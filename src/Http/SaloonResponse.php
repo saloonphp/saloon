@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Illuminate\Support\Arr;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Illuminate\Support\Collection;
 
@@ -59,7 +60,7 @@ class SaloonResponse
             return $this->decoded;
         }
 
-        return data_get($this->decoded, $key, $default);
+        return Arr::get($this->decoded, $key, $default);
     }
 
     /**
