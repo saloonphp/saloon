@@ -1,0 +1,23 @@
+{
+    "name": "sammyjo20/saloon",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Sammyjo20\\Saloon\\": "src/",
+            "Sammyjo20\\Saloon\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Sammyjo20",
+            "email": "29132017+Sammyjo20@users.noreply.github.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^8.0",
+        "guzzlehttp/guzzle": "^7.3",
+        "illuminate/collections": "^8.63"
+    }
+}
