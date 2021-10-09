@@ -7,7 +7,6 @@ use Sammyjo20\Saloon\Traits\CollectsAuth;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
-use Sammyjo20\Saloon\Traits\CollectsQuery;
 use Sammyjo20\Saloon\Traits\CollectsAttributes;
 use Sammyjo20\Saloon\Traits\InterceptsGuzzle;
 use Sammyjo20\Saloon\Traits\SendsRequests;
@@ -17,7 +16,6 @@ abstract class SaloonRequest implements SaloonRequestInterface
     use CollectsData,
         CollectsHeaders,
         CollectsAuth,
-        CollectsQuery, // Todo: Do we really need to have a collector for this?
         CollectsConfig,
         CollectsAttributes;
 
@@ -38,6 +36,13 @@ abstract class SaloonRequest implements SaloonRequestInterface
      */
     protected ?string $connector = null;
 
+    /**
+     * The instantiated connector instance.
+     *
+     * @var SaloonConnector
+     */
+    private SaloonConnector $loadedConnector;
+
     public function __construct(array $requestAttributes = [])
     {
         // Bootstrap our request
@@ -48,12 +53,11 @@ abstract class SaloonRequest implements SaloonRequestInterface
         // Todo: Work out how to access "auth", "data", and "config" from within each other.
         // Todo: Setting the defaults may not work here.
 
+        $this->bootConnector($this->connector);
+
         $this->setRequestAttributes($requestAttributes);
         $this->setAuth($this->defineAuth());
-        $this->setHeaders($this->defineHeaders());
         $this->setData($this->defineData());
-        $this->setQuery($this->defineQuery());
-        $this->setConfig($this->defineConfig());
     }
 
     public function defineMethod(): ?string
@@ -65,13 +69,18 @@ abstract class SaloonRequest implements SaloonRequestInterface
         return $this->method;
     }
 
-    public function getConnector(): ?SaloonConnector
+    public function bootConnector(string $connectorClass = null): void
     {
         if (empty($this->connector) || ! class_exists($this->connector)) {
-            return null;
+            return;
         }
 
-        return new $this->connector;
+        $this->loadedConnector = new $connectorClass;
+    }
+
+    public function getConnector(): ?SaloonConnector
+    {
+        return $this->loadedConnector ?? null;
     }
 
     public function mockSuccessResponse(): array

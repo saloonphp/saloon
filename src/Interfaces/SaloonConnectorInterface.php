@@ -9,15 +9,11 @@ interface SaloonConnectorInterface
 {
     public function defineBaseUrl(): string;
 
-    public function defineQuery(): array;
+    public function defaultHeaders(): array;
 
-    public function defineHeaders(): array;
-
-    public function defineOptions(): array;
+    public function defaultConfig(): array;
 
     public function defineAuth(): array;
-
-    public function defineConfig(): array;
 
     public function interceptRequest(Request $requestInstance): Request;
 

@@ -8,7 +8,6 @@ use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
-use Sammyjo20\Saloon\Traits\CollectsQuery;
 use Sammyjo20\Saloon\Traits\ManagesFeatures;
 use Sammyjo20\Saloon\Traits\ManagesGuzzle;
 use GuzzleHttp\Exception\GuzzleException;
@@ -22,8 +21,7 @@ class RequestManager
     use ManagesFeatures;
 
     use CollectsHeaders,
-        CollectsConfig,
-        CollectsQuery;
+        CollectsConfig;
 
     /**
      * The request that we are about to dispatch.
@@ -77,20 +75,15 @@ class RequestManager
 
         $this->loadFeatures();
 
-        // Merge the headers, query, and config (request always takes presidency)
+        // Merge the headers, query, and config (request always takes presidency).
 
-        $this->mergeHeaders($this->connector->getHeaders())
-            ->mergeHeaders($this->request->getHeaders());
-
-        // Merge the query
-
-        $this->mergeQuery($this->connector->getQuery())
-            ->mergeQuery($this->request->getQuery());
+        $this->mergeHeaders($this->connector->getHeaders(), $this->request->getHeaders());
 
         // Merge the config
 
-        $this->mergeConfig($this->connector->getConfig())
-            ->mergeConfig($this->request->getConfig());
+        $this->mergeConfig($this->connector->getConfig(), $this->request->getConfig());
+
+        dd($this->getHeaders(), $this->getConfig());
     }
 
     public function send()

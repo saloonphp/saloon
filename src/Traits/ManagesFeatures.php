@@ -70,11 +70,11 @@ trait ManagesFeatures
     private function bootFeature(SaloonFeature $feature): void
     {
         foreach ($feature->getHeaders() as $header => $value) {
-            $this->setHeader($header, $value);
+            $this->addHeader($header, $value);
         }
 
         foreach ($feature->getConfig() as $option => $value) {
-            $this->addConfig($option, $value);
+            $this->addConfigVariable($option, $value);
         }
     }
 }
