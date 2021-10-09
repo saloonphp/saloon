@@ -31,15 +31,24 @@ class SaloonResponse
     protected array $saloonRequestOptions;
 
     /**
+     * Should we attempt to guess the status of the request from the body?
+     *
+     * @var bool
+     */
+    protected bool $shouldGuessStatusFromBody = false;
+
+    /**
      * Create a new response instance.
      *
      * @param array $requestOptions
      * @param $response
+     * @param bool $shouldGuessStatusFromBody
      */
-    public function __construct(array $requestOptions, $response)
+    public function __construct(array $requestOptions, $response, bool $shouldGuessStatusFromBody = false)
     {
         $this->saloonRequestOptions = $requestOptions;
         $this->response = $response;
+        $this->shouldGuessStatusFromBody = $shouldGuessStatusFromBody;
     }
 
     /**
@@ -129,9 +138,50 @@ class SaloonResponse
      *
      * @return int
      */
-    public function status()
+    public function getStatusFromResponse(): int
     {
         return (int) $this->response->getStatusCode();
+    }
+
+    /**
+     * Get the status code of the response.
+     *
+     * @return int
+     */
+    public function status()
+    {
+        if ($this->shouldGuessStatusFromBody === true) {
+            return $this->guessStatusFromBody();
+        }
+
+        return $this->getStatusFromResponse();
+    }
+
+    /**
+     * Attempt to guess the status code from the body.
+     *
+     * Basically check it against a regex, then check if that string is
+     * numeric, and if so - return it as an integer.
+     *
+     * @return int
+     */
+    public function guessStatusFromBody(): int
+    {
+        $body = $this->json('status', null);
+
+        if (isset($body) === false) {
+            return $this->getStatusFromResponse();
+        }
+
+        if (! preg_match('/^[1-5][0-9][0-9]$/', $body)) {
+            return $this->getStatusFromResponse();
+        }
+
+        if (is_numeric($body) === false) {
+            return $this->getStatusFromResponse();
+        }
+
+        return (int)$body;
     }
 
     /**

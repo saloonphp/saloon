@@ -132,7 +132,9 @@ class RequestManager
      */
     private function createRepsonse(array $requestOptions, Request $request, Response $response): SaloonResponse
     {
-        $requestiResponse =  new SaloonResponse($requestOptions, $response);
+        $shouldGuessStatusFromBody = isset($this->connector->shouldGuessStatusFromBody) || isset($this->request->shouldGuessStatusFromBody);
+
+        $requestiResponse =  new SaloonResponse($requestOptions, $response, $shouldGuessStatusFromBody);
 
         $requestiResponse = $this->connector->interceptResponse($request, $requestiResponse);
         $requestiResponse = $this->request->interceptResponse($request, $requestiResponse);

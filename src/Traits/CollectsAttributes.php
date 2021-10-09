@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
+use Illuminate\Support\Arr;
 use Sammyjo20\Saloon\Exceptions\SaloonMissingAttributeException;
 
 trait CollectsAttributes
@@ -49,6 +50,6 @@ trait CollectsAttributes
             throw new SaloonMissingAttributeException($this, $attribute);
         }
 
-        return $this->requestAttributes[$attribute];
+        return Arr::get($this->requestAttributes, $attribute);
     }
 }

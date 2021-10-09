@@ -2,6 +2,8 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
+use Illuminate\Support\Arr;
+
 trait CollectsHeaders
 {
     /**
@@ -88,7 +90,7 @@ trait CollectsHeaders
         }
 
         if (isset($key)) {
-            return $headerBag[$key];
+            return Arr::get($headerBag, $key);
         }
 
         return $headerBag;

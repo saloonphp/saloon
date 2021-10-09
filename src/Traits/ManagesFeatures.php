@@ -18,7 +18,7 @@ trait ManagesFeatures
      *
      * @var array|string[]
      */
-    private array $featureMapper = [
+    private array $availableFeatures = [
         HasBodyInterface::class => HasBodyFeature::class,
         AcceptsJsonInterface::class => AcceptsJsonFeature::class,
         HasJsonBodyInterface::class => HasJsonBodyFeature::class,
@@ -45,12 +45,14 @@ trait ManagesFeatures
 
         $interfaces = array_merge($connectorInterfaces, $requestInterfaces);
 
+        $availableFeatures = $this->getAvailableFeatures();
+
         foreach ($interfaces as $interface) {
-            if (! array_key_exists($interface, $this->featureMapper)) {
+            if (! array_key_exists($interface, $availableFeatures)) {
                 continue;
             }
 
-            $feature = $this->featureMapper[$interface];
+            $feature = $availableFeatures[$interface];
 
             if (in_array($feature, $this->features, true)) {
                 continue;
@@ -76,5 +78,25 @@ trait ManagesFeatures
         foreach ($feature->getConfig() as $option => $value) {
             $this->addConfigVariable($option, $value);
         }
+    }
+
+    /**
+     * Get any available features.
+     *
+     * @return array
+     */
+    public function getAvailableFeatures(): array
+    {
+        $builtInFeatures = $this->availableFeatures;
+
+        return $builtInFeatures;
+
+        // Todo:
+
+        if (method_exists($this->connector, 'extendFeatures') === false) {
+            return $builtInFeatures;
+        }
+
+        return array_merge($builtInFeatures, $this->connector->extendFeatures());
     }
 }

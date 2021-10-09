@@ -30,6 +30,10 @@ trait ManagesGuzzle
             ? $this->request->mockSuccessResponse()
             : $this->request->mockFailureResponse();
 
+        if (isset($mockData['body']) && is_array($mockData['body'])) {
+            $mockData['body'] = json_encode($mockData['body']);
+        }
+
         $mockHandler = new MockHandler([
             new Response($mockData['status'], $mockData['headers'], $mockData['body'])
         ]);

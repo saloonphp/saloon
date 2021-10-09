@@ -2,6 +2,8 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
+use Illuminate\Support\Arr;
+
 trait CollectsConfig
 {
     /**
@@ -89,7 +91,7 @@ trait CollectsConfig
         }
 
         if (isset($key)) {
-            return $configBag[$key];
+            return Arr::get($configBag, $key);
         }
 
         return $configBag;
