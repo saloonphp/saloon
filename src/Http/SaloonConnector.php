@@ -7,7 +7,6 @@ use Sammyjo20\Saloon\Traits\CollectsAuth;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\InterceptsGuzzle;
-use Sammyjo20\Saloon\Traits\SendsRequests;
 
 abstract class SaloonConnector implements SaloonConnectorInterface
 {
@@ -15,7 +14,6 @@ abstract class SaloonConnector implements SaloonConnectorInterface
         CollectsAuth,
         CollectsConfig;
 
-    use SendsRequests;
     use InterceptsGuzzle;
 
     public function __construct()
