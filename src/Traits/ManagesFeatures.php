@@ -2,28 +2,10 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Sammyjo20\Saloon\Interfaces\Request\HasJsonBody as HasJsonBodyInterface;
-use Sammyjo20\Saloon\Features\HasJsonBody as HasJsonBodyFeature;
-use Sammyjo20\Saloon\Interfaces\Request\AcceptsJson as AcceptsJsonInterface;
-use Sammyjo20\Saloon\Features\AcceptsJson as AcceptsJsonFeature;
-use Sammyjo20\Saloon\Interfaces\Request\HasBody as HasBodyInterface;
-use Sammyjo20\Saloon\Features\HasBody as HasBodyFeature;
-use Sammyjo20\Saloon\Features\SaloonFeature;
 use ReflectionClass;
 
 trait ManagesFeatures
 {
-    /**
-     * These are all the features.
-     *
-     * @var array|string[]
-     */
-    private array $availableFeatures = [
-        HasBodyInterface::class => HasBodyFeature::class,
-        AcceptsJsonInterface::class => AcceptsJsonFeature::class,
-        HasJsonBodyInterface::class => HasJsonBodyFeature::class,
-    ];
-
     /**
      * @var array
      */
@@ -40,63 +22,67 @@ trait ManagesFeatures
         // any options. E.g if they have the "hasBody" interface, we need to add the
         // body to the request.
 
-        $connectorInterfaces = (new ReflectionClass($this->request->getConnector()))->getInterfaceNames();
-        $requestInterfaces = (new ReflectionClass($this->request))->getInterfaceNames();
+        $connectorTraits = (new ReflectionClass($this->request->getConnector()))->getTraits();
+        $requestTraits = (new ReflectionClass($this->request))->getTraits();
 
-        $interfaces = array_merge($connectorInterfaces, $requestInterfaces);
-
-        $availableFeatures = $this->getAvailableFeatures();
-
-        foreach ($interfaces as $interface) {
-            if (! array_key_exists($interface, $availableFeatures)) {
-                continue;
-            }
-
-            $feature = $availableFeatures[$interface];
-
-            if (in_array($feature, $this->features, true)) {
-                continue;
-            }
-
-            $this->features[] = $feature;
-
-            $this->bootFeature(new $feature($this->request));
-        }
+        $this->scanTraits($connectorTraits, 'connector')
+            ->scanTraits($requestTraits, 'request');
     }
 
     /**
-     * Boot each filter by adding the headers.
+     * Scan through each of the traits and attempt to find the "boot" method.
+     * If it exists, then we will run it.
      *
-     * @param SaloonFeature $feature
+     * @param array $traits
+     * @param string $type
+     * @return $this
      */
-    private function bootFeature(SaloonFeature $feature): void
+    private function scanTraits(array $traits, string $type): self
     {
-        foreach ($feature->getHeaders() as $header => $value) {
-            $this->addHeader($header, $value);
+        foreach ($traits as $trait) {
+            $featureName = $trait->getShortName();
+
+            if (in_array($featureName, $this->features, true)) {
+                continue;
+            }
+
+            $bootName = 'boot' . $featureName . 'Feature';
+
+            if ($trait->hasMethod($bootName) === false) {
+                continue;
+            }
+
+            if ($type === 'connector' && method_exists($this->connector, $bootName)) {
+                $this->bootConnectorFeature($bootName);
+            }
+
+            if ($type === 'request' && method_exists($this->request, $bootName)) {
+                $this->bootRequestFeature($bootName);
+            }
+
+            $this->features[] = $featureName;
         }
 
-        foreach ($feature->getConfig() as $option => $value) {
-            $this->addConfigVariable($option, $value);
-        }
+        return $this;
     }
 
     /**
-     * Get any available features.
+     * Run the method on the connector.
      *
-     * @return array
+     * @param string $methodName
      */
-    public function getAvailableFeatures(): array
+    private function bootConnectorFeature(string $methodName): void
     {
-        $builtInFeatures = $this->availableFeatures;
+        $this->connector->{$methodName}();
+    }
 
-        return $builtInFeatures;
-
-        // Todo:
-
-        if (method_exists($this->connector, 'extendFeatures') === false) {
-            return $builtInFeatures;
-        }
-
-        return array_merge($builtInFeatures, $this->connector->extendFeatures());
+    /**
+     * Run the boot method on the request.
+     *
+     * @param string $methodName
+     */
+    private function bootRequestFeature(string $methodName): void
+    {
+        $this->request->{$methodName}();
     }
 }
