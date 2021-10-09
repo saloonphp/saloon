@@ -91,7 +91,7 @@ class RequestManager
         // Remove any leading slashes on the endpoint.
 
         $endpoint = ltrim($request->defineEndpoint(), '/ ');
-        $guzzleRequest = new Request($request->defineMethod(), $endpoint);
+        $guzzleRequest = new Request($request->getMethod(), $endpoint);
 
         // Run the interceptors.
 

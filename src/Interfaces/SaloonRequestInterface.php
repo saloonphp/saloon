@@ -8,7 +8,7 @@ use GuzzleHttp\Psr7\Request;
 
 interface SaloonRequestInterface
 {
-    public function defineMethod(): ?string;
+    public function getMethod(): ?string;
 
     public function getConnector(): ?SaloonConnector;
 
@@ -26,7 +26,7 @@ interface SaloonRequestInterface
 
     public function interceptResponse($requestInstance, SaloonResponse $responseInstance): SaloonResponse;
 
-    public function mockSuccessResponse(): array;
+    public function defaultSuccessMockResponse(): void;
 
-    public function mockFailureResponse(): array;
+    public function defaultFailureMockResponse(): void;
 }

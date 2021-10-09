@@ -11,6 +11,7 @@ use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\CollectsAttributes;
 use Sammyjo20\Saloon\Traits\InterceptsGuzzle;
+use Sammyjo20\Saloon\Traits\MocksResponses;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 
 abstract class SaloonRequest implements SaloonRequestInterface
@@ -19,10 +20,10 @@ abstract class SaloonRequest implements SaloonRequestInterface
         CollectsHeaders,
         CollectsAuth,
         CollectsConfig,
-        CollectsAttributes;
-
-    use SendsRequests;
-    use InterceptsGuzzle;
+        CollectsAttributes,
+        SendsRequests,
+        InterceptsGuzzle,
+        MocksResponses;
 
     /**
      * Define the method that the request will use.
@@ -41,28 +42,16 @@ abstract class SaloonRequest implements SaloonRequestInterface
     /**
      * The instantiated connector instance.
      *
-     * @var SaloonConnector
+     * @var SaloonConnector|null
      */
-    private SaloonConnector $loadedConnector;
+    private ?SaloonConnector $loadedConnector = null;
 
-    public function __construct(array $requestAttributes = [])
-    {
-        // Bootstrap our request
-        // Todo: Tidy  up the below - note "options" and "data" is basically the same thing.
-        // Todo: Throw exceptions if certain attributes aren't listed.
-        // Todo: Throw exceptions if requested headers, attributes or data is missing.
-
-        // Todo: Work out how to access "auth", "data", and "config" from within each other.
-        // Todo: Setting the defaults may not work here.
-
-        $this->bootConnector($this->connector);
-
-        $this->setRequestAttributes($requestAttributes);
-        $this->setAuth($this->defineAuth());
-        $this->setData($this->defineData());
-    }
-
-    public function defineMethod(): ?string
+    /**
+     * Get the method the class is using.
+     *
+     * @return string|null
+     */
+    public function getMethod(): ?string
     {
         if (empty($this->method)) {
             return null;
@@ -71,48 +60,44 @@ abstract class SaloonRequest implements SaloonRequestInterface
         return $this->method;
     }
 
-    public function bootConnector(string $connectorClass = null): void
+    private function bootConnector(): void
     {
         if (empty($this->connector) || ! class_exists($this->connector)) {
             throw new SaloonInvalidConnectorException;
         }
 
-        $this->loadedConnector = new $connectorClass;
-    }
-
-    public function getConnector(): SaloonConnector
-    {
-        return $this->loadedConnector;
-    }
-
-    public function mockSuccessResponse(): array
-    {
-        // Todo: Change this as it won't work if you want to define the success/failure response.
-
-        return [
-            'status' => 201,
-            'headers' => [],
-            'body' => 'Success',
-        ];
-    }
-
-    public function mockFailureResponse(): array
-    {
-        return [
-            'status' => 401,
-            'headers' => [],
-            'body' => '',
-        ];
+        $this->loadedConnector = new $this->connector;
     }
 
     /**
-     * Default "body" if you do not provide your own.
+     * Get the connector instance. If it hasn't yet been booted, we will boot it up.
      *
-     * @return array
+     * @return SaloonConnector
+     * @throws SaloonInvalidConnectorException
      */
-    public function defineBody(): array
+    public function getConnector(): SaloonConnector
     {
-        return $this->getData();
+        if (! $this->loadedConnector instanceof SaloonConnector) {
+            $this->bootConnector();
+        }
+
+        return $this->loadedConnector;
+    }
+
+    /**
+     * Define your default successful mock response.
+     */
+    public function defaultSuccessMockResponse(): void
+    {
+        $this->setSuccessMockResponse(200, [], '');
+    }
+
+    /**
+     * Define your default failure mock response.
+     */
+    public function defaultFailureMockResponse(): void
+    {
+        $this->setFailureMockResponse(500, [], '');
     }
 
     /**

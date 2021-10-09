@@ -24,20 +24,20 @@ trait ManagesGuzzle
         $this->guzzleClient = new GuzzleClient($clientConfig);
     }
 
+    /**
+     * Create a "mock" handler so Guzzle can pretend it's a real request.
+     *
+     * @return MockHandler
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
+     */
     private function createMockHandler(): MockHandler
     {
-        $mockData = $this->mockType === 'success'
-            ? $this->request->mockSuccessResponse()
-            : $this->request->mockFailureResponse();
+        $saloonMock = $this->mockType === 'success'
+            ? $this->request->getSuccessMock()
+            : $this->request->getFailureMock();
 
-        if (isset($mockData['body']) && is_array($mockData['body'])) {
-            $mockData['body'] = json_encode($mockData['body']);
-        }
-
-        $mockHandler = new MockHandler([
-            new Response($mockData['status'], $mockData['headers'], $mockData['body'])
+        return new MockHandler([
+            new Response($saloonMock->getStatusCode(), $saloonMock->getHeaders(), $saloonMock->getBody())
         ]);
-
-        return $mockHandler;
     }
 }
