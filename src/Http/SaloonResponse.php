@@ -5,6 +5,7 @@ namespace Sammyjo20\Saloon\Http;
 use Illuminate\Support\Arr;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Illuminate\Support\Collection;
+use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 
 class SaloonResponse
 {
@@ -23,14 +24,32 @@ class SaloonResponse
     protected $decoded;
 
     /**
+     * The request options we attached to the request.
+     *
+     * @var array
+     */
+    protected array $saloonRequestOptions;
+
+    /**
      * Create a new response instance.
      *
-     * @param  \Psr\Http\Message\MessageInterface  $response
-     * @return void
+     * @param array $requestOptions
+     * @param $response
      */
-    public function __construct($response)
+    public function __construct(array $requestOptions, $response)
     {
+        $this->saloonRequestOptions = $requestOptions;
         $this->response = $response;
+    }
+
+    /**
+     * Get the request options we attached to the request. Headers, Config etc.
+     *
+     * @return array
+     */
+    public function getSaloonRequestOptions(): array
+    {
+        return $this->saloonRequestOptions;
     }
 
     /**
@@ -245,12 +264,12 @@ class SaloonResponse
     /**
      * Create an exception if a server or client error occurred.
      *
-     * @return SaloonException|void
+     * @return SaloonRequestException|void
      */
     public function toException()
     {
         if ($this->failed()) {
-            return new SaloonException($this);
+            return new SaloonRequestException($this, $this->response?->getBody()?->getContents());
         }
     }
 

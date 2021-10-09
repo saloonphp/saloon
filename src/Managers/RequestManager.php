@@ -82,8 +82,6 @@ class RequestManager
         // Merge the config
 
         $this->mergeConfig($this->connector->getConfig(), $this->request->getConfig());
-
-        dd($this->getHeaders(), $this->getConfig());
     }
 
     public function send()
@@ -104,7 +102,6 @@ class RequestManager
 
         $requestOptions = [
             RequestOptions::HEADERS => $this->getHeaders(),
-            RequestOptions::QUERY => $this->getQuery(),
         ];
 
         // Recursively add config variables...
@@ -119,22 +116,23 @@ class RequestManager
             $guzzleResponse = $this->guzzleClient->send($guzzleRequest, $requestOptions);
         } catch (GuzzleException $exception) {
             // Todo: Catch ClientExceptions separately
-            return $this->createRepsonse($exception->getRequest(), $exception->getResponse());
+            return $this->createRepsonse($requestOptions, $exception->getRequest(), $exception->getResponse());
         }
 
-        return $this->createRepsonse($guzzleRequest, $guzzleResponse);
+        return $this->createRepsonse($requestOptions, $guzzleRequest, $guzzleResponse);
     }
 
     /**
      * Create a response.
      *
+     * @param array $requestOptions
      * @param Request $request
      * @param Response $response
      * @return SaloonResponse
      */
-    private function createRepsonse(Request $request, Response $response): SaloonResponse
+    private function createRepsonse(array $requestOptions, Request $request, Response $response): SaloonResponse
     {
-        $requestiResponse =  new SaloonResponse($response);
+        $requestiResponse =  new SaloonResponse($requestOptions, $response);
 
         $requestiResponse = $this->connector->interceptResponse($request, $requestiResponse);
         $requestiResponse = $this->request->interceptResponse($request, $requestiResponse);
