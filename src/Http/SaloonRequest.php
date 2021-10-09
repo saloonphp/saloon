@@ -20,7 +20,6 @@ abstract class SaloonRequest implements SaloonRequestInterface
         CollectsHeaders,
         CollectsAuth,
         CollectsConfig,
-        CollectsAttributes,
         SendsRequests,
         InterceptsGuzzle,
         MocksResponses;
