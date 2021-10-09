@@ -28,7 +28,7 @@ trait MocksResponses
         }
 
         if (! $this->successMock instanceof SaloonMock) {
-            throw new SaloonMissingMockException('You have not defined a "success" mock for this request. Please set one with the "setSuccessfulMockResponse" method.');
+            throw new SaloonMissingMockException('You have not defined a "success" mock for this request. Please set one with the "setSuccessMockResponse" method.');
         }
 
         return $this->successMock;
@@ -41,7 +41,7 @@ trait MocksResponses
         }
 
         if (! $this->failureMock instanceof SaloonMock) {
-            throw new SaloonMissingMockException('You have not defined a "failure" mock for this request. Please set one with the "setSuccessfulMockResponse" method.');
+            throw new SaloonMissingMockException('You have not defined a "failure" mock for this request. Please set one with the "setFailureMockResponse" method.');
         }
 
         return $this->failureMock;
