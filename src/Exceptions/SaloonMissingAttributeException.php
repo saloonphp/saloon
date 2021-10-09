@@ -3,8 +3,9 @@
 namespace Sammyjo20\Saloon\Exceptions;
 
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use \Exception;
 
-class SaloonMissingAttributeException extends \Exception
+class SaloonMissingAttributeException extends Exception
 {
     /**
      * Throw an exception if we are missing a required attribute.

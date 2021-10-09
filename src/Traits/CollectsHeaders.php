@@ -79,7 +79,7 @@ trait CollectsHeaders
      * @param string|null $key
      * @return array
      */
-    public function getHeaders(string $key = null): array
+    public function getHeaders(string $key = null): mixed
     {
         if ($this->includeDefaultHeaders === true) {
             $headerBag = array_merge($this->defaultHeaders(), $this->customHeaders);
@@ -92,6 +92,17 @@ trait CollectsHeaders
         }
 
         return $headerBag;
+    }
+
+    /**
+     * Get an individual header
+     *
+     * @param string|null $key
+     * @return array
+     */
+    public function getHeader(string $key): string
+    {
+        return $this->getHeaders($key);
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
+use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
 use Sammyjo20\Saloon\Interfaces\SaloonRequestInterface;
 use Sammyjo20\Saloon\Traits\CollectsAuth;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
@@ -72,15 +74,15 @@ abstract class SaloonRequest implements SaloonRequestInterface
     public function bootConnector(string $connectorClass = null): void
     {
         if (empty($this->connector) || ! class_exists($this->connector)) {
-            return;
+            throw new SaloonInvalidConnectorException;
         }
 
         $this->loadedConnector = new $connectorClass;
     }
 
-    public function getConnector(): ?SaloonConnector
+    public function getConnector(): SaloonConnector
     {
-        return $this->loadedConnector ?? null;
+        return $this->loadedConnector;
     }
 
     public function mockSuccessResponse(): array
@@ -103,8 +105,30 @@ abstract class SaloonRequest implements SaloonRequestInterface
         ];
     }
 
+    /**
+     * Default "body" if you do not provide your own.
+     *
+     * @return array
+     */
     public function defineBody(): array
     {
         return $this->getData();
+    }
+
+    /**
+     * Dynamically proxy other methods to the underlying response.
+     *
+     * @param $method
+     * @param $parameters
+     * @return mixed
+     * @throws SaloonMethodNotFoundException
+     */
+    public function __call($method, $parameters)
+    {
+        if (method_exists($this->getConnector(), $method) === false) {
+            throw new SaloonMethodNotFoundException($method, $this->getConnector());
+        }
+
+        return $this->getConnector()->{$method}(...$parameters);
     }
 }
