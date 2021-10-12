@@ -20,7 +20,7 @@ $data = $response->json();
 - You don't have to interact with cURL/Http Facade/Guzzle.
 - Lets you update API requests in one place.
 - Easily extend with your own functionality.
-- Framework agnostic
+- Framework agnostic.
 
 ## Using Laravel?
 Saloon has a powerful Laravel package. Check out sammyjo20/laravel-saloon to get started.
@@ -102,11 +102,11 @@ class ForgeConnector extends SaloonConnector
 }
 ```
 ## Requests
-The second most important file in Saloon is your request. Requests are where you define each method of the API you want to call.
+The second most important file in Saloon is your request. Requests are where you define each method of the API you want to call. The minimum requirements are `$method`. `$connector` and `defineMethod()`.
 
 > If you are using Laravel, you can use the **php artisan saloon:request** command.
 
-Let's have a look at our GetForgeServerRequest. 
+Let's have a look at our GetForgeServerRequest.
 ```php
 <?php
 
@@ -145,6 +145,7 @@ class GetForgeServerRequest extends SaloonRequest
     ){}
 }
 ```
+
 Requests can also have their own default headers and configuration which are merged in with the connector's default headers and configuration. 
 ```php
 <?php
