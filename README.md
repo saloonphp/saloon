@@ -5,6 +5,8 @@
 Saloon is a PHP package which introduces a class-based/OOP approach to building connections to APIs. Saloon introduces an easy to understand pattern to help you standardise the way you interact with third-party APIs, reduce repeated code (DRY) and lets you mock API requests for your tests.
 
 ```php
+<?php
+
 use App\Http\Saloon\Requests\GetForgeServerRequest;
 
 $request = new GetForgeServerRequest(serverId: '123456');
@@ -146,7 +148,7 @@ class GetForgeServerRequest extends SaloonRequest
 }
 ```
 
-Requests can also have their own default headers and configuration which are merged in with the connector's default headers and configuration. 
+Requests can also have their own default headers and configuration which are merged in with the connector's default headers and configuration. These will take priority over connector's default values.
 ```php
 <?php
 
@@ -213,4 +215,64 @@ class GetForgeServerRequest extends SaloonRequest
         public string $serverId
     ){}
 }
+```
+## Making your request
+Once you have created your Saloon Connector and Request, you are ready to make your request! 
+
+Here's a simple example of making a request.
+```php
+<?php
+
+use App\Http\Saloon\Requests\GetForgeServerRequest;
+
+$request = new GetForgeServerRequest(serverId: '123456');
+
+$response = $request->send();
+```
+You can also set/overwrite any configuration at this stage too! Any headers/configuration added at this stage are merged in with the default values from the connector and request, but will take the highest priority.
+```php
+<?php
+
+use App\Http\Saloon\Requests\GetForgeServerRequest;
+
+$request = new GetForgeServerRequest(serverId: '123456');
+
+$request->addHeader('Accept', 'application/json');
+$request->addConfig('debug', true);
+
+$request->setHeaders($array); // This will overwrite all default headers.
+$request->setConfig($array); // This will overwrite all default configration options.
+
+$response = $request->send();
+```
+## API responses
+Once Saloon has sent the request, you will be given an instance of `SaloonResponse` to easily interact with the response from the server.
+```php
+$response = $request->send();
+```
+### Available methods
+The Saloon response has a lot of handy methods for you. A lot of these are taken from `Illuminate/Http`.
+```php
+getSaloonRequestOptions(): array
+toPsrResponse(): ResponseInterface
+body(): string
+json(): array
+object(): object
+collect(): Collection
+header(): string
+headers(): array
+getStatusFroMResponse(): int
+status(): int
+effectiveUri(): UriInterface
+successful(): bool
+ok(): bool
+redirect(): bool
+failed(): bool
+clientError(): bool
+serverError(): bool
+onError(callable $callback)
+cookies(): CookieJar
+handlerStats(): array
+toException()
+throw()
 ```
