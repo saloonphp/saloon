@@ -5,9 +5,9 @@
 Saloon is a PHP package which introduces a class-based/OOP approach to building connections to APIs. Saloon introduces an easy to understand pattern to help you standardise the way you interact with third-party APIs, reduce repeated code (DRY) and lets you mock API requests for your tests.
 
 ```php
-use App\Http\Saloon\Requests\GetPokemonRequest;
+use App\Http\Saloon\Requests\GetForgeServerRequest;
 
-$request = new GetPokemonRequest(name: 'Piplup');
+$request = new GetForgeServerRequest(serverId: '123456');
 
 $response = $request->send();
 $data = $response->json();
@@ -98,5 +98,117 @@ class ForgeConnector extends SaloonConnector
             'timeout' => 5,
         ];
     }
+}
+```
+## Requests
+The second most important file in Saloon is your request. Requests are where you define each method of the API you want to call.
+
+> If you are using Laravel, you can use the **php artisan saloon:request** command.
+
+Let's have a look at our GetForgeServerRequest. 
+```php
+<?php
+
+use App\Http\Saloon\Connectors\ForgeConnector;
+use Sammyjo20\Saloon\Constants\Saloon;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+
+class GetForgeServerRequest extends SaloonRequest
+{
+    /**
+     * Define the method that the request will use.
+     *
+     * @var string|null
+     */
+    protected ?string $method = Saloon::GET;
+
+    /**
+     * The connector.
+     *
+     * @var string|null
+     */
+    protected ?string $connector = ForgeConnector::class;
+
+    /**
+     * Define the endpoint for the request.
+     *
+     * @return string
+     */
+    public function defineEndpoint(): string
+    {
+        return '/servers/' . $this->serverId;
+    }
+    
+    public function __construct(
+        public string $serverId
+    ){}
+}
+```
+Requests can also have their own default headers and configuration which are merged in with the connector's default headers and configuration. 
+```php
+<?php
+
+use App\Http\Saloon\Connectors\ForgeConnector;
+use Sammyjo20\Saloon\Constants\Saloon;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+
+class GetForgeServerRequest extends SaloonRequest
+{
+    /**
+     * Define the method that the request will use.
+     *
+     * @var string|null
+     */
+    protected ?string $method = Saloon::GET;
+
+    /**
+     * The connector.
+     *
+     * @var string|null
+     */
+    protected ?string $connector = ForgeConnector::class;
+
+    /**
+     * Define the endpoint for the request.
+     *
+     * @return string
+     */
+    public function defineEndpoint(): string
+    {
+        return '/servers/' . $this->serverId;
+    }
+    
+    /**
+     * Define the base headers for the connector.
+     *
+     * @return string[]
+     */
+    public function defaultHeaders(): array
+    {
+        return [
+            'X-Custom-Header' => 'Hello-World',
+        ];
+    }
+    
+    /**
+     * Define the default Guzzle configuration for the connector.
+     *
+     * @return string[]
+     */
+    public function defaultConfig(): array
+    {
+        // You can specify any of the Guzzle configuration options here.
+        // See https://docs.guzzlephp.org/en/stable/request-options.html for more.
+    
+        return [
+            'query' => [
+                'filter' => 'onlyActive',
+            ],
+        ];
+    }
+    
+    public function __construct(
+        public string $serverId
+    ){}
 }
 ```
