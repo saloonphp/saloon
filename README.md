@@ -13,13 +13,14 @@ $response = $request->send();
 $data = $response->json();
 ```
 
-## Juicy Features
+## Features
 - Easy mocking/testing utilities out of the box.
 - Simple and elegant syntax.
 - Conforms to the PSR-7 standard.
 - You don't have to interact with cURL/Http Facade/Guzzle.
 - Lets you update API requests in one place.
 - Easily extend with your own functionality.
+- Framework agnostic
 
 ## Using Laravel?
 Saloon has a powerful Laravel package. Check out sammyjo20/laravel-saloon to get started.
