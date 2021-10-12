@@ -276,3 +276,62 @@ handlerStats(): array
 toException()
 throw()
 ```
+
+## Saloon Plugins
+Saloon also comes with a library of useful "plugins" in the form of traits. These plugins can be added to either the Connector or a Request, depending on if you want the plugin to be used on all requests within a connection or just one request.
+
+Plugins can add their own headers/Guzzle configuration. These are especially useful if you have headers that you frequently want to add to a specific connection or request. For example the `Content-Type: application/json` header.
+
+Let's take a look at the `AcceptsJson` feature plugin. We will add it to our ForgeConnector.
+```php
+<?php
+
+use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
+
+class ForgeConnector extends SaloonConnector
+{
+    use AcceptsJson;
+
+    /**
+     * Define the base url for the connector.
+     *
+     * @return string
+     */
+    public function defineBaseUrl(): string
+    {
+        return 'https://forge.laravel.com/api/v1';
+    }
+}
+```
+Now let's take a look inside the `AcceptsJson` feature plugin. As you can see, we are using the `mergeHeaders($headers)` so it adds its own headers.
+```php
+<?php
+
+namespace Sammyjo20\Saloon\Traits\Features;
+
+trait AcceptsJson
+{
+    public function bootAcceptsJsonFeature()
+    {
+        $this->mergeHeaders([
+            'Accept' => 'application/json'
+        ]);
+    }
+}
+```
+### Available plugins
+- AcceptsJson
+- DisablesSSLVerification
+- HasBody
+- HasJsonBody
+- HasMultipartBody
+- HasQueryParams
+- HasTimeout
+- WithDebugData
+
+### Todo
+- Glossary and separate pages
+- Example on a simple GET request
+- Example on a simple POST request with request data
+- Examples on the features
