@@ -320,6 +320,8 @@ trait AcceptsJson
     }
 }
 ```
+This plugin will add the header "Accept: application/json". These headers take a lower priority than the "defaultHeaders" defined in the Request/Connector.
+
 ### Available plugins
 - AcceptsJson
 - DisablesSSLVerification
