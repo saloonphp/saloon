@@ -142,6 +142,10 @@ class GetForgeServerRequest extends SaloonRequest
         return '/servers/' . $this->serverId;
     }
     
+    /**
+     * Constructor, you can pass in your own properties.
+     *
+     */
     public function __construct(
         public string $serverId
     ){}
