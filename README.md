@@ -23,6 +23,9 @@ $data = $response->json();
 - Lets you update API requests in one place.
 - Easily extend with your own functionality.
 - Framework agnostic.
+- Mocking requests for testing.
+
+> Note on mocking/faking: I'm currently looking for some help with mocking requests in Saloon. If you have any suggestions to make this better, please consider contributing to the issue on the issues page.
 
 ## Getting Started
 ### Using Laravel?
