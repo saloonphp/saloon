@@ -16,8 +16,8 @@ $data = $response->json();
 ```
 
 ## Features
-- Easy mocking/testing utilities out of the box.
 - Simple and elegant syntax.
+- Standardises the way you interact with APIs.
 - Conforms to the PSR-7 standard.
 - You don't have to interact with cURL/Http Facade/Guzzle.
 - Lets you update API requests in one place.
