@@ -24,11 +24,13 @@ $data = $response->json();
 - Easily extend with your own functionality.
 - Framework agnostic.
 
-## Using Laravel?
-Saloon has a powerful Laravel package. Check out sammyjo20/laravel-saloon to get started.
-
 ## Getting Started
-To install Saloon, use Composer to install it into your PHP app.
+### Using Laravel?
+There is a version of Saloon for Laravel, to install it use Composer.
+```bash
+composer require sammyjo20/laravel-saloon
+```
+Otherwise, to install Saloon, use Composer to install it into your PHP app.
 ```bash
 composer require sammyjo20/saloon
 ```
