@@ -1,5 +1,6 @@
 {
     "name": "sammyjo20/saloon",
+    "description": "Interact with REST APIs with confidence and elegance."
     "type": "library",
     "license": "MIT",
     "autoload": {
