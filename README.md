@@ -33,7 +33,7 @@ $data = $response->json();
 ### Using Laravel?
 There is a version of Saloon for Laravel, to install it use Composer.
 ```bash
-composer require sammyjo20/laravel-saloon
+composer require sammyjo20/saloon-laravel
 ```
 Otherwise, to install Saloon, use Composer to install it into your PHP app.
 ```bash
