@@ -134,13 +134,11 @@ class RequestManager
     {
         $shouldGuessStatusFromBody = isset($this->connector->shouldGuessStatusFromBody) || isset($this->request->shouldGuessStatusFromBody);
 
-        $requestiResponse =  new SaloonResponse($requestOptions, $response, $shouldGuessStatusFromBody);
+        $response =  new SaloonResponse($requestOptions, $response, $shouldGuessStatusFromBody);
 
-        $requestiResponse = $this->connector->interceptResponse($request, $requestiResponse);
-        $requestiResponse = $this->request->interceptResponse($request, $requestiResponse);
+        $response = $this->connector->interceptResponse($request, $response);
+        $response = $this->request->interceptResponse($request, $response);
 
-        // Todo: Create a nice fresh standardised response class on top of guzzles
-
-        return $requestiResponse;
+        return $response;
     }
 }
