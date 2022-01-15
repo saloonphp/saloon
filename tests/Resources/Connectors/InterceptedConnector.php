@@ -13,7 +13,6 @@ use Sammyjo20\Saloon\Traits\Features\WithDebugData;
 class InterceptedConnector extends SaloonConnector
 {
     use AcceptsJson;
-    use DisablesSSLVerification;
 
     public function defineBaseUrl(): string
     {

@@ -9,8 +9,6 @@ use Sammyjo20\Saloon\Traits\Features\DisablesSSLVerification;
 class TestConnector extends SaloonConnector
 {
     use AcceptsJson;
-    // Todo: Remove when real API is working...
-    use DisablesSSLVerification;
 
     /**
      * Define the base url of the api.
