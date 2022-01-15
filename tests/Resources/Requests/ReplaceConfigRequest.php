@@ -43,7 +43,7 @@ class ReplaceConfigRequest extends SaloonRequest
         ];
     }
 
-    public function getData(): array
+    public function defaultData(): array
     {
         return [
             'foo' => 'bar'
