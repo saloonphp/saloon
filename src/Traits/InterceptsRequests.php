@@ -2,24 +2,24 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use GuzzleHttp\Psr7\Request;
+use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 
-trait InterceptsGuzzle
+trait InterceptsRequests
 {
-    public function interceptRequest(Request $requestInstance): Request
+    public function interceptRequest(SaloonRequest $request): SaloonRequest
     {
         // This will give you an instance of Http or Guzzle to allow
         // you to make any changes before the request goes out.
 
-        return $requestInstance;
+        return $request;
     }
 
-    public function interceptResponse($requestInstance, SaloonResponse $responseInstance): SaloonResponse
+    public function interceptResponse(SaloonRequest $request, SaloonResponse $response): SaloonResponse
     {
         // This will be called before anything else (including success/error handling)
         // You can do anything like logging etc.
 
-        return $responseInstance;
+        return $response;
     }
 }

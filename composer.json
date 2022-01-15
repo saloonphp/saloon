@@ -21,5 +21,20 @@
         "guzzlehttp/guzzle": "^7.3",
         "illuminate/collections": "^8.0",
         "laravel/helpers": "^1.4"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.5",
+        "pestphp/pest": "^1.21",
+        "spatie/ray": "^1.33"
+    },
+    "scripts": {
+        "fix-code": [
+            "./vendor/bin/php-cs-fixer fix"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     }
 }

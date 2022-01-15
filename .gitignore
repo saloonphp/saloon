@@ -1,3 +1,4 @@
 .idea
 composer.lock
 vendor
+.php-cs-fixer.cache

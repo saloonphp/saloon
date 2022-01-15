@@ -2,17 +2,16 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
-use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
-use Sammyjo20\Saloon\Interfaces\SaloonRequestInterface;
 use Sammyjo20\Saloon\Traits\CollectsAuth;
-use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsData;
-use Sammyjo20\Saloon\Traits\CollectsHeaders;
-use Sammyjo20\Saloon\Traits\CollectsAttributes;
-use Sammyjo20\Saloon\Traits\InterceptsGuzzle;
-use Sammyjo20\Saloon\Traits\MocksResponses;
 use Sammyjo20\Saloon\Traits\SendsRequests;
+use Sammyjo20\Saloon\Traits\CollectsConfig;
+use Sammyjo20\Saloon\Traits\MocksResponses;
+use Sammyjo20\Saloon\Traits\CollectsHeaders;
+use Sammyjo20\Saloon\Traits\InterceptsRequests;
+use Sammyjo20\Saloon\Interfaces\SaloonRequestInterface;
+use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 
 abstract class SaloonRequest implements SaloonRequestInterface
 {
@@ -21,7 +20,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
         CollectsAuth,
         CollectsConfig,
         SendsRequests,
-        InterceptsGuzzle,
+        InterceptsRequests,
         MocksResponses;
 
     /**

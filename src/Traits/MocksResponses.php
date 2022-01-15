@@ -2,8 +2,8 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Sammyjo20\Saloon\Exceptions\SaloonMissingMockException;
 use Sammyjo20\Saloon\Http\SaloonMock;
+use Sammyjo20\Saloon\Exceptions\SaloonMissingMockException;
 
 trait MocksResponses
 {
