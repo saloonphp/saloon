@@ -259,7 +259,7 @@ $request->setConfig($array); // This will overwrite all default configration opt
 $response = $request->send();
 ```
 ### Post Requests
-[Click here to read more about POST/PUT/PATCH requests](#post-requests)
+[Click here to read more about POST/PUT/PATCH requests](#form-data)
 
 ## API responses
 Once Saloon has sent the request, you will be given an instance of `SaloonResponse` to easily interact with the response from the server.
