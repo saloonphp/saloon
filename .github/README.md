@@ -385,7 +385,7 @@ class CreateForgeSiteRequest extends SaloonRequest
      * 
      * @return array
      */
-    public function defineData(): array
+    public function defaultData(): array
     {
         return [
             'domain' => $this->domain,
@@ -471,7 +471,7 @@ class GetForgeServersRequest extends SaloonRequest
      * 
      * @return array
      */
-    public function defineQuery(): array
+    public function defaultQuery(): array
     {
         return [
             'sort' => 'updated_at',
