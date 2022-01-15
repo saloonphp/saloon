@@ -38,7 +38,7 @@ trait CollectsHeaders
      */
     public function mergeHeaders(array ...$headerCollection): self
     {
-        foreach($headerCollection as $headers) {
+        foreach ($headerCollection as $headers) {
             $this->customHeaders = array_merge($this->customHeaders, $headers);
         }
 

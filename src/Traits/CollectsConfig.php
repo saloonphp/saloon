@@ -38,7 +38,7 @@ trait CollectsConfig
      */
     public function mergeConfig(array ...$configCollection): self
     {
-        foreach($configCollection as $config) {
+        foreach ($configCollection as $config) {
             $this->customConfig = array_merge($this->customConfig, $config);
         }
 

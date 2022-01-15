@@ -2,10 +2,10 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Client as GuzzleClient;
 
 trait ManagesGuzzle
 {
@@ -37,7 +37,7 @@ trait ManagesGuzzle
             : $this->request->getFailureMock();
 
         return new MockHandler([
-            new Response($saloonMock->getStatusCode(), $saloonMock->getHeaders(), $saloonMock->getBody())
+            new Response($saloonMock->getStatusCode(), $saloonMock->getHeaders(), $saloonMock->getBody()),
         ]);
     }
 }

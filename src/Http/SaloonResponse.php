@@ -3,8 +3,8 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Illuminate\Support\Arr;
-use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Illuminate\Support\Collection;
+use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 
 class SaloonResponse
@@ -31,6 +31,13 @@ class SaloonResponse
     protected array $saloonRequestOptions;
 
     /**
+     * The original request
+     *
+     * @var SaloonRequest
+     */
+    protected SaloonRequest $originalRequest;
+
+    /**
      * Should we attempt to guess the status of the request from the body?
      *
      * @var bool
@@ -41,12 +48,14 @@ class SaloonResponse
      * Create a new response instance.
      *
      * @param array $requestOptions
+     * @param SaloonRequest $originalRequest
      * @param $response
      * @param bool $shouldGuessStatusFromBody
      */
-    public function __construct(array $requestOptions, $response, bool $shouldGuessStatusFromBody = false)
+    public function __construct(array $requestOptions, SaloonRequest $originalRequest, $response, bool $shouldGuessStatusFromBody = false)
     {
         $this->saloonRequestOptions = $requestOptions;
+        $this->originalRequest = $originalRequest;
         $this->response = $response;
         $this->shouldGuessStatusFromBody = $shouldGuessStatusFromBody;
     }
@@ -59,6 +68,16 @@ class SaloonResponse
     public function getSaloonRequestOptions(): array
     {
         return $this->saloonRequestOptions;
+    }
+
+    /**
+     * Get the original request
+     *
+     * @return SaloonRequest
+     */
+    public function getOriginalRequest(): SaloonRequest
+    {
+        return $this->originalRequest;
     }
 
     /**

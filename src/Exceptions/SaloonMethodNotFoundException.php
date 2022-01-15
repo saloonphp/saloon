@@ -4,9 +4,6 @@ namespace Sammyjo20\Saloon\Exceptions;
 
 use \Exception;
 use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonResponse;
-use Throwable;
 
 class SaloonMethodNotFoundException extends Exception
 {

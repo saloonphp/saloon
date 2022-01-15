@@ -2,9 +2,9 @@
 
 namespace Sammyjo20\Saloon\Interfaces;
 
-use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
-use GuzzleHttp\Psr7\Request;
+use Sammyjo20\Saloon\Http\SaloonConnector;
 
 interface SaloonRequestInterface
 {
@@ -22,9 +22,9 @@ interface SaloonRequestInterface
 
     public function defineAuth(): array;
 
-    public function interceptRequest(Request $requestInstance): Request;
+    public function interceptRequest(SaloonRequest $request): SaloonRequest;
 
-    public function interceptResponse($requestInstance, SaloonResponse $responseInstance): SaloonResponse;
+    public function interceptResponse(SaloonRequest $request, SaloonResponse $responseInstance): SaloonResponse;
 
     public function defaultSuccessMockResponse(): void;
 

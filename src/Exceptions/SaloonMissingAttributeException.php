@@ -2,8 +2,8 @@
 
 namespace Sammyjo20\Saloon\Exceptions;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
 use \Exception;
+use Sammyjo20\Saloon\Http\SaloonRequest;
 
 class SaloonMissingAttributeException extends Exception
 {

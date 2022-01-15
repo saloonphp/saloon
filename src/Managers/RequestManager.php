@@ -2,18 +2,20 @@
 
 namespace Sammyjo20\Saloon\Managers;
 
-use Sammyjo20\Saloon\Constants\Saloon;
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonResponse;
-use Sammyjo20\Saloon\Traits\CollectsConfig;
-use Sammyjo20\Saloon\Traits\CollectsHeaders;
-use Sammyjo20\Saloon\Traits\ManagesFeatures;
-use Sammyjo20\Saloon\Traits\ManagesGuzzle;
-use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
+use Sammyjo20\Saloon\Constants\Saloon;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+use GuzzleHttp\Exception\GuzzleException;
+use Sammyjo20\Saloon\Http\SaloonResponse;
+use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Traits\ManagesGuzzle;
+use Sammyjo20\Saloon\Traits\CollectsConfig;
+use Sammyjo20\Saloon\Traits\CollectsHeaders;
+use Sammyjo20\Saloon\Traits\ManagesFeatures;
 
 class RequestManager
 {
@@ -69,7 +71,16 @@ class RequestManager
     private function bootManager(): void
     {
         $this->createGuzzleClient();
+    }
 
+    /**
+     * Hydrate the request manager
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    private function hydrateManager(): void
+    {
         // Load up any features and if they add any headers, then we add them to the array.
         // Some features, like the "hasBody" feature, will need some manual code.
 
@@ -84,19 +95,44 @@ class RequestManager
         $this->mergeConfig($this->connector->getConfig(), $this->request->getConfig());
     }
 
+    /**
+     * Prepare the request manager for message shipment
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function prepareMessage(): SaloonRequest
+    {
+        $request = &$this->request;
+
+        // Run the interceptors.
+
+        $request = $this->connector->interceptRequest($request);
+        $request = $this->request->interceptRequest($request);
+
+        // Rehydrate the manager
+
+        $this->hydrateManager();
+
+        return $request;
+    }
+
+    /**
+     * Send off the message... 🚀
+     *
+     * @return SaloonResponse
+     * @throws GuzzleException
+     * @throws \ReflectionException
+     */
     public function send()
     {
-        $request = $this->request;
+        $request = $this->prepareMessage();
 
         // Remove any leading slashes on the endpoint.
 
         $endpoint = ltrim($request->defineEndpoint(), '/ ');
+
         $guzzleRequest = new Request($request->getMethod(), $endpoint);
-
-        // Run the interceptors.
-
-        $guzzleRequest = $this->connector->interceptRequest($guzzleRequest);
-        $guzzleRequest = $this->request->interceptRequest($guzzleRequest);
 
         // Build up the config!
 
@@ -114,27 +150,26 @@ class RequestManager
 
         try {
             $guzzleResponse = $this->guzzleClient->send($guzzleRequest, $requestOptions);
-        } catch (GuzzleException $exception) {
-            // Todo: Catch ClientExceptions separately
-            return $this->createRepsonse($requestOptions, $exception->getRequest(), $exception->getResponse());
+        } catch (BadResponseException $exception) {
+            return $this->createResponse($requestOptions, $request, $exception->getResponse());
         }
 
-        return $this->createRepsonse($requestOptions, $guzzleRequest, $guzzleResponse);
+        return $this->createResponse($requestOptions, $request, $guzzleResponse);
     }
 
     /**
      * Create a response.
      *
      * @param array $requestOptions
-     * @param Request $request
+     * @param SaloonRequest $request
      * @param Response $response
      * @return SaloonResponse
      */
-    private function createRepsonse(array $requestOptions, Request $request, Response $response): SaloonResponse
+    private function createResponse(array $requestOptions, SaloonRequest $request, Response $response): SaloonResponse
     {
         $shouldGuessStatusFromBody = isset($this->connector->shouldGuessStatusFromBody) || isset($this->request->shouldGuessStatusFromBody);
 
-        $response =  new SaloonResponse($requestOptions, $response, $shouldGuessStatusFromBody);
+        $response = new SaloonResponse($requestOptions, $request, $response, $shouldGuessStatusFromBody);
 
         $response = $this->connector->interceptResponse($request, $response);
         $response = $this->request->interceptResponse($request, $response);
