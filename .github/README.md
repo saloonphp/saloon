@@ -1,5 +1,7 @@
 # Saloon 🚪🚪
 
+![Build Status](https://github.com/sammyjo20/saloon/actions/workflows/tests.yml/badge.svg)
+
 *Interact with REST APIs with elegance.*
 
 Saloon is a PHP package which introduces a class-based/OOP approach to building connections to APIs. Saloon introduces an easy to understand pattern to help you standardise the way you interact with third-party APIs, reduce repeated code (DRY) and lets you mock API requests for your tests.
@@ -256,6 +258,9 @@ $request->setConfig($array); // This will overwrite all default configration opt
 
 $response = $request->send();
 ```
+### Post Requests
+[Click here to read more about POST/PUT/PATCH requests](#form-data)
+
 ## API responses
 Once Saloon has sent the request, you will be given an instance of `SaloonResponse` to easily interact with the response from the server.
 ```php
@@ -333,25 +338,175 @@ trait AcceptsJson
 ```
 This plugin will add the header "Accept: application/json". These headers take a lower priority than the "defaultHeaders" defined in the Request/Connector.
 
+## Form Data
+Most API integrations you will write will often require sending data using a POST/PUT/PATCH request. Saloon makes this easy for you with the HasJsonBody, HasBody and HasMultipartBody plugin traits. Let’s look at how you use the HasJsonBody feature.
+
+```php
+<?php
+
+namespace App\Http\Saloon\Requests;
+
+use App\Http\Saloon\Connectors\ForgeConnector;
+use Sammyjo20\Saloon\Constants\Saloon;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Traits\Features\HasJsonBody;
+
+class CreateForgeSiteRequest extends SaloonRequest
+{
+    use HasJsonBody;
+
+    /**
+     * Define the method that the request will use.
+     *
+     * @var string|null
+     */
+    protected ?string $method = Saloon::POST;
+
+    /**
+     * The connector.
+     *
+     * @var string|null
+     */
+    protected ?string $connector = ForgeConnector::class;
+
+    /**
+     * Define the endpoint
+     *
+     * @return string
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingAttributeException
+     */
+    public function defineEndpoint(): string
+    {
+        return '/servers/' . $this->serverId . '/sites';
+    }
+    
+    /**
+     * Define data on the request
+     * 
+     * @return array
+     */
+    public function defaultData(): array
+    {
+        return [
+            'domain' => $this->domain,
+            'type' => 'php',
+        ];
+    }
+    
+    /**
+     * Constructor, you can pass in your own properties.
+     *
+     */
+    public function __construct(
+        public string $serverId,
+        public string $domain,
+    ){}
+}
+```
+
+Similar to headers and config, post data can have a hierarchy, and can also be added to, over overwritten at runtime.
+
+```php
+<?php
+
+$request = new CreateForgeSiteRequest($serverId, $domain);
+
+// Add an individual key
+
+$request->addData('key', 'value');
+
+// Overwrite the request data entirely.
+
+$request->setData([
+    'domain' => $customDomain,
+]);
+```
+
+> Tip: Instead of using `setData` you could add a constructor to your request with arguments for the data.
+
+## Query Parameters
+
+Saloon offers an easy way to add query parameters to your connectors and requests too. Let’s take a look at a request with the `HasQueryParams` trait.
+
+```php
+<?php
+
+namespace App\Http\Saloon\Requests;
+
+use App\Http\Saloon\Connectors\ForgeConnector;
+use Sammyjo20\Saloon\Constants\Saloon;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Traits\Features\HasQueryParams;
+
+class GetForgeServersRequest extends SaloonRequest
+{
+    use HasQueryParams;
+
+    /**
+     * Define the method that the request will use.
+     *
+     * @var string|null
+     */
+    protected ?string $method = Saloon::GET;
+
+    /**
+     * The connector.
+     *
+     * @var string|null
+     */
+    protected ?string $connector = ForgeConnector::class;
+
+    /**
+     * Define the endpoint for the request.
+     *
+     * @return string
+     */
+    public function defineEndpoint(): string
+    {
+        return '/servers';
+    }
+    
+    /**
+     * Define query parameters on the request
+     * 
+     * @return array
+     */
+    public function defaultQuery(): array
+    {
+        return [
+            'sort' => 'updated_at',
+        ];
+    }
+}
+```
+
+Similar to headers, config and form data - query parameters have a hierarchy and can also be added to or overwritten at run time
+
+```php
+<?php
+
+$request = new GetForgeSerersRequest();
+
+// Add an individual key
+
+$request->addQuery('key', 'value');
+
+// Overwrite the query parameters entirely.
+
+$request->setQuery([
+    'sort' => $sort,
+]);
+```
+
+## Other Plugins Available
+-   AcceptsJson
+-   HasTimeout
+-   WithDebugData
+-   DisablesSSLVerification (Please be careful with this)
+
 ## And that's it! ✨
 
 I really hope this package has been useful to you, if you like my work and want to show some love, consider buying me some coding fuel (Coffee) ❤
 
 [Donate Java (the drink not the language)](https://ko-fi.com/sammyjo20)
-
-### Available plugins
-- AcceptsJson
-- DisablesSSLVerification
-- HasBody
-- HasJsonBody
-- HasMultipartBody
-- HasQueryParams
-- HasTimeout
-- WithDebugData
-
-### Todo
-- Glossary and separate pages
-- Example on a simple GET request
-- Example on a simple POST request with request data
-- Examples on the features
 

@@ -4,13 +4,13 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\HeaderConnector;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\QueryParameterConnector;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
-use Sammyjo20\Saloon\Traits\Features\HasJsonBody;
+use Sammyjo20\Saloon\Traits\Features\HasQueryParams;
 
-class HeaderRequest extends SaloonRequest
+class QueryParameterConnectorBlankRequest extends SaloonRequest
 {
-    use HasJsonBody;
+    use HasQueryParams;
 
     /**
      * Define the method that the request will use.
@@ -24,7 +24,7 @@ class HeaderRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $connector = HeaderConnector::class;
+    protected ?string $connector = QueryParameterConnector::class;
 
     /**
      * Define the endpoint for the request.
@@ -34,27 +34,6 @@ class HeaderRequest extends SaloonRequest
     public function defineEndpoint(): string
     {
         return '/user';
-    }
-
-    public function defaultHeaders(): array
-    {
-        return [
-            'X-Custom-Header' => 'Howdy'
-        ];
-    }
-
-    public function defaultConfig(): array
-    {
-        return [
-            'timeout' => 5,
-        ];
-    }
-
-    public function defaultData(): array
-    {
-        return [
-            'foo' => 'bar'
-        ];
     }
 }
 

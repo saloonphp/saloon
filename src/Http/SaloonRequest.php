@@ -2,8 +2,8 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Sammyjo20\Saloon\Traits\CollectsAuth;
 use Sammyjo20\Saloon\Traits\CollectsData;
+use Sammyjo20\Saloon\Traits\CollectsQueryParams;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\MocksResponses;
@@ -16,8 +16,8 @@ use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 abstract class SaloonRequest implements SaloonRequestInterface
 {
     use CollectsData,
+        CollectsQueryParams,
         CollectsHeaders,
-        CollectsAuth,
         CollectsConfig,
         SendsRequests,
         InterceptsRequests,

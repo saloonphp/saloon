@@ -2,8 +2,6 @@
 
 namespace Sammyjo20\Saloon\Traits\Features;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-
 trait HasJsonBody
 {
     public function bootHasJsonBodyFeature()
@@ -13,16 +11,18 @@ trait HasJsonBody
         ]);
 
         $this->mergeConfig([
-            'json' => $this->defineBody(),
+            'json' => $this->getData(),
         ]);
     }
 
-    public function defineBody(): array
+    /**
+     * Check if the connector has a trait
+     *
+     * @return bool
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     */
+    protected function connectorHasTrait(): bool
     {
-        if ($this instanceof SaloonRequest) {
-            return $this->getData();
-        }
-
-        return [];
+        return array_key_exists(HasJsonBody::class, class_uses($this->getConnector()));
     }
 }

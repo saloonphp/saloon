@@ -4,11 +4,11 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\HeaderConnector;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\PostJsonConnector;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 use Sammyjo20\Saloon\Traits\Features\HasJsonBody;
 
-class HeaderRequest extends SaloonRequest
+class PostRequest extends SaloonRequest
 {
     use HasJsonBody;
 
@@ -17,14 +17,14 @@ class HeaderRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::GET;
+    protected ?string $method = Saloon::POST;
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = HeaderConnector::class;
+    protected ?string $connector = PostJsonConnector::class;
 
     /**
      * Define the endpoint for the request.
@@ -36,24 +36,10 @@ class HeaderRequest extends SaloonRequest
         return '/user';
     }
 
-    public function defaultHeaders(): array
-    {
-        return [
-            'X-Custom-Header' => 'Howdy'
-        ];
-    }
-
-    public function defaultConfig(): array
-    {
-        return [
-            'timeout' => 5,
-        ];
-    }
-
     public function defaultData(): array
     {
         return [
-            'foo' => 'bar'
+            'requestId' => '2',
         ];
     }
 }

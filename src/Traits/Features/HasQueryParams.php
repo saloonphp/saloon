@@ -7,12 +7,7 @@ trait HasQueryParams
     public function bootHasQueryParamsFeature()
     {
         $this->mergeConfig([
-            'query' => $this->defineQueryParams(),
+            'query' => $this->getQuery(),
         ]);
-    }
-
-    public function defineQueryParams(): array
-    {
-        return [];
     }
 }
