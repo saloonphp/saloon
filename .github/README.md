@@ -6,8 +6,6 @@
 
 Saloon is a PHP package which introduces a class-based/OOP approach to building connections to APIs. Saloon introduces an easy to understand pattern to help you standardise the way you interact with third-party APIs, reduce repeated code (DRY) and lets you mock API requests for your tests.
 
-> Note: Saloon is still a work in progress, some features aren't quite ready yet but are coming soon.
-
 ```php
 <?php
 
