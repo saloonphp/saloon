@@ -8,7 +8,7 @@ use Sammyjo20\Saloon\Tests\Resources\Connectors\PostJsonConnector;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 use Sammyjo20\Saloon\Traits\Features\HasJsonBody;
 
-class PostRequest extends SaloonRequest
+class PostConnectorDataBlankRequest extends SaloonRequest
 {
     use HasJsonBody;
 
@@ -34,13 +34,6 @@ class PostRequest extends SaloonRequest
     public function defineEndpoint(): string
     {
         return '/user';
-    }
-
-    public function defaultData(): array
-    {
-        return [
-            'requestId' => '2',
-        ];
     }
 }
 

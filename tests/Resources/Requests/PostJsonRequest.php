@@ -35,7 +35,7 @@ class PostJsonRequest extends SaloonRequest
         return '/user';
     }
 
-    public function postData(): array
+    public function defaultData(): array
     {
         return [
             'foo' => 'bar',

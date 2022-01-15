@@ -5,21 +5,22 @@ namespace Sammyjo20\Saloon\Tests\Resources\Connectors;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
 use Sammyjo20\Saloon\Traits\Features\HasJsonBody;
+use Sammyjo20\Saloon\Traits\Features\HasQueryParams;
 
-class PostJsonConnector extends SaloonConnector
+class QueryParameterConnector extends SaloonConnector
 {
     use AcceptsJson;
-    use HasJsonBody;
+    use HasQueryParams;
 
     public function defineBaseUrl(): string
     {
         return apiUrl();
     }
 
-    public function defaultData(): array
+    public function defaultQuery(): array
     {
         return [
-            'connectorId' => 1,
+            'sort' => 'first_name',
         ];
     }
 }

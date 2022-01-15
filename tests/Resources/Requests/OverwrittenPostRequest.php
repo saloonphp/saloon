@@ -8,7 +8,7 @@ use Sammyjo20\Saloon\Tests\Resources\Connectors\PostJsonConnector;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 use Sammyjo20\Saloon\Traits\Features\HasJsonBody;
 
-class PostRequest extends SaloonRequest
+class OverwrittenPostRequest extends SaloonRequest
 {
     use HasJsonBody;
 
@@ -39,7 +39,7 @@ class PostRequest extends SaloonRequest
     public function defaultData(): array
     {
         return [
-            'requestId' => '2',
+            'connectorId' => '2',
         ];
     }
 }

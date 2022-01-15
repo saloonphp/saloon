@@ -14,9 +14,9 @@ interface SaloonConnectorInterface
 
     public function defaultConfig(): array;
 
-    public function defineAuth(): array;
+    public function defaultData(): array;
 
-    public function postData(): array;
+    public function defaultQuery(): array;
 
     public function interceptRequest(SaloonRequest $request): SaloonRequest;
 

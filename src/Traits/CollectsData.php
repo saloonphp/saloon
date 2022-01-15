@@ -2,56 +2,132 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
+use Illuminate\Support\Arr;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+
 trait CollectsData
 {
-    protected array $data = [];
-
-    protected bool $overwriteDefaults = false;
-
-    public function setData(array $data): self
-    {
-        $this->overwriteDefaults = true;
-        $this->data = $data;
-
-        return $this;
-    }
-
-    public function addData(string $item, $value): self
-    {
-        $this->data[$item] = $value;
-
-        return $this;
-    }
+    /**
+     * Data that have been added, this doesn't include default data.
+     *
+     * @var array
+     */
+    private array $customData = [];
 
     /**
+     * Should we include the default data when using ->getData()?
+     *
+     * @var bool
+     */
+    public bool $includeDefaultData = true;
+
+    /**
+     * Default data.
+     *
      * @return array
      */
-    public function postData(): array
+    public function defaultData(): array
     {
         return [];
     }
 
     /**
-     * Get all data, if setData has been used, don't include the defaults.
+     * Merge data together into one array.
      *
-     * @return array
+     * @param mixed ...$dataCollection
+     * @return $this
      */
-    public function allData(): array
+    public function mergeData(array ...$dataCollection): self
     {
-        if ($this->overwriteDefaults === true) {
-            return $this->data;
+        foreach ($dataCollection as $data) {
+            $this->customData = array_merge($this->customData, $data);
         }
 
-        return array_merge($this->data, $this->postData());
+        return $this;
     }
 
-    public function data(string $item): mixed
+    /**
+     * Set the whole data array.
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function setData(array $data): self
     {
-        return $this->data[$item];
+        $this->ignoreDefaultData();
+
+        $this->customData = $data;
+
+        return $this;
     }
 
-    public function shouldOverwriteDefaults(): bool
+    /**
+     * Add an individual data.
+     *
+     * @param string $data
+     * @param $value
+     * @return $this
+     */
+    public function addData(string $data, $value): self
     {
-        return $this->overwriteDefaults;
+        $this->customData[$data] = $value;
+
+        return $this;
+    }
+
+    /**
+     *  Get all data or filter with a key.
+     *
+     * @param string|null $key
+     * @return mixed
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     */
+    public function getData(string $key = null): mixed
+    {
+        if ($this->includeDefaultData === true) {
+            // Let's merge in the query parameters from the connector if
+            // the connector has the trait.
+
+            if ($this instanceof SaloonRequest && $this->connectorHasTrait()) {
+                $dataBag = $this->getConnector()->getData();
+            } else {
+                $dataBag = [];
+            }
+
+            // Now let's merge the request query parameters because they take priority
+
+            $dataBag = array_merge($dataBag, $this->defaultData(), $this->customData);
+        } else {
+            $dataBag = $this->customData;
+        }
+
+        if (isset($key)) {
+            return Arr::get($dataBag, $key);
+        }
+
+        return $dataBag;
+    }
+
+    /**
+     * Get an individual data
+     *
+     * @param string $key
+     * @return string
+     */
+    public function getDataByKey(string $key): string
+    {
+        return $this->getData($key);
+    }
+
+    /**
+     * Should we ignore the default data when calling `->getData()`?
+     *
+     * @return $this
+     */
+    public function ignoreDefaultData(): self
+    {
+        $this->includeDefaultData = false;
+
+        return $this;
     }
 }

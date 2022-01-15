@@ -4,27 +4,27 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\PostJsonConnector;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\QueryParameterConnector;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
-use Sammyjo20\Saloon\Traits\Features\HasJsonBody;
+use Sammyjo20\Saloon\Traits\Features\HasQueryParams;
 
-class PostRequest extends SaloonRequest
+class QueryParameterConnectorRequest extends SaloonRequest
 {
-    use HasJsonBody;
+    use HasQueryParams;
 
     /**
      * Define the method that the request will use.
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::POST;
+    protected ?string $method = Saloon::GET;
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = PostJsonConnector::class;
+    protected ?string $connector = QueryParameterConnector::class;
 
     /**
      * Define the endpoint for the request.
@@ -36,10 +36,10 @@ class PostRequest extends SaloonRequest
         return '/user';
     }
 
-    public function defaultData(): array
+    public function defaultQuery(): array
     {
         return [
-            'requestId' => '2',
+            'include' => 'user',
         ];
     }
 }
