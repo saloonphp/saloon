@@ -16,6 +16,8 @@ interface SaloonConnectorInterface
 
     public function defineAuth(): array;
 
+    public function postData(): array;
+
     public function interceptRequest(SaloonRequest $request): SaloonRequest;
 
     public function interceptResponse(SaloonRequest $request, SaloonResponse $responseInstance): SaloonResponse;

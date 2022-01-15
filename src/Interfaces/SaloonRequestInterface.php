@@ -18,7 +18,7 @@ interface SaloonRequestInterface
 
     public function defaultConfig(): array;
 
-    public function defineData(): array;
+    public function postData(): array;
 
     public function defineAuth(): array;
 

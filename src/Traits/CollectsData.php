@@ -6,13 +6,11 @@ trait CollectsData
 {
     protected array $data = [];
 
-    public function defineData(): array
-    {
-        return [];
-    }
+    protected bool $overwriteDefaults = false;
 
     public function setData(array $data): self
     {
+        $this->overwriteDefaults = true;
         $this->data = $data;
 
         return $this;
@@ -25,13 +23,35 @@ trait CollectsData
         return $this;
     }
 
-    public function getData(): array
+    /**
+     * @return array
+     */
+    public function postData(): array
     {
-        return $this->data;
+        return [];
+    }
+
+    /**
+     * Get all data, if setData has been used, don't include the defaults.
+     *
+     * @return array
+     */
+    public function allData(): array
+    {
+        if ($this->overwriteDefaults === true) {
+            return $this->data;
+        }
+
+        return array_merge($this->data, $this->postData());
     }
 
     public function data(string $item): mixed
     {
         return $this->data[$item];
+    }
+
+    public function shouldOverwriteDefaults(): bool
+    {
+        return $this->overwriteDefaults;
     }
 }

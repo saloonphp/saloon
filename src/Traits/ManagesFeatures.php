@@ -52,6 +52,10 @@ trait ManagesFeatures
                 continue;
             }
 
+            if ($type !== 'connector' && $type !== 'request') {
+                continue;
+            }
+
             if ($type === 'connector' && method_exists($this->connector, $bootName)) {
                 $this->bootConnectorFeature($bootName);
             }
@@ -60,7 +64,7 @@ trait ManagesFeatures
                 $this->bootRequestFeature($bootName);
             }
 
-            $this->features[] = $featureName;
+            $this->features[] = $featureName . $type;
         }
 
         return $this;

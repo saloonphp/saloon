@@ -9,16 +9,7 @@ trait HasMultipartBody
     public function bootHasMultipartBodyFeature()
     {
         $this->mergeConfig([
-            'multipart' => $this->defineMultipartBody(),
+            'multipart' => $this->allData(),
         ]);
-    }
-
-    public function defineBody(): array
-    {
-        if ($this instanceof SaloonRequest) {
-            return $this->getData();
-        }
-
-        return [];
     }
 }

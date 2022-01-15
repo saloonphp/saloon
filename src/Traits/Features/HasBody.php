@@ -9,16 +9,7 @@ trait HasBody
     public function bootHasBodyFeature()
     {
         $this->mergeConfig([
-            'form_params' => $this->defineBody(),
+            'form_params' => $this->allData(),
         ]);
-    }
-
-    public function defineBody(): array
-    {
-        if ($this instanceof SaloonRequest) {
-            return $this->getData();
-        }
-
-        return [];
     }
 }

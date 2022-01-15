@@ -12,6 +12,7 @@ class HeaderConnector extends SaloonConnector
 {
     use AcceptsJson;
     use WithDebugData;
+    use HasJsonBody;
 
     public function defineBaseUrl(): string
     {
