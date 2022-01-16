@@ -340,7 +340,7 @@ trait AcceptsJson
     }
 }
 ```
-This plugin will add the header "Accept: application/json". These headers take a lower priority than the "defaultHeaders" defined in the Request/Connector.
+This plugin will add the header `Accept: application/json` to all requests made by the connector. If you add the `AcceptsJson` to just one request, the header will only be applied to that request. Plugin headers take a lower priority than the `defaultHeaders` defined in the Request/Connector and can be overwritten at runtime with `$request->setHeaders()`.
 
 ## Form Data
 Most API integrations you will write will often require sending data using a POST/PUT/PATCH request. Saloon makes this easy for you with the `HasJsonBody`, `HasBody` and `HasMultipartBody` plugin traits. Let’s look at how you use the `HasJsonBody` feature.
@@ -511,6 +511,10 @@ $request->setQuery([
 -   HasTimeout
 -   WithDebugData
 -   DisablesSSLVerification (Please be careful with this)
+
+## Write your own plugins
+
+Feel free to write your own plugins, just make sure to include a "boot" method inside of the plugin. The format is: `boot{YOUR CLASS NAME}feature`. For example if I had a class called WithAWSHeader your boot method would be called `bootWithAWSHeaderFeature`.
 
 ## And that's it! ✨
 
