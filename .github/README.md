@@ -10,7 +10,7 @@
 
 ## Introduction
 
-Saloon is a PHP package which introduces a class-based/OOP approach to building connections to APIs. Saloon introduces an easy to understand pattern to help you standardise the way you interact with third-party APIs, reduce repeated code (DRY) and lets you mock API requests for your tests.
+Saloon is a PHP package which introduces a class-based/OOP approach to building connections to APIs. Saloon introduces an easy to understand pattern to help you standardise the way you interact with third-party APIs, reduce repeated code (DRY) and lets you mock API requests for your tests. It has a great package for Laravel for a tight integration with a fantastic ecosystem.
 
 ```php
 <?php
@@ -24,13 +24,13 @@ $data = $response->json();
 ```
 
 ## Features
-- Simple and elegant syntax.
-- Standardises the way you interact with APIs.
-- Conforms to the PSR-7 standard.
-- You don't have to interact with cURL/Http Facade/Guzzle.
-- Lets you update API requests in one place.
-- Easily extend with your own functionality.
-- Framework agnostic.
+- Simple and elegant syntax
+- Standardises the way you interact with APIs
+- Conforms to the PSR-7 standard
+- You don't have to worry about Guzzle/Http Facade/cURL
+- Lets you organise all your API integrations in one place
+- Easily add on your own functionality with plugins
+- Framework agnostic
 - Mocking requests for testing. (work in progress)
 
 > Note on mocking/faking: I'm currently looking for some help with mocking requests in Saloon. If you have any suggestions to make this better, please consider contributing to the issue on the issues page.
