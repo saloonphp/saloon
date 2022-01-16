@@ -1,8 +1,14 @@
+<div align="center">
+
 # Saloon 🚪🚪
 
 ![Build Status](https://github.com/sammyjo20/saloon/actions/workflows/tests.yml/badge.svg)
 
 *A Laravel & PHP package that allows you to write your API integrations in a beautiful, standardised syntax.*
+    
+</div>
+
+## Introduction
 
 Saloon is a PHP package which introduces a class-based/OOP approach to building connections to APIs. Saloon introduces an easy to understand pattern to help you standardise the way you interact with third-party APIs, reduce repeated code (DRY) and lets you mock API requests for your tests.
 
