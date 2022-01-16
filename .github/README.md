@@ -273,28 +273,28 @@ $response = $request->send();
 ### Available methods
 The Saloon response has a lot of handy methods for you. A lot of these are taken from `Illuminate/Http`.
 ```php
-getSaloonRequestOptions(): array
-toPsrResponse(): ResponseInterface
-body(): string
-json(): array
-object(): object
-collect(): Collection
-header(): string
-headers(): array
-getStatusFroMResponse(): int
-status(): int
-effectiveUri(): UriInterface
-successful(): bool
-ok(): bool
-redirect(): bool
-failed(): bool
-clientError(): bool
-serverError(): bool
-onError(callable $callback)
-cookies(): CookieJar
-handlerStats(): array
-toException()
-throw()
+$response->getSaloonRequestOptions(): array
+$response->toPsrResponse(): ResponseInterface
+$response->body(): string
+$response->json(): array
+$response->object(): object
+$response->collect(): Collection
+$response->header(): string
+$response->headers(): array
+$response->getStatusFroMResponse(): int
+$response->status(): int
+$response->effectiveUri(): UriInterface
+$response->successful(): bool
+$response->ok(): bool
+$response->redirect(): bool
+$response->failed(): bool
+$response->clientError(): bool
+$response->serverError(): bool
+$response->onError(callable $callback)
+$response->cookies(): CookieJar
+$response->handlerStats(): array
+$response->toException()
+$response->throw()
 ```
 
 ## Saloon Plugins
@@ -343,7 +343,9 @@ trait AcceptsJson
 This plugin will add the header "Accept: application/json". These headers take a lower priority than the "defaultHeaders" defined in the Request/Connector.
 
 ## Form Data
-Most API integrations you will write will often require sending data using a POST/PUT/PATCH request. Saloon makes this easy for you with the HasJsonBody, HasBody and HasMultipartBody plugin traits. Let’s look at how you use the HasJsonBody feature.
+Most API integrations you will write will often require sending data using a POST/PUT/PATCH request. Saloon makes this easy for you with the `HasJsonBody`, `HasBody` and `HasMultipartBody` plugin traits. Let’s look at how you use the `HasJsonBody` feature.
+
+Firstly, add the trait to the class. After that, use the `defaultData()` method to define data that will be sent in the request. You don't have to define a `defaultData()` method for it to work, however it's recommended that you do so you can update your request payload in the Saloon request. See below for setting the form data at runtime.
 
 ```php
 <?php
@@ -431,6 +433,8 @@ $request->setData([
 ## Query Parameters
 
 Saloon offers an easy way to add query parameters to your connectors and requests too. Let’s take a look at a request with the `HasQueryParams` trait.
+
+Firstly, add the trait to the class. After that, use the `defaultQuery()` method to define query parameters that will be sent in the request. You don't have to define a `defaultQuery()` method for it to work, however it's recommended that you do so you can update your request payload in the Saloon request. See below for setting the query parameters at runtime.
 
 ```php
 <?php
