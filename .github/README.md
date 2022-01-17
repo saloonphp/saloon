@@ -1,6 +1,8 @@
+![1752](https://user-images.githubusercontent.com/29132017/149842636-e9964b27-7ace-4af9-a6db-23c325505295.jpg)
+
 <div align="center">
 
-# Saloon 🚪🚪
+# 🚪 Saloon 🚪
 
 ![Build Status](https://github.com/sammyjo20/saloon/actions/workflows/tests.yml/badge.svg)
 
@@ -585,3 +587,5 @@ I really hope this package has been useful to you, if you like my work and want 
 
 [Donate Java (the drink not the language)](https://ko-fi.com/sammyjo20)
 
+## Banner Image Credit
+- Freepix.com
