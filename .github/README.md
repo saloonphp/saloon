@@ -4,9 +4,9 @@
 
 # 🚪 Saloon 🚪
 
-![Build Status](https://github.com/sammyjo20/saloon/actions/workflows/tests.yml/badge.svg)
-
 *A Laravel & PHP package that allows you to write your API integrations in a beautiful, standardised syntax.*
+    
+![Build Status](https://github.com/sammyjo20/saloon/actions/workflows/tests.yml/badge.svg)
     
 </div>
 
