@@ -31,6 +31,7 @@ $data = $response->json();
 - Lets you organise all your API integrations in one place
 - Easily add on your own functionality with plugins
 - Framework agnostic
+- Powerful plugin/interceptor logic to customise the request and response
 - Mocking requests for testing. (work in progress)
 
 > Note on mocking/faking: I'm currently looking for some help with mocking requests in Saloon. If you have any suggestions to make this better, please consider contributing to the issue on the issues page.
