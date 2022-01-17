@@ -6,7 +6,7 @@ use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Tests\Resources\Plugins\HasTestHandler;
 use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
 
-class TestConnector extends SaloonConnector
+class WithBootConnector extends SaloonConnector
 {
     use AcceptsJson;
 
@@ -20,13 +20,8 @@ class TestConnector extends SaloonConnector
         return apiUrl();
     }
 
-    /**
-     * Define the base headers that will be applied in every request.
-     *
-     * @return string[]
-     */
-    public function defaultHeaders(): array
+    public function boot(): void
     {
-        return [];
+        $this->addHeader('X-Connector-Boot-Header', 'Howdy!');
     }
 }

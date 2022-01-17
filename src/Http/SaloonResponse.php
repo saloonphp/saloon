@@ -4,7 +4,6 @@ namespace Sammyjo20\Saloon\Http;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 
 class SaloonResponse
@@ -43,6 +42,13 @@ class SaloonResponse
      * @var bool
      */
     protected bool $shouldGuessStatusFromBody = false;
+
+    /**
+     * Determines if the response has been cached
+     *
+     * @var bool
+     */
+    private bool $isCached = false;
 
     /**
      * Create a new response instance.
@@ -365,6 +371,29 @@ class SaloonResponse
     public function __toString()
     {
         return $this->body();
+    }
+
+    /**
+     * Set if the response is cached. Should only be used internally.
+     *
+     * @param bool $cached
+     * @return $this
+     */
+    public function setCached(bool $cached): self
+    {
+        $this->isCached = $cached;
+
+        return $this;
+    }
+
+    /**
+     * Check if the response has been cached
+     *
+     * @return bool
+     */
+    public function isCached(): bool
+    {
+        return $this->isCached;
     }
 
     /**

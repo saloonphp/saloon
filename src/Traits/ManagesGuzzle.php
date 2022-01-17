@@ -80,18 +80,9 @@ trait ManagesGuzzle
                 throw new SaloonDuplicateHandlerException($handler);
             }
 
-            // Now let's invoke the closure that has been passed into "addHandler"
-            // it is time for it to shine.
-
-            $invokedHandler = $handlerClosure();
-
-            if (is_null($invokedHandler)) {
-                throw new SaloonInvalidHandlerException($handler);
-            }
-
             // Once that's all good, push the handler onto the stack.
 
-            $handlerStack->push($invokedHandler, $handler);
+            $handlerStack->push($handlerClosure, $handler);
 
             // Add the booted handler here, so it can't be loaded again.
 

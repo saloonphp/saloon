@@ -15,18 +15,4 @@ class InterceptedConnector extends SaloonConnector
     {
         return apiUrl();
     }
-
-    public function interceptRequest(SaloonRequest $request): SaloonRequest
-    {
-        $request->addHeader('X-Connector-Name', 'Interceptor');
-
-        return $request;
-    }
-
-    public function interceptResponse(SaloonRequest $request, SaloonResponse $response): SaloonResponse
-    {
-        $response->throw();
-
-        return $response;
-    }
 }

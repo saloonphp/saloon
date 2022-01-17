@@ -31,11 +31,4 @@ class InterceptedRequest extends SaloonRequest
     {
         return '/user';
     }
-
-    public function interceptRequest(SaloonRequest $request): SaloonRequest
-    {
-        $request->addHeader('X-Intercepted-Header', 'Sam');
-
-        return $request;
-    }
 }

@@ -13,7 +13,7 @@ test('a request with the hasQueryParams feature sends the query params', functio
 
     $requestManager = new RequestManager($request);
 
-    $requestManager->prepareMessage();
+    $requestManager->prepareForFlight();
 
     $config = $requestManager->getConfig();
 
@@ -31,7 +31,7 @@ test('if setQuery is used, all other default query params wont be included', fun
 
     $requestManager = new RequestManager($request);
 
-    $requestManager->prepareMessage();
+    $requestManager->prepareForFlight();
 
     $config = $requestManager->getConfig();
 
@@ -44,7 +44,7 @@ test('a connector can have query that is set', function () {
 
     $requestManager = new RequestManager($request);
 
-    $requestManager->prepareMessage();
+    $requestManager->prepareForFlight();
 
     $config = $requestManager->getConfig();
 
@@ -58,7 +58,7 @@ test('a request query parameter can overwrite a connectors parameter', function 
 
     $requestManager = new RequestManager($request);
 
-    $requestManager->prepareMessage();
+    $requestManager->prepareForFlight();
 
     $config = $requestManager->getConfig();
 
@@ -73,7 +73,7 @@ test('manually overwriting query parameter in runtime can overwrite connector pa
 
     $requestManager = new RequestManager($request);
 
-    $requestManager->prepareMessage();
+    $requestManager->prepareForFlight();
 
     $config = $requestManager->getConfig();
 
@@ -88,7 +88,7 @@ test('manually overwriting query parameter in runtime can overwrite request para
 
     $requestManager = new RequestManager($request);
 
-    $requestManager->prepareMessage();
+    $requestManager->prepareForFlight();
 
     $config = $requestManager->getConfig();
 

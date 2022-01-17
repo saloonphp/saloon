@@ -6,9 +6,10 @@ use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Tests\Resources\Plugins\HasTestHandler;
 use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
 
-class TestConnector extends SaloonConnector
+class HandlerConnector extends SaloonConnector
 {
     use AcceptsJson;
+    use HasTestHandler;
 
     /**
      * Define the base url of the api.

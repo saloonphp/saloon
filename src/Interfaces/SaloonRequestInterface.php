@@ -26,11 +26,13 @@ interface SaloonRequestInterface
 
     public function getHandlers(): array;
 
-    public function interceptRequest(SaloonRequest $request): SaloonRequest;
+    public function addResponseInterceptor(callable $function): void;
 
-    public function interceptResponse(SaloonRequest $request, SaloonResponse $responseInstance): SaloonResponse;
+    public function getResponseInterceptors(): array;
 
     public function defaultSuccessMockResponse(): void;
 
     public function defaultFailureMockResponse(): void;
+
+    public function boot(): void;
 }

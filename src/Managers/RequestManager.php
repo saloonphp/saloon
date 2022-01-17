@@ -10,6 +10,7 @@ use Sammyjo20\Saloon\Http\SaloonRequest;
 use GuzzleHttp\Exception\GuzzleException;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Traits\CollectsInterceptors;
 use Sammyjo20\Saloon\Traits\ManagesGuzzle;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
@@ -22,8 +23,9 @@ class RequestManager
     use ManagesGuzzle,
         ManagesFeatures,
         CollectsHeaders,
+        CollectsConfig,
         CollectsHandlers,
-        CollectsConfig;
+        CollectsInterceptors;
 
     /**
      * The request that we are about to dispatch.
@@ -74,6 +76,16 @@ class RequestManager
 
         $this->loadFeatures();
 
+        // Run the boot methods of the connector and requests these are only used to add
+        // extra functionality at a pinch.
+
+        $this->connector->boot();
+        $this->request->boot();
+
+        // Run any interceptors now
+
+        $this->mergeResponseInterceptors($this->connector->getResponseInterceptors(), $this->request->getResponseInterceptors());
+
         // Merge the headers, query, and config (request always takes presidency).
 
         $this->mergeHeaders($this->connector->getHeaders(), $this->request->getHeaders());
@@ -93,14 +105,9 @@ class RequestManager
      * @return void
      * @throws \ReflectionException
      */
-    public function prepareMessage(): SaloonRequest
+    public function prepareForFlight(): SaloonRequest
     {
         $request = &$this->request;
-
-        // Run the interceptors.
-
-        $request = $this->connector->interceptRequest($request);
-        $request = $this->request->interceptRequest($request);
 
         // Rehydrate the manager
 
@@ -121,7 +128,7 @@ class RequestManager
      */
     public function send()
     {
-        $request = $this->prepareMessage();
+        $request = $this->prepareForFlight();
 
         // Remove any leading slashes on the endpoint.
 
@@ -170,8 +177,11 @@ class RequestManager
 
         $response = new SaloonResponse($requestOptions, $request, $response, $shouldGuessStatusFromBody);
 
-        $response = $this->connector->interceptResponse($request, $response);
-        $response = $this->request->interceptResponse($request, $response);
+        // Run Response Interceptors
+
+        foreach ($this->getResponseInterceptors() as $responseInterceptor) {
+            $response = $responseInterceptor($request, $response);
+        }
 
         return $response;
     }

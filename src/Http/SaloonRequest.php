@@ -8,8 +8,8 @@ use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\MocksResponses;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\CollectsHandlers;
-use Sammyjo20\Saloon\Traits\InterceptsRequests;
 use Sammyjo20\Saloon\Traits\CollectsQueryParams;
+use Sammyjo20\Saloon\Traits\CollectsInterceptors;
 use Sammyjo20\Saloon\Interfaces\SaloonRequestInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
@@ -21,8 +21,8 @@ abstract class SaloonRequest implements SaloonRequestInterface
         CollectsHeaders,
         CollectsConfig,
         CollectsHandlers,
+        CollectsInterceptors,
         SendsRequests,
-        InterceptsRequests,
         MocksResponses;
 
     /**
@@ -47,6 +47,16 @@ abstract class SaloonRequest implements SaloonRequestInterface
     private ?SaloonConnector $loadedConnector = null;
 
     /**
+     * Define anything to be added to the request.
+     *
+     * @return void
+     */
+    public function boot(): void
+    {
+        // TODO: Implement boot() method.
+    }
+
+    /**
      * Get the method the class is using.
      *
      * @return string|null
@@ -60,6 +70,12 @@ abstract class SaloonRequest implements SaloonRequestInterface
         return $this->method;
     }
 
+    /**
+     * Boot the connector
+     *
+     * @return void
+     * @throws SaloonInvalidConnectorException
+     */
     private function bootConnector(): void
     {
         if (empty($this->connector) || ! class_exists($this->connector)) {
@@ -101,7 +117,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
     }
 
     /**
-     * Dynamically proxy other methods to the underlying response.
+     * Dynamically proxy other methods to the connector.
      *
      * @param $method
      * @param $parameters

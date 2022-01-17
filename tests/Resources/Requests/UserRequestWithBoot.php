@@ -4,9 +4,9 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\InterceptedConnector;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 
-class InterceptedConnectorUserRequest extends SaloonRequest
+class UserRequestWithBoot extends SaloonRequest
 {
     /**
      * Define the method that the request will use.
@@ -20,7 +20,7 @@ class InterceptedConnectorUserRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $connector = InterceptedConnector::class;
+    protected ?string $connector = TestConnector::class;
 
     /**
      * Define the endpoint for the request.
@@ -34,10 +34,6 @@ class InterceptedConnectorUserRequest extends SaloonRequest
 
     public function boot(): void
     {
-        $this->addRequestInterceptor(function (SaloonRequest $request) {
-            $request->addHeader('X-Connector-Name', 'Interceptor');
-
-            return $request;
-        });
+        $this->addHeader('X-Request-Boot-Header', 'Yee-haw!');
     }
 }
