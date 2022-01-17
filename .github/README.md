@@ -35,8 +35,6 @@ $data = $response->json();
 - Mocking requests for testing (Coming Soon)
 - Framework agnostic
 
-> Note on mocking/faking: I'm currently looking for some help with mocking requests in Saloon. If you have any suggestions to make this better, please consider contributing.
-
 ## Getting Started
 ### Using Laravel?
 There is a version of Saloon for Laravel, to install it use Composer.
