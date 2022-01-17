@@ -1,10 +1,10 @@
 <?php
 
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
-use Sammyjo20\Saloon\Tests\Resources\Requests\InterceptedConnectorErrorRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\InterceptedConnectorUserRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\InterceptedRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\InterceptedResponseRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\InterceptedConnectorUserRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\InterceptedConnectorErrorRequest;
 
 test('a connector request can be intercepted', function () {
     $request = new InterceptedConnectorUserRequest();

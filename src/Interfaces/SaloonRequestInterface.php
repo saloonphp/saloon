@@ -22,6 +22,10 @@ interface SaloonRequestInterface
 
     public function defaultQuery(): array;
 
+    public function addHandler(string $name, callable $function): void;
+
+    public function getHandlers(): array;
+
     public function interceptRequest(SaloonRequest $request): SaloonRequest;
 
     public function interceptResponse(SaloonRequest $request, SaloonResponse $responseInstance): SaloonResponse;

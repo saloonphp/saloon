@@ -3,12 +3,13 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Traits\CollectsData;
-use Sammyjo20\Saloon\Traits\CollectsQueryParams;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\MocksResponses;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
+use Sammyjo20\Saloon\Traits\CollectsHandlers;
 use Sammyjo20\Saloon\Traits\InterceptsRequests;
+use Sammyjo20\Saloon\Traits\CollectsQueryParams;
 use Sammyjo20\Saloon\Interfaces\SaloonRequestInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
@@ -19,6 +20,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
         CollectsQueryParams,
         CollectsHeaders,
         CollectsConfig,
+        CollectsHandlers,
         SendsRequests,
         InterceptsRequests,
         MocksResponses;

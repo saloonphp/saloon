@@ -32,5 +32,3 @@ class ErrorRequest extends SaloonRequest
         return '/error';
     }
 }
-
-

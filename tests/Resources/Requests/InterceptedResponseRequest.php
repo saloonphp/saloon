@@ -47,5 +47,3 @@ class InterceptedResponseRequest extends SaloonRequest
         return $responseInstance;
     }
 }
-
-

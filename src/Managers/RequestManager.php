@@ -2,8 +2,6 @@
 
 namespace Sammyjo20\Saloon\Managers;
 
-use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
@@ -16,13 +14,15 @@ use Sammyjo20\Saloon\Traits\ManagesGuzzle;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\ManagesFeatures;
+use Sammyjo20\Saloon\Traits\CollectsHandlers;
+use GuzzleHttp\Exception\BadResponseException;
 
 class RequestManager
 {
-    use ManagesGuzzle;
-    use ManagesFeatures;
-
-    use CollectsHeaders,
+    use ManagesGuzzle,
+        ManagesFeatures,
+        CollectsHeaders,
+        CollectsHandlers,
         CollectsConfig;
 
     /**
@@ -59,18 +59,6 @@ class RequestManager
         $this->connector = $request->getConnector();
         $this->isMocking = in_array($mockType, [Saloon::SUCCESS_MOCK, Saloon::FAILURE_MOCK], true);
         $this->mockType = $mockType;
-
-        $this->bootManager();
-    }
-
-    /**
-     * Boot up the request manager, merge the headers, query, and config.
-     *
-     * @throws \ReflectionException
-     */
-    private function bootManager(): void
-    {
-        $this->createGuzzleClient();
     }
 
     /**
@@ -93,6 +81,10 @@ class RequestManager
         // Merge the config
 
         $this->mergeConfig($this->connector->getConfig(), $this->request->getConfig());
+
+        // Merge in any handlers
+
+        $this->mergeHandlers($this->connector->getHandlers(), $this->request->getHandlers());
     }
 
     /**
@@ -123,6 +115,9 @@ class RequestManager
      * @return SaloonResponse
      * @throws GuzzleException
      * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
      */
     public function send()
     {
@@ -146,10 +141,14 @@ class RequestManager
             $requestOptions[$configVariable] = $value;
         }
 
+        // Boot up our Guzzle client... This will also boot up handlers...
+
+        $client = $this->createGuzzleClient();
+
         // Send the request! 🚀
 
         try {
-            $guzzleResponse = $this->guzzleClient->send($guzzleRequest, $requestOptions);
+            $guzzleResponse = $client->send($guzzleRequest, $requestOptions);
         } catch (BadResponseException $exception) {
             return $this->createResponse($requestOptions, $request, $exception->getResponse());
         }

@@ -1,10 +1,10 @@
 <?php
 
 use Sammyjo20\Saloon\Managers\RequestManager;
+use Sammyjo20\Saloon\Tests\Resources\Requests\PostRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\PostJsonRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\OverwrittenPostRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\PostConnectorDataBlankRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\PostJsonRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\PostRequest;
 
 test('a request with the hasJsonBody feature sends the json data', function () {
     $request = new PostJsonRequest();
