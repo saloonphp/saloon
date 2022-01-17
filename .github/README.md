@@ -586,6 +586,3 @@ class CreateForgeServerRequest extends SaloonRequest
 I really hope this package has been useful to you, if you like my work and want to show some love, consider buying me some coding fuel (Coffee) ❤
 
 [Donate Java (the drink not the language)](https://ko-fi.com/sammyjo20)
-
-## Banner Image Credit
-- Freepix.com
