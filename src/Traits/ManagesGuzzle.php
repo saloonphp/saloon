@@ -91,7 +91,7 @@ trait ManagesGuzzle
 
             // Once that's all good, push the handler onto the stack.
 
-            $handlerStack->push($invokedHandler);
+            $handlerStack->push($invokedHandler, $handler);
 
             // Add the booted handler here, so it can't be loaded again.
 
