@@ -24,18 +24,16 @@ $data = $response->json();
 ```
 
 ## Features
-- Simple and elegant syntax
-- Standardises the way you interact with APIs
-- Conforms to the PSR-7 standard
+- Simple syntax, standardises the way you interact with APIs
 - You don't have to worry about Guzzle/Http Facade/cURL
-- Lets you organise all your API integrations in one place
+- Organise all your API integrations in one place
 - Easily add on your own functionality with plugins
-- Framework agnostic
 - Powerful interceptor logic to customise the response
 - Supports Guzzle Handlers for unlimited customisation
-- Mocking requests for testing. (work in progress)
+- Mocking requests for testing (Coming Soon)
+- Framework agnostic
 
-> Note on mocking/faking: I'm currently looking for some help with mocking requests in Saloon. If you have any suggestions to make this better, please consider contributing to the issue on the issues page.
+> Note on mocking/faking: I'm currently looking for some help with mocking requests in Saloon. If you have any suggestions to make this better, please consider contributing.
 
 ## Getting Started
 ### Using Laravel?
