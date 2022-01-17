@@ -1,7 +1,7 @@
 <?php
 
-use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
 
 test('a request can be made successfully', function () {
     $request = new UserRequest();
@@ -14,7 +14,7 @@ test('a request can be made successfully', function () {
     expect($data)->toEqual([
         'name' => 'Sammyjo20',
         'actual_name' => 'Sam',
-        'twitter' => '@carre_sam'
+        'twitter' => '@carre_sam',
     ]);
 });
 

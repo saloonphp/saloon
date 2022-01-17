@@ -421,6 +421,12 @@ $request = new CreateForgeSiteRequest($serverId, $domain);
 
 $request->addData('key', 'value');
 
+// Merge in your own data to the existing data array
+
+$request->mergeData([
+    'database' => 'test123'
+]);
+
 // Overwrite the request data entirely.
 
 $request->setData([
@@ -499,6 +505,12 @@ $request = new GetForgeSerersRequest();
 
 $request->addQuery('key', 'value');
 
+// Merge in your own query parameters to the existing array
+
+$request->mergeQuery([
+    'include' => 'user'
+]);
+
 // Overwrite the query parameters entirely.
 
 $request->setQuery([
@@ -506,15 +518,66 @@ $request->setQuery([
 ]);
 ```
 
-## Other Plugins Available
+### Other Plugins Available
 -   AcceptsJson
 -   HasTimeout
 -   WithDebugData
 -   DisablesSSLVerification (Please be careful with this)
 
-## Write your own plugins
+### Write your own plugins
 
-Feel free to write your own plugins, just make sure to include a "boot" method inside of the plugin. The format is: `boot{YOUR CLASS NAME}feature`. For example if I had a class called WithAWSHeader your boot method would be called `bootWithAWSHeaderFeature`.
+Feel free to write your own plugins, just make sure to include a "boot" method inside of the plugin. The format is: `boot{YOUR CLASS NAME}Feature`. For example if I had a class called WithAWSHeader your boot method would be called `bootWithAWSHeaderFeature`.
+
+## Advanced
+
+### Interceptors
+Saloon already allows you to add functionality to your requests in the form of plugins, but if you would like to intercept the response before it is passed
+back to you, you can add a response interceptor. These can be added in the `boot` method of your plugin, or they can be added to the generic `boot` method 
+on the Connector/Request.
+
+Let's have a look at an interceptor that will automatically throw if the response returns an unsuccessful error.
+
+```php
+class CreateForgeServerRequest extends SaloonRequest
+{
+    //...
+
+    public function boot(): void
+    {
+        $this->addResponseInterceptor(function (SaloonRequest $request, SaloonResponse $response) {
+            $response->throw();
+    
+            return $response;
+        });
+    }
+}
+```
+> You can have as many response interceptors as you like.
+
+### Guzzle Handlers
+
+If you need to modify the underlying Guzzle request/response right before its sent, you can use handlers. These are an incredibly useful feature in Guzzle to add functionality to request/responses. To add a handler, simply use the `addHandler` method in your plugin or `boot` method on your connector/request.
+
+[Learn more about Guzzle handlers](https://docs.guzzlephp.org/en/stable/handlers-and-middleware.html)
+
+```php
+class CreateForgeServerRequest extends SaloonRequest
+{
+    //...
+
+    public function boot(): void
+    {
+        $this->addHandler('myCustomHandler', function (callable $handler) {
+            return function (RequestInterface $request, array $options) use ($handler) {
+                $request->withHeader('X-Custom-Header', 'Hello');
+                
+                return $handler($request, $options);             
+            };
+        });
+    }
+}
+```
+> Saloon will not know about the changes you make to your request/responses in handlers.
 
 ## And that's it! ✨
 

@@ -22,11 +22,17 @@ interface SaloonRequestInterface
 
     public function defaultQuery(): array;
 
-    public function interceptRequest(SaloonRequest $request): SaloonRequest;
+    public function addHandler(string $name, callable $function): void;
 
-    public function interceptResponse(SaloonRequest $request, SaloonResponse $responseInstance): SaloonResponse;
+    public function getHandlers(): array;
+
+    public function addResponseInterceptor(callable $function): void;
+
+    public function getResponseInterceptors(): array;
 
     public function defaultSuccessMockResponse(): void;
 
     public function defaultFailureMockResponse(): void;
+
+    public function boot(): void;
 }

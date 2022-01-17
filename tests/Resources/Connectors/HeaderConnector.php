@@ -4,7 +4,6 @@ namespace Sammyjo20\Saloon\Tests\Resources\Connectors;
 
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
-use Sammyjo20\Saloon\Traits\Features\DisablesSSLVerification;
 use Sammyjo20\Saloon\Traits\Features\HasJsonBody;
 use Sammyjo20\Saloon\Traits\Features\WithDebugData;
 
@@ -22,7 +21,7 @@ class HeaderConnector extends SaloonConnector
     public function defaultHeaders(): array
     {
         return [
-            'X-Connector-Header' => 'Sam'
+            'X-Connector-Header' => 'Sam',
         ];
     }
 

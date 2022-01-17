@@ -1,10 +1,10 @@
 <?php
 
 use Sammyjo20\Saloon\Managers\RequestManager;
+use Sammyjo20\Saloon\Tests\Resources\Requests\PostRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\PostJsonRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\OverwrittenPostRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\PostConnectorDataBlankRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\PostJsonRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\PostRequest;
 
 test('a request with the hasJsonBody feature sends the json data', function () {
     $request = new PostJsonRequest();
@@ -12,7 +12,7 @@ test('a request with the hasJsonBody feature sends the json data', function () {
 
     $requestManager = new RequestManager($request);
 
-    $requestManager->prepareMessage();
+    $requestManager->prepareForFlight();
 
     $config = $requestManager->getConfig();
 
@@ -30,7 +30,7 @@ test('if setData is used, all other default data wont be included', function () 
 
     $requestManager = new RequestManager($request);
 
-    $requestManager->prepareMessage();
+    $requestManager->prepareForFlight();
 
     $config = $requestManager->getConfig();
 
@@ -43,7 +43,7 @@ test('a connector can have jsonBody that is set', function () {
 
     $requestManager = new RequestManager($request);
 
-    $requestManager->prepareMessage();
+    $requestManager->prepareForFlight();
 
     $config = $requestManager->getConfig();
 
@@ -61,7 +61,7 @@ test('a request can overwrite all jsonBody', function () {
 
     $requestManager = new RequestManager($request);
 
-    $requestManager->prepareMessage();
+    $requestManager->prepareForFlight();
 
     $config = $requestManager->getConfig();
 
@@ -74,7 +74,7 @@ test('request form data can overwrite a connectors form data', function () {
 
     $requestManager = new RequestManager($request);
 
-    $requestManager->prepareMessage();
+    $requestManager->prepareForFlight();
 
     $config = $requestManager->getConfig();
 
@@ -89,7 +89,7 @@ test('manually overwriting form data in runtime can overwrite connectors form da
 
     $requestManager = new RequestManager($request);
 
-    $requestManager->prepareMessage();
+    $requestManager->prepareForFlight();
 
     $config = $requestManager->getConfig();
 
@@ -104,7 +104,7 @@ test('manually overwriting form data in runtime can overwrite request form data'
 
     $requestManager = new RequestManager($request);
 
-    $requestManager->prepareMessage();
+    $requestManager->prepareForFlight();
 
     $config = $requestManager->getConfig();
 

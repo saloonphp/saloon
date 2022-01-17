@@ -6,7 +6,7 @@ use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 
-class ErrorRequest extends SaloonRequest
+class UserRequestWithBoot extends SaloonRequest
 {
     /**
      * Define the method that the request will use.
@@ -29,6 +29,11 @@ class ErrorRequest extends SaloonRequest
      */
     public function defineEndpoint(): string
     {
-        return '/error';
+        return '/user';
+    }
+
+    public function boot(): void
+    {
+        $this->addHeader('X-Request-Boot-Header', 'Yee-haw!');
     }
 }

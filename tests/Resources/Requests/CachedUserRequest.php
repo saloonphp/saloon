@@ -4,10 +4,13 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Traits\Features\CachesRequests;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 
-class ErrorRequest extends SaloonRequest
+class CachedUserRequest extends SaloonRequest
 {
+    use CachesRequests;
+
     /**
      * Define the method that the request will use.
      *
@@ -29,6 +32,6 @@ class ErrorRequest extends SaloonRequest
      */
     public function defineEndpoint(): string
     {
-        return '/error';
+        return '/user';
     }
 }

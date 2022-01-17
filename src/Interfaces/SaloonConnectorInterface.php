@@ -2,7 +2,6 @@
 
 namespace Sammyjo20\Saloon\Interfaces;
 
-use GuzzleHttp\Psr7\Request;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 
@@ -18,7 +17,13 @@ interface SaloonConnectorInterface
 
     public function defaultQuery(): array;
 
-    public function interceptRequest(SaloonRequest $request): SaloonRequest;
+    public function addHandler(string $name, callable $function): void;
 
-    public function interceptResponse(SaloonRequest $request, SaloonResponse $responseInstance): SaloonResponse;
+    public function getHandlers(): array;
+
+    public function addResponseInterceptor(callable $function): void;
+
+    public function getResponseInterceptors(): array;
+
+    public function boot(): void;
 }

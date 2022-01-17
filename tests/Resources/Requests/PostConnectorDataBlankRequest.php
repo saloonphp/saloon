@@ -4,9 +4,8 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\PostJsonConnector;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 use Sammyjo20\Saloon\Traits\Features\HasJsonBody;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\PostJsonConnector;
 
 class PostConnectorDataBlankRequest extends SaloonRequest
 {
@@ -36,5 +35,3 @@ class PostConnectorDataBlankRequest extends SaloonRequest
         return '/user';
     }
 }
-
-

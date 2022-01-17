@@ -4,7 +4,6 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 
 class InterceptedRequest extends SaloonRequest
@@ -32,13 +31,4 @@ class InterceptedRequest extends SaloonRequest
     {
         return '/user';
     }
-
-    public function interceptRequest(SaloonRequest $request): SaloonRequest
-    {
-        $request->addHeader('X-Intercepted-Header', 'Sam');
-
-        return $request;
-    }
 }
-
-

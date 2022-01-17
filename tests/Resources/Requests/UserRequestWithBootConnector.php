@@ -5,8 +5,9 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\WithBootConnector;
 
-class ErrorRequest extends SaloonRequest
+class UserRequestWithBootConnector extends SaloonRequest
 {
     /**
      * Define the method that the request will use.
@@ -20,7 +21,7 @@ class ErrorRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $connector = TestConnector::class;
+    protected ?string $connector = WithBootConnector::class;
 
     /**
      * Define the endpoint for the request.
@@ -29,6 +30,6 @@ class ErrorRequest extends SaloonRequest
      */
     public function defineEndpoint(): string
     {
-        return '/error';
+        return '/user';
     }
 }

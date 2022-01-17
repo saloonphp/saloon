@@ -1,3 +1,0 @@
-<?php
-
-// Todo: Write tests...

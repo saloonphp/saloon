@@ -4,9 +4,8 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\HeaderConnector;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 use Sammyjo20\Saloon\Traits\Features\HasJsonBody;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\HeaderConnector;
 
 class HeaderRequest extends SaloonRequest
 {
@@ -39,7 +38,7 @@ class HeaderRequest extends SaloonRequest
     public function defaultHeaders(): array
     {
         return [
-            'X-Custom-Header' => 'Howdy'
+            'X-Custom-Header' => 'Howdy',
         ];
     }
 
@@ -53,9 +52,7 @@ class HeaderRequest extends SaloonRequest
     public function defaultData(): array
     {
         return [
-            'foo' => 'bar'
+            'foo' => 'bar',
         ];
     }
 }
-
-

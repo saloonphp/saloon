@@ -33,19 +33,12 @@ class InterceptedResponseRequest extends SaloonRequest
         return '/error';
     }
 
-    /**
-     * Always throw an error
-     *
-     * @param SaloonRequest $request
-     * @param SaloonResponse $responseInstance
-     * @return SaloonResponse
-     */
-    public function interceptResponse(SaloonRequest $request, SaloonResponse $responseInstance): SaloonResponse
+    public function boot(): void
     {
-        $responseInstance->throw();
+        $this->addResponseInterceptor(function (SaloonRequest $request, SaloonResponse $response) {
+            $response->setCached(true);
 
-        return $responseInstance;
+            return $response;
+        });
     }
 }
-
-

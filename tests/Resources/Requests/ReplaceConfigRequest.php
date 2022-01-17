@@ -4,9 +4,8 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\HeaderConnector;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 use Sammyjo20\Saloon\Traits\Features\HasJsonBody;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\HeaderConnector;
 
 class ReplaceConfigRequest extends SaloonRequest
 {
@@ -46,9 +45,7 @@ class ReplaceConfigRequest extends SaloonRequest
     public function defaultData(): array
     {
         return [
-            'foo' => 'bar'
+            'foo' => 'bar',
         ];
     }
 }
-
-

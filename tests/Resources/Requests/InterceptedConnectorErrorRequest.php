@@ -4,8 +4,8 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\InterceptedConnector;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 
 class InterceptedConnectorErrorRequest extends SaloonRequest
 {
@@ -32,6 +32,13 @@ class InterceptedConnectorErrorRequest extends SaloonRequest
     {
         return '/error';
     }
+
+    public function boot(): void
+    {
+        $this->addResponseInterceptor(function (SaloonRequest $request, SaloonResponse $response) {
+            $response->throw();
+
+            return $response;
+        });
+    }
 }
-
-

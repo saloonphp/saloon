@@ -32,5 +32,3 @@ class UserRequest extends SaloonRequest
         return '/user';
     }
 }
-
-

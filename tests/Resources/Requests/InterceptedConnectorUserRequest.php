@@ -5,7 +5,6 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\InterceptedConnector;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 
 class InterceptedConnectorUserRequest extends SaloonRequest
 {
@@ -32,6 +31,13 @@ class InterceptedConnectorUserRequest extends SaloonRequest
     {
         return '/user';
     }
+
+    public function boot(): void
+    {
+        $this->addRequestInterceptor(function (SaloonRequest $request) {
+            $request->addHeader('X-Connector-Name', 'Interceptor');
+
+            return $request;
+        });
+    }
 }
-
-

@@ -28,6 +28,9 @@
         "spatie/ray": "^1.33"
     },
     "scripts": {
+        "test": [
+            "./vendor/bin/pest"
+        ],
         "fix-code": [
             "./vendor/bin/php-cs-fixer fix"
         ]
