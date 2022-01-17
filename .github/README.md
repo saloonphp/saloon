@@ -577,6 +577,7 @@ class CreateForgeServerRequest extends SaloonRequest
     }
 }
 ```
+> Saloon will not know about the changes you make to your request/responses in handlers.
 
 ## And that's it! ✨
 
