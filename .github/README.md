@@ -32,7 +32,7 @@ $data = $response->json();
 - Easily add on your own functionality with plugins
 - Powerful interceptor logic to customise the response
 - Supports Guzzle Handlers for unlimited customisation
-- Mocking requests for testing (Coming Soon)
+- Mocking requests for testing [(Coming Soon)](https://github.com/Sammyjo20/Saloon/issues/5)
 - Framework agnostic
 
 ## Getting Started
