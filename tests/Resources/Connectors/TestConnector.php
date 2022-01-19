@@ -3,7 +3,6 @@
 namespace Sammyjo20\Saloon\Tests\Resources\Connectors;
 
 use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Tests\Resources\Plugins\HasTestHandler;
 use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
 
 class TestConnector extends SaloonConnector

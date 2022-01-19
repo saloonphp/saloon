@@ -3,8 +3,7 @@
 namespace Sammyjo20\Saloon\Traits;
 
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Client as GuzzleClient;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
 use Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException;
@@ -17,6 +16,18 @@ trait ManagesGuzzle
      * @var array
      */
     private array $bootedHandlers = [];
+
+    /**
+     * Create the Guzzle request
+     *
+     * @return Request
+     */
+    public function createGuzzleRequest(): Request
+    {
+        $endpoint = ltrim($this->request->defineEndpoint(), '/ ');
+
+        return new Request($this->request->getMethod(), $endpoint);
+    }
 
     /**
      * Create a new Guzzle client
@@ -35,23 +46,6 @@ trait ManagesGuzzle
         $clientConfig['handler'] = $this->bootHandlers(HandlerStack::create());
 
         return new GuzzleClient($clientConfig);
-    }
-
-    /**
-     * Create a "mock" handler so Guzzle can pretend it's a real request.
-     *
-     * @return MockHandler
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
-     */
-    private function createMockHandler(): MockHandler
-    {
-        $saloonMock = $this->mockType === 'success'
-            ? $this->request->getSuccessMock()
-            : $this->request->getFailureMock();
-
-        return new MockHandler([
-            new Response($saloonMock->getStatusCode(), $saloonMock->getHeaders(), $saloonMock->getBody()),
-        ]);
     }
 
     /**

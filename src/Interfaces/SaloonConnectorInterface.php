@@ -2,9 +2,6 @@
 
 namespace Sammyjo20\Saloon\Interfaces;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonResponse;
-
 interface SaloonConnectorInterface
 {
     public function defineBaseUrl(): string;
