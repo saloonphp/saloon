@@ -230,6 +230,6 @@ class RequestManager
      */
     private function detectLaravel(): bool
     {
-        return function_exists('app') && app() instanceof \Illuminate\Contracts\Foundation\Application && function_exists('resolve') && InstalledVersions::isInstalled('sammyjo20/saloon-laravel');
+        return InstalledVersions::isInstalled('sammyjo20/saloon-laravel') && function_exists('app') && app() instanceof \Illuminate\Contracts\Foundation\Application && function_exists('resolve');
     }
 }
