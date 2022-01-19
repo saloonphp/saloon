@@ -32,11 +32,7 @@ trait ManagesGuzzle
             'base_uri' => rtrim($this->connector->defineBaseUrl(), '/ ') . '/',
         ];
 
-        if ($this->isMocking === true) {
-            $clientConfig['handler'] = HandlerStack::create($this->createMockHandler());
-        } else {
-            $clientConfig['handler'] = $this->bootHandlers(HandlerStack::create());
-        }
+        $clientConfig['handler'] = $this->bootHandlers(HandlerStack::create());
 
         return new GuzzleClient($clientConfig);
     }

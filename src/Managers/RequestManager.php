@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Managers;
 
+use Composer\InstalledVersions;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
@@ -49,6 +50,20 @@ class RequestManager
     public bool $isMocking = false;
 
     /**
+     * Are we running Saloon in a Laravel environment?
+     *
+     * @var bool
+     */
+    protected bool $inLaravelEnvironment = false;
+
+    /**
+     * The Laravel manager
+     *
+     * @var LaravelManger
+     */
+    protected LaravelManger $laravelManger;
+
+    /**
      * Construct the request manager
      *
      * @param SaloonRequest $request
@@ -61,6 +76,8 @@ class RequestManager
         $this->connector = $request->getConnector();
         $this->isMocking = in_array($mockType, [Saloon::SUCCESS_MOCK, Saloon::FAILURE_MOCK], true);
         $this->mockType = $mockType;
+        $this->inLaravelEnvironment = $this->detectLaravel();
+        $this->laravelManger = new LaravelManger;
     }
 
     /**
@@ -82,7 +99,7 @@ class RequestManager
         $this->connector->boot();
         $this->request->boot();
 
-        // Run any interceptors now
+        // Merge in response interceptors now
 
         $this->mergeResponseInterceptors($this->connector->getResponseInterceptors(), $this->request->getResponseInterceptors());
 
@@ -97,6 +114,26 @@ class RequestManager
         // Merge in any handlers
 
         $this->mergeHandlers($this->connector->getHandlers(), $this->request->getHandlers());
+
+        // If we're not running Laravel, just stop here.
+
+        if ($this->inLaravelEnvironment === false) {
+            return;
+        }
+
+        // If we can detect Laravel, let's run the internal Laravel resolve method to import
+        // our facade and boot it up. This will return any added
+
+        $laravelManager = &$this->laravelManger;
+
+        $laravelManager = resolve('saloon')->boot($laravelManager);
+
+        // Now we'll merge in anything added by Laravel.
+
+        $this->mergeResponseInterceptors($laravelManager->getResponseInterceptors());
+        $this->mergeHeaders($laravelManager->getHeaders());
+        $this->mergeConfig($laravelManager->getConfig());
+        $this->mergeHandlers($laravelManager->getHandlers());
     }
 
     /**
@@ -184,5 +221,15 @@ class RequestManager
         }
 
         return $response;
+    }
+
+    /**
+     * Check if we can detect Laravel
+     *
+     * @return bool
+     */
+    private function detectLaravel(): bool
+    {
+        return function_exists('app') && app() instanceof \Illuminate\Contracts\Foundation\Application && function_exists('resolve') && InstalledVersions::isInstalled('sammyjo20/saloon-laravel');
     }
 }
