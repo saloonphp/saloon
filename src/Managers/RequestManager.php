@@ -124,7 +124,7 @@ class RequestManager
         // If we can detect Laravel, let's run the internal Laravel resolve method to import
         // our facade and boot it up. This will return any added
 
-        $laravelManager = &$this->laravelManger;
+        $laravelManager = $this->laravelManger;
 
         $laravelManager = resolve('saloon')->boot($laravelManager);
 
