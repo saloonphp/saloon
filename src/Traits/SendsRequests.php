@@ -2,7 +2,6 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Managers\RequestManager;
 
@@ -12,7 +11,11 @@ trait SendsRequests
      * Send the request.
      *
      * @return SaloonResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
      */
     public function send(): SaloonResponse
     {
@@ -22,27 +25,5 @@ trait SendsRequests
         // 🚀 ... 🌑 ... 💫
 
         return (new RequestManager($this))->send();
-    }
-
-    /**
-     * Mock a successful request.
-     *
-     * @return SaloonResponse
-     * @throws \ReflectionException
-     */
-    public function mockSuccess(): SaloonResponse
-    {
-        return (new RequestManager($this, Saloon::SUCCESS_MOCK))->send();
-    }
-
-    /**
-     * Mock a failure request.
-     *
-     * @return SaloonResponse
-     * @throws \ReflectionException
-     */
-    public function mockFailure(): SaloonResponse
-    {
-        return (new RequestManager($this, Saloon::FAILURE_MOCK))->send();
     }
 }

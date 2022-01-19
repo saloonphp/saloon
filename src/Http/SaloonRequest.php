@@ -5,7 +5,6 @@ namespace Sammyjo20\Saloon\Http;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
-use Sammyjo20\Saloon\Traits\MocksResponses;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\CollectsHandlers;
 use Sammyjo20\Saloon\Traits\CollectsQueryParams;
@@ -22,8 +21,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
         CollectsConfig,
         CollectsHandlers,
         CollectsInterceptors,
-        SendsRequests,
-        MocksResponses;
+        SendsRequests;
 
     /**
      * Define the method that the request will use.
@@ -98,22 +96,6 @@ abstract class SaloonRequest implements SaloonRequestInterface
         }
 
         return $this->loadedConnector;
-    }
-
-    /**
-     * Define your default successful mock response.
-     */
-    public function defaultSuccessMockResponse(): void
-    {
-        $this->setSuccessMockResponse(200, [], '');
-    }
-
-    /**
-     * Define your default failure mock response.
-     */
-    public function defaultFailureMockResponse(): void
-    {
-        $this->setFailureMockResponse(500, [], '');
     }
 
     /**

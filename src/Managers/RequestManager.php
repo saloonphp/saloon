@@ -5,7 +5,6 @@ namespace Sammyjo20\Saloon\Managers;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use Composer\InstalledVersions;
-use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use GuzzleHttp\Exception\GuzzleException;
 use Sammyjo20\Saloon\Http\SaloonResponse;
@@ -42,13 +41,6 @@ class RequestManager
     private SaloonConnector $connector;
 
     /**
-     * Check if the request manager is mocking.
-     *
-     * @var bool
-     */
-    public bool $isMocking = false;
-
-    /**
      * Are we running Saloon in a Laravel environment?
      *
      * @var bool
@@ -66,15 +58,12 @@ class RequestManager
      * Construct the request manager
      *
      * @param SaloonRequest $request
-     * @param string|null $mockType
-     * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function __construct(SaloonRequest $request, string $mockType = null)
+    public function __construct(SaloonRequest $request)
     {
         $this->request = $request;
         $this->connector = $request->getConnector();
-        $this->isMocking = in_array($mockType, [Saloon::SUCCESS_MOCK, Saloon::FAILURE_MOCK], true);
-        $this->mockType = $mockType;
         $this->inLaravelEnvironment = $this->detectLaravel();
         $this->laravelManger = new LaravelManger;
     }
