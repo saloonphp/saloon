@@ -28,8 +28,14 @@ trait ManagesGuzzle
      */
     private function createGuzzleClient(): GuzzleClient
     {
+        $baseUri = rtrim($this->connector->defineBaseUrl(), '/ ');
+
+        if (empty($this->request->defineEndpoint()) === false) {
+            $baseUri .= '/';
+        }
+
         $clientConfig = [
-            'base_uri' => rtrim($this->connector->defineBaseUrl(), '/ ') . '/',
+            'base_uri' => $baseUri,
         ];
 
         if ($this->isMocking === true) {

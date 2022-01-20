@@ -4,13 +4,10 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Resources\Plugins\HasTestHandler;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 
-class UserWithTestHandlerRequest extends SaloonRequest
+class NoTrailingSlashRequest extends SaloonRequest
 {
-    use HasTestHandler;
-
     /**
      * Define the method that the request will use.
      *
@@ -32,6 +29,6 @@ class UserWithTestHandlerRequest extends SaloonRequest
      */
     public function defineEndpoint(): string
     {
-        return '/user';
+        return '';
     }
 }
