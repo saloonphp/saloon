@@ -2,8 +2,6 @@
 
 namespace Sammyjo20\Saloon\Interfaces;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 
 interface SaloonRequestInterface

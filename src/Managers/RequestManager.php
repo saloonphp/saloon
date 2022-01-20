@@ -10,13 +10,13 @@ use Sammyjo20\Saloon\Http\SaloonRequest;
 use GuzzleHttp\Exception\GuzzleException;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Traits\CollectsInterceptors;
 use Sammyjo20\Saloon\Traits\ManagesGuzzle;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\ManagesFeatures;
 use Sammyjo20\Saloon\Traits\CollectsHandlers;
 use GuzzleHttp\Exception\BadResponseException;
+use Sammyjo20\Saloon\Traits\CollectsInterceptors;
 
 class RequestManager
 {

@@ -1,16 +1,13 @@
 <?php
 
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Managers\RequestManager;
 use Sammyjo20\Saloon\Tests\Resources\Requests\HeaderRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\NoTrailingSlashRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\NoTrailingSlashRequestWithConnector;
+use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithBoot;
 use Sammyjo20\Saloon\Tests\Resources\Requests\ReplaceConfigRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\ReplaceHeaderRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\TrailingSlashRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithBoot;
+use Sammyjo20\Saloon\Tests\Resources\Requests\NoTrailingSlashRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithBootConnector;
 
 test('a request is built up correctly', function () {

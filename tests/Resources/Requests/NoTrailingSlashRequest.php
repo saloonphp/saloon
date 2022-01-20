@@ -4,9 +4,7 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\NoTrailingSlashConnector;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\TrailingSlashConnector;
 
 class NoTrailingSlashRequest extends SaloonRequest
 {
@@ -22,7 +20,7 @@ class NoTrailingSlashRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $connector = TrailingSlashConnector::class;
+    protected ?string $connector = TestConnector::class;
 
     /**
      * Define the endpoint for the request.
