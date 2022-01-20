@@ -198,8 +198,12 @@ class RequestManager
      */
     private function detectLaravel(): bool
     {
-        return InstalledVersions::isInstalled('laravel/framework')
-            && InstalledVersions::isInstalled('sammyjo20/saloon-laravel')
-            && resolve('saloon') instanceof \Sammyjo20\SaloonLaravel\Saloon;
+        $hasRequiredDependencies = InstalledVersions::isInstalled('laravel/framework') && InstalledVersions::isInstalled('sammyjo20/saloon-laravel');
+
+        try {
+            return $hasRequiredDependencies && resolve('saloon') instanceof \Sammyjo20\SaloonLaravel\Saloon;
+        } catch (\Exception $ex) {
+            return false;
+        }
     }
 }
