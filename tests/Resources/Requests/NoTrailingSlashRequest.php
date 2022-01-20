@@ -11,13 +11,6 @@ use Sammyjo20\Saloon\Tests\Resources\Connectors\TrailingSlashConnector;
 class NoTrailingSlashRequest extends SaloonRequest
 {
     /**
-     * Specify if Saloon should add a trailing slash to the base url.
-     *
-     * @var bool
-     */
-    public bool $addTrailingSlashToBaseUrl = false;
-
-    /**
      * Define the method that the request will use.
      *
      * @var string|null

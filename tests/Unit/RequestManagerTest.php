@@ -81,7 +81,7 @@ test('the requirement for a trailing slash is enabled by default', function () {
     $request->send();
 });
 
-test('the trailing slash is removed when disabled from the request', function () {
+test('the trailing slash is removed when disabled from the request if the endpoint is an empty string', function () {
     $request = new NoTrailingSlashRequest();
 
     $request->addTrailingSlashAfterBaseUrl = false;
