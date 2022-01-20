@@ -1,10 +1,13 @@
 <?php
 
+use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Managers\RequestManager;
 use Sammyjo20\Saloon\Tests\Resources\Requests\HeaderRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithBoot;
 use Sammyjo20\Saloon\Tests\Resources\Requests\ReplaceConfigRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\ReplaceHeaderRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\TrailingSlashRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\NoTrailingSlashRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithBootConnector;
 
 test('a request is built up correctly', function () {
@@ -59,4 +62,34 @@ test('the boot method can add functionality in requests', function () {
     $requestManager->hydrate();
 
     expect($requestManager->getHeaders())->toHaveKey('X-Request-Boot-Header', 'Yee-haw!');
+});
+
+test('the requirement for a trailing slash is enabled by default', function () {
+    $request = new TrailingSlashRequest();
+
+    $request->addHandler('captureBaseUrl', function (callable $handler) {
+        return function (RequestInterface $request, array $options) use ($handler) {
+            expect($request->getUri()->getPath())->toEqual('/api/');
+
+            return $handler($request, $options);
+        };
+    });
+
+    $request->send();
+});
+
+test('the trailing slash is removed when disabled from the request if the endpoint is an empty string', function () {
+    $request = new NoTrailingSlashRequest();
+
+    $request->addTrailingSlashAfterBaseUrl = false;
+
+    $request->addHandler('captureBaseUrl', function (callable $handler) {
+        return function (RequestInterface $request, array $options) use ($handler) {
+            expect($request->getUri()->getPath())->toEqual('/api');
+
+            return $handler($request, $options);
+        };
+    });
+
+    $request->send();
 });

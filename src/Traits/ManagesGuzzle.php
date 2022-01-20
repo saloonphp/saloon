@@ -39,8 +39,10 @@ trait ManagesGuzzle
      */
     private function createGuzzleClient(): GuzzleClient
     {
+        $baseUri = rtrim($this->connector->defineBaseUrl(), '/ ');
+
         $clientConfig = [
-            'base_uri' => rtrim($this->connector->defineBaseUrl(), '/ ') . '/',
+            'base_uri' => empty($this->request->defineEndpoint()) ? $baseUri : $baseUri . '/',
         ];
 
         $clientConfig['handler'] = $this->bootHandlers(HandlerStack::create());
