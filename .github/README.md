@@ -34,6 +34,7 @@ $data = $response->json();
 - Supports Guzzle Handlers for unlimited customisation
 - Mocking requests for testing [(Coming Soon)](https://github.com/Sammyjo20/Saloon/issues/5)
 - Framework agnostic
+- Can be used for building SDKs
 
 ## Getting Started
 ### Using Laravel?
