@@ -282,7 +282,7 @@ $response->object(): object
 $response->collect(): Collection
 $response->header(): string
 $response->headers(): array
-$response->getStatusFroMResponse(): int
+$response->getStatusFromResponse(): int
 $response->status(): int
 $response->effectiveUri(): UriInterface
 $response->successful(): bool
