@@ -21,7 +21,16 @@ test('a mock response can be created from a request', function () {
     $request = new MockRequest;
     $response = MockResponse::fromRequest($request, 200);
 
-    expect($response->getHeaders())->toEqual($request->getHeaders());
+    expect($response->getHeaders())->toEqual(array_merge($request->getHeaders(), ['Content-Type' => 'application/json']));
     expect($response->getConfig())->toEqual($request->getConfig());
     expect($response->getStatus())->toEqual(200);
+});
+
+test('a mock response can have raw body data', function () {
+    $response = new MockResponse('xml', 200, ['Content-Type' => 'application/json']);
+
+    expect($response->getHeaders())->toEqual(['Content-Type' => 'application/json']);
+    expect($response->getConfig())->toEqual([]);
+    expect($response->getStatus())->toEqual(200);
+    expect($response->getFormattedData())->toEqual('xml');
 });

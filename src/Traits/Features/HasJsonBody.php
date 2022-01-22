@@ -21,7 +21,7 @@ trait HasJsonBody
      * @return bool
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    protected function connectorHasTrait(): bool
+    protected function connectorHasDataTrait(): bool
     {
         return array_key_exists(HasJsonBody::class, class_uses($this->getConnector()));
     }

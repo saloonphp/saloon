@@ -192,6 +192,8 @@ class RequestManager
 
         $response = new SaloonResponse($requestOptions, $request, $response, $shouldGuessStatusFromBody);
 
+        $response->setMocked($this->isMocking());
+
         // Run Response Interceptors
 
         foreach ($this->getResponseInterceptors() as $responseInterceptor) {

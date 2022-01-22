@@ -6,10 +6,26 @@ use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 
 test('a request can be mocked', function () {
     $mockClient = new MockClient([
-        new MockResponse(['foo' => 'bar'], 200)
+        new MockResponse(['name' => 'Sam'], 200),
+        new MockResponse(['name' => 'Alex'], 200),
+        new MockResponse(['error' => 'Server Unavailable'], 500),
     ]);
 
-    dd($mockClient->getNextResponse()->getData());
+    $responseA = (new UserRequest)->send($mockClient);
 
-    $request = new UserRequest();
+    expect($responseA->isMocked())->toBeTrue();
+    expect($responseA->json())->toEqual(['name' => 'Sam']);
+    expect($responseA->status())->toEqual(200);
+
+    $responseB = (new UserRequest)->send($mockClient);
+
+    expect($responseB->isMocked())->toBeTrue();
+    expect($responseB->json())->toEqual(['name' => 'Alex']);
+    expect($responseB->status())->toEqual(200);
+
+    $responseC = (new UserRequest)->send($mockClient);
+
+    expect($responseC->isMocked())->toBeTrue();
+    expect($responseC->json())->toEqual(['error' => 'Server Unavailable']);
+    expect($responseC->status())->toEqual(500);
 });

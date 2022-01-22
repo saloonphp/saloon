@@ -51,6 +51,13 @@ class SaloonResponse
     private bool $isCached = false;
 
     /**
+     * Determines if the response has been mocked.
+     *
+     * @var bool
+     */
+    private bool $isMocked = false;
+
+    /**
      * Create a new response instance.
      *
      * @param array $requestOptions
@@ -387,6 +394,19 @@ class SaloonResponse
     }
 
     /**
+     * Set if the response is mocked. Should only be used internally.
+     *
+     * @param bool $mocked
+     * @return $this
+     */
+    public function setMocked(bool $mocked): self
+    {
+        $this->isMocked = $mocked;
+
+        return $this;
+    }
+
+    /**
      * Check if the response has been cached
      *
      * @return bool
@@ -394,6 +414,16 @@ class SaloonResponse
     public function isCached(): bool
     {
         return $this->isCached;
+    }
+
+    /**
+     * Check if the response has been mocked
+     *
+     * @return bool
+     */
+    public function isMocked(): bool
+    {
+        return $this->isMocked;
     }
 
     /**

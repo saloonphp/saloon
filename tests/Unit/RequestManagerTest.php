@@ -4,6 +4,7 @@ use Couchbase\UserManager;
 use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Constants\MockStrategies;
+use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Managers\RequestManager;
 use Sammyjo20\Saloon\Tests\Resources\Requests\HeaderRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
@@ -112,7 +113,9 @@ test('if you do not pass a mock client into the request, no mocking will be conf
 });
 
 test('if you pass a mock client into the request, the request manager will setup mocking correctly', function () {
-    $requestManager = new RequestManager(new UserRequest(), new MockClient());
+    $mockClient = new MockClient([new MockResponse([], 200)]);
+
+    $requestManager = new RequestManager(new UserRequest(), $mockClient);
 
     expect($requestManager->isMocking())->toBeTrue();
     expect($requestManager->getMockStrategy())->toEqual(MockStrategies::SALOON);

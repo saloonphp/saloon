@@ -8,6 +8,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use Sammyjo20\Saloon\Constants\MockStrategies;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
 use Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException;
+use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
 
 trait ManagesGuzzle
 {
@@ -83,7 +84,9 @@ trait ManagesGuzzle
         }
 
         if ($this->isMocking() && $this->getMockStrategy() === MockStrategies::SALOON) {
-            dd('Perform Saloon Mocking');
+            $mockResponse = $this->mockClient->getNextResponse();
+
+            $handlerStack->push(new MockMiddleware($mockResponse), 'saloonMockMiddleware');
         }
 
         return $handlerStack;
