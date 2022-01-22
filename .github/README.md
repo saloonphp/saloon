@@ -34,6 +34,7 @@ $data = $response->json();
 - Supports Guzzle Handlers for unlimited customisation
 - Mocking requests for testing [(Coming Soon)](https://github.com/Sammyjo20/Saloon/issues/5)
 - Framework agnostic
+- Can be used for building SDKs
 
 ## Getting Started
 ### Using Laravel?
@@ -281,7 +282,7 @@ $response->object(): object
 $response->collect(): Collection
 $response->header(): string
 $response->headers(): array
-$response->getStatusFroMResponse(): int
+$response->getStatusFromResponse(): int
 $response->status(): int
 $response->effectiveUri(): UriInterface
 $response->successful(): bool
@@ -337,6 +338,14 @@ trait AcceptsJson
         $this->mergeHeaders([
             'Accept' => 'application/json'
         ]);
+        
+        // You can also do:
+        // mergeQuery
+        // addHandler
+        // addResponseInterceptor
+        // addHeader
+        // addConfig
+        // addData
     }
 }
 ```
