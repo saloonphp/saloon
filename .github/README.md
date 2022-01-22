@@ -338,6 +338,14 @@ trait AcceptsJson
         $this->mergeHeaders([
             'Accept' => 'application/json'
         ]);
+        
+        // You can also do:
+        // mergeQuery
+        // addHandler
+        // addResponseInterceptor
+        // addHeader
+        // addConfig
+        // addData
     }
 }
 ```
