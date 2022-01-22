@@ -4,10 +4,15 @@ namespace Sammyjo20\Saloon\Traits\Features;
 
 trait HasBody
 {
-    public function bootHasBodyFeature()
+    /**
+     * Define any form body.
+     *
+     * @return void
+     */
+    public function bootHasBodyFeature(): void
     {
         $this->mergeConfig([
-            'form_params' => $this->getData(),
+            'body' => $this->defineBody(),
         ]);
     }
 
@@ -20,5 +25,15 @@ trait HasBody
     protected function connectorHasTrait(): bool
     {
         return array_key_exists(HasBody::class, class_uses($this->getConnector()));
+    }
+
+    /**
+     * Define the body data that should be sent
+     *
+     * @return mixed
+     */
+    public function defineBody(): mixed
+    {
+        return null;
     }
 }
