@@ -5,6 +5,7 @@ namespace Sammyjo20\Saloon\Traits;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Client as GuzzleClient;
+use Sammyjo20\Saloon\Constants\MockStrategies;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
 use Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException;
 
@@ -79,6 +80,10 @@ trait ManagesGuzzle
             // Add the booted handler here, so it can't be loaded again.
 
             $this->bootedHandlers[] = $handler;
+        }
+
+        if ($this->isMocking() && $this->getMockStrategy() === MockStrategies::SALOON) {
+            dd('Perform Saloon Mocking');
         }
 
         return $handlerStack;

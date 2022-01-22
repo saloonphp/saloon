@@ -2,20 +2,24 @@
 
 namespace Sammyjo20\Saloon\Managers;
 
+use Composer\InstalledVersions;
+use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
-use Composer\InstalledVersions;
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use GuzzleHttp\Exception\GuzzleException;
-use Sammyjo20\Saloon\Http\SaloonResponse;
+use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Constants\MockStrategies;
+use Sammyjo20\Saloon\Exceptions\SaloonMultipleMockMethodsException;
+use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Traits\ManagesGuzzle;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
-use Sammyjo20\Saloon\Traits\CollectsHeaders;
-use Sammyjo20\Saloon\Traits\ManagesFeatures;
 use Sammyjo20\Saloon\Traits\CollectsHandlers;
-use GuzzleHttp\Exception\BadResponseException;
+use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\CollectsInterceptors;
+use Sammyjo20\Saloon\Traits\ManagesFeatures;
+use Sammyjo20\Saloon\Traits\ManagesGuzzle;
 
 class RequestManager
 {
@@ -45,27 +49,44 @@ class RequestManager
      *
      * @var bool
      */
-    protected bool $inLaravelEnvironment = false;
+    public bool $inLaravelEnvironment = false;
 
     /**
      * The Laravel manager
      *
-     * @var LaravelManger
+     * @var LaravelManager|null
      */
-    protected LaravelManger $laravelManger;
+    protected ?LaravelManager $laravelManger = null;
+
+    /**
+     * The mock client if it has been provided
+     *
+     * @var MockClient|null
+     */
+    protected ?MockClient $mockClient = null;
+
+    /**
+     * Detect the current mock client
+     *
+     * @var string|null
+     */
+    public ?string $mockStrategy = null;
 
     /**
      * Construct the request manager
      *
      * @param SaloonRequest $request
+     * @param MockClient|null $mockClient
+     * @throws SaloonMultipleMockMethodsException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function __construct(SaloonRequest $request)
+    public function __construct(SaloonRequest $request, MockClient $mockClient = null)
     {
         $this->request = $request;
         $this->connector = $request->getConnector();
         $this->inLaravelEnvironment = $this->detectLaravel();
-        $this->laravelManger = new LaravelManger;
+        $this->laravelManger = $this->bootLaravelManager();
+        $this->mockClient = $this->bootMockClient($mockClient);
     }
 
     /**
@@ -103,25 +124,14 @@ class RequestManager
 
         $this->mergeHandlers($this->connector->getHandlers(), $this->request->getHandlers());
 
-        // If we're not running Laravel, just stop here.
-
-        if ($this->inLaravelEnvironment === false) {
-            return;
-        }
-
-        // If we can detect Laravel, let's run the internal Laravel resolve method to import
-        // our facade and boot it up. This will return any added
-
-        $laravelManager = $this->laravelManger;
-
-        $laravelManager = resolve('saloon')->boot($laravelManager);
-
         // Now we'll merge in anything added by Laravel.
 
-        $this->mergeResponseInterceptors($laravelManager->getResponseInterceptors());
-        $this->mergeHeaders($laravelManager->getHeaders());
-        $this->mergeConfig($laravelManager->getConfig());
-        $this->mergeHandlers($laravelManager->getHandlers());
+        if ($this->laravelManger instanceof LaravelManager) {
+            $this->mergeResponseInterceptors($this->laravelManger->getResponseInterceptors());
+            $this->mergeHeaders($this->laravelManger->getHeaders());
+            $this->mergeConfig($this->laravelManger->getConfig());
+            $this->mergeHandlers($this->laravelManger->getHandlers());
+        }
     }
 
     /**
@@ -205,5 +215,76 @@ class RequestManager
         } catch (\Exception $ex) {
             return false;
         }
+    }
+
+    /**
+     * Retrieve the Laravel manager from the Laravel package.
+     *
+     * @return LaravelManager|null
+     */
+    private function bootLaravelManager(): ?LaravelManager
+    {
+        // If we're not running Laravel, just stop here.
+
+        if ($this->inLaravelEnvironment === false) {
+            return null;
+        }
+
+        // If we can detect Laravel, let's run the internal Laravel resolve method to import
+        // our facade and boot it up. This will return any added
+
+        $manager = resolve('saloon')->boot(new LaravelManager);
+
+        if ($manager->isMocking()) {
+            $this->mockStrategy = MockStrategies::LARAVEL;
+        }
+
+        return $manager;
+    }
+
+    /**
+     * Boot the mock client
+     *
+     * @param MockClient|null $mockClient
+     * @return MockClient|null
+     * @throws SaloonMultipleMockMethodsException
+     */
+    private function bootMockClient(MockClient|null $mockClient): ?MockClient
+    {
+        if (is_null($mockClient)) {
+            return null;
+        }
+
+        if ($mockClient->isEmpty()) {
+            throw new SaloonNoMockResponsesProvidedException;
+        }
+
+        if ($this->isMocking()) {
+            throw new SaloonMultipleMockMethodsException;
+        }
+
+        $this->mockStrategy = MockStrategies::SALOON;
+
+        return $mockClient;
+    }
+
+    /**
+     * Is the manager in mocking mode?
+     *
+     * @return bool
+     */
+    public function isMocking(): bool
+    {
+        return ! is_null($this->mockStrategy);
+    }
+
+    /**
+     * Get the mock strategy
+     *
+     * @return string|null
+     */
+    public function getMockStrategy(): ?string
+    {
+        return $this->mockStrategy;
     }
 }
