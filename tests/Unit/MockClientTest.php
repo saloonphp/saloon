@@ -1,10 +1,12 @@
 <?php
 
 use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\QueryParameterConnector;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 use Sammyjo20\Saloon\Tests\Resources\Requests\DifferentServiceUserRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 
@@ -53,29 +55,64 @@ test('you can create request mocks', function () {
     expect($mockClient->isEmpty())->toBeFalse();
 });
 
+test('you can create url mocks', function () {
+    $responseA = new MockResponse(['name' => 'Sammyjo20'], 200);
+    $responseB = new MockResponse(['name' => 'Alex'], 200);
+    $responseC = new MockResponse(['name' => 'Sam Carré'], 200);
+
+    $requestA = new UserRequest;
+    $requestB = new ErrorRequest;
+    $requestC = new DifferentServiceUserRequest;
+
+    $mockClient = new MockClient([
+        'saloon-test.samcarre.dev/api/user' => $responseA, // Test Exact Route
+        'saloon-test.samcarre.dev/*' => $responseB, // Test Wildcard Routes
+        'google.com/*' => $responseC, // Test Different Route,
+    ]);
+
+    expect($mockClient->guessNextResponse($requestA))->toEqual($responseA);
+    expect($mockClient->guessNextResponse($requestB))->toEqual($responseB);
+    expect($mockClient->guessNextResponse($requestC))->toEqual($responseC);
+});
+
 test('you can create wildcard url mocks', function () {
     $responseA = new MockResponse(['name' => 'Sammyjo20'], 200);
     $responseB = new MockResponse(['name' => 'Alex'], 200);
     $responseC = new MockResponse(['name' => 'Sam Carré'], 200);
 
     $requestA = new UserRequest;
-    $requestB = new DifferentServiceUserRequest;
+    $requestB = new ErrorRequest;
+    $requestC = new DifferentServiceUserRequest;
 
     $mockClient = new MockClient([
-        'saloon-test.samcarre.dev/*' => $responseA, // Test Wildcard Routes
-        'google.com/*' => $responseB, // Test Different Route
-        'saloon-test.samcarre.dev/api/user' => $responseC // Test Exact Route
+        'saloon-test.samcarre.dev/api/user' => $responseA, // Test Exact Route
+        'saloon-test.samcarre.dev/*' => $responseB, // Test Wildcard Routes
+        '*' => $responseC,
     ]);
 
     expect($mockClient->guessNextResponse($requestA))->toEqual($responseA);
     expect($mockClient->guessNextResponse($requestB))->toEqual($responseB);
-    expect($mockClient->guessNextResponse($requestA))->toEqual($responseC);
+    expect($mockClient->guessNextResponse($requestC))->toEqual($responseC);
 });
 
-test('you can create a callable mock', function () {
+test('saloon throws an exception if it cant work out the url response', function () {
+    $responseA = new MockResponse(['name' => 'Sammyjo20'], 200);
+    $responseB = new MockResponse(['name' => 'Alex'], 200);
+    $responseC = new MockResponse(['name' => 'Sam Carré'], 200);
 
-});
+    $requestA = new UserRequest;
+    $requestB = new ErrorRequest;
+    $requestC = new DifferentServiceUserRequest;
 
-test('a callable mock must return a saloon response', function () {
+    $mockClient = new MockClient([
+        'saloon-test.samcarre.dev/api/user' => $responseA, // Test Exact Route
+        'saloon-test.samcarre.dev/*' => $responseB, // Test Wildcard Routes
+    ]);
 
+    expect($mockClient->guessNextResponse($requestA))->toEqual($responseA);
+    expect($mockClient->guessNextResponse($requestB))->toEqual($responseB);
+
+    $this->expectException(SaloonNoMockResponseFoundException::class);
+
+    expect($mockClient->guessNextResponse($requestC))->toEqual($responseC);
 });

@@ -10,7 +10,6 @@ use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use ReflectionClass;
-use Spatie\Url\Url;
 
 class BaseMockClient
 {
@@ -22,19 +21,12 @@ class BaseMockClient
 
     protected array $urlResponses = [];
 
-    protected mixed $callableResponse = null;
-
     /**
      * @param array $responses
      * @throws SaloonNoMockResponsesProvidedException
      */
-    public function __construct(array|callable $mockData = [])
+    public function __construct(array $mockData = [])
     {
-        if (is_callable($mockData)) {
-            $this->addCallableResponse($mockData);
-            return;
-        }
-
         $this->addResponses($mockData);
     }
 
@@ -89,19 +81,6 @@ class BaseMockClient
         $this->urlResponses[$captureMethod] = $response;
     }
 
-    /**
-     * Add a callable response
-     *
-     * @param callable $callable
-     * @return $this
-     */
-    private function addCallableResponse(callable $callable): self
-    {
-        $this->callableResponse = $callable;
-
-        return $this;
-    }
-
     public function getNextFromSequence(): mixed
     {
         return array_shift($this->sequenceResponses);
@@ -112,18 +91,11 @@ class BaseMockClient
      *
      * @param SaloonRequest $request
      * @return MockResponse
+     * @throws SaloonNoMockResponseFoundException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function guessNextResponse(SaloonRequest $request): MockResponse
     {
-        // Check if there is an explicit response for this request
-        // Check if there is an explicit response for the request's connector
-        // Check if there is a response for the url
-        // Otherwise, use the sequence.
-
-        if (is_callable($this->callableResponse)) {
-            dd('Process callable');
-        }
-
         $requestClass = get_class($request);
 
         if (array_key_exists($requestClass, $this->requestResponses)) {
@@ -136,9 +108,11 @@ class BaseMockClient
             return $this->connectorResponses[$connectorClass];
         }
 
-        $guessedUrl = $this->guessUrlResponse($request);
+        $guessedResponse = $this->guessResponseFromUrl($request);
 
-        dd($guessedUrl);
+        if (! is_null($guessedResponse)) {
+            return $guessedResponse;
+        }
 
         if (empty($this->sequenceResponses)) {
             throw new SaloonNoMockResponseFoundException;
@@ -147,9 +121,24 @@ class BaseMockClient
         return $this->getNextFromSequence();
     }
 
-    private function guessUrlResponse(SaloonRequest $request): ?MockResponse
+    /**
+     * Guess the response from the URL.
+     *
+     * @param SaloonRequest $request
+     * @return MockResponse|null
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     */
+    private function guessResponseFromUrl(SaloonRequest $request): ?MockResponse
     {
-        dd('guesisgn work', $request->getFullRequestUrl());
+        foreach ($this->urlResponses as $url => $response) {
+            if (! Str::is(Str::start($url, '*'), $request->getFullRequestUrl())) {
+                continue;
+            }
+
+            return $response;
+        }
+
+        return null;
     }
 
     /**
@@ -159,6 +148,6 @@ class BaseMockClient
      */
     public function isEmpty(): bool
     {
-        return empty($this->sequenceResponses) && empty($this->connectorResponses) && empty($this->requestResponses) && empty($this->urlResponses) && empty($this->callableResponse);
+        return empty($this->sequenceResponses) && empty($this->connectorResponses) && empty($this->requestResponses) && empty($this->urlResponses);
     }
 }
