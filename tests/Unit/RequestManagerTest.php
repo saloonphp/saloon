@@ -24,7 +24,6 @@ test('a request is built up correctly', function () {
 
     expect($requestManager->getHeaders())->toEqual([
         'Accept' => 'application/json',
-        'Content-Type' => 'application/json',
         'X-Connector-Header' => 'Sam', // Added by connector
         'X-Custom-Header' => 'Howdy', // Added by request
     ]);

@@ -6,9 +6,7 @@ trait HasMultipartBody
 {
     public function bootHasMultipartBodyFeature()
     {
-        $this->mergeConfig([
-            'multipart' => $this->getData(),
-        ]);
+        $this->addConfig('multipart', $this->getData());
     }
 
     /**

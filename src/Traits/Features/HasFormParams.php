@@ -6,9 +6,7 @@ trait HasFormParams
 {
     public function bootHasBodyFeature()
     {
-        $this->mergeConfig([
-            'form_params' => $this->getData(),
-        ]);
+        $this->addConfig('form_params', $this->getData());
     }
 
     /**

@@ -6,13 +6,7 @@ trait HasJsonBody
 {
     public function bootHasJsonBodyFeature()
     {
-        $this->mergeHeaders([
-            'Content-Type' => 'application/json',
-        ]);
-
-        $this->mergeConfig([
-            'json' => $this->getData(),
-        ]);
+        $this->addConfig('json', $this->getData());
     }
 
     /**
