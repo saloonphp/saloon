@@ -9,6 +9,7 @@ test('a request can be made successfully', function () {
 
     $data = $response->json();
 
+    expect($response->isMocked())->toBeFalse();
     expect($response->status())->toEqual(200);
 
     expect($data)->toEqual([
@@ -22,5 +23,6 @@ test('a request can handle an exception properly', function () {
     $request = new ErrorRequest();
     $response = $request->send();
 
+    expect($response->isMocked())->toBeFalse();
     expect($response->status())->toEqual(500);
 });
