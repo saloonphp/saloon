@@ -674,6 +674,153 @@ class CreateForgeServerRequest extends SaloonRequest
 
 > Saloon will not know about the changes you make to your request/responses in handlers.
 
+## Mocking / Faking
+
+It's important when building API integrations or SDKs to test your application's response to particular API requests without actually making a request to the API. Saloon has a fluent, and easy to understand workflow to build testing. There are some small differences between testing with Laravel and testing your SDK, which is why I have separated them below.
+
+### Mocking Saloon Requests With Laravel
+If you are using the `sammyjo20/saloon-laravel` Laravel package, the method of testing is slightly different. This is because we make use of Laravel's service container to store fake responses for later.
+
+When testing in Laravel, use the Saloon facade and call `Saloon::fake()` before testing your application logic that makes a Saloon request. Saloon will automatically detect when an API request is about to be made, and will respond with the fake response, stopping the real API request being sent out. This powerful feature allows you to test **any** feature in your application that uses Saloon requests.
+
+#### Basic Usage (Sequence Tests)
+Basic sequence testing allows you to define any number of fake responses. When your application uses Saloon, it will pull out the next response in the sequence, removing it too.
+
+```php
+use Sammyjo20\SaloonLaravel\Facades\Saloon;
+
+Saloon::fake([
+    new MockResponse(['name' => 'Sam'], 200),
+    new MockResponse(['name' => 'Alex'], 200),
+    new MockResponse(['error' => 'Server Unavailable'], 500),
+]);
+
+(new GetForgeServerRequest)->send() // Will return with `['name' => 'Sam']` and status `200`
+(new GetForgeServerRequest)->send() // Will return with `['name' => 'Alex']` and status `200`
+(new GetForgeServerRequest)->send() // Will return with `['error' => 'Server Unavailable']` and status `500`
+```
+
+#### Connector Mocking
+You may also explicitly define mock responses for a particular connector that is used. Unlike sequence tests, these are kept even after the response has been sent.
+
+```php
+use Sammyjo20\SaloonLaravel\Facades\Saloon;
+
+Saloon::fake([
+    ForgeConnector::class => new MockResponse(['name' => 'Sam'], 200),
+    OtherServiceConnector::class => new MockResponse(['name' => 'Alex'], 200),
+]);
+
+(new GetForgeServerRequest)->send() // Will return with `['name' => 'Sam']` and status `200`
+(new GetForgeServerRequest)->send() // Will return with `['name' => 'Sam']` and status `200`
+(new OtherServiceRequest)->send() // Will return with `['name' => 'Alex']` and status `200`
+```
+
+#### Request Mocking
+You may also explicitly define mock responses for a particular request that is used. Unlike sequence tests, these are kept even after the response has been sent.
+
+```php
+use Sammyjo20\SaloonLaravel\Facades\Saloon;
+
+Saloon::fake([
+    GetForgeServerRequest::class => new MockResponse(['name' => 'Sam'], 200),
+    OtherServiceRequest::class => new MockResponse(['name' => 'Alex'], 200),
+]);
+
+(new GetForgeServerRequest)->send() // Will return with `['name' => 'Sam']` and status `200`
+(new OtherServiceRequest)->send() // Will return with `['name' => 'Alex']` and status `200`
+```
+
+#### URL Mocking
+You can also define fake responses for particular URL patterns. Whenever a request is made for a particular pattern, Saloon will respond to that request.
+
+```php
+use Sammyjo20\SaloonLaravel\Facades\Saloon;
+
+Saloon::fake([
+    'forge.laravel.com/api/*' => new MockResponse(['name' => 'Sam'], 200),
+    'samcarre.dev/*' => new MockResponse(['name' => 'Alex'], 200),
+    'samcarre.dev/exact' => new MockResponse(['name' => 'Taylor'], 200), // Exact requests
+    '*' => new MockResponse(['name' => 'Wildcard'], 200), // Any other requests
+]);
+
+(new GetForgeServerRequest)->send() // Will return with `['name' => 'Sam']` and status `200`
+(new OtherServiceRequest)->send() // Will return with `['name' => 'Alex']` and status `200`
+(new ExactRequest)->send() // Will return with `['name' => 'Taylor']` and status `200`
+(new WildcardServiceRequest)->send() // Will return with `['name' => 'Wildcard']` and status `200`
+```
+
+### Testing Without Laravel (SDKs, non-laravel applications)
+
+Saloon provides a way to test your SDKs really easily. You will need to create an instance of `MockClient` and then pass the `MockClient` as an argument to the `send` method on your request. There are multiple ways you can write tests.
+
+#### Basic Usage (Sequence Tests)
+Basic sequence testing allows you to define any number of fake responses. When your application uses Saloon, it will pull out the next response in the sequence, removing it too.
+
+```php
+use Sammyjo20\Saloon\Clients\MockClient;
+
+$mockClient = new MockClient([
+    new MockResponse(['name' => 'Sam'], 200),
+    new MockResponse(['name' => 'Alex'], 200),
+    new MockResponse(['error' => 'Server Unavailable'], 500),
+]);
+
+(new GetForgeServerRequest)->send($mockClient) // Will return with `['name' => 'Sam']` and status `200`
+(new GetForgeServerRequest)->send($mockClient) // Will return with `['name' => 'Alex']` and status `200`
+(new GetForgeServerRequest)->send($mockClient) // Will return with `['error' => 'Server Unavailable']` and status `500`
+```
+
+#### Connector Mocking
+You may also explicitly define mock responses for a particular connector that is used. Unlike sequence tests, these are kept even after the response has been sent.
+
+```php
+use Sammyjo20\Saloon\Clients\MockClient;
+
+$mockClient = new MockClient([
+    ForgeConnector::class => new MockResponse(['name' => 'Sam'], 200),
+    OtherServiceConnector::class => new MockResponse(['name' => 'Alex'], 200),
+]);
+
+(new GetForgeServerRequest)->send($mockClient) // Will return with `['name' => 'Sam']` and status `200`
+(new GetForgeServerRequest)->send($mockClient) // Will return with `['name' => 'Sam']` and status `200`
+(new OtherServiceRequest)->send($mockClient) // Will return with `['name' => 'Alex']` and status `200`
+```
+
+#### Request Mocking
+You may also explicitly define mock responses for a particular request that is used. Unlike sequence tests, these are kept even after the response has been sent.
+
+```php
+use Sammyjo20\Saloon\Clients\MockClient;
+
+$mockClient = new MockClient([
+    GetForgeServerRequest::class => new MockResponse(['name' => 'Sam'], 200),
+    OtherServiceRequest::class => new MockResponse(['name' => 'Alex'], 200),
+]);
+
+(new GetForgeServerRequest)->send($mockClient) // Will return with `['name' => 'Sam']` and status `200`
+(new OtherServiceRequest)->send($mockClient) // Will return with `['name' => 'Alex']` and status `200`
+```
+
+#### URL Mocking
+You can also define fake responses for particular URL patterns. Whenever a request is made for a particular pattern, Saloon will respond to that request.
+
+```php
+use Sammyjo20\Saloon\Clients\MockClient;
+
+$mockClient = new MockClient([
+    'forge.laravel.com/api/*' => new MockResponse(['name' => 'Sam'], 200),
+    'samcarre.dev/*' => new MockResponse(['name' => 'Alex'], 200),
+    'samcarre.dev/exact' => new MockResponse(['name' => 'Taylor'], 200), // Exact requests
+    '*' => new MockResponse(['name' => 'Wildcard'], 200), // Any other requests
+]);
+
+(new GetForgeServerRequest)->send($mockClient) // Will return with `['name' => 'Sam']` and status `200`
+(new OtherServiceRequest)->send($mockClient) // Will return with `['name' => 'Alex']` and status `200`
+(new ExactRequest)->send($mockClient) // Will return with `['name' => 'Taylor']` and status `200`
+(new WildcardServiceRequest)->send($mockClient) // Will return with `['name' => 'Wildcard']` and status `200`
+```
+
 ## And that's it! ✨
 
 I really hope this package has been useful to you, if you like my work and want to show some love, consider buying me some coding fuel (Coffee) ❤
