@@ -494,7 +494,7 @@ Sometimes you will need to send custom form data like XML or a stream. In this c
 add the `HasBody` trait to your request class. After that, add a `defineBody` method on your request class. This method should return the raw body that you intend to send to the server. You should
 also specify headers so the receiving server can understand what Content-Type you are sending.
 
-[If you are sending XML, consider using the HasXMLBody trait](#xml-data)
+[If you are sending XML, consider using the HasXMLBody trait.](#xml-data)
 
 ```php
 <?php
