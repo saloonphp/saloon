@@ -11,9 +11,9 @@ test('pulling a response from the sequence will return the correct response', fu
 
     $mockClient = new MockClient([$responseA, $responseB, $responseC]);
 
-    expect($mockClient->getNextResponse()->getStatus())->toEqual($responseA->getStatus());
-    expect($mockClient->getNextResponse()->getStatus())->toEqual($responseB->getStatus());
-    expect($mockClient->getNextResponse()->getStatus())->toEqual($responseC->getStatus());
+    expect($mockClient->getNextFromSequence()->getStatus())->toEqual($responseA->getStatus());
+    expect($mockClient->getNextFromSequence()->getStatus())->toEqual($responseB->getStatus());
+    expect($mockClient->getNextFromSequence()->getStatus())->toEqual($responseC->getStatus());
     expect($mockClient->isEmpty())->toBeTrue();
 });
 

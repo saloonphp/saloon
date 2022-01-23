@@ -12,6 +12,7 @@ use Sammyjo20\Saloon\Traits\CollectsInterceptors;
 use Sammyjo20\Saloon\Interfaces\SaloonRequestInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
+use ReflectionClass;
 
 abstract class SaloonRequest implements SaloonRequestInterface
 {
@@ -80,6 +81,12 @@ abstract class SaloonRequest implements SaloonRequestInterface
             throw new SaloonInvalidConnectorException;
         }
 
+        $isValidRequest = (new ReflectionClass($this->connector))->isSubclassOf(SaloonConnector::class);
+
+        if (! $isValidRequest) {
+            throw new SaloonInvalidConnectorException;
+        }
+
         $this->loadedConnector = new $this->connector;
     }
 
@@ -96,6 +103,28 @@ abstract class SaloonRequest implements SaloonRequestInterface
         }
 
         return $this->loadedConnector;
+    }
+
+    /**
+     * Build up the final request URL.
+     *
+     * @return string
+     * @throws SaloonInvalidConnectorException
+     */
+    public function getFullRequestUrl(): string
+    {
+        $requestEndpoint = $this->defineEndpoint();
+
+        if ($requestEndpoint !== '/') {
+            $requestEndpoint = ltrim($requestEndpoint, '/ ');
+        }
+
+        $requiresTrailingSlash = ! empty($requestEndpoint) && $requestEndpoint !== '/';
+
+        $baseEndpoint = rtrim($this->getConnector()->defineBaseUrl(), '/ ');
+        $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . '/' : $baseEndpoint;
+
+        return $baseEndpoint . $requestEndpoint;
     }
 
     /**

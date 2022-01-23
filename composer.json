@@ -20,7 +20,8 @@
         "php": "^8.0",
         "guzzlehttp/guzzle": "^7.3",
         "illuminate/collections": "^8.0",
-        "laravel/helpers": "^1.4"
+        "laravel/helpers": "^1.4",
+        "spatie/url": "^2.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.5",

@@ -8,6 +8,6 @@ class SaloonInvalidConnectorException extends Exception
 {
     public function __construct()
     {
-        parent::__construct('The provided connector is invalid.');
+        parent::__construct('The provided connector is not a valid. The class must also extend SaloonConnector.');
     }
 }

@@ -239,6 +239,7 @@ class RequestManager
 
         if ($manager->isMocking()) {
             $this->mockStrategy = MockStrategies::LARAVEL;
+            // Todo: Change this to $this->mockClient = $manager->getMockClient();
         }
 
         return $manager;

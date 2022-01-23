@@ -23,12 +23,11 @@ trait ManagesGuzzle
      * Create the Guzzle request
      *
      * @return Request
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function createGuzzleRequest(): Request
     {
-        $endpoint = ltrim($this->request->defineEndpoint(), '/ ');
-
-        return new Request($this->request->getMethod(), $endpoint);
+        return new Request($this->request->getMethod(), $this->request->getFullRequestUrl());
     }
 
     /**
@@ -41,11 +40,7 @@ trait ManagesGuzzle
      */
     private function createGuzzleClient(): GuzzleClient
     {
-        $baseUri = rtrim($this->connector->defineBaseUrl(), '/ ');
-
-        $clientConfig = [
-            'base_uri' => empty($this->request->defineEndpoint()) ? $baseUri : $baseUri . '/',
-        ];
+        $clientConfig = [];
 
         $clientConfig['handler'] = $this->bootHandlers(HandlerStack::create());
 
@@ -84,7 +79,7 @@ trait ManagesGuzzle
         }
 
         if ($this->isMocking() && $this->getMockStrategy() === MockStrategies::SALOON) {
-            $mockResponse = $this->mockClient->getNextResponse();
+            $mockResponse = $this->mockClient->getNextFromSequence();
 
             $handlerStack->push(new MockMiddleware($mockResponse), 'saloonMockMiddleware');
         }
