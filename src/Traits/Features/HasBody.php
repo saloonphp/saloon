@@ -3,6 +3,7 @@
 namespace Sammyjo20\Saloon\Traits\Features;
 
 use Sammyjo20\Saloon\Exceptions\SaloonHasBodyException;
+use Sammyjo20\Saloon\Http\SaloonRequest;
 
 trait HasBody
 {
@@ -15,7 +16,7 @@ trait HasBody
      */
     public function bootHasBodyFeature(): void
     {
-        if ($this->traitExistsOnConnector(HasBody::class)) {
+        if ($this instanceof SaloonRequest && $this->traitExistsOnConnector(HasBody::class)) {
             throw new SaloonHasBodyException('You can not have the HasBody trait on both the request and the connector at the same time.');
         }
 
