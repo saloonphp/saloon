@@ -1,14 +1,14 @@
 <?php
 
-use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
 use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\QueryParameterConnector;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
-use Sammyjo20\Saloon\Tests\Resources\Requests\DifferentServiceUserRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorRequest;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
+use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\QueryParameterConnector;
+use Sammyjo20\Saloon\Tests\Resources\Requests\DifferentServiceUserRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorRequest;
 
 test('you can create sequence mocks', function () {
     $responseA = new MockResponse(['name' => 'Sammyjo20'], 200);
@@ -30,7 +30,7 @@ test('you can create connector mocks', function () {
 
     $mockClient = new MockClient([
         TestConnector::class => $responseA,
-        QueryParameterConnector::class => $responseB
+        QueryParameterConnector::class => $responseB,
     ]);
 
     expect($mockClient->guessNextResponse($connectorARequest))->toEqual($responseA);
@@ -47,7 +47,7 @@ test('you can create request mocks', function () {
 
     $mockClient = new MockClient([
         UserRequest::class => $responseA,
-        QueryParameterConnectorRequest::class => $responseB
+        QueryParameterConnectorRequest::class => $responseB,
     ]);
 
     expect($mockClient->guessNextResponse($requestA))->toEqual($responseA);

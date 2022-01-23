@@ -4,7 +4,6 @@ namespace Sammyjo20\Saloon\Traits;
 
 use Illuminate\Support\Arr;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Traits\Features\HasJsonBody;
 use Sammyjo20\Saloon\Traits\Features\HasQueryParams;
 
 trait CollectsQueryParams

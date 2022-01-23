@@ -1,13 +1,11 @@
 <?php
 
-use Couchbase\UserManager;
 use Psr\Http\Message\RequestInterface;
-use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Constants\MockStrategies;
 use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Managers\RequestManager;
-use Sammyjo20\Saloon\Tests\Resources\Requests\HeaderRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\HeaderRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithBoot;
 use Sammyjo20\Saloon\Tests\Resources\Requests\ReplaceConfigRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\ReplaceHeaderRequest;

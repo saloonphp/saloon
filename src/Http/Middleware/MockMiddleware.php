@@ -2,9 +2,9 @@
 
 namespace Sammyjo20\Saloon\Http\Middleware;
 
-use GuzzleHttp\Promise\FulfilledPromise;
 use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Http\MockResponse;
+use GuzzleHttp\Promise\FulfilledPromise;
 
 class MockMiddleware
 {

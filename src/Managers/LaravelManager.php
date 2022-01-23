@@ -2,11 +2,10 @@
 
 namespace Sammyjo20\Saloon\Managers;
 
-use Sammyjo20\Saloon\Clients\BaseMockClient;
-use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
-use Sammyjo20\Saloon\Traits\CollectsHandlers;
+use Sammyjo20\Saloon\Clients\BaseMockClient;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
+use Sammyjo20\Saloon\Traits\CollectsHandlers;
 use Sammyjo20\Saloon\Traits\CollectsInterceptors;
 
 class LaravelManager

@@ -3,8 +3,8 @@
 namespace Sammyjo20\Saloon\Http;
 
 use GuzzleHttp\Psr7\Response;
-use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsData;
+use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\Features\HasBody;
 
