@@ -68,7 +68,7 @@ trait CollectsConfig
      * @param $value
      * @return $this
      */
-    public function addConfigVariable(string $item, $value): self
+    public function addConfig(string $item, $value): self
     {
         $this->customConfig[$item] = $value;
 

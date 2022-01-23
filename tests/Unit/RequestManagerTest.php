@@ -1,7 +1,10 @@
 <?php
 
 use Psr\Http\Message\RequestInterface;
+use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Managers\RequestManager;
+use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\HeaderRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithBoot;
 use Sammyjo20\Saloon\Tests\Resources\Requests\ReplaceConfigRequest;
@@ -15,11 +18,10 @@ test('a request is built up correctly', function () {
 
     // Manually prepare the message
 
-    $requestManager->prepareForFlight();
+    $requestManager->hydrate();
 
     expect($requestManager->getHeaders())->toEqual([
         'Accept' => 'application/json',
-        'Content-Type' => 'application/json',
         'X-Connector-Header' => 'Sam', // Added by connector
         'X-Custom-Header' => 'Howdy', // Added by request
     ]);
@@ -37,7 +39,7 @@ test('a request is built up correctly', function () {
 test('a request headers replace connectors headers', function () {
     $requestManager = new RequestManager(new ReplaceHeaderRequest());
 
-    $requestManager->prepareForFlight();
+    $requestManager->hydrate();
 
     expect($requestManager->getHeaders())->toHaveKey('X-Connector-Header', 'Howdy');
 });
@@ -45,21 +47,21 @@ test('a request headers replace connectors headers', function () {
 test('a request config replace connectors config', function () {
     $requestManager = new RequestManager(new ReplaceConfigRequest());
 
-    $requestManager->prepareForFlight();
+    $requestManager->hydrate();
 
     expect($requestManager->getConfig())->toHaveKey('debug', false);
 });
 
 test('the boot method can add functionality in connectors', function () {
     $requestManager = new RequestManager(new UserRequestWithBootConnector());
-    $requestManager->prepareForFlight();
+    $requestManager->hydrate();
 
     expect($requestManager->getHeaders())->toHaveKey('X-Connector-Boot-Header', 'Howdy!');
 });
 
 test('the boot method can add functionality in requests', function () {
     $requestManager = new RequestManager(new UserRequestWithBoot());
-    $requestManager->prepareForFlight();
+    $requestManager->hydrate();
 
     expect($requestManager->getHeaders())->toHaveKey('X-Request-Boot-Header', 'Yee-haw!');
 });
@@ -92,4 +94,24 @@ test('the trailing slash is removed when disabled from the request if the endpoi
     });
 
     $request->send();
+});
+
+test('it cant detect laravel', function () {
+    $requestManager = new RequestManager(new UserRequest());
+
+    expect($requestManager->inLaravelEnvironment)->toBeFalse();
+});
+
+test('if you do not pass a mock client into the request, no mocking will be configured', function () {
+    $requestManager = new RequestManager(new UserRequest());
+
+    expect($requestManager->isMocking())->toBeFalse();
+});
+
+test('if you pass a mock client into the request, the request manager will setup mocking correctly', function () {
+    $mockClient = new MockClient([new MockResponse([], 200)]);
+
+    $requestManager = new RequestManager(new UserRequest(), $mockClient);
+
+    expect($requestManager->isMocking())->toBeTrue();
 });

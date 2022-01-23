@@ -4,12 +4,13 @@ namespace Sammyjo20\Saloon\Traits\Features;
 
 trait DisablesSSLVerification
 {
+    /**
+     * Disable SSL verification on requests. I hope you know this is bad.
+     *
+     * @return void
+     */
     public function bootDisablesSSLVerificationFeature()
     {
-        // I hope you know that this is bad.
-
-        $this->mergeConfig([
-            'verify' => false,
-        ]);
+        $this->addConfig('verify', false);
     }
 }

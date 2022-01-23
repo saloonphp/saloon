@@ -9,13 +9,9 @@ jobs:
       fail-fast: true
       matrix:
         php: [8.1, 8.0]
-        laravel: [^8.0]
         dependency-version: [prefer-lowest, prefer-stable]
-        include:
-          - laravel: ^8.0
-            testbench: ^6.0
 
-    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - ${{ matrix.dependency-version }}
+    name: PHP ${{ matrix.php }} - ${{ matrix.dependency-version }}
 
     steps:
       - name: Checkout code
@@ -25,7 +21,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.composer/cache/files
-          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+          key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -35,8 +31,7 @@ jobs:
 
       - name: Install composer dependencies
         run: |
-          composer require "illuminate/contracts:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
       - name: Execute tests
-        run: ./vendor/bin/pest
+        run: composer test

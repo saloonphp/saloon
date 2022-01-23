@@ -141,6 +141,6 @@ trait CollectsQueryParams
      */
     private function connectorHasQueryParamsTrait(): bool
     {
-        return array_key_exists(HasQueryParams::class, class_uses($this->getConnector()));
+        return $this->traitExistsOnConnector(HasQueryParams::class);
     }
 }

@@ -28,9 +28,5 @@ interface SaloonRequestInterface
 
     public function getResponseInterceptors(): array;
 
-    public function defaultSuccessMockResponse(): void;
-
-    public function defaultFailureMockResponse(): void;
-
     public function boot(): void;
 }

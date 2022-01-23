@@ -4,10 +4,13 @@ namespace Sammyjo20\Saloon\Http;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Traits\Macroable;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 
 class SaloonResponse
 {
+    use Macroable;
+
     /**
      * The underlying PSR response.
      *
@@ -49,6 +52,13 @@ class SaloonResponse
      * @var bool
      */
     private bool $isCached = false;
+
+    /**
+     * Determines if the response has been mocked.
+     *
+     * @var bool
+     */
+    private bool $isMocked = false;
 
     /**
      * Create a new response instance.
@@ -337,6 +347,16 @@ class SaloonResponse
     }
 
     /**
+     * Get the underlying PSR response for the response.
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function toGuzzleResponse()
+    {
+        return $this->toPsrResponse();
+    }
+
+    /**
      * Create an exception if a server or client error occurred.
      *
      * @return SaloonRequestException|void
@@ -387,6 +407,19 @@ class SaloonResponse
     }
 
     /**
+     * Set if the response is mocked. Should only be used internally.
+     *
+     * @param bool $mocked
+     * @return $this
+     */
+    public function setMocked(bool $mocked): self
+    {
+        $this->isMocked = $mocked;
+
+        return $this;
+    }
+
+    /**
      * Check if the response has been cached
      *
      * @return bool
@@ -397,14 +430,12 @@ class SaloonResponse
     }
 
     /**
-     * Dynamically proxy other methods to the underlying response.
+     * Check if the response has been mocked
      *
-     * @param  string  $method
-     * @param  array  $parameters
-     * @return mixed
+     * @return bool
      */
-    public function __call($method, $parameters)
+    public function isMocked(): bool
     {
-        return $this->response->{$method}(...$parameters);
+        return $this->isMocked;
     }
 }

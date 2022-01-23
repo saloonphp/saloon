@@ -2,10 +2,10 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use ReflectionClass;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
-use Sammyjo20\Saloon\Traits\MocksResponses;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\CollectsHandlers;
 use Sammyjo20\Saloon\Traits\CollectsQueryParams;
@@ -22,8 +22,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
         CollectsConfig,
         CollectsHandlers,
         CollectsInterceptors,
-        SendsRequests,
-        MocksResponses;
+        SendsRequests;
 
     /**
      * Define the method that the request will use.
@@ -82,6 +81,12 @@ abstract class SaloonRequest implements SaloonRequestInterface
             throw new SaloonInvalidConnectorException;
         }
 
+        $isValidRequest = (new ReflectionClass($this->connector))->isSubclassOf(SaloonConnector::class);
+
+        if (! $isValidRequest) {
+            throw new SaloonInvalidConnectorException;
+        }
+
         $this->loadedConnector = new $this->connector;
     }
 
@@ -101,19 +106,37 @@ abstract class SaloonRequest implements SaloonRequestInterface
     }
 
     /**
-     * Define your default successful mock response.
+     * Build up the final request URL.
+     *
+     * @return string
+     * @throws SaloonInvalidConnectorException
      */
-    public function defaultSuccessMockResponse(): void
+    public function getFullRequestUrl(): string
     {
-        $this->setSuccessMockResponse(200, [], '');
+        $requestEndpoint = $this->defineEndpoint();
+
+        if ($requestEndpoint !== '/') {
+            $requestEndpoint = ltrim($requestEndpoint, '/ ');
+        }
+
+        $requiresTrailingSlash = ! empty($requestEndpoint) && $requestEndpoint !== '/';
+
+        $baseEndpoint = rtrim($this->getConnector()->defineBaseUrl(), '/ ');
+        $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . '/' : $baseEndpoint;
+
+        return $baseEndpoint . $requestEndpoint;
     }
 
     /**
-     * Define your default failure mock response.
+     * Check if a trait exists on the connector.
+     *
+     * @param string $trait
+     * @return bool
+     * @throws SaloonInvalidConnectorException
      */
-    public function defaultFailureMockResponse(): void
+    public function traitExistsOnConnector(string $trait): bool
     {
-        $this->setFailureMockResponse(500, [], '');
+        return array_key_exists($trait, class_uses($this->getConnector()));
     }
 
     /**

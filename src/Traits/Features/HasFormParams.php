@@ -2,11 +2,11 @@
 
 namespace Sammyjo20\Saloon\Traits\Features;
 
-trait HasJsonBody
+trait HasFormParams
 {
-    public function bootHasJsonBodyFeature()
+    public function bootHasBodyFeature()
     {
-        $this->addConfig('json', $this->getData());
+        $this->addConfig('form_params', $this->getData());
     }
 
     /**
@@ -17,6 +17,6 @@ trait HasJsonBody
      */
     protected function connectorHasDataTrait(): bool
     {
-        return $this->traitExistsOnConnector(HasJsonBody::class);
+        return $this->traitExistsOnConnector(HasFormParams::class);
     }
 }

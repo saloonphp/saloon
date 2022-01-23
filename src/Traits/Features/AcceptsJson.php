@@ -6,8 +6,6 @@ trait AcceptsJson
 {
     public function bootAcceptsJsonFeature()
     {
-        $this->mergeHeaders([
-            'Accept' => 'application/json',
-        ]);
+        $this->addHeader('Accept', 'application/json');
     }
 }

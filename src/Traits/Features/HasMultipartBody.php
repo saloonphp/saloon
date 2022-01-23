@@ -6,9 +6,7 @@ trait HasMultipartBody
 {
     public function bootHasMultipartBodyFeature()
     {
-        $this->mergeConfig([
-            'multipart' => $this->getData(),
-        ]);
+        $this->addConfig('multipart', $this->getData());
     }
 
     /**
@@ -17,8 +15,8 @@ trait HasMultipartBody
      * @return bool
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    protected function connectorHasTrait(): bool
+    protected function connectorHasDataTrait(): bool
     {
-        return array_key_exists(HasMultipartBody::class, class_uses($this->getConnector()));
+        return $this->traitExistsOnConnector(HasMultipartBody::class);
     }
 }

@@ -3,9 +3,9 @@
 namespace Sammyjo20\Saloon\Traits;
 
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Client as GuzzleClient;
+use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
 use Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException;
 
@@ -19,6 +19,17 @@ trait ManagesGuzzle
     private array $bootedHandlers = [];
 
     /**
+     * Create the Guzzle request
+     *
+     * @return Request
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     */
+    public function createGuzzleRequest(): Request
+    {
+        return new Request($this->request->getMethod(), $this->request->getFullRequestUrl());
+    }
+
+    /**
      * Create a new Guzzle client
      *
      * @return GuzzleClient
@@ -28,40 +39,11 @@ trait ManagesGuzzle
      */
     private function createGuzzleClient(): GuzzleClient
     {
-        $baseUri = rtrim($this->connector->defineBaseUrl(), '/ ');
+        $clientConfig = [];
 
-        if (empty($this->request->defineEndpoint()) === false) {
-            $baseUri .= '/';
-        }
-
-        $clientConfig = [
-            'base_uri' => $baseUri,
-        ];
-
-        if ($this->isMocking === true) {
-            $clientConfig['handler'] = HandlerStack::create($this->createMockHandler());
-        } else {
-            $clientConfig['handler'] = $this->bootHandlers(HandlerStack::create());
-        }
+        $clientConfig['handler'] = $this->bootHandlers(HandlerStack::create());
 
         return new GuzzleClient($clientConfig);
-    }
-
-    /**
-     * Create a "mock" handler so Guzzle can pretend it's a real request.
-     *
-     * @return MockHandler
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
-     */
-    private function createMockHandler(): MockHandler
-    {
-        $saloonMock = $this->mockType === 'success'
-            ? $this->request->getSuccessMock()
-            : $this->request->getFailureMock();
-
-        return new MockHandler([
-            new Response($saloonMock->getStatusCode(), $saloonMock->getHeaders(), $saloonMock->getBody()),
-        ]);
     }
 
     /**
@@ -93,6 +75,12 @@ trait ManagesGuzzle
             // Add the booted handler here, so it can't be loaded again.
 
             $this->bootedHandlers[] = $handler;
+        }
+
+        if ($this->isMocking()) {
+            $mockResponse = $this->mockClient->guessNextResponse($this->request);
+
+            $handlerStack->push(new MockMiddleware($mockResponse), 'saloonMockMiddleware');
         }
 
         return $handlerStack;

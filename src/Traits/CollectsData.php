@@ -88,7 +88,7 @@ trait CollectsData
             // Let's merge in the query parameters from the connector if
             // the connector has the trait.
 
-            if ($this instanceof SaloonRequest && $this->connectorHasTrait()) {
+            if ($this instanceof SaloonRequest && method_exists($this, 'connectorHasDataTrait') && $this->connectorHasDataTrait()) {
                 $dataBag = $this->getConnector()->getData();
             } else {
                 $dataBag = [];

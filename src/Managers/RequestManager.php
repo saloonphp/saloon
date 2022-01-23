@@ -2,21 +2,24 @@
 
 namespace Sammyjo20\Saloon\Managers;
 
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
-use Sammyjo20\Saloon\Constants\Saloon;
+use Composer\InstalledVersions;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use GuzzleHttp\Exception\GuzzleException;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\ManagesGuzzle;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
+use Sammyjo20\Saloon\Clients\BaseMockClient;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\ManagesFeatures;
 use Sammyjo20\Saloon\Traits\CollectsHandlers;
 use GuzzleHttp\Exception\BadResponseException;
 use Sammyjo20\Saloon\Traits\CollectsInterceptors;
+use Sammyjo20\Saloon\Exceptions\SaloonMultipleMockMethodsException;
+use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 
 class RequestManager
 {
@@ -42,25 +45,43 @@ class RequestManager
     private SaloonConnector $connector;
 
     /**
-     * Check if the request manager is mocking.
+     * Are we running Saloon in a Laravel environment?
      *
      * @var bool
      */
-    public bool $isMocking = false;
+    public bool $inLaravelEnvironment = false;
+
+    /**
+     * The Laravel manager
+     *
+     * @var LaravelManager|null
+     */
+    protected ?LaravelManager $laravelManger = null;
+
+    /**
+     * The mock client if it has been provided
+     *
+     * @var BaseMockClient|null
+     */
+    protected ?BaseMockClient $mockClient = null;
 
     /**
      * Construct the request manager
      *
      * @param SaloonRequest $request
-     * @param string|null $mockType
-     * @throws \ReflectionException
+     * @param MockClient|null $mockClient
+     * @throws SaloonMultipleMockMethodsException
+     * @throws SaloonNoMockResponsesProvidedException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function __construct(SaloonRequest $request, string $mockType = null)
+    public function __construct(SaloonRequest $request, MockClient $mockClient = null)
     {
         $this->request = $request;
         $this->connector = $request->getConnector();
-        $this->isMocking = in_array($mockType, [Saloon::SUCCESS_MOCK, Saloon::FAILURE_MOCK], true);
-        $this->mockType = $mockType;
+        $this->inLaravelEnvironment = $this->detectLaravel();
+
+        $this->bootLaravelManager();
+        $this->bootMockClient($mockClient);
     }
 
     /**
@@ -69,7 +90,7 @@ class RequestManager
      * @return void
      * @throws \ReflectionException
      */
-    private function hydrateManager(): void
+    public function hydrate(): void
     {
         // Load up any features and if they add any headers, then we add them to the array.
         // Some features, like the "hasBody" feature, will need some manual code.
@@ -82,7 +103,7 @@ class RequestManager
         $this->connector->boot();
         $this->request->boot();
 
-        // Run any interceptors now
+        // Merge in response interceptors now
 
         $this->mergeResponseInterceptors($this->connector->getResponseInterceptors(), $this->request->getResponseInterceptors());
 
@@ -97,23 +118,15 @@ class RequestManager
         // Merge in any handlers
 
         $this->mergeHandlers($this->connector->getHandlers(), $this->request->getHandlers());
-    }
 
-    /**
-     * Prepare the request manager for message shipment
-     *
-     * @return void
-     * @throws \ReflectionException
-     */
-    public function prepareForFlight(): SaloonRequest
-    {
-        $request = &$this->request;
+        // Now we'll merge in anything added by Laravel.
 
-        // Rehydrate the manager
-
-        $this->hydrateManager();
-
-        return $request;
+        if ($this->laravelManger instanceof LaravelManager) {
+            $this->mergeResponseInterceptors($this->laravelManger->getResponseInterceptors());
+            $this->mergeHeaders($this->laravelManger->getHeaders());
+            $this->mergeConfig($this->laravelManger->getConfig());
+            $this->mergeHandlers($this->laravelManger->getHandlers());
+        }
     }
 
     /**
@@ -128,13 +141,9 @@ class RequestManager
      */
     public function send()
     {
-        $request = $this->prepareForFlight();
+        // Hydrate the manager with juicy headers, config, interceptors, handlers...
 
-        // Remove any leading slashes on the endpoint.
-
-        $endpoint = ltrim($request->defineEndpoint(), '/ ');
-
-        $guzzleRequest = new Request($request->getMethod(), $endpoint);
+        $this->hydrate();
 
         // Build up the config!
 
@@ -155,27 +164,30 @@ class RequestManager
         // Send the request! 🚀
 
         try {
-            $guzzleResponse = $client->send($guzzleRequest, $requestOptions);
+            $guzzleResponse = $client->send($this->createGuzzleRequest(), $requestOptions);
         } catch (BadResponseException $exception) {
-            return $this->createResponse($requestOptions, $request, $exception->getResponse());
+            return $this->createResponse($requestOptions, $exception->getResponse());
         }
 
-        return $this->createResponse($requestOptions, $request, $guzzleResponse);
+        return $this->createResponse($requestOptions, $guzzleResponse);
     }
 
     /**
      * Create a response.
      *
      * @param array $requestOptions
-     * @param SaloonRequest $request
      * @param Response $response
      * @return SaloonResponse
      */
-    private function createResponse(array $requestOptions, SaloonRequest $request, Response $response): SaloonResponse
+    private function createResponse(array $requestOptions, Response $response): SaloonResponse
     {
+        $request = $this->request;
+
         $shouldGuessStatusFromBody = isset($this->connector->shouldGuessStatusFromBody) || isset($this->request->shouldGuessStatusFromBody);
 
         $response = new SaloonResponse($requestOptions, $request, $response, $shouldGuessStatusFromBody);
+
+        $response->setMocked($this->isMocking());
 
         // Run Response Interceptors
 
@@ -184,5 +196,78 @@ class RequestManager
         }
 
         return $response;
+    }
+
+    /**
+     * Check if we can detect Laravel
+     *
+     * @return bool
+     */
+    private function detectLaravel(): bool
+    {
+        $hasRequiredDependencies = InstalledVersions::isInstalled('laravel/framework') && InstalledVersions::isInstalled('sammyjo20/saloon-laravel');
+
+        try {
+            return $hasRequiredDependencies && resolve('saloon') instanceof \Sammyjo20\SaloonLaravel\Saloon;
+        } catch (\Exception $ex) {
+            return false;
+        }
+    }
+
+    /**
+     *  Retrieve the Laravel manager from the Laravel package.
+     *
+     * @return void
+     */
+    private function bootLaravelManager(): void
+    {
+        // If we're not running Laravel, just stop here.
+
+        if ($this->inLaravelEnvironment === false) {
+            return;
+        }
+
+        // If we can detect Laravel, let's run the internal Laravel resolve method to import
+        // our facade and boot it up. This will return any added
+
+        $manager = resolve('saloon')->bootLaravelFeatures(new LaravelManager, $this->request);
+
+        $this->laravelManger = $manager;
+        $this->mockClient = $manager->getMockClient();
+    }
+
+    /**
+     * Boot the mock client
+     *
+     * @param MockClient|null $mockClient
+     * @return void
+     * @throws SaloonMultipleMockMethodsException
+     * @throws SaloonNoMockResponsesProvidedException
+     */
+    private function bootMockClient(MockClient|null $mockClient): void
+    {
+        if (is_null($mockClient)) {
+            return;
+        }
+
+        if ($mockClient->isEmpty()) {
+            throw new SaloonNoMockResponsesProvidedException;
+        }
+
+        if ($this->isMocking()) {
+            throw new SaloonMultipleMockMethodsException;
+        }
+
+        $this->mockClient = $mockClient;
+    }
+
+    /**
+     * Is the manager in mocking mode?
+     *
+     * @return bool
+     */
+    public function isMocking(): bool
+    {
+        return $this->mockClient instanceof BaseMockClient;
     }
 }

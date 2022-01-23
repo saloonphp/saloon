@@ -2,23 +2,34 @@
 
 namespace Sammyjo20\Saloon\Traits\Features;
 
+use Sammyjo20\Saloon\Exceptions\SaloonHasBodyException;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+
 trait HasBody
 {
-    public function bootHasBodyFeature()
+    /**
+     * Define any form body.
+     *
+     * @return void
+     * @throws SaloonHasBodyException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     */
+    public function bootHasBodyFeature(): void
     {
-        $this->mergeConfig([
-            'form_params' => $this->getData(),
-        ]);
+        if ($this instanceof SaloonRequest && $this->traitExistsOnConnector(HasBody::class)) {
+            throw new SaloonHasBodyException('You can not have the HasBody trait on both the request and the connector at the same time.');
+        }
+
+        $this->addConfig('body', $this->defineBody());
     }
 
     /**
-     * Check if the connector has a trait
+     * Define the body data that should be sent
      *
-     * @return bool
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     * @return mixed
      */
-    protected function connectorHasTrait(): bool
+    public function defineBody(): mixed
     {
-        return array_key_exists(HasBody::class, class_uses($this->getConnector()));
+        return null;
     }
 }

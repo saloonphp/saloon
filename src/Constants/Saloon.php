@@ -10,7 +10,4 @@ class Saloon
     public const PATCH = 'PATCH';
     public const DELETE = 'DELETE';
     public const OPTIONS = 'OPTIONS';
-
-    public const SUCCESS_MOCK = 'success';
-    public const FAILURE_MOCK = 'failure';
 }
