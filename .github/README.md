@@ -494,6 +494,8 @@ Sometimes you will need to send custom form data like XML or a stream. In this c
 add the `HasBody` trait to your request class. After that, add a `defineBody` method on your request class. This method should return the raw body that you intend to send to the server. You should
 also specify headers so the receiving server can understand what Content-Type you are sending.
 
+[If you are sending XML, consider using the HasXMLBody trait](#xml-data)
+
 ```php
 <?php
 
@@ -546,29 +548,7 @@ class GetForgeServersRequest extends SaloonRequest
 {
     use HasQueryParams;
 
-    /**
-     * Define the method that the request will use.
-     *
-     * @var string|null
-     */
-    protected ?string $method = Saloon::GET;
-
-    /**
-     * The connector.
-     *
-     * @var string|null
-     */
-    protected ?string $connector = ForgeConnector::class;
-
-    /**
-     * Define the endpoint for the request.
-     *
-     * @return string
-     */
-    public function defineEndpoint(): string
-    {
-        return '/servers';
-    }
+    // ...
     
     /**
      * Define query parameters on the request
@@ -608,9 +588,43 @@ $request->setQuery([
 ]);
 ```
 
-### Other Plugins Available
+## XML Data
+If you are sending XML data to an XML service, you can use the `HasXMLBody` trait on your request which will automatically add the headers that you need to send XML. Once you add the trait, 
+make sure to add the `defineXMLBody` method where you can return your XML as a string.
+
+```php
+<?php
+
+namespace App\Http\Saloon\Requests;
+
+use App\Http\Saloon\Connectors\ForgeConnector;
+use Sammyjo20\Saloon\Constants\Saloon;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Traits\Features\HasXMLBody;
+
+class XMLRequest extends SaloonRequest
+{
+    use HasXMLBody;
+
+    // ...
+    
+    public function defineXmlBody(): string
+    {
+        return '<?xml version="1.0" encoding="UTF-8"?>';
+    }
+}
+```
+
+### All Plugins Available
 
 - AcceptsJson
+- AlwaysThrowsOnErrors
+- HasJsonBody
+- HasBody
+- HasXMLBody
+- HasFormParams
+- HasMultipartBody
+- HasQueryParams
 - HasTimeout
 - WithDebugData
 - DisablesSSLVerification (Please be careful with this)
