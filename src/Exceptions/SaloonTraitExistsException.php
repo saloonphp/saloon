@@ -4,6 +4,7 @@ namespace Sammyjo20\Saloon\Exceptions;
 
 use \Exception;
 
-class SaloonHasBodyException extends Exception
+class SaloonTraitExistsException extends Exception
 {
+    //
 }
