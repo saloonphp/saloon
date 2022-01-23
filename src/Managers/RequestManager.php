@@ -235,7 +235,7 @@ class RequestManager
         // If we can detect Laravel, let's run the internal Laravel resolve method to import
         // our facade and boot it up. This will return any added
 
-        $manager = resolve('saloon')->boot(new LaravelManager);
+        $manager = resolve('saloon')->bootLaravelFeatures(new LaravelManager, $this->request);
 
         if ($manager->isMocking()) {
             $this->mockStrategy = MockStrategies::LARAVEL;
