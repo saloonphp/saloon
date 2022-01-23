@@ -3,6 +3,7 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Traits\CollectsData;
+use Sammyjo20\Saloon\Traits\Features\HasJsonBody;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
@@ -125,6 +126,18 @@ abstract class SaloonRequest implements SaloonRequestInterface
         $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . '/' : $baseEndpoint;
 
         return $baseEndpoint . $requestEndpoint;
+    }
+
+    /**
+     * Check if a trait exists on the connector.
+     *
+     * @param string $trait
+     * @return bool
+     * @throws SaloonInvalidConnectorException
+     */
+    public function traitExistsOnConnector(string $trait): bool
+    {
+        return array_key_exists($trait, class_uses($this->getConnector()));
     }
 
     /**

@@ -19,6 +19,6 @@ trait HasFormParams
      */
     protected function connectorHasDataTrait(): bool
     {
-        return array_key_exists(HasFormParams::class, class_uses($this->getConnector()));
+        return $this->traitExistsOnConnector(HasFormParams::class);
     }
 }

@@ -2,7 +2,10 @@
 
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Tests\Resources\Requests\MockRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 
 test('pulling a response from the sequence will return the correct response', function () {
     $responseA = new MockResponse([], 200);
@@ -33,4 +36,21 @@ test('a mock response can have raw body data', function () {
     expect($response->getConfig())->toEqual([]);
     expect($response->getStatus())->toEqual(200);
     expect($response->getFormattedData())->toEqual('xml');
+});
+
+test('a response can have a method added to it', function () {
+    $mockClient = new MockClient([new MockResponse([], 200)]);
+    $request = new UserRequest();
+
+    $request->addResponseInterceptor(function (SaloonRequest $request, SaloonResponse $response) {
+        $response::macro('yeehaw', function () {
+            return 'Yee-haw!';
+        });
+
+        return $response;
+    });
+
+    $response = $request->send($mockClient);
+
+    expect($response->yeehaw())->toEqual('Yee-haw!');
 });

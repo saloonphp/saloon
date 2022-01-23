@@ -23,6 +23,6 @@ trait HasJsonBody
      */
     protected function connectorHasDataTrait(): bool
     {
-        return array_key_exists(HasJsonBody::class, class_uses($this->getConnector()));
+        return $this->traitExistsOnConnector(HasJsonBody::class);
     }
 }

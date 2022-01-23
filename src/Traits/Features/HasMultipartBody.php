@@ -19,6 +19,6 @@ trait HasMultipartBody
      */
     protected function connectorHasDataTrait(): bool
     {
-        return array_key_exists(HasMultipartBody::class, class_uses($this->getConnector()));
+        return $this->traitExistsOnConnector(HasMultipartBody::class);
     }
 }

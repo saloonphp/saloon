@@ -4,10 +4,13 @@ namespace Sammyjo20\Saloon\Http;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Traits\Macroable;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 
 class SaloonResponse
 {
+    use Macroable;
+
     /**
      * The underlying PSR response.
      *
@@ -344,6 +347,16 @@ class SaloonResponse
     }
 
     /**
+     * Get the underlying PSR response for the response.
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function toGuzzleResponse()
+    {
+        return $this->toPsrResponse();
+    }
+
+    /**
      * Create an exception if a server or client error occurred.
      *
      * @return SaloonRequestException|void
@@ -424,17 +437,5 @@ class SaloonResponse
     public function isMocked(): bool
     {
         return $this->isMocked;
-    }
-
-    /**
-     * Dynamically proxy other methods to the underlying response.
-     *
-     * @param  string  $method
-     * @param  array  $parameters
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        return $this->response->{$method}(...$parameters);
     }
 }
