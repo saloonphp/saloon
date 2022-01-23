@@ -109,7 +109,6 @@ test('if you do not pass a mock client into the request, no mocking will be conf
     $requestManager = new RequestManager(new UserRequest());
 
     expect($requestManager->isMocking())->toBeFalse();
-    expect($requestManager->getMockStrategy())->toBeNull();
 });
 
 test('if you pass a mock client into the request, the request manager will setup mocking correctly', function () {
@@ -118,5 +117,4 @@ test('if you pass a mock client into the request, the request manager will setup
     $requestManager = new RequestManager(new UserRequest(), $mockClient);
 
     expect($requestManager->isMocking())->toBeTrue();
-    expect($requestManager->getMockStrategy())->toEqual(MockStrategies::SALOON);
 });

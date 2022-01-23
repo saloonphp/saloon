@@ -7,8 +7,8 @@ use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
+use Sammyjo20\Saloon\Clients\BaseMockClient;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Constants\MockStrategies;
 use Sammyjo20\Saloon\Exceptions\SaloonMultipleMockMethodsException;
 use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 use Sammyjo20\Saloon\Http\SaloonConnector;
@@ -61,16 +61,9 @@ class RequestManager
     /**
      * The mock client if it has been provided
      *
-     * @var MockClient|null
+     * @var BaseMockClient|null
      */
-    protected ?MockClient $mockClient = null;
-
-    /**
-     * Detect the current mock client
-     *
-     * @var string|null
-     */
-    public ?string $mockStrategy = null;
+    protected ?BaseMockClient $mockClient = null;
 
     /**
      * Construct the request manager
@@ -78,6 +71,7 @@ class RequestManager
      * @param SaloonRequest $request
      * @param MockClient|null $mockClient
      * @throws SaloonMultipleMockMethodsException
+     * @throws SaloonNoMockResponsesProvidedException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function __construct(SaloonRequest $request, MockClient $mockClient = null)
@@ -85,8 +79,9 @@ class RequestManager
         $this->request = $request;
         $this->connector = $request->getConnector();
         $this->inLaravelEnvironment = $this->detectLaravel();
-        $this->laravelManger = $this->bootLaravelManager();
-        $this->mockClient = $this->bootMockClient($mockClient);
+
+        $this->bootLaravelManager();
+        $this->bootMockClient($mockClient);
     }
 
     /**
@@ -220,16 +215,16 @@ class RequestManager
     }
 
     /**
-     * Retrieve the Laravel manager from the Laravel package.
+     *  Retrieve the Laravel manager from the Laravel package.
      *
-     * @return LaravelManager|null
+     * @return void
      */
-    private function bootLaravelManager(): ?LaravelManager
+    private function bootLaravelManager(): void
     {
         // If we're not running Laravel, just stop here.
 
         if ($this->inLaravelEnvironment === false) {
-            return null;
+            return;
         }
 
         // If we can detect Laravel, let's run the internal Laravel resolve method to import
@@ -237,25 +232,22 @@ class RequestManager
 
         $manager = resolve('saloon')->bootLaravelFeatures(new LaravelManager, $this->request);
 
-        if ($manager->isMocking()) {
-            $this->mockStrategy = MockStrategies::LARAVEL;
-            // Todo: Change this to $this->mockClient = $manager->getMockClient();
-        }
-
-        return $manager;
+        $this->laravelManger = $manager;
+        $this->mockClient = $manager->getMockClient();
     }
 
     /**
      * Boot the mock client
      *
      * @param MockClient|null $mockClient
-     * @return MockClient|null
+     * @return void
      * @throws SaloonMultipleMockMethodsException
+     * @throws SaloonNoMockResponsesProvidedException
      */
-    private function bootMockClient(MockClient|null $mockClient): ?MockClient
+    private function bootMockClient(MockClient|null $mockClient): void
     {
         if (is_null($mockClient)) {
-            return null;
+            return;
         }
 
         if ($mockClient->isEmpty()) {
@@ -266,9 +258,7 @@ class RequestManager
             throw new SaloonMultipleMockMethodsException;
         }
 
-        $this->mockStrategy = MockStrategies::SALOON;
-
-        return $mockClient;
+        $this->mockClient = $mockClient;
     }
 
     /**
@@ -278,16 +268,6 @@ class RequestManager
      */
     public function isMocking(): bool
     {
-        return ! is_null($this->mockStrategy);
-    }
-
-    /**
-     * Get the mock strategy
-     *
-     * @return string|null
-     */
-    public function getMockStrategy(): ?string
-    {
-        return $this->mockStrategy;
+        return $this->mockClient instanceof BaseMockClient;
     }
 }

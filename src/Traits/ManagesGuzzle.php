@@ -78,8 +78,8 @@ trait ManagesGuzzle
             $this->bootedHandlers[] = $handler;
         }
 
-        if ($this->isMocking() && $this->getMockStrategy() === MockStrategies::SALOON) {
-            $mockResponse = $this->mockClient->getNextFromSequence();
+        if ($this->isMocking()) {
+            $mockResponse = $this->mockClient->guessNextResponse($this->request);
 
             $handlerStack->push(new MockMiddleware($mockResponse), 'saloonMockMiddleware');
         }

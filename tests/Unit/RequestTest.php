@@ -17,7 +17,6 @@ test('if you dont pass in a mock client to the saloon request it will not be in 
     $requestManager = $request->getRequestManager();
 
     expect($requestManager->isMocking())->toBeFalse();
-    expect($requestManager->getMockStrategy())->toBeNull();
 });
 
 test('you can pass a mock client to the saloon request and it will be in mock mode', function () {
@@ -27,7 +26,6 @@ test('you can pass a mock client to the saloon request and it will be in mock mo
     $requestManager = $request->getRequestManager($mockClient);
 
     expect($requestManager->isMocking())->toBeTrue();
-    expect($requestManager->getMockStrategy())->toEqual(MockStrategies::SALOON);
 });
 
 test('you cant pass a mock client without any responses', function () {

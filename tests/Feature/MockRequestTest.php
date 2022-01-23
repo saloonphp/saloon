@@ -1,8 +1,13 @@
 <?php
 
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;
+use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\QueryParameterConnector;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
+use Sammyjo20\Saloon\Tests\Resources\Requests\DifferentServiceUserRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 
 test('a request can be mocked with a sequence', function () {
@@ -29,16 +34,126 @@ test('a request can be mocked with a sequence', function () {
     expect($responseC->isMocked())->toBeTrue();
     expect($responseC->json())->toEqual(['error' => 'Server Unavailable']);
     expect($responseC->status())->toEqual(500);
-});
 
-test('a request can be mocked with a url defined', function () {
-    //
+    $this->expectException(SaloonNoMockResponsesProvidedException::class);
+
+    (new UserRequest)->send($mockClient);
 });
 
 test('a request can be mocked with a connector defined', function () {
-    //
+    $responseA = new MockResponse(['name' => 'Sammyjo20'], 200);
+    $responseB = new MockResponse(['name' => 'Alex'], 200);
+
+    $connectorARequest = new UserRequest;
+    $connectorBRequest = new QueryParameterConnectorRequest;
+
+    $mockClient = new MockClient([
+        TestConnector::class => $responseA,
+        QueryParameterConnector::class => $responseB
+    ]);
+
+    $responseA = $connectorARequest->send($mockClient);
+
+    expect($responseA->isMocked())->toBeTrue();
+    expect($responseA->json())->toEqual(['name' => 'Sammyjo20']);
+    expect($responseA->status())->toEqual(200);
+
+    $responseB = $connectorBRequest->send($mockClient);
+
+    expect($responseB->isMocked())->toBeTrue();
+    expect($responseB->json())->toEqual(['name' => 'Alex']);
+    expect($responseB->status())->toEqual(200);
 });
 
 test('a request can be mocked with a request defined', function () {
-    //
+    $responseA = new MockResponse(['name' => 'Sammyjo20'], 200);
+    $responseB = new MockResponse(['name' => 'Alex'], 200);
+
+    $requestA = new UserRequest;
+    $requestB = new QueryParameterConnectorRequest;
+
+    $mockClient = new MockClient([
+        UserRequest::class => $responseA,
+        QueryParameterConnectorRequest::class => $responseB
+    ]);
+
+    $responseA = $requestA->send($mockClient);
+
+    expect($responseA->isMocked())->toBeTrue();
+    expect($responseA->json())->toEqual(['name' => 'Sammyjo20']);
+    expect($responseA->status())->toEqual(200);
+
+    $responseB = $requestB->send($mockClient);
+
+    expect($responseB->isMocked())->toBeTrue();
+    expect($responseB->json())->toEqual(['name' => 'Alex']);
+    expect($responseB->status())->toEqual(200);
+});
+
+test('a request can be mocked with a url defined', function () {
+    $responseA = new MockResponse(['name' => 'Sammyjo20'], 200);
+    $responseB = new MockResponse(['name' => 'Alex'], 200);
+    $responseC = new MockResponse(['error' => 'Server Broken'], 500);
+
+    $requestA = new UserRequest;
+    $requestB = new ErrorRequest;
+    $requestC = new DifferentServiceUserRequest;
+
+    $mockClient = new MockClient([
+        'saloon-test.samcarre.dev/api/user' => $responseA, // Test Exact Route
+        'saloon-test.samcarre.dev/*' => $responseB, // Test Wildcard Routes
+        'google.com/*' => $responseC, // Test Different Route,
+    ]);
+
+    $responseA = $requestA->send($mockClient);
+
+    expect($responseA->isMocked())->toBeTrue();
+    expect($responseA->json())->toEqual(['name' => 'Sammyjo20']);
+    expect($responseA->status())->toEqual(200);
+
+    $responseB = $requestB->send($mockClient);
+
+    expect($responseB->isMocked())->toBeTrue();
+    expect($responseB->json())->toEqual(['name' => 'Alex']);
+    expect($responseB->status())->toEqual(200);
+
+    $responseC = $requestC->send($mockClient);
+
+    expect($responseC->isMocked())->toBeTrue();
+    expect($responseC->json())->toEqual(['error' => 'Server Broken']);
+    expect($responseC->status())->toEqual(500);
+});
+
+test('you can create wildcard url mocks', function () {
+    $responseA = new MockResponse(['name' => 'Sammyjo20'], 200);
+    $responseB = new MockResponse(['name' => 'Alex'], 200);
+    $responseC = new MockResponse(['error' => 'Server Broken'], 500);
+
+    $requestA = new UserRequest;
+    $requestB = new ErrorRequest;
+    $requestC = new DifferentServiceUserRequest;
+
+    $mockClient = new MockClient([
+        'saloon-test.samcarre.dev/api/user' => $responseA, // Test Exact Route
+        'saloon-test.samcarre.dev/*' => $responseB, // Test Wildcard Routes
+        '*' => $responseC,
+    ]);
+
+    $responseA = $requestA->send($mockClient);
+
+    expect($responseA->isMocked())->toBeTrue();
+    expect($responseA->json())->toEqual(['name' => 'Sammyjo20']);
+    expect($responseA->status())->toEqual(200);
+
+    $responseB = $requestB->send($mockClient);
+
+    expect($responseB->isMocked())->toBeTrue();
+    expect($responseB->json())->toEqual(['name' => 'Alex']);
+    expect($responseB->status())->toEqual(200);
+
+    $responseC = $requestC->send($mockClient);
+
+    expect($responseC->isMocked())->toBeTrue();
+    expect($responseC->json())->toEqual(['error' => 'Server Broken']);
+    expect($responseC->status())->toEqual(500);
 });

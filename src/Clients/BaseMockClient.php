@@ -37,7 +37,7 @@ class BaseMockClient
      * @return void
      * @throws SaloonInvalidMockResponseCaptureMethodException
      */
-    private function addResponses(array $responses): void
+    public function addResponses(array $responses): void
     {
         foreach ($responses as $key => $response) {
             if (is_int($key)) {
@@ -48,7 +48,7 @@ class BaseMockClient
         }
     }
 
-    private function addResponse(MockResponse $response, ?string $captureMethod = null): void
+    public function addResponse(MockResponse $response, ?string $captureMethod = null): void
     {
         if (is_null($captureMethod)) {
             $this->sequenceResponses[] = $response;
