@@ -841,6 +841,14 @@ I really hope this package has been useful to you, if you like my work and want 
 
 [Donate Java (the drink not the language)](https://ko-fi.com/sammyjo20)
 
+## Contributing
+
+Please see [here](https://github.com/Sammyjo20/Saloon/blob/main/.github/CONTRIBUTING.md) for more details about contributing.
+
+## Security
+
+Please see [here](https://github.com/Sammyjo20/Saloon/blob/main/.github/SECURITY.md) for our security policy.
+
 ## Banner Image Credit
 
 - Freepik.com
