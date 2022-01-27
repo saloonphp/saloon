@@ -185,7 +185,9 @@ class RequestManager
 
         $shouldGuessStatusFromBody = isset($this->connector->shouldGuessStatusFromBody) || isset($this->request->shouldGuessStatusFromBody);
 
-        $response = new SaloonResponse($requestOptions, $request, $response, $shouldGuessStatusFromBody);
+        $responseClass = $request->getResponseClass();
+
+        $response = new $responseClass($requestOptions, $request, $response, $shouldGuessStatusFromBody);
 
         $response->setMocked($this->isMocking());
 

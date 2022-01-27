@@ -46,6 +46,13 @@ abstract class SaloonRequest implements SaloonRequestInterface
     private ?SaloonConnector $loadedConnector = null;
 
     /**
+     * The response class.
+     *
+     * @var class-string<\Sammyjo20\Saloon\Http\SaloonResponse>|null
+     */
+    protected ?string $response = null;
+
+    /**
      * Define anything to be added to the request.
      *
      * @return void
@@ -67,6 +74,20 @@ abstract class SaloonRequest implements SaloonRequestInterface
         }
 
         return $this->method;
+    }
+
+    /**
+     * Get the method the class is using.
+     *
+     * @return string
+     */
+    public function getResponseClass(): string
+    {
+        return match (false) {
+            is_null($this->response) => $this->response,
+            is_null($this->loadedConnector?->getResponseClass()) => $this->loadedConnector?->getResponseClass(),
+            default => SaloonResponse::class,
+        };
     }
 
     /**

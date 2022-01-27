@@ -20,6 +20,21 @@ abstract class SaloonConnector implements SaloonConnectorInterface
         CollectsInterceptors;
 
     /**
+     * The response class.
+     *
+     * @var class-string<\Sammyjo20\Saloon\Http\SaloonResponse>|null
+     */
+    protected ?string $response = null;
+
+    /**
+     * Gets the response class.
+     * @return string|null
+     */
+    public function getResponseClass(): ?string {
+        return $this->response;
+    }
+
+    /**
      * Define anything to be added to the connector.
      *
      * @return void
