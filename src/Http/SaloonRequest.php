@@ -79,26 +79,28 @@ abstract class SaloonRequest implements SaloonRequestInterface
 
 	/**
 	 * Get the response class
-	 * 
+	 *
 	 * @return string
 	 * @throws \ReflectionException
 	 * @throws SaloonInvalidResponseClassException
+	 * @throws SaloonInvalidConnectorException
 	 */
 	public function getResponseClass(): string
 	{
-		if(is_null($this->response)) return SaloonResponse::class;
+		$response = $this->response ?? $this->getConnector()->getResponseClass();
 
-		if(!class_exists($this->response)) {
+		if(!class_exists($response)) {
 			throw new SaloonInvalidResponseClassException;
 		}
 
-		$isValidResponse = (new ReflectionClass($this->response))->isSubclassOf(SaloonResponse::class);
+		$isValidResponse = $response == SaloonResponse::class
+			|| (new ReflectionClass($response))->isSubclassOf(SaloonResponse::class);
 
 		if(!$isValidResponse) {
 			throw new SaloonInvalidResponseClassException;
 		}
 
-		return $this->response;
+		return $response;
 	}
 
 	/**
