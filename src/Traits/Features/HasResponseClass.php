@@ -25,7 +25,7 @@ trait HasResponseClass
 	{
 		$response = $this->response;
 
-		if(!$response) {
+		if(empty($response)) {
 			$response = $this instanceof SaloonRequest ? $this->getConnector()->getResponseClass() : SaloonResponse::class;
 		}
 
