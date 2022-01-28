@@ -10,9 +10,17 @@ class UserResponse extends SaloonResponse
 	/**
 	 * @return \Sammyjo20\Saloon\Tests\Resources\Responses\UserCustomResponse
 	 */
-	public function customUserResponseMethod(): UserCustomResponse
+	public function customCastMethod(): UserCustomResponse
 	{
 		return new UserCustomResponse($this->json("foo"));
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function foo(): ?string
+	{
+		return $this->json("foo");
 	}
 
 }
