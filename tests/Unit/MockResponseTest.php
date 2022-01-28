@@ -65,5 +65,5 @@ test('a response can be a custom response class', function() {
 
 	expect($response)->customCastMethod()->toBeInstanceOf(UserCustomResponse::class);
 	expect($response)->foo()->toBe("bar");
-})->group("response");
+});
 
