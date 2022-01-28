@@ -13,6 +13,7 @@ use Sammyjo20\Saloon\Traits\CollectsHandlers;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\CollectsInterceptors;
 use Sammyjo20\Saloon\Traits\CollectsQueryParams;
+use Sammyjo20\Saloon\Traits\Features\HasResponseClass;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 
 abstract class SaloonRequest implements SaloonRequestInterface
@@ -23,6 +24,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
 		CollectsConfig,
 		CollectsHandlers,
 		CollectsInterceptors,
+		HasResponseClass,
 		SendsRequests;
 
 	/**
@@ -75,32 +77,6 @@ abstract class SaloonRequest implements SaloonRequestInterface
 		}
 
 		return $this->method;
-	}
-
-	/**
-	 * Get the response class
-	 *
-	 * @return string
-	 * @throws \ReflectionException
-	 * @throws SaloonInvalidResponseClassException
-	 * @throws SaloonInvalidConnectorException
-	 */
-	public function getResponseClass(): string
-	{
-		$response = $this->response ?? $this->getConnector()->getResponseClass();
-
-		if(!class_exists($response)) {
-			throw new SaloonInvalidResponseClassException;
-		}
-
-		$isValidResponse = $response == SaloonResponse::class
-			|| (new ReflectionClass($response))->isSubclassOf(SaloonResponse::class);
-
-		if(!$isValidResponse) {
-			throw new SaloonInvalidResponseClassException;
-		}
-
-		return $response;
 	}
 
 	/**
