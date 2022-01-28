@@ -1,11 +1,11 @@
 <?php
 
 use Sammyjo20\Saloon\Managers\RequestManager;
+use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorBlankRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\OverwrittenQueryParameterConnectorRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 
 test('a request with the hasQueryParams feature sends the query params', function () {
     $request = new QueryParameterRequest();
