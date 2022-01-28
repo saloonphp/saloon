@@ -4,8 +4,11 @@ use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
+use Sammyjo20\Saloon\Tests\Resources\Responses\UserData;
 use Sammyjo20\Saloon\Tests\Resources\Requests\MockRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithCustomResponse;
+use Sammyjo20\Saloon\Tests\Resources\Responses\UserResponse;
 
 test('pulling a response from the sequence will return the correct response', function () {
     $responseA = new MockResponse([], 200);
@@ -53,4 +56,15 @@ test('a response can have a method added to it', function () {
     $response = $request->send($mockClient);
 
     expect($response->yeehaw())->toEqual('Yee-haw!');
+});
+
+test('a response can be a custom response class', function () {
+    $mockClient = new MockClient([new MockResponse(['foo' => 'bar'], 200)]);
+    $request = new UserRequestWithCustomResponse();
+
+    $response = $request->send($mockClient);
+
+    expect($response)->toBeInstanceOf(UserResponse::class);
+    expect($response)->customCastMethod()->toBeInstanceOf(UserData::class);
+    expect($response)->foo()->toBe('bar');
 });

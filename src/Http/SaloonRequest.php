@@ -3,16 +3,17 @@
 namespace Sammyjo20\Saloon\Http;
 
 use ReflectionClass;
-use Sammyjo20\Saloon\Traits\CollectsData;
-use Sammyjo20\Saloon\Traits\SendsRequests;
-use Sammyjo20\Saloon\Traits\CollectsConfig;
-use Sammyjo20\Saloon\Traits\CollectsHeaders;
-use Sammyjo20\Saloon\Traits\CollectsHandlers;
-use Sammyjo20\Saloon\Traits\CollectsQueryParams;
-use Sammyjo20\Saloon\Traits\CollectsInterceptors;
-use Sammyjo20\Saloon\Interfaces\SaloonRequestInterface;
-use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
+use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
+use Sammyjo20\Saloon\Interfaces\SaloonRequestInterface;
+use Sammyjo20\Saloon\Traits\CollectsConfig;
+use Sammyjo20\Saloon\Traits\CollectsData;
+use Sammyjo20\Saloon\Traits\CollectsHandlers;
+use Sammyjo20\Saloon\Traits\CollectsHeaders;
+use Sammyjo20\Saloon\Traits\CollectsInterceptors;
+use Sammyjo20\Saloon\Traits\CollectsQueryParams;
+use Sammyjo20\Saloon\Traits\HasCustomResponses;
+use Sammyjo20\Saloon\Traits\SendsRequests;
 
 abstract class SaloonRequest implements SaloonRequestInterface
 {
@@ -22,6 +23,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
         CollectsConfig,
         CollectsHandlers,
         CollectsInterceptors,
+        HasCustomResponses,
         SendsRequests;
 
     /**
@@ -30,6 +32,13 @@ abstract class SaloonRequest implements SaloonRequestInterface
      * @var string|null
      */
     protected ?string $method = null;
+
+    /**
+     * Define a custom response that the request will return.
+     *
+     * @var string|null
+     */
+    protected ?string $response = null;
 
     /**
      * The connector.

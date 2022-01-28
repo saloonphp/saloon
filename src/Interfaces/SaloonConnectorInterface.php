@@ -10,6 +10,8 @@ interface SaloonConnectorInterface
 
     public function defaultConfig(): array;
 
+    public function getResponseClass(): string;
+
     public function defaultData(): array;
 
     public function defaultQuery(): array;

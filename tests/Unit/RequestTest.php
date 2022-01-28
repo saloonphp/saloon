@@ -3,13 +3,21 @@
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Resources\Responses\UserResponse;
+use Sammyjo20\Saloon\Tests\Resources\Responses\CustomResponse;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Tests\Resources\Requests\NoConnectorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\ExtendedConnector;
+use Sammyjo20\Saloon\Tests\Resources\Requests\InvalidResponseClass;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 use Sammyjo20\Saloon\Tests\Resources\Requests\InvalidConnectorRequest;
 use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 use Sammyjo20\Saloon\Tests\Resources\Requests\ExtendedConnectorRequest;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\CustomResponseConnector;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\InvalidResponseConnector;
 use Sammyjo20\Saloon\Tests\Resources\Requests\InvalidConnectorClassRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithCustomResponse;
+use Sammyjo20\Saloon\Tests\Resources\Requests\CustomResponseConnectorRequest;
 
 test('if you dont pass in a mock client to the saloon request it will not be in mocking mode', function () {
     $request = new UserRequest();
@@ -64,4 +72,44 @@ test('saloon works even if you have an extended connector', function () {
     $request = new ExtendedConnectorRequest;
 
     expect($request->getConnector())->toBeInstanceOf(ExtendedConnector::class);
+});
+
+test('saloon works with a custom response class in connector', function () {
+    $request = new CustomResponseConnector();
+
+    expect($request->getResponseClass())->toBe(CustomResponse::class);
+});
+
+test('saloon throws an exception if the extended connector return a response is not a response class', function () {
+    $invalidConnectorResponse = new InvalidResponseConnector();
+
+    $this->expectException(SaloonInvalidResponseClassException::class);
+
+    $invalidConnectorResponse->getResponseClass();
+});
+
+test('saloon can handle with custom response in connector', function () {
+    $request = new CustomResponseConnectorRequest();
+
+    expect($request->getResponseClass())->toBe(CustomResponse::class);
+});
+
+test('saloon can handle with custom response in request', function () {
+    $request = new UserRequestWithCustomResponse();
+
+    expect($request->getResponseClass())->toBe(UserResponse::class);
+});
+
+test('saloon can handle with custom response in request and custom response in connector', function () {
+    $request = new CustomResponseConnectorRequest();
+
+    expect($request->getResponseClass())->toBe(CustomResponse::class);
+});
+
+test('saloon throws an exception if the custom response is not a response class', function () {
+    $invalidConnectorClassRequest = new InvalidResponseClass();
+
+    $this->expectException(SaloonInvalidResponseClassException::class);
+
+    expect($invalidConnectorClassRequest->getResponseClass());
 });
