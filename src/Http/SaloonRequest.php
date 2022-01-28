@@ -37,7 +37,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
 	 *
 	 * @var string|null
 	 */
-//    protected ?string $response;
+    protected ?string $response = null;
 
 	/**
 	 * The connector.
@@ -80,24 +80,23 @@ abstract class SaloonRequest implements SaloonRequestInterface
 	/**
 	 * @return string
 	 * @throws \ReflectionException
-	 * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
-	 * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
+	 * @throws SaloonInvalidResponseClassException
 	 */
 	public function getResponseClass(): string
 	{
-		$response = $this->response ?? SaloonResponse::class;
+		if(is_null($this->response)) return SaloonResponse::class;
 
-		if(!class_exists($response)) {
+		if(!class_exists($this->response)) {
 			throw new SaloonInvalidResponseClassException;
 		}
 
-		$isValidResponse = (new ReflectionClass($response))->isSubclassOf(SaloonResponse::class);
+		$isValidResponse = (new ReflectionClass($this->response))->isSubclassOf(SaloonResponse::class);
 
 		if(!$isValidResponse) {
 			throw new SaloonInvalidResponseClassException;
 		}
 
-		return $response;
+		return $this->response;
 	}
 
 	/**
