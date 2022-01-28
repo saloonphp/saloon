@@ -4,8 +4,8 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 use Sammyjo20\Saloon\Traits\Features\HasXMLBody;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 
 class HasXMLRequest extends SaloonRequest
 {

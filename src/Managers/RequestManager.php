@@ -6,9 +6,7 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use Composer\InstalledVersions;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use GuzzleHttp\Exception\GuzzleException;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\ManagesGuzzle;
@@ -20,6 +18,7 @@ use Sammyjo20\Saloon\Traits\CollectsHandlers;
 use GuzzleHttp\Exception\BadResponseException;
 use Sammyjo20\Saloon\Traits\CollectsInterceptors;
 use Sammyjo20\Saloon\Exceptions\SaloonMultipleMockMethodsException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 
 class RequestManager
@@ -134,13 +133,13 @@ class RequestManager
      * Send off the message... 🚀
      *
      * @return SaloonResponse
-	 * @throws \GuzzleHttp\Exception\GuzzleException
-	 * @throws \ReflectionException
-	 * @throws \Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException
-	 * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
-	 * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException
-	 * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
-	 * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
      */
     public function send()
     {
@@ -181,9 +180,9 @@ class RequestManager
      * @param array $requestOptions
      * @param Response $response
      * @return SaloonResponse
-	 * @throws \ReflectionException
-	 * @throws SaloonInvalidResponseClassException
-	 *
+     * @throws \ReflectionException
+     * @throws SaloonInvalidResponseClassException
+     *
      */
     private function createResponse(array $requestOptions, Response $response): SaloonResponse
     {
