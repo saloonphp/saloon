@@ -77,7 +77,7 @@ trait CollectsQueryParams
     }
 
     /**
-     * Get all query or filter with a key.
+     *  Get all query or filter with a key.
      *
      * @param string|null $key
      * @return mixed
@@ -107,18 +107,6 @@ trait CollectsQueryParams
         }
 
         return $queryBag;
-    }
-
-    /**
-     * Get an individual query param
-     *
-     * @param string $key
-     * @return string
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
-     */
-    public function getQueryByKey(string $key): string
-    {
-        return $this->getQuery($key);
     }
 
     /**

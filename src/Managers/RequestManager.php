@@ -16,6 +16,7 @@ use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\ManagesFeatures;
 use Sammyjo20\Saloon\Traits\CollectsHandlers;
 use GuzzleHttp\Exception\BadResponseException;
+use Sammyjo20\Saloon\Traits\CollectsQueryParams;
 use Sammyjo20\Saloon\Traits\CollectsInterceptors;
 use Sammyjo20\Saloon\Exceptions\SaloonMultipleMockMethodsException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
@@ -27,6 +28,7 @@ class RequestManager
         ManagesFeatures,
         CollectsHeaders,
         CollectsConfig,
+        CollectsQueryParams,
         CollectsHandlers,
         CollectsInterceptors;
 
@@ -89,6 +91,7 @@ class RequestManager
      *
      * @return void
      * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function hydrate(): void
     {
@@ -111,9 +114,21 @@ class RequestManager
 
         $this->mergeHeaders($this->connector->getHeaders(), $this->request->getHeaders());
 
+        // Merge in query params
+
+        $this->mergeQuery($this->connector->getQuery(), $this->request->getQuery());
+
         // Merge the config
 
         $this->mergeConfig($this->connector->getConfig(), $this->request->getConfig());
+
+        // Add the query parameters to the config
+
+        $query = $this->getQuery();
+
+        if (! empty($query)) {
+            $this->mergeConfig(['query' => $query]);
+        }
 
         // Merge in any handlers
 
@@ -149,15 +164,7 @@ class RequestManager
 
         // Build up the config!
 
-        $requestOptions = [
-            RequestOptions::HEADERS => $this->getHeaders(),
-        ];
-
-        // Recursively add config variables...
-
-        foreach ($this->getConfig() as $configVariable => $value) {
-            $requestOptions[$configVariable] = $value;
-        }
+        $requestOptions = $this->buildRequestOptions();
 
         // Boot up our Guzzle client... This will also boot up handlers...
 
@@ -266,6 +273,24 @@ class RequestManager
         }
 
         $this->mockClient = $mockClient;
+    }
+
+    /**
+     * Build up all the request options
+     *
+     * @return array
+     */
+    private function buildRequestOptions(): array
+    {
+        $requestOptions = [
+            RequestOptions::HEADERS => $this->getHeaders(),
+        ];
+
+        foreach ($this->getConfig() as $configVariable => $value) {
+            $requestOptions[$configVariable] = $value;
+        }
+
+        return $requestOptions;
     }
 
     /**

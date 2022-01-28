@@ -1,6 +1,7 @@
 <?php
 
 use Sammyjo20\Saloon\Managers\RequestManager;
+use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorBlankRequest;
@@ -94,4 +95,16 @@ test('manually overwriting query parameter in runtime can overwrite request para
 
     expect($config)->toHaveKey('query');
     expect($config['query'])->toEqual(['per_page' => 500]);
+});
+
+test('when not sending query parameters, the query option is not set', function () {
+    $request = new UserRequest();
+
+    $requestManager = new RequestManager($request);
+
+    $requestManager->hydrate();
+
+    $config = $requestManager->getConfig();
+
+    expect(isset($config['query']))->toBeFalse();
 });
