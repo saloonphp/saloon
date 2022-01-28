@@ -9,8 +9,6 @@ use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 
 class QueryParameterRequest extends SaloonRequest
 {
-    use HasQueryParams;
-
     /**
      * Define the method that the request will use.
      *

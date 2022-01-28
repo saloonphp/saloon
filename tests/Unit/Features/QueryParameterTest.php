@@ -5,6 +5,7 @@ use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorBlankRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\OverwrittenQueryParameterConnectorRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 
 test('a request with the hasQueryParams feature sends the query params', function () {
     $request = new QueryParameterRequest();
@@ -94,4 +95,16 @@ test('manually overwriting query parameter in runtime can overwrite request para
 
     expect($config)->toHaveKey('query');
     expect($config['query'])->toEqual(['per_page' => 500]);
+});
+
+test('when not sending query parameters, the query option is not set', function () {
+    $request = new UserRequest();
+
+    $requestManager = new RequestManager($request);
+
+    $requestManager->hydrate();
+
+    $config = $requestManager->getConfig();
+
+    expect(isset($config['query']))->toBeFalse();
 });

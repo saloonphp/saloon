@@ -9,7 +9,6 @@ use Sammyjo20\Saloon\Traits\Features\HasQueryParams;
 class QueryParameterConnector extends SaloonConnector
 {
     use AcceptsJson;
-    use HasQueryParams;
 
     public function defineBaseUrl(): string
     {
