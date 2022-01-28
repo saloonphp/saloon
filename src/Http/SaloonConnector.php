@@ -9,6 +9,7 @@ use Sammyjo20\Saloon\Traits\CollectsHandlers;
 use Sammyjo20\Saloon\Traits\CollectsQueryParams;
 use Sammyjo20\Saloon\Traits\CollectsInterceptors;
 use Sammyjo20\Saloon\Interfaces\SaloonConnectorInterface;
+use Sammyjo20\Saloon\Traits\Features\HasResponseClass;
 
 abstract class SaloonConnector implements SaloonConnectorInterface
 {
@@ -17,7 +18,8 @@ abstract class SaloonConnector implements SaloonConnectorInterface
         CollectsQueryParams,
         CollectsConfig,
         CollectsHandlers,
-        CollectsInterceptors;
+        CollectsInterceptors,
+		HasResponseClass;
 
     /**
      * Define anything to be added to the connector.
