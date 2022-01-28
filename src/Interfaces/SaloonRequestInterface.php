@@ -8,6 +8,8 @@ interface SaloonRequestInterface
 {
     public function getMethod(): ?string;
 
+    public function getResponseClass(): ?string;
+
     public function getConnector(): ?SaloonConnector;
 
     public function defineEndpoint(): string;
