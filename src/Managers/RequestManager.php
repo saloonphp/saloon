@@ -179,7 +179,9 @@ class RequestManager
      * @param array $requestOptions
      * @param Response $response
      * @return SaloonResponse
+	 * @throws \ReflectionException
 	 * @throws SaloonInvalidResponseClassException
+	 *
      */
     private function createResponse(array $requestOptions, Response $response): SaloonResponse
     {
