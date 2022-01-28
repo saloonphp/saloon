@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use Composer\InstalledVersions;
 use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use GuzzleHttp\Exception\GuzzleException;
 use Sammyjo20\Saloon\Http\SaloonResponse;
@@ -178,6 +179,7 @@ class RequestManager
      * @param array $requestOptions
      * @param Response $response
      * @return SaloonResponse
+	 * @throws SaloonInvalidResponseClassException
      */
     private function createResponse(array $requestOptions, Response $response): SaloonResponse
     {
@@ -185,7 +187,9 @@ class RequestManager
 
         $shouldGuessStatusFromBody = isset($this->connector->shouldGuessStatusFromBody) || isset($this->request->shouldGuessStatusFromBody);
 
-        $response = new SaloonResponse($requestOptions, $request, $response, $shouldGuessStatusFromBody);
+        $responseClass = $request->getResponseClass();
+
+        $response = new $responseClass($requestOptions, $request, $response, $shouldGuessStatusFromBody);
 
         $response->setMocked($this->isMocking());
 
