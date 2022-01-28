@@ -2,14 +2,14 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Sammyjo20\Saloon\Traits\CollectsData;
-use Sammyjo20\Saloon\Traits\CollectsConfig;
-use Sammyjo20\Saloon\Traits\CollectsHeaders;
-use Sammyjo20\Saloon\Traits\CollectsHandlers;
-use Sammyjo20\Saloon\Traits\CollectsQueryParams;
-use Sammyjo20\Saloon\Traits\CollectsInterceptors;
-use Sammyjo20\Saloon\Traits\Features\HasResponseClass;
 use Sammyjo20\Saloon\Interfaces\SaloonConnectorInterface;
+use Sammyjo20\Saloon\Traits\CollectsConfig;
+use Sammyjo20\Saloon\Traits\CollectsData;
+use Sammyjo20\Saloon\Traits\CollectsHandlers;
+use Sammyjo20\Saloon\Traits\CollectsHeaders;
+use Sammyjo20\Saloon\Traits\CollectsInterceptors;
+use Sammyjo20\Saloon\Traits\CollectsQueryParams;
+use Sammyjo20\Saloon\Traits\HasCustomResponses;
 
 abstract class SaloonConnector implements SaloonConnectorInterface
 {
@@ -19,7 +19,7 @@ abstract class SaloonConnector implements SaloonConnectorInterface
         CollectsConfig,
         CollectsHandlers,
         CollectsInterceptors,
-        HasResponseClass;
+        HasCustomResponses;
 
     /**
      * Define anything to be added to the connector.

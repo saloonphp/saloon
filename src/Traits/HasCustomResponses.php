@@ -1,15 +1,20 @@
 <?php
 
-namespace Sammyjo20\Saloon\Traits\Features;
+namespace Sammyjo20\Saloon\Traits;
 
-use \ReflectionClass;
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonResponse;
+use ReflectionClass;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Http\SaloonResponse;
 
-trait HasResponseClass
+trait HasCustomResponses
 {
+    /**
+     * The response class
+     *
+     * @var string|null
+     */
     protected ?string $response = null;
 
     /**
@@ -32,8 +37,7 @@ trait HasResponseClass
             throw new SaloonInvalidResponseClassException;
         }
 
-        $isValidResponse = $response === SaloonResponse::class
-            || (new ReflectionClass($response))->isSubclassOf(SaloonResponse::class);
+        $isValidResponse = $response === SaloonResponse::class || (new ReflectionClass($response))->isSubclassOf(SaloonResponse::class);
 
         if (! $isValidResponse) {
             throw new SaloonInvalidResponseClassException;
