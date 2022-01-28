@@ -8,11 +8,11 @@ class UserResponse extends SaloonResponse
 {
 
 	/**
-	 * @return \Sammyjo20\Saloon\Tests\Resources\Responses\UserCustomResponse
+	 * @return \Sammyjo20\Saloon\Tests\Resources\Responses\UserData
 	 */
-	public function customCastMethod(): UserCustomResponse
+	public function customCastMethod(): UserData
 	{
-		return new UserCustomResponse($this->json("foo"));
+		return new UserData($this->json("foo"));
 	}
 
 	/**

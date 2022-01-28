@@ -2,7 +2,7 @@
 
 namespace Sammyjo20\Saloon\Tests\Resources\Responses;
 
-class UserCustomResponse
+class UserData
 {
 
 	/**
