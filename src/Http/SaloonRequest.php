@@ -78,6 +78,8 @@ abstract class SaloonRequest implements SaloonRequestInterface
 	}
 
 	/**
+	 * Get the response class
+	 * 
 	 * @return string
 	 * @throws \ReflectionException
 	 * @throws SaloonInvalidResponseClassException
