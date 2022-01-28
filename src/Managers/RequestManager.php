@@ -134,11 +134,13 @@ class RequestManager
      * Send off the message... 🚀
      *
      * @return SaloonResponse
-     * @throws GuzzleException
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 * @throws \ReflectionException
+	 * @throws \Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException
+	 * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+	 * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException
+	 * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
+	 * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
      */
     public function send()
     {
