@@ -104,7 +104,7 @@ test('saloon can handle with custom response in request and custom response in c
     $request = new CustomResponseConnectorRequest();
 
     expect($request->getResponseClass())->toBe(CustomResponse::class);
-})->group('test');
+});
 
 test('saloon throws an exception if the custom response is not a response class', function () {
     $invalidConnectorClassRequest = new InvalidResponseClass();
