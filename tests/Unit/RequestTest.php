@@ -116,5 +116,5 @@ test('saloon throws an exception if the custom response is not a response class'
 });
 
 test('defineEndpoint method may be omited in request class to use the base url')
-	->expect(new DefaultEndpointRequest)
-	->getFullRequestUrl()->toBe(apiUrl());
+    ->expect(new DefaultEndpointRequest)
+    ->getFullRequestUrl()->toBe(apiUrl());

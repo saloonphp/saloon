@@ -144,7 +144,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
     public function defineEndpoint(): string
     {
         return '';
-    }	
+    }
 
     /**
      * Check if a trait exists on the connector.
