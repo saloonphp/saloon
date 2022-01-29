@@ -10,6 +10,7 @@ use Sammyjo20\Saloon\Tests\Resources\Requests\NoConnectorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\ExtendedConnector;
 use Sammyjo20\Saloon\Tests\Resources\Requests\InvalidResponseClass;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Sammyjo20\Saloon\Tests\Resources\Requests\DefaultEndpointRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\InvalidConnectorRequest;
 use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 use Sammyjo20\Saloon\Tests\Resources\Requests\ExtendedConnectorRequest;
@@ -113,3 +114,7 @@ test('saloon throws an exception if the custom response is not a response class'
 
     expect($invalidConnectorClassRequest->getResponseClass());
 });
+
+test('defineEndpoint method may be omited in request class to use the base url')
+	->expect(new DefaultEndpointRequest)
+	->getFullRequestUrl()->toBe(apiUrl());

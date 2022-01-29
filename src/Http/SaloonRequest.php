@@ -137,6 +137,16 @@ abstract class SaloonRequest implements SaloonRequestInterface
     }
 
     /**
+     * Define the endpoint for the request.
+     *
+     * @return string
+     */
+    public function defineEndpoint(): string
+    {
+        return '';
+    }	
+
+    /**
      * Check if a trait exists on the connector.
      *
      * @param string $trait
