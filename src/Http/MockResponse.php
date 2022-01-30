@@ -11,6 +11,7 @@ use Sammyjo20\Saloon\Traits\Features\HasBody;
 class MockResponse
 {
     use CollectsHeaders,
+        CollectsConfig,
         CollectsData;
 
     /**
@@ -29,8 +30,9 @@ class MockResponse
      * @param int $status
      * @param array $data
      * @param array $headers
+     * @param array $config
      */
-    public function __construct(mixed $data = [], int $status = 200, array $headers = [])
+    public function __construct(mixed $data = [], int $status = 200, array $headers = [], array $config = [])
     {
         $this->status = $status;
 
@@ -44,7 +46,7 @@ class MockResponse
             $this->rawData = $data;
         }
 
-        $this->mergeHeaders($headers);
+        $this->mergeHeaders($headers)->mergeConfig($config);
     }
 
     /**
@@ -65,7 +67,7 @@ class MockResponse
             ? $request->defineBody()
             : $request->getData();
 
-        return new static($data, $status, $request->getHeaders());
+        return new static($data, $status, $request->getHeaders(), $request->getConfig());
     }
 
     /**
