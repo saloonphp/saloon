@@ -4,7 +4,6 @@ namespace Sammyjo20\Saloon\Http;
 
 use Illuminate\Support\Arr;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Cookie\CookieJar;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
 use GuzzleHttp\Exception\RequestException;
