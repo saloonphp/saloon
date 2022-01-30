@@ -297,16 +297,6 @@ class SaloonResponse
     }
 
     /**
-     * Get the response cookies.
-     *
-     * @return \GuzzleHttp\Cookie\CookieJar
-     */
-    public function cookies(): CookieJar
-    {
-        return $this->cookies;
-    }
-
-    /**
      * Close the stream and any underlying resources.
      *
      * @return $this
