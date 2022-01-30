@@ -15,7 +15,7 @@ trait AlwaysThrowsOnErrors
      */
     public function bootAlwaysThrowsOnErrorsFeature()
     {
-        if ($this->traitExistsOnConnector(AlwaysThrowsOnErrors::class)) {
+        if ($this instanceof SaloonRequest && $this->traitExistsOnConnector(AlwaysThrowsOnErrors::class)) {
             return;
         }
 
