@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Managers;
 
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use Composer\InstalledVersions;
@@ -175,7 +176,7 @@ class RequestManager
         try {
             $guzzleResponse = $client->send($this->createGuzzleRequest(), $requestOptions);
         } catch (BadResponseException $exception) {
-            return $this->createResponse($requestOptions, $exception->getResponse());
+            return $this->createResponse($requestOptions, $exception->getResponse(), $exception);
         }
 
         return $this->createResponse($requestOptions, $guzzleResponse);
@@ -186,22 +187,25 @@ class RequestManager
      *
      * @param array $requestOptions
      * @param Response $response
+     * @param RequestException|null $exception
      * @return SaloonResponse
-     * @throws \ReflectionException
      * @throws SaloonInvalidResponseClassException
-     *
+     * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    private function createResponse(array $requestOptions, Response $response): SaloonResponse
+    private function createResponse(array $requestOptions, Response $response, RequestException $exception = null): SaloonResponse
     {
         $request = $this->request;
-
-        $shouldGuessStatusFromBody = isset($this->connector->shouldGuessStatusFromBody) || isset($this->request->shouldGuessStatusFromBody);
-
         $responseClass = $request->getResponseClass();
 
-        $response = new $responseClass($requestOptions, $request, $response, $shouldGuessStatusFromBody);
+        /** @var SaloonResponse $response */
+        $response = new $responseClass($requestOptions, $request, $response, $exception);
 
         $response->setMocked($this->isMocking());
+
+        if (property_exists($this->connector, 'shouldGuessStatusFromBody') || property_exists($this->request, 'shouldGuessStatusFromBody')) {
+            $response->guessesStatusFromBody();
+        }
 
         // Run Response Interceptors
 

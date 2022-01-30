@@ -2,6 +2,9 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use GuzzleHttp\Cookie\CookieJar;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
@@ -14,9 +17,9 @@ class SaloonResponse
     /**
      * The underlying PSR response.
      *
-     * @var \Psr\Http\Message\ResponseInterface
+     * @var Response
      */
-    protected $response;
+    protected Response $response;
 
     /**
      * The decoded JSON response.
@@ -30,7 +33,7 @@ class SaloonResponse
      *
      * @var array
      */
-    protected array $saloonRequestOptions;
+    protected array $requestOptions;
 
     /**
      * The original request
@@ -44,7 +47,14 @@ class SaloonResponse
      *
      * @var bool
      */
-    protected bool $shouldGuessStatusFromBody = false;
+    protected bool $guessesStatusFromBody = false;
+
+    /**
+     * The original Guzzle request exception
+     *
+     * @var RequestException|null
+     */
+    protected ?RequestException $guzzleRequestException = null;
 
     /**
      * Determines if the response has been cached
@@ -65,15 +75,15 @@ class SaloonResponse
      *
      * @param array $requestOptions
      * @param SaloonRequest $originalRequest
-     * @param $response
-     * @param bool $shouldGuessStatusFromBody
+     * @param Response $response
+     * @param RequestException|null $guzzleRequestException
      */
-    public function __construct(array $requestOptions, SaloonRequest $originalRequest, $response, bool $shouldGuessStatusFromBody = false)
+    public function __construct(array $requestOptions, SaloonRequest $originalRequest, Response $response, RequestException $guzzleRequestException = null)
     {
-        $this->saloonRequestOptions = $requestOptions;
+        $this->requestOptions = $requestOptions;
         $this->originalRequest = $originalRequest;
         $this->response = $response;
-        $this->shouldGuessStatusFromBody = $shouldGuessStatusFromBody;
+        $this->guzzleRequestException = $guzzleRequestException;
     }
 
     /**
@@ -81,9 +91,9 @@ class SaloonResponse
      *
      * @return array
      */
-    public function getSaloonRequestOptions(): array
+    public function getRequestOptions(): array
     {
-        return $this->saloonRequestOptions;
+        return $this->requestOptions;
     }
 
     /**
@@ -103,14 +113,14 @@ class SaloonResponse
      */
     public function body()
     {
-        return (string) $this->response->getBody();
+        return (string)$this->response->getBody();
     }
 
     /**
      * Get the JSON decoded body of the response as an array or scalar value.
      *
-     * @param  string|null  $key
-     * @param  mixed  $default
+     * @param string|null $key
+     * @param mixed $default
      * @return mixed
      */
     public function json($key = null, $default = null)
@@ -139,10 +149,10 @@ class SaloonResponse
     /**
      * Get the JSON decoded body of the response as a collection.
      *
-     * @param  string|null  $key
-     * @return \Illuminate\Support\Collection
+     * @param $key
+     * @return Collection
      */
-    public function collect($key = null)
+    public function collect($key = null): Collection
     {
         return Collection::make($this->json($key));
     }
@@ -150,10 +160,10 @@ class SaloonResponse
     /**
      * Get a header from the response.
      *
-     * @param  string  $header
+     * @param string $header
      * @return string
      */
-    public function header(string $header)
+    public function header(string $header): string
     {
         return $this->response->getHeaderLine($header);
     }
@@ -163,7 +173,7 @@ class SaloonResponse
      *
      * @return array
      */
-    public function headers()
+    public function headers(): array
     {
         return $this->response->getHeaders();
     }
@@ -173,9 +183,9 @@ class SaloonResponse
      *
      * @return int
      */
-    public function getStatusFromResponse(): int
+    private function getStatusFromResponse(): int
     {
-        return (int) $this->response->getStatusCode();
+        return (int)$this->response->getStatusCode();
     }
 
     /**
@@ -183,9 +193,9 @@ class SaloonResponse
      *
      * @return int
      */
-    public function status()
+    public function status(): int
     {
-        if ($this->shouldGuessStatusFromBody === true) {
+        if ($this->guessesStatusFromBody === true) {
             return $this->guessStatusFromBody();
         }
 
@@ -200,33 +210,15 @@ class SaloonResponse
      *
      * @return int
      */
-    public function guessStatusFromBody(): int
+    private function guessStatusFromBody(): int
     {
-        $body = $this->json('status', null);
+        $status = $this->json('status');
 
-        if (isset($body) === false) {
-            return $this->getStatusFromResponse();
+        if (preg_match('/^[1-5][0-9][0-9]$/', $status)) {
+            return (int)$status;
         }
 
-        if (! preg_match('/^[1-5][0-9][0-9]$/', $body)) {
-            return $this->getStatusFromResponse();
-        }
-
-        if (is_numeric($body) === false) {
-            return $this->getStatusFromResponse();
-        }
-
-        return (int)$body;
-    }
-
-    /**
-     * Get the effective URI of the response.
-     *
-     * @return \Psr\Http\Message\UriInterface|null
-     */
-    public function effectiveUri()
-    {
-        return optional($this->transferStats)->getEffectiveUri();
+        return $this->getStatusFromResponse();
     }
 
     /**
@@ -292,10 +284,10 @@ class SaloonResponse
     /**
      * Execute the given callback if there was a server or client error.
      *
-     * @param  callable  $callback
+     * @param callable $callback
      * @return $this
      */
-    public function onError(callable $callback)
+    public function onError(callable $callback): self
     {
         if ($this->failed()) {
             $callback($this);
@@ -309,19 +301,9 @@ class SaloonResponse
      *
      * @return \GuzzleHttp\Cookie\CookieJar
      */
-    public function cookies()
+    public function cookies(): CookieJar
     {
         return $this->cookies;
-    }
-
-    /**
-     * Get the handler stats of the response.
-     *
-     * @return array
-     */
-    public function handlerStats()
-    {
-        return optional($this->transferStats)->getHandlerStats() ?? [];
     }
 
     /**
@@ -329,7 +311,7 @@ class SaloonResponse
      *
      * @return $this
      */
-    public function close()
+    public function close(): self
     {
         $this->response->getBody()->close();
 
@@ -339,9 +321,9 @@ class SaloonResponse
     /**
      * Get the underlying PSR response for the response.
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return Response
      */
-    public function toPsrResponse()
+    public function toPsrResponse(): Response
     {
         return $this->response;
     }
@@ -349,9 +331,9 @@ class SaloonResponse
     /**
      * Get the underlying PSR response for the response.
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return Response
      */
-    public function toGuzzleResponse()
+    public function toGuzzleResponse(): Response
     {
         return $this->toPsrResponse();
     }
@@ -364,7 +346,9 @@ class SaloonResponse
     public function toException()
     {
         if ($this->failed()) {
-            return new SaloonRequestException($this, $this->response?->getBody()?->getContents());
+            $body = $this->response?->getBody()?->getContents();
+
+            return new SaloonRequestException($this, $body, 0, $this->guzzleRequestException);
         }
     }
 
@@ -372,7 +356,7 @@ class SaloonResponse
      * Throw an exception if a server or client error occurred.
      *
      * @return $this
-     * @throws SaloonException
+     * @throws SaloonRequestException
      */
     public function throw()
     {
@@ -437,5 +421,27 @@ class SaloonResponse
     public function isMocked(): bool
     {
         return $this->isMocked;
+    }
+
+    /**
+     * Get the original request exception
+     *
+     * @return RequestException|null
+     */
+    public function getGuzzleException(): ?RequestException
+    {
+        return $this->guzzleRequestException;
+    }
+
+    /**
+     * Should the response guess the status from the body?
+     *
+     * @return $this
+     */
+    public function guessesStatusFromBody(): self
+    {
+        $this->guessesStatusFromBody = true;
+
+        return $this;
     }
 }
