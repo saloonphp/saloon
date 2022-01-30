@@ -3,8 +3,10 @@
 use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
+use GuzzleHttp\Exception\RequestException;
 use Sammyjo20\Saloon\Managers\RequestManager;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\HeaderRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithBoot;
 use Sammyjo20\Saloon\Tests\Resources\Requests\ReplaceConfigRequest;
@@ -114,4 +116,20 @@ test('if you pass a mock client into the request, the request manager will setup
     $requestManager = new RequestManager(new UserRequest(), $mockClient);
 
     expect($requestManager->isMocking())->toBeTrue();
+});
+
+test('if a request fails you can get the original error from the response', function () {
+    $request = new ErrorRequest();
+
+    $response = $request->send();
+
+    expect($response->getGuzzleException())->toBeInstanceOf(RequestException::class);
+});
+
+test('if a request fails you can get the original error from the SaloonException', function () {
+    $request = new ErrorRequest();
+
+    $response = $request->send();
+
+    expect($response->toException()->getPrevious())->toBeInstanceOf(RequestException::class);
 });
