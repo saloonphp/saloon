@@ -2,12 +2,12 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use GuzzleHttp\Cookie\CookieJar;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Arr;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Cookie\CookieJar;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
+use GuzzleHttp\Exception\RequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 
 class SaloonResponse
