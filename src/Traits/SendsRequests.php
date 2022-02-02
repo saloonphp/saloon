@@ -15,11 +15,7 @@ trait SendsRequests
      * @return SaloonResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonMultipleMockMethodsException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */
     public function send(MockClient $mockClient = null): SaloonResponse
     {

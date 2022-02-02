@@ -2,9 +2,7 @@
 
 namespace Sammyjo20\Saloon\Exceptions;
 
-use \Exception;
-
-class SaloonDuplicateHandlerException extends Exception
+class SaloonDuplicateHandlerException extends SaloonException
 {
     public function __construct(string $name)
     {

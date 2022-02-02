@@ -2,9 +2,7 @@
 
 namespace Sammyjo20\Saloon\Exceptions;
 
-use \Exception;
-
-class SaloonNoMockResponseFoundException extends Exception
+class SaloonNoMockResponseFoundException extends SaloonException
 {
     public function __construct()
     {

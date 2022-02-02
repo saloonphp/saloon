@@ -2,10 +2,9 @@
 
 namespace Sammyjo20\Saloon\Exceptions;
 
-use \Exception;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 
-class SaloonMethodNotFoundException extends Exception
+class SaloonMethodNotFoundException extends SaloonException
 {
     public function __construct(string $method, SaloonConnector $connector)
     {

@@ -3,10 +3,9 @@
 namespace Sammyjo20\Saloon\Exceptions;
 
 use Throwable;
-use \Exception;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 
-class SaloonRequestException extends Exception
+class SaloonRequestException extends SaloonException
 {
     /**
      * The Saloon Response
@@ -15,6 +14,14 @@ class SaloonRequestException extends Exception
      */
     protected SaloonResponse $saloonResponse;
 
+    /**
+     * Create the SaloonRequestException
+     *
+     * @param SaloonResponse $response
+     * @param $message
+     * @param $code
+     * @param Throwable|null $previous
+     */
     public function __construct(SaloonResponse $response, $message = '', $code = 0, Throwable $previous = null)
     {
         $this->saloonResponse = $response;
