@@ -2,9 +2,7 @@
 
 namespace Sammyjo20\Saloon\Exceptions;
 
-use \Exception;
-
-class SaloonInvalidMockResponseCaptureMethodException extends Exception
+class SaloonInvalidMockResponseCaptureMethodException extends SaloonException
 {
     public function __construct()
     {

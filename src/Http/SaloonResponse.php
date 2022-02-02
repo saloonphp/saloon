@@ -337,7 +337,7 @@ class SaloonResponse
         if ($this->failed()) {
             $body = $this->response?->getBody()?->getContents();
 
-            return new SaloonRequestException($this, $body, 0, $this->guzzleRequestException);
+            return new SaloonRequestException($this, $body, 0, $this->getGuzzleException());
         }
     }
 

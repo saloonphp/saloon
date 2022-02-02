@@ -2,9 +2,7 @@
 
 namespace Sammyjo20\Saloon\Exceptions;
 
-use Exception;
-
-class SaloonInvalidResponseClassException extends Exception
+class SaloonInvalidResponseClassException extends SaloonException
 {
     public function __construct()
     {

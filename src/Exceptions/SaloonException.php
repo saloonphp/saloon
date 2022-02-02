@@ -2,7 +2,9 @@
 
 namespace Sammyjo20\Saloon\Exceptions;
 
-class SaloonMissingMockException extends SaloonException
+use \Exception;
+
+class SaloonException extends Exception
 {
     //
 }

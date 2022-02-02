@@ -2,9 +2,7 @@
 
 namespace Sammyjo20\Saloon\Exceptions;
 
-use \Exception;
-
-class SaloonInvalidHandlerException extends Exception
+class SaloonInvalidHandlerException extends SaloonException
 {
     public function __construct(string $name)
     {

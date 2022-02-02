@@ -2,9 +2,7 @@
 
 namespace Sammyjo20\Saloon\Exceptions;
 
-use \Exception;
-
-class SaloonInvalidConnectorException extends Exception
+class SaloonInvalidConnectorException extends SaloonException
 {
     public function __construct()
     {

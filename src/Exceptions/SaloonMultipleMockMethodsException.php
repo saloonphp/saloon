@@ -2,9 +2,7 @@
 
 namespace Sammyjo20\Saloon\Exceptions;
 
-use \Exception;
-
-class SaloonMultipleMockMethodsException extends Exception
+class SaloonMultipleMockMethodsException extends SaloonException
 {
     public function __construct()
     {
