@@ -5,7 +5,7 @@ use Sammyjo20\Saloon\Tests\Resources\Connectors\RequestSelectionConnector;
 use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 
-test('you can specify a method that will be proxied to a request', function () {
+test('you can create a method that will be proxied to a request', function () {
     $connector = new RequestSelectionConnector;
     $request = $connector->getUser();
 
@@ -21,11 +21,11 @@ test('you can pass parameters into the request method', function () {
     expect($request)->groupId->toEqual(4);
 });
 
-test('it can use a request from the request selection', function () {
+test('it can call a request from the requests array', function () {
     $connector = new RequestSelectionConnector;
 
-    $userRequest = $connector->getMyUser();
-    $errorRequest = $connector->errorRequest();
+    $userRequest = $connector->getMyUser(); // Manually defined name
+    $errorRequest = $connector->errorRequest(); // Guessed name
 
     expect($userRequest)->toBeInstanceOf(UserRequest::class);
     expect($errorRequest)->toBeInstanceOf(ErrorRequest::class);
