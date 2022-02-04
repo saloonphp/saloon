@@ -103,6 +103,8 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      * @param $method
      * @param $arguments
      * @return SaloonRequest
+     * @throws ClassNotFoundException
+     * @throws SaloonInvalidRequestException
      * @throws SaloonMethodNotFoundException
      * @throws \ReflectionException
      */
