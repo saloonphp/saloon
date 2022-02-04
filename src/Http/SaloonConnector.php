@@ -28,18 +28,19 @@ abstract class SaloonConnector implements SaloonConnectorInterface
         HasCustomResponses;
 
     /**
-     * Manually specify requests that the connector will register as methods
+     * Register Saloon requests that will become methods on the connector.
+     * For example, GetUserRequest would become $this->getUserRequest(...$args)
      *
      * @var array|string[]
      */
     protected array $requests = [];
 
     /**
-     * The loaded requests.
+     * Requests that have already been registered. Used as a cache for performance.
      *
      * @var array|null
      */
-    private ?array $loadedRequests = null;
+    private ?array $registeredRequests = null;
 
     /**
      * Attempt to create a request and forward parameters to it.
@@ -66,18 +67,22 @@ abstract class SaloonConnector implements SaloonConnectorInterface
     }
 
     /**
-     * Get the available requests on the connector.
+     * Bootstrap the registered requests in the $requests array.
      *
      * @return array
      * @throws \ReflectionException
      */
-    private function getAvailableRequests(): array
+    private function registerRequests(): array
     {
-        if (is_array($this->loadedRequests)) {
-            return $this->loadedRequests;
+        if (empty($this->requests)) {
+            return [];
         }
 
-        $loadedRequests = (new Collection($this->requests))->mapWithKeys(function ($value, $key) {
+        if (is_array($this->registeredRequests)) {
+            return $this->registeredRequests;
+        }
+
+        $requests = (new Collection($this->requests))->mapWithKeys(function ($value, $key) {
             if (is_string($key)) {
                 return [$key => $value];
             }
@@ -87,9 +92,9 @@ abstract class SaloonConnector implements SaloonConnectorInterface
             return [$guessedKey => $value];
         })->toArray();
 
-        $this->loadedRequests = $loadedRequests;
+        $this->registeredRequests = $requests;
 
-        return $loadedRequests;
+        return $requests;
     }
 
     /**
@@ -103,7 +108,7 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      */
     public function __call($method, $arguments)
     {
-        $requests = $this->getAvailableRequests();
+        $requests = $this->registerRequests();
 
         if (array_key_exists($method, $requests) === false) {
             throw new SaloonMethodNotFoundException($method, $this);
