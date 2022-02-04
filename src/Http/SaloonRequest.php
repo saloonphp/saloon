@@ -96,7 +96,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
             throw new SaloonInvalidConnectorException;
         }
 
-        $this->loadedConnector = new $this->connector;
+        $this->setLoadedConnector(new $this->connector);
     }
 
     /**
@@ -112,6 +112,19 @@ abstract class SaloonRequest implements SaloonRequestInterface
         }
 
         return $this->loadedConnector;
+    }
+
+    /**
+     * Set the loaded connector.
+     *
+     * @param SaloonConnector $connector
+     * @return $this
+     */
+    public function setLoadedConnector(SaloonConnector $connector): self
+    {
+        $this->loadedConnector = $connector;
+
+        return $this;
     }
 
     /**
