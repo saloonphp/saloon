@@ -69,12 +69,12 @@ abstract class SaloonConnector implements SaloonConnectorInterface
     }
 
     /**
-     * Bootstrap the registered requests in the $requests array.
+     * Bootstrap and get the registered requests in the $requests array.
      *
      * @return array
      * @throws \ReflectionException
      */
-    private function getRegisteredRequests(): array
+    public function getRegisteredRequests(): array
     {
         if (empty($this->requests)) {
             return [];
@@ -100,6 +100,18 @@ abstract class SaloonConnector implements SaloonConnectorInterface
     }
 
     /**
+     * Check if a given request method exists
+     *
+     * @param string $method
+     * @return bool
+     * @throws \ReflectionException
+     */
+    public function requestExists(string $method): bool
+    {
+        return method_exists($this, $method) || array_key_exists($method, $this->getRegisteredRequests());
+    }
+
+    /**
      * Dynamically proxy other methods to try and call a requests.
      *
      * @param $method
@@ -112,11 +124,11 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      */
     public function __call($method, $arguments)
     {
-        $requests = $this->getRegisteredRequests();
-
-        if (array_key_exists($method, $requests) === false) {
+        if ($this->requestExists($method) === false) {
             throw new SaloonMethodNotFoundException($method, $this);
         }
+
+        $requests = $this->getRegisteredRequests();
 
         return $this->forwardCallToRequest($requests[$method], $arguments);
     }
@@ -135,11 +147,12 @@ abstract class SaloonConnector implements SaloonConnectorInterface
     public static function __callStatic($method, $arguments)
     {
         $connector = new static;
-        $requests = $connector->getRegisteredRequests();
 
-        if (array_key_exists($method, $requests) === false) {
+        if ($connector->requestExists($method) === false) {
             throw new SaloonMethodNotFoundException($method, $connector);
         }
+
+        $requests = $connector->getRegisteredRequests();
 
         return $connector->forwardCallToRequest($requests[$method], $arguments);
     }

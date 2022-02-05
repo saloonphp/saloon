@@ -1,6 +1,10 @@
 <?php
 
+use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\InvalidDefinedRequestSelectionConnector;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\InvalidRequestSelectionConnector;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\RequestSelectionConnector;
 use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
@@ -71,9 +75,25 @@ test('it throws an exception if the static request method does not exist on the 
 });
 
 test('it throws an exception if one of the provided request classes does not exist', function () {
-    //
+    $connector = new InvalidRequestSelectionConnector;
+
+    $this->expectException(ReflectionException::class);
+
+    $connector->missingClass();
+});
+
+test('it throws an exception if one of the provided guessed request classes does not exist', function () {
+    $connector = new InvalidDefinedRequestSelectionConnector;
+
+    $this->expectException(ClassNotFoundException::class);
+
+    $connector->missing_request();
 });
 
 test('it throws an exception if one of the provided request classes is not a saloon request', function () {
-    //
+    $connector = new InvalidDefinedRequestSelectionConnector;
+
+    $this->expectException(SaloonInvalidRequestException::class);
+
+    $connector->test_connector();
 });

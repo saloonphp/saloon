@@ -7,12 +7,13 @@ use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
+use Sammyjo20\MissingClass;
 
 /**
  * @method getMyUser($userId, $groupId): UserRequest
  * @method errorRequest(...$args): UserRequest
  */
-class RequestSelectionConnector extends SaloonConnector
+class InvalidRequestSelectionConnector extends SaloonConnector
 {
     use AcceptsJson;
 
@@ -22,8 +23,8 @@ class RequestSelectionConnector extends SaloonConnector
      * @var array|string[]
      */
     protected array $requests = [
-        'getMyUser' => UserRequest::class,
-        ErrorRequest::class,
+        MissingClass::class, // Invalid Class
+        TestConnector::class, // Invalid Connector
     ];
 
     /**
@@ -44,20 +45,6 @@ class RequestSelectionConnector extends SaloonConnector
     public function defaultHeaders(): array
     {
         return [];
-    }
-
-    /**
-     * Get the user from the system.
-     *
-     * @param ...$args
-     * @return SaloonRequest
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\ClassNotFoundException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException
-     */
-    public function getUser(...$args): SaloonRequest
-    {
-        return $this->forwardCallToRequest(UserRequest::class, $args);
     }
 
     public function __construct(public ?string $apiKey = null)
