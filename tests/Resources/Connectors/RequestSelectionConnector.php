@@ -9,8 +9,8 @@ use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
 
 /**
- * @method getMyUser($args = []): UserRequest
- * @method errorRequest($args = []): UserRequest
+ * @method getMyUser($userId, $groupId): UserRequest
+ * @method errorRequest(...$args): UserRequest
  */
 class RequestSelectionConnector extends SaloonConnector
 {
@@ -52,6 +52,8 @@ class RequestSelectionConnector extends SaloonConnector
      * @param ...$args
      * @return SaloonRequest
      * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\ClassNotFoundException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException
      */
     public function getUser(...$args): SaloonRequest
     {

@@ -3,6 +3,7 @@
 namespace Sammyjo20\Saloon\Http;
 
 use ReflectionClass;
+use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
@@ -83,6 +84,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
      *
      * @return void
      * @throws SaloonInvalidConnectorException
+     * @throws \ReflectionException
      */
     private function bootConnector(): void
     {
@@ -90,9 +92,9 @@ abstract class SaloonRequest implements SaloonRequestInterface
             throw new SaloonInvalidConnectorException;
         }
 
-        $isValidRequest = (new ReflectionClass($this->connector))->isSubclassOf(SaloonConnector::class);
+        $isValidConnector = ReflectionHelper::isSubclassOf($this->connector, SaloonConnector::class);
 
-        if (! $isValidRequest) {
+        if (! $isValidConnector) {
             throw new SaloonInvalidConnectorException;
         }
 

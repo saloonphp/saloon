@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
+use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
@@ -50,6 +51,7 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      * @return SaloonRequest
      * @throws ClassNotFoundException
      * @throws SaloonInvalidRequestException
+     * @throws \ReflectionException
      */
     protected function forwardCallToRequest(string $request, array $args = []): SaloonRequest
     {
@@ -57,7 +59,7 @@ abstract class SaloonConnector implements SaloonConnectorInterface
             throw new ClassNotFoundException($request);
         }
 
-        $isValidRequest = (new ReflectionClass($request))->isSubclassOf(SaloonRequest::class);
+        $isValidRequest = ReflectionHelper::isSubclassOf($request, SaloonRequest::class);
 
         if (! $isValidRequest) {
             throw new SaloonInvalidRequestException($request);
@@ -72,7 +74,7 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      * @return array
      * @throws \ReflectionException
      */
-    private function registerRequests(): array
+    private function getRegisteredRequests(): array
     {
         if (empty($this->requests)) {
             return [];
@@ -110,15 +112,36 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      */
     public function __call($method, $arguments)
     {
-        $requests = $this->registerRequests();
+        $requests = $this->getRegisteredRequests();
 
         if (array_key_exists($method, $requests) === false) {
             throw new SaloonMethodNotFoundException($method, $this);
         }
 
-        $request = $requests[$method];
+        return $this->forwardCallToRequest($requests[$method], $arguments);
+    }
 
-        return $this->forwardCallToRequest($request, ...$arguments);
+    /**
+     * Dynamically proxy other methods to try and call a requests.
+     *
+     * @param $method
+     * @param $arguments
+     * @return SaloonRequest
+     * @throws ClassNotFoundException
+     * @throws SaloonInvalidRequestException
+     * @throws SaloonMethodNotFoundException
+     * @throws \ReflectionException
+     */
+    public static function __callStatic($method, $arguments)
+    {
+        $connector = new static;
+        $requests = $connector->getRegisteredRequests();
+
+        if (array_key_exists($method, $requests) === false) {
+            throw new SaloonMethodNotFoundException($method, $connector);
+        }
+
+        return $connector->forwardCallToRequest($requests[$method], $arguments);
     }
 
     /**

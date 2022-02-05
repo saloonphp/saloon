@@ -12,9 +12,34 @@ test('you can create a method that will be proxied to a request', function () {
     expect($request)->toBeInstanceOf(UserRequest::class);
 });
 
+test('a request can be called statically', function () {
+    $userRequest = RequestSelectionConnector::getMyUser();
+    $errorRequest = RequestSelectionConnector::errorRequest();
+
+    expect($userRequest)->toBeInstanceOf(UserRequest::class);
+    expect($errorRequest)->toBeInstanceOf(ErrorRequest::class);
+});
+
 test('you can pass parameters into the request method', function () {
     $connector = new RequestSelectionConnector;
     $request = $connector->getUser(123, 4);
+
+    expect($request)->toBeInstanceOf(UserRequest::class);
+    expect($request)->userId->toEqual(123);
+    expect($request)->groupId->toEqual(4);
+});
+
+test('you can pass parameters into a guessed request method', function () {
+    $connector = new RequestSelectionConnector;
+    $request = $connector->getMyUser(123, 4);
+
+    expect($request)->toBeInstanceOf(UserRequest::class);
+    expect($request)->userId->toEqual(123);
+    expect($request)->groupId->toEqual(4);
+});
+
+test('you can pass parameters into the static request method', function () {
+    $request = RequestSelectionConnector::getMyUser(123, 4);
 
     expect($request)->toBeInstanceOf(UserRequest::class);
     expect($request)->userId->toEqual(123);
@@ -37,6 +62,12 @@ test('it throws an exception if the request method does not exist on the connect
     $this->expectException(SaloonMethodNotFoundException::class);
 
     $connector->missingRequest();
+});
+
+test('it throws an exception if the static request method does not exist on the connector', function () {
+    $this->expectException(SaloonMethodNotFoundException::class);
+
+    RequestSelectionConnector::missingRequest();
 });
 
 test('it throws an exception if one of the provided request classes does not exist', function () {
