@@ -5,8 +5,8 @@ namespace Sammyjo20\Saloon\Http;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
+use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
-use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
 use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
@@ -119,13 +119,13 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      * @return SaloonRequest
      * @throws ClassNotFoundException
      * @throws SaloonInvalidRequestException
-     * @throws SaloonMethodNotFoundException
+     * @throws SaloonConnectorMethodNotFoundException
      * @throws \ReflectionException
      */
     public function __call($method, $arguments)
     {
         if ($this->requestExists($method) === false) {
-            throw new SaloonMethodNotFoundException($method, $this);
+            throw new SaloonConnectorMethodNotFoundException($method, $this);
         }
 
         $requests = $this->getRegisteredRequests();
@@ -141,7 +141,7 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      * @return SaloonRequest
      * @throws ClassNotFoundException
      * @throws SaloonInvalidRequestException
-     * @throws SaloonMethodNotFoundException
+     * @throws SaloonConnectorMethodNotFoundException
      * @throws \ReflectionException
      */
     public static function __callStatic($method, $arguments)
@@ -149,7 +149,7 @@ abstract class SaloonConnector implements SaloonConnectorInterface
         $connector = new static;
 
         if ($connector->requestExists($method) === false) {
-            throw new SaloonMethodNotFoundException($method, $connector);
+            throw new SaloonConnectorMethodNotFoundException($method, $connector);
         }
 
         $requests = $connector->getRegisteredRequests();

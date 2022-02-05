@@ -1,6 +1,7 @@
 <?php
 
 use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
+use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\InvalidDefinedRequestSelectionConnector;
@@ -63,13 +64,13 @@ test('it can call a request from the requests array', function () {
 test('it throws an exception if the request method does not exist on the connector', function () {
     $connector = new RequestSelectionConnector;
 
-    $this->expectException(SaloonMethodNotFoundException::class);
+    $this->expectException(SaloonConnectorMethodNotFoundException::class);
 
     $connector->missingRequest();
 });
 
 test('it throws an exception if the static request method does not exist on the connector', function () {
-    $this->expectException(SaloonMethodNotFoundException::class);
+    $this->expectException(SaloonConnectorMethodNotFoundException::class);
 
     RequestSelectionConnector::missingRequest();
 });
