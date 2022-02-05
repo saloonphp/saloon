@@ -31,4 +31,7 @@ class UserRequest extends SaloonRequest
     {
         return '/user';
     }
+
+    public function __construct(public ?int $userId = null, public ?int $groupId = null)
+    {}
 }

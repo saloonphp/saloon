@@ -8,6 +8,6 @@ class SaloonMethodNotFoundException extends SaloonException
 {
     public function __construct(string $method, SaloonConnector $connector)
     {
-        parent::__construct(sprintf('Unable to find the method "%s" on either the request class or the "%s" connector.', $method, get_class($connector)));
+        parent::__construct(sprintf('Unable to find the "%s" method on the request class or the "%s" connector.', $method, get_class($connector)));
     }
 }

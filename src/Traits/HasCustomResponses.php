@@ -3,6 +3,7 @@
 namespace Sammyjo20\Saloon\Traits;
 
 use ReflectionClass;
+use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
@@ -37,7 +38,7 @@ trait HasCustomResponses
             throw new SaloonInvalidResponseClassException;
         }
 
-        $isValidResponse = $response === SaloonResponse::class || (new ReflectionClass($response))->isSubclassOf(SaloonResponse::class);
+        $isValidResponse = $response === SaloonResponse::class || ReflectionHelper::isSubclassOf($response, SaloonResponse::class);
 
         if (! $isValidResponse) {
             throw new SaloonInvalidResponseClassException;
