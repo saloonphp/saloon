@@ -1,14 +1,13 @@
 <?php
 
 use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
-use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\InvalidDefinedRequestSelectionConnector;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\InvalidRequestSelectionConnector;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\RequestSelectionConnector;
-use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
+use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\RequestSelectionConnector;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\InvalidRequestSelectionConnector;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\InvalidDefinedRequestSelectionConnector;
 
 test('you can create a method that will be proxied to a request', function () {
     $connector = new RequestSelectionConnector;

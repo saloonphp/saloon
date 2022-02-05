@@ -2,21 +2,21 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Illuminate\Support\Collection;
+use ReflectionClass;
 use Illuminate\Support\Str;
-use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
-use Sammyjo20\Saloon\Helpers\ReflectionHelper;
+use Illuminate\Support\Collection;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\CollectsHandlers;
+use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\CollectsQueryParams;
 use Sammyjo20\Saloon\Traits\CollectsInterceptors;
+use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Interfaces\SaloonConnectorInterface;
-use ReflectionClass;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
+use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
 
 abstract class SaloonConnector implements SaloonConnectorInterface
 {

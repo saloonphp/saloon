@@ -2,12 +2,11 @@
 
 namespace Sammyjo20\Saloon\Tests\Resources\Connectors;
 
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
-use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
 use Sammyjo20\MissingClass;
+use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
+use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
 
 /**
  * @method getMyUser($userId, $groupId): UserRequest
