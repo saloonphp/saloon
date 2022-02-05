@@ -24,5 +24,9 @@ interface SaloonConnectorInterface
 
     public function getResponseInterceptors(): array;
 
+    public function getRegisteredRequests(): array;
+    
+    public function requestExists(string $method): bool;
+
     public function boot(): void;
 }

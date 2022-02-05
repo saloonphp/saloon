@@ -6,11 +6,19 @@ use Sammyjo20\Saloon\Http\SaloonConnector;
 
 interface SaloonRequestInterface
 {
+    public function boot(): void;
+
     public function getMethod(): ?string;
 
     public function getResponseClass(): ?string;
 
     public function getConnector(): ?SaloonConnector;
+
+    public function setLoadedConnector(SaloonConnector $connector): self;
+
+    public function getFullRequestUrl(): string;
+
+    public function traitExistsOnConnector(string $trait): bool;
 
     public function defineEndpoint(): string;
 
@@ -29,6 +37,4 @@ interface SaloonRequestInterface
     public function addResponseInterceptor(callable $function): void;
 
     public function getResponseInterceptors(): array;
-
-    public function boot(): void;
 }
