@@ -4,26 +4,64 @@ namespace Sammyjo20\Saloon\Clients;
 
 use ReflectionClass;
 use Illuminate\Support\Str;
+use Sammyjo20\Saloon\Helpers\ReflectionHelper;
+use Sammyjo20\Saloon\Helpers\URLHelper;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;
+use Sammyjo20\Saloon\Http\SaloonResponse;
+use PHPUnit\Framework\Assert as PHPUnit;
+
 
 class BaseMockClient
 {
+    /**
+     * Collection of all the responses that will be sequenced.
+     *
+     * @var array
+     */
     protected array $sequenceResponses = [];
 
+    /**
+     * Collection of responses used only when a connector is called.
+     *
+     * @var array
+     */
     protected array $connectorResponses = [];
 
+    /**
+     * Collection of responses used only when a request is called.
+     *
+     * @var array
+     */
     protected array $requestResponses = [];
 
+    /**
+     * Collection of responses that will run when the request is matched.
+     *
+     * @var array
+     */
     protected array $urlResponses = [];
 
     /**
-     * @param array $responses
-     * @throws SaloonNoMockResponsesProvidedException
+     * Collection of all the recorded responses.
+     *
+     * @var array
+     */
+    protected array $recordedResponses = [];
+
+    /**
+     * The last response the mock client saw.
+     *
+     * @var SaloonResponse|null
+     */
+    protected SaloonResponse|null $lastResponse = null;
+
+    /**
+     * @param array $mockData
+     * @throws SaloonInvalidMockResponseCaptureMethodException
      */
     public function __construct(array $mockData = [])
     {
@@ -134,7 +172,7 @@ class BaseMockClient
     private function guessResponseFromUrl(SaloonRequest $request): ?MockResponse
     {
         foreach ($this->urlResponses as $url => $response) {
-            if (! Str::is(Str::start($url, '*'), $request->getFullRequestUrl())) {
+            if (! URLHelper::matches($url, $request->getFullRequestUrl())) {
                 continue;
             }
 
@@ -152,5 +190,187 @@ class BaseMockClient
     public function isEmpty(): bool
     {
         return empty($this->sequenceResponses) && empty($this->connectorResponses) && empty($this->requestResponses) && empty($this->urlResponses);
+    }
+
+    /**
+     * Record a response.
+     *
+     * @param SaloonResponse $response
+     * @return void
+     */
+    public function recordResponse(SaloonResponse $response): void
+    {
+        $this->recordedResponses[] = $response;
+        $this->lastResponse = $response;
+    }
+
+    /**
+     * Get all the recorded responses
+     *
+     * @return array
+     */
+    public function getRecordedResponses(): array
+    {
+        return $this->recordedResponses;
+    }
+
+    /**
+     * Get the last request that the mock manager sent.
+     *
+     * @return SaloonRequest|null
+     */
+    public function getLastRequest(): ?SaloonRequest
+    {
+        return $this->lastResponse?->getOriginalRequest();
+    }
+
+    /**
+     * Get the last response that the mock manager sent.
+     *
+     * @return SaloonResponse|null
+     */
+    public function getLastResponse(): ?SaloonResponse
+    {
+        return $this->lastResponse;
+    }
+
+    /**
+     * Assert that a given request was sent.
+     *
+     * @param string|callable $value
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function assertSent(string|callable $value): void
+    {
+        $result = $this->checkRequestWasSent($value);
+
+        PHPUnit::assertTrue($result, 'An expected request was not sent.');
+    }
+
+    /**
+     * Assert that a given request was not sent.
+     *
+     * @param string|callable $request
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function assertNotSent(string|callable $request): void
+    {
+        $result = $this->checkRequestWasNotSent($request);
+
+        PHPUnit::assertTrue($result, 'An unexpected request was sent.');
+    }
+
+    /**
+     * Assert JSON data was sent
+     *
+     * @param string $request
+     * @param array $data
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function assertSentJson(string $request, array $data): void
+    {
+        $this->assertSent($request);
+
+        $response = $this->findRequestInHistory($request);
+
+        PHPUnit::assertEquals($response->json(), $data, 'Expected request data was not sent.');
+    }
+
+    /**
+     * Assert that nothing was sent.
+     *
+     * @return void
+     */
+    public function assertNothingSent(): void
+    {
+        PHPUnit::assertEmpty($this->getRecordedResponses(), 'Requests were sent.');
+    }
+
+    /**
+     * Assert a request count has been met.
+     *
+     * @param int $count
+     * @return void
+     */
+    public function assertSentCount(int $count): void
+    {
+        PHPUnit::assertCount($count, $this->getRecordedResponses());
+    }
+
+    /**
+     * Check if a given request was sent
+     *
+     * @param string|callable $request
+     * @return bool
+     * @throws \ReflectionException
+     */
+    protected function checkRequestWasSent(string|callable $request): bool
+    {
+        $result = false;
+
+        if (is_callable($request)) {
+            $result = $request($this->getLastRequest(), $this->getLastResponse());
+        }
+
+        if (is_string($request)) {
+            if (class_exists($request) && ReflectionHelper::isSubclassOf($request, SaloonRequest::class)) {
+                $result = ! is_null($this->findRequestInHistory($request));
+            } else {
+                $result = ! is_null($this->findRequestWithUrl($request));
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Check if a request has not been sent.
+     *
+     * @param string|callable $request
+     * @return bool
+     * @throws \ReflectionException
+     */
+    protected function checkRequestWasNotSent(string|callable $request): bool
+    {
+        return ! $this->checkRequestWasSent($request);
+    }
+
+    /**
+     * Assert a given request was sent.
+     *
+     * @param string $request
+     * @return SaloonResponse|null
+     */
+    protected function findRequestInHistory(string $request): ?SaloonResponse
+    {
+        foreach ($this->getRecordedResponses() as $recordedResponse) {
+            if ($recordedResponse->getOriginalRequest() instanceof $request) {
+                return $recordedResponse;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Find a request that matches a given url pattern
+     *
+     * @param string $url
+     * @return SaloonResponse|null
+     */
+    protected function findRequestWithUrl(string $url): ?SaloonResponse
+    {
+        foreach ($this->getRecordedResponses() as $recordedResponse) {
+            $request = $recordedResponse->getOriginalRequest();
+
+            if (URLHelper::matches($url, $request->getFullRequestUrl())) {
+                return $recordedResponse;
+            }
+        }
+
+        return null;
     }
 }
