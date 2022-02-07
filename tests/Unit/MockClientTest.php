@@ -133,7 +133,7 @@ test('you can get an array of the recorded requests', function () {
     expect($responses)->toEqual([
         $responseA,
         $responseB,
-        $responseC
+        $responseC,
     ]);
 });
 

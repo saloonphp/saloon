@@ -1,15 +1,15 @@
 <?php
 
-use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
-use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
 
 test('that assertSent works with a request', function () {
     $mockClient = new MockClient([
-        UserRequest::class => new MockResponse(['name' => 'Sam'], 200)
+        UserRequest::class => new MockResponse(['name' => 'Sam'], 200),
     ]);
 
     (new UserRequest())->send($mockClient);
@@ -52,7 +52,7 @@ test('that assertSent works with a closure', function () {
 
 test('that assertSent works with a url', function () {
     $mockClient = new MockClient([
-        UserRequest::class => new MockResponse(['name' => 'Sam'], 200)
+        UserRequest::class => new MockResponse(['name' => 'Sam'], 200),
     ]);
 
     (new UserRequest())->send($mockClient);
@@ -89,7 +89,7 @@ test('that assertNotSent works with a closure', function () {
 
 test('that assertNotSent works with a url', function () {
     $mockClient = new MockClient([
-        UserRequest::class => new MockResponse(['name' => 'Sam'], 200)
+        UserRequest::class => new MockResponse(['name' => 'Sam'], 200),
     ]);
 
     (new UserRequest())->send($mockClient);
@@ -100,19 +100,19 @@ test('that assertNotSent works with a url', function () {
 
 test('that assertSentJson works properly', function () {
     $mockClient = new MockClient([
-        UserRequest::class => new MockResponse(['name' => 'Sam'], 200)
+        UserRequest::class => new MockResponse(['name' => 'Sam'], 200),
     ]);
 
     (new UserRequest())->send($mockClient);
 
     $mockClient->assertSentJson(UserRequest::class, [
-        'name' => 'Sam'
+        'name' => 'Sam',
     ]);
 });
 
 test('test assertNothingSent works properly', function () {
     $mockClient = new MockClient([
-        UserRequest::class => new MockResponse(['name' => 'Sam'], 200)
+        UserRequest::class => new MockResponse(['name' => 'Sam'], 200),
     ]);
 
     $mockClient->assertNothingSent();
