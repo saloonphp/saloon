@@ -53,13 +53,6 @@ class BaseMockClient
     protected array $recordedResponses = [];
 
     /**
-     * The last response the mock client saw.
-     *
-     * @var SaloonResponse|null
-     */
-    protected SaloonResponse|null $lastResponse = null;
-
-    /**
      * @param array $mockData
      * @throws SaloonInvalidMockResponseCaptureMethodException
      */
@@ -201,7 +194,6 @@ class BaseMockClient
     public function recordResponse(SaloonResponse $response): void
     {
         $this->recordedResponses[] = $response;
-        $this->lastResponse = $response;
     }
 
     /**
@@ -221,7 +213,7 @@ class BaseMockClient
      */
     public function getLastRequest(): ?SaloonRequest
     {
-        return $this->lastResponse?->getOriginalRequest();
+        return $this->getLastResponse()?->getOriginalRequest();
     }
 
     /**
@@ -231,7 +223,11 @@ class BaseMockClient
      */
     public function getLastResponse(): ?SaloonResponse
     {
-        return $this->lastResponse;
+        $lastResponse = end($this->recordedResponses);
+
+        reset($this->recordedResponses);
+
+        return $lastResponse;
     }
 
     /**

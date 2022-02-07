@@ -116,3 +116,39 @@ test('saloon throws an exception if it cant work out the url response', function
 
     expect($mockClient->guessNextResponse($requestC))->toEqual($responseC);
 });
+
+test('you can get an array of the recorded requests', function () {
+    $mockClient = new MockClient([
+        new MockResponse(['name' => 'Sam'], 200),
+        new MockResponse(['name' => 'Taylor'], 200),
+        new MockResponse(['name' => 'Marcel'], 200),
+    ]);
+
+    $responseA = (new UserRequest())->send($mockClient);
+    $responseB = (new UserRequest())->send($mockClient);
+    $responseC = (new UserRequest())->send($mockClient);
+
+    $responses = $mockClient->getRecordedResponses();
+
+    expect($responses)->toEqual([
+        $responseA,
+        $responseB,
+        $responseC
+    ]);
+});
+
+test('you can get the last recorded request', function () {
+    $mockClient = new MockClient([
+        new MockResponse(['name' => 'Sam'], 200),
+        new MockResponse(['name' => 'Taylor'], 200),
+        new MockResponse(['name' => 'Marcel'], 200),
+    ]);
+
+    $responseA = (new UserRequest())->send($mockClient);
+    $responseB = (new UserRequest())->send($mockClient);
+    $responseC = (new UserRequest())->send($mockClient);
+
+    $lastResponse = $mockClient->getLastResponse();
+
+    expect($lastResponse)->toBe($responseC);
+});
