@@ -152,3 +152,19 @@ test('you can get the last recorded request', function () {
 
     expect($lastResponse)->toBe($responseC);
 });
+
+test('if there are no recorded responses the getLastResponse will return null', function () {
+    $mockClient = new MockClient([
+        new MockResponse(['name' => 'Sam'], 200),
+    ]);
+
+    expect($mockClient)->getLastResponse()->toBeNull();
+});
+
+test('if there are no recorded responses the getLastRequest will return null', function () {
+    $mockClient = new MockClient([
+        new MockResponse(['name' => 'Sam'], 200),
+    ]);
+
+    expect($mockClient)->getLastRequest()->toBeNull();
+});

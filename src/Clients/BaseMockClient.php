@@ -77,6 +77,14 @@ class BaseMockClient
         }
     }
 
+    /**
+     * Add a mock response to the client
+     *
+     * @param MockResponse $response
+     * @param string|null $captureMethod
+     * @return void
+     * @throws SaloonInvalidMockResponseCaptureMethodException
+     */
     public function addResponse(MockResponse $response, ?string $captureMethod = null): void
     {
         if (is_null($captureMethod)) {
@@ -113,6 +121,11 @@ class BaseMockClient
         $this->urlResponses[$captureMethod] = $response;
     }
 
+    /**
+     * Get the next response in the sequence
+     *
+     * @return mixed
+     */
     public function getNextFromSequence(): mixed
     {
         return array_shift($this->sequenceResponses);
@@ -221,6 +234,10 @@ class BaseMockClient
      */
     public function getLastResponse(): ?SaloonResponse
     {
+        if (empty($this->recordedResponses)) {
+            return null;
+        }
+
         $lastResponse = end($this->recordedResponses);
 
         reset($this->recordedResponses);
@@ -300,6 +317,7 @@ class BaseMockClient
      * @param string|callable $request
      * @return bool
      * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     protected function checkRequestWasSent(string|callable $request): bool
     {
@@ -311,9 +329,9 @@ class BaseMockClient
 
         if (is_string($request)) {
             if (class_exists($request) && ReflectionHelper::isSubclassOf($request, SaloonRequest::class)) {
-                $result = ! is_null($this->findResponseByRequest($request));
+                $result = $this->findResponseByRequest($request) instanceof SaloonResponse;
             } else {
-                $result = ! is_null($this->findResponseWithRequestUrl($request));
+                $result = $this->findResponseWithRequestUrl($request) instanceof SaloonResponse;
             }
         }
 
@@ -326,6 +344,7 @@ class BaseMockClient
      * @param string|callable $request
      * @return bool
      * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     protected function checkRequestWasNotSent(string|callable $request): bool
     {
@@ -340,6 +359,12 @@ class BaseMockClient
      */
     protected function findResponseByRequest(string $request): ?SaloonResponse
     {
+        $lastRequest = $this->getLastRequest();
+
+        if ($lastRequest instanceof $request) {
+            return $this->getLastResponse();
+        }
+
         foreach ($this->getRecordedResponses() as $recordedResponse) {
             if ($recordedResponse->getOriginalRequest() instanceof $request) {
                 return $recordedResponse;
@@ -354,9 +379,16 @@ class BaseMockClient
      *
      * @param string $url
      * @return SaloonResponse|null
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     protected function findResponseWithRequestUrl(string $url): ?SaloonResponse
     {
+        $lastRequest = $this->getLastRequest();
+
+        if ($lastRequest instanceof SaloonRequest && URLHelper::matches($url, $lastRequest->getFullRequestUrl())) {
+            return $this->getLastResponse();
+        }
+
         foreach ($this->getRecordedResponses() as $recordedResponse) {
             $request = $recordedResponse->getOriginalRequest();
 
