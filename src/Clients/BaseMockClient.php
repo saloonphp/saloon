@@ -331,7 +331,7 @@ class BaseMockClient
             if (class_exists($request) && ReflectionHelper::isSubclassOf($request, SaloonRequest::class)) {
                 $result = $this->findResponseByRequest($request) instanceof SaloonResponse;
             } else {
-                $result = $this->findResponseWithRequestUrl($request) instanceof SaloonResponse;
+                $result = $this->findResponseByRequestUrl($request) instanceof SaloonResponse;
             }
         }
 
@@ -357,7 +357,7 @@ class BaseMockClient
      * @param string $request
      * @return SaloonResponse|null
      */
-    protected function findResponseByRequest(string $request): ?SaloonResponse
+    public function findResponseByRequest(string $request): ?SaloonResponse
     {
         $lastRequest = $this->getLastRequest();
 
@@ -381,7 +381,7 @@ class BaseMockClient
      * @return SaloonResponse|null
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    protected function findResponseWithRequestUrl(string $url): ?SaloonResponse
+    public function findResponseByRequestUrl(string $url): ?SaloonResponse
     {
         $lastRequest = $this->getLastRequest();
 
