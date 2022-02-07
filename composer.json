@@ -1,6 +1,6 @@
 {
     "name": "sammyjo20/saloon",
-    "description": "Interact with REST APIs with confidence and elegance.",
+    "description": "A Laravel/PHP package that allows you to write your API integrations or SDKs in a beautiful, standardised syntax.",
     "type": "library",
     "license": "MIT",
     "autoload": {
