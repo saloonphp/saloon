@@ -270,7 +270,7 @@ class BaseMockClient
     {
         $this->assertSent($request);
 
-        $response = $this->findRequestInHistory($request);
+        $response = $this->findResponseByRequest($request);
 
         PHPUnit::assertEquals($response->json(), $data, 'Expected request data was not sent.');
     }
@@ -313,9 +313,9 @@ class BaseMockClient
 
         if (is_string($request)) {
             if (class_exists($request) && ReflectionHelper::isSubclassOf($request, SaloonRequest::class)) {
-                $result = ! is_null($this->findRequestInHistory($request));
+                $result = ! is_null($this->findResponseByRequest($request));
             } else {
-                $result = ! is_null($this->findRequestWithUrl($request));
+                $result = ! is_null($this->findResponseWithRequestUrl($request));
             }
         }
 
@@ -340,7 +340,7 @@ class BaseMockClient
      * @param string $request
      * @return SaloonResponse|null
      */
-    protected function findRequestInHistory(string $request): ?SaloonResponse
+    protected function findResponseByRequest(string $request): ?SaloonResponse
     {
         foreach ($this->getRecordedResponses() as $recordedResponse) {
             if ($recordedResponse->getOriginalRequest() instanceof $request) {
@@ -357,7 +357,7 @@ class BaseMockClient
      * @param string $url
      * @return SaloonResponse|null
      */
-    protected function findRequestWithUrl(string $url): ?SaloonResponse
+    protected function findResponseWithRequestUrl(string $url): ?SaloonResponse
     {
         foreach ($this->getRecordedResponses() as $recordedResponse) {
             $request = $recordedResponse->getOriginalRequest();
