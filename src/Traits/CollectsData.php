@@ -109,17 +109,6 @@ trait CollectsData
     }
 
     /**
-     * Get an individual data
-     *
-     * @param string $key
-     * @return string
-     */
-    public function getDataByKey(string $key): string
-    {
-        return $this->getData($key);
-    }
-
-    /**
      * Should we ignore the default data when calling `->getData()`?
      *
      * @return $this

@@ -201,7 +201,13 @@ class RequestManager
         /** @var SaloonResponse $response */
         $response = new $responseClass($requestOptions, $request, $response, $exception);
 
-        $response->setMocked($this->isMocking());
+        // If we are mocking, we should record the request and response on the mock manager,
+        // so we can run assertions on the responses.
+
+        if ($this->isMocking()) {
+            $response->setMocked(true);
+            $this->mockClient->recordResponse($response);
+        }
 
         if (property_exists($this->connector, 'shouldGuessStatusFromBody') || property_exists($this->request, 'shouldGuessStatusFromBody')) {
             $response->guessesStatusFromBody();

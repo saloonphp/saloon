@@ -116,3 +116,95 @@ test('saloon throws an exception if it cant work out the url response', function
 
     expect($mockClient->guessNextResponse($requestC))->toEqual($responseC);
 });
+
+test('you can get an array of the recorded requests', function () {
+    $mockClient = new MockClient([
+        new MockResponse(['name' => 'Sam'], 200),
+        new MockResponse(['name' => 'Taylor'], 200),
+        new MockResponse(['name' => 'Marcel'], 200),
+    ]);
+
+    $responseA = (new UserRequest())->send($mockClient);
+    $responseB = (new UserRequest())->send($mockClient);
+    $responseC = (new UserRequest())->send($mockClient);
+
+    $responses = $mockClient->getRecordedResponses();
+
+    expect($responses)->toEqual([
+        $responseA,
+        $responseB,
+        $responseC,
+    ]);
+});
+
+test('you can get the last recorded request', function () {
+    $mockClient = new MockClient([
+        new MockResponse(['name' => 'Sam'], 200),
+        new MockResponse(['name' => 'Taylor'], 200),
+        new MockResponse(['name' => 'Marcel'], 200),
+    ]);
+
+    $responseA = (new UserRequest())->send($mockClient);
+    $responseB = (new UserRequest())->send($mockClient);
+    $responseC = (new UserRequest())->send($mockClient);
+
+    $lastResponse = $mockClient->getLastResponse();
+
+    expect($lastResponse)->toBe($responseC);
+});
+
+test('if there are no recorded responses the getLastResponse will return null', function () {
+    $mockClient = new MockClient([
+        new MockResponse(['name' => 'Sam'], 200),
+    ]);
+
+    expect($mockClient)->getLastResponse()->toBeNull();
+});
+
+test('if there are no recorded responses the getLastRequest will return null', function () {
+    $mockClient = new MockClient([
+        new MockResponse(['name' => 'Sam'], 200),
+    ]);
+
+    expect($mockClient)->getLastRequest()->toBeNull();
+});
+
+test('if the response is not the last response it will use the loop to find it', function () {
+    $mockClient = new MockClient([
+        new MockResponse(['name' => 'Sam'], 200),
+        new MockResponse(['error' => 'Server Error'], 500),
+    ]);
+
+    $responseA = (new ErrorRequest())->send($mockClient);
+    $responseB = (new UserRequest())->send($mockClient);
+
+    expect($mockClient)->getLastResponse()->toBe($responseB);
+
+    // Uses last response
+
+    expect($mockClient)->findResponseByRequest(UserRequest::class)->toBe($responseB);
+
+    // Does not use the last response
+
+    expect($mockClient)->findResponseByRequest(ErrorRequest::class)->toBe($responseA);
+});
+
+test('it will find the response by url if it is not the last response', function () {
+    $mockClient = new MockClient([
+        '/user' => new MockResponse(['name' => 'Sam'], 200),
+        '/error' => new MockResponse(['error' => 'Server Error'], 500),
+    ]);
+
+    $responseA = (new ErrorRequest())->send($mockClient);
+    $responseB = (new UserRequest())->send($mockClient);
+
+    expect($mockClient)->getLastResponse()->toBe($responseB);
+
+    // Uses last response
+
+    expect($mockClient)->findResponseByRequestUrl('/user')->toBe($responseB);
+
+    // Does not use the last response
+
+    expect($mockClient)->findResponseByRequestUrl('/error')->toBe($responseA);
+});

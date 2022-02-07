@@ -76,7 +76,6 @@ trait CollectsHeaders
 
     /**
      * Get all headers or filter with a key.
-     * Todo: Throw an error if it doesn't exist.
      *
      * @param string|null $key
      * @return array
