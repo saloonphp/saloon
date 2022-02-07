@@ -77,12 +77,11 @@ trait CollectsConfig
 
     /**
      * Get all headers or filter with a key.
-     * Todo: Throw an error if it doesn't exist.
      *
      * @param string|null $key
      * @return array
      */
-    public function getConfig(string $key = null): array
+    public function getConfig(string $key = null): mixed
     {
         if ($this->includeDefaultConfig === true) {
             $configBag = array_merge($this->defaultConfig(), $this->customConfig);
