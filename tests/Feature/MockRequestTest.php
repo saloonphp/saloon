@@ -12,9 +12,9 @@ use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorRequest;
 
 test('a request can be mocked with a sequence', function () {
     $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sam'], 200),
-        new MockResponse(['name' => 'Alex'], 200),
-        new MockResponse(['error' => 'Server Unavailable'], 500),
+        MockResponse::make(['name' => 'Sam'], 200),
+        MockResponse::make(['name' => 'Alex'], 200),
+        MockResponse::make(['error' => 'Server Unavailable'], 500),
     ]);
 
     $responseA = (new UserRequest)->send($mockClient);
@@ -41,8 +41,8 @@ test('a request can be mocked with a sequence', function () {
 });
 
 test('a request can be mocked with a connector defined', function () {
-    $responseA = new MockResponse(['name' => 'Sammyjo20'], 200);
-    $responseB = new MockResponse(['name' => 'Alex'], 200);
+    $responseA = MockResponse::make(['name' => 'Sammyjo20'], 200);
+    $responseB = MockResponse::make(['name' => 'Alex'], 200);
 
     $connectorARequest = new UserRequest;
     $connectorBRequest = new QueryParameterConnectorRequest;
@@ -66,8 +66,8 @@ test('a request can be mocked with a connector defined', function () {
 });
 
 test('a request can be mocked with a request defined', function () {
-    $responseA = new MockResponse(['name' => 'Sammyjo20'], 200);
-    $responseB = new MockResponse(['name' => 'Alex'], 200);
+    $responseA = MockResponse::make(['name' => 'Sammyjo20'], 200);
+    $responseB = MockResponse::make(['name' => 'Alex'], 200);
 
     $requestA = new UserRequest;
     $requestB = new QueryParameterConnectorRequest;
@@ -91,9 +91,9 @@ test('a request can be mocked with a request defined', function () {
 });
 
 test('a request can be mocked with a url defined', function () {
-    $responseA = new MockResponse(['name' => 'Sammyjo20'], 200);
-    $responseB = new MockResponse(['name' => 'Alex'], 200);
-    $responseC = new MockResponse(['error' => 'Server Broken'], 500);
+    $responseA = MockResponse::make(['name' => 'Sammyjo20'], 200);
+    $responseB = MockResponse::make(['name' => 'Alex'], 200);
+    $responseC = MockResponse::make(['error' => 'Server Broken'], 500);
 
     $requestA = new UserRequest;
     $requestB = new ErrorRequest;
@@ -125,9 +125,9 @@ test('a request can be mocked with a url defined', function () {
 });
 
 test('you can create wildcard url mocks', function () {
-    $responseA = new MockResponse(['name' => 'Sammyjo20'], 200);
-    $responseB = new MockResponse(['name' => 'Alex'], 200);
-    $responseC = new MockResponse(['error' => 'Server Broken'], 500);
+    $responseA = MockResponse::make(['name' => 'Sammyjo20'], 200);
+    $responseB = MockResponse::make(['name' => 'Alex'], 200);
+    $responseC = MockResponse::make(['error' => 'Server Broken'], 500);
 
     $requestA = new UserRequest;
     $requestB = new ErrorRequest;

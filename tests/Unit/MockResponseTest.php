@@ -11,9 +11,9 @@ use Sammyjo20\Saloon\Tests\Resources\Responses\UserResponse;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithCustomResponse;
 
 test('pulling a response from the sequence will return the correct response', function () {
-    $responseA = new MockResponse([], 200);
-    $responseB = new MockResponse([], 201);
-    $responseC = new MockResponse([], 500);
+    $responseA = MockResponse::make([], 200);
+    $responseB = MockResponse::make([], 201);
+    $responseC = MockResponse::make([], 500);
 
     $mockClient = new MockClient([$responseA, $responseB, $responseC]);
 
@@ -33,7 +33,7 @@ test('a mock response can be created from a request', function () {
 });
 
 test('a mock response can have raw body data', function () {
-    $response = new MockResponse('xml', 200, ['Content-Type' => 'application/json']);
+    $response = MockResponse::make('xml', 200, ['Content-Type' => 'application/json']);
 
     expect($response->getHeaders())->toEqual(['Content-Type' => 'application/json']);
     expect($response->getConfig())->toEqual([]);
@@ -42,7 +42,7 @@ test('a mock response can have raw body data', function () {
 });
 
 test('a response can have a method added to it', function () {
-    $mockClient = new MockClient([new MockResponse([], 200)]);
+    $mockClient = new MockClient([MockResponse::make([], 200)]);
     $request = new UserRequest();
 
     $request->addResponseInterceptor(function (SaloonRequest $request, SaloonResponse $response) {
@@ -59,7 +59,7 @@ test('a response can have a method added to it', function () {
 });
 
 test('a response can be a custom response class', function () {
-    $mockClient = new MockClient([new MockResponse(['foo' => 'bar'], 200)]);
+    $mockClient = new MockClient([MockResponse::make(['foo' => 'bar'], 200)]);
     $request = new UserRequestWithCustomResponse();
 
     $response = $request->send($mockClient);

@@ -29,7 +29,7 @@ test('if you dont pass in a mock client to the saloon request it will not be in 
 
 test('you can pass a mock client to the saloon request and it will be in mock mode', function () {
     $request = new UserRequest();
-    $mockClient = new MockClient([new MockResponse([], 200)]);
+    $mockClient = new MockClient([MockResponse::make([], 200)]);
 
     $requestManager = $request->getRequestManager($mockClient);
 

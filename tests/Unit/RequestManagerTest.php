@@ -111,7 +111,7 @@ test('if you do not pass a mock client into the request, no mocking will be conf
 });
 
 test('if you pass a mock client into the request, the request manager will setup mocking correctly', function () {
-    $mockClient = new MockClient([new MockResponse([], 200)]);
+    $mockClient = new MockClient([MockResponse::make([], 200)]);
 
     $requestManager = new RequestManager(new UserRequest(), $mockClient);
 
