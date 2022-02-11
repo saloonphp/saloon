@@ -283,11 +283,9 @@ class BaseMockClient
      */
     public function assertSentJson(string $request, array $data): void
     {
-        $this->assertSent($request);
-
-        $response = $this->findResponseByRequest($request);
-
-        PHPUnit::assertEquals($response->json(), $data, 'Expected request data was not sent.');
+        $this->assertSent(function ($currentRequest, $currentResponse) use ($request, $data) {
+            return $currentRequest instanceof $request && $currentResponse->json() === $data;
+        });
     }
 
     /**
@@ -321,21 +319,21 @@ class BaseMockClient
      */
     protected function checkRequestWasSent(string|callable $request): bool
     {
-        $result = false;
+        $passed = false;
 
         if (is_callable($request)) {
-            $result = $request($this->getLastRequest(), $this->getLastResponse());
+            return $this->checkClosureAgainstResponses($request);
         }
 
         if (is_string($request)) {
             if (class_exists($request) && ReflectionHelper::isSubclassOf($request, SaloonRequest::class)) {
-                $result = $this->findResponseByRequest($request) instanceof SaloonResponse;
+                $passed = $this->findResponseByRequest($request) instanceof SaloonResponse;
             } else {
-                $result = $this->findResponseByRequestUrl($request) instanceof SaloonResponse;
+                $passed = $this->findResponseByRequestUrl($request) instanceof SaloonResponse;
             }
         }
 
-        return $result;
+        return $passed;
     }
 
     /**
@@ -359,6 +357,10 @@ class BaseMockClient
      */
     public function findResponseByRequest(string $request): ?SaloonResponse
     {
+        if ($this->checkHistoryEmpty() === true) {
+            return null;
+        }
+
         $lastRequest = $this->getLastRequest();
 
         if ($lastRequest instanceof $request) {
@@ -383,20 +385,75 @@ class BaseMockClient
      */
     public function findResponseByRequestUrl(string $url): ?SaloonResponse
     {
+        if ($this->checkHistoryEmpty() === true) {
+            return null;
+        }
+
         $lastRequest = $this->getLastRequest();
 
         if ($lastRequest instanceof SaloonRequest && URLHelper::matches($url, $lastRequest->getFullRequestUrl())) {
             return $this->getLastResponse();
         }
 
-        foreach ($this->getRecordedResponses() as $recordedResponse) {
-            $request = $recordedResponse->getOriginalRequest();
+        foreach ($this->getRecordedResponses() as $response) {
+            $request = $response->getOriginalRequest();
 
             if (URLHelper::matches($url, $request->getFullRequestUrl())) {
-                return $recordedResponse;
+                return $response;
             }
         }
 
         return null;
+    }
+
+    /**
+     * Test if the closure can pass with the history.
+     *
+     * @param callable $closure
+     * @return bool
+     */
+    private function checkClosureAgainstResponses(callable $closure): bool
+    {
+        if ($this->checkHistoryEmpty() === true) {
+            return false;
+        }
+
+        // Let's first check if the latest response resolves the callable
+        // with a successful result.
+
+        $lastResponse = $this->getLastResponse();
+
+        if ($lastResponse instanceof SaloonResponse) {
+            $passed = $closure($lastResponse->getOriginalRequest(), $lastResponse);
+
+            if ($passed === true) {
+                return true;
+            }
+        }
+
+        // If it was not the previous response, we should iterate through each of the
+        // responses and break out if we get a match.
+
+        foreach ($this->getRecordedResponses() as $response) {
+            $request = $response->getOriginalRequest();
+
+            $passed = $closure($request, $response);
+
+            if ($passed === true) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Will return true if the history is empty.
+     *
+     * @return bool
+     */
+    private function checkHistoryEmpty(): bool
+    {
+        return count($this->recordedResponses) <= 0;
     }
 }

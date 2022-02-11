@@ -7,7 +7,7 @@ use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
 
-test('that assertSent works with a request', function () {
+test('assertSent works with a request', function () {
     $mockClient = new MockClient([
         UserRequest::class => new MockResponse(['name' => 'Sam'], 200),
     ]);
@@ -17,7 +17,7 @@ test('that assertSent works with a request', function () {
     $mockClient->assertSent(UserRequest::class);
 });
 
-test('that assertSent works with a closure', function () {
+test('assertSent works with a closure', function () {
     $mockClient = new MockClient([
         UserRequest::class => new MockResponse(['name' => 'Sam'], 200),
         ErrorRequest::class => new MockResponse(['error' => 'Server Error'], 500),
@@ -50,7 +50,7 @@ test('that assertSent works with a closure', function () {
     });
 });
 
-test('that assertSent works with a url', function () {
+test('assertSent works with a url', function () {
     $mockClient = new MockClient([
         UserRequest::class => new MockResponse(['name' => 'Sam'], 200),
     ]);
@@ -62,7 +62,7 @@ test('that assertSent works with a url', function () {
     $mockClient->assertSent('api/user');
 });
 
-test('that assertNotSent works with a request', function () {
+test('assertNotSent works with a request', function () {
     $mockClient = new MockClient([
         UserRequest::class => new MockResponse(['name' => 'Sam'], 200),
         ErrorRequest::class => new MockResponse(['error' => 'Server Error'], 500),
@@ -73,7 +73,7 @@ test('that assertNotSent works with a request', function () {
     $mockClient->assertNotSent(UserRequest::class);
 });
 
-test('that assertNotSent works with a closure', function () {
+test('assertNotSent works with a closure', function () {
     $mockClient = new MockClient([
         UserRequest::class => new MockResponse(['name' => 'Sam'], 200),
         ErrorRequest::class => new MockResponse(['error' => 'Server Error'], 500),
@@ -87,7 +87,7 @@ test('that assertNotSent works with a closure', function () {
     });
 });
 
-test('that assertNotSent works with a url', function () {
+test('assertNotSent works with a url', function () {
     $mockClient = new MockClient([
         UserRequest::class => new MockResponse(['name' => 'Sam'], 200),
     ]);
@@ -98,7 +98,7 @@ test('that assertNotSent works with a url', function () {
     $mockClient->assertNotSent('/error');
 });
 
-test('that assertSentJson works properly', function () {
+test('assertSentJson works properly', function () {
     $mockClient = new MockClient([
         UserRequest::class => new MockResponse(['name' => 'Sam'], 200),
     ]);
@@ -110,7 +110,31 @@ test('that assertSentJson works properly', function () {
     ]);
 });
 
-test('test assertNothingSent works properly', function () {
+test('assertSentJson works with multiple requests in history', function () {
+    $mockClient = new MockClient([
+        new MockResponse(['name' => 'Sam'], 200),
+        new MockResponse(['name' => 'Taylor'], 201),
+        new MockResponse(['name' => 'Marcel'], 204),
+    ]);
+
+    (new UserRequest())->send($mockClient);
+    (new UserRequest())->send($mockClient);
+    (new UserRequest())->send($mockClient);
+
+    $mockClient->assertSentJson(UserRequest::class, [
+        'name' => 'Sam',
+    ]);
+
+    $mockClient->assertSentJson(UserRequest::class, [
+        'name' => 'Taylor',
+    ]);
+
+    $mockClient->assertSentJson(UserRequest::class, [
+        'name' => 'Marcel',
+    ]);
+});
+
+test('assertNothingSent works properly', function () {
     $mockClient = new MockClient([
         UserRequest::class => new MockResponse(['name' => 'Sam'], 200),
     ]);
@@ -118,7 +142,7 @@ test('test assertNothingSent works properly', function () {
     $mockClient->assertNothingSent();
 });
 
-test('test assertSentCount works properly', function () {
+test('assertSentCount works properly', function () {
     $mockClient = new MockClient([
         new MockResponse(['name' => 'Sam'], 200),
         new MockResponse(['name' => 'Taylor'], 200),
@@ -130,4 +154,28 @@ test('test assertSentCount works properly', function () {
     (new UserRequest())->send($mockClient);
 
     $mockClient->assertSentCount(3);
+});
+
+test('assertSent with a closure works with more than one request in the history', function () {
+    $mockClient = new MockClient([
+        new MockResponse(['name' => 'Sam'], 200),
+        new MockResponse(['name' => 'Taylor'], 201),
+        new MockResponse(['name' => 'Marcel'], 204),
+    ]);
+
+    (new UserRequest())->send($mockClient);
+    (new UserRequest())->send($mockClient);
+    (new UserRequest())->send($mockClient);
+
+    $mockClient->assertSent(function ($request, $response) {
+        return $response->json() === ['name' => 'Sam'] && $response->status() === 200;
+    });
+
+    $mockClient->assertSent(function ($request, $response) {
+        return $response->json() === ['name' => 'Taylor'] && $response->status() === 201;
+    });
+
+    $mockClient->assertSent(function ($request, $response) {
+        return $response->json() === ['name' => 'Marcel'] && $response->status() === 204;
+    });
 });
