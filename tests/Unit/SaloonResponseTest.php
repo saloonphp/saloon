@@ -9,7 +9,7 @@ use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 
 test('you can get the original request options', function () {
     $mockClient = new MockClient([
-        new MockResponse(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
+        MockResponse::make(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
@@ -22,7 +22,7 @@ test('you can get the original request options', function () {
 
 test('you can get the original request', function () {
     $mockClient = new MockClient([
-        new MockResponse(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
+        MockResponse::make(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
     ]);
 
     $request = new UserRequest;
@@ -33,7 +33,7 @@ test('you can get the original request', function () {
 
 test('it will throw an exception when you use the throw method', function () {
     $mockClient = new MockClient([
-        new MockResponse([], 500),
+        MockResponse::make([], 500),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
@@ -45,7 +45,7 @@ test('it will throw an exception when you use the throw method', function () {
 
 test('it wont throw an exception if the request did not fail', function () {
     $mockClient = new MockClient([
-        new MockResponse([], 200),
+        MockResponse::make([], 200),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
@@ -55,7 +55,7 @@ test('it wont throw an exception if the request did not fail', function () {
 
 test('to exception will return a saloon request exception', function () {
     $mockClient = new MockClient([
-        new MockResponse([], 500),
+        MockResponse::make([], 500),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
@@ -66,7 +66,7 @@ test('to exception will return a saloon request exception', function () {
 
 test('to exception wont return anything if the request did not fail', function () {
     $mockClient = new MockClient([
-        new MockResponse([], 200),
+        MockResponse::make([], 200),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
@@ -77,7 +77,7 @@ test('to exception wont return anything if the request did not fail', function (
 
 test('the onError method will run a custom closure', function () {
     $mockClient = new MockClient([
-        new MockResponse([], 500),
+        MockResponse::make([], 500),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
@@ -94,7 +94,7 @@ test('the object method will return an object', function () {
     $data = ['name' => 'Sam', 'work' => 'Codepotato'];
 
     $mockClient = new MockClient([
-        new MockResponse($data, 500),
+        MockResponse::make($data, 500),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
@@ -106,7 +106,7 @@ test('the object method will return an object', function () {
 
 test('the collect method will return a collection', function () {
     $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sam', 'work' => 'Codepotato'], 500),
+        MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 500),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
@@ -123,7 +123,7 @@ test('the collect method will return a collection', function () {
 
 test('the toGuzzleResponse and toPsrResponse methods will return a guzzle response', function () {
     $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sam', 'work' => 'Codepotato'], 500),
+        MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 500),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
@@ -134,7 +134,7 @@ test('the toGuzzleResponse and toPsrResponse methods will return a guzzle respon
 
 test('you can get an individual header from the response', function () {
     $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sam', 'work' => 'Codepotato'], 200, ['X-Greeting' => 'Howdy']),
+        MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 200, ['X-Greeting' => 'Howdy']),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
@@ -147,7 +147,7 @@ test('it will convert the body to string if the cast is used', function () {
     $data = ['name' => 'Sam', 'work' => 'Codepotato'];
 
     $mockClient = new MockClient([
-        new MockResponse($data, 200, ['X-Greeting' => 'Howdy']),
+        MockResponse::make($data, 200, ['X-Greeting' => 'Howdy']),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
@@ -157,9 +157,9 @@ test('it will convert the body to string if the cast is used', function () {
 
 test('it checks statuses correctly', function () {
     $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sam', 'work' => 'Codepotato'], 200, ['X-Greeting' => 'Howdy']),
-        new MockResponse(['name' => 'Sam', 'work' => 'Codepotato'], 500, ['X-Greeting' => 'Howdy']),
-        new MockResponse(['name' => 'Sam', 'work' => 'Codepotato'], 302, ['X-Greeting' => 'Howdy']),
+        MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 200, ['X-Greeting' => 'Howdy']),
+        MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 500, ['X-Greeting' => 'Howdy']),
+        MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 302, ['X-Greeting' => 'Howdy']),
     ]);
 
     $responseA = (new UserRequest())->send($mockClient);

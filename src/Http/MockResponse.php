@@ -50,6 +50,20 @@ class MockResponse
     }
 
     /**
+     * Create a new mock response
+     *
+     * @param mixed $data
+     * @param int $status
+     * @param array $headers
+     * @param array $config
+     * @return static
+     */
+    public static function make(mixed $data = [], int $status = 200, array $headers = [], array $config = []): self
+    {
+        return new static($data, $status, $headers, $config);
+    }
+
+    /**
      * Create a new mock response from a Saloon request.
      *
      * @param SaloonRequest $request

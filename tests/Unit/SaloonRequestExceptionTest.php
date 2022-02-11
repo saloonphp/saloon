@@ -6,7 +6,7 @@ use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 
 test('saloon request exception contains the guzzle exception', function () {
     $mockClient = new MockClient([
-        new MockResponse([], 500),
+        MockResponse::make([], 500),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
