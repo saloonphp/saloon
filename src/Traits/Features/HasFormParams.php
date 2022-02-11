@@ -4,7 +4,7 @@ namespace Sammyjo20\Saloon\Traits\Features;
 
 trait HasFormParams
 {
-    public function bootHasBodyFeature()
+    public function bootHasFormParamsFeature()
     {
         $this->addConfig('form_params', $this->getData());
     }
