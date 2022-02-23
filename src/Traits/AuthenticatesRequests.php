@@ -21,6 +21,8 @@ trait AuthenticatesRequests
         }
 
         $this->addConfig('auth', $auth);
+
+        return $this;
     }
 
     /**
@@ -32,7 +34,9 @@ trait AuthenticatesRequests
      */
     public function withDigestAuth(string $username, string $password): self
     {
-        return $this->withBasicAuth($username, $password, true);
+        $this->withBasicAuth($username, $password, true);
+
+        return $this;
     }
 
     /**
@@ -45,5 +49,7 @@ trait AuthenticatesRequests
     public function withToken(string $token, ?string $type = 'Bearer'): self
     {
         $this->addHeader('Authorization', trim($type . ' ' . $token));
+
+        return $this;
     }
 }
