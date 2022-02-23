@@ -2,10 +2,7 @@
 
 namespace Sammyjo20\Saloon\Tests\Resources\Plugins;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonConnector;
 
 trait WithBootTestPlugin
 {

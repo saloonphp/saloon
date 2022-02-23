@@ -1,9 +1,9 @@
 <?php
 
 use Sammyjo20\Saloon\Managers\RequestManager;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\TimeoutConnector;
-use Sammyjo20\Saloon\Tests\Resources\Requests\TimeoutRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Resources\Requests\TimeoutRequest;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\TimeoutConnector;
 
 test('a request is given a default timeout and connect timeout', function () {
     $requestManager = new RequestManager(new TimeoutRequest);

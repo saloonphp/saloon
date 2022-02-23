@@ -1,7 +1,7 @@
 <?php
 
-use Sammyjo20\Saloon\Tests\Resources\Connectors\RequestSelectionConnector;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\RequestSelectionConnector;
 
 test('a connector class can be instantiated using the make method', function () {
     $connectorA = TestConnector::make();
