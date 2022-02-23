@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Traits\HasMake;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\SendsRequests;
@@ -24,6 +25,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
         CollectsConfig,
         CollectsHandlers,
         CollectsInterceptors,
+        AuthenticatesRequests,
         HasCustomResponses,
         SendsRequests,
         HasMake;
