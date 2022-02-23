@@ -17,6 +17,7 @@ use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Interfaces\SaloonConnectorInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
+use Sammyjo20\Saloon\Traits\HasMake;
 
 abstract class SaloonConnector implements SaloonConnectorInterface
 {
@@ -26,7 +27,8 @@ abstract class SaloonConnector implements SaloonConnectorInterface
         CollectsConfig,
         CollectsHandlers,
         CollectsInterceptors,
-        HasCustomResponses;
+        HasCustomResponses,
+        HasMake;
 
     /**
      * Register Saloon requests that will become methods on the connector.
