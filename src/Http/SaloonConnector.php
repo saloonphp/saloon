@@ -53,7 +53,7 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      * @param SaloonRequest $request
      * @return void
      */
-    public function boot(SaloonRequest $request): void
+    public function beforeSend(SaloonRequest $request): void
     {
         //
     }

@@ -104,8 +104,8 @@ class RequestManager
         // Run the boot methods of the connector and requests these are only used to add
         // extra functionality at a pinch.
 
-        $this->connector->boot($this->request);
-        $this->request->boot($this->request);
+        $this->connector->beforeSend($this->request);
+        $this->request->beforeSend($this->request);
 
         // Merge in response interceptors now
 

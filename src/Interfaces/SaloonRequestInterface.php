@@ -7,7 +7,7 @@ use Sammyjo20\Saloon\Http\SaloonConnector;
 
 interface SaloonRequestInterface
 {
-    public function boot(SaloonRequest $request): void;
+    public function beforeSend(SaloonRequest $request): void;
 
     public function getMethod(): ?string;
 
