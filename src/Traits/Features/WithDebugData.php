@@ -9,7 +9,7 @@ trait WithDebugData
      *
      * @return void
      */
-    public function bootWithDebugDataFeature()
+    public function bootWithDebugData()
     {
         $this->addConfig('debug', true);
     }

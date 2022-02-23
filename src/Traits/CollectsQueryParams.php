@@ -89,11 +89,7 @@ trait CollectsQueryParams
             // Let's merge in the query parameters from the connector if
             // the connector has the trait.
 
-            if ($this instanceof SaloonRequest && $this->connectorHasQueryParamsTrait()) {
-                $queryBag = $this->getConnector()->getQuery();
-            } else {
-                $queryBag = [];
-            }
+            $queryBag = $this instanceof SaloonRequest ? $this->getConnector()->getQuery() : [];
 
             // Now let's merge the request query parameters because they take priority
 
@@ -119,16 +115,5 @@ trait CollectsQueryParams
         $this->includeDefaultQuery = false;
 
         return $this;
-    }
-
-    /**
-     * Check if the connector has a trait
-     *
-     * @return bool
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
-     */
-    private function connectorHasQueryParamsTrait(): bool
-    {
-        return $this->traitExistsOnConnector(HasQueryParams::class);
     }
 }

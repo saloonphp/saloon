@@ -7,7 +7,8 @@ trait HasMake
     /**
      * Instantiate a new class with the arguments.
      *
-     * @return static
+     * @param mixed ...$arguments
+     * @return \Sammyjo20\Saloon\Http\SaloonConnector|\Sammyjo20\Saloon\Http\SaloonRequest
      */
     public static function make(...$arguments): self
     {

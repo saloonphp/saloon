@@ -13,7 +13,7 @@ trait AlwaysThrowsOnErrors
      * @return void
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function bootAlwaysThrowsOnErrorsFeature()
+    public function bootAlwaysThrowsOnErrors()
     {
         if ($this instanceof SaloonRequest && $this->traitExistsOnConnector(AlwaysThrowsOnErrors::class)) {
             return;

@@ -5,25 +5,11 @@ namespace Sammyjo20\Saloon\Traits\Features;
 trait HasTimeout
 {
     /**
-     * Define a default connection timeout in seconds.
-     *
-     * @var int
-     */
-    protected int $connectTimeout = 30;
-
-    /**
-     * Define a default timeout in seconds.
-     *
-     * @var int
-     */
-    protected int $requestTimeout = 30;
-
-    /**
      * Register the timeout on the resource using the plugin.
      *
      * @return void
      */
-    public function bootHasTimeoutFeature()
+    public function bootHasTimeout()
     {
         $this->addConfig('connect_timeout', $this->getConnectTimeout());
         $this->addConfig('timeout', $this->getRequestTimeout());
@@ -32,20 +18,20 @@ trait HasTimeout
     /**
      * Get the request connection timeout.
      *
-     * @return int
+     * @return float
      */
-    public function getConnectTimeout(): int
+    public function getConnectTimeout(): float
     {
-        return $this->connectTimeout;
+        return $this->connectTimeout ?? 30;
     }
 
     /**
      * Get the request timeout.
      *
-     * @return int
+     * @return float
      */
-    public function getRequestTimeout(): int
+    public function getRequestTimeout(): float
     {
-        return $this->requestTimeout;
+        return $this->requestTimeout ?? 30;
     }
 }

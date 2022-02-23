@@ -52,17 +52,11 @@ trait ManagesPlugins
                 continue;
             }
 
-            $bootPluginName = 'boot' . $pluginName . 'Plugin';
-            $bootFeatureName = 'boot' . $pluginName . 'Feature';
+            $bootName = 'boot' . $pluginName;
 
-            $hasBootPluginMethod = $trait->hasMethod($bootPluginName);
-            $hasBootFeatureMethod = $trait->hasMethod($bootFeatureName);
-
-            if ($hasBootPluginMethod === false && $hasBootFeatureMethod === false) {
+            if ($trait->hasMethod($bootName) === false) {
                 continue;
             }
-
-            $bootName = $hasBootPluginMethod ? $bootPluginName : $bootFeatureName;
 
             if ($type === 'connector' && method_exists($this->connector, $bootName)) {
                 $this->bootConnectorPlugin($bootName);

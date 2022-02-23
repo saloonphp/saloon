@@ -4,7 +4,7 @@ namespace Sammyjo20\Saloon\Traits\Features;
 
 trait HasJsonBody
 {
-    public function bootHasJsonBodyFeature()
+    public function bootHasJsonBody()
     {
         $this->addConfig('json', $this->getData());
     }

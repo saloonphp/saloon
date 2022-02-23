@@ -9,7 +9,7 @@ trait HasBody
      *
      * @return void
      */
-    public function bootHasBodyFeature(): void
+    public function bootHasBody(): void
     {
         $this->addConfig('body', $this->defineBody());
     }

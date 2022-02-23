@@ -5,11 +5,11 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
-use Sammyjo20\Saloon\Tests\Resources\Plugins\WithNewBootSyntax;
+use Sammyjo20\Saloon\Traits\Features\HasTimeout;
 
-class NewPluginBootSyntaxRequest extends SaloonRequest
+class TimeoutRequest extends SaloonRequest
 {
-    use WithNewBootSyntax;
+    use HasTimeout;
 
     /**
      * Define the method that the request will use.

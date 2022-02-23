@@ -34,5 +34,6 @@ class UserRequest extends SaloonRequest
 
     public function __construct(public ?int $userId = null, public ?int $groupId = null)
     {
+        //
     }
 }

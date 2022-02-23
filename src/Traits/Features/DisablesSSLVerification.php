@@ -9,7 +9,7 @@ trait DisablesSSLVerification
      *
      * @return void
      */
-    public function bootDisablesSSLVerificationFeature()
+    public function bootDisablesSSLVerification()
     {
         $this->addConfig('verify', false);
     }

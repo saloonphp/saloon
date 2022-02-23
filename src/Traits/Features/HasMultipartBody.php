@@ -4,7 +4,7 @@ namespace Sammyjo20\Saloon\Traits\Features;
 
 trait HasMultipartBody
 {
-    public function bootHasMultipartBodyFeature()
+    public function bootHasMultipartBody()
     {
         $this->addConfig('multipart', $this->getData());
     }

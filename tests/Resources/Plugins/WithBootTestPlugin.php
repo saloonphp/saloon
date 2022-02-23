@@ -14,7 +14,7 @@ trait WithBootTestPlugin
      *
      * @return void
      */
-    public function bootWithBootTestPluginFeature(SaloonRequest $request)
+    public function bootWithBootTestPlugin(SaloonRequest $request)
     {
         $this->addHeader('X-Plugin-User-Id', $request->userId);
         $this->addHeader('X-Plugin-Group-Id', $request->groupId);
