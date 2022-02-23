@@ -57,11 +57,12 @@ abstract class SaloonRequest implements SaloonRequestInterface
     /**
      * Define anything to be added to the request.
      *
+     * @param SaloonRequest $request
      * @return void
      */
-    public function boot(): void
+    public function boot(SaloonRequest $request): void
     {
-        // TODO: Implement boot() method.
+        //
     }
 
     /**

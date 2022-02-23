@@ -2,8 +2,12 @@
 
 namespace Sammyjo20\Saloon\Interfaces;
 
+use Sammyjo20\Saloon\Http\SaloonRequest;
+
 interface SaloonConnectorInterface
 {
+    public function boot(SaloonRequest $request): void;
+
     public function defineBaseUrl(): string;
 
     public function defaultHeaders(): array;
@@ -25,8 +29,6 @@ interface SaloonConnectorInterface
     public function getResponseInterceptors(): array;
 
     public function getRegisteredRequests(): array;
-    
-    public function requestExists(string $method): bool;
 
-    public function boot(): void;
+    public function requestExists(string $method): bool;
 }

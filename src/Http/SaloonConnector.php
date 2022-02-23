@@ -44,6 +44,17 @@ abstract class SaloonConnector implements SaloonConnectorInterface
     private ?array $registeredRequests = null;
 
     /**
+     * Define anything to be added to all requests in the connector.
+     *
+     * @param SaloonRequest $request
+     * @return void
+     */
+    public function boot(SaloonRequest $request): void
+    {
+        //
+    }
+
+    /**
      * Attempt to create a request and forward parameters to it.
      *
      * @param string $request
@@ -155,15 +166,5 @@ abstract class SaloonConnector implements SaloonConnectorInterface
         $requests = $connector->getRegisteredRequests();
 
         return $connector->forwardCallToRequest($requests[$method], $arguments);
-    }
-
-    /**
-     * Define anything to be added to the connector.
-     *
-     * @return void
-     */
-    public function boot(): void
-    {
-        // TODO: Implement boot() method.
     }
 }

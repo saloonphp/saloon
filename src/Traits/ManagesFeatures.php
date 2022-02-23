@@ -77,7 +77,7 @@ trait ManagesFeatures
      */
     private function bootConnectorFeature(string $methodName): void
     {
-        $this->connector->{$methodName}();
+        $this->connector->{$methodName}($this->request);
     }
 
     /**
@@ -87,6 +87,6 @@ trait ManagesFeatures
      */
     private function bootRequestFeature(string $methodName): void
     {
-        $this->request->{$methodName}();
+        $this->request->{$methodName}($this->request);
     }
 }
