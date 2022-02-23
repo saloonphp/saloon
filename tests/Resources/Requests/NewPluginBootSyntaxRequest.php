@@ -4,12 +4,12 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Traits\Features\HasXMLBody;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
+use Sammyjo20\Saloon\Tests\Resources\Plugins\WithNewBootSyntax;
 
-class HasXMLRequest extends SaloonRequest
+class NewPluginBootSyntaxRequest extends SaloonRequest
 {
-    use HasXMLBody;
+    use WithNewBootSyntax;
 
     /**
      * Define the method that the request will use.
@@ -33,10 +33,5 @@ class HasXMLRequest extends SaloonRequest
     public function defineEndpoint(): string
     {
         return '/user';
-    }
-
-    public function defineXMLBody(): ?string
-    {
-        return '<xml></xml>';
     }
 }

@@ -5,11 +5,13 @@ namespace Sammyjo20\Saloon\Http;
 use ReflectionClass;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\CollectsHandlers;
 use Sammyjo20\Saloon\Helpers\ReflectionHelper;
+use Sammyjo20\Saloon\Traits\Features\HasTimeout;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\CollectsQueryParams;
 use Sammyjo20\Saloon\Traits\CollectsInterceptors;
@@ -27,8 +29,10 @@ abstract class SaloonConnector implements SaloonConnectorInterface
         CollectsConfig,
         CollectsHandlers,
         CollectsInterceptors,
+        AuthenticatesRequests,
         HasCustomResponses,
-        HasMake;
+        HasMake,
+        HasTimeout;
 
     /**
      * Register Saloon requests that will become methods on the connector.

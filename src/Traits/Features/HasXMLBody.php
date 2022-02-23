@@ -24,10 +24,7 @@ trait HasXMLBody
     /**
      * Define your XML body
      *
-     * @return null
+     * @return string|null
      */
-    public function defineXMLBody()
-    {
-        return null;
-    }
+    abstract public function defineXMLBody(): ?string;
 }

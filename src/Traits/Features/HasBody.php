@@ -19,8 +19,5 @@ trait HasBody
      *
      * @return mixed
      */
-    public function defineBody(): mixed
-    {
-        return null;
-    }
+    abstract public function defineBody(): mixed;
 }

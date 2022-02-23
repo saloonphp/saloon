@@ -4,19 +4,21 @@ namespace Sammyjo20\Saloon\Traits;
 
 use ReflectionClass;
 
-trait ManagesFeatures
+trait ManagesPlugins
 {
     /**
+     * The loaded plugins.
+     *
      * @var array
      */
-    private array $features = [];
+    private array $plugins = [];
 
     /**
-     * Load all the features.
+     * Load all the plugins.
      *
      * @throws \ReflectionException
      */
-    private function loadFeatures(): void
+    private function loadPlugins(): void
     {
         // Check for the interfaces on the request class and see if we need to load
         // any options. E.g if they have the "hasBody" interface, we need to add the
@@ -39,32 +41,38 @@ trait ManagesFeatures
      */
     private function scanTraits(array $traits, string $type): self
     {
+        if ($type !== 'connector' && $type !== 'request') {
+            return $this;
+        }
+
         foreach ($traits as $trait) {
-            $featureName = $trait->getShortName();
+            $pluginName = $trait->getShortName();
 
-            if (in_array($featureName, $this->features, true)) {
+            if (in_array($pluginName, $this->plugins, true)) {
                 continue;
             }
 
-            $bootName = 'boot' . $featureName . 'Feature';
+            $bootPluginName = 'boot' . $pluginName . 'Plugin';
+            $bootFeatureName = 'boot' . $pluginName . 'Feature';
 
-            if ($trait->hasMethod($bootName) === false) {
+            $hasBootPluginMethod = $trait->hasMethod($bootPluginName);
+            $hasBootFeatureMethod = $trait->hasMethod($bootFeatureName);
+
+            if ($hasBootPluginMethod === false && $hasBootFeatureMethod === false) {
                 continue;
             }
 
-            if ($type !== 'connector' && $type !== 'request') {
-                continue;
-            }
+            $bootName = $hasBootPluginMethod ? $bootPluginName : $bootFeatureName;
 
             if ($type === 'connector' && method_exists($this->connector, $bootName)) {
-                $this->bootConnectorFeature($bootName);
+                $this->bootConnectorPlugin($bootName);
             }
 
             if ($type === 'request' && method_exists($this->request, $bootName)) {
-                $this->bootRequestFeature($bootName);
+                $this->bootRequestPlugin($bootName);
             }
 
-            $this->features[] = $featureName . $type;
+            $this->plugins[] = $pluginName . $type;
         }
 
         return $this;
@@ -75,7 +83,7 @@ trait ManagesFeatures
      *
      * @param string $methodName
      */
-    private function bootConnectorFeature(string $methodName): void
+    private function bootConnectorPlugin(string $methodName): void
     {
         $this->connector->{$methodName}($this->request);
     }
@@ -85,7 +93,7 @@ trait ManagesFeatures
      *
      * @param string $methodName
      */
-    private function bootRequestFeature(string $methodName): void
+    private function bootRequestPlugin(string $methodName): void
     {
         $this->request->{$methodName}($this->request);
     }
