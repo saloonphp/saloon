@@ -39,7 +39,11 @@ trait ManagesGuzzle
      */
     private function createGuzzleClient(): GuzzleClient
     {
-        $clientConfig = [];
+        $clientConfig = [
+            'connect_timeout' => 10,
+            'timeout' => 30,
+            'http_errors' => true,
+        ];
 
         $clientConfig['handler'] = $this->bootHandlers(HandlerStack::create());
 

@@ -11,6 +11,10 @@ class TimeoutRequest extends SaloonRequest
 {
     use HasTimeout;
 
+    protected int $connectTimeout = 1;
+
+    protected int $requestTimeout = 2;
+
     /**
      * Define the method that the request will use.
      *
