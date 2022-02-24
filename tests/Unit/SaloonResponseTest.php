@@ -186,3 +186,14 @@ test('it checks statuses correctly', function () {
     expect($responseC)->failed()->toBeFalse();
     expect($responseC)->serverError()->toBeFalse();
 });
+
+test('the xml method will return xml as an array', function () {
+    $mockClient = new MockClient([
+        new MockResponse('<SaveContactResponse xmlns="http://schemas.datacontract.org/2004/07/SmashFly.WebServices.ContactManagerService.v2"><ContactId>1168255</ContactId><Errors nil="true" xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/><HasErrors>false</HasErrors></SaveContactResponse>', 200),
+    ]);
+
+    $response = (new UserRequest())->send($mockClient);
+    $simpleXml = $response->xml();
+
+    expect($simpleXml)->toBeInstanceOf(SimpleXMLElement::class);
+});
