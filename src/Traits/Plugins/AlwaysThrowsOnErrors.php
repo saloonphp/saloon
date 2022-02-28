@@ -1,6 +1,6 @@
 <?php
 
-namespace Sammyjo20\Saloon\Traits\Features;
+namespace Sammyjo20\Saloon\Traits\Plugins;
 
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
@@ -13,7 +13,7 @@ trait AlwaysThrowsOnErrors
      * @return void
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function bootAlwaysThrowsOnErrors()
+    public function bootAlwaysThrowsOnErrors(): void
     {
         if ($this instanceof SaloonRequest && $this->traitExistsOnConnector(AlwaysThrowsOnErrors::class)) {
             return;

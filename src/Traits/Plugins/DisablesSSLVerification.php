@@ -1,6 +1,6 @@
 <?php
 
-namespace Sammyjo20\Saloon\Traits\Features;
+namespace Sammyjo20\Saloon\Traits\Plugins;
 
 trait DisablesSSLVerification
 {
@@ -9,7 +9,7 @@ trait DisablesSSLVerification
      *
      * @return void
      */
-    public function bootDisablesSSLVerification()
+    public function bootDisablesSSLVerification(): void
     {
         $this->addConfig('verify', false);
     }

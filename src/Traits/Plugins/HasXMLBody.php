@@ -1,6 +1,6 @@
 <?php
 
-namespace Sammyjo20\Saloon\Traits\Features;
+namespace Sammyjo20\Saloon\Traits\Plugins;
 
 use Sammyjo20\Saloon\Exceptions\SaloonTraitExistsException;
 
@@ -13,7 +13,7 @@ trait HasXMLBody
      * @throws SaloonTraitExistsException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function bootHasXMLBody()
+    public function bootHasXMLBody(): void
     {
         $this->addHeader('Accept', 'application/xml');
         $this->addHeader('Content-Type', 'application/xml');

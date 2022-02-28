@@ -3,8 +3,8 @@
 namespace Sammyjo20\Saloon\Tests\Resources\Connectors;
 
 use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Traits\Features\HasTimeout;
-use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
+use Sammyjo20\Saloon\Traits\Plugins\HasTimeout;
+use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
 
 class TimeoutConnector extends SaloonConnector
 {

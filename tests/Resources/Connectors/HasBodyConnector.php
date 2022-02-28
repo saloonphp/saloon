@@ -3,8 +3,8 @@
 namespace Sammyjo20\Saloon\Tests\Resources\Connectors;
 
 use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Traits\Features\HasBody;
-use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
+use Sammyjo20\Saloon\Traits\Plugins\HasBody;
+use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
 
 class HasBodyConnector extends SaloonConnector
 {

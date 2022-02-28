@@ -1,6 +1,6 @@
 <?php
 
-namespace Sammyjo20\Saloon\Traits\Features;
+namespace Sammyjo20\Saloon\Traits\Plugins;
 
 trait HasTimeout
 {
@@ -9,7 +9,7 @@ trait HasTimeout
      *
      * @return void
      */
-    public function bootHasTimeout()
+    public function bootHasTimeout(): void
     {
         $this->addConfig('connect_timeout', $this->getConnectTimeout());
         $this->addConfig('timeout', $this->getRequestTimeout());
@@ -22,7 +22,7 @@ trait HasTimeout
      */
     public function getConnectTimeout(): float
     {
-        return $this->connectTimeout ?? 30;
+        return property_exists($this, 'connectTimeout') ? $this->connectTimeout : 10;
     }
 
     /**
@@ -32,6 +32,6 @@ trait HasTimeout
      */
     public function getRequestTimeout(): float
     {
-        return $this->requestTimeout ?? 30;
+        return property_exists($this, 'requestTimeout') ? $this->requestTimeout : 30;
     }
 }

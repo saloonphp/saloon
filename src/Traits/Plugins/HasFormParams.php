@@ -1,10 +1,13 @@
 <?php
 
-namespace Sammyjo20\Saloon\Traits\Features;
+namespace Sammyjo20\Saloon\Traits\Plugins;
 
 trait HasFormParams
 {
-    public function bootHasFormParams()
+    /**
+     * @return void
+     */
+    public function bootHasFormParams(): void
     {
         $this->addConfig('form_params', $this->getData());
     }

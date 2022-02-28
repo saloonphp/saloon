@@ -1,15 +1,15 @@
 <?php
 
-namespace Sammyjo20\Saloon\Traits\Features;
+namespace Sammyjo20\Saloon\Traits\Plugins;
 
 trait WithDebugData
 {
     /**
-     * Enable debug mode
+     * Enable debug mode.
      *
      * @return void
      */
-    public function bootWithDebugData()
+    public function bootWithDebugData(): void
     {
         $this->addConfig('debug', true);
     }

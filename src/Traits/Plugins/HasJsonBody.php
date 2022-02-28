@@ -1,10 +1,14 @@
 <?php
 
-namespace Sammyjo20\Saloon\Traits\Features;
+namespace Sammyjo20\Saloon\Traits\Plugins;
 
 trait HasJsonBody
 {
-    public function bootHasJsonBody()
+    /**
+     * @return void
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     */
+    public function bootHasJsonBody(): void
     {
         $this->addConfig('json', $this->getData());
     }
