@@ -407,7 +407,7 @@ class BaseMockClient
     }
 
     /**
-     * Test if the closure can pass with the history.
+     * ApiResponse if the closure can pass with the history.
      *
      * @param callable $closure
      * @return bool

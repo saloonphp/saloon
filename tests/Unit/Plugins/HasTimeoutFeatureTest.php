@@ -4,9 +4,9 @@ use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Managers\RequestManager;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\TimeoutRequest;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\TimeoutConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\TimeoutRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TimeoutConnector;
 
 test('a request is given a default timeout and connect timeout', function () {
     $mockClient = new MockClient([new MockResponse()]);

@@ -1,7 +1,7 @@
 <?php
 
 use Sammyjo20\Saloon\Managers\RequestManager;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithBootPlugin;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequestWithBootPlugin;
 
 test('a plugin boot method has access to the request', function () {
     $requestManager = new RequestManager(new UserRequestWithBootPlugin(1, 2));

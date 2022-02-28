@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Exceptions\MissingDTOCastException;
 use SimpleXMLElement;
 use Illuminate\Support\Arr;
 use GuzzleHttp\Psr7\Response;
@@ -63,6 +64,11 @@ class SaloonResponse
      * @var RequestException|null
      */
     protected ?RequestException $guzzleRequestException = null;
+
+    /**
+     * @var object|null
+     */
+    protected ?object $dto = null;
 
     /**
      * Determines if the response has been cached
@@ -466,5 +472,33 @@ class SaloonResponse
         $this->guessesStatusFromBody = true;
 
         return $this;
+    }
+
+    /**
+     * Set the DTO on the response.
+     *
+     * @param object $dto
+     * @return $this
+     */
+    public function setDto(object $dto): self
+    {
+        $this->dto = $dto;
+
+        return $this;
+    }
+
+    /**
+     * Cast the response to a DTO.
+     *
+     * @return object
+     * @throws MissingDTOCastException
+     */
+    public function dto(): object
+    {
+        if (is_null($this->dto)) {
+            throw new MissingDTOCastException;
+        }
+
+        return $this->dto;
     }
 }

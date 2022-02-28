@@ -3,7 +3,7 @@
 use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('you can add basic auth to a request', function () {
     $mockClient = new MockClient([

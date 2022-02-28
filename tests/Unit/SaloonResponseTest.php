@@ -5,7 +5,7 @@ use Illuminate\Support\Collection;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('you can get the original request options', function () {
     $mockClient = new MockClient([

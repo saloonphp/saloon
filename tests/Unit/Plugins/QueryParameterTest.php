@@ -1,11 +1,11 @@
 <?php
 
 use Sammyjo20\Saloon\Managers\RequestManager;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorBlankRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\OverwrittenQueryParameterConnectorRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\QueryParameterRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\QueryParameterConnectorBlankRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\OverwrittenQueryParameterConnectorRequest;
 
 test('a request with the hasQueryParams feature sends the query params', function () {
     $request = new QueryParameterRequest();
@@ -19,8 +19,8 @@ test('a request with the hasQueryParams feature sends the query params', functio
     $config = $requestManager->getConfig();
 
     expect($config)->toHaveKey('query');
-    expect($config['query'])->toHaveKey('per_page', 100); // Test Default
-    expect($config['query'])->toHaveKey('sort', '-created_at'); // Test Adding Data After
+    expect($config['query'])->toHaveKey('per_page', 100); // ApiResponse Default
+    expect($config['query'])->toHaveKey('sort', '-created_at'); // ApiResponse Adding Data After
 });
 
 test('if setQuery is used, all other default query params wont be included', function () {

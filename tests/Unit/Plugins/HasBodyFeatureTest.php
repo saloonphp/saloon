@@ -1,7 +1,7 @@
 <?php
 
 use Psr\Http\Message\RequestInterface;
-use Sammyjo20\Saloon\Tests\Resources\Requests\HasBodyRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\HasBodyRequest;
 
 test('with the hasBody trait, you can pass in a string body response', function () {
     $request = new HasBodyRequest;

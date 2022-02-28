@@ -1,7 +1,7 @@
 <?php
 
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserWithTestHandlerRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserWithTestHandlerConnectorRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserWithTestHandlerRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserWithTestHandlerConnectorRequest;
 
 test('you can define a handler within a plugin', function () {
     $request = new UserWithTestHandlerRequest();
@@ -9,8 +9,8 @@ test('you can define a handler within a plugin', function () {
 
     $headers = $response->headers();
 
-    expect(isset($headers['X-Test-Handler']))->toBeTrue();
-    expect($headers['X-Test-Handler'])->toEqual([1]);
+    expect(isset($headers['X-ApiResponse-Handler']))->toBeTrue();
+    expect($headers['X-ApiResponse-Handler'])->toEqual([1]);
 });
 
 test('handlers on the request with the same name will take priority', function () {

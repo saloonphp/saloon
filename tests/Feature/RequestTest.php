@@ -1,7 +1,7 @@
 <?php
 
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 
 test('a request can be made successfully', function () {
     $request = new UserRequest();

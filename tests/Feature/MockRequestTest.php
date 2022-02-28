@@ -2,13 +2,13 @@
 
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\QueryParameterConnector;
-use Sammyjo20\Saloon\Tests\Resources\Requests\DifferentServiceUserRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
 
 test('a request can be mocked with a sequence', function () {
     $mockClient = new MockClient([
@@ -100,9 +100,9 @@ test('a request can be mocked with a url defined', function () {
     $requestC = new DifferentServiceUserRequest;
 
     $mockClient = new MockClient([
-        'saloon-test.samcarre.dev/api/user' => $responseA, // Test Exact Route
-        'saloon-test.samcarre.dev/*' => $responseB, // Test Wildcard Routes
-        'google.com/*' => $responseC, // Test Different Route,
+        'saloon-test.samcarre.dev/api/user' => $responseA, // ApiResponse Exact Route
+        'saloon-test.samcarre.dev/*' => $responseB, // ApiResponse Wildcard Routes
+        'google.com/*' => $responseC, // ApiResponse Different Route,
     ]);
 
     $responseA = $requestA->send($mockClient);
@@ -134,8 +134,8 @@ test('you can create wildcard url mocks', function () {
     $requestC = new DifferentServiceUserRequest;
 
     $mockClient = new MockClient([
-        'saloon-test.samcarre.dev/api/user' => $responseA, // Test Exact Route
-        'saloon-test.samcarre.dev/*' => $responseB, // Test Wildcard Routes
+        'saloon-test.samcarre.dev/api/user' => $responseA, // ApiResponse Exact Route
+        'saloon-test.samcarre.dev/*' => $responseB, // ApiResponse Wildcard Routes
         '*' => $responseC,
     ]);
 

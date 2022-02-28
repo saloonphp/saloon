@@ -5,15 +5,15 @@ use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use GuzzleHttp\Exception\RequestException;
 use Sammyjo20\Saloon\Managers\RequestManager;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\HeaderRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithBoot;
-use Sammyjo20\Saloon\Tests\Resources\Requests\ReplaceConfigRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\ReplaceHeaderRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\TrailingSlashRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\NoTrailingSlashRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithBootConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\HeaderRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequestWithBoot;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\ReplaceConfigRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\ReplaceHeaderRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\TrailingSlashRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\NoTrailingSlashRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequestWithBootConnector;
 
 test('a request is built up correctly', function () {
     $requestManager = new RequestManager(new HeaderRequest());
