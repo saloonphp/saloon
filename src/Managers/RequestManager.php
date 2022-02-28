@@ -97,7 +97,7 @@ class RequestManager
     public function hydrate(): void
     {
         // Load up any plugins and if they add any headers, then we add them to the array.
-        // Some features, like the "hasBody" feature, will need some manual code.
+        // Some plugins, like the "hasBody" plugin, will need some manual code.
 
         $this->loadPlugins();
 
