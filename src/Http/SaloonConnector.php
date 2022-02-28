@@ -5,6 +5,7 @@ namespace Sammyjo20\Saloon\Http;
 use ReflectionClass;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use Sammyjo20\Saloon\Traits\HasMake;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
@@ -13,6 +14,7 @@ use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\CollectsQueryParams;
 use Sammyjo20\Saloon\Traits\CollectsInterceptors;
+use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Interfaces\SaloonConnectorInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
@@ -26,7 +28,9 @@ abstract class SaloonConnector implements SaloonConnectorInterface
         CollectsConfig,
         CollectsHandlers,
         CollectsInterceptors,
-        HasCustomResponses;
+        AuthenticatesRequests,
+        HasCustomResponses,
+        HasMake;
 
     /**
      * Register Saloon requests that will become methods on the connector.
@@ -42,6 +46,18 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      * @var array|null
      */
     private ?array $registeredRequests = null;
+
+    /**
+     * Define anything that should be added to any requests
+     * with this connector before the request is sent.
+     *
+     * @param SaloonRequest $request
+     * @return void
+     */
+    public function boot(SaloonRequest $request): void
+    {
+        //
+    }
 
     /**
      * Attempt to create a request and forward parameters to it.
@@ -155,15 +171,5 @@ abstract class SaloonConnector implements SaloonConnectorInterface
         $requests = $connector->getRegisteredRequests();
 
         return $connector->forwardCallToRequest($requests[$method], $arguments);
-    }
-
-    /**
-     * Define anything to be added to the connector.
-     *
-     * @return void
-     */
-    public function boot(): void
-    {
-        // TODO: Implement boot() method.
     }
 }

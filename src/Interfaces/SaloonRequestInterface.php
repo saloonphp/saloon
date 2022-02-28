@@ -2,11 +2,12 @@
 
 namespace Sammyjo20\Saloon\Interfaces;
 
+use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 
 interface SaloonRequestInterface
 {
-    public function boot(): void;
+    public function boot(SaloonRequest $request): void;
 
     public function getMethod(): ?string;
 

@@ -4,7 +4,7 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Traits\Features\HasBody;
+use Sammyjo20\Saloon\Traits\Plugins\HasBody;
 use Sammyjo20\Saloon\Tests\Resources\Connectors\HasBodyConnector;
 
 class HasBodyConnectorRequest extends SaloonRequest

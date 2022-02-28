@@ -83,11 +83,9 @@ trait CollectsConfig
      */
     public function getConfig(string $key = null): mixed
     {
-        if ($this->includeDefaultConfig === true) {
-            $configBag = array_merge($this->defaultConfig(), $this->customConfig);
-        } else {
-            $configBag = $this->customConfig;
-        }
+        $configBag = $this->includeDefaultConfig
+            ? array_merge($this->defaultConfig(), $this->customConfig)
+            : $this->customConfig;
 
         if (isset($key)) {
             return Arr::get($configBag, $key);

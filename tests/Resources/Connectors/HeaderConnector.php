@@ -3,9 +3,9 @@
 namespace Sammyjo20\Saloon\Tests\Resources\Connectors;
 
 use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Traits\Features\AcceptsJson;
-use Sammyjo20\Saloon\Traits\Features\HasJsonBody;
-use Sammyjo20\Saloon\Traits\Features\WithDebugData;
+use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
+use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
+use Sammyjo20\Saloon\Traits\Plugins\WithDebugData;
 
 class HeaderConnector extends SaloonConnector
 {

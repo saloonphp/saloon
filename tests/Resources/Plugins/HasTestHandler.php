@@ -14,7 +14,7 @@ trait HasTestHandler
      *
      * @return void
      */
-    public function bootHasTestHandlerFeature()
+    public function bootHasTestHandler(SaloonRequest $request)
     {
         $this->addHandler('testHandler', function (callable $handler) {
             return function (RequestInterface $request, array $options) use ($handler) {

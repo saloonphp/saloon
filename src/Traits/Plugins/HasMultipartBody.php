@@ -1,10 +1,16 @@
 <?php
 
-namespace Sammyjo20\Saloon\Traits\Features;
+namespace Sammyjo20\Saloon\Traits\Plugins;
+
+use Sammyjo20\Saloon\Http\SaloonRequest;
 
 trait HasMultipartBody
 {
-    public function bootHasMultipartBodyFeature()
+    /**
+     * @param SaloonRequest $request
+     * @return void
+     */
+    public function bootHasMultipartBody(SaloonRequest $request): void
     {
         $this->addConfig('multipart', $this->getData());
     }

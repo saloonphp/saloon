@@ -115,6 +115,20 @@ test('saloon throws an exception if the custom response is not a response class'
     expect($invalidConnectorClassRequest->getResponseClass());
 });
 
-test('defineEndpoint method may be omited in request class to use the base url')
-    ->expect(new DefaultEndpointRequest)
-    ->getFullRequestUrl()->toBe(apiUrl());
+test('defineEndpoint method may be omitted in request class to use the base url', function () {
+    expect(new DefaultEndpointRequest)->getFullRequestUrl()->toBe(apiUrl());
+});
+
+test('a request class can be instantiated using the make method', function () {
+    $requestA = UserRequest::make();
+
+    expect($requestA)->toBeInstanceOf(UserRequest::class);
+    expect($requestA)->userId->toBeNull();
+    expect($requestA)->groupId->toBeNull();
+
+    $requestB = UserRequest::make(1, 2);
+
+    expect($requestB)->toBeInstanceOf(UserRequest::class);
+    expect($requestB)->userId->toEqual(1);
+    expect($requestB)->groupId->toEqual(2);
+});

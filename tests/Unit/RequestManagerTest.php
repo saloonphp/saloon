@@ -68,6 +68,27 @@ test('the boot method can add functionality in requests', function () {
     expect($requestManager->getHeaders())->toHaveKey('X-Request-Boot-Header', 'Yee-haw!');
 });
 
+
+test('the boot method has access to the current request within a connector', function () {
+    $requestManager = new RequestManager(new UserRequestWithBoot());
+    $requestManager->hydrate();
+
+    expect($requestManager->getHeaders())->toHaveKey('X-Connector-Request-Class', UserRequestWithBoot::class);
+});
+
+test('the boot method has access to the current request within a request', function () {
+    $requestManager = new RequestManager(new UserRequestWithBoot());
+    $requestManager->hydrate();
+
+    expect($requestManager->getHeaders())->toHaveKey('X-Request-Boot-With-Data', 'Ride on, cowboy.');
+
+    $farewell = 'Farewell, Sir!';
+    $requestManager = new RequestManager(new UserRequestWithBoot($farewell));
+    $requestManager->hydrate();
+
+    expect($requestManager->getHeaders())->toHaveKey('X-Request-Boot-With-Data', $farewell);
+});
+
 test('the requirement for a trailing slash is enabled by default', function () {
     $request = new TrailingSlashRequest();
 

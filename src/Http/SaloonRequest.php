@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Traits\HasMake;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
@@ -11,6 +12,7 @@ use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\CollectsQueryParams;
 use Sammyjo20\Saloon\Traits\CollectsInterceptors;
+use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Interfaces\SaloonRequestInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
@@ -23,8 +25,10 @@ abstract class SaloonRequest implements SaloonRequestInterface
         CollectsConfig,
         CollectsHandlers,
         CollectsInterceptors,
+        AuthenticatesRequests,
         HasCustomResponses,
-        SendsRequests;
+        SendsRequests,
+        HasMake;
 
     /**
      * Define the method that the request will use.
@@ -55,13 +59,15 @@ abstract class SaloonRequest implements SaloonRequestInterface
     private ?SaloonConnector $loadedConnector = null;
 
     /**
-     * Define anything to be added to the request.
+     * Define anything that should be added to the request
+     * before it is sent.
      *
+     * @param SaloonRequest $request
      * @return void
      */
-    public function boot(): void
+    public function boot(SaloonRequest $request): void
     {
-        // TODO: Implement boot() method.
+        //
     }
 
     /**

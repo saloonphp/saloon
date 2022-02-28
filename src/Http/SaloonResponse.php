@@ -2,9 +2,11 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use SimpleXMLElement;
 use Illuminate\Support\Arr;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
+use Psr\Http\Message\StreamInterface;
 use Illuminate\Support\Traits\Macroable;
 use GuzzleHttp\Exception\RequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
@@ -25,7 +27,14 @@ class SaloonResponse
      *
      * @var array
      */
-    protected $decoded;
+    protected $decodedJson;
+
+    /**
+     * The decoded XML response.
+     *
+     * @var
+     */
+    protected $decodedXml;
 
     /**
      * The request options we attached to the request.
@@ -106,13 +115,23 @@ class SaloonResponse
     }
 
     /**
-     * Get the body of the response.
+     * Get the body of the response as string.
      *
      * @return string
      */
     public function body()
     {
         return (string)$this->response->getBody();
+    }
+
+    /**
+     * Get the body as a stream. Don't forget to close the stream after using ->close().
+     *
+     * @return StreamInterface
+     */
+    public function getStream(): StreamInterface
+    {
+        return $this->response->getBody();
     }
 
     /**
@@ -124,15 +143,15 @@ class SaloonResponse
      */
     public function json($key = null, $default = null)
     {
-        if (! $this->decoded) {
-            $this->decoded = json_decode($this->body(), true);
+        if (! $this->decodedJson) {
+            $this->decodedJson = json_decode($this->body(), true);
         }
 
         if (is_null($key)) {
-            return $this->decoded;
+            return $this->decodedJson;
         }
 
-        return Arr::get($this->decoded, $key, $default);
+        return Arr::get($this->decodedJson, $key, $default);
     }
 
     /**
@@ -143,6 +162,21 @@ class SaloonResponse
     public function object()
     {
         return json_decode($this->body(), false);
+    }
+
+    /**
+     * Convert the XML response into a SimpleXMLElement.
+     *
+     * @param ...$arguments
+     * @return SimpleXMLElement|bool
+     */
+    public function xml(...$arguments): SimpleXMLElement|bool
+    {
+        if (! $this->decodedXml) {
+            $this->decodedXml = $this->body();
+        }
+
+        return simplexml_load_string($this->decodedXml, ...$arguments);
     }
 
     /**

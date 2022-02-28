@@ -2,14 +2,18 @@
 
 namespace Sammyjo20\Saloon\Tests\Resources\Connectors;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Traits\Plugins\HasTimeout;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 
-class TestProxyConnector extends SaloonConnector
+class TimeoutConnector extends SaloonConnector
 {
     use AcceptsJson;
+    use HasTimeout;
+
+    protected int $connectTimeout = 10;
+
+    protected int $requestTimeout = 5;
 
     /**
      * Define the base url of the api.
@@ -29,17 +33,5 @@ class TestProxyConnector extends SaloonConnector
     public function defaultHeaders(): array
     {
         return [];
-    }
-
-    /**
-     * Get the user from the system.
-     *
-     * @param ...$args
-     * @return SaloonRequest
-     * @throws \ReflectionException
-     */
-    public function getUser(...$args): SaloonRequest
-    {
-        return $this->forwardCallToRequest(UserRequest::class, $args);
     }
 }

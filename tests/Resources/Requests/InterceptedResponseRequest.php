@@ -33,7 +33,7 @@ class InterceptedResponseRequest extends SaloonRequest
         return '/error';
     }
 
-    public function boot(): void
+    public function boot(SaloonRequest $request): void
     {
         $this->addResponseInterceptor(function (SaloonRequest $request, SaloonResponse $response) {
             $response->setCached(true);

@@ -82,11 +82,9 @@ trait CollectsHeaders
      */
     public function getHeaders(string $key = null): mixed
     {
-        if ($this->includeDefaultHeaders === true) {
-            $headerBag = array_merge($this->defaultHeaders(), $this->customHeaders);
-        } else {
-            $headerBag = $this->customHeaders;
-        }
+        $headerBag = $this->includeDefaultHeaders
+            ? array_merge($this->defaultHeaders(), $this->customHeaders)
+            : $this->customHeaders;
 
         if (isset($key)) {
             return Arr::get($headerBag, $key);

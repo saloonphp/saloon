@@ -4,26 +4,26 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\PostJsonConnector;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
+use Sammyjo20\Saloon\Tests\Resources\Plugins\WithBootTestPlugin;
 
-class OverwrittenPostRequest extends SaloonRequest
+class UserRequestWithBootPlugin extends SaloonRequest
 {
-    use HasJsonBody;
+    use WithBootTestPlugin;
 
     /**
      * Define the method that the request will use.
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::POST;
+    protected ?string $method = Saloon::GET;
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = PostJsonConnector::class;
+    protected ?string $connector = TestConnector::class;
 
     /**
      * Define the endpoint for the request.
@@ -35,10 +35,8 @@ class OverwrittenPostRequest extends SaloonRequest
         return '/user';
     }
 
-    public function defaultData(): array
+    public function __construct(public ?int $userId = null, public ?int $groupId = null)
     {
-        return [
-            'connectorId' => '2',
-        ];
+        //
     }
 }

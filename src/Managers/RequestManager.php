@@ -12,9 +12,9 @@ use GuzzleHttp\Exception\RequestException;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\ManagesGuzzle;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
+use Sammyjo20\Saloon\Traits\ManagesPlugins;
 use Sammyjo20\Saloon\Clients\BaseMockClient;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
-use Sammyjo20\Saloon\Traits\ManagesFeatures;
 use Sammyjo20\Saloon\Traits\CollectsHandlers;
 use GuzzleHttp\Exception\BadResponseException;
 use Sammyjo20\Saloon\Traits\CollectsQueryParams;
@@ -26,7 +26,7 @@ use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 class RequestManager
 {
     use ManagesGuzzle,
-        ManagesFeatures,
+        ManagesPlugins,
         CollectsHeaders,
         CollectsConfig,
         CollectsQueryParams,
@@ -96,16 +96,16 @@ class RequestManager
      */
     public function hydrate(): void
     {
-        // Load up any features and if they add any headers, then we add them to the array.
-        // Some features, like the "hasBody" feature, will need some manual code.
+        // Load up any plugins and if they add any headers, then we add them to the array.
+        // Some plugins, like the "hasBody" plugin, will need some manual code.
 
-        $this->loadFeatures();
+        $this->loadPlugins();
 
         // Run the boot methods of the connector and requests these are only used to add
         // extra functionality at a pinch.
 
-        $this->connector->boot();
-        $this->request->boot();
+        $this->connector->boot($this->request);
+        $this->request->boot($this->request);
 
         // Merge in response interceptors now
 

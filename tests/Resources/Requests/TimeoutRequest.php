@@ -4,26 +4,30 @@ namespace Sammyjo20\Saloon\Tests\Resources\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\PostJsonConnector;
+use Sammyjo20\Saloon\Traits\Plugins\HasTimeout;
+use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
 
-class OverwrittenPostRequest extends SaloonRequest
+class TimeoutRequest extends SaloonRequest
 {
-    use HasJsonBody;
+    use HasTimeout;
+
+    protected int $connectTimeout = 1;
+
+    protected int $requestTimeout = 2;
 
     /**
      * Define the method that the request will use.
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::POST;
+    protected ?string $method = Saloon::GET;
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = PostJsonConnector::class;
+    protected ?string $connector = TestConnector::class;
 
     /**
      * Define the endpoint for the request.
@@ -33,12 +37,5 @@ class OverwrittenPostRequest extends SaloonRequest
     public function defineEndpoint(): string
     {
         return '/user';
-    }
-
-    public function defaultData(): array
-    {
-        return [
-            'connectorId' => '2',
-        ];
     }
 }
