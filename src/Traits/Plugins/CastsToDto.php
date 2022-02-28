@@ -17,7 +17,7 @@ trait CastsToDto
     public function bootCastsToDto(SaloonRequest $request): void
     {
         $this->addResponseInterceptor(function (SaloonRequest $request, SaloonResponse $response) {
-            $response->setDTO($this->castToDTO($response));
+            $response->setDto($this->castToDto($response));
 
             return $response;
         });

@@ -7,7 +7,7 @@ use Sammyjo20\Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\QueryParameterConnectorBlankRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\OverwrittenQueryParameterConnectorRequest;
 
-test('a request with the hasQueryParams feature sends the query params', function () {
+test('a request with query params added sends the query params', function () {
     $request = new QueryParameterRequest();
 
     $request->addQuery('sort', '-created_at');

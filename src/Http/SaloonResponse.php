@@ -2,7 +2,6 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Sammyjo20\Saloon\Exceptions\MissingDTOCastException;
 use SimpleXMLElement;
 use Illuminate\Support\Arr;
 use GuzzleHttp\Psr7\Response;
@@ -11,6 +10,7 @@ use Psr\Http\Message\StreamInterface;
 use Illuminate\Support\Traits\Macroable;
 use GuzzleHttp\Exception\RequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
+use Sammyjo20\Saloon\Exceptions\MissingDtoCastException;
 
 class SaloonResponse
 {
@@ -66,6 +66,8 @@ class SaloonResponse
     protected ?RequestException $guzzleRequestException = null;
 
     /**
+     * The data transfer object specified on the request if the CastsToDto plugin was added.
+     *
      * @var object|null
      */
     protected ?object $dto = null;
@@ -491,12 +493,12 @@ class SaloonResponse
      * Cast the response to a DTO.
      *
      * @return object
-     * @throws MissingDTOCastException
+     * @throws MissingDtoCastException
      */
     public function dto(): object
     {
         if (is_null($this->dto)) {
-            throw new MissingDTOCastException;
+            throw new MissingDtoCastException;
         }
 
         return $this->dto;

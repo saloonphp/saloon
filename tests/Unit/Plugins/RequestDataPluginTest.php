@@ -6,7 +6,7 @@ use Sammyjo20\Saloon\Tests\Fixtures\Requests\PostJsonRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\OverwrittenPostRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\PostConnectorDataBlankRequest;
 
-test('a request with the hasJsonBody feature sends the json data', function () {
+test('a request with the hasJsonBody plugin sends the json data', function () {
     $request = new PostJsonRequest();
     $request->addData('name', 'Sam');
 

@@ -11,8 +11,7 @@ class ApiResponse
      */
     public function __construct(
         public array $data,
-    )
-    {
+    ) {
         //
     }
 

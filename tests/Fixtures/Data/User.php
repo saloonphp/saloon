@@ -15,8 +15,7 @@ class User
         public string $name,
         public string $actualName,
         public string $twitter,
-    )
-    {
+    ) {
         //
     }
 

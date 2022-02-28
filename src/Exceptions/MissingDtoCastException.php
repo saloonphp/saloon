@@ -2,7 +2,7 @@
 
 namespace Sammyjo20\Saloon\Exceptions;
 
-class MissingDTOCastException extends SaloonException
+class MissingDtoCastException extends SaloonException
 {
     /**
      *

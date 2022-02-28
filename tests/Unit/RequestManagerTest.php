@@ -30,11 +30,11 @@ test('a request is built up correctly', function () {
 
     expect($requestManager->getConfig())->toEqual([
         'json' => [
-            'foo' => 'bar', // Added by feature
+            'foo' => 'bar', // Added by plugin
         ],
         'http_errors' => false, // Added manually in connector
         'timeout' => 5, // Added manually in request
-        'debug' => true, // Added by connector feature
+        'debug' => true, // Added by connector plugin
     ]);
 });
 
