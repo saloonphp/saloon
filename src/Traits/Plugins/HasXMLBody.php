@@ -2,7 +2,6 @@
 
 namespace Sammyjo20\Saloon\Traits\Plugins;
 
-use Sammyjo20\Saloon\Exceptions\SaloonTraitExistsException;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 
 trait HasXMLBody
