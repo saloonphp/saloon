@@ -2,7 +2,7 @@
 
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('saloon request exception contains the guzzle exception', function () {
     $mockClient = new MockClient([

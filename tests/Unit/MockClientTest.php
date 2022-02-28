@@ -2,13 +2,13 @@
 
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\ErrorRequest;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\QueryParameterConnector;
-use Sammyjo20\Saloon\Tests\Resources\Requests\DifferentServiceUserRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\QueryParameterConnectorRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
 
 test('you can create sequence mocks', function () {
     $responseA = MockResponse::make(['name' => 'Sammyjo20'], 200);

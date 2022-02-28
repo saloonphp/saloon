@@ -2,23 +2,23 @@
 
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Resources\Responses\UserResponse;
-use Sammyjo20\Saloon\Tests\Resources\Responses\CustomResponse;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Responses\UserResponse;
+use Sammyjo20\Saloon\Tests\Fixtures\Responses\CustomResponse;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
-use Sammyjo20\Saloon\Tests\Resources\Requests\NoConnectorRequest;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\ExtendedConnector;
-use Sammyjo20\Saloon\Tests\Resources\Requests\InvalidResponseClass;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\NoConnectorRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\ExtendedConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
-use Sammyjo20\Saloon\Tests\Resources\Requests\DefaultEndpointRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\InvalidConnectorRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\DefaultEndpointRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\InvalidConnectorRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\ExtendedConnectorRequest;
 use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
-use Sammyjo20\Saloon\Tests\Resources\Requests\ExtendedConnectorRequest;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\CustomResponseConnector;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\InvalidResponseConnector;
-use Sammyjo20\Saloon\Tests\Resources\Requests\InvalidConnectorClassRequest;
-use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequestWithCustomResponse;
-use Sammyjo20\Saloon\Tests\Resources\Requests\CustomResponseConnectorRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\CustomResponseConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidResponseConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\InvalidConnectorClassRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\CustomResponseConnectorRequest;
 
 test('if you dont pass in a mock client to the saloon request it will not be in mocking mode', function () {
     $request = new UserRequest();
