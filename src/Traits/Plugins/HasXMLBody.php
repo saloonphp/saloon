@@ -3,17 +3,17 @@
 namespace Sammyjo20\Saloon\Traits\Plugins;
 
 use Sammyjo20\Saloon\Exceptions\SaloonTraitExistsException;
+use Sammyjo20\Saloon\Http\SaloonRequest;
 
 trait HasXMLBody
 {
     /**
      * Add the required headers to send XML
      *
+     * @param SaloonRequest $request
      * @return void
-     * @throws SaloonTraitExistsException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function bootHasXMLBody(): void
+    public function bootHasXMLBody(SaloonRequest $request): void
     {
         $this->addHeader('Accept', 'application/xml');
         $this->addHeader('Content-Type', 'application/xml');

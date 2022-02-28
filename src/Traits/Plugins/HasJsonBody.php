@@ -2,13 +2,16 @@
 
 namespace Sammyjo20\Saloon\Traits\Plugins;
 
+use Sammyjo20\Saloon\Http\SaloonRequest;
+
 trait HasJsonBody
 {
     /**
+     * @param SaloonRequest $request
      * @return void
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function bootHasJsonBody(): void
+    public function bootHasJsonBody(SaloonRequest $request): void
     {
         $this->addConfig('json', $this->getData());
     }

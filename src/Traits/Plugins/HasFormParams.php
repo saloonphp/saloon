@@ -2,12 +2,15 @@
 
 namespace Sammyjo20\Saloon\Traits\Plugins;
 
+use Sammyjo20\Saloon\Http\SaloonRequest;
+
 trait HasFormParams
 {
     /**
+     * @param SaloonRequest $request
      * @return void
      */
-    public function bootHasFormParams(): void
+    public function bootHasFormParams(SaloonRequest $request): void
     {
         $this->addConfig('form_params', $this->getData());
     }
