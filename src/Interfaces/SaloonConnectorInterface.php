@@ -6,7 +6,7 @@ use Sammyjo20\Saloon\Http\SaloonRequest;
 
 interface SaloonConnectorInterface
 {
-    public function beforeSend(SaloonRequest $request): void;
+    public function boot(SaloonRequest $request): void;
 
     public function defineBaseUrl(): string;
 

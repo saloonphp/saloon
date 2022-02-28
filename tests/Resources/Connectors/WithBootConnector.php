@@ -20,7 +20,7 @@ class WithBootConnector extends SaloonConnector
         return apiUrl();
     }
 
-    public function beforeSend(SaloonRequest $request): void
+    public function boot(SaloonRequest $request): void
     {
         $this->addHeader('X-Connector-Boot-Header', 'Howdy!');
         $this->addHeader('X-Connector-Request-Class', get_class($request));

@@ -33,7 +33,7 @@ class InterceptedConnectorErrorRequest extends SaloonRequest
         return '/error';
     }
 
-    public function beforeSend(SaloonRequest $request): void
+    public function boot(SaloonRequest $request): void
     {
         $this->addResponseInterceptor(function (SaloonRequest $request, SaloonResponse $response) {
             $response->throw();

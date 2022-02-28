@@ -32,7 +32,7 @@ class InterceptedConnectorUserRequest extends SaloonRequest
         return '/user';
     }
 
-    public function beforeSend(SaloonRequest $request): void
+    public function boot(SaloonRequest $request): void
     {
         $this->addRequestInterceptor(function (SaloonRequest $request) {
             $request->addHeader('X-Connector-Name', 'Interceptor');

@@ -32,7 +32,7 @@ class UserRequestWithBoot extends SaloonRequest
         return '/user';
     }
 
-    public function beforeSend(SaloonRequest $request): void
+    public function boot(SaloonRequest $request): void
     {
         $this->addHeader('X-Request-Boot-Header', 'Yee-haw!');
         $this->addHeader('X-Request-Boot-With-Data', $request->farewell);

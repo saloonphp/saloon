@@ -59,12 +59,13 @@ abstract class SaloonRequest implements SaloonRequestInterface
     private ?SaloonConnector $loadedConnector = null;
 
     /**
-     * Define anything to be added to the request before it is sent.
+     * Define anything that should be added to the request
+     * before it is sent.
      *
      * @param SaloonRequest $request
      * @return void
      */
-    public function beforeSend(SaloonRequest $request): void
+    public function boot(SaloonRequest $request): void
     {
         //
     }
