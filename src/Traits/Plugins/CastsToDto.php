@@ -29,5 +29,5 @@ trait CastsToDto
      * @param SaloonResponse $response
      * @return object
      */
-    abstract public function castToDto(SaloonResponse $response): object;
+    abstract protected function castToDto(SaloonResponse $response): object;
 }

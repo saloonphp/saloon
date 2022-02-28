@@ -37,7 +37,7 @@ class DtoConnector extends SaloonConnector
      * @param SaloonResponse $response
      * @return object
      */
-    public function castToDto(SaloonResponse $response): object
+    protected function castToDto(SaloonResponse $response): object
     {
         return ApiResponse::fromSaloon($response);
     }

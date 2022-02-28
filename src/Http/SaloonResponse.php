@@ -137,7 +137,7 @@ class SaloonResponse
      *
      * @return StreamInterface
      */
-    public function getStream(): StreamInterface
+    public function stream(): StreamInterface
     {
         return $this->response->getBody();
     }
@@ -196,6 +196,21 @@ class SaloonResponse
     public function collect($key = null): Collection
     {
         return Collection::make($this->json($key));
+    }
+
+    /**
+     * Cast the response to a DTO.
+     *
+     * @return object
+     * @throws MissingDtoCastException
+     */
+    public function dto(): object
+    {
+        if (is_null($this->dto)) {
+            throw new MissingDtoCastException;
+        }
+
+        return $this->dto;
     }
 
     /**
@@ -487,20 +502,5 @@ class SaloonResponse
         $this->dto = $dto;
 
         return $this;
-    }
-
-    /**
-     * Cast the response to a DTO.
-     *
-     * @return object
-     * @throws MissingDtoCastException
-     */
-    public function dto(): object
-    {
-        if (is_null($this->dto)) {
-            throw new MissingDtoCastException;
-        }
-
-        return $this->dto;
     }
 }
