@@ -1,8 +1,8 @@
 <?php
 
 use Psr\Http\Message\RequestInterface;
-use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Managers\RequestManager;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Resources\Requests\TimeoutRequest;

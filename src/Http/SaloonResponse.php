@@ -2,14 +2,14 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use SimpleXMLElement;
 use Illuminate\Support\Arr;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
+use Psr\Http\Message\StreamInterface;
 use Illuminate\Support\Traits\Macroable;
 use GuzzleHttp\Exception\RequestException;
-use Psr\Http\Message\StreamInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
-use SimpleXMLElement;
 
 class SaloonResponse
 {

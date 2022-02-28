@@ -1,9 +1,8 @@
 <?php
 
 use Psr\Http\Message\RequestInterface;
-use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Tests\Resources\Connectors\TestConnector;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Tests\Resources\Requests\UserRequest;
 
 test('you can add basic auth to a request', function () {
@@ -92,5 +91,3 @@ test('you can attach an authorization token to a request', function () {
 
     $request->send($mockClient);
 });
-
-
