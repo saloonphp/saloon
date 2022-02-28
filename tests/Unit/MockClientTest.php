@@ -65,9 +65,9 @@ test('you can create url mocks', function () {
     $requestC = new DifferentServiceUserRequest;
 
     $mockClient = new MockClient([
-        'saloon-test.samcarre.dev/api/user' => $responseA, // ApiResponse Exact Route
-        'saloon-test.samcarre.dev/*' => $responseB, // ApiResponse Wildcard Routes
-        'google.com/*' => $responseC, // ApiResponse Different Route,
+        'saloon-test.samcarre.dev/api/user' => $responseA, // Test Exact Route
+        'saloon-test.samcarre.dev/*' => $responseB, // Test Wildcard Routes
+        'google.com/*' => $responseC, // Test Different Route,
     ]);
 
     expect($mockClient->guessNextResponse($requestA))->toEqual($responseA);
@@ -85,8 +85,8 @@ test('you can create wildcard url mocks', function () {
     $requestC = new DifferentServiceUserRequest;
 
     $mockClient = new MockClient([
-        'saloon-test.samcarre.dev/api/user' => $responseA, // ApiResponse Exact Route
-        'saloon-test.samcarre.dev/*' => $responseB, // ApiResponse Wildcard Routes
+        'saloon-test.samcarre.dev/api/user' => $responseA, // Test Exact Route
+        'saloon-test.samcarre.dev/*' => $responseB, // Test Wildcard Routes
         '*' => $responseC,
     ]);
 
@@ -105,8 +105,8 @@ test('saloon throws an exception if it cant work out the url response', function
     $requestC = new DifferentServiceUserRequest;
 
     $mockClient = new MockClient([
-        'saloon-test.samcarre.dev/api/user' => $responseA, // ApiResponse Exact Route
-        'saloon-test.samcarre.dev/*' => $responseB, // ApiResponse Wildcard Routes
+        'saloon-test.samcarre.dev/api/user' => $responseA, // Test Exact Route
+        'saloon-test.samcarre.dev/*' => $responseB, // Test Wildcard Routes
     ]);
 
     expect($mockClient->guessNextResponse($requestA))->toEqual($responseA);

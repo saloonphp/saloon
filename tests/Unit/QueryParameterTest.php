@@ -19,8 +19,8 @@ test('a request with query params added sends the query params', function () {
     $config = $requestManager->getConfig();
 
     expect($config)->toHaveKey('query');
-    expect($config['query'])->toHaveKey('per_page', 100); // ApiResponse Default
-    expect($config['query'])->toHaveKey('sort', '-created_at'); // ApiResponse Adding Data After
+    expect($config['query'])->toHaveKey('per_page', 100); // Test Default
+    expect($config['query'])->toHaveKey('sort', '-created_at'); // Test Adding Data After
 });
 
 test('if setQuery is used, all other default query params wont be included', function () {

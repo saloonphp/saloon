@@ -22,7 +22,7 @@ trait HasTestHandler
 
                 return $promise->then(
                     function (ResponseInterface $response) {
-                        $response = $response->withHeader('X-ApiResponse-Handler', true);
+                        $response = $response->withHeader('X-Test-Handler', true);
 
                         if ($this instanceof SaloonConnector) {
                             $response = $response->withHeader('X-Handler-Added-To', 'connector');

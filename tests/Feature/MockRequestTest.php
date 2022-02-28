@@ -100,9 +100,9 @@ test('a request can be mocked with a url defined', function () {
     $requestC = new DifferentServiceUserRequest;
 
     $mockClient = new MockClient([
-        'saloon-test.samcarre.dev/api/user' => $responseA, // ApiResponse Exact Route
-        'saloon-test.samcarre.dev/*' => $responseB, // ApiResponse Wildcard Routes
-        'google.com/*' => $responseC, // ApiResponse Different Route,
+        'saloon-test.samcarre.dev/api/user' => $responseA, // Test Exact Route
+        'saloon-test.samcarre.dev/*' => $responseB, // Test Wildcard Routes
+        'google.com/*' => $responseC, // Test Different Route,
     ]);
 
     $responseA = $requestA->send($mockClient);
@@ -134,8 +134,8 @@ test('you can create wildcard url mocks', function () {
     $requestC = new DifferentServiceUserRequest;
 
     $mockClient = new MockClient([
-        'saloon-test.samcarre.dev/api/user' => $responseA, // ApiResponse Exact Route
-        'saloon-test.samcarre.dev/*' => $responseB, // ApiResponse Wildcard Routes
+        'saloon-test.samcarre.dev/api/user' => $responseA, // Test Exact Route
+        'saloon-test.samcarre.dev/*' => $responseB, // Test Wildcard Routes
         '*' => $responseC,
     ]);
 

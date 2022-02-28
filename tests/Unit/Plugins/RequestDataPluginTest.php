@@ -17,8 +17,8 @@ test('a request with the hasJsonBody plugin sends the json data', function () {
     $config = $requestManager->getConfig();
 
     expect($config)->toHaveKey('json');
-    expect($config['json'])->toHaveKey('foo', 'bar'); // ApiResponse Default
-    expect($config['json'])->toHaveKey('name', 'Sam'); // ApiResponse Adding Data After
+    expect($config['json'])->toHaveKey('foo', 'bar'); // Test Default
+    expect($config['json'])->toHaveKey('name', 'Sam'); // Test Adding Data After
 });
 
 test('if setData is used, all other default data wont be included', function () {
@@ -48,8 +48,8 @@ test('a connector can have jsonBody that is set', function () {
     $config = $requestManager->getConfig();
 
     expect($config)->toHaveKey('json');
-    expect($config['json'])->toHaveKey('connectorId', '1'); // ApiResponse Default
-    expect($config['json'])->toHaveKey('requestId', '2'); // ApiResponse Default
+    expect($config['json'])->toHaveKey('connectorId', '1'); // Test Default
+    expect($config['json'])->toHaveKey('requestId', '2'); // Test Default
 });
 
 test('a request can overwrite all jsonBody', function () {
