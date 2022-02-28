@@ -48,7 +48,7 @@ class DTORequest extends SaloonRequest
      * @param SaloonResponse $response
      * @return object
      */
-    public function castToDTO(SaloonResponse $response): object
+    protected function castToDto(SaloonResponse $response): object
     {
         return User::fromSaloon($response);
     }
