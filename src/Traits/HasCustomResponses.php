@@ -11,7 +11,7 @@ use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 trait HasCustomResponses
 {
     /**
-     * The response class
+     * Define a custom response that the request will return.
      *
      * @var string|null
      */
@@ -37,7 +37,7 @@ trait HasCustomResponses
             throw new SaloonInvalidResponseClassException;
         }
 
-        $isValidResponse = $response === SaloonResponse::class || ReflectionHelper::isSubclassOf($response, SaloonResponse::class);
+        $isValidResponse = ReflectionHelper::isSubclassOf($response, SaloonResponse::class);
 
         if (! $isValidResponse) {
             throw new SaloonInvalidResponseClassException;

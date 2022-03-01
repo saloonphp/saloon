@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Traits\HasKeychain;
 use Sammyjo20\Saloon\Traits\HasMake;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\SendsRequests;
@@ -28,7 +29,8 @@ abstract class SaloonRequest implements SaloonRequestInterface
         AuthenticatesRequests,
         HasCustomResponses,
         SendsRequests,
-        HasMake;
+        HasMake,
+        HasKeychain;
 
     /**
      * Define the method that the request will use.
@@ -36,13 +38,6 @@ abstract class SaloonRequest implements SaloonRequestInterface
      * @var string|null
      */
     protected ?string $method = null;
-
-    /**
-     * Define a custom response that the request will return.
-     *
-     * @var string|null
-     */
-    protected ?string $response = null;
 
     /**
      * The connector.

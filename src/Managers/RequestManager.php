@@ -107,6 +107,10 @@ class RequestManager
         $this->connector->boot($this->request);
         $this->request->boot($this->request);
 
+        // Now let's run our keychain boot method
+
+        $this->request->bootKeychain($this->request);
+
         // Merge in response interceptors now
 
         $this->mergeResponseInterceptors($this->connector->getResponseInterceptors(), $this->request->getResponseInterceptors());
@@ -311,5 +315,15 @@ class RequestManager
     public function isMocking(): bool
     {
         return $this->mockClient instanceof BaseMockClient;
+    }
+
+    /**
+     * Retrieve the request from the request manager.
+     *
+     * @return SaloonRequest
+     */
+    public function getRequest(): SaloonRequest
+    {
+        return $this->request;
     }
 }
