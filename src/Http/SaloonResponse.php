@@ -10,7 +10,6 @@ use Psr\Http\Message\StreamInterface;
 use Illuminate\Support\Traits\Macroable;
 use GuzzleHttp\Exception\RequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
-use Sammyjo20\Saloon\Exceptions\MissingDtoCastException;
 
 class SaloonResponse
 {

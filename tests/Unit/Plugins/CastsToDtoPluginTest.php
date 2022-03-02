@@ -4,7 +4,6 @@ use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Tests\Fixtures\Data\User;
 use Sammyjo20\Saloon\Tests\Fixtures\Data\ApiResponse;
-use Sammyjo20\Saloon\Exceptions\MissingDtoCastException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\DTORequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\DtoConnector;
