@@ -9,14 +9,14 @@ use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 trait HasKeychain
 {
     /**
-     * The class for a Saloon keychain.
+     * The class string for a Saloon keychain.
      *
      * @var string|null
      */
     protected ?string $defaultKeychain = null;
 
     /**
-     * The preloaded keychain if passed into the request/connector.
+     * The loaded keychain if passed into the request/connector.
      *
      * @var Keychain|null
      */
@@ -32,39 +32,31 @@ trait HasKeychain
      */
     public function bootKeychain(SaloonRequest $request): void
     {
-        // Let's firstly get the keychain from the request/connector.
-        // This method will return an instance of keychain or null.
-        // If someone hasn't loaded a keychain manually, we will boot
-        // one up.
+        // Let's get the keychain from the request/connector. This method
+        // will return an instance of keychain or null. If someone hasn't
+        // loaded a keychain manually but a default keychain was provided
+        // we will load that one.
 
         $keychain = $this->getKeychain($request) ?? $this->getConnector()->getKeychain($request);
-
-        // If there is no keychain, it will just stop here.
 
         if (! $keychain instanceof Keychain) {
             return;
         }
 
-        $this->authenticate($keychain);
+        // If we have a keychain class, we should authenticate the request
+        // which is useful for debugging. After that, we will run the "boot"
+        // method on the keychain which applies changes to the request.
 
-        // If the keychain is valid, we should run the "boot" method on the keychain
-        // which will let the keychain modify the request how it likes.
+        $this->authenticate($keychain);
 
         $keychain->boot($request);
     }
 
     /**
-     * Retrieve the loaded keychain from the request/connector.
-     *
-     * @return Keychain|null
-     */
-    public function getDefaultKeychain(): ?string
-    {
-        return $this->defaultKeychain;
-    }
-
-    /**
-     * Load the keychain if there is not one already set.
+     * Attempt to find a keychain on the class. If a loaded keychain
+     * already exists, we will return that otherwise we will check
+     * if the class has a default connector and create one if
+     * it exits.
      *
      * @param SaloonRequest $request
      * @return Keychain|null
@@ -94,7 +86,7 @@ trait HasKeychain
     }
 
     /**
-     * Authenticate the request/connector with a keychain.
+     * Authenticate the class with a keychain.
      *
      * @param Keychain $keychain
      * @return $this
@@ -114,10 +106,10 @@ trait HasKeychain
      */
     private function hasDefaultKeychain(): bool
     {
-        $default = $this->defaultKeychain;
+        $keychain = $this->defaultKeychain;
 
-        return is_string($default)
-            && class_exists($default)
-            && ReflectionHelper::isSubclassOf($default, Keychain::class);
+        return is_string($keychain)
+            && class_exists($keychain)
+            && ReflectionHelper::isSubclassOf($keychain, Keychain::class);
     }
 }
