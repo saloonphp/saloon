@@ -3,7 +3,6 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Traits\HasMake;
-use Sammyjo20\Saloon\Traits\HasKeychain;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
