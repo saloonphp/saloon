@@ -51,13 +51,6 @@ class SaloonResponse
     protected SaloonRequest $originalRequest;
 
     /**
-     * Should we attempt to guess the status of the request from the body?
-     *
-     * @var bool
-     */
-    protected bool $guessesStatusFromBody = false;
-
-    /**
      * The original Guzzle request exception
      *
      * @var RequestException|null
@@ -233,42 +226,9 @@ class SaloonResponse
      *
      * @return int
      */
-    private function getStatusFromResponse(): int
-    {
-        return (int)$this->response->getStatusCode();
-    }
-
-    /**
-     * Get the status code of the response.
-     *
-     * @return int
-     */
     public function status(): int
     {
-        if ($this->guessesStatusFromBody === true) {
-            return $this->guessStatusFromBody();
-        }
-
-        return $this->getStatusFromResponse();
-    }
-
-    /**
-     * Attempt to guess the status code from the body.
-     *
-     * Basically check it against a regex, then check if that string is
-     * numeric, and if so - return it as an integer.
-     *
-     * @return int
-     */
-    private function guessStatusFromBody(): int
-    {
-        $status = $this->json('status');
-
-        if (preg_match('/^[1-5][0-9][0-9]$/', $status)) {
-            return (int)$status;
-        }
-
-        return $this->getStatusFromResponse();
+        return $this->response->getStatusCode();
     }
 
     /**
@@ -471,18 +431,6 @@ class SaloonResponse
     public function getGuzzleException(): ?RequestException
     {
         return $this->guzzleRequestException;
-    }
-
-    /**
-     * Should the response guess the status from the body?
-     *
-     * @return $this
-     */
-    public function guessesStatusFromBody(): self
-    {
-        $this->guessesStatusFromBody = true;
-
-        return $this;
     }
 
     /**

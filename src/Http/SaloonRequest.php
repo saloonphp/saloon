@@ -3,6 +3,7 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Traits\HasMake;
+use Sammyjo20\Saloon\Traits\HasKeychain;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
@@ -36,13 +37,6 @@ abstract class SaloonRequest implements SaloonRequestInterface
      * @var string|null
      */
     protected ?string $method = null;
-
-    /**
-     * Define a custom response that the request will return.
-     *
-     * @var string|null
-     */
-    protected ?string $response = null;
 
     /**
      * The connector.
@@ -103,7 +97,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
             throw new SaloonInvalidConnectorException;
         }
 
-        $this->setLoadedConnector(new $this->connector);
+        $this->setConnector(new $this->connector);
     }
 
     /**
@@ -122,12 +116,12 @@ abstract class SaloonRequest implements SaloonRequestInterface
     }
 
     /**
-     * Set the loaded connector.
+     * Specify a connector to use in the request.
      *
      * @param SaloonConnector $connector
      * @return $this
      */
-    public function setLoadedConnector(SaloonConnector $connector): self
+    public function setConnector(SaloonConnector $connector): self
     {
         $this->loadedConnector = $connector;
 

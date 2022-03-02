@@ -6,6 +6,7 @@ use ReflectionClass;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Sammyjo20\Saloon\Traits\HasMake;
+use Sammyjo20\Saloon\Traits\HasKeychain;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
@@ -81,7 +82,7 @@ abstract class SaloonConnector implements SaloonConnectorInterface
             throw new SaloonInvalidRequestException($request);
         }
 
-        return (new $request(...$args))->setLoadedConnector($this);
+        return (new $request(...$args))->setConnector($this);
     }
 
     /**

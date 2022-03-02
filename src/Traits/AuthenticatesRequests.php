@@ -4,6 +4,8 @@ namespace Sammyjo20\Saloon\Traits;
 
 trait AuthenticatesRequests
 {
+    use HasKeychain;
+
     /**
      * Attach basic authentication to the request.
      *

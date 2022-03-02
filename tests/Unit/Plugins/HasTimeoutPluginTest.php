@@ -38,7 +38,7 @@ test('a request can set a timeout and connect timeout', function () {
 test('a connector is given a default timeout and connect timeout', function () {
     $mockClient = new MockClient([new MockResponse()]);
 
-    $request = (new UserRequest)->setLoadedConnector(new TimeoutConnector);
+    $request = (new UserRequest)->setConnector(new TimeoutConnector);
 
     $request->addHandler('test', function (callable $handler) {
         return function (RequestInterface $request, array $options) use ($handler) {

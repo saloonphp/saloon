@@ -16,6 +16,10 @@ class ReflectionHelper
      */
     public static function isSubclassOf(string $class, string $subclass): bool
     {
+        if ($class === $subclass) {
+            return true;
+        }
+
         return (new ReflectionClass($class))->isSubclassOf($subclass);
     }
 }
