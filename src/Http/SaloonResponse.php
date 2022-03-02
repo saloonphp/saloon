@@ -201,15 +201,10 @@ class SaloonResponse
     /**
      * Cast the response to a DTO.
      *
-     * @return object
-     * @throws MissingDtoCastException
+     * @return object|null
      */
-    public function dto(): object
+    public function dto(): ?object
     {
-        if (is_null($this->dto)) {
-            throw new MissingDtoCastException;
-        }
-
         return $this->dto;
     }
 
