@@ -50,15 +50,3 @@ test('the request dto will be returned as a higher priority than the connector d
     expect($dto)->actualName->toEqual($json['actual_name']);
     expect($dto)->twitter->toEqual($json['twitter']);
 });
-
-test('it throws an exception if you try to cast to a dto without defining a dto cast first', function () {
-    $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
-    ]);
-
-    $response = UserRequest::make()->send($mockClient);
-
-    $this->expectException(MissingDtoCastException::class);
-
-    $response->dto();
-});
