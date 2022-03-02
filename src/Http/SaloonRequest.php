@@ -29,8 +29,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
         AuthenticatesRequests,
         HasCustomResponses,
         SendsRequests,
-        HasMake,
-        HasKeychain;
+        HasMake;
 
     /**
      * Define the method that the request will use.

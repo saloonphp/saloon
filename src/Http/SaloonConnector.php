@@ -31,8 +31,7 @@ abstract class SaloonConnector implements SaloonConnectorInterface
         CollectsInterceptors,
         AuthenticatesRequests,
         HasCustomResponses,
-        HasMake,
-        HasKeychain;
+        HasMake;
 
     /**
      * Register Saloon requests that will become methods on the connector.
