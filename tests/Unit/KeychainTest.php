@@ -22,7 +22,7 @@ test('a request can have a default keychain that is populated before the request
 });
 
 test('a request can use its connectors default keychain if there is no default populated on the request', function () {
-    $request = (new UserRequest)->setLoadedConnector(new KeychainConnector);
+    $request = (new UserRequest)->setConnector(new KeychainConnector);
     $requestManager = $request->getRequestManager();
 
     $requestManager->hydrate();
@@ -38,7 +38,7 @@ test('a request can use its connectors default keychain if there is no default p
 });
 
 test('if both the connector and the request have a default keychain, the request will take priority', function () {
-    $request = (new KeychainRequest())->setLoadedConnector(new KeychainConnector);
+    $request = (new KeychainRequest())->setConnector(new KeychainConnector);
     $requestManager = $request->getRequestManager();
 
     $requestManager->hydrate();
@@ -68,7 +68,7 @@ test('you can load a keychain onto a request before it is sent', function () {
 test('you can load a keychain onto a connector before it is sent', function () {
     $connector = TestConnector::make()->authenticate(new AuthKeychain('custom-user-token'));
 
-    $request = (new UserRequest)->setLoadedConnector($connector);
+    $request = (new UserRequest)->setConnector($connector);
     $requestManager = $request->getRequestManager();
 
     $requestManager->hydrate();

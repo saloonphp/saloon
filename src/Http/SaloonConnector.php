@@ -83,7 +83,7 @@ abstract class SaloonConnector implements SaloonConnectorInterface
             throw new SaloonInvalidRequestException($request);
         }
 
-        return (new $request(...$args))->setLoadedConnector($this);
+        return (new $request(...$args))->setConnector($this);
     }
 
     /**

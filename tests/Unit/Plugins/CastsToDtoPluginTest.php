@@ -29,7 +29,7 @@ test('it can cast to a dto that is defined on a connector', function () {
         new MockResponse(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
     ]);
 
-    $response = UserRequest::make()->setLoadedConnector(new DtoConnector())->send($mockClient);
+    $response = UserRequest::make()->setConnector(new DtoConnector())->send($mockClient);
     $dto = $response->dto();
 
     expect($dto)->toBeInstanceOf(ApiResponse::class);
@@ -41,7 +41,7 @@ test('the request dto will be returned as a higher priority than the connector d
         new MockResponse(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
     ]);
 
-    $response = DTORequest::make()->setLoadedConnector(new DtoConnector())->send($mockClient);
+    $response = DTORequest::make()->setConnector(new DtoConnector())->send($mockClient);
     $dto = $response->dto();
     $json = $response->json();
 

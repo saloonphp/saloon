@@ -15,7 +15,7 @@ interface SaloonRequestInterface
 
     public function getConnector(): ?SaloonConnector;
 
-    public function setLoadedConnector(SaloonConnector $connector): self;
+    public function setConnector(SaloonConnector $connector): self;
 
     public function getFullRequestUrl(): string;
 

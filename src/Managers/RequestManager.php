@@ -213,10 +213,6 @@ class RequestManager
             $this->mockClient->recordResponse($response);
         }
 
-        if (property_exists($this->connector, 'shouldGuessStatusFromBody') || property_exists($this->request, 'shouldGuessStatusFromBody')) {
-            $response->guessesStatusFromBody();
-        }
-
         // Run Response Interceptors
 
         foreach ($this->getResponseInterceptors() as $responseInterceptor) {
