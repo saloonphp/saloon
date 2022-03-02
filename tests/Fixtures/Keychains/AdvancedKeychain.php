@@ -14,8 +14,7 @@ class AdvancedKeychain extends Keychain
     public function __construct(
         protected string $token,
         protected string $apiKey,
-    )
-    {
+    ) {
         //
     }
 

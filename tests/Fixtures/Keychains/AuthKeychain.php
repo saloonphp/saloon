@@ -12,8 +12,7 @@ class AuthKeychain extends Keychain
      */
     public function __construct(
         protected string $token,
-    )
-    {
+    ) {
         //
     }
 

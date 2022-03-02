@@ -3,8 +3,8 @@
 namespace Sammyjo20\Saloon\Traits;
 
 use Sammyjo20\Saloon\Helpers\Keychain;
-use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 
 trait HasKeychain
 {
@@ -32,43 +32,25 @@ trait HasKeychain
      */
     public function bootKeychain(SaloonRequest $request): void
     {
-        $keychain = $this->getLoadedKeychain();
+        // Let's firstly get the keychain from the request/connector.
+        // This method will return an instance of keychain or null.
+        // If someone hasn't loaded a keychain manually, we will boot
+        // one up.
 
-        // If there is no loaded keychain, lets see if there is a loaded keychain on the connector.
+        $keychain = $this->getKeychain($request) ?? $this->getConnector()->getKeychain($request);
 
-        if (is_null($keychain) && $this instanceof SaloonRequest) {
-            $keychain = $this->getConnector()->getLoadedKeychain();
+        // If there is no keychain, it will just stop here.
+
+        if (! $keychain instanceof Keychain) {
+            return;
         }
 
-        // If there still is no loaded connector, lets see if there is a default keychain.
-        // If there is, and it is a valid keychain class - we will run the "default"
-        // method to populate the keychain.
-
-        if (is_null($keychain)) {
-            $defaultKeychain = $this->getDefaultKeychain();
-
-            if (is_null($defaultKeychain) && $this instanceof SaloonRequest) {
-                $defaultKeychain = $this->getConnector()->getDefaultKeychain();
-            }
-
-            if (is_null($defaultKeychain)) {
-                return;
-            }
-
-            $isValidKeychain = ReflectionHelper::isSubclassOf($defaultKeychain, Keychain::class);
-
-            if ($isValidKeychain === true) {
-                $keychain = $defaultKeychain::default($request);
-            }
-        }
+        $this->authenticate($keychain);
 
         // If the keychain is valid, we should run the "boot" method on the keychain
         // which will let the keychain modify the request how it likes.
 
-        if ($keychain instanceof Keychain) {
-            $this->loadedKeychain = $keychain;
-            $keychain->boot($request);
-        }
+        $keychain->boot($request);
     }
 
     /**
@@ -82,7 +64,27 @@ trait HasKeychain
     }
 
     /**
-     * Retrieve the loaded keychain from the request/connector.
+     * Load the keychain if there is not one already set.
+     *
+     * @param SaloonRequest $request
+     * @return Keychain|null
+     * @throws \ReflectionException
+     */
+    public function getKeychain(SaloonRequest $request): ?Keychain
+    {
+        if ($this->loadedKeychain instanceof Keychain) {
+            return $this->loadedKeychain;
+        }
+
+        if ($this->hasDefaultKeychain()) {
+            return $this->defaultKeychain::default($request);
+        }
+
+        return null;
+    }
+
+    /**
+     * Retrieve the loaded keychain.
      *
      * @return Keychain|null
      */
@@ -92,15 +94,30 @@ trait HasKeychain
     }
 
     /**
-     * Specify a keychain to be used on the request/connector.
+     * Authenticate the request/connector with a keychain.
      *
      * @param Keychain $keychain
      * @return $this
      */
-    public function withKeychain(Keychain $keychain): self
+    public function authenticate(Keychain $keychain): self
     {
         $this->loadedKeychain = $keychain;
 
         return $this;
+    }
+
+    /**
+     * Check if we have a default keychain defined.
+     *
+     * @return bool
+     * @throws \ReflectionException
+     */
+    private function hasDefaultKeychain(): bool
+    {
+        $default = $this->defaultKeychain;
+
+        return is_string($default)
+            && class_exists($default)
+            && ReflectionHelper::isSubclassOf($default, Keychain::class);
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\KeychainConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Keychains\AdvancedKeychain;
-use Sammyjo20\Saloon\Tests\Fixtures\Keychains\AuthKeychain;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\KeychainRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Keychains\AuthKeychain;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\KeychainRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Keychains\AdvancedKeychain;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\KeychainConnector;
 
 test('a request can have a default keychain that is populated before the request is sent', function () {
     $request = new KeychainRequest(1, 2);
@@ -33,6 +33,7 @@ test('a request can use its connectors default keychain if there is no default p
 
     expect($headers)->toHaveKey('Authorization', 'Bearer 12345');
     expect($headers)->toHaveKey('X-API-Key', 'my-api-key');
+
     expect($requestManager)->getRequest()->getLoadedKeychain()->toBeInstanceOf(AdvancedKeychain::class);
 });
 
@@ -51,7 +52,7 @@ test('if both the connector and the request have a default keychain, the request
 });
 
 test('you can load a keychain onto a request before it is sent', function () {
-    $request = (new UserRequest)->withKeychain(new AuthKeychain('custom-user-token'));
+    $request = (new UserRequest)->authenticate(new AuthKeychain('custom-user-token'));
     $requestManager = $request->getRequestManager();
 
     $requestManager->hydrate();
@@ -65,7 +66,7 @@ test('you can load a keychain onto a request before it is sent', function () {
 });
 
 test('you can load a keychain onto a connector before it is sent', function () {
-    $connector = TestConnector::make()->withKeychain(new AuthKeychain('custom-user-token'));
+    $connector = TestConnector::make()->authenticate(new AuthKeychain('custom-user-token'));
 
     $request = (new UserRequest)->setLoadedConnector($connector);
     $requestManager = $request->getRequestManager();
