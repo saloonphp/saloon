@@ -16,6 +16,6 @@ abstract class Keychain implements KeychainInterface
      */
     public static function default(SaloonRequest $request): Keychain
     {
-        //
+        return new static();
     }
 }
