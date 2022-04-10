@@ -62,7 +62,7 @@ class SaloonResponse
      *
      * @var object|null
      */
-    protected ?object $dto = null;
+    protected mixed $dto = null;
 
     /**
      * Determines if the response has been cached
@@ -195,7 +195,7 @@ class SaloonResponse
      *
      * @return object|null
      */
-    public function dto(): ?object
+    public function dto(): mixed
     {
         return $this->dto;
     }
@@ -436,10 +436,10 @@ class SaloonResponse
     /**
      * Set the DTO on the response.
      *
-     * @param object $dto
+     * @param mixed $dto
      * @return $this
      */
-    public function setDto(object $dto): self
+    public function setDto(mixed $dto): self
     {
         $this->dto = $dto;
 

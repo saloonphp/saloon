@@ -29,7 +29,7 @@ trait CastsToDto
      * Define how Saloon should cast to your DTO.
      *
      * @param SaloonResponse $response
-     * @return object
+     * @return mixed
      */
-    abstract protected function castToDto(SaloonResponse $response): object;
+    abstract protected function castToDto(SaloonResponse $response): mixed;
 }

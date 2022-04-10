@@ -5,7 +5,7 @@ namespace Sammyjo20\Saloon\Http;
 use ReflectionClass;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
-use Sammyjo20\Saloon\Traits\HasMake;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
@@ -29,8 +29,7 @@ abstract class SaloonConnector implements SaloonConnectorInterface
         CollectsHandlers,
         CollectsInterceptors,
         AuthenticatesRequests,
-        HasCustomResponses,
-        HasMake;
+        HasCustomResponses;
 
     /**
      * Register Saloon requests that will become methods on the connector.
@@ -46,6 +45,17 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      * @var array|null
      */
     private ?array $registeredRequests = null;
+
+    /**
+     * Instantiate a new class with the arguments.
+     *
+     * @param mixed ...$arguments
+     * @return SaloonConnector
+     */
+    public static function make(...$arguments): self
+    {
+        return new static(...$arguments);
+    }
 
     /**
      * Define anything that should be added to any requests
@@ -125,6 +135,29 @@ abstract class SaloonConnector implements SaloonConnectorInterface
     public function requestExists(string $method): bool
     {
         return method_exists($this, $method) || array_key_exists($method, $this->getRegisteredRequests());
+    }
+
+    /**
+     * Prepare a new request by providing it the current instance of the connector.
+     *
+     * @param SaloonRequest $request
+     * @return SaloonRequest
+     */
+    public function request(SaloonRequest $request): SaloonRequest
+    {
+        return $request->setConnector($this);
+    }
+
+    /**
+     * Send a Saloon request with the current instance of the connector.
+     *
+     * @throws \ReflectionException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
+     */
+    public function send(SaloonRequest $request, MockClient $mockClient = null): SaloonResponse
+    {
+        return $this->request($request)->send($mockClient);
     }
 
     /**
