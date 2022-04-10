@@ -57,7 +57,7 @@ test('assertSent works with a url', function () {
 
     (new UserRequest())->send($mockClient);
 
-    $mockClient->assertSent('samcarre.dev/*');
+    $mockClient->assertSent('saloon.dev/*');
     $mockClient->assertSent('/user');
     $mockClient->assertSent('api/user');
 });
