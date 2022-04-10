@@ -2,7 +2,6 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Sammyjo20\Saloon\Traits\HasMake;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
@@ -27,8 +26,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
         CollectsInterceptors,
         AuthenticatesRequests,
         HasCustomResponses,
-        SendsRequests,
-        HasMake;
+        SendsRequests;
 
     /**
      * Define the method that the request will use.
@@ -50,6 +48,17 @@ abstract class SaloonRequest implements SaloonRequestInterface
      * @var SaloonConnector|null
      */
     private ?SaloonConnector $loadedConnector = null;
+
+    /**
+     * Instantiate a new class with the arguments.
+     *
+     * @param mixed ...$arguments
+     * @return SaloonRequest
+     */
+    public static function make(...$arguments): self
+    {
+        return new static(...$arguments);
+    }
 
     /**
      * Define anything that should be added to the request
