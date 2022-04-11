@@ -2,6 +2,8 @@
 
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Tests\Fixtures\Authenticators\PizzaAuthenticator;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\DefaultPizzaAuthenticatorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Exceptions\MissingAuthenticatorException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\RequiresAuthRequest;
@@ -61,7 +63,7 @@ test('the RequiresAuth trait will throw an exception if an authenticator is not 
     ]);
 
     $this->expectException(MissingAuthenticatorException::class);
-    $this->expectExceptionMessage('This request requires authentication. Please provide an authenticator using the `withAuth` method.');
+    $this->expectExceptionMessage('This request requires authentication. Please provide an authenticator using the `withAuth` method or return a default authenticator in your connector/request.');
 
     $request = new RequiresAuthRequest();
     $request->send($mockClient);
@@ -73,7 +75,7 @@ test('the RequiresTokenAuth trait will throw an exception if an authenticator is
     ]);
 
     $this->expectException(MissingAuthenticatorException::class);
-    $this->expectExceptionMessage('This request requires token authentication. Please provide authentication using the `withTokenAuth` method.');
+    $this->expectExceptionMessage('This request requires token authentication. Please provide authentication using the `withTokenAuth` method or return a default authenticator in your connector/request.');
 
     $request = new RequiresTokenAuthRequest();
     $request->send($mockClient);
@@ -85,7 +87,7 @@ test('the RequiresBasicAuth trait will throw an exception if an authenticator is
     ]);
 
     $this->expectException(MissingAuthenticatorException::class);
-    $this->expectExceptionMessage('This request requires basic authentication. Please provide authentication using the `withBasicAuth` method.');
+    $this->expectExceptionMessage('This request requires basic authentication. Please provide authentication using the `withBasicAuth` method or return a default authenticator in your connector/request.');
 
     $request = new RequiresBasicAuthRequest();
     $request->send($mockClient);
@@ -97,8 +99,39 @@ test('the RequiresDigestAuth trait will throw an exception if an authenticator i
     ]);
 
     $this->expectException(MissingAuthenticatorException::class);
-    $this->expectExceptionMessage('This request requires digest authentication. Please provide authentication using the `withDigestAuth` method.');
+    $this->expectExceptionMessage('This request requires digest authentication. Please provide authentication using the `withDigestAuth` method or return a default authenticator in your connector/request.');
 
     $request = new RequiresDigestAuthRequest();
     $request->send($mockClient);
+});
+
+test('you can use your own authenticators', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(),
+    ]);
+
+    $request = new UserRequest();
+    $request->withAuth(new PizzaAuthenticator('Margherita', 'San Pellegrino'));
+    $request->send($mockClient);
+
+    $headers = $request->getHeaders();
+
+    expect($headers['X-Pizza'])->toEqual('Margherita');
+    expect($headers['X-Drink'])->toEqual('San Pellegrino');
+    expect($request->getConfig('debug'))->toBeTrue();
+});
+
+test('you can use your own authenticators as default', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(),
+    ]);
+
+    $request = new DefaultPizzaAuthenticatorRequest();
+    $request->send($mockClient);
+
+    $headers = $request->getHeaders();
+
+    expect($headers['X-Pizza'])->toEqual('BBQ Chicken');
+    expect($headers['X-Drink'])->toEqual('Lemonade');
+    expect($request->getConfig('debug'))->toBeTrue();
 });

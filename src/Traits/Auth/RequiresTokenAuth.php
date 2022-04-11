@@ -25,6 +25,6 @@ trait RequiresTokenAuth
      */
     protected function getRequiresAuthMessage(): string
     {
-        return 'This request requires token authentication. Please provide authentication using the `withTokenAuth` method.';
+        return 'This request requires token authentication. Please provide authentication using the `withTokenAuth` method or return a default authenticator in your connector/request.';
     }
 }

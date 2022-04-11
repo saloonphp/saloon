@@ -25,6 +25,6 @@ trait RequiresBasicAuth
      */
     protected function getRequiresAuthMessage(): string
     {
-        return 'This request requires basic authentication. Please provide authentication using the `withBasicAuth` method.';
+        return 'This request requires basic authentication. Please provide authentication using the `withBasicAuth` method or return a default authenticator in your connector/request.';
     }
 }

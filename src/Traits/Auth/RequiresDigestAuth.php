@@ -25,6 +25,6 @@ trait RequiresDigestAuth
      */
     protected function getRequiresAuthMessage(): string
     {
-        return 'This request requires digest authentication. Please provide authentication using the `withDigestAuth` method.';
+        return 'This request requires digest authentication. Please provide authentication using the `withDigestAuth` method or return a default authenticator in your connector/request.';
     }
 }

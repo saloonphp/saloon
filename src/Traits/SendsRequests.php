@@ -19,9 +19,6 @@ trait SendsRequests
      */
     public function send(MockClient $mockClient = null): SaloonResponse
     {
-        // Let's pass this job onto the request manager as serializing all the logic to send
-        // requests may become cumbersome.
-
         // 🚀 ... 🌑 ... 💫
 
         return $this->getRequestManager($mockClient)->send();

@@ -32,6 +32,6 @@ trait RequiresAuth
      */
     protected function getRequiresAuthMessage(): string
     {
-        return 'This request requires authentication. Please provide an authenticator using the `withAuth` method.';
+        return 'This request requires authentication. Please provide an authenticator using the `withAuth` method or return a default authenticator in your connector/request.';
     }
 }
