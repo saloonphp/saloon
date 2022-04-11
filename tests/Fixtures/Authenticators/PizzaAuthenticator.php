@@ -14,8 +14,7 @@ class PizzaAuthenticator implements AuthenticatorInterface
     public function __construct(
         public string $pizza,
         public string $drink,
-    )
-    {
+    ) {
         //
     }
 
