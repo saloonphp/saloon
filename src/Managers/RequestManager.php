@@ -10,6 +10,7 @@ use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 use GuzzleHttp\Exception\RequestException;
 use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 use Sammyjo20\Saloon\Traits\ManagesGuzzle;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\ManagesPlugins;
@@ -107,9 +108,9 @@ class RequestManager
         $this->connector->boot($this->request);
         $this->request->boot($this->request);
 
-        // Now let's run our keychain boot method
+        // Now let's run our authenticator if one is present.
 
-        $this->request->bootKeychain($this->request);
+        $this->authenticateRequest();
 
         // Merge in response interceptors now
 
@@ -321,5 +322,21 @@ class RequestManager
     public function getRequest(): SaloonRequest
     {
         return $this->request;
+    }
+
+    /**
+     * Authenticate the request by running the authenticator if it is present.
+     *
+     * @return void
+     */
+    private function authenticateRequest(): void
+    {
+        $authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
+
+        if (! $authenticator instanceof AuthenticatorInterface) {
+            return;
+        }
+
+        $authenticator->set($this->request);
     }
 }
