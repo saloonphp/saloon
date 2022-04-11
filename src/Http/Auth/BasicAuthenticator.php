@@ -14,8 +14,7 @@ class BasicAuthenticator implements AuthenticatorInterface
     public function __construct(
         public string $username,
         public string $password,
-    )
-    {
+    ) {
         //
     }
 

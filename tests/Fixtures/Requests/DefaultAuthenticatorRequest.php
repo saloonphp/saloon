@@ -4,11 +4,15 @@ namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Keychains\AuthKeychain;
+use Sammyjo20\Saloon\Traits\Auth\RequiresAuth;
+use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
+use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class KeychainRequest extends SaloonRequest
+class DefaultAuthenticatorRequest extends SaloonRequest
 {
+    use RequiresAuth;
+
     /**
      * Define the method that the request will use.
      *
@@ -24,11 +28,6 @@ class KeychainRequest extends SaloonRequest
     protected ?string $connector = TestConnector::class;
 
     /**
-     * @var string|null
-     */
-    protected ?string $defaultKeychain = AuthKeychain::class;
-
-    /**
      * Define the endpoint for the request.
      *
      * @return string
@@ -36,6 +35,16 @@ class KeychainRequest extends SaloonRequest
     public function defineEndpoint(): string
     {
         return '/user';
+    }
+
+    /**
+     * Provide default authentication.
+     *
+     * @return AuthenticatorInterface|null
+     */
+    public function defaultAuth(): ?AuthenticatorInterface
+    {
+        return new TokenAuthenticator('yee-haw-request');
     }
 
     public function __construct(public ?int $userId = null, public ?int $groupId = null)

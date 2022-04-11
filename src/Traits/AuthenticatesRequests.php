@@ -3,8 +3,8 @@
 namespace Sammyjo20\Saloon\Traits;
 
 use Sammyjo20\Saloon\Http\Auth\BasicAuthenticator;
-use Sammyjo20\Saloon\Http\Auth\DigestAuthenticator;
 use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
+use Sammyjo20\Saloon\Http\Auth\DigestAuthenticator;
 use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 
 trait AuthenticatesRequests
@@ -34,26 +34,6 @@ trait AuthenticatesRequests
     public function getAuthenticator(): ?AuthenticatorInterface
     {
         return $this->authenticator ?? $this->defaultAuth();
-    }
-
-    /**
-     * Check if an authenticator exists.
-     *
-     * @return bool
-     */
-    public function hasAuthenticator(): bool
-    {
-        return $this->getAuthenticator() instanceof AuthenticatorInterface;
-    }
-
-    /**
-     * Check if an authenticator does not exist.
-     *
-     * @return bool
-     */
-    public function doesntHaveAuthenticator(): bool
-    {
-        return ! $this->hasAuthenticator();
     }
 
     /**

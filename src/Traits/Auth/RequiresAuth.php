@@ -2,9 +2,9 @@
 
 namespace Sammyjo20\Saloon\Traits\Auth;
 
-use Sammyjo20\Saloon\Exceptions\MissingAuthenticatorException;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
+use Sammyjo20\Saloon\Exceptions\MissingAuthenticatorException;
 
 trait RequiresAuth
 {

@@ -16,8 +16,7 @@ class DigestAuthenticator implements AuthenticatorInterface
         public string $username,
         public string $password,
         public string $digest,
-    )
-    {
+    ) {
         //
     }
 

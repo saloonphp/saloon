@@ -14,8 +14,7 @@ class TokenAuthenticator implements AuthenticatorInterface
     public function __construct(
         public string $token,
         public string $prefix = 'Bearer'
-    )
-    {
+    ) {
         //
     }
 

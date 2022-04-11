@@ -4,10 +4,8 @@ namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Sammyjo20\Saloon\Traits\Auth\RequiresAuth;
-use Sammyjo20\Saloon\Traits\Auth\RequiresBasicAuth;
 use Sammyjo20\Saloon\Traits\Auth\RequiresDigestAuth;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class RequiresDigestAuthRequest extends SaloonRequest
 {

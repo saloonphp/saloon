@@ -4,13 +4,12 @@ namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
-use Sammyjo20\Saloon\Tests\Fixtures\Keychains\AdvancedKeychain;
+use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
+use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 
-class KeychainConnector extends SaloonConnector
+class DefaultAuthenticatorConnector extends SaloonConnector
 {
     use AcceptsJson;
-
-    protected ?string $defaultKeychain = AdvancedKeychain::class;
 
     /**
      * Define the base url of the api.
@@ -30,5 +29,15 @@ class KeychainConnector extends SaloonConnector
     public function defaultHeaders(): array
     {
         return [];
+    }
+
+    /**
+     * Provide default authentication.
+     *
+     * @return AuthenticatorInterface|null
+     */
+    public function defaultAuth(): ?AuthenticatorInterface
+    {
+        return new TokenAuthenticator('yee-haw-connector');
     }
 }
