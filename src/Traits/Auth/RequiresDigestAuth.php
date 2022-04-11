@@ -19,12 +19,13 @@ trait RequiresDigestAuth
     }
 
     /**
-     * Exception message.
+     * Default message.
      *
+     * @param SaloonRequest $request
      * @return string
      */
-    protected function getRequiresAuthMessage(): string
+    protected function getRequiresAuthMessage(SaloonRequest $request): string
     {
-        return 'This request requires digest authentication. Please provide authentication using the `withDigestAuth` method or return a default authenticator in your connector/request.';
+        return sprintf('The "%s" request requires authentication. Please provide authentication using the `withDigestAuth` method or return a default authenticator in your connector/request.', $request::class);
     }
 }

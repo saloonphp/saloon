@@ -21,17 +21,18 @@ trait RequiresAuth
         $connector = $request->getAuthenticator() ?? $request->getConnector()->getAuthenticator();
 
         if (! $connector instanceof AuthenticatorInterface) {
-            throw new MissingAuthenticatorException($this->getRequiresAuthMessage());
+            throw new MissingAuthenticatorException($this->getRequiresAuthMessage($request));
         }
     }
 
     /**
      * Default message.
      *
+     * @param SaloonRequest $request
      * @return string
      */
-    protected function getRequiresAuthMessage(): string
+    protected function getRequiresAuthMessage(SaloonRequest $request): string
     {
-        return 'This request requires authentication. Please provide an authenticator using the `withAuth` method or return a default authenticator in your connector/request.';
+        return sprintf('The "%s" request requires authentication. Please provide an authenticator using the `withAuth` method or return a default authenticator in your connector/request.', $request::class);
     }
 }
