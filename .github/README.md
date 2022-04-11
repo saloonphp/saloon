@@ -13,8 +13,9 @@ A PHP package that helps you write beautiful API integrations. It introduces a s
 </div>
 
 ## Introduction
+Building API integrations can be difficult. Once you have found the right API client to use, there's often lots of boilerplate configuration to remember and decision fatigue can settle in quickly. You may have even found yourself abstracting your API integrations into actions or service classes to avoid repeating yourself. Saloon offers a fluent framework for building your next API integration or PHP SDK. Saloon's syntax is object-oriented, standardised and easy to understand.
 
-Building API integrations can be difficult. Once you have found the right API client to use, there's often lots of boilerplate configuration to remember and decision fatigue can settle in really quickly. Saloon offers a fresh, fluent framework for building your next API integration or PHP SDK. Saloon's syntax is object-oriented, standardised and easy to understand. You can build one or many API integrations with Saloon, the sky is the limit. If you're using Laravel, there's a dedicated Laravel package with pre-written commands and a more advanced mocking toolbelt. Saloon will help you get up and running with APIs in a matter of minutes, and will scale with your project.
+If you're using Laravel, there's also a dedicated Laravel package with pre-written commands and a more advanced mocking toolbelt.
 
 ```php
 <?php
@@ -30,15 +31,13 @@ $data = $response->json();
 ## Features
 
 - Simple, easy to learn syntax that standardises the way you interact with APIs
-- You don't have to worry about Guzzle/Http Facade/cURL
+- Abstract API integrations into classes so you can keep your code DRY
+- Configuration is fast and can be shared across all your requests
 - Framework agnostic
-- Organise all your API integrations in one place
 - Mocking requests for testing
 - Great for building your own PHP SDKs
-- Easily add on your own functionality with plugins
-- Powerful interceptor logic to customise the response
-- Customise everything under the hood with handlers and middleware
-- Comes with a great Laravel package
+- Authentication boilerplate already prepared for you
+- Scalable with lots of API integrations across many team members
 
 ## Documentation
 
