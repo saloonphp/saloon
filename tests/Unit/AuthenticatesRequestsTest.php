@@ -41,14 +41,14 @@ test('you can add digest auth to a request', function () {
     ]);
 
     $request = new UserRequest;
-    $request->withDigestAuth('Sammyjo20', 'Cowboy1');
+    $request->withDigestAuth('Sammyjo20', 'Cowboy1', 'Howdy');
 
     $request->addHandler('test', function (callable $handler) {
         return function (RequestInterface $request, array $options) use ($handler) {
             expect($options['auth'])->toBeArray();
             expect($options['auth'][0])->toEqual('Sammyjo20');
             expect($options['auth'][1])->toEqual('Cowboy1');
-            expect($options['auth'][2])->toEqual('digest');
+            expect($options['auth'][2])->toEqual('Howdy');
 
             return $handler($request, $options);
         };
@@ -62,7 +62,7 @@ test('you can add digest auth to a request', function () {
     expect($config['auth'])->toBeArray();
     expect($config['auth'][0])->toEqual('Sammyjo20');
     expect($config['auth'][1])->toEqual('Cowboy1');
-    expect($config['auth'][2])->toEqual('digest');
+    expect($config['auth'][2])->toEqual('Howdy');
 
     $request->send($mockClient);
 });
@@ -72,7 +72,7 @@ test('you can attach an authorization token to a request', function () {
         MockResponse::make(),
     ]);
 
-    $request = UserRequest::make()->withToken('Sammyjo20');
+    $request = UserRequest::make()->withTokenAuth('Sammyjo20');
 
     $request->addHandler('test', function (callable $handler) {
         return function (RequestInterface $request, array $options) use ($handler) {
