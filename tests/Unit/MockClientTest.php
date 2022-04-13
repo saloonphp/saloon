@@ -1,5 +1,7 @@
 <?php
 
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
@@ -207,4 +209,31 @@ test('it will find the response by url if it is not the last response', function
     // Does not use the last response
 
     expect($mockClient)->findResponseByRequestUrl('/error')->toBe($responseA);
+});
+
+test('you can mock guzzle exceptions', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam']),
+        MockResponse::make(['name' => 'Patrick'])->throw(fn ($guzzleRequest) => new ConnectException('Unable to connect!', $guzzleRequest)),
+    ]);
+
+    $okResponse = (new UserRequest())->send($mockClient);
+
+    expect($okResponse->json())->toEqual(['name' => 'Sam']);
+
+    $this->expectException(ConnectException::class);
+    $this->expectExceptionMessage('Unable to connect!');
+
+    (new UserRequest())->send($mockClient);
+});
+
+test('you can mock normal exceptions', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Michael'])->throw(new Exception('Custom Exception!')),
+    ]);
+
+    $this->expectException(Exception::class);
+    $this->expectExceptionMessage('Custom Exception!');
+
+    (new UserRequest())->send($mockClient);
 });
