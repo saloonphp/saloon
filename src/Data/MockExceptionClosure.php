@@ -2,8 +2,8 @@
 
 namespace Sammyjo20\Saloon\Data;
 
-use Psr\Http\Message\RequestInterface;
 use Throwable;
+use Psr\Http\Message\RequestInterface;
 
 class MockExceptionClosure
 {
@@ -12,8 +12,7 @@ class MockExceptionClosure
      */
     public function __construct(
         public mixed $closure
-    )
-    {
+    ) {
         //
     }
 

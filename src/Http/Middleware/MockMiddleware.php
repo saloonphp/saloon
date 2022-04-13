@@ -2,9 +2,8 @@
 
 namespace Sammyjo20\Saloon\Http\Middleware;
 
-use GuzzleHttp\Promise\RejectedPromise;
-use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Promise\RejectedPromise;
 use Sammyjo20\Saloon\Http\MockResponse;
 use GuzzleHttp\Promise\FulfilledPromise;
 

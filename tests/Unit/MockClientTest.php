@@ -1,9 +1,8 @@
 <?php
 
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
+use GuzzleHttp\Exception\ConnectException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
