@@ -3,10 +3,13 @@
 namespace Sammyjo20\Saloon\Http;
 
 use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
+use Sammyjo20\Saloon\Data\MockExceptionClosure;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\Plugins\HasBody;
+use Throwable;
 
 class MockResponse
 {
@@ -23,6 +26,11 @@ class MockResponse
      * @var mixed
      */
     protected mixed $rawData = null;
+
+    /**
+     * @var MockExceptionClosure|null
+     */
+    protected ?MockExceptionClosure $exceptionClosure = null;
 
     /**
      * Create a new mock response
@@ -85,6 +93,21 @@ class MockResponse
     }
 
     /**
+     * Throw an exception on the request.
+     *
+     * @param callable|Throwable $value
+     * @return $this
+     */
+    public function throw(callable|Throwable $value): self
+    {
+        $closure = $value instanceof Throwable ? static fn () => $value : $value;
+
+        $this->exceptionClosure = new MockExceptionClosure($closure);
+
+        return $this;
+    }
+
+    /**
      * Get the status from the responses
      *
      * @return int
@@ -124,5 +147,26 @@ class MockResponse
     public function toGuzzleResponse(): Response
     {
         return new Response($this->getStatus(), $this->getHeaders(), $this->getFormattedData());
+    }
+
+    /**
+     * Checks if the response throws an exception.
+     *
+     * @return bool
+     */
+    public function throwsException(): bool
+    {
+        return $this->exceptionClosure instanceof MockExceptionClosure;
+    }
+
+    /**
+     * Retrieve the exception.
+     *
+     * @param RequestInterface $psrRequest
+     * @return Throwable
+     */
+    public function getException(RequestInterface $psrRequest): Throwable
+    {
+        return $this->exceptionClosure->call($psrRequest);
     }
 }

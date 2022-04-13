@@ -2,6 +2,9 @@
 
 namespace Sammyjo20\Saloon\Http\Middleware;
 
+use GuzzleHttp\Promise\RejectedPromise;
+use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Http\MockResponse;
 use GuzzleHttp\Promise\FulfilledPromise;
 
@@ -28,8 +31,12 @@ class MockMiddleware
      */
     public function __invoke(callable $handler)
     {
-        return function () {
-            return new FulfilledPromise($this->mockResponse->toGuzzleResponse());
-        };
+        $mockResponse = $this->mockResponse;
+
+        if ($mockResponse->throwsException()) {
+            return fn (RequestInterface $request) => new RejectedPromise($mockResponse->getException($request));
+        }
+
+        return fn () => new FulfilledPromise($this->mockResponse->toGuzzleResponse());
     }
 }
