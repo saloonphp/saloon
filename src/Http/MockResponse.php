@@ -4,6 +4,7 @@ namespace Sammyjo20\Saloon\Http;
 
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
+use Sammyjo20\Saloon\Data\MockExceptionClosure;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
@@ -27,9 +28,9 @@ class MockResponse
     protected mixed $rawData = null;
 
     /**
-     * @var callable|null
+     * @var MockExceptionClosure|null
      */
-    protected mixed $exceptionClosure = null;
+    protected ?MockExceptionClosure $exceptionClosure = null;
 
     /**
      * Create a new mock response
@@ -99,7 +100,9 @@ class MockResponse
      */
     public function throw(callable|Throwable $value): self
     {
-        $this->exceptionClosure = $value instanceof Throwable ? fn () => $value : $value;
+        $closure = $value instanceof Throwable ? static fn () => $value : $value;
+
+        $this->exceptionClosure = new MockExceptionClosure($closure);
 
         return $this;
     }
@@ -153,7 +156,7 @@ class MockResponse
      */
     public function throwsException(): bool
     {
-        return is_callable($this->exceptionClosure);
+        return $this->exceptionClosure instanceof MockExceptionClosure;
     }
 
     /**
@@ -164,6 +167,6 @@ class MockResponse
      */
     public function getException(RequestInterface $psrRequest): Throwable
     {
-        return call_user_func($this->exceptionClosure, $psrRequest);
+        return $this->exceptionClosure->call($psrRequest);
     }
 }
