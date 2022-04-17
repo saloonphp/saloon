@@ -2,9 +2,9 @@
 
 namespace Sammyjo20\Saloon\Managers;
 
+use Exception;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
-use Composer\InstalledVersions;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
@@ -230,11 +230,9 @@ class RequestManager
      */
     private function detectLaravel(): bool
     {
-        $hasRequiredDependencies = InstalledVersions::isInstalled('laravel/framework') && InstalledVersions::isInstalled('sammyjo20/saloon-laravel');
-
         try {
-            return $hasRequiredDependencies && resolve('saloon') instanceof \Sammyjo20\SaloonLaravel\Saloon;
-        } catch (\Exception $ex) {
+            return function_exists('resolve') && resolve('saloon') instanceof \Sammyjo20\SaloonLaravel\Saloon;
+        } catch (Exception $ex) {
             return false;
         }
     }
