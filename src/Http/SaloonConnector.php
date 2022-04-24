@@ -5,6 +5,7 @@ namespace Sammyjo20\Saloon\Http;
 use ReflectionClass;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
@@ -158,6 +159,21 @@ abstract class SaloonConnector implements SaloonConnectorInterface
     public function send(SaloonRequest $request, MockClient $mockClient = null): SaloonResponse
     {
         return $this->request($request)->send($mockClient);
+    }
+
+    /**
+     * Send an asynchronous Saloon request with the current instance of the connector.
+     *
+     * @param SaloonRequest $request
+     * @param MockClient|null $mockClient
+     * @return PromiseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
+     */
+    public function sendAsync(SaloonRequest $request, MockClient $mockClient = null): PromiseInterface
+    {
+        return $this->request($request)->sendAsync($mockClient);
     }
 
     /**
