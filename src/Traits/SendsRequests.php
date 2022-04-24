@@ -4,9 +4,9 @@ namespace Sammyjo20\Saloon\Traits;
 
 use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Managers\RequestManager;
+use Sammyjo20\Saloon\Exceptions\SaloonException;
 
 trait SendsRequests
 {

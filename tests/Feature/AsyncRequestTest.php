@@ -1,15 +1,15 @@
 <?php
 
 use GuzzleHttp\Promise\Promise;
-use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
+use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 use Sammyjo20\Saloon\Tests\Fixtures\Responses\UserData;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Responses\UserResponse;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
 
 test('an asynchronous request can be made successfully', function () {
     $request = new UserRequest();

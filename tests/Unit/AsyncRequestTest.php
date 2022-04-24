@@ -1,18 +1,17 @@
 <?php
 
+use GuzzleHttp\Promise\Promise;
+use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Http\SaloonResponse;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Promise\Promise;
-use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
-use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('an asynchronous request will return a saloon response on a successful request', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Sam'])
+        MockResponse::make(['name' => 'Sam']),
     ]);
 
     $request = new UserRequest;
@@ -29,7 +28,7 @@ test('an asynchronous request will return a saloon response on a successful requ
 
 test('an asynchronous request will throw a saloon exception on an unsuccessful request', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['error' => 'Server Error'], 500)
+        MockResponse::make(['error' => 'Server Error'], 500),
     ]);
 
     $request = new UserRequest;
@@ -69,7 +68,7 @@ test('an asynchronous request will return a connect exception if a connection er
 
 test('if you chain an asynchronous request you can have a SaloonResponse', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Sam'])
+        MockResponse::make(['name' => 'Sam']),
     ]);
 
     $request = new UserRequest;
@@ -86,7 +85,7 @@ test('if you chain an asynchronous request you can have a SaloonResponse', funct
 
 test('if you chain an erroneous asynchronous request the error can be caught in the rejection handler', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['error' => 'Server Error'], 500)
+        MockResponse::make(['error' => 'Server Error'], 500),
     ]);
 
     $request = new UserRequest;

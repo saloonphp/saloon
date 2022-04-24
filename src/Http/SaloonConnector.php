@@ -2,10 +2,10 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use GuzzleHttp\Promise\PromiseInterface;
 use ReflectionClass;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
