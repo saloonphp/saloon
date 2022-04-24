@@ -165,7 +165,7 @@ class RequestManager
     }
 
     /**
-     * Send of the request 🚀
+     * Send off the request 🚀
      *
      * @return SaloonResponse|PromiseInterface
      * @throws SaloonInvalidResponseClassException
