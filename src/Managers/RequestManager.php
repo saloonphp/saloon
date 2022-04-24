@@ -176,7 +176,7 @@ class RequestManager
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
      */
-    public function send(): SaloonResponse|PromiseInterface
+    public function send()
     {
         // Let's firstly hydrate the request manager, which will retrieve all the attributes
         // from the request and connector and build them up inside the request.
