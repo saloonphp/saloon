@@ -1,5 +1,6 @@
 <?php
 
+use GuzzleHttp\Promise\Promise;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
@@ -36,6 +37,22 @@ test('you can send a request through the connector', function () {
 
     $connector = new TestConnector();
     $response = $connector->send(new UserRequest, $mockClient);
+
+    expect($response)->toBeInstanceOf(SaloonResponse::class);
+    expect($response->json())->toEqual(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']);
+});
+
+test('you can send an asynchronous request through the connector', function () {
+    $mockClient = new MockClient([
+        new MockResponse(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
+    ]);
+
+    $connector = new TestConnector();
+    $promise = $connector->sendAsync(new UserRequest, $mockClient);
+
+    expect($promise)->toBeInstanceOf(Promise::class);
+
+    $response = $promise->wait();
 
     expect($response)->toBeInstanceOf(SaloonResponse::class);
     expect($response->json())->toEqual(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']);
