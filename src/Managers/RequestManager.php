@@ -2,9 +2,17 @@
 
 namespace Sammyjo20\Saloon\Managers;
 
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Promise\RejectedPromise;
+use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use Composer\InstalledVersions;
+use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
@@ -70,19 +78,28 @@ class RequestManager
     protected ?BaseMockClient $mockClient = null;
 
     /**
+     * Determines if the request should be sent asynchronously.
+     *
+     * @var bool
+     */
+    protected bool $asynchronous = false;
+
+    /**
      * Construct the request manager
      *
      * @param SaloonRequest $request
      * @param MockClient|null $mockClient
+     * @param bool $asynchronous
      * @throws SaloonMultipleMockMethodsException
      * @throws SaloonNoMockResponsesProvidedException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function __construct(SaloonRequest $request, MockClient $mockClient = null)
+    public function __construct(SaloonRequest $request, MockClient $mockClient = null, bool $asynchronous = false)
     {
         $this->request = $request;
         $this->connector = $request->getConnector();
         $this->inLaravelEnvironment = $this->detectLaravel();
+        $this->asynchronous = $asynchronous;
 
         $this->bootLaravelManager();
         $this->bootMockClient($mockClient);
@@ -151,40 +168,95 @@ class RequestManager
     }
 
     /**
-     * Send off the message... 🚀
+     * Send of the request 🚀
      *
-     * @return SaloonResponse
+     * @return SaloonResponse|PromiseInterface
+     * @throws SaloonInvalidResponseClassException
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
      */
-    public function send()
+    public function send(): SaloonResponse|PromiseInterface
     {
-        // Hydrate the manager with juicy headers, config, interceptors, handlers...
+        // Let's firstly hydrate the request manager, which will retrieve all the attributes
+        // from the request and connector and build them up inside the request.
 
         $this->hydrate();
 
-        // Build up the config!
-
-        $requestOptions = $this->buildRequestOptions();
-
-        // Boot up our Guzzle client... This will also boot up handlers...
+        // Next, we will retrieve our Guzzle client, request and build up the request options
+        // in a way Guzzle will understand.
 
         $client = $this->createGuzzleClient();
+        $request = $this->createGuzzleRequest();
+        $requestOptions = $this->buildRequestOptions();
 
-        // Send the request! 🚀
+        // Finally, we will send the request! If the asynchronous mode has been requested,
+        // we will return a promise with the Saloon response, however if not then we will
+        // just return a response.
 
+        return $this->asynchronous === true
+            ? $this->sendAsyncRequest($client, $request, $requestOptions)
+            : $this->sendSyncRequest($client, $request, $requestOptions);
+    }
+
+    /**
+     * Send a traditional, synchronous request.
+     *
+     * @param GuzzleClient $client
+     * @param GuzzleRequest $request
+     * @param array $requestOptions
+     * @return SaloonResponse
+     * @throws SaloonInvalidResponseClassException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     */
+    private function sendSyncRequest(GuzzleClient $client, GuzzleRequest $request, array $requestOptions): SaloonResponse
+    {
         try {
-            $guzzleResponse = $client->send($this->createGuzzleRequest(), $requestOptions);
+            $guzzleResponse = $client->send($request, $requestOptions);
         } catch (BadResponseException $exception) {
             return $this->createResponse($requestOptions, $exception->getResponse(), $exception);
         }
 
         return $this->createResponse($requestOptions, $guzzleResponse);
+    }
+
+    /**
+     * Prepare an asynchronous request, and return a promise.
+     *
+     * @param GuzzleClient $client
+     * @param GuzzleRequest $request
+     * @param array $requestOptions
+     * @return PromiseInterface
+     */
+    private function sendAsyncRequest(GuzzleClient $client, GuzzleRequest $request, array $requestOptions): PromiseInterface
+    {
+        return $client->sendAsync($request, $requestOptions)
+            ->then(
+                function (ResponseInterface $guzzleResponse) use ($requestOptions) {
+                    // Instead of the promise returning a Guzzle response, we want to return
+                    // a Saloon response.
+
+                    return $this->createResponse($requestOptions, $guzzleResponse);
+                },
+                function (GuzzleException $guzzleException) use ($requestOptions) {
+                    // If the exception was a connect exception, we should return that in the
+                    // promise instead rather than trying to convert it into a
+                    // SaloonResponse, since there was no response.
+
+                    if (! $guzzleException instanceof RequestException) {
+                        throw $guzzleException;
+                    }
+
+                    $response = $this->createResponse($requestOptions, $guzzleException->getResponse(), $guzzleException);
+
+                    throw $response->toException();
+                }
+            );
     }
 
     /**
