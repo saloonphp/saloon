@@ -118,7 +118,7 @@ test('a connector request collection can be defined', function () {
     $request = $connector->custom();
 
     expect($request)->toBeInstanceOf(UserCollection::class);
-    expect($request->test())->toBeTrue();
+    expect($request->get())->toBeInstanceOf(UserRequest::class);
 });
 
 test('it throws an exception if you do not key an array of requests', function () {
