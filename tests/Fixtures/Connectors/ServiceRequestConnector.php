@@ -19,7 +19,12 @@ class ServiceRequestConnector extends SaloonConnector
      * @var array|string[]
      */
     protected array $requests = [
-        'user' => UserCollection::class,
+        'user' => [
+            'get' => UserRequest::class,
+        ],
+        'custom' => UserCollection::class,
+        ErrorRequest::class,
+        GuessedCollection::class,
     ];
 
     /**
