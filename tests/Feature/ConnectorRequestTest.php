@@ -1,10 +1,16 @@
 <?php
 
+use Sammyjo20\Saloon\Exceptions\InvalidRequestKeyException;
+use Sammyjo20\Saloon\Http\AnonymousRequestCollection;
 use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
+use Sammyjo20\Saloon\Tests\Fixtures\Collections\GuessedCollection;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidServiceRequestConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
+use Sammyjo20\Saloon\Tests\Fixtures\Collections\UserCollection;
 use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\ServiceRequestConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\RequestSelectionConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidRequestSelectionConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidDefinedRequestSelectionConnector;
@@ -96,4 +102,37 @@ test('it throws an exception if one of the provided request classes is not a sal
     $this->expectException(SaloonInvalidRequestException::class);
 
     $connector->test_connector();
+});
+
+test('a connector request can be defined in an array', function () {
+    $connector = new ServiceRequestConnector;
+    $request = $connector->user();
+
+    expect($request)->toBeInstanceOf(AnonymousRequestCollection::class);
+    expect($request->get())->toBeInstanceOf(UserRequest::class);
+    expect($request->get(1)->userId)->toEqual(1);
+});
+
+test('a connector request collection can be defined', function () {
+    $connector = new ServiceRequestConnector;
+    $request = $connector->custom();
+
+    expect($request)->toBeInstanceOf(UserCollection::class);
+    expect($request->get())->toBeInstanceOf(UserRequest::class);
+});
+
+test('it throws an exception if you do not key an array of requests', function () {
+    $connector = new InvalidServiceRequestConnector();
+
+    $this->expectException(InvalidRequestKeyException::class);
+    $this->expectDeprecationMessage('Request groups must be keyed.');
+
+    $connector->custom();
+});
+
+test('it can guess the name of a collection', function () {
+    $connector = new ServiceRequestConnector;
+    $collection = $connector->guessedCollection();
+
+    expect($collection)->toBeInstanceOf(GuessedCollection::class);
 });

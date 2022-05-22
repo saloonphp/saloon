@@ -2,12 +2,11 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use ReflectionClass;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Traits\CollectsData;
+use Sammyjo20\Saloon\Helpers\RequestHelper;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\CollectsHandlers;
@@ -16,6 +15,7 @@ use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\CollectsQueryParams;
 use Sammyjo20\Saloon\Traits\CollectsInterceptors;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
+use Sammyjo20\Saloon\Helpers\ProxyRequestNameHelper;
 use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Interfaces\SaloonConnectorInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
@@ -76,23 +76,12 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      * @param string $request
      * @param array $args
      * @return SaloonRequest
-     * @throws ClassNotFoundException
      * @throws SaloonInvalidRequestException
      * @throws \ReflectionException
      */
     protected function forwardCallToRequest(string $request, array $args = []): SaloonRequest
     {
-        if (! class_exists($request)) {
-            throw new ClassNotFoundException($request);
-        }
-
-        $isValidRequest = ReflectionHelper::isSubclassOf($request, SaloonRequest::class);
-
-        if (! $isValidRequest) {
-            throw new SaloonInvalidRequestException($request);
-        }
-
-        return (new $request(...$args))->setConnector($this);
+        return RequestHelper::callFromConnector($this, $request, $args);
     }
 
     /**
@@ -111,19 +100,9 @@ abstract class SaloonConnector implements SaloonConnectorInterface
             return $this->registeredRequests;
         }
 
-        $requests = (new Collection($this->requests))->mapWithKeys(function ($value, $key) {
-            if (is_string($key)) {
-                return [$key => $value];
-            }
+        $this->registeredRequests = ProxyRequestNameHelper::generateNames($this->requests);
 
-            $guessedKey = Str::camel((new ReflectionClass($value))->getShortName());
-
-            return [$guessedKey => $value];
-        })->toArray();
-
-        $this->registeredRequests = $requests;
-
-        return $requests;
+        return $this->registeredRequests;
     }
 
     /**
@@ -181,21 +160,15 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      *
      * @param $method
      * @param $arguments
-     * @return SaloonRequest
+     * @return AnonymousRequestCollection|SaloonRequest
      * @throws ClassNotFoundException
-     * @throws SaloonInvalidRequestException
      * @throws SaloonConnectorMethodNotFoundException
+     * @throws SaloonInvalidRequestException
      * @throws \ReflectionException
      */
     public function __call($method, $arguments)
     {
-        if ($this->requestExists($method) === false) {
-            throw new SaloonConnectorMethodNotFoundException($method, $this);
-        }
-
-        $requests = $this->getRegisteredRequests();
-
-        return $this->forwardCallToRequest($requests[$method], $arguments);
+        return $this->guessRequest($method, $arguments);
     }
 
     /**
@@ -211,14 +184,52 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      */
     public static function __callStatic($method, $arguments)
     {
-        $connector = new static;
+        return (new static)->guessRequest($method, $arguments);
+    }
 
-        if ($connector->requestExists($method) === false) {
-            throw new SaloonConnectorMethodNotFoundException($method, $connector);
+    /**
+     * Attempt to guess the next request.
+     *
+     * @param $method
+     * @param $arguments
+     * @return mixed
+     * @throws ClassNotFoundException
+     * @throws SaloonConnectorMethodNotFoundException
+     * @throws SaloonInvalidRequestException
+     * @throws \ReflectionException
+     */
+    protected function guessRequest($method, $arguments): mixed
+    {
+        if ($this->requestExists($method) === false) {
+            throw new SaloonConnectorMethodNotFoundException($method, $this);
         }
 
-        $requests = $connector->getRegisteredRequests();
+        $requests = $this->getRegisteredRequests();
 
-        return $connector->forwardCallToRequest($requests[$method], $arguments);
+        // Work out what it is. If it is an array, pass the array into AnonymousRequestCollection($requests)
+        // If it is a request, just forward the call to the request.
+
+        $resource = $requests[$method];
+
+        // If the request is a type of array, then it must be an anonymous request collection.
+
+        if (is_array($resource)) {
+            return new AnonymousRequestCollection($this, $method, $resource);
+        }
+
+        // Otherwise, check if it is a RequestCollection. If it is, then
+        // return that class - otherwise, just forward the request.
+
+        if (! class_exists($resource)) {
+            throw new ClassNotFoundException($resource);
+        }
+
+        if (ReflectionHelper::isSubclassOf($resource, RequestCollection::class)) {
+            return new $resource($this);
+        }
+
+        // It's just a request, so forward to that.
+
+        return $this->forwardCallToRequest($resource, $arguments);
     }
 }
