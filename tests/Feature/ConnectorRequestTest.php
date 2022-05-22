@@ -1,6 +1,9 @@
 <?php
 
 use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
+use Sammyjo20\Saloon\Http\AnonymousRequestCollection;
+use Sammyjo20\Saloon\Tests\Fixtures\Collections\UserCollection;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\ServiceRequestConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
@@ -96,4 +99,21 @@ test('it throws an exception if one of the provided request classes is not a sal
     $this->expectException(SaloonInvalidRequestException::class);
 
     $connector->test_connector();
+});
+
+test('a connector request can be defined in an array', function () {
+    $connector = new ServiceRequestConnector;
+    $request = $connector->user();
+
+    expect($request)->toBeInstanceOf(AnonymousRequestCollection::class);
+    expect($request->get())->toBeInstanceOf(UserRequest::class);
+    expect($request->get(1)->userId)->toEqual(1);
+});
+
+test('a connector request collection can be defined', function () {
+    $connector = new ServiceRequestConnector;
+    $request = $connector->custom();
+
+    expect($request)->toBeInstanceOf(UserCollection::class);
+    expect($request->test())->toBeTrue();
 });
