@@ -2,9 +2,9 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use ReflectionClass;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 
 class ProxyRequestNameHelper
 {

@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Helpers\RequestHelper;
 use Sammyjo20\Saloon\Exceptions\NestedRequestNotFoundException;
 
 class AnonymousRequestCollection extends RequestCollection
@@ -15,19 +16,19 @@ class AnonymousRequestCollection extends RequestCollection
         SaloonConnector $connector,
         protected string $collectionName,
         protected array $requests,
-    )
-    {
+    ) {
         parent::__construct($connector);
     }
 
 
     /**
+     * Call a request on a connector.
+     *
      * @param string $name
      * @param array $arguments
-     * @return SaloonRequest
+     * @return mixed
      * @throws NestedRequestNotFoundException
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\ClassNotFoundException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException
      */
     public function __call(string $name, array $arguments)
@@ -36,6 +37,6 @@ class AnonymousRequestCollection extends RequestCollection
             throw new NestedRequestNotFoundException($name, $this->collectionName, $this->connector);
         }
 
-        return $this->connector->forwardCallToRequest($this->requests[$name], $arguments);
+        return RequestHelper::callFromConnector($this->connector, $this->requests[$name], $arguments);
     }
 }

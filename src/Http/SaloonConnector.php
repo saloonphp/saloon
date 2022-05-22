@@ -2,13 +2,10 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use ReflectionClass;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Exceptions\InvalidRequestTypeException;
-use Sammyjo20\Saloon\Helpers\ProxyRequestNameHelper;
 use Sammyjo20\Saloon\Traits\CollectsData;
+use Sammyjo20\Saloon\Helpers\RequestHelper;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\CollectsHandlers;
@@ -17,6 +14,7 @@ use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\CollectsQueryParams;
 use Sammyjo20\Saloon\Traits\CollectsInterceptors;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
+use Sammyjo20\Saloon\Helpers\ProxyRequestNameHelper;
 use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Interfaces\SaloonConnectorInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
@@ -77,19 +75,12 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      * @param string $request
      * @param array $args
      * @return SaloonRequest
-     * @throws ClassNotFoundException
      * @throws SaloonInvalidRequestException
      * @throws \ReflectionException
      */
-    public function forwardCallToRequest(string $request, array $args = []): SaloonRequest
+    protected function forwardCallToRequest(string $request, array $args = []): SaloonRequest
     {
-        $isValidRequest = ReflectionHelper::isSubclassOf($request, SaloonRequest::class);
-
-        if (! $isValidRequest) {
-            throw new SaloonInvalidRequestException($request);
-        }
-
-        return (new $request(...$args))->setConnector($this);
+        return RequestHelper::callFromConnector($this, $request, $args);
     }
 
     /**

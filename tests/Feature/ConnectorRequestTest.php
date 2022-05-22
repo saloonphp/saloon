@@ -1,13 +1,13 @@
 <?php
 
-use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Http\AnonymousRequestCollection;
-use Sammyjo20\Saloon\Tests\Fixtures\Collections\UserCollection;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\ServiceRequestConnector;
+use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
+use Sammyjo20\Saloon\Tests\Fixtures\Collections\UserCollection;
 use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\ServiceRequestConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\RequestSelectionConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidRequestSelectionConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidDefinedRequestSelectionConnector;
