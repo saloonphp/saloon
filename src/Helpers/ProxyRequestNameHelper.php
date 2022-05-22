@@ -5,6 +5,7 @@ namespace Sammyjo20\Saloon\Helpers;
 use ReflectionClass;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use Sammyjo20\Saloon\Exceptions\InvalidRequestKeyException;
 
 class ProxyRequestNameHelper
 {
@@ -24,6 +25,10 @@ class ProxyRequestNameHelper
 
             if (is_string($key)) {
                 return [$key => $value];
+            }
+
+            if (is_array($value)) {
+                throw new InvalidRequestKeyException('Request groups must be keyed.');
             }
 
             $guessedKey = Str::camel((new ReflectionClass($value))->getShortName());

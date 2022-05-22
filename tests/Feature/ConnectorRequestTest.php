@@ -1,7 +1,10 @@
 <?php
 
+use Sammyjo20\Saloon\Exceptions\InvalidRequestKeyException;
 use Sammyjo20\Saloon\Http\AnonymousRequestCollection;
 use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
+use Sammyjo20\Saloon\Tests\Fixtures\Collections\GuessedCollection;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidServiceRequestConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
@@ -116,4 +119,20 @@ test('a connector request collection can be defined', function () {
 
     expect($request)->toBeInstanceOf(UserCollection::class);
     expect($request->test())->toBeTrue();
+});
+
+test('it throws an exception if you do not key an array of requests', function () {
+    $connector = new InvalidServiceRequestConnector();
+
+    $this->expectException(InvalidRequestKeyException::class);
+    $this->expectDeprecationMessage('Request groups must be keyed.');
+
+    $connector->custom();
+});
+
+test('it can guess the name of a collection', function () {
+    $connector = new ServiceRequestConnector;
+    $collection = $connector->guessedCollection();
+
+    expect($collection)->toBeInstanceOf(GuessedCollection::class);
 });

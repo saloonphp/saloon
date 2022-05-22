@@ -3,13 +3,12 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 
 use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Collections\GuessedCollection;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Collections\UserCollection;
 
-class ServiceRequestConnector extends SaloonConnector
+class InvalidServiceRequestConnector extends SaloonConnector
 {
     use AcceptsJson;
 
@@ -19,12 +18,9 @@ class ServiceRequestConnector extends SaloonConnector
      * @var array|string[]
      */
     protected array $requests = [
-        'user' => [
+        [
             'get' => UserRequest::class,
         ],
-        'custom' => UserCollection::class,
-        ErrorRequest::class,
-        GuessedCollection::class,
     ];
 
     /**
