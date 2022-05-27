@@ -4,12 +4,10 @@ namespace Sammyjo20\Saloon\Helpers;
 
 class ContentBag
 {
-    // Todo: Bring in defaults so we dont have to use constructors on requests.
-
     /**
      * @var array
      */
-    protected array $data;
+    protected array $data = [];
 
     /**
      * @param array $data

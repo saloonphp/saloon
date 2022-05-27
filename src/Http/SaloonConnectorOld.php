@@ -33,21 +33,6 @@ abstract class SaloonConnectorOld implements SaloonConnectorInterface
         HasCustomResponses;
 
     /**
-     * Register Saloon requests that will become methods on the connector.
-     * For example, GetUserRequest would become $this->getUserRequest(...$args)
-     *
-     * @var array|string[]
-     */
-    protected array $requests = [];
-
-    /**
-     * Requests that have already been registered. Used as a cache for performance.
-     *
-     * @var array|null
-     */
-    private ?array $registeredRequests = null;
-
-    /**
      * Instantiate a new class with the arguments.
      *
      * @param mixed ...$arguments
@@ -153,38 +138,6 @@ abstract class SaloonConnectorOld implements SaloonConnectorInterface
     public function sendAsync(SaloonRequest $request, MockClient $mockClient = null): PromiseInterface
     {
         return $this->request($request)->sendAsync($mockClient);
-    }
-
-    /**
-     * Dynamically proxy other methods to try and call a requests.
-     *
-     * @param $method
-     * @param $arguments
-     * @return AnonymousRequestCollection|SaloonRequest
-     * @throws ClassNotFoundException
-     * @throws SaloonConnectorMethodNotFoundException
-     * @throws SaloonInvalidRequestException
-     * @throws \ReflectionException
-     */
-    public function __call($method, $arguments)
-    {
-        return $this->guessRequest($method, $arguments);
-    }
-
-    /**
-     * Dynamically proxy other methods to try and call a requests.
-     *
-     * @param $method
-     * @param $arguments
-     * @return SaloonRequest
-     * @throws ClassNotFoundException
-     * @throws SaloonInvalidRequestException
-     * @throws SaloonConnectorMethodNotFoundException
-     * @throws \ReflectionException
-     */
-    public static function __callStatic($method, $arguments)
-    {
-        return (new static)->guessRequest($method, $arguments);
     }
 
     /**

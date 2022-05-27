@@ -17,9 +17,9 @@ abstract class SaloonRequest implements SaloonRequestInterface
     use MocksRequests;
 
     /**
-     * @var string|null
+     * @var string
      */
-    protected ?string $connector = null;
+    protected string $connector = '';
 
     /**
      * @var SaloonConnector|null

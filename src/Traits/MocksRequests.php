@@ -25,9 +25,9 @@ trait MocksRequests
     }
 
     /**
-     * @return MockClient
+     * @return MockClient|null
      */
-    public function getMockClient(): MockClient
+    public function getMockClient(): ?MockClient
     {
         return $this->mockClient;
     }

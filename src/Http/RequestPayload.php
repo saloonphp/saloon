@@ -4,8 +4,9 @@ namespace Sammyjo20\Saloon\Http;
 
 use ReflectionClass;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Helpers\ContentBag;
+use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
+use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 
 // This contains all the merged in data from the connector and the request.
@@ -43,6 +44,11 @@ class RequestPayload
     protected SaloonRequest $request;
 
     /**
+     * @var Method
+     */
+    protected Method $method;
+
+    /**
      * @var SaloonConnector
      */
     protected SaloonConnector $connector;
@@ -70,27 +76,15 @@ class RequestPayload
         $connector = $request->getConnector();
 
         $this->request = $request;
+        $this->method = $request->getMethod();
         $this->connector = $connector;
         $this->mockClient = $request->getMockClient() ?? $connector->getMockClient();
-        $this->responseClass = $request->getResponseClass() ?? $connector->getMockClient();
+        $this->responseClass = $request->getResponseClass() ?? $connector->getResponseClass();
 
         $this->mergeBaseProperties()
-            ->bootConnectorAndRequest()
             ->bootPlugins()
-            ->runAuthenticator();
-    }
-
-    /**
-     * Run the "boot" methods on the connector and the request.
-     *
-     * @return $this
-     */
-    protected function bootConnectorAndRequest(): self
-    {
-        $this->connector->boot($this);
-        $this->request->boot($this);
-
-        return $this;
+            ->runAuthenticator()
+            ->runBeforeSend();
     }
 
     /**
@@ -165,6 +159,25 @@ class RequestPayload
      */
     protected function runAuthenticator(): self
     {
-        //
+        $authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
+
+        if ($authenticator instanceof AuthenticatorInterface) {
+            $authenticator->set($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Run the "boot" methods on the connector and the request.
+     *
+     * @return $this
+     */
+    protected function runBeforeSend(): self
+    {
+        $this->connector->beforeSend($this);
+        $this->request->beforeSend($this);
+
+        return $this;
     }
 }

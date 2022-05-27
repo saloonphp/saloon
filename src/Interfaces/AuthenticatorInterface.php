@@ -2,15 +2,15 @@
 
 namespace Sammyjo20\Saloon\Interfaces;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Http\RequestPayload;
 
 interface AuthenticatorInterface
 {
     /**
      * Apply the authentication to the request.
      *
-     * @param SaloonRequest $request
+     * @param RequestPayload $requestPayload
      * @return void
      */
-    public function set(SaloonRequest $request): void;
+    public function set(RequestPayload $requestPayload): void;
 }

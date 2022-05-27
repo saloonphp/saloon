@@ -6,7 +6,7 @@ use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 test('a request can be made successfully', function () {
     $request = new UserRequest();
 
-    dd($request);
+    dd($request->createRequestPayload());
 
     $response = $request->send();
 

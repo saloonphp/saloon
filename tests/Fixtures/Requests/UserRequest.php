@@ -3,6 +3,7 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
+use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 
@@ -11,29 +12,31 @@ class UserRequest extends SaloonRequest
     /**
      * Define the method that the request will use.
      *
-     * @var string|null
+     * @var Method
      */
-    protected ?string $method = Saloon::GET;
+    protected Method $method = Method::GET;
 
     /**
      * The connector.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $connector = TestConnector::class;
+    protected string $connector = TestConnector::class;
 
     /**
-     * Define the endpoint for the request.
-     *
-     * @return string
+     * @param int|null $userId
+     * @param int|null $groupId
      */
-    public function defineEndpoint(): string
-    {
-        return '/user';
-    }
-
     public function __construct(public ?int $userId = null, public ?int $groupId = null)
     {
-        parent::__construct();
+        //
+    }
+
+    /**
+     * @return string
+     */
+    protected function defineEndpoint(): string
+    {
+        return '/user';
     }
 }
