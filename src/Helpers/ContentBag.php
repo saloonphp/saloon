@@ -60,9 +60,9 @@ class ContentBag
      * @param array $data
      * @return $this
      */
-    public function merge(array $data): self
+    public function merge(...$arrays): self
     {
-        $this->data = array_merge($data, $this->data);
+        $this->data = array_merge($this->data, $arrays);
 
         return $this;
     }

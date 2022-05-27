@@ -2,14 +2,16 @@
 
 namespace Sammyjo20\Saloon\Interfaces;
 
+use Sammyjo20\Saloon\Enums\Method;
+use Sammyjo20\Saloon\Http\RequestPayload;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 
 interface SaloonRequestInterface
 {
-    public function boot(SaloonRequest $request): void;
+    public function boot(RequestPayload $payload): void;
 
-    public function getMethod(): ?string;
+    public function getMethod(): Method;
 
     public function getResponseClass(): ?string;
 
@@ -17,9 +19,5 @@ interface SaloonRequestInterface
 
     public function setConnector(SaloonConnector $connector): self;
 
-    public function getFullRequestUrl(): string;
-
     public function traitExistsOnConnector(string $trait): bool;
-
-    public function defineEndpoint(): string;
 }
