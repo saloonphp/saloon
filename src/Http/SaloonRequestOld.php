@@ -3,7 +3,6 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Traits\CollectsData;
-use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
@@ -17,12 +16,17 @@ use Sammyjo20\Saloon\Interfaces\SaloonRequestInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 
-abstract class SaloonRequest implements SaloonRequestInterface
+abstract class SaloonRequestOld implements SaloonRequestInterface
 {
-    use HasRequestProperties;
-    use AuthenticatesRequests;
-    use HasCustomResponses;
-    use SendsRequests;
+    use CollectsData,
+        CollectsQueryParams,
+        CollectsHeaders,
+        CollectsConfig,
+        CollectsHandlers,
+        CollectsInterceptors,
+        AuthenticatesRequests,
+        HasCustomResponses,
+        SendsRequests;
 
     /**
      * Define the method that the request will use.
@@ -44,28 +48,6 @@ abstract class SaloonRequest implements SaloonRequestInterface
      * @var SaloonConnector|null
      */
     private ?SaloonConnector $loadedConnector = null;
-
-    /**
-     * @throws SaloonInvalidConnectorException
-     * @throws \ReflectionException
-     */
-    public function __construct()
-    {
-        $this->bootConnector()
-            ->seedRequestProperties();
-    }
-
-    /**
-     * Merge the connector's request properties into ours.
-     *
-     * @return void
-     */
-    private function seedRequestProperties(): void
-    {
-        $this->setDefaultRequestProperties();
-
-        $this->mergeRequestProperties($this->loadedConnector->getRequestProperties());
-    }
 
     /**
      * Instantiate a new class with the arguments.
@@ -107,11 +89,11 @@ abstract class SaloonRequest implements SaloonRequestInterface
     /**
      * Boot the connector
      *
-     * @return SaloonConnector
+     * @return void
      * @throws SaloonInvalidConnectorException
      * @throws \ReflectionException
      */
-    private function bootConnector(): self
+    private function bootConnector(): void
     {
         if (empty($this->connector) || ! class_exists($this->connector)) {
             throw new SaloonInvalidConnectorException;
@@ -123,7 +105,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
             throw new SaloonInvalidConnectorException;
         }
 
-        return $this->setConnector(new $this->connector);
+        $this->setConnector(new $this->connector);
     }
 
     /**

@@ -22,20 +22,4 @@ interface SaloonRequestInterface
     public function traitExistsOnConnector(string $trait): bool;
 
     public function defineEndpoint(): string;
-
-    public function defaultHeaders(): array;
-
-    public function defaultConfig(): array;
-
-    public function defaultData(): array;
-
-    public function defaultQuery(): array;
-
-    public function addHandler(string $name, callable $function): void;
-
-    public function getHandlers(): array;
-
-    public function addResponseInterceptor(callable $function): void;
-
-    public function getResponseInterceptors(): array;
 }

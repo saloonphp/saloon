@@ -20,13 +20,17 @@ use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Interfaces\SaloonConnectorInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
-use Sammyjo20\Saloon\Traits\HasRequestProperties;
 
-abstract class SaloonConnector implements SaloonConnectorInterface
+abstract class SaloonConnectorOld implements SaloonConnectorInterface
 {
-    use HasRequestProperties;
-    use AuthenticatesRequests;
-    use HasCustomResponses;
+    use CollectsHeaders,
+        CollectsData,
+        CollectsQueryParams,
+        CollectsConfig,
+        CollectsHandlers,
+        CollectsInterceptors,
+        AuthenticatesRequests,
+        HasCustomResponses;
 
     /**
      * Register Saloon requests that will become methods on the connector.
@@ -42,11 +46,6 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      * @var array|null
      */
     private ?array $registeredRequests = null;
-
-    public function __construct()
-    {
-        $this->setDefaultRequestProperties();
-    }
 
     /**
      * Instantiate a new class with the arguments.
