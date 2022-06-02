@@ -3,8 +3,6 @@
 namespace Sammyjo20\Saloon\Traits\Plugins;
 
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\TestPipe;
 
 trait AcceptsJson
 {

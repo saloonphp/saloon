@@ -2,18 +2,15 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
-use Sammyjo20\Saloon\Interfaces\SaloonConnectorInterface;
-use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
-use Sammyjo20\Saloon\Traits\HasCustomResponses;
-use Sammyjo20\Saloon\Traits\HasDefaultRequestProperties;
-use Sammyjo20\Saloon\Traits\HasMiddleware;
-use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Traits\ProxiesRequests;
+use Sammyjo20\Saloon\Traits\HasCustomResponses;
+use Sammyjo20\Saloon\Traits\HasRequestProperties;
+use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
+use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Traits\RetrievesRequestProperties;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
+use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
 
 abstract class SaloonConnector
 {

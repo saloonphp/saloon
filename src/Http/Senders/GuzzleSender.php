@@ -2,20 +2,17 @@
 
 namespace Sammyjo20\Saloon\Http\Senders;
 
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use Sammyjo20\Saloon\Data\DataType;
-use Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use GuzzleHttp\Client as GuzzleClient;
 use Sammyjo20\Saloon\Http\SaloonResponse;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\BadResponseException;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Interfaces\RequestSenderInterface;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 
 class GuzzleSender implements RequestSenderInterface
 {

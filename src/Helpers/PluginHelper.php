@@ -2,9 +2,9 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 
 class PluginHelper
 {

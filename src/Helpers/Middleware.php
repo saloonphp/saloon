@@ -3,9 +3,8 @@
 namespace Sammyjo20\Saloon\Helpers;
 
 use League\Pipeline\Pipeline;
-use League\Pipeline\PipelineInterface;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 
 class Middleware
 {

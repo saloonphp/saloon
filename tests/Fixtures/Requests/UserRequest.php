@@ -2,13 +2,10 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Enums\Method;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonResponse;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Interfaces\Data\HasJsonBody;
-use Sammyjo20\Saloon\Interfaces\Data\HasMixedBody;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class UserRequest extends SaloonRequest implements HasJsonBody
@@ -55,7 +52,7 @@ class UserRequest extends SaloonRequest implements HasJsonBody
     protected function defaultHeaders(): array
     {
         return [
-            'Content-Type' => 'application/json'
+            'Content-Type' => 'application/json',
         ];
     }
 

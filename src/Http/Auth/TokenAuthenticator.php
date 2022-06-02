@@ -3,7 +3,6 @@
 namespace Sammyjo20\Saloon\Http\Auth;
 
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 
 class TokenAuthenticator implements AuthenticatorInterface

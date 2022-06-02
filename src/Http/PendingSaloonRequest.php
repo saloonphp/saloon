@@ -2,22 +2,21 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Utils;
 use ReflectionClass;
-use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Data\DataType;
+use GuzzleHttp\Psr7\Request;
 use Sammyjo20\Saloon\Enums\Method;
-use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
+use Sammyjo20\Saloon\Data\DataType;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Helpers\Middleware;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
-use Sammyjo20\Saloon\Interfaces\Data\HasFormParams;
-use Sammyjo20\Saloon\Interfaces\Data\HasJsonBody;
-use Sammyjo20\Saloon\Interfaces\Data\HasMixedBody;
-use Sammyjo20\Saloon\Interfaces\Data\HasMultipartBody;
-use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Symfony\Component\VarDumper\Cloner\Data;
+use Sammyjo20\Saloon\Interfaces\Data\HasJsonBody;
+use Sammyjo20\Saloon\Traits\HasRequestProperties;
+use Sammyjo20\Saloon\Interfaces\Data\HasMixedBody;
+use Sammyjo20\Saloon\Interfaces\Data\HasFormParams;
+use Sammyjo20\Saloon\Interfaces\Data\HasMultipartBody;
+use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
+use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
 
 class PendingSaloonRequest
 {
@@ -84,7 +83,9 @@ class PendingSaloonRequest
      * Build up the request payload.
      *
      * @param SaloonRequest $request
+     * @throws PendingSaloonRequestException
      * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\DataBagException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
      */
@@ -100,8 +101,6 @@ class PendingSaloonRequest
         $this->mockClient = $request->getMockClient() ?? $connector->getMockClient();
         $this->connectorMiddleware = $connector->middleware();
         $this->requestMiddleware = $request->middleware();
-
-        // Todo: Maybe Validate Response Class Here?
 
         $this->mergeRequestProperties()
             ->mergeData()
