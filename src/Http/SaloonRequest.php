@@ -9,7 +9,7 @@ use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 
-abstract class SaloonRequest implements SaloonRequestInterface
+abstract class SaloonRequest
 {
     use HasRequestProperties;
     use BuildsUrls;
@@ -72,21 +72,21 @@ abstract class SaloonRequest implements SaloonRequestInterface
     /**
      * Create the request payload which will run all plugins, boot methods, everything.
      *
-     * @return RequestPayload
+     * @return PendingSaloonRequest
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
      */
-    public function createRequestPayload(): RequestPayload
+    public function createRequestPayload(): PendingSaloonRequest
     {
-        return new RequestPayload($this);
+        return new PendingSaloonRequest($this);
     }
 
     /**
-     * @param RequestPayload $payload
+     * @param PendingSaloonRequest $payload
      * @return void
      */
-    public function beforeSend(RequestPayload $payload): void
+    public function beforeSend(PendingSaloonRequest $payload): void
     {
         // Apply anything right before the request is sent.
     }

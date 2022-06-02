@@ -36,11 +36,11 @@ class ContentBag
      */
     public function get(string $key, mixed $default = null): mixed
     {
-        return $this->data[$key] ?? $default;
+        return $this->all()[$key] ?? $default;
     }
 
     /**
-     * Overwrite the entire ContentBag.
+     * Overwrite the entire ContentBag. Will disable default values.
      *
      * @param array $data
      * @return $this
@@ -55,12 +55,12 @@ class ContentBag
     /**
      * Merge in data into the content bag.
      *
-     * @param array $data
+     * @param mixed ...$arrays
      * @return $this
      */
     public function merge(...$arrays): self
     {
-        $this->data = array_merge($this->data, $arrays);
+        $this->data = array_merge($this->data, ...$arrays);
 
         return $this;
     }

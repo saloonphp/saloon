@@ -12,42 +12,102 @@ trait HasRequestProperties
      *
      * @var ContentBag
      */
-    public ContentBag $headers;
+    private ContentBag $headers;
 
     /**
      * Request Query Parameters
      *
      * @var ContentBag
      */
-    public ContentBag $queryParameters;
+    private ContentBag $queryParameters;
 
     /**
      * Request Data
      *
      * @var ContentBag
      */
-    public ContentBag $data;
+    private ContentBag $data;
 
     /**
      * Request Config
      *
      * @var ContentBag
      */
-    public ContentBag $config;
+    private ContentBag $config;
 
     /**
      * Request Guzzle Middleware
      *
      * @var ContentBag
      */
-    public ContentBag $guzzleMiddleware;
+    private ContentBag $guzzleMiddleware;
 
     /**
      * Request Response Interceptors
      *
      * @var ContentBag
      */
-    public ContentBag $responseInterceptors;
+    private ContentBag $responseInterceptors;
+
+    /**
+     * Retrieve the headers content bag.
+     *
+     * @return ContentBag
+     */
+    public function headers(): ContentBag
+    {
+        return $this->headers ??= new ContentBag($this->defaultHeaders());
+    }
+
+    /**
+     * Retrieve the query parameters content bag.
+     *
+     * @return ContentBag
+     */
+    public function queryParameters(): ContentBag
+    {
+        return $this->queryParameters ??= new ContentBag($this->defaultQueryParameters());
+    }
+
+    /**
+     * Retrieve the data content bag.
+     *
+     * @return ContentBag
+     */
+    public function data(): ContentBag
+    {
+        return $this->data ??= new ContentBag($this->defaultData());
+    }
+
+    /**
+     * Retrieve the config content bag.
+     *
+     * @return ContentBag
+     */
+    public function config(): ContentBag
+    {
+        return $this->config ??= new ContentBag($this->defaultConfig());
+    }
+
+    /**
+     * Retrieve the guzzle middleware content bag.
+     *
+     * @return ContentBag
+     */
+    public function guzzleMiddleware(): ContentBag
+    {
+        return $this->guzzleMiddleware ??= new ContentBag($this->defaultGuzzleMiddleware());
+    }
+
+    /**
+     * Retrieve the response interceptors content bag.
+     *
+     * @return ContentBag
+     */
+    public function responseInterceptors(): ContentBag
+    {
+        return $this->responseInterceptors ??= new ContentBag($this->defaultResponseInterceptors());
+    }
 
     /**
      * Default Request Headers
@@ -107,5 +167,22 @@ trait HasRequestProperties
     protected function defaultResponseInterceptors(): array
     {
         return [];
+    }
+
+    /**
+     * Get all the request properties with their default set.
+     *
+     * @return RequestProperties
+     */
+    public function getRequestProperties(): RequestProperties
+    {
+        return new RequestProperties(
+            $this->headers()->all(),
+            $this->queryParameters()->all(),
+            $this->data()->all(),
+            $this->config()->all(),
+            $this->guzzleMiddleware()->all(),
+            $this->responseInterceptors()->all(),
+        );
     }
 }

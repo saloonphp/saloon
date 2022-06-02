@@ -29,7 +29,7 @@ class UserRequest extends SaloonRequest
      */
     public function __construct(public ?int $userId = null, public ?int $groupId = null)
     {
-        //
+
     }
 
     /**
@@ -38,5 +38,12 @@ class UserRequest extends SaloonRequest
     protected function defineEndpoint(): string
     {
         return '/user';
+    }
+
+    protected function defaultHeaders(): array
+    {
+        return [
+            'Content-Type' => 'application/json'
+        ];
     }
 }

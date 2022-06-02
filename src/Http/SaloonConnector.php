@@ -11,7 +11,7 @@ use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Traits\ProxiesRequests;
 
-abstract class SaloonConnector implements SaloonConnectorInterface
+abstract class SaloonConnector
 {
     use HasRequestProperties;
     use HasCustomResponses;
@@ -21,10 +21,10 @@ abstract class SaloonConnector implements SaloonConnectorInterface
     abstract protected function defineBaseUrl(): string;
 
     /**
-     * @param RequestPayload $requestPayload
+     * @param PendingSaloonRequest $requestPayload
      * @return void
      */
-    public function beforeSend(RequestPayload $requestPayload): void
+    public function beforeSend(PendingSaloonRequest $requestPayload): void
     {
         //
     }

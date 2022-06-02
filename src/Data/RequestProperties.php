@@ -2,27 +2,24 @@
 
 namespace Sammyjo20\Saloon\Data;
 
-use Sammyjo20\Saloon\Helpers\ContentBag;
-
 class RequestProperties
 {
     /**
-     * @param ContentBag $headers
-     * @param ContentBag $queryParameters
-     * @param ContentBag $data
-     * @param ContentBag $config
-     * @param ContentBag $guzzleMiddleware
-     * @param ContentBag $responseInterceptors
+     * @param array $headers
+     * @param array $queryParameters
+     * @param array $data
+     * @param array $config
+     * @param array $guzzleMiddleware
+     * @param array $responseInterceptors
      */
     public function __construct(
-        public ContentBag $headers,
-        public ContentBag $queryParameters,
-        public ContentBag $data,
-        public ContentBag $config,
-        public ContentBag $guzzleMiddleware,
-        public ContentBag $responseInterceptors,
-    )
-    {
+        public array $headers,
+        public array $queryParameters,
+        public array $data,
+        public array $config,
+        public array $guzzleMiddleware,
+        public array $responseInterceptors
+    ) {
         //
     }
 }

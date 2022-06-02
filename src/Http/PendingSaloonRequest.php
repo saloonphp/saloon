@@ -9,56 +9,41 @@ use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 
-// This contains all the merged in data from the connector and the request.
-// It acts like a data-transfer-object with extra things included.
-
-// 1. Construct and accept a request
-// 2. Boot or get the connector
-// 3. Pull in the request data from the request + connector
-// 4. Merge into the request payload's data.
-
-// 1. "boot" the connector and the request, pass in the request payload
-// 2. "boot" all the plugins, pass in the request payload
-// 3. Run the authenticator
-// 4. Run the laravel manager and merge in any data from there...
-
-// Now You have a complete request payload with everything inside ready to be sent to the manager!
-
-// Request payload data:
-// - Request, Connector
-// - Headers, Config, Data, GuzzleMiddleware, Response Interceptors
-
-// ...
-
-// Inside a "RequestSender", accept a RequestPayload and we can do whatever we want with it
-
-// Mock client could live on the connector or the request.
-
-class RequestPayload
+class PendingSaloonRequest
 {
     use HasRequestProperties;
 
     /**
+     * The original request class making the request.
+     *
      * @var SaloonRequest
      */
     protected SaloonRequest $request;
 
     /**
-     * @var Method
-     */
-    protected Method $method;
-
-    /**
+     * The original connector making the request.
+     *
      * @var SaloonConnector
      */
     protected SaloonConnector $connector;
 
     /**
+     * The method the request will use.
+     *
+     * @var Method
+     */
+    protected Method $method;
+
+    /**
+     * The mock client if provided on the connector or request.
+     *
      * @var MockClient|null
      */
     protected ?MockClient $mockClient = null;
 
     /**
+     * The response class used to create a response.
+     *
      * @var string
      */
     protected string $responseClass;
@@ -76,55 +61,48 @@ class RequestPayload
         $connector = $request->getConnector();
 
         $this->request = $request;
-        $this->method = $request->getMethod();
         $this->connector = $connector;
+        $this->method = $request->getMethod();
         $this->mockClient = $request->getMockClient() ?? $connector->getMockClient();
         $this->responseClass = $request->getResponseClass() ?? $connector->getResponseClass();
 
-        $this->mergeBaseProperties()
-            ->bootPlugins()
+        // 1. Retrieve default properties
+        // 2. Merge default properties
+        // 3. Merge in new properties, keep old if the content bag allows.
+        // 4. Run "boot" methods on connector and request
+        // 5. Run authenticator
+        // 6. Run all plugins
+        // 7. Done!
+
+        $this->mergeRequestProperties()
             ->runAuthenticator()
+            ->bootPlugins()
             ->runBeforeSend();
     }
 
     /**
-     * Merge all the base data properties from the connectors.
+     * Merge all the properties together.
      *
      * @return $this
      */
-    protected function mergeBaseProperties(): self
+    protected function mergeRequestProperties(): self
     {
-        $connector = $this->connector;
-        $request = $this->request;
+        $connectorProperties = $this->connector->getRequestProperties();
+        $requestProperties = $this->request->getRequestProperties();
 
-        $this->headers->merge(
-            $connector->headers->all(),
-            $request->headers->all());
+        $this->headers()->merge($connectorProperties->headers, $requestProperties->headers);
+        $this->queryParameters()->merge($connectorProperties->queryParameters, $requestProperties->queryParameters);
+        $this->data()->merge($connectorProperties->data, $requestProperties->data);
+        $this->config()->merge($connectorProperties->config, $requestProperties->config);
+        $this->guzzleMiddleware()->merge($connectorProperties->guzzleMiddleware, $requestProperties->guzzleMiddleware);
+        $this->responseInterceptors()->merge($connectorProperties->responseInterceptors, $requestProperties->responseInterceptors);
 
-        $this->queryParameters->merge(
-            $connector->queryParameters->all(),
-            $request->queryParameters->all(),
-        );
+        return $this;
+    }
 
-        $this->data->merge(
-            $connector->data->all(),
-            $request->data->all(),
-        );
-
-        $this->config->merge(
-            $connector->config->all(),
-            $request->config->all(),
-        );
-
-        $this->guzzleMiddleware->merge(
-            $connector->guzzleMiddleware->all(),
-            $request->guzzleMiddleware->all(),
-        );
-
-        $this->responseInterceptors->merge(
-            $connector->responseInterceptors->all(),
-            $request->responseInterceptors->all(),
-        );
+    protected function runBootOnConnectorAndRequest(): self
+    {
+        // Run the "boot" methods on the connector/request.
 
         return $this;
     }
