@@ -39,9 +39,9 @@ class SaloonResponse
     /**
      * The request options we attached to the request.
      *
-     * @var array
+     * @var PendingSaloonRequest
      */
-    protected array $requestOptions;
+    protected PendingSaloonRequest $pendingSaloonRequest;
 
     /**
      * The original request
@@ -86,22 +86,20 @@ class SaloonResponse
      * @param Response $response
      * @param RequestException|null $guzzleRequestException
      */
-    public function __construct(array $requestOptions, SaloonRequest $originalRequest, Response $response, RequestException $guzzleRequestException = null)
+    public function __construct(PendingSaloonRequest $pendingSaloonRequest, SaloonRequest $originalRequest, Response $response, RequestException $guzzleRequestException = null)
     {
-        $this->requestOptions = $requestOptions;
+        $this->pendingSaloonRequest = $pendingSaloonRequest;
         $this->originalRequest = $originalRequest;
         $this->response = $response;
         $this->guzzleRequestException = $guzzleRequestException;
     }
 
     /**
-     * Get the request options we attached to the request. Headers, Config etc.
-     *
-     * @return array
+     * @return PendingSaloonRequest
      */
-    public function getRequestOptions(): array
+    public function getPendingSaloonRequest(): PendingSaloonRequest
     {
-        return $this->requestOptions;
+        return $this->pendingSaloonRequest;
     }
 
     /**

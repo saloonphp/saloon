@@ -16,7 +16,7 @@ class RequestProperties
     public function __construct(
         public array $headers,
         public array $queryParameters,
-        public array $data,
+        public array|string $data,
         public array $config,
         public Middleware $middleware,
     ) {

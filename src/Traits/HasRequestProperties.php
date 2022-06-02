@@ -4,6 +4,7 @@ namespace Sammyjo20\Saloon\Traits;
 
 use Sammyjo20\Saloon\Data\RequestProperties;
 use Sammyjo20\Saloon\Helpers\ContentBag;
+use Sammyjo20\Saloon\Helpers\DataBag;
 use Sammyjo20\Saloon\Helpers\Middleware;
 
 trait HasRequestProperties
@@ -25,9 +26,9 @@ trait HasRequestProperties
     /**
      * Request Data
      *
-     * @var ContentBag
+     * @var DataBag
      */
-    private ContentBag $data;
+    private DataBag $data;
 
     /**
      * Request Config
@@ -66,11 +67,11 @@ trait HasRequestProperties
     /**
      * Retrieve the data content bag.
      *
-     * @return ContentBag
+     * @return DataBag
      */
-    public function data(): ContentBag
+    public function data(): DataBag
     {
-        return $this->data ??= new ContentBag($this->defaultData());
+        return $this->data ??= new DataBag($this->defaultData());
     }
 
     /**
@@ -116,9 +117,9 @@ trait HasRequestProperties
     /**
      * Default Data
      *
-     * @return array
+     * @return array|string
      */
-    protected function defaultData(): array
+    protected function defaultData(): mixed
     {
         return [];
     }

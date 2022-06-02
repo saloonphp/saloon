@@ -3,6 +3,7 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
 use Sammyjo20\Saloon\Constants\Saloon;
+use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 
@@ -13,14 +14,14 @@ class ErrorRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::GET;
+    protected Method $method = Method::GET;
 
     /**
      * The connector.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $connector = TestConnector::class;
+    protected string $connector = TestConnector::class;
 
     /**
      * Define the endpoint for the request.

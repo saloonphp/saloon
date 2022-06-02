@@ -7,9 +7,11 @@ use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
+use Sammyjo20\Saloon\Interfaces\Data\HasJsonBody;
+use Sammyjo20\Saloon\Interfaces\Data\HasMixedBody;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class UserRequest extends SaloonRequest
+class UserRequest extends SaloonRequest implements HasJsonBody
 {
     /**
      * Define the method that the request will use.
@@ -39,9 +41,6 @@ class UserRequest extends SaloonRequest
             })
             ->addRequestPipe(function (PendingSaloonRequest $request) {
                 return $request;
-            })
-            ->addResponsePipe(function (SaloonResponse $response) {
-                //
             });
     }
 
@@ -57,6 +56,13 @@ class UserRequest extends SaloonRequest
     {
         return [
             'Content-Type' => 'application/json'
+        ];
+    }
+
+    protected function defaultData(): mixed
+    {
+        return [
+            'foo' => 'bar',
         ];
     }
 }

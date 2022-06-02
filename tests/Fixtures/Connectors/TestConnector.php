@@ -3,9 +3,12 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 
 use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Interfaces\Data\HasJsonBody;
+use Sammyjo20\Saloon\Interfaces\Data\HasMixedBody;
+use Sammyjo20\Saloon\Interfaces\Data\HasMultipartBody;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
 
-class TestConnector extends SaloonConnector
+class TestConnector extends SaloonConnector implements HasJsonBody
 {
     use AcceptsJson;
 
@@ -27,5 +30,12 @@ class TestConnector extends SaloonConnector
     public function defaultHeaders(): array
     {
         return [];
+    }
+
+    protected function defaultData(): mixed
+    {
+        return [
+            'baz' => 'bash',
+        ];
     }
 }

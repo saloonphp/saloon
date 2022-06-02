@@ -6,11 +6,18 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Utils;
 use ReflectionClass;
 use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Data\DataType;
 use Sammyjo20\Saloon\Enums\Method;
+use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
 use Sammyjo20\Saloon\Helpers\Middleware;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
+use Sammyjo20\Saloon\Interfaces\Data\HasFormParams;
+use Sammyjo20\Saloon\Interfaces\Data\HasJsonBody;
+use Sammyjo20\Saloon\Interfaces\Data\HasMixedBody;
+use Sammyjo20\Saloon\Interfaces\Data\HasMultipartBody;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 class PendingSaloonRequest
 {
@@ -69,6 +76,11 @@ class PendingSaloonRequest
     protected Middleware $requestMiddleware;
 
     /**
+     * @var DataType|null
+     */
+    protected ?DataType $dataType = null;
+
+    /**
      * Build up the request payload.
      *
      * @param SaloonRequest $request
@@ -92,6 +104,7 @@ class PendingSaloonRequest
         // Todo: Maybe Validate Response Class Here?
 
         $this->mergeRequestProperties()
+            ->mergeData()
             ->runAuthenticator()
             ->runBootOnConnectorAndRequest()
             ->bootPlugins()
@@ -102,6 +115,7 @@ class PendingSaloonRequest
      * Merge all the properties together.
      *
      * @return $this
+     * @throws \Sammyjo20\Saloon\Exceptions\DataBagException
      */
     protected function mergeRequestProperties(): self
     {
@@ -110,10 +124,56 @@ class PendingSaloonRequest
 
         $this->headers()->merge($connectorProperties->headers, $requestProperties->headers);
         $this->queryParameters()->merge($connectorProperties->queryParameters, $requestProperties->queryParameters);
-        $this->data()->merge($connectorProperties->data, $requestProperties->data);
         $this->config()->merge($connectorProperties->config, $requestProperties->config);
 
         return $this;
+    }
+
+    /**
+     * @return $this
+     * @throws PendingSaloonRequestException
+     * @throws \Sammyjo20\Saloon\Exceptions\DataBagException
+     */
+    protected function mergeData(): self
+    {
+        $connectorProperties = $this->connector->getRequestProperties();
+        $requestProperties = $this->request->getRequestProperties();
+
+        $connectorDataType = $this->determineDataType($this->connector);
+        $requestDataType = $this->determineDataType($this->request);
+
+        if (isset($connectorDataType, $requestDataType) && $connectorDataType !== $requestDataType) {
+            throw new PendingSaloonRequestException('Request data type and connector data type cannot be mixed.');
+        }
+
+        // The primary data type will be the request data type, if one has not
+        // been set, we will use the connector data.
+
+        $dataType = $requestDataType ?? $connectorDataType;
+
+        if ($connectorDataType instanceof DataType) {
+            $connectorDataType->isArrayable()
+                ? $this->data()->merge($connectorProperties->data)
+                : $this->data()->set($connectorProperties->data);
+        }
+
+        if ($requestDataType instanceof DataType) {
+            $requestDataType->isArrayable()
+                ? $this->data()->merge($requestProperties->data)
+                : $this->data()->set($requestProperties->data);
+        }
+
+        $this->dataType = $dataType;
+
+        return $this;
+    }
+
+    /**
+     * @return DataType|null
+     */
+    public function getDataType(): ?DataType
+    {
+        return $this->dataType;
     }
 
     /**
@@ -188,7 +248,7 @@ class PendingSaloonRequest
      * @param SaloonResponse $response
      * @return SaloonResponse
      */
-    public function runResponsePipeline(SaloonResponse $response): SaloonResponse
+    public function executeResponsePipeline(SaloonResponse $response): SaloonResponse
     {
         $response = $this->connectorMiddleware->executeResponsePipeline($response);
         $response = $this->requestMiddleware->executeResponsePipeline($response);
@@ -202,6 +262,33 @@ class PendingSaloonRequest
         // TODO: Work out data properly
 
         return new Request($this->method->value, $this->url, $this->headers()->all(), $this->data()->all());
+    }
+
+    /**
+     * Calculate the data type.
+     *
+     * @param SaloonConnector|SaloonRequest $object
+     * @return DataType|null
+     */
+    protected function determineDataType(SaloonConnector|SaloonRequest $object): ?DataType
+    {
+        if ($object instanceof HasJsonBody) {
+            return DataType::JSON;
+        }
+
+        if ($object instanceof HasFormParams) {
+            return DataType::FORM;
+        }
+
+        if ($object instanceof HasMultipartBody) {
+            return DataType::MULTIPART;
+        }
+
+        if ($object instanceof HasMixedBody) {
+            return DataType::MIXED;
+        }
+
+        return null;
     }
 
     /**
@@ -243,7 +330,6 @@ class PendingSaloonRequest
     {
         return $this->responseClass;
     }
-
 
     /**
      * @return MockClient|null
