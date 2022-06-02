@@ -3,20 +3,25 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Enums\Method;
-use Sammyjo20\Saloon\Interfaces\SaloonRequestInterface;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Traits\BuildsUrls;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
+use Sammyjo20\Saloon\Traits\HasDefaultRequestProperties;
+use Sammyjo20\Saloon\Traits\HasMiddleware;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\MocksRequests;
+use Sammyjo20\Saloon\Traits\RetrievesRequestProperties;
+use Sammyjo20\Saloon\Traits\SendsRequests;
 
 abstract class SaloonRequest
 {
     use HasRequestProperties;
+    use RetrievesRequestProperties;
     use BuildsUrls;
     use HasCustomResponses;
     use MocksRequests;
     use AuthenticatesRequests;
+    use SendsRequests;
 
     /**
      * @var string
@@ -79,7 +84,7 @@ abstract class SaloonRequest
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
      */
-    public function createRequestPayload(): PendingSaloonRequest
+    public function createPendingRequest(): PendingSaloonRequest
     {
         return new PendingSaloonRequest($this);
     }

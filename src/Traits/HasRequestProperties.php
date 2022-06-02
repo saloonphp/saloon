@@ -4,6 +4,7 @@ namespace Sammyjo20\Saloon\Traits;
 
 use Sammyjo20\Saloon\Data\RequestProperties;
 use Sammyjo20\Saloon\Helpers\ContentBag;
+use Sammyjo20\Saloon\Helpers\Middleware;
 
 trait HasRequestProperties
 {
@@ -38,16 +39,9 @@ trait HasRequestProperties
     /**
      * Request Guzzle Middleware
      *
-     * @var ContentBag
+     * @var Middleware
      */
-    private ContentBag $guzzleMiddleware;
-
-    /**
-     * Request Response Interceptors
-     *
-     * @var ContentBag
-     */
-    private ContentBag $responseInterceptors;
+    private Middleware $middleware;
 
     /**
      * Retrieve the headers content bag.
@@ -92,21 +86,11 @@ trait HasRequestProperties
     /**
      * Retrieve the guzzle middleware content bag.
      *
-     * @return ContentBag
+     * @return Middleware
      */
-    public function guzzleMiddleware(): ContentBag
+    public function middleware(): Middleware
     {
-        return $this->guzzleMiddleware ??= new ContentBag($this->defaultGuzzleMiddleware());
-    }
-
-    /**
-     * Retrieve the response interceptors content bag.
-     *
-     * @return ContentBag
-     */
-    public function responseInterceptors(): ContentBag
-    {
-        return $this->responseInterceptors ??= new ContentBag($this->defaultResponseInterceptors());
+        return $this->middleware ??= new Middleware;
     }
 
     /**
@@ -150,16 +134,6 @@ trait HasRequestProperties
     }
 
     /**
-     * Default Guzzle Middleware
-     *
-     * @return array
-     */
-    protected function defaultGuzzleMiddleware(): array
-    {
-        return [];
-    }
-
-    /**
      * Default Response Interceptors
      *
      * @return array
@@ -167,22 +141,5 @@ trait HasRequestProperties
     protected function defaultResponseInterceptors(): array
     {
         return [];
-    }
-
-    /**
-     * Get all the request properties with their default set.
-     *
-     * @return RequestProperties
-     */
-    public function getRequestProperties(): RequestProperties
-    {
-        return new RequestProperties(
-            $this->headers()->all(),
-            $this->queryParameters()->all(),
-            $this->data()->all(),
-            $this->config()->all(),
-            $this->guzzleMiddleware()->all(),
-            $this->responseInterceptors()->all(),
-        );
     }
 }

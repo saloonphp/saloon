@@ -2,6 +2,8 @@
 
 namespace Sammyjo20\Saloon\Data;
 
+use Sammyjo20\Saloon\Helpers\Middleware;
+
 class RequestProperties
 {
     /**
@@ -9,16 +11,14 @@ class RequestProperties
      * @param array $queryParameters
      * @param array $data
      * @param array $config
-     * @param array $guzzleMiddleware
-     * @param array $responseInterceptors
+     * @param Middleware $middleware
      */
     public function __construct(
         public array $headers,
         public array $queryParameters,
         public array $data,
         public array $config,
-        public array $guzzleMiddleware,
-        public array $responseInterceptors
+        public Middleware $middleware,
     ) {
         //
     }

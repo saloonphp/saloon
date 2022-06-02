@@ -8,13 +8,17 @@ use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
 use Sammyjo20\Saloon\Interfaces\SaloonConnectorInterface;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
+use Sammyjo20\Saloon\Traits\HasDefaultRequestProperties;
+use Sammyjo20\Saloon\Traits\HasMiddleware;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Traits\ProxiesRequests;
+use Sammyjo20\Saloon\Traits\RetrievesRequestProperties;
 
 abstract class SaloonConnector
 {
     use HasRequestProperties;
+    use RetrievesRequestProperties;
     use HasCustomResponses;
     use MocksRequests;
     use ProxiesRequests;
