@@ -102,6 +102,9 @@ class PendingSaloonRequest
         $this->connectorMiddleware = $connector->middleware();
         $this->requestMiddleware = $request->middleware();
 
+        // TODO: Mock Requests
+        // TODO: Allow middleware pipeline to go to the top
+
         $this->mergeRequestProperties()
             ->mergeData()
             ->runAuthenticator()

@@ -30,6 +30,8 @@ class Middleware
      */
     public function addRequestPipe(callable $closure): self
     {
+        // TODO: Allow ordering
+
         $this->requestPipeline = $this->requestPipeline->pipe(function (PendingSaloonRequest $request) use ($closure) {
             $closure($request);
 
