@@ -9,6 +9,7 @@ use Sammyjo20\Saloon\Data\DataType;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Helpers\Middleware;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
+use Sammyjo20\Saloon\Http\Middleware\DataObjectPipe;
 use Symfony\Component\VarDumper\Cloner\Data;
 use Sammyjo20\Saloon\Interfaces\Data\HasJsonBody;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
@@ -110,6 +111,7 @@ class PendingSaloonRequest
             ->runAuthenticator()
             ->runBootOnConnectorAndRequest()
             ->bootPlugins()
+            ->registerDefaultMiddleware()
             ->runMiddlewarePipeline();
     }
 
@@ -228,6 +230,17 @@ class PendingSaloonRequest
         foreach ($requestTraits as $requestTrait) {
             PluginHelper::bootPlugin($this, $request, $requestTrait);
         }
+
+        return $this;
+    }
+
+    protected function registerDefaultMiddleware(): self
+    {
+        // Todo: Register high priority mock client
+        // Todo: Register DTO response pipe
+
+        $this->middleware()
+            ->addResponsePipe(new DataObjectPipe);
 
         return $this;
     }
