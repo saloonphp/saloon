@@ -2,16 +2,17 @@
 
 namespace Sammyjo20\Saloon\Traits\Plugins;
 
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 
 trait AcceptsJson
 {
     /**
-     * @param SaloonRequest $request
+     * @param PendingSaloonRequest $request
      * @return void
      */
-    public function bootAcceptsJson(SaloonRequest $request): void
+    public function bootAcceptsJson(PendingSaloonRequest $request): void
     {
-        $this->addHeader('Accept', 'application/json');
+        $request->headers()->put('Accept', 'application/json');
     }
 }

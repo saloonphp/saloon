@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Http\Auth;
 
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 
@@ -23,11 +24,11 @@ class DigestAuthenticator implements AuthenticatorInterface
     /**
      * Apply the authentication to the request.
      *
-     * @param SaloonRequest $request
+     * @param PendingSaloonRequest $request
      * @return void
      */
-    public function set(SaloonRequest $request): void
+    public function set(PendingSaloonRequest $request): void
     {
-        $request->addConfig('auth', [$this->username, $this->password, $this->digest]);
+        $request->config()->put('auth', [$this->username, $this->password, $this->digest]);
     }
 }

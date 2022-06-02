@@ -35,18 +35,18 @@ class PendingSaloonRequest
     protected Method $method;
 
     /**
-     * The mock client if provided on the connector or request.
-     *
-     * @var MockClient|null
-     */
-    protected ?MockClient $mockClient = null;
-
-    /**
      * The response class used to create a response.
      *
      * @var string
      */
     protected string $responseClass;
+
+    /**
+     * The mock client if provided on the connector or request.
+     *
+     * @var MockClient|null
+     */
+    protected ?MockClient $mockClient = null;
 
     /**
      * Build up the request payload.
@@ -63,21 +63,15 @@ class PendingSaloonRequest
         $this->request = $request;
         $this->connector = $connector;
         $this->method = $request->getMethod();
+        $this->responseClass = $request->getResponseClass();
         $this->mockClient = $request->getMockClient() ?? $connector->getMockClient();
-        $this->responseClass = $request->getResponseClass() ?? $connector->getResponseClass();
 
-        // 1. Retrieve default properties
-        // 2. Merge default properties
-        // 3. Merge in new properties, keep old if the content bag allows.
-        // 4. Run "boot" methods on connector and request
-        // 5. Run authenticator
-        // 6. Run all plugins
-        // 7. Done!
+        // Todo: Maybe Validate Response Class Here?
 
         $this->mergeRequestProperties()
             ->runAuthenticator()
-            ->bootPlugins()
-            ->runBeforeSend();
+            ->runBootOnConnectorAndRequest()
+            ->bootPlugins();
     }
 
     /**
@@ -100,9 +94,31 @@ class PendingSaloonRequest
         return $this;
     }
 
+    /**
+     * Authenticate the request.
+     *
+     * @return $this
+     */
+    protected function runAuthenticator(): self
+    {
+        $authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
+
+        if ($authenticator instanceof AuthenticatorInterface) {
+            $authenticator->set($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Run the boot method on the connector and request.
+     *
+     * @return $this
+     */
     protected function runBootOnConnectorAndRequest(): self
     {
-        // Run the "boot" methods on the connector/request.
+        $this->connector->boot($this);
+        $this->request->boot($this);
 
         return $this;
     }
@@ -128,33 +144,6 @@ class PendingSaloonRequest
         foreach ($requestTraits as $requestTrait) {
             PluginHelper::bootPlugin($this, $request, $requestTrait);
         }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    protected function runAuthenticator(): self
-    {
-        $authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
-
-        if ($authenticator instanceof AuthenticatorInterface) {
-            $authenticator->set($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Run the "boot" methods on the connector and the request.
-     *
-     * @return $this
-     */
-    protected function runBeforeSend(): self
-    {
-        $this->connector->beforeSend($this);
-        $this->request->beforeSend($this);
 
         return $this;
     }

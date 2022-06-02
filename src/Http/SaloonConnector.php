@@ -6,6 +6,7 @@ use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
 use Sammyjo20\Saloon\Interfaces\SaloonConnectorInterface;
+use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\MocksRequests;
@@ -17,6 +18,7 @@ abstract class SaloonConnector
     use HasCustomResponses;
     use MocksRequests;
     use ProxiesRequests;
+    use AuthenticatesRequests;
 
     abstract protected function defineBaseUrl(): string;
 
@@ -24,7 +26,7 @@ abstract class SaloonConnector
      * @param PendingSaloonRequest $requestPayload
      * @return void
      */
-    public function beforeSend(PendingSaloonRequest $requestPayload): void
+    public function boot(PendingSaloonRequest $requestPayload): void
     {
         //
     }

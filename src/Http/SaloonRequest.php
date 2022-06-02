@@ -4,6 +4,7 @@ namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Interfaces\SaloonRequestInterface;
+use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Traits\BuildsUrls;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
@@ -15,6 +16,7 @@ abstract class SaloonRequest
     use BuildsUrls;
     use HasCustomResponses;
     use MocksRequests;
+    use AuthenticatesRequests;
 
     /**
      * @var string
@@ -86,7 +88,7 @@ abstract class SaloonRequest
      * @param PendingSaloonRequest $payload
      * @return void
      */
-    public function beforeSend(PendingSaloonRequest $payload): void
+    public function boot(PendingSaloonRequest $payload): void
     {
         // Apply anything right before the request is sent.
     }
