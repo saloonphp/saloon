@@ -7,10 +7,9 @@ use GuzzleHttp\Psr7\Request;
 use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Data\DataType;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Helpers\Middleware;
+use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Http\Middleware\DataObjectPipe;
-use Symfony\Component\VarDumper\Cloner\Data;
 use Sammyjo20\Saloon\Interfaces\Data\HasJsonBody;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Interfaces\Data\HasMixedBody;
@@ -66,14 +65,14 @@ class PendingSaloonRequest
     protected ?MockClient $mockClient = null;
 
     /**
-     * @var Middleware
+     * @var MiddlewarePipeline
      */
-    protected Middleware $connectorMiddleware;
+    protected MiddlewarePipeline $connectorMiddleware;
 
     /**
-     * @var Middleware
+     * @var MiddlewarePipeline
      */
-    protected Middleware $requestMiddleware;
+    protected MiddlewarePipeline $requestMiddleware;
 
     /**
      * @var DataType|null
@@ -103,16 +102,13 @@ class PendingSaloonRequest
         $this->connectorMiddleware = $connector->middleware();
         $this->requestMiddleware = $request->middleware();
 
-        // TODO: Mock Requests
-        // TODO: Allow middleware pipeline to go to the top
-
         $this->mergeRequestProperties()
             ->mergeData()
             ->runAuthenticator()
-            ->runBootOnConnectorAndRequest()
+            ->bootConnectorAndRequest()
             ->bootPlugins()
             ->registerDefaultMiddleware()
-            ->runMiddlewarePipeline();
+            ->executeRequestPipeline();
     }
 
     /**
@@ -201,7 +197,7 @@ class PendingSaloonRequest
      *
      * @return $this
      */
-    protected function runBootOnConnectorAndRequest(): self
+    protected function bootConnectorAndRequest(): self
     {
         $this->connector->boot($this);
         $this->request->boot($this);
@@ -246,10 +242,14 @@ class PendingSaloonRequest
     }
 
     /**
+     * Execute the request pipeline.
+     *
      * @return $this
      */
-    protected function runMiddlewarePipeline(): self
+    protected function executeRequestPipeline(): self
     {
+        // Todo: Combine into one Middleware pipeline.
+
         $this->connectorMiddleware->executeRequestPipeline($this);
         $this->requestMiddleware->executeRequestPipeline($this);
         $this->middleware()->executeRequestPipeline($this);

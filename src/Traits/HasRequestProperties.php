@@ -4,7 +4,7 @@ namespace Sammyjo20\Saloon\Traits;
 
 use Sammyjo20\Saloon\Helpers\DataBag;
 use Sammyjo20\Saloon\Helpers\ContentBag;
-use Sammyjo20\Saloon\Helpers\Middleware;
+use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 
 trait HasRequestProperties
 {
@@ -39,9 +39,9 @@ trait HasRequestProperties
     /**
      * Request Guzzle Middleware
      *
-     * @var Middleware
+     * @var MiddlewarePipeline
      */
-    private Middleware $middleware;
+    private MiddlewarePipeline $middleware;
 
     /**
      * Retrieve the headers content bag.
@@ -86,11 +86,11 @@ trait HasRequestProperties
     /**
      * Retrieve the guzzle middleware content bag.
      *
-     * @return Middleware
+     * @return MiddlewarePipeline
      */
-    public function middleware(): Middleware
+    public function middleware(): MiddlewarePipeline
     {
-        return $this->middleware ??= new Middleware;
+        return $this->middleware ??= new MiddlewarePipeline;
     }
 
     /**
@@ -116,7 +116,7 @@ trait HasRequestProperties
     /**
      * Default Data
      *
-     * @return array|string
+     * @return mixed
      */
     protected function defaultData(): mixed
     {
@@ -129,16 +129,6 @@ trait HasRequestProperties
      * @return array
      */
     protected function defaultConfig(): array
-    {
-        return [];
-    }
-
-    /**
-     * Default Response Interceptors
-     *
-     * @return array
-     */
-    protected function defaultResponseInterceptors(): array
     {
         return [];
     }

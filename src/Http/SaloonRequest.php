@@ -79,6 +79,8 @@ abstract class SaloonRequest
      *
      * @return PendingSaloonRequest
      * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\DataBagException
+     * @throws \Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
      */

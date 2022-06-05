@@ -2,11 +2,10 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
-use League\Pipeline\Pipeline;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 
-class Middleware
+class MiddlewarePipeline
 {
     /**
      * @var Pipeline
@@ -18,6 +17,9 @@ class Middleware
      */
     protected Pipeline $responsePipeline;
 
+    /**
+     * Instantiate the pipelines
+     */
     public function __construct()
     {
         $this->requestPipeline = new Pipeline();
@@ -31,32 +33,27 @@ class Middleware
      */
     public function addRequestPipe(callable $closure, bool $highPriority = false): self
     {
-        // TODO: Allow ordering
-
-        dd('is high priority', $highPriority);
-
         $this->requestPipeline = $this->requestPipeline->pipe(function (PendingSaloonRequest $request) use ($closure) {
-            $closure($request);
+            $result = $closure($request);
 
-            return $request;
-        });
+            return $result instanceof PendingSaloonRequest ? $result : $request;
+        }, $highPriority);
 
         return $this;
     }
 
     /**
      * @param callable $closure
+     * @param bool $highPriority
      * @return $this
      */
     public function addResponsePipe(callable $closure, bool $highPriority = false): self
     {
-        dd('is high priority', $highPriority);
-
         $this->responsePipeline = $this->responsePipeline->pipe(function (SaloonResponse $response) use ($closure) {
-            $closure($response);
+            $result = $closure($response);
 
-            return $response;
-        });
+            return $response instanceof SaloonResponse ? $result : $response;
+        }, $highPriority);
 
         return $this;
     }
@@ -73,7 +70,7 @@ class Middleware
     }
 
     /**
-     * Process the request pipeline.
+     * Process the response pipeline.
      *
      * @param SaloonResponse $response
      * @return SaloonResponse
