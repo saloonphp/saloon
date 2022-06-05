@@ -37,11 +37,11 @@ trait HasRequestProperties
     private ContentBag $config;
 
     /**
-     * Request Guzzle Middleware
+     * Saloon Middleware Pipeline
      *
      * @var MiddlewarePipeline
      */
-    private MiddlewarePipeline $middleware;
+    private MiddlewarePipeline $middlewarePipeline;
 
     /**
      * Retrieve the headers content bag.
@@ -88,9 +88,9 @@ trait HasRequestProperties
      *
      * @return MiddlewarePipeline
      */
-    public function middleware(): MiddlewarePipeline
+    public function middlewarePipeline(): MiddlewarePipeline
     {
-        return $this->middleware ??= new MiddlewarePipeline;
+        return $this->middlewarePipeline ??= new MiddlewarePipeline;
     }
 
     /**

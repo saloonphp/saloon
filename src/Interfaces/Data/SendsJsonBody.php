@@ -2,7 +2,7 @@
 
 namespace Sammyjo20\Saloon\Interfaces\Data;
 
-interface HasMixedBody
+interface SendsJsonBody
 {
     //
 }

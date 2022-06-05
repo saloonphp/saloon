@@ -18,7 +18,7 @@ trait RetrievesRequestProperties
             $this->queryParameters()->all(),
             $this->data()->all(),
             $this->config()->all(),
-            $this->middleware(),
+            $this->middlewarePipeline(),
         );
     }
 }

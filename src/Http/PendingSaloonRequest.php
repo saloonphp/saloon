@@ -10,11 +10,12 @@ use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Http\Middleware\DataObjectPipe;
-use Sammyjo20\Saloon\Interfaces\Data\HasJsonBody;
+use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
+use Sammyjo20\Saloon\Interfaces\Data\SendsXMLBody;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
-use Sammyjo20\Saloon\Interfaces\Data\HasMixedBody;
-use Sammyjo20\Saloon\Interfaces\Data\HasFormParams;
-use Sammyjo20\Saloon\Interfaces\Data\HasMultipartBody;
+use Sammyjo20\Saloon\Interfaces\Data\SendsMixedBody;
+use Sammyjo20\Saloon\Interfaces\Data\SendsFormParams;
+use Sammyjo20\Saloon\Interfaces\Data\SendsMultipartBody;
 use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
 
@@ -99,8 +100,8 @@ class PendingSaloonRequest
         $this->method = $request->getMethod();
         $this->responseClass = $request->getResponseClass();
         $this->mockClient = $request->getMockClient() ?? $connector->getMockClient();
-        $this->connectorMiddleware = $connector->middleware();
-        $this->requestMiddleware = $request->middleware();
+        $this->connectorMiddleware = $connector->middlewarePipeline();
+        $this->requestMiddleware = $request->middlewarePipeline();
 
         $this->mergeRequestProperties()
             ->mergeData()
@@ -235,7 +236,7 @@ class PendingSaloonRequest
         // Todo: Register high priority mock client
         // Todo: Register DTO response pipe
 
-        $this->middleware()
+        $this->middlewarePipeline()
             ->addResponsePipe(new DataObjectPipe);
 
         return $this;
@@ -252,7 +253,7 @@ class PendingSaloonRequest
 
         $this->connectorMiddleware->executeRequestPipeline($this);
         $this->requestMiddleware->executeRequestPipeline($this);
-        $this->middleware()->executeRequestPipeline($this);
+        $this->middlewarePipeline()->executeRequestPipeline($this);
 
         return $this;
     }
@@ -267,7 +268,7 @@ class PendingSaloonRequest
     {
         $response = $this->connectorMiddleware->executeResponsePipeline($response);
         $response = $this->requestMiddleware->executeResponsePipeline($response);
-        $response = $this->middleware()->executeResponsePipeline($response);
+        $response = $this->middlewarePipeline()->executeResponsePipeline($response);
 
         return $response;
     }
@@ -287,19 +288,19 @@ class PendingSaloonRequest
      */
     protected function determineDataType(SaloonConnector|SaloonRequest $object): ?DataType
     {
-        if ($object instanceof HasJsonBody) {
+        if ($object instanceof SendsJsonBody) {
             return DataType::JSON;
         }
 
-        if ($object instanceof HasFormParams) {
+        if ($object instanceof SendsFormParams) {
             return DataType::FORM;
         }
 
-        if ($object instanceof HasMultipartBody) {
+        if ($object instanceof SendsMultipartBody) {
             return DataType::MULTIPART;
         }
 
-        if ($object instanceof HasMixedBody) {
+        if ($object instanceof SendsMixedBody || $object instanceof SendsXMLBody) {
             return DataType::MIXED;
         }
 

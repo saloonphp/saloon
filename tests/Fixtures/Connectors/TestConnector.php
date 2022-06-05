@@ -4,9 +4,9 @@ namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
-use Sammyjo20\Saloon\Interfaces\Data\HasJsonBody;
+use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
 
-class TestConnector extends SaloonConnector implements HasJsonBody
+class TestConnector extends SaloonConnector implements SendsJsonBody
 {
     use AcceptsJson;
 
