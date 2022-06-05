@@ -18,14 +18,14 @@ test('you can set it', function () {
 
 test('you can add an item', function () {
     $bag = new ContentBag();
-    $bag->put('name', 'Sam');
+    $bag->push('name', 'Sam');
 
     expect($bag->all())->toEqual(['name' => 'Sam']);
 });
 
 test('you can delete an item', function () {
     $bag = new ContentBag(['name' => 'Sam']);
-    $bag->delete('name');
+    $bag->remove('name');
 
     expect($bag->all())->toEqual([]);
 });

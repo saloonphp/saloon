@@ -28,6 +28,6 @@ class DigestAuthenticator implements AuthenticatorInterface
      */
     public function set(PendingSaloonRequest $request): void
     {
-        $request->config()->put('auth', [$this->username, $this->password, $this->digest]);
+        $request->config()->push('auth', [$this->username, $this->password, $this->digest]);
     }
 }

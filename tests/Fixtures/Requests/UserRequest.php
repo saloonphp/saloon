@@ -32,7 +32,7 @@ class UserRequest extends SaloonRequest implements HasJsonBody
     {
         $this->middleware()
             ->addRequestPipe(function (PendingSaloonRequest $request) {
-                $request->headers()->put('X-Name', 'Sam');
+                $request->headers()->push('X-Name', 'Sam');
             });
     }
 

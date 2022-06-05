@@ -72,7 +72,7 @@ class ContentBag
      * @param mixed $value
      * @return $this
      */
-    public function put(string $key, mixed $value): self
+    public function push(string $key, mixed $value): self
     {
         $this->data[$key] = $value;
 
@@ -85,7 +85,7 @@ class ContentBag
      * @param string $key
      * @return $this
      */
-    public function delete(string $key): self
+    public function remove(string $key): self
     {
         unset($this->data[$key]);
 

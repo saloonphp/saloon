@@ -26,6 +26,6 @@ class TokenAuthenticator implements AuthenticatorInterface
      */
     public function set(PendingSaloonRequest $request): void
     {
-        $request->headers()->put('Authorization', trim($this->prefix . ' ' . $this->token));
+        $request->headers()->push('Authorization', trim($this->prefix . ' ' . $this->token));
     }
 }

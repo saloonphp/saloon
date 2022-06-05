@@ -12,6 +12,6 @@ trait AcceptsJson
      */
     public function bootAcceptsJson(PendingSaloonRequest $request): void
     {
-        $request->headers()->put('Accept', 'application/json');
+        $request->headers()->push('Accept', 'application/json');
     }
 }

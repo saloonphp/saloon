@@ -26,6 +26,6 @@ class BasicAuthenticator implements AuthenticatorInterface
      */
     public function set(PendingSaloonRequest $request): void
     {
-        $request->config()->put('auth', [$this->username, $this->password]);
+        $request->config()->push('auth', [$this->username, $this->password]);
     }
 }

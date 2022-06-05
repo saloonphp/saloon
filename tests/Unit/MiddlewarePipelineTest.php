@@ -10,12 +10,11 @@ test('you can add a request pipe to the middleware', function () {
 
     $pipeline
         ->addRequestPipe(function (PendingSaloonRequest $request) {
-            $request->headers()->put('X-Pipe-One', 'Yee-Haw');
+            $request->headers()->push('X-Pipe-One', 'Yee-Haw');
         })
         ->addRequestPipe(function (PendingSaloonRequest $request) {
-            $request->headers()->put('X-Pipe-Two', 'Howdy');
+            $request->headers()->push('X-Pipe-Two', 'Howdy');
         });
-
 
     $pendingRequest = (new UserRequest)->createPendingRequest();
     $pendingRequest = $pipeline->executeRequestPipeline($pendingRequest);
@@ -31,7 +30,7 @@ test('if a request pipe returns a pending request, we will use that in the next 
 
     $pipeline
         ->addRequestPipe(function (PendingSaloonRequest $request) use ($errorRequest) {
-            $request->headers()->put('X-Pipe-One', 'Yee-Haw');
+            $request->headers()->push('X-Pipe-One', 'Yee-Haw');
 
             return $errorRequest;
         });
@@ -47,10 +46,10 @@ test('you can define a high priority request pipe', function () {
 
     $pipeline
         ->addRequestPipe(function (PendingSaloonRequest $request) {
-            $request->headers()->put('X-Pipe-One', 'Yee-Haw');
+            $request->headers()->push('X-Pipe-One', 'Yee-Haw');
         })
         ->addRequestPipe(function (PendingSaloonRequest $request) {
-            $request->headers()->put('X-Pipe-One', 'Howdy');
+            $request->headers()->push('X-Pipe-One', 'Howdy');
         }, true);
 
     $pendingRequest = (new UserRequest)->createPendingRequest();

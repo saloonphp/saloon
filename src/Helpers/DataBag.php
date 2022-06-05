@@ -85,7 +85,7 @@ class DataBag
      * @return $this
      * @throws DataBagException
      */
-    public function put(string $key, mixed $value): self
+    public function push(string $key, mixed $value): self
     {
         if ($this->isNotArray()) {
             throw new DataBagException('This method is only available for array data.');
