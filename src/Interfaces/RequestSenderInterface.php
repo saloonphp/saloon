@@ -14,4 +14,12 @@ interface RequestSenderInterface
      * @return SaloonResponse
      */
     public function handle(PendingSaloonRequest $request): SaloonResponse;
+
+    /**
+     * Process the response
+     *
+     * @param SaloonResponse $response
+     * @return SaloonResponse
+     */
+    public function processResponse(SaloonResponse $response): SaloonResponse;
 }

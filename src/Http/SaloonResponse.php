@@ -44,13 +44,6 @@ class SaloonResponse
     protected PendingSaloonRequest $pendingSaloonRequest;
 
     /**
-     * The original request
-     *
-     * @var SaloonRequest
-     */
-    protected SaloonRequest $originalRequest;
-
-    /**
      * The original Guzzle request exception
      *
      * @var RequestException|null
@@ -79,17 +72,15 @@ class SaloonResponse
     private bool $isMocked = false;
 
     /**
-     * Create a new response instance.s
+     * Create a new response instance.
      *
      * @param PendingSaloonRequest $pendingSaloonRequest
-     * @param SaloonRequest $originalRequest
      * @param Response $response
      * @param RequestException|null $guzzleRequestException
      */
-    public function __construct(PendingSaloonRequest $pendingSaloonRequest, SaloonRequest $originalRequest, Response $response, RequestException $guzzleRequestException = null)
+    public function __construct(PendingSaloonRequest $pendingSaloonRequest, Response $response, RequestException $guzzleRequestException = null)
     {
         $this->pendingSaloonRequest = $pendingSaloonRequest;
-        $this->originalRequest = $originalRequest;
         $this->response = $response;
         $this->guzzleRequestException = $guzzleRequestException;
     }

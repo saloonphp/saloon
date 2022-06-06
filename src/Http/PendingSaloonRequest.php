@@ -168,14 +168,6 @@ class PendingSaloonRequest
     }
 
     /**
-     * @return DataType|null
-     */
-    public function getDataType(): ?DataType
-    {
-        return $this->dataType;
-    }
-
-    /**
      * Authenticate the request.
      *
      * @return $this
@@ -267,13 +259,6 @@ class PendingSaloonRequest
         return $response;
     }
 
-    public function toPsrRequest(): Request
-    {
-        // TODO: Work out data properly
-
-        return new Request($this->method->value, $this->url, $this->headers()->all(), $this->data()->all());
-    }
-
     /**
      * Calculate the data type.
      *
@@ -347,5 +332,13 @@ class PendingSaloonRequest
     public function getMockClient(): ?MockClient
     {
         return $this->mockClient;
+    }
+
+    /**
+     * @return DataType|null
+     */
+    public function getDataType(): ?DataType
+    {
+        return $this->dataType;
     }
 }

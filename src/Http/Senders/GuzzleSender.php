@@ -7,6 +7,7 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use Sammyjo20\Saloon\Data\DataType;
 use GuzzleHttp\Client as GuzzleClient;
+use Sammyjo20\Saloon\Http\RequestSender;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\BadResponseException;
@@ -14,8 +15,16 @@ use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Interfaces\RequestSenderInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 
-class GuzzleSender implements RequestSenderInterface
+class GuzzleSender extends RequestSender
 {
+    /**
+     * @param PendingSaloonRequest $request
+     * @return SaloonResponse
+     * @throws SaloonInvalidResponseClassException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     */
     public function handle(PendingSaloonRequest $request): SaloonResponse
     {
         $client = $this->createGuzzleClient();
@@ -90,25 +99,21 @@ class GuzzleSender implements RequestSenderInterface
     /**
      * Create a response.
      *
-     * @param array $requestOptions
-     * @param Response $response
+     * @param PendingSaloonRequest $pendingSaloonRequest
+     * @param Response $guzzleResponse
      * @param RequestException|null $exception
      * @return SaloonResponse
-     * @throws SaloonInvalidResponseClassException
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     private function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $guzzleResponse, RequestException $exception = null): SaloonResponse
     {
-        $request = $pendingSaloonRequest->getRequest();
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
         /** @var SaloonResponse $response */
-        $response = new $responseClass($pendingSaloonRequest, $request, $guzzleResponse, $exception);
+        $response = new $responseClass($pendingSaloonRequest, $guzzleResponse, $exception);
 
         // Run the response pipeline
 
-        $response = $pendingSaloonRequest->executeResponsePipeline($response);
+        $pendingSaloonRequest->executeResponsePipeline($response);
 
         // If we are mocking, we should record the request and response on the mock manager,
         // so we can run assertions on the responses.
@@ -116,12 +121,6 @@ class GuzzleSender implements RequestSenderInterface
 //        if ($this->isMocking()) {
 //            $response->setMocked(true);
 //            $this->mockClient->recordResponse($response);
-//        }
-
-        // Run Response Interceptors
-
-//        foreach ($this->getResponseInterceptors() as $responseInterceptor) {
-//            $response = $responseInterceptor($request, $response);
 //        }
 
         return $response;
