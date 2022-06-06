@@ -2,28 +2,20 @@
 
 namespace Sammyjo20\Saloon\Traits\Plugins;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonResponse;
+use Sammyjo20\Saloon\Http\Middleware\ThrowPipe;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 
 trait AlwaysThrowsOnErrors
 {
     /**
      * Always throw if there is something wrong with the request.
      *
-     * @param SaloonRequest $request
+     * @param PendingSaloonRequest $request
      * @return void
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function bootAlwaysThrowsOnErrors(SaloonRequest $request): void
+    public function bootAlwaysThrowsOnErrors(PendingSaloonRequest $request): void
     {
-        if ($this instanceof SaloonRequest && $this->traitExistsOnConnector(AlwaysThrowsOnErrors::class)) {
-            return;
-        }
-
-        $this->addResponseInterceptor(function (SaloonRequest $request, SaloonResponse $response) {
-            $response->throw();
-
-            return $response;
-        });
+        $request->middlewarePipeline()
+            ->addResponsePipe(new ThrowPipe);
     }
 }

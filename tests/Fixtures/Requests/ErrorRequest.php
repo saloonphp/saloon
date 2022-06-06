@@ -11,7 +11,7 @@ class ErrorRequest extends SaloonRequest
     /**
      * Define the method that the request will use.
      *
-     * @var string|null
+     * @var string
      */
     protected string $method = 'GET';
 

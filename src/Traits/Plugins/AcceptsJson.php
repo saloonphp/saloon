@@ -10,7 +10,7 @@ trait AcceptsJson
      * @param PendingSaloonRequest $request
      * @return void
      */
-    public function bootAcceptsJson(PendingSaloonRequest $request): void
+    public static function bootAcceptsJson(PendingSaloonRequest $request): void
     {
         $request->headers()->push('Accept', 'application/json');
     }

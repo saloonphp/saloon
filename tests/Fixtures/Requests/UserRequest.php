@@ -7,9 +7,12 @@ use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Sammyjo20\Saloon\Traits\Plugins\AlwaysThrowsOnErrors;
 
 class UserRequest extends SaloonRequest implements SendsJsonBody
 {
+    use AlwaysThrowsOnErrors;
+
     /**
      * Define the method that the request will use.
      *
