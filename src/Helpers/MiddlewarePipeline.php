@@ -52,7 +52,7 @@ class MiddlewarePipeline
         $this->responsePipeline = $this->responsePipeline->pipe(function (SaloonResponse $response) use ($closure) {
             $result = $closure($response);
 
-            return $response instanceof SaloonResponse ? $result : $response;
+            return $result instanceof SaloonResponse ? $result : $response;
         }, $highPriority);
 
         return $this;
@@ -66,7 +66,9 @@ class MiddlewarePipeline
      */
     public function executeRequestPipeline(PendingSaloonRequest $request): PendingSaloonRequest
     {
-        return $this->requestPipeline->process($request);
+        $this->requestPipeline->process($request);
+
+        return $request;
     }
 
     /**
@@ -77,6 +79,48 @@ class MiddlewarePipeline
      */
     public function executeResponsePipeline(SaloonResponse $response): SaloonResponse
     {
-        return $this->responsePipeline->process($response);
+        $this->responsePipeline->process($response);
+
+        return $response;
+    }
+
+    /**
+     * Merge in another middleware pipeline.
+     *
+     * @param MiddlewarePipeline $middlewarePipeline
+     * @return $this
+     */
+    public function merge(MiddlewarePipeline $middlewarePipeline): self
+    {
+        $requestPipes = array_merge(
+            $this->getRequestPipeline()->getPipes(),
+            $middlewarePipeline->getRequestPipeline()->getPipes()
+        );
+
+        $responsePipes = array_merge(
+            $this->getResponsePipeline()->getPipes(),
+            $middlewarePipeline->getResponsePipeline()->getPipes()
+        );
+
+        $this->requestPipeline->setPipes($requestPipes);
+        $this->responsePipeline->setPipes($responsePipes);
+
+        return $this;
+    }
+
+    /**
+     * @return Pipeline
+     */
+    public function getRequestPipeline(): Pipeline
+    {
+        return $this->requestPipeline;
+    }
+
+    /**
+     * @return Pipeline
+     */
+    public function getResponsePipeline(): Pipeline
+    {
+        return $this->responsePipeline;
     }
 }

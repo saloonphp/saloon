@@ -98,17 +98,19 @@ class GuzzleSender implements RequestSenderInterface
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    private function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $response, RequestException $exception = null): SaloonResponse
+    private function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $guzzleResponse, RequestException $exception = null): SaloonResponse
     {
         $request = $pendingSaloonRequest->getRequest();
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
         /** @var SaloonResponse $response */
-        $response = new $responseClass($pendingSaloonRequest, $request, $response, $exception);
+        $response = new $responseClass($pendingSaloonRequest, $request, $guzzleResponse, $exception);
 
         // Run the response pipeline
 
         $response = $pendingSaloonRequest->executeResponsePipeline($response);
+
+        dd($response);
 
         // If we are mocking, we should record the request and response on the mock manager,
         // so we can run assertions on the responses.

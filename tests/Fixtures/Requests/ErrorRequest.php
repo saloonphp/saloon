@@ -13,7 +13,7 @@ class ErrorRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected Method $method = Method::GET;
+    protected string $method = 'GET';
 
     /**
      * The connector.

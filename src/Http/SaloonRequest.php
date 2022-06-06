@@ -32,9 +32,9 @@ abstract class SaloonRequest
     private ?SaloonConnector $loadedConnector = null;
 
     /**
-     * @var Method
+     * @var string
      */
-    protected Method $method = Method::GET;
+    protected string $method = '';
 
     /**
      * Define the API endpoint used.
@@ -46,7 +46,7 @@ abstract class SaloonRequest
     /**
      * @return Method
      */
-    public function getMethod(): Method
+    public function getMethod(): string
     {
         return $this->method;
     }

@@ -8,6 +8,6 @@ class DataObjectPipe
 {
     public function __invoke(SaloonResponse $response): void
     {
-        dd('Set DTO', $response);
+        // TODO: Write DTO Logic
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 
@@ -13,9 +13,9 @@ class UserRequest extends SaloonRequest implements SendsJsonBody
     /**
      * Define the method that the request will use.
      *
-     * @var Method
+     * @var string
      */
-    protected Method $method = Method::GET;
+    protected string $method = 'GET';
 
     /**
      * The connector.

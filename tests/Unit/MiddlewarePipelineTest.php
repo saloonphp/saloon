@@ -2,6 +2,7 @@
 
 use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Http\SaloonResponse;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 
@@ -69,3 +70,27 @@ test('you can add a response pipe to the middleware', function () {
 test('you can define a high priority response pipe', function () {
     //
 })->skip('Until we have mocking working for version 2');
+
+test('you can merge a middleware pipeline together', closure: function () {
+    $pipelineA = new MiddlewarePipeline;
+    $pipelineB = new MiddlewarePipeline;
+
+    $pipelineA
+        ->addRequestPipe(function (PendingSaloonRequest $request) {
+            $request->headers()->push('X-Pipe-One', 'Yee-Haw');
+        })
+        ->addRequestPipe(function (PendingSaloonRequest $request) {
+            $request->headers()->push('X-Pipe-One', 'Howdy');
+        })
+        ->addResponsePipe(function (SaloonResponse $response) {
+            return $response->throw();
+        });
+
+    expect($pipelineB->getRequestPipeline()->getPipes())->toBeEmpty();
+    expect($pipelineB->getResponsePipeline()->getPipes())->toBeEmpty();
+
+    $pipelineB->merge($pipelineA);
+
+    expect($pipelineB->getRequestPipeline()->getPipes())->toHaveCount(2);
+    expect($pipelineB->getResponsePipeline()->getPipes())->toHaveCount(1);
+});

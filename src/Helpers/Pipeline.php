@@ -51,6 +51,19 @@ class Pipeline
     }
 
     /**
+     * Set the pipes on the pipeline.
+     *
+     * @param array $pipes
+     * @return $this
+     */
+    public function setPipes(array $pipes): self
+    {
+        $this->pipes = $pipes;
+
+        return $this;
+    }
+
+    /**
      * Get all the pipes in the pipeline
      *
      * @return array

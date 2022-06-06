@@ -66,16 +66,6 @@ class PendingSaloonRequest
     protected ?MockClient $mockClient = null;
 
     /**
-     * @var MiddlewarePipeline
-     */
-    protected MiddlewarePipeline $connectorMiddleware;
-
-    /**
-     * @var MiddlewarePipeline
-     */
-    protected MiddlewarePipeline $requestMiddleware;
-
-    /**
      * @var DataType|null
      */
     protected ?DataType $dataType = null;
@@ -97,13 +87,15 @@ class PendingSaloonRequest
         $this->request = $request;
         $this->connector = $connector;
         $this->url = $request->getRequestUrl();
-        $this->method = $request->getMethod();
+        $this->method = Method::upperFrom($request->getMethod());
         $this->responseClass = $request->getResponseClass();
         $this->mockClient = $request->getMockClient() ?? $connector->getMockClient();
-        $this->connectorMiddleware = $connector->middlewarePipeline();
-        $this->requestMiddleware = $request->middlewarePipeline();
 
-        $this->mergeRequestProperties()
+        // Now it's time to stitch together our PendingSaloonRequest. We will firstly merge everything
+        // into this one class, and then run each of the various features at once. 🚀
+
+        $this
+            ->mergeRequestProperties()
             ->mergeData()
             ->runAuthenticator()
             ->bootConnectorAndRequest()
@@ -116,7 +108,6 @@ class PendingSaloonRequest
      * Merge all the properties together.
      *
      * @return $this
-     * @throws \Sammyjo20\Saloon\Exceptions\DataBagException
      */
     protected function mergeRequestProperties(): self
     {
@@ -126,6 +117,11 @@ class PendingSaloonRequest
         $this->headers()->merge($connectorProperties->headers, $requestProperties->headers);
         $this->queryParameters()->merge($connectorProperties->queryParameters, $requestProperties->queryParameters);
         $this->config()->merge($connectorProperties->config, $requestProperties->config);
+
+        // Merge together the middleware...
+
+        $this->middlewarePipeline()->merge($connectorProperties->middleware);
+        $this->middlewarePipeline()->merge($requestProperties->middleware);
 
         return $this;
     }
@@ -165,6 +161,8 @@ class PendingSaloonRequest
         }
 
         $this->dataType = $dataType;
+
+        // Todo: Set datatype on the databag to enforce type?
 
         return $this;
     }
@@ -231,13 +229,15 @@ class PendingSaloonRequest
         return $this;
     }
 
+    /**
+     * Register any default middleware that should be placed right at the top.
+     *
+     * @return $this
+     */
     protected function registerDefaultMiddleware(): self
     {
-        // Todo: Register high priority mock client
-        // Todo: Register DTO response pipe
-
         $this->middlewarePipeline()
-            ->addResponsePipe(new DataObjectPipe);
+            ->addResponsePipe(new DataObjectPipe, true);
 
         return $this;
     }
@@ -249,10 +249,6 @@ class PendingSaloonRequest
      */
     protected function executeRequestPipeline(): self
     {
-        // Todo: Combine into one Middleware pipeline.
-
-        $this->connectorMiddleware->executeRequestPipeline($this);
-        $this->requestMiddleware->executeRequestPipeline($this);
         $this->middlewarePipeline()->executeRequestPipeline($this);
 
         return $this;
@@ -266,9 +262,7 @@ class PendingSaloonRequest
      */
     public function executeResponsePipeline(SaloonResponse $response): SaloonResponse
     {
-        $response = $this->connectorMiddleware->executeResponsePipeline($response);
-        $response = $this->requestMiddleware->executeResponsePipeline($response);
-        $response = $this->middlewarePipeline()->executeResponsePipeline($response);
+        $this->middlewarePipeline()->executeResponsePipeline($response);
 
         return $response;
     }

@@ -79,9 +79,9 @@ class SaloonResponse
     private bool $isMocked = false;
 
     /**
-     * Create a new response instance.
+     * Create a new response instance.s
      *
-     * @param array $requestOptions
+     * @param PendingSaloonRequest $pendingSaloonRequest
      * @param SaloonRequest $originalRequest
      * @param Response $response
      * @param RequestException|null $guzzleRequestException
