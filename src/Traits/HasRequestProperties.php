@@ -13,35 +13,35 @@ trait HasRequestProperties
      *
      * @var ContentBag
      */
-    private ContentBag $headers;
+    protected ContentBag $headers;
 
     /**
      * Request Query Parameters
      *
      * @var ContentBag
      */
-    private ContentBag $queryParameters;
+    protected ContentBag $queryParameters;
 
     /**
      * Request Data
      *
      * @var DataBag
      */
-    private DataBag $data;
+    protected DataBag $data;
 
     /**
      * Request Config
      *
      * @var ContentBag
      */
-    private ContentBag $config;
+    protected ContentBag $config;
 
     /**
      * Saloon Middleware Pipeline
      *
      * @var MiddlewarePipeline
      */
-    private MiddlewarePipeline $middlewarePipeline;
+    protected MiddlewarePipeline $middlewarePipeline;
 
     /**
      * Retrieve the headers content bag.

@@ -110,8 +110,6 @@ class GuzzleSender implements RequestSenderInterface
 
         $response = $pendingSaloonRequest->executeResponsePipeline($response);
 
-        dd($response);
-
         // If we are mocking, we should record the request and response on the mock manager,
         // so we can run assertions on the responses.
 //
