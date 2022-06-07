@@ -17,4 +17,25 @@ class URLHelper
     {
         return Str::is(Str::start($pattern, '*'), $value);
     }
+
+    /**
+     * Join a domain and an endpoint together.
+     *
+     * @param string $baseUrl
+     * @param string $endpoint
+     * @return string
+     */
+    public static function join(string $baseUrl, string $endpoint): string
+    {
+        if ($endpoint !== '/') {
+            $endpoint = ltrim($endpoint, '/ ');
+        }
+
+        $requiresTrailingSlash = ! empty($endpoint) && $endpoint !== '/';
+
+        $baseEndpoint = rtrim($baseUrl, '/ ');
+        $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . '/' : $baseEndpoint;
+
+        return $baseEndpoint . $endpoint;
+    }
 }

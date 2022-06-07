@@ -2,7 +2,9 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Helpers\URLHelper;
 use Sammyjo20\Saloon\Traits\CollectsData;
+use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
@@ -26,7 +28,8 @@ abstract class SaloonRequest implements SaloonRequestInterface
         CollectsInterceptors,
         AuthenticatesRequests,
         HasCustomResponses,
-        SendsRequests;
+        SendsRequests,
+        MocksRequests;
 
     /**
      * Define the method that the request will use.
@@ -144,18 +147,10 @@ abstract class SaloonRequest implements SaloonRequestInterface
      */
     public function getFullRequestUrl(): string
     {
+        $baseUrl = $this->getConnector()->defineBaseUrl();
         $requestEndpoint = $this->defineEndpoint();
 
-        if ($requestEndpoint !== '/') {
-            $requestEndpoint = ltrim($requestEndpoint, '/ ');
-        }
-
-        $requiresTrailingSlash = ! empty($requestEndpoint) && $requestEndpoint !== '/';
-
-        $baseEndpoint = rtrim($this->getConnector()->defineBaseUrl(), '/ ');
-        $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . '/' : $baseEndpoint;
-
-        return $baseEndpoint . $requestEndpoint;
+        return URLHelper::join($baseUrl, $requestEndpoint);
     }
 
     /**

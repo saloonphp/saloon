@@ -9,6 +9,7 @@ trait HasFormParams
     /**
      * @param SaloonRequest $request
      * @return void
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function bootHasFormParams(SaloonRequest $request): void
     {
