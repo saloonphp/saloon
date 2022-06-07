@@ -12,7 +12,7 @@ use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
 use Sammyjo20\Saloon\Traits\Plugins\CastsToDto;
 use Sammyjo20\Saloon\Traits\Plugins\HasFormParams;
 
-class GetAccessTokenRequest extends SaloonRequest
+class GetRefreshTokenRequest extends SaloonRequest
 {
     use HasFormParams;
     use AcceptsJson;
@@ -37,10 +37,10 @@ class GetAccessTokenRequest extends SaloonRequest
     /**
      * Requires the authorization code and OAuth 2 config.
      *
-     * @param string $code
+     * @param AccessTokenAuthenticator $accessToken
      * @param OAuth2Config $oauthConfig
      */
-    public function __construct(protected string $code, protected OAuth2Config $oauthConfig)
+    public function __construct(protected AccessTokenAuthenticator $accessToken, protected OAuth2Config $oauthConfig)
     {
         //
     }
@@ -53,11 +53,10 @@ class GetAccessTokenRequest extends SaloonRequest
     public function defaultData(): array
     {
         return [
-            'grant_type' => 'authorization_code',
-            'code' => $this->code,
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $this->accessToken->getRefreshToken(),
             'client_id' => $this->oauthConfig->getClientId(),
             'client_secret' => $this->oauthConfig->getClientSecret(),
-            'redirect_uri' => $this->oauthConfig->getRedirectUri(),
         ];
     }
 }

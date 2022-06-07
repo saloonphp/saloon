@@ -4,9 +4,9 @@ namespace Sammyjo20\Saloon\Http\Auth;
 
 use Carbon\CarbonInterface;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
+use Sammyjo20\Saloon\Interfaces\OauthAuthenticatorInterface;
 
-class AccessTokenAuthenticator implements AuthenticatorInterface
+class AccessTokenAuthenticator implements OauthAuthenticatorInterface
 {
     /**
      * @param string $accessToken
@@ -22,9 +22,15 @@ class AccessTokenAuthenticator implements AuthenticatorInterface
         //
     }
 
+    /**
+     * Apply the authentication to the request.
+     *
+     * @param SaloonRequest $request
+     * @return void
+     */
     public function set(SaloonRequest $request): void
     {
-        // TODO: Implement set() method.
+        $request->addHeader('Authorization', 'Bearer ' . $this->getAccessToken());
     }
 
     /**
