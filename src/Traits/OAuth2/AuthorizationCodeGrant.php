@@ -119,7 +119,7 @@ trait AuthorizationCodeGrant
         }
 
         return $returnResponse === false
-            ? $this->createAccessTokenAuthenticator($response)
+            ? $this->createAccessTokenAuthenticator($response, $accessToken)
             : $response;
     }
 
@@ -145,14 +145,19 @@ trait AuthorizationCodeGrant
      * @param SaloonResponse $response
      * @return OauthAuthenticatorInterface
      */
-    protected function createAccessTokenAuthenticator(SaloonResponse $response): OauthAuthenticatorInterface
+    protected function createAccessTokenAuthenticator(SaloonResponse $response, AccessTokenAuthenticator $accessToken = null): OauthAuthenticatorInterface
     {
         $data = $response->object();
 
         $expiresAt = CarbonImmutable::now()->addSeconds($data->expires_in);
 
+        // If an refresh token exists on the payload, use that - but if one does not
+        // exist, fetch a new one.
+
+        $refreshToken = $data->refresh_token ?? $accessToken?->getRefreshToken();
+
         return new AccessTokenAuthenticator(
-            $data->access_token, $data->refresh_token, $expiresAt,
+            $data->access_token, $refreshToken, $expiresAt,
         );
     }
 }

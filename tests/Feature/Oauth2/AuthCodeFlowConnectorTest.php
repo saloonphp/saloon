@@ -76,5 +76,5 @@ test('you can get the user from an oauth connector', function () {
 });
 
 test('you can customize the oauth authenticator', function () {
-    // TODO:    
+    // TODO:
 });
