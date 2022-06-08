@@ -1,6 +1,8 @@
 <?php
 
-namespace Sammyjo20\Saloon\Helpers;
+namespace Sammyjo20\Saloon\Helpers\OAuth2;
+
+use Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException;
 
 class OAuthConfig
 {
@@ -45,6 +47,13 @@ class OAuthConfig
      * @var string
      */
     protected string $userEndpoint = 'user';
+
+    /**
+     * The default scopes that will be applied to every authorization URL.
+     *
+     * @var array
+     */
+    protected array $defaultScopes = [];
 
     /**
      * Create a new instance of the class.
@@ -192,5 +201,51 @@ class OAuthConfig
         $this->userEndpoint = $userEndpoint;
 
         return $this;
+    }
+
+    /**
+     * Get the default scopes.
+     *
+     * @return array
+     */
+    public function getDefaultScopes(): array
+    {
+        return $this->defaultScopes;
+    }
+
+    /**
+     * Set the default scopes.
+     *
+     * @param array $defaultScopes
+     * @return OAuthConfig
+     */
+    public function setDefaultScopes(array $defaultScopes): self
+    {
+        $this->defaultScopes = $defaultScopes;
+
+        return $this;
+    }
+
+    /**
+     * Validate the OAuth2 config.
+     *
+     * @return bool
+     * @throws OAuthConfigValidationException
+     */
+    public function validate(): bool
+    {
+        if (empty($this->getClientId())) {
+            throw new OAuthConfigValidationException('The Client ID is empty or has not been provided.');
+        }
+
+        if (empty($this->getClientSecret())) {
+            throw new OAuthConfigValidationException('The Client Secret is empty or has not been provided.');
+        }
+
+        if (empty($this->getRedirectUri())) {
+            throw new OAuthConfigValidationException('The Redirect URI is empty or has not been provided.');
+        }
+
+        return true;
     }
 }

@@ -12,6 +12,10 @@ test('the redirect url is structured properly', function () {
     // Test scopes
 });
 
+test('you can provide default scopes that will be applied to every authorization url', function () {
+
+});
+
 test('you can request the original response instead of the authenticator on the create tokens method', function () {
 
 });
@@ -26,4 +30,8 @@ test('default state is generated automatically on the authorization code flow', 
 
 test('you can provide a real state if you prefer', function () {
 
+});
+
+test('it will throw an exception if the state provided is invalid', function () {
+    //
 });

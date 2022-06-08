@@ -55,7 +55,7 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      * @param mixed ...$arguments
      * @return SaloonConnector
      */
-    public static function make(...$arguments): self
+    public static function make(...$arguments): static
     {
         return new static(...$arguments);
     }

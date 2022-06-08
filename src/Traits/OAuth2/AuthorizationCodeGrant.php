@@ -3,7 +3,8 @@
 namespace Sammyjo20\Saloon\Traits\OAuth2;
 
 use Carbon\CarbonImmutable;
-use Sammyjo20\Saloon\Helpers\OAuthConfig;
+use Sammyjo20\Saloon\Exceptions\InvalidStateException;
+use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
 use Sammyjo20\Saloon\Helpers\StateHelper;
 use Sammyjo20\Saloon\Helpers\URLHelper;
 use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
@@ -56,17 +57,23 @@ trait AuthorizationCodeGrant
      * @param string $scopeSeparator
      * @param string|null $state
      * @return string
+     * @throws \Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException
      */
     public function getAuthorizationUrl(array $scopes = [], string $state = null, string $scopeSeparator = ' '): string
     {
-        $clientId = $this->oauthConfig()->getClientId();
-        $redirectUri = $this->oauthConfig()->getRedirectUri();
+        $config = $this->oauthConfig();
+
+        $config->validate();
+
+        $clientId = $config->getClientId();
+        $redirectUri = $config->getRedirectUri();
+        $defaultScopes = $config->getDefaultScopes();
 
         $this->state = $state ?? StateHelper::createRandomState();
 
         $queryParameters = [
             'response_type' => 'code',
-            'scope' => implode($scopeSeparator, $scopes),
+            'scope' => implode($scopeSeparator, array_merge($defaultScopes, $scopes)),
             'client_id' => $clientId,
             'redirect_uri' => $redirectUri,
             'state' => $this->state,
@@ -75,7 +82,7 @@ trait AuthorizationCodeGrant
         $query = http_build_query($queryParameters, '', '&', PHP_QUERY_RFC3986);
         $query = trim($query, '?&');
 
-        $url = URLHelper::join($this->defineBaseUrl(), $this->oauthConfig()->getAuthorizeEndpoint());
+        $url = URLHelper::join($this->defineBaseUrl(), $config->getAuthorizeEndpoint());
 
         $glue = str_contains($url, '?') ? '&' : '?';
 
@@ -86,16 +93,25 @@ trait AuthorizationCodeGrant
      * Get the access token.
      *
      * @param string $code
+     * @param string|null $state
+     * @param string|null $expectedState
      * @param bool $returnResponse
      * @param bool $throwOnFailure
-     * @return SaloonResponse|AccessTokenAuthenticator
+     * @return OauthAuthenticatorInterface|SaloonResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonRequestException
      */
-    public function getAccessToken(string $code, bool $returnResponse = false, bool $throwOnFailure = true): OauthAuthenticatorInterface|SaloonResponse
+    public function getAccessToken(string $code, string $state = null, string $expectedState = null, bool $returnResponse = false, bool $throwOnFailure = true): OauthAuthenticatorInterface|SaloonResponse
     {
+        $this->oauthConfig()->validate();
+
+        if (! empty($state) && ! empty($expectedState) && $state !== $expectedState) {
+            throw new InvalidStateException;
+        }
+
         $response = $this->send(new GetAccessTokenRequest($code, $this->oauthConfig()));
 
         if ($throwOnFailure === true) {
@@ -113,14 +129,17 @@ trait AuthorizationCodeGrant
      * @param AccessTokenAuthenticator $accessToken
      * @param bool $returnResponse
      * @param bool $throwOnFailure
-     * @return AccessTokenAuthenticator|SaloonResponse
+     * @return OauthAuthenticatorInterface|SaloonResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonRequestException
      */
     public function refreshAccessToken(AccessTokenAuthenticator $accessToken, bool $returnResponse = false, bool $throwOnFailure = true): OauthAuthenticatorInterface|SaloonResponse
     {
+        $this->oauthConfig()->validate();
+
         $response = $this->send(new GetRefreshTokenRequest($accessToken, $this->oauthConfig()));
 
         if ($throwOnFailure === true) {

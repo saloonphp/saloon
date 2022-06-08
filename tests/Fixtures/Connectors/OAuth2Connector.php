@@ -2,7 +2,7 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 
-use Sammyjo20\Saloon\Helpers\OAuthConfig;
+use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\OAuth2\AuthorizationCodeGrant;
 
