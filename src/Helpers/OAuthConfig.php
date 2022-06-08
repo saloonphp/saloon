@@ -2,9 +2,7 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
-use Sammyjo20\Saloon\Http\MockResponse;
-
-class OAuth2Config
+class OAuthConfig
 {
     /**
      * The Client ID
@@ -72,7 +70,7 @@ class OAuth2Config
      * Set the Client ID
      *
      * @param string $clientId
-     * @return OAuth2Config
+     * @return OAuthConfig
      */
     public function setClientId(string $clientId): self
     {
@@ -95,7 +93,7 @@ class OAuth2Config
      * Set the Client Secret
      *
      * @param string $clientSecret
-     * @return OAuth2Config
+     * @return OAuthConfig
      */
     public function setClientSecret(string $clientSecret): self
     {
@@ -118,7 +116,7 @@ class OAuth2Config
      * Set the Redirect URI
      *
      * @param string $redirectUri
-     * @return OAuth2Config
+     * @return OAuthConfig
      */
     public function setRedirectUri(string $redirectUri): self
     {
@@ -141,7 +139,7 @@ class OAuth2Config
      * Set the authorization endpoint.
      *
      * @param string $authorizeEndpoint
-     * @return OAuth2Config
+     * @return OAuthConfig
      */
     public function setAuthorizeEndpoint(string $authorizeEndpoint): self
     {
@@ -164,7 +162,7 @@ class OAuth2Config
      * Set the token endpoint.
      *
      * @param string $tokenEndpoint
-     * @return OAuth2Config
+     * @return OAuthConfig
      */
     public function setTokenEndpoint(string $tokenEndpoint): self
     {
@@ -187,7 +185,7 @@ class OAuth2Config
      * Set the user endpoint.
      *
      * @param string $userEndpoint
-     * @return OAuth2Config
+     * @return OAuthConfig
      */
     public function setUserEndpoint(string $userEndpoint): self
     {

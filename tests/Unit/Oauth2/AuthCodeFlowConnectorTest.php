@@ -19,3 +19,11 @@ test('you can request the original response instead of the authenticator on the 
 test('you can request the original response instead of the authenticator on the refresh tokens method', function () {
 
 });
+
+test('default state is generated automatically on the authorization code flow', function () {
+
+});
+
+test('you can provide a real state if you prefer', function () {
+
+});

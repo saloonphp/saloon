@@ -4,7 +4,7 @@ namespace Sammyjo20\Saloon\Http\OAuth2;
 
 use Carbon\CarbonImmutable;
 use Sammyjo20\Saloon\Constants\Saloon;
-use Sammyjo20\Saloon\Helpers\OAuth2Config;
+use Sammyjo20\Saloon\Helpers\OAuthConfig;
 use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonResponse;
@@ -38,9 +38,9 @@ class GetAccessTokenRequest extends SaloonRequest
      * Requires the authorization code and OAuth 2 config.
      *
      * @param string $code
-     * @param OAuth2Config $oauthConfig
+     * @param OAuthConfig $oauthConfig
      */
-    public function __construct(protected string $code, protected OAuth2Config $oauthConfig)
+    public function __construct(protected string $code, protected OAuthConfig $oauthConfig)
     {
         //
     }

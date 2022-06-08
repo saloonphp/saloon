@@ -2,7 +2,7 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 
-use Sammyjo20\Saloon\Helpers\OAuth2Config;
+use Sammyjo20\Saloon\Helpers\OAuthConfig;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\OAuth2\AuthorizationCodeGrant;
 
@@ -23,11 +23,11 @@ class OAuth2Connector extends SaloonConnector
     /**
      * Define default Oauth config.
      *
-     * @return OAuth2Config
+     * @return OAuthConfig
      */
-    protected function defaultOauthConfig(): OAuth2Config
+    protected function defaultOauthConfig(): OAuthConfig
     {
-        return OAuth2Config::make()
+        return OAuthConfig::make()
             ->setClientId('client-id')
             ->setClientSecret('client-secret')
             ->setRedirectUri('https://my-app.saloon.dev/oauth/redirect');

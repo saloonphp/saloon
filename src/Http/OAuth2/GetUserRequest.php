@@ -3,7 +3,7 @@
 namespace Sammyjo20\Saloon\Http\OAuth2;
 
 use Sammyjo20\Saloon\Constants\Saloon;
-use Sammyjo20\Saloon\Helpers\OAuth2Config;
+use Sammyjo20\Saloon\Helpers\OAuthConfig;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
 use Sammyjo20\Saloon\Traits\Plugins\HasFormParams;
@@ -33,9 +33,9 @@ class GetUserRequest extends SaloonRequest
     /**
      * Requires the authorization code and OAuth 2 config.
      *
-     * @param OAuth2Config $oauthConfig
+     * @param OAuthConfig $oauthConfig
      */
-    public function __construct(protected OAuth2Config $oauthConfig)
+    public function __construct(protected OAuthConfig $oauthConfig)
     {
         //
     }
