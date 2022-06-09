@@ -33,6 +33,27 @@ class AccessTokenAuthenticator implements OAuthAuthenticatorInterface
     }
 
     /**
+     * Serialize the access token.
+     *
+     * @return string
+     */
+    public function serialize(): string
+    {
+        return serialize($this);
+    }
+
+    /**
+     * Unserialize the access token.
+     *
+     * @param string $string
+     * @return static
+     */
+    public static function unserialize(string $string): static
+    {
+        return unserialize($string, ['allowed_classes' => true]);
+    }
+
+    /**
      * Check if the access token has expired.
      *
      * @return bool
