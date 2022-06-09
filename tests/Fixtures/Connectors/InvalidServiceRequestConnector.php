@@ -5,8 +5,6 @@ namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Collections\UserCollection;
 
 class InvalidServiceRequestConnector extends SaloonConnector
 {

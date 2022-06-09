@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Traits\CollectsData;
+use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Helpers\RequestHelper;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
@@ -30,7 +31,8 @@ abstract class SaloonConnector implements SaloonConnectorInterface
         CollectsHandlers,
         CollectsInterceptors,
         AuthenticatesRequests,
-        HasCustomResponses;
+        HasCustomResponses,
+        MocksRequests;
 
     /**
      * Register Saloon requests that will become methods on the connector.
@@ -53,7 +55,7 @@ abstract class SaloonConnector implements SaloonConnectorInterface
      * @param mixed ...$arguments
      * @return SaloonConnector
      */
-    public static function make(...$arguments): self
+    public static function make(...$arguments): static
     {
         return new static(...$arguments);
     }

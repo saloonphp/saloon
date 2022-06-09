@@ -2,7 +2,9 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Helpers\URLHelper;
 use Sammyjo20\Saloon\Traits\CollectsData;
+use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
@@ -26,7 +28,8 @@ abstract class SaloonRequest implements SaloonRequestInterface
         CollectsInterceptors,
         AuthenticatesRequests,
         HasCustomResponses,
-        SendsRequests;
+        SendsRequests,
+        MocksRequests;
 
     /**
      * Define the method that the request will use.
@@ -50,12 +53,22 @@ abstract class SaloonRequest implements SaloonRequestInterface
     private ?SaloonConnector $loadedConnector = null;
 
     /**
+     * Define the endpoint for the request.
+     *
+     * @return string
+     */
+    public function defineEndpoint(): string
+    {
+        return '';
+    }
+
+    /**
      * Instantiate a new class with the arguments.
      *
      * @param mixed ...$arguments
      * @return SaloonRequest
      */
-    public static function make(...$arguments): self
+    public static function make(...$arguments): static
     {
         return new static(...$arguments);
     }
@@ -129,7 +142,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
      * @param SaloonConnector $connector
      * @return $this
      */
-    public function setConnector(SaloonConnector $connector): self
+    public function setConnector(SaloonConnector $connector): static
     {
         $this->loadedConnector = $connector;
 
@@ -144,28 +157,10 @@ abstract class SaloonRequest implements SaloonRequestInterface
      */
     public function getFullRequestUrl(): string
     {
+        $baseUrl = $this->getConnector()->defineBaseUrl();
         $requestEndpoint = $this->defineEndpoint();
 
-        if ($requestEndpoint !== '/') {
-            $requestEndpoint = ltrim($requestEndpoint, '/ ');
-        }
-
-        $requiresTrailingSlash = ! empty($requestEndpoint) && $requestEndpoint !== '/';
-
-        $baseEndpoint = rtrim($this->getConnector()->defineBaseUrl(), '/ ');
-        $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . '/' : $baseEndpoint;
-
-        return $baseEndpoint . $requestEndpoint;
-    }
-
-    /**
-     * Define the endpoint for the request.
-     *
-     * @return string
-     */
-    public function defineEndpoint(): string
-    {
-        return '';
+        return URLHelper::join($baseUrl, $requestEndpoint);
     }
 
     /**

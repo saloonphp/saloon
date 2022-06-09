@@ -24,6 +24,8 @@ trait SendsRequests
     {
         // 🚀 ... 🌑 ... 💫
 
+        $mockClient ??= ($this->getMockClient() ?? $this->getConnector()->getMockClient());
+
         return $this->getRequestManager($mockClient, $asynchronous)->send();
     }
 
