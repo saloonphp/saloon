@@ -53,6 +53,16 @@ abstract class SaloonRequest implements SaloonRequestInterface
     private ?SaloonConnector $loadedConnector = null;
 
     /**
+     * Define the endpoint for the request.
+     *
+     * @return string
+     */
+    public function defineEndpoint(): string
+    {
+        return '';
+    }
+
+    /**
      * Instantiate a new class with the arguments.
      *
      * @param mixed ...$arguments
@@ -151,16 +161,6 @@ abstract class SaloonRequest implements SaloonRequestInterface
         $requestEndpoint = $this->defineEndpoint();
 
         return URLHelper::join($baseUrl, $requestEndpoint);
-    }
-
-    /**
-     * Define the endpoint for the request.
-     *
-     * @return string
-     */
-    public function defineEndpoint(): string
-    {
-        return '';
     }
 
     /**

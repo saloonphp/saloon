@@ -93,7 +93,7 @@ test('it will throw an exception if state is invalid', function () {
     $url = $connector->getAuthorizationUrl(['scope-1', 'scope-2'], $state);
 
     $connector->getAccessToken('code', 'invalid', $state);
-})->throws(InvalidStateException::class);
+})->throws(InvalidStateException::class, 'Invalid state.');
 
 test('you can refresh a token from a connector', function () {
     $mockClient = new MockClient([
