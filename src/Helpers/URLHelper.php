@@ -19,7 +19,7 @@ class URLHelper
     }
 
     /**
-     * Join a domain and an endpoint together.
+     * Join a base url and an endpoint together.
      *
      * @param string $baseUrl
      * @param string $endpoint

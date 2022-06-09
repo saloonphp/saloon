@@ -28,21 +28,21 @@ class OAuthConfig
     protected string $redirectUri = '';
 
     /**
-     * The endpoint used to retrieve credentials.
+     * The endpoint used for the authorization URL.
      *
      * @var string
      */
     protected string $authorizeEndpoint = 'authorize';
 
     /**
-     * The endpoint used to refresh credentials.
+     * The endpoint used to create and refresh tokens.
      *
      * @var string
      */
     protected string $tokenEndpoint = 'token';
 
     /**
-     * The endpoint used to retrieve user information.s
+     * The endpoint used to retrieve user information.
      *
      * @var string
      */
