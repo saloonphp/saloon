@@ -1,10 +1,10 @@
 <?php
 
 use Carbon\CarbonImmutable;
-use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
 use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonResponse;
+use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\OAuth2Connector;
 
 test('you can get the redirect url from a connector', function () {
@@ -19,7 +19,7 @@ test('you can get the redirect url from a connector', function () {
 
 test('you can request a token from a connector', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600])
+        MockResponse::make(['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600]),
     ]);
 
     $connector = new OAuth2Connector;
@@ -36,7 +36,7 @@ test('you can request a token from a connector', function () {
 
 test('you can refresh a token from a connector', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600])
+        MockResponse::make(['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
     ]);
 
     $connector = new OAuth2Connector;
@@ -55,7 +55,7 @@ test('you can refresh a token from a connector', function () {
 
 test('you can get the user from an oauth connector', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['user' => 'Sam'])
+        MockResponse::make(['user' => 'Sam']),
     ]);
 
     $connector = new OAuth2Connector;
@@ -71,7 +71,7 @@ test('you can get the user from an oauth connector', function () {
 
     expect($originalRequest->getHeaders())->toEqual([
         'Accept' => 'application/json',
-        'Authorization' => 'Bearer access'
+        'Authorization' => 'Bearer access',
     ]);
 });
 

@@ -3,8 +3,8 @@
 namespace Sammyjo20\Saloon\Http\OAuth2;
 
 use Sammyjo20\Saloon\Constants\Saloon;
-use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
 use Sammyjo20\Saloon\Traits\Plugins\HasFormParams;
 

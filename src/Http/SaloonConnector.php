@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Traits\CollectsData;
+use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Helpers\RequestHelper;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
@@ -20,7 +21,6 @@ use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Interfaces\SaloonConnectorInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
-use Sammyjo20\Saloon\Traits\MocksRequests;
 
 abstract class SaloonConnector implements SaloonConnectorInterface
 {

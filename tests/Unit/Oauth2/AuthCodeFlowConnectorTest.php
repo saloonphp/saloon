@@ -1,11 +1,9 @@
 <?php
 
 test('the oauth 2 config class can be configured properly', function () {
-
 });
 
 test('the oauth config method will return an oauth config class', function () {
-
 });
 
 test('the redirect url is structured properly', function () {
@@ -13,23 +11,18 @@ test('the redirect url is structured properly', function () {
 });
 
 test('you can provide default scopes that will be applied to every authorization url', function () {
-
 });
 
 test('you can request the original response instead of the authenticator on the create tokens method', function () {
-
 });
 
 test('you can request the original response instead of the authenticator on the refresh tokens method', function () {
-
 });
 
 test('default state is generated automatically on the authorization code flow', function () {
-
 });
 
 test('you can provide a real state if you prefer', function () {
-
 });
 
 test('it will throw an exception if the state provided is invalid', function () {

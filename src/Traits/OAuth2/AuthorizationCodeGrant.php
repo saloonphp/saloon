@@ -3,16 +3,17 @@
 namespace Sammyjo20\Saloon\Traits\OAuth2;
 
 use Carbon\CarbonImmutable;
-use Sammyjo20\Saloon\Exceptions\InvalidStateException;
-use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
-use Sammyjo20\Saloon\Helpers\StateHelper;
+use Carbon\CarbonInterface;
 use Sammyjo20\Saloon\Helpers\URLHelper;
-use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
-use Sammyjo20\Saloon\Http\OAuth2\GetAccessTokenRequest;
-use Sammyjo20\Saloon\Http\OAuth2\GetRefreshTokenRequest;
-use Sammyjo20\Saloon\Http\OAuth2\GetUserRequest;
+use Sammyjo20\Saloon\Helpers\StateHelper;
 use Sammyjo20\Saloon\Http\SaloonResponse;
-use Sammyjo20\Saloon\Interfaces\OauthAuthenticatorInterface;
+use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
+use Sammyjo20\Saloon\Http\OAuth2\GetUserRequest;
+use Sammyjo20\Saloon\Exceptions\InvalidStateException;
+use Sammyjo20\Saloon\Http\OAuth2\GetAccessTokenRequest;
+use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
+use Sammyjo20\Saloon\Http\OAuth2\GetRefreshTokenRequest;
+use Sammyjo20\Saloon\Interfaces\OAuthAuthenticatorInterface;
 
 trait AuthorizationCodeGrant
 {
@@ -96,15 +97,15 @@ trait AuthorizationCodeGrant
      * @param string|null $state
      * @param string|null $expectedState
      * @param bool $returnResponse
-     * @param bool $throwOnFailure
-     * @return OauthAuthenticatorInterface|SaloonResponse
+     * @return OAuthAuthenticatorInterface|SaloonResponse
+     * @throws InvalidStateException
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonRequestException
      */
-    public function getAccessToken(string $code, string $state = null, string $expectedState = null, bool $returnResponse = false, bool $throwOnFailure = true): OauthAuthenticatorInterface|SaloonResponse
+    public function getAccessToken(string $code, string $state = null, string $expectedState = null, bool $returnResponse = false): OAuthAuthenticatorInterface|SaloonResponse
     {
         $this->oauthConfig()->validate();
 
@@ -114,79 +115,90 @@ trait AuthorizationCodeGrant
 
         $response = $this->send(new GetAccessTokenRequest($code, $this->oauthConfig()));
 
-        if ($throwOnFailure === true) {
-            $response->throw();
+        if ($returnResponse === true) {
+            return $response;
         }
 
-        return $returnResponse === false
-            ? $this->createAccessTokenAuthenticator($response)
-            : $response;
+        $response->throw();
+
+        return $this->createOAuthAuthenticatorFromResponse($response);
     }
 
     /**
      * Refresh the access token.
      *
-     * @param AccessTokenAuthenticator $accessToken
+     * @param OAuthAuthenticatorInterface|string $refreshToken
      * @param bool $returnResponse
-     * @param bool $throwOnFailure
-     * @return OauthAuthenticatorInterface|SaloonResponse
+     * @return OAuthAuthenticatorInterface|SaloonResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonRequestException
      */
-    public function refreshAccessToken(AccessTokenAuthenticator $accessToken, bool $returnResponse = false, bool $throwOnFailure = true): OauthAuthenticatorInterface|SaloonResponse
+    public function refreshAccessToken(OAuthAuthenticatorInterface|string $refreshToken, bool $returnResponse = false): OAuthAuthenticatorInterface|SaloonResponse
     {
         $this->oauthConfig()->validate();
 
-        $response = $this->send(new GetRefreshTokenRequest($accessToken, $this->oauthConfig()));
-
-        if ($throwOnFailure === true) {
-            $response->throw();
+        if ($refreshToken instanceof OAuthAuthenticatorInterface) {
+            $refreshToken = $refreshToken->getRefreshToken();
         }
 
-        return $returnResponse === false
-            ? $this->createAccessTokenAuthenticator($response, $accessToken)
-            : $response;
+        $response = $this->send(new GetRefreshTokenRequest($this->oauthConfig(), $refreshToken));
+
+        if ($returnResponse === true) {
+            return $response;
+        }
+
+        $response->throw();
+
+        return $this->createOAuthAuthenticatorFromResponse($response, $refreshToken);
     }
 
     /**
-     * Get the authenticated user.
+     * Create the OAuthAuthenticator from a response.
      *
-     * @param AccessTokenAuthenticator $accessToken
+     * @param SaloonResponse $response
+     * @param string|null $fallbackRefreshToken
+     * @return OAuthAuthenticatorInterface
+     */
+    protected function createOAuthAuthenticatorFromResponse(SaloonResponse $response, string $fallbackRefreshToken = null): OAuthAuthenticatorInterface
+    {
+        $responseData = $response->object();
+
+        $accessToken = $responseData->access_token;
+        $refreshToken = $responseData->refresh_token ?? $fallbackRefreshToken;
+        $expiresAt = CarbonImmutable::now()->addSeconds($responseData->expires_in);
+
+        return $this->createOAuthAuthenticator($accessToken, $refreshToken, $expiresAt);
+    }
+
+    /**
+     * Create the authenticator.
+     *
+     * @param string $accessToken
+     * @param string $refreshToken
+     * @param CarbonInterface $expiresAt
+     * @return OAuthAuthenticatorInterface
+     */
+    protected function createOAuthAuthenticator(string $accessToken, string $refreshToken, CarbonInterface $expiresAt): OAuthAuthenticatorInterface
+    {
+        return new AccessTokenAuthenticator($accessToken, $refreshToken, $expiresAt);
+    }
+
+    /**
+     * Get the authenticated user.s
+     *
+     * @param OAuthAuthenticatorInterface $oauthAuthenticator
      * @return SaloonResponse
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */
-    public function getUser(AccessTokenAuthenticator $accessToken): SaloonResponse
+    public function getUser(OAuthAuthenticatorInterface $oauthAuthenticator): SaloonResponse
     {
         return $this->send(
-            GetUserRequest::make($this->oauthConfig())->withAuth($accessToken)
-        );
-    }
-
-    /**
-     * Create the access token authenticator used in requests.
-     *
-     * @param SaloonResponse $response
-     * @param AccessTokenAuthenticator|null $accessToken
-     * @return OauthAuthenticatorInterface
-     */
-    protected function createAccessTokenAuthenticator(SaloonResponse $response, AccessTokenAuthenticator $accessToken = null): OauthAuthenticatorInterface
-    {
-        $data = $response->object();
-
-        $expiresAt = CarbonImmutable::now()->addSeconds($data->expires_in);
-
-        // If refresh token exists on the payload, use that - but if one does not
-        // exist, fetch a new one.
-
-        $refreshToken = $data->refresh_token ?? $accessToken?->getRefreshToken();
-
-        return new AccessTokenAuthenticator(
-            $data->access_token, $refreshToken, $expiresAt,
+            GetUserRequest::make($this->oauthConfig())->withAuth($oauthAuthenticator)
         );
     }
 

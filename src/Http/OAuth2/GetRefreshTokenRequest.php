@@ -3,9 +3,8 @@
 namespace Sammyjo20\Saloon\Http\OAuth2;
 
 use Sammyjo20\Saloon\Constants\Saloon;
-use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
-use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
 use Sammyjo20\Saloon\Traits\Plugins\HasFormParams;
 
@@ -34,10 +33,10 @@ class GetRefreshTokenRequest extends SaloonRequest
     /**
      * Requires the authorization code and OAuth 2 config.
      *
-     * @param AccessTokenAuthenticator $accessToken
      * @param OAuthConfig $oauthConfig
+     * @param string $refreshToken
      */
-    public function __construct(protected AccessTokenAuthenticator $accessToken, protected OAuthConfig $oauthConfig)
+    public function __construct(protected OAuthConfig $oauthConfig, protected string $refreshToken)
     {
         //
     }
@@ -51,7 +50,7 @@ class GetRefreshTokenRequest extends SaloonRequest
     {
         return [
             'grant_type' => 'refresh_token',
-            'refresh_token' => $this->accessToken->getRefreshToken(),
+            'refresh_token' => $this->refreshToken,
             'client_id' => $this->oauthConfig->getClientId(),
             'client_secret' => $this->oauthConfig->getClientSecret(),
         ];

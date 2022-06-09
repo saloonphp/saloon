@@ -3,9 +3,8 @@
 namespace Sammyjo20\Saloon\Interfaces;
 
 use Carbon\CarbonInterface;
-use Sammyjo20\Saloon\Http\SaloonRequest;
 
-interface OauthAuthenticatorInterface extends AuthenticatorInterface
+interface OAuthAuthenticatorInterface extends AuthenticatorInterface
 {
     /**
      * @return string
