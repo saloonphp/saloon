@@ -4,7 +4,7 @@ use Carbon\CarbonImmutable;
 use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
 
 it('can be serialized and unserialized', function () {
-    $accessToken = 'accesss';
+    $accessToken = 'access';
     $refreshToken = 'refresh';
     $expiresAt = CarbonImmutable::now();
 
