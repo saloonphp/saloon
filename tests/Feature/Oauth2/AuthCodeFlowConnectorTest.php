@@ -1,15 +1,15 @@
 <?php
 
 use Carbon\CarbonImmutable;
-use Sammyjo20\Saloon\Exceptions\InvalidStateException;
+use Illuminate\Support\Str;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonResponse;
+use Sammyjo20\Saloon\Exceptions\InvalidStateException;
 use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\OAuth2Connector;
 use Sammyjo20\Saloon\Tests\Fixtures\Authenticators\CustomOAuthAuthenticator;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\CustomResponseOAuth2Connector;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\OAuth2Connector;
-use Illuminate\Support\Str;
 
 test('you can get the redirect url from a connector', function () {
     $connector = new OAuth2Connector;

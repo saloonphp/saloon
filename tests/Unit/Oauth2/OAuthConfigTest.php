@@ -1,7 +1,7 @@
 <?php
 
-use Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException;
 use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
+use Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException;
 
 test('all default properties are correct and all getters and setters work properly', function () {
     $config = new OAuthConfig;
@@ -63,4 +63,3 @@ test('it will throw an exception if you do not specify the redirect uri', functi
 
     $config->validate();
 })->throws(OAuthConfigValidationException::class, 'The Redirect URI is empty or has not been provided.');
-

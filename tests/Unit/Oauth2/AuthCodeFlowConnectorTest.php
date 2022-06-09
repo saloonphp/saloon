@@ -1,11 +1,11 @@
 <?php
 
 use Carbon\CarbonImmutable;
+use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException;
 use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
 use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
-use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\OAuth2Connector;
 
 test('the oauth 2 config class can be configured properly', function () {

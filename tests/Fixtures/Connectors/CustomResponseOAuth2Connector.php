@@ -5,9 +5,9 @@ namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 use Carbon\CarbonInterface;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
+use Sammyjo20\Saloon\Traits\OAuth2\AuthorizationCodeGrant;
 use Sammyjo20\Saloon\Interfaces\OAuthAuthenticatorInterface;
 use Sammyjo20\Saloon\Tests\Fixtures\Authenticators\CustomOAuthAuthenticator;
-use Sammyjo20\Saloon\Traits\OAuth2\AuthorizationCodeGrant;
 
 class CustomResponseOAuth2Connector extends SaloonConnector
 {

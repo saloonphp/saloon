@@ -1,9 +1,9 @@
 <?php
 
-use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('you can provide a mock client on a connector and all requests will be mocked', function () {
     $mockClient = new MockClient([
