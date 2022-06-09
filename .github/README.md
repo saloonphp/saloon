@@ -36,7 +36,7 @@ $data = $response->json();
 - Framework agnostic
 - Mocking requests for testing
 - Great for building your own PHP SDKs
-- Authentication & OAuth2 boilerplate already prepared for you
+- Authentication & OAuth2 boilerplate already built for you
 - Scalable with lots of API integrations across many team members
 
 ## Documentation
