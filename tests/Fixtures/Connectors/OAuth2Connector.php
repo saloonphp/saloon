@@ -30,6 +30,6 @@ class OAuth2Connector extends SaloonConnector
         return OAuthConfig::make()
             ->setClientId('client-id')
             ->setClientSecret('client-secret')
-            ->setRedirectUri('https://my-app.saloon.dev/oauth/redirect');
+            ->setRedirectUri('https://my-app.saloon.dev/auth/callback');
     }
 }

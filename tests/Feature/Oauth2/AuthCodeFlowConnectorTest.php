@@ -23,7 +23,7 @@ test('you can get the redirect url from a connector', function () {
     expect($state)->toEqual('my-state');
 
     expect($url)->toEqual(
-        'https://oauth.saloon.dev/authorize?response_type=code&scope=scope-1%20scope-2&client_id=client-id&redirect_uri=https%3A%2F%2Fmy-app.saloon.dev%2Foauth%2Fredirect&state=my-state'
+        'https://oauth.saloon.dev/authorize?response_type=code&scope=scope-1%20scope-2&client_id=client-id&redirect_uri=https%3A%2F%2Fmy-app.saloon.dev%2Fauth%2Fcallback&state=my-state'
     );
 });
 
@@ -35,7 +35,7 @@ test('you can provide default scopes that will be applied to every authorization
     $url = $connector->getAuthorizationUrl(['scope-1', 'scope-2'], 'my-state');
 
     expect($url)->toEqual(
-        'https://oauth.saloon.dev/authorize?response_type=code&scope=scope-3%20scope-1%20scope-2&client_id=client-id&redirect_uri=https%3A%2F%2Fmy-app.saloon.dev%2Foauth%2Fredirect&state=my-state'
+        'https://oauth.saloon.dev/authorize?response_type=code&scope=scope-3%20scope-1%20scope-2&client_id=client-id&redirect_uri=https%3A%2F%2Fmy-app.saloon.dev%2Fauth%2Fcallback&state=my-state'
     );
 });
 
