@@ -20,16 +20,16 @@ use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 
 abstract class SaloonRequest implements SaloonRequestInterface
 {
-    use CollectsData,
-        CollectsQueryParams,
-        CollectsHeaders,
-        CollectsConfig,
-        CollectsHandlers,
-        CollectsInterceptors,
-        AuthenticatesRequests,
-        HasCustomResponses,
-        SendsRequests,
-        MocksRequests;
+    use CollectsData;
+    use CollectsQueryParams;
+    use CollectsHeaders;
+    use CollectsConfig;
+    use CollectsHandlers;
+    use CollectsInterceptors;
+    use AuthenticatesRequests;
+    use HasCustomResponses;
+    use SendsRequests;
+    use MocksRequests;
 
     /**
      * Define the method that the request will use.
@@ -60,17 +60,6 @@ abstract class SaloonRequest implements SaloonRequestInterface
     public function defineEndpoint(): string
     {
         return '';
-    }
-
-    /**
-     * Instantiate a new class with the arguments.
-     *
-     * @param mixed ...$arguments
-     * @return SaloonRequest
-     */
-    public static function make(...$arguments): static
-    {
-        return new static(...$arguments);
     }
 
     /**
@@ -126,6 +115,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
      *
      * @return SaloonConnector
      * @throws SaloonInvalidConnectorException
+     * @throws \ReflectionException
      */
     public function getConnector(): SaloonConnector
     {
@@ -153,7 +143,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
      * Build up the final request URL.
      *
      * @return string
-     * @throws SaloonInvalidConnectorException
+     * @throws SaloonInvalidConnectorException|\ReflectionException
      */
     public function getFullRequestUrl(): string
     {
@@ -168,7 +158,7 @@ abstract class SaloonRequest implements SaloonRequestInterface
      *
      * @param string $trait
      * @return bool
-     * @throws SaloonInvalidConnectorException
+     * @throws SaloonInvalidConnectorException|\ReflectionException
      */
     public function traitExistsOnConnector(string $trait): bool
     {
@@ -181,7 +171,8 @@ abstract class SaloonRequest implements SaloonRequestInterface
      * @param $method
      * @param $parameters
      * @return mixed
-     * @throws SaloonMethodNotFoundException
+     * @throws SaloonInvalidConnectorException
+     * @throws SaloonMethodNotFoundException|\ReflectionException
      */
     public function __call($method, $parameters)
     {
@@ -190,5 +181,16 @@ abstract class SaloonRequest implements SaloonRequestInterface
         }
 
         return $this->getConnector()->{$method}(...$parameters);
+    }
+
+    /**
+     * Instantiate a new class with the arguments.
+     *
+     * @param mixed ...$arguments
+     * @return SaloonRequest
+     */
+    public static function make(...$arguments): static
+    {
+        return new static(...$arguments);
     }
 }

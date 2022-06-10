@@ -42,4 +42,14 @@ class TestProxyConnector extends SaloonConnector
     {
         return $this->forwardCallToRequest(UserRequest::class, $args);
     }
+
+    /**
+     * Return a greeting!
+     *
+     * @return string
+     */
+    public function greeting(): string
+    {
+        return 'Howdy!';
+    }
 }

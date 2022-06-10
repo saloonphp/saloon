@@ -2,6 +2,7 @@
 
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestProxyConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Responses\UserResponse;
 use Sammyjo20\Saloon\Tests\Fixtures\Responses\CustomResponse;
@@ -131,4 +132,12 @@ test('a request class can be instantiated using the make method', function () {
     expect($requestB)->toBeInstanceOf(UserRequest::class);
     expect($requestB)->userId->toEqual(1);
     expect($requestB)->groupId->toEqual(2);
+});
+
+test('a method is proxied onto the connector if it does not exist on the request', function () {
+    $connector = new TestProxyConnector;
+    $request = $connector->request(new UserRequest);
+
+    expect(method_exists($request, 'greeting'))->toBeFalse();
+    expect($request->greeting())->toEqual('Howdy!');
 });
