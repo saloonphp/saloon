@@ -2,13 +2,13 @@
 
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestProxyConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Responses\UserResponse;
 use Sammyjo20\Saloon\Tests\Fixtures\Responses\CustomResponse;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\NoConnectorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\ExtendedConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestProxyConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\DefaultEndpointRequest;

@@ -2,15 +2,15 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
-use Sammyjo20\Saloon\Helpers\ProxyRequestNameHelper;
-use Sammyjo20\Saloon\Helpers\ReflectionHelper;
-use Sammyjo20\Saloon\Helpers\RequestHelper;
-use Sammyjo20\Saloon\Http\AnonymousRequestCollection;
-use Sammyjo20\Saloon\Http\RequestCollection;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Helpers\RequestHelper;
+use Sammyjo20\Saloon\Http\RequestCollection;
+use Sammyjo20\Saloon\Helpers\ReflectionHelper;
+use Sammyjo20\Saloon\Helpers\ProxyRequestNameHelper;
+use Sammyjo20\Saloon\Http\AnonymousRequestCollection;
+use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
+use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
 
 trait GuessesRequests
 {
