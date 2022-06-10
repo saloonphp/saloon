@@ -22,3 +22,14 @@ it('can be serialized and unserialized', function () {
 
     expect($unserialized)->toEqual($authenticator);
 });
+
+it('can return if it has expired or not', function () {
+    $accessToken = 'access';
+    $refreshToken = 'refresh';
+    $expiresAt = CarbonImmutable::now()->subMinutes(5);
+
+    $authenticator = new AccessTokenAuthenticator($accessToken, $refreshToken, $expiresAt);
+
+    expect($authenticator->hasExpired())->toBeTrue();
+    expect($authenticator->hasNotExpired())->toBeFalse();
+});

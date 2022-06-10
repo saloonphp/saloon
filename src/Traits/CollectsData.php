@@ -37,7 +37,7 @@ trait CollectsData
      * @param mixed ...$dataCollection
      * @return $this
      */
-    public function mergeData(array ...$dataCollection): self
+    public function mergeData(array ...$dataCollection): static
     {
         foreach ($dataCollection as $data) {
             $this->customData = array_merge($this->customData, $data);
@@ -52,7 +52,7 @@ trait CollectsData
      * @param array $data
      * @return $this
      */
-    public function setData(array $data): self
+    public function setData(array $data): static
     {
         $this->ignoreDefaultData();
 
@@ -68,7 +68,7 @@ trait CollectsData
      * @param $value
      * @return $this
      */
-    public function addData(string $data, $value): self
+    public function addData(string $data, $value): static
     {
         $this->customData[$data] = $value;
 
@@ -113,7 +113,7 @@ trait CollectsData
      *
      * @return $this
      */
-    public function ignoreDefaultData(): self
+    public function ignoreDefaultData(): static
     {
         $this->includeDefaultData = false;
 

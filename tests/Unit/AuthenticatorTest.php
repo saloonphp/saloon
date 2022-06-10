@@ -121,6 +121,22 @@ test('you can use your own authenticators', function () {
     expect($request->getConfig('debug'))->toBeTrue();
 });
 
+test('you can use your own authenticators with the authenticate method', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(),
+    ]);
+
+    $request = new UserRequest();
+    $request->authenticate(new PizzaAuthenticator('Margherita', 'San Pellegrino'));
+    $request->send($mockClient);
+
+    $headers = $request->getHeaders();
+
+    expect($headers['X-Pizza'])->toEqual('Margherita');
+    expect($headers['X-Drink'])->toEqual('San Pellegrino');
+    expect($request->getConfig('debug'))->toBeTrue();
+});
+
 test('you can use your own authenticators as default', function () {
     $mockClient = new MockClient([
         MockResponse::make(),
