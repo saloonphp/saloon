@@ -2,8 +2,8 @@
 
 namespace Sammyjo20\Saloon\Exceptions;
 
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Throwable;
-use Sammyjo20\Saloon\Http\SaloonResponse;
 
 class SaloonRequestException extends SaloonException
 {

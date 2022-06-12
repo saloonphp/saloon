@@ -4,8 +4,8 @@ namespace Sammyjo20\Saloon\Exceptions;
 
 class SaloonInvalidResponseClassException extends SaloonException
 {
-    public function __construct()
+    public function __construct(string $message = null)
     {
-        parent::__construct('The provided response is not a valid. The class must also extend SaloonResponse.');
+        parent::__construct($message ?? 'The provided response is not a valid. The class must also extend SaloonResponse.');
     }
 }

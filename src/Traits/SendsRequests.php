@@ -2,9 +2,9 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
+use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Http\SaloonResponse;
-use Sammyjo20\Saloon\Http\Senders\GuzzleSender;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 
 trait SendsRequests
 {
@@ -12,21 +12,42 @@ trait SendsRequests
      * Send the request synchronously.
      *
      * @param MockClient|null $mockClient
-     * @return SaloonResponse
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @param bool $asynchronous
+     * @return SaloonResponse|PromiseInterface
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */
-    public function send(MockClient $mockClient = null): SaloonResponse
+    public function send(MockClient $mockClient = null, bool $asynchronous = false): SaloonResponse|PromiseInterface
     {
-        // TODO: Proper async requests...
-
         if ($mockClient instanceof MockClient) {
             $this->withMockClient($mockClient);
         }
 
         // 🚀 ... 🌑 ... 💫
 
-        return (new GuzzleSender())->handle($this->createPendingRequest());
+        $pendingRequest = $this->createPendingRequest();
+        $requestSender = $pendingRequest->getRequestSender();
+
+        // If any of the middleware have registered early responses, like mocking or caching,
+        // we should process this response right away.
+
+        if ($pendingRequest->hasEarlyResponse()) {
+            return $requestSender->processResponse($pendingRequest, $pendingRequest->getEarlyResponse(), $asynchronous);
+        }
+
+        return $requestSender->processRequest($pendingRequest, $asynchronous);
+    }
+
+    /**
+     * Send a request asynchronously
+     *
+     * @param MockClient|null $mockClient
+     * @return PromiseInterface
+     * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
+     */
+    public function sendAsync(MockClient $mockClient = null): PromiseInterface
+    {
+        return $this->send($mockClient, true);
     }
 }

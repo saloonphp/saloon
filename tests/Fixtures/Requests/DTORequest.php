@@ -2,11 +2,10 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Constants\Saloon;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Data\User;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Data\User;
 
 class DTORequest extends SaloonRequest
 {

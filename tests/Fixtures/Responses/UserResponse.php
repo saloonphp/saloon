@@ -2,11 +2,10 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Responses;
 
-use Sammyjo20\Saloon\Http\SaloonResponse;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 
 class UserResponse extends SaloonResponse
 {
-
     /**
      * @return \Sammyjo20\Saloon\Tests\Fixtures\Responses\UserData
      */

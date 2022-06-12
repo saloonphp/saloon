@@ -14,16 +14,19 @@ class UserRequestWithCustomResponse extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::GET;
+    protected string $method = Saloon::GET;
 
+    /**
+     * @var string|null
+     */
     protected ?string $response = UserResponse::class;
 
     /**
      * The connector.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $connector = TestConnector::class;
+    protected string $connector = TestConnector::class;
 
     /**
      * Define the endpoint for the request.

@@ -1,14 +1,14 @@
 <?php
 
-use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Responses\UserData;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\MockRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Responses\UserResponse;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
+use Sammyjo20\Saloon\Tests\Fixtures\Responses\UserData;
+use Sammyjo20\Saloon\Tests\Fixtures\Responses\UserResponse;
 
 test('pulling a response from the sequence will return the correct response', function () {
     $responseA = MockResponse::make([], 200);

@@ -2,7 +2,7 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Data;
 
-use Sammyjo20\Saloon\Http\SaloonResponse;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 
 class ApiResponse
 {

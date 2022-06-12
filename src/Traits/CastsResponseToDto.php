@@ -2,7 +2,7 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Sammyjo20\Saloon\Http\SaloonResponse;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 
 trait CastsResponseToDto
 {

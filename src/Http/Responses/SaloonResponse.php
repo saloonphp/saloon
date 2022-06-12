@@ -1,15 +1,17 @@
 <?php
 
-namespace Sammyjo20\Saloon\Http;
+namespace Sammyjo20\Saloon\Http\Responses;
 
-use SimpleXMLElement;
-use Illuminate\Support\Arr;
+use Exception;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Psr\Http\Message\StreamInterface;
 use Illuminate\Support\Traits\Macroable;
-use GuzzleHttp\Exception\RequestException;
+use Psr\Http\Message\StreamInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+use SimpleXMLElement;
 
 class SaloonResponse
 {
@@ -44,11 +46,11 @@ class SaloonResponse
     protected PendingSaloonRequest $pendingSaloonRequest;
 
     /**
-     * The original Guzzle request exception
+     * The original request exception
      *
-     * @var RequestException|null
+     * @var Exception|null
      */
-    protected ?RequestException $guzzleRequestException = null;
+    protected ?Exception $requestException = null;
 
     /**
      * Determines if the response has been cached
@@ -69,13 +71,13 @@ class SaloonResponse
      *
      * @param PendingSaloonRequest $pendingSaloonRequest
      * @param Response $response
-     * @param RequestException|null $guzzleRequestException
+     * @param Exception|null $requestException
      */
-    public function __construct(PendingSaloonRequest $pendingSaloonRequest, Response $response, RequestException $guzzleRequestException = null)
+    public function __construct(PendingSaloonRequest $pendingSaloonRequest, Response $response, Exception $requestException = null)
     {
         $this->pendingSaloonRequest = $pendingSaloonRequest;
         $this->response = $response;
-        $this->guzzleRequestException = $guzzleRequestException;
+        $this->requestException = $requestException;
     }
 
     /**
@@ -315,27 +317,30 @@ class SaloonResponse
     }
 
     /**
-     * Get the underlying PSR response for the response.
-     *
-     * @return Response
-     */
-    public function toGuzzleResponse(): Response
-    {
-        return $this->toPsrResponse();
-    }
-
-    /**
      * Create an exception if a server or client error occurred.
      *
-     * @return SaloonRequestException|void
+     * @return Exception|void
      */
     public function toException()
     {
-        if ($this->failed()) {
-            $body = $this->response?->getBody()?->getContents();
-
-            return new SaloonRequestException($this, $body, 0, $this->getGuzzleException());
+        if ($this->successful()) {
+            return;
         }
+
+        $body = $this->response?->getBody()?->getContents();
+
+        return $this->createException($body);
+    }
+
+    /**
+     * Create the request exception
+     *
+     * @param string $body
+     * @return Exception
+     */
+    protected function createException(string $body): Exception
+    {
+        return new SaloonRequestException($this, $body, 0, $this->getRequestException());
     }
 
     /**
@@ -412,10 +417,10 @@ class SaloonResponse
     /**
      * Get the original request exception
      *
-     * @return RequestException|null
+     * @return Exception|null
      */
-    public function getGuzzleException(): ?RequestException
+    public function getRequestException(): ?Exception
     {
-        return $this->guzzleRequestException;
+        return $this->requestException;
     }
 }

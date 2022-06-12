@@ -2,53 +2,109 @@
 
 namespace Sammyjo20\Saloon\Http\Senders;
 
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
+use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Data\RequestDataType;
-use GuzzleHttp\Client as GuzzleClient;
-use Sammyjo20\Saloon\Http\RequestSender;
-use Sammyjo20\Saloon\Http\SaloonResponse;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\BadResponseException;
+use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Interfaces\RequestSenderInterface;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Sammyjo20\Saloon\Http\RequestSender;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 
 class GuzzleSender extends RequestSender
 {
     /**
-     * @param PendingSaloonRequest $request
-     * @return SaloonResponse
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @var GuzzleClient
      */
-    public function handle(PendingSaloonRequest $request): SaloonResponse
-    {
-        $client = $this->createGuzzleClient();
-        $guzzleRequest = $this->createGuzzleRequest($request);
-        $options = $this->createRequestOptions($request);
-
-        try {
-            $guzzleResponse = $client->send($guzzleRequest, $options);
-        } catch (BadResponseException $exception) {
-            return $this->createResponse($request, $exception->getResponse(), $exception);
-        }
-
-        return $this->createResponse($request, $guzzleResponse);
-    }
+    protected GuzzleClient $client;
 
     /**
-     * Create a new Guzzle client
-     *
-     * @return GuzzleClient
+     * Create the HTTP client.
      */
-    private function createGuzzleClient(): GuzzleClient
+    public function __construct()
     {
-        return new GuzzleClient([
+        $this->client = new GuzzleClient([
             'connect_timeout' => 10,
             'timeout' => 30,
             'http_errors' => true,
         ]);
+    }
+
+    /**
+     * Send a request
+     *
+     * @param PendingSaloonRequest $saloonRequest
+     * @param bool $asynchronous
+     * @return SaloonResponse|PromiseInterface
+     * @throws GuzzleException
+     */
+    public function processRequest(PendingSaloonRequest $saloonRequest, bool $asynchronous = false): SaloonResponse|PromiseInterface
+    {
+        return $asynchronous === true
+            ? $this->sendAsynchronousRequest($saloonRequest)
+            : $this->sendSynchronousRequest($saloonRequest);
+    }
+
+    /**
+     * Send a synchronous request.
+     *
+     * @param PendingSaloonRequest $saloonRequest
+     * @return SaloonResponse
+     * @throws GuzzleException
+     */
+    protected function sendSynchronousRequest(PendingSaloonRequest $saloonRequest): SaloonResponse
+    {
+        $guzzleRequest = $this->createGuzzleRequest($saloonRequest);
+        $guzzleRequestOptions = $this->createRequestOptions($saloonRequest);
+
+        try {
+            $guzzleResponse = $this->client->send($guzzleRequest, $guzzleRequestOptions);
+        } catch (BadResponseException $exception) {
+            return $this->createResponse($saloonRequest, $exception->getResponse(), $exception);
+        }
+
+        return $this->createResponse($saloonRequest, $guzzleResponse);
+    }
+
+    /**
+     * Send an asynchronous request
+     *
+     * @param PendingSaloonRequest $saloonRequest
+     * @return PromiseInterface
+     */
+    protected function sendAsynchronousRequest(PendingSaloonRequest $saloonRequest): PromiseInterface
+    {
+        $guzzleRequest = $this->createGuzzleRequest($saloonRequest);
+        $guzzleRequestOptions = $this->createRequestOptions($saloonRequest);
+
+        return $this->client->sendAsync($guzzleRequest, $guzzleRequestOptions)
+            ->then(
+                function (ResponseInterface $guzzleResponse) use ($saloonRequest) {
+                    // Instead of the promise returning a Guzzle response, we want to return
+                    // a Saloon response.
+
+                    return $this->createResponse($saloonRequest, $guzzleResponse);
+                },
+                function (GuzzleException $guzzleException) use ($saloonRequest) {
+                    // If the exception was a connect exception, we should return that in the
+                    // promise instead rather than trying to convert it into a
+                    // SaloonResponse, since there was no response.
+
+                    if (! $guzzleException instanceof RequestException) {
+                        throw $guzzleException;
+                    }
+
+                    $response = $this->createResponse($saloonRequest, $guzzleException->getResponse(), $guzzleException);
+
+                    throw $response->toException();
+                }
+            );
     }
 
     /**
@@ -110,16 +166,16 @@ class GuzzleSender extends RequestSender
 
         // Run the response pipeline
 
-        $pendingSaloonRequest->executeResponsePipeline($response);
+        return $this->processResponse($pendingSaloonRequest, $response);
+    }
 
-        // If we are mocking, we should record the request and response on the mock manager,
-        // so we can run assertions on the responses.
-//
-//        if ($this->isMocking()) {
-//            $response->setMocked(true);
-//            $this->mockClient->recordResponse($response);
-//        }
-
-        return $response;
+    /**
+     * Get the base class that the custom responses should extend.
+     *
+     * @return string
+     */
+    public function getBaseResponseClass(): string
+    {
+        return SaloonResponse::class;
     }
 }

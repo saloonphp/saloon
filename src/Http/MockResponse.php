@@ -2,20 +2,20 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Throwable;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Traits\CollectsData;
 use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
-use Sammyjo20\Saloon\Traits\Plugins\HasBody;
 use Sammyjo20\Saloon\Data\MockExceptionClosure;
 
 class MockResponse
 {
-    use CollectsHeaders,
-        CollectsConfig,
-        CollectsData;
+    use CollectsHeaders;
+    use CollectsConfig;
+    use CollectsData;
 
     /**
      * @var int
@@ -100,7 +100,7 @@ class MockResponse
      */
     public function throw(callable|Throwable $value): self
     {
-        $closure = $value instanceof Throwable ? static fn () => $value : $value;
+        $closure = $value instanceof Throwable ? static fn() => $value : $value;
 
         $this->exceptionClosure = new MockExceptionClosure($closure);
 
@@ -139,14 +139,28 @@ class MockResponse
     }
 
     /**
-     * Convert the mock response into a Guzzle response
+     * Get the PSR response
      *
      * @return Response
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function toGuzzleResponse(): Response
+    protected function getPsrResponse(): Response
     {
         return new Response($this->getStatus(), $this->getHeaders(), $this->getFormattedData());
+    }
+
+    /**
+     * Convert the mock response into a Guzzle response
+     *
+     * @param PendingSaloonRequest $pendingRequest
+     * @return Response
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     */
+    public function toSaloonResponse(PendingSaloonRequest $pendingRequest): SaloonResponse
+    {
+        $responseClass = $pendingRequest->getResponseClass();
+
+        return new $responseClass($pendingRequest, $this->getPsrResponse());
     }
 
     /**

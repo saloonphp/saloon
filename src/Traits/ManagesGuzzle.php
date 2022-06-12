@@ -5,7 +5,7 @@ namespace Sammyjo20\Saloon\Traits;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Client as GuzzleClient;
-use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
+use Sammyjo20\Saloon\Http\Middleware\MockResponsePipe;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
 use Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException;
 
@@ -84,7 +84,7 @@ trait ManagesGuzzle
         if ($this->isMocking()) {
             $mockResponse = $this->mockClient->guessNextResponse($this->request);
 
-            $handlerStack->push(new MockMiddleware($mockResponse), 'saloonMockMiddleware');
+            $handlerStack->push(new MockResponsePipe($mockResponse), 'saloonMockMiddleware');
         }
 
         return $handlerStack;

@@ -3,21 +3,21 @@
 namespace Sammyjo20\Saloon\Http;
 
 use ReflectionClass;
-use GuzzleHttp\Psr7\Request;
-use Sammyjo20\Saloon\Enums\Method;
-use Sammyjo20\Saloon\Data\RequestDataType;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
-use Sammyjo20\Saloon\Helpers\PluginHelper;
-use Sammyjo20\Saloon\Http\Middleware\DataObjectPipe;
-use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
-use Sammyjo20\Saloon\Interfaces\Data\SendsXMLBody;
-use Sammyjo20\Saloon\Traits\HasRequestProperties;
-use Sammyjo20\Saloon\Interfaces\Data\SendsMixedBody;
-use Sammyjo20\Saloon\Interfaces\Data\SendsFormParams;
-use Sammyjo20\Saloon\Interfaces\Data\SendsMultipartBody;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
+use Sammyjo20\Saloon\Data\RequestDataType;
+use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
+use Sammyjo20\Saloon\Helpers\PluginHelper;
+use Sammyjo20\Saloon\Http\Middleware\MockResponsePipe;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
+use Sammyjo20\Saloon\Interfaces\Data\SendsFormParams;
+use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
+use Sammyjo20\Saloon\Interfaces\Data\SendsMixedBody;
+use Sammyjo20\Saloon\Interfaces\Data\SendsMultipartBody;
+use Sammyjo20\Saloon\Interfaces\Data\SendsXMLBody;
+use Sammyjo20\Saloon\Interfaces\RequestSenderInterface;
+use Sammyjo20\Saloon\Traits\HasRequestProperties;
 
 class PendingSaloonRequest
 {
@@ -66,6 +66,15 @@ class PendingSaloonRequest
     protected ?MockClient $mockClient = null;
 
     /**
+     * The early response.
+     *
+     * @var SaloonResponse|null
+     */
+    protected ?SaloonResponse $earlyResponse = null;
+
+    /**
+     * The data type.
+     *
      * @var RequestDataType|null
      */
     protected ?RequestDataType $dataType = null;
@@ -230,8 +239,11 @@ class PendingSaloonRequest
      */
     protected function registerDefaultMiddleware(): self
     {
-        $this->middlewarePipeline()
-            ->addResponsePipe(new DataObjectPipe, true);
+        $pipeline = $this->middlewarePipeline();
+
+        if ($this->isMocking()) {
+            $pipeline->addRequestPipe(new MockResponsePipe($this->getMockClient()));
+        }
 
         return $this;
     }
@@ -337,10 +349,57 @@ class PendingSaloonRequest
     }
 
     /**
+     * Check if the pending Saloon request is being mocked.
+     *
+     * @return bool
+     */
+    public function isMocking(): bool
+    {
+        return $this->mockClient instanceof MockClient;
+    }
+
+    /**
      * @return RequestDataType|null
      */
     public function getDataType(): ?RequestDataType
     {
         return $this->dataType;
+    }
+
+    /**
+     * Get the request sender.
+     *
+     * @return RequestSenderInterface
+     */
+    public function getRequestSender(): RequestSenderInterface
+    {
+        return $this->getConnector()->requestSender();
+    }
+
+    /**
+     * @return SaloonResponse|null
+     */
+    public function getEarlyResponse(): ?SaloonResponse
+    {
+        return $this->earlyResponse;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasEarlyResponse(): bool
+    {
+        return $this->earlyResponse instanceof SaloonResponse;
+    }
+
+    /**
+     * @param SaloonResponse|null $earlyResponse
+     * @return PendingSaloonRequest
+     */
+    public function setEarlyResponse(?SaloonResponse $earlyResponse): self
+    {
+        $this->earlyResponse = $earlyResponse;
+
+        return $this;
     }
 }

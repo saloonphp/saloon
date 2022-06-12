@@ -4,6 +4,7 @@ namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Traits\BuildsUrls;
 use Sammyjo20\Saloon\Traits\CastsResponseToDto;
+use Sammyjo20\Saloon\Traits\HasRequestSender;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
