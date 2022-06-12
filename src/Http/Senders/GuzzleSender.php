@@ -6,6 +6,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -167,6 +168,33 @@ class GuzzleSender extends RequestSender
         // Run the response pipeline
 
         return $this->processResponse($pendingSaloonRequest, $response);
+    }
+
+    /**
+     * Process the response.
+     *
+     * @param PendingSaloonRequest $pendingRequest
+     * @param SaloonResponse $saloonResponse
+     * @param bool $asPromise
+     * @return SaloonResponse|PromiseInterface
+     */
+    public function processResponse(PendingSaloonRequest $pendingRequest, SaloonResponse $saloonResponse, bool $asPromise = false): SaloonResponse|PromiseInterface
+    {
+        $saloonResponse = $pendingRequest->executeResponsePipeline($saloonResponse);
+
+        // If we are mocking, we should record the request and response on the mock manager,
+        // so we can run assertions on the responses.
+
+        if ($pendingRequest->isMocking()) {
+            $saloonResponse->setMocked(true);
+            $pendingRequest->getMockClient()->recordResponse($saloonResponse);
+        }
+
+        if ($asPromise === true) {
+            return new FulfilledPromise($saloonResponse);
+        }
+
+        return $saloonResponse;
     }
 
     /**

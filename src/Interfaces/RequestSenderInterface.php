@@ -12,21 +12,21 @@ interface RequestSenderInterface
     /**
      * Send the request.
      *
-     * @param PendingSaloonRequest $saloonRequest
+     * @param PendingSaloonRequest $pendingRequest
      * @param bool $asynchronous
      * @return SaloonResponse|PromiseInterface
      */
-    public function processRequest(PendingSaloonRequest $saloonRequest, bool $asynchronous = false): SaloonResponse|PromiseInterface;
+    public function processRequest(PendingSaloonRequest $pendingRequest, bool $asynchronous = false): SaloonResponse|PromiseInterface;
 
     /**
      * Process the response
      *
-     * @param PendingSaloonRequest $saloonRequest
+     * @param PendingSaloonRequest $pendingRequest
      * @param SaloonResponse $saloonResponse
      * @param bool $asPromise
      * @return SaloonResponse|PromiseInterface
      */
-    public function processResponse(PendingSaloonRequest $saloonRequest, SaloonResponse $saloonResponse, bool $asPromise = false): SaloonResponse|PromiseInterface;
+    public function processResponse(PendingSaloonRequest $pendingRequest, SaloonResponse $saloonResponse, bool $asPromise = false): SaloonResponse|PromiseInterface;
 
     /**
      * Return the base response class used to validate the custom response.

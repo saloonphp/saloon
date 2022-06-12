@@ -2,6 +2,7 @@
 
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\Promise;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
@@ -17,7 +18,7 @@ test('an asynchronous request will return a saloon response on a successful requ
     $request = new UserRequest;
     $promise = $request->sendAsync($mockClient);
 
-    expect($promise)->toBeInstanceOf(Promise::class);
+    expect($promise)->toBeInstanceOf(FulfilledPromise::class);
 
     $response = $promise->wait();
 
@@ -35,6 +36,8 @@ test('an asynchronous request will throw a saloon exception on an unsuccessful r
     $promise = $request->sendAsync($mockClient);
 
     expect($promise)->toBeInstanceOf(Promise::class);
+
+    dd('here');
 
     try {
         $promise->wait();
