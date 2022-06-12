@@ -3,6 +3,7 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Traits\BuildsUrls;
+use Sammyjo20\Saloon\Traits\CastsResponseToDto;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
@@ -19,6 +20,7 @@ abstract class SaloonRequest
     use MocksRequests;
     use SendsRequests;
     use BuildsUrls;
+    use CastsResponseToDto;
 
     /**
      * @var string
@@ -97,5 +99,16 @@ abstract class SaloonRequest
     public function createPendingRequest(): PendingSaloonRequest
     {
         return new PendingSaloonRequest($this);
+    }
+
+    /**
+     * Instantiate a new class with the arguments.
+     *
+     * @param ...$arguments
+     * @return static
+     */
+    public static function make(...$arguments): static
+    {
+        return new static(...$arguments);
     }
 }

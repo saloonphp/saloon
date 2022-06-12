@@ -17,6 +17,7 @@ test('it can cast to a dto that is defined on the request', function () {
     $dto = $response->dto();
     $json = $response->json();
 
+    expect($response->isMocked())->toBeTrue();
     expect($dto)->toBeInstanceOf(User::class);
     expect($dto)->name->toEqual($json['name']);
     expect($dto)->actualName->toEqual($json['actual_name']);

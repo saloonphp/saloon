@@ -79,7 +79,7 @@ trait ManagesPlugins
      */
     private function bootConnectorPlugin(string $methodName): void
     {
-        $this->connector->{$methodName}($this->request);
+        $this->connector::{$methodName}($this->request);
     }
 
     /**
@@ -89,6 +89,6 @@ trait ManagesPlugins
      */
     private function bootRequestPlugin(string $methodName): void
     {
-        $this->request->{$methodName}($this->request);
+        $this->request::{$methodName}($this->request);
     }
 }

@@ -2,28 +2,19 @@
 
 namespace Sammyjo20\Saloon\Traits\Plugins;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 
 trait HasXMLBody
 {
     /**
-     * Add the required headers to send XML
+     * Add the headers to send XML
      *
-     * @param SaloonRequest $request
+     * @param PendingSaloonRequest $request
      * @return void
      */
-    public function bootHasXMLBody(SaloonRequest $request): void
+    public static function bootHasXMLBody(PendingSaloonRequest $request): void
     {
-        $this->addHeader('Accept', 'application/xml');
-        $this->addHeader('Content-Type', 'application/xml');
-
-        $this->addConfig('body', $this->defineXMLBody());
+        $request->headers()->push('Accept', 'application/xml');
+        $request->headers()->push('Content-Type', 'application/xml');
     }
-
-    /**
-     * Define your XML body
-     *
-     * @return string|null
-     */
-    abstract public function defineXMLBody(): ?string;
 }

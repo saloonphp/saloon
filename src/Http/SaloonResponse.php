@@ -51,13 +51,6 @@ class SaloonResponse
     protected ?RequestException $guzzleRequestException = null;
 
     /**
-     * The data transfer object specified on the request if the CastsToDto plugin was added.
-     *
-     * @var object|null
-     */
-    protected mixed $dto = null;
-
-    /**
      * Determines if the response has been cached
      *
      * @var bool
@@ -100,7 +93,7 @@ class SaloonResponse
      */
     public function getOriginalRequest(): SaloonRequest
     {
-        return $this->originalRequest;
+        return $this->pendingSaloonRequest->getRequest();
     }
 
     /**
@@ -186,7 +179,11 @@ class SaloonResponse
      */
     public function dto(): mixed
     {
-        return $this->dto;
+        if ($this->failed()) {
+            return null;
+        }
+
+        return $this->getOriginalRequest()->createDtoFromResponse($this);
     }
 
     /**
@@ -420,18 +417,5 @@ class SaloonResponse
     public function getGuzzleException(): ?RequestException
     {
         return $this->guzzleRequestException;
-    }
-
-    /**
-     * Set the DTO on the response.
-     *
-     * @param mixed $dto
-     * @return $this
-     */
-    public function setDto(mixed $dto): self
-    {
-        $this->dto = $dto;
-
-        return $this;
     }
 }

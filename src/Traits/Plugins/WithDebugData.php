@@ -2,18 +2,18 @@
 
 namespace Sammyjo20\Saloon\Traits\Plugins;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 
 trait WithDebugData
 {
     /**
      * Enable debug mode.
      *
-     * @param SaloonRequest $request
+     * @param PendingSaloonRequest $request
      * @return void
      */
-    public function bootWithDebugData(SaloonRequest $request): void
+    public static function bootWithDebugData(PendingSaloonRequest $request): void
     {
-        $this->addConfig('debug', true);
+        $request->config()->push('debug', true);
     }
 }

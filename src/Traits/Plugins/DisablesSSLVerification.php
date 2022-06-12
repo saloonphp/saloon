@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Traits\Plugins;
 
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 
 trait DisablesSSLVerification
@@ -9,11 +10,11 @@ trait DisablesSSLVerification
     /**
      * Disable SSL verification on requests. I hope you know this is bad.
      *
-     * @param SaloonRequest $request
+     * @param PendingSaloonRequest $request
      * @return void
      */
-    public function bootDisablesSSLVerification(SaloonRequest $request): void
+    public static function bootDisablesSSLVerification(PendingSaloonRequest $request): void
     {
-        $this->addConfig('verify', false);
+        $request->config()->push('verify', false);
     }
 }
