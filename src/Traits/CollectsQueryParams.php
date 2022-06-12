@@ -37,7 +37,7 @@ trait CollectsQueryParams
      * @param mixed ...$queryCollection
      * @return $this
      */
-    public function mergeQuery(array ...$queryCollection): self
+    public function mergeQuery(array ...$queryCollection): static
     {
         foreach ($queryCollection as $query) {
             $this->customQuery = array_merge($this->customQuery, $query);
@@ -52,7 +52,7 @@ trait CollectsQueryParams
      * @param array $query
      * @return $this
      */
-    public function setQuery(array $query): self
+    public function setQuery(array $query): static
     {
         $this->ignoreDefaultQuery();
 
@@ -68,7 +68,7 @@ trait CollectsQueryParams
      * @param $value
      * @return $this
      */
-    public function addQuery(string $query, $value): self
+    public function addQuery(string $query, $value): static
     {
         $this->customQuery[$query] = $value;
 
@@ -109,7 +109,7 @@ trait CollectsQueryParams
      *
      * @return $this
      */
-    public function ignoreDefaultQuery(): self
+    public function ignoreDefaultQuery(): static
     {
         $this->includeDefaultQuery = false;
 
