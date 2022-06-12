@@ -13,9 +13,9 @@ trait SendsRequests
      *
      * @param MockClient|null $mockClient
      * @return SaloonResponse
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */
     public function send(MockClient $mockClient = null): SaloonResponse
     {

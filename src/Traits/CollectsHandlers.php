@@ -29,7 +29,7 @@ trait CollectsHandlers
      * @param array ...$handlersCollection
      * @return $this
      */
-    public function mergeHandlers(array ...$handlersCollection): self
+    public function mergeHandlers(array ...$handlersCollection): static
     {
         foreach ($handlersCollection as $handler) {
             $this->handlers = array_merge($this->handlers, $handler);

@@ -4,7 +4,7 @@ namespace Sammyjo20\Saloon\Traits;
 
 use Sammyjo20\Saloon\Data\RequestProperties;
 
-trait RetrievesRequestProperties
+trait WrapsRequestProperties
 {
     /**
      * Get all the request properties with their default set.

@@ -2,24 +2,23 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Traits\BuildsUrls;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
-use Sammyjo20\Saloon\Traits\RetrievesRequestProperties;
+use Sammyjo20\Saloon\Traits\WrapsRequestProperties;
 
 abstract class SaloonRequest
 {
     use HasRequestProperties;
-    use RetrievesRequestProperties;
-    use BuildsUrls;
+    use WrapsRequestProperties;
+    use AuthenticatesRequests;
     use HasCustomResponses;
     use MocksRequests;
-    use AuthenticatesRequests;
     use SendsRequests;
+    use BuildsUrls;
 
     /**
      * @var string
@@ -27,14 +26,14 @@ abstract class SaloonRequest
     protected string $connector = '';
 
     /**
-     * @var SaloonConnector|null
-     */
-    private ?SaloonConnector $loadedConnector = null;
-
-    /**
      * @var string
      */
     protected string $method = '';
+
+    /**
+     * @var SaloonConnector|null
+     */
+    private ?SaloonConnector $loadedConnector = null;
 
     /**
      * Define the API endpoint used.
@@ -44,7 +43,18 @@ abstract class SaloonRequest
     abstract protected function defineEndpoint(): string;
 
     /**
-     * @return Method
+     * @param PendingSaloonRequest $payload
+     * @return void
+     */
+    public function boot(PendingSaloonRequest $payload): void
+    {
+        // Apply anything right before the request is sent.
+    }
+
+    /**
+     * Get the method of the request.
+     *
+     * @return string
      */
     public function getMethod(): string
     {
@@ -87,14 +97,5 @@ abstract class SaloonRequest
     public function createPendingRequest(): PendingSaloonRequest
     {
         return new PendingSaloonRequest($this);
-    }
-
-    /**
-     * @param PendingSaloonRequest $payload
-     * @return void
-     */
-    public function boot(PendingSaloonRequest $payload): void
-    {
-        // Apply anything right before the request is sent.
     }
 }

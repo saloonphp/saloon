@@ -7,7 +7,7 @@ use Sammyjo20\Saloon\Clients\MockClient;
 trait MocksRequests
 {
     /**
-     * @var MockClient
+     * @var MockClient|null
      */
     protected ?MockClient $mockClient = null;
 
@@ -17,7 +17,7 @@ trait MocksRequests
      * @param MockClient $mockClient
      * @return $this
      */
-    public function withMockClient(MockClient $mockClient): self
+    public function withMockClient(MockClient $mockClient): static
     {
         $this->mockClient = $mockClient;
 
@@ -25,6 +25,8 @@ trait MocksRequests
     }
 
     /**
+     * Get the mock client on the request.
+     *
      * @return MockClient|null
      */
     public function getMockClient(): ?MockClient

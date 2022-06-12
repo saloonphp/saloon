@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
+use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Helpers\RequestHelper;
 use Sammyjo20\Saloon\Http\RequestCollection;
 use Sammyjo20\Saloon\Helpers\ReflectionHelper;
@@ -11,16 +12,8 @@ use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
 
-trait ProxiesRequests
+trait GuessesRequests
 {
-    /**
-     * Register Saloon requests that will become methods on the connector.
-     * For example, GetUserRequest would become $this->getUserRequest(...$args)
-     *
-     * @var array|string[]
-     */
-    protected array $requests = [];
-
     /**
      * Requests that have already been registered. Used as a cache for performance.
      *
@@ -29,13 +22,48 @@ trait ProxiesRequests
     private ?array $registeredRequests = null;
 
     /**
+     * Attempt to create a request and forward parameters to it.
+     *
+     * @param string $request
+     * @param array $args
+     * @return SaloonRequest
+     * @throws SaloonInvalidRequestException
+     * @throws \ReflectionException
+     */
+    protected function forwardCallToRequest(string $request, array $args = []): SaloonRequest
+    {
+        return RequestHelper::callFromConnector($this, $request, $args);
+    }
+
+    /**
+     * Bootstrap and get the registered requests in the $requests array.
+     *
+     * @return array
+     * @throws \ReflectionException
+     */
+    public function getRegisteredRequests(): array
+    {
+        if (empty($this->requests)) {
+            return [];
+        }
+
+        if (is_array($this->registeredRequests)) {
+            return $this->registeredRequests;
+        }
+
+        $this->registeredRequests = ProxyRequestNameHelper::generateNames($this->requests);
+
+        return $this->registeredRequests;
+    }
+
+    /**
      * Check if a given request method exists
      *
      * @param string $method
      * @return bool
      * @throws \ReflectionException
      */
-    protected function requestExists(string $method): bool
+    public function requestExists(string $method): bool
     {
         return method_exists($this, $method) || array_key_exists($method, $this->getRegisteredRequests());
     }
@@ -51,7 +79,7 @@ trait ProxiesRequests
      * @throws SaloonInvalidRequestException
      * @throws \ReflectionException
      */
-    protected function proxyRequest($method, $arguments): mixed
+    protected function guessRequest($method, $arguments): mixed
     {
         if ($this->requestExists($method) === false) {
             throw new SaloonConnectorMethodNotFoundException($method, $this);
@@ -83,27 +111,6 @@ trait ProxiesRequests
 
         // It's just a request, so forward to that.
 
-        return RequestHelper::callFromConnector($this, $resource, $arguments);
-    }
-
-    /**
-     * Bootstrap and get the registered requests in the $requests array.
-     *
-     * @return array
-     * @throws \ReflectionException
-     */
-    protected function getRegisteredRequests(): array
-    {
-        if (empty($this->requests)) {
-            return [];
-        }
-
-        if (is_array($this->registeredRequests)) {
-            return $this->registeredRequests;
-        }
-
-        $this->registeredRequests = ProxyRequestNameHelper::generateNames($this->requests);
-
-        return $this->registeredRequests;
+        return $this->forwardCallToRequest($resource, $arguments);
     }
 }

@@ -8,6 +8,7 @@ use Sammyjo20\Saloon\Tests\Fixtures\Responses\CustomResponse;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\NoConnectorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\ExtendedConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestProxyConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\DefaultEndpointRequest;
@@ -131,4 +132,12 @@ test('a request class can be instantiated using the make method', function () {
     expect($requestB)->toBeInstanceOf(UserRequest::class);
     expect($requestB)->userId->toEqual(1);
     expect($requestB)->groupId->toEqual(2);
+});
+
+test('a method is proxied onto the connector if it does not exist on the request', function () {
+    $connector = new TestProxyConnector;
+    $request = $connector->request(new UserRequest);
+
+    expect(method_exists($request, 'greeting'))->toBeFalse();
+    expect($request->greeting())->toEqual('Howdy!');
 });
