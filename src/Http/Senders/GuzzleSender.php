@@ -5,7 +5,7 @@ namespace Sammyjo20\Saloon\Http\Senders;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
-use Sammyjo20\Saloon\Data\DataType;
+use Sammyjo20\Saloon\Data\RequestDataType;
 use GuzzleHttp\Client as GuzzleClient;
 use Sammyjo20\Saloon\Http\RequestSender;
 use Sammyjo20\Saloon\Http\SaloonResponse;
@@ -20,10 +20,7 @@ class GuzzleSender extends RequestSender
     /**
      * @param PendingSaloonRequest $request
      * @return SaloonResponse
-     * @throws SaloonInvalidResponseClassException
      * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function handle(PendingSaloonRequest $request): SaloonResponse
     {
@@ -86,10 +83,10 @@ class GuzzleSender extends RequestSender
         $data = $request->data()->all();
 
         match ($request->getDataType()) {
-            DataType::JSON => $requestOptions['json'] = $data,
-            DataType::MULTIPART => $requestOptions['multipart'] = $data,
-            DataType::FORM => $requestOptions['form_params'] = $data,
-            DataType::MIXED => $requestOptions['body'] = $data,
+            RequestDataType::JSON => $requestOptions['json'] = $data,
+            RequestDataType::MULTIPART => $requestOptions['multipart'] = $data,
+            RequestDataType::FORM => $requestOptions['form_params'] = $data,
+            RequestDataType::MIXED => $requestOptions['body'] = $data,
             default => null,
         };
 

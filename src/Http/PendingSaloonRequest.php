@@ -5,7 +5,7 @@ namespace Sammyjo20\Saloon\Http;
 use ReflectionClass;
 use GuzzleHttp\Psr7\Request;
 use Sammyjo20\Saloon\Enums\Method;
-use Sammyjo20\Saloon\Data\DataType;
+use Sammyjo20\Saloon\Data\RequestDataType;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
@@ -66,9 +66,9 @@ class PendingSaloonRequest
     protected ?MockClient $mockClient = null;
 
     /**
-     * @var DataType|null
+     * @var RequestDataType|null
      */
-    protected ?DataType $dataType = null;
+    protected ?RequestDataType $dataType = null;
 
     /**
      * Build up the request payload.
@@ -148,21 +148,23 @@ class PendingSaloonRequest
 
         $dataType = $requestDataType ?? $connectorDataType;
 
-        if ($connectorDataType instanceof DataType) {
-            $connectorDataType->isArrayable()
-                ? $this->data()->merge($connectorProperties->data)
-                : $this->data()->set($connectorProperties->data);
-        }
-
-        if ($requestDataType instanceof DataType) {
-            $requestDataType->isArrayable()
-                ? $this->data()->merge($requestProperties->data)
-                : $this->data()->set($requestProperties->data);
-        }
-
         $this->dataType = $dataType;
 
-        // Todo: Set datatype on the databag to enforce type?
+        // Now we'll enforce the type on the data.
+
+        $this->data()->setTypeFromRequestType($dataType);
+
+        if ($dataType instanceof RequestDataType && $dataType->isArrayable()) {
+            $this->data()->merge($connectorProperties->data, $requestProperties->data);
+        } else {
+            $this->data()->set($connectorProperties->data)->set($requestProperties->data);
+        }
+
+        // Throw an exception if the data bag is not empty.
+
+        if (is_null($dataType) && $this->data()->isNotEmpty()) {
+            throw new PendingSaloonRequestException('You have provided data without a data type interface defined on your request or connector.');
+        }
 
         return $this;
     }
@@ -263,24 +265,24 @@ class PendingSaloonRequest
      * Calculate the data type.
      *
      * @param SaloonConnector|SaloonRequest $object
-     * @return DataType|null
+     * @return RequestDataType|null
      */
-    protected function determineDataType(SaloonConnector|SaloonRequest $object): ?DataType
+    protected function determineDataType(SaloonConnector|SaloonRequest $object): ?RequestDataType
     {
         if ($object instanceof SendsJsonBody) {
-            return DataType::JSON;
+            return RequestDataType::JSON;
         }
 
         if ($object instanceof SendsFormParams) {
-            return DataType::FORM;
+            return RequestDataType::FORM;
         }
 
         if ($object instanceof SendsMultipartBody) {
-            return DataType::MULTIPART;
+            return RequestDataType::MULTIPART;
         }
 
         if ($object instanceof SendsMixedBody || $object instanceof SendsXMLBody) {
-            return DataType::MIXED;
+            return RequestDataType::MIXED;
         }
 
         return null;
@@ -335,9 +337,9 @@ class PendingSaloonRequest
     }
 
     /**
-     * @return DataType|null
+     * @return RequestDataType|null
      */
-    public function getDataType(): ?DataType
+    public function getDataType(): ?RequestDataType
     {
         return $this->dataType;
     }

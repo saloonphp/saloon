@@ -8,6 +8,6 @@ abstract class RequestSender implements RequestSenderInterface
 {
     public function processResponse(SaloonResponse $response): SaloonResponse
     {
-
+        //
     }
 }

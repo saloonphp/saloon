@@ -2,6 +2,8 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
+use Sammyjo20\Saloon\Data\DataBagType;
+use Sammyjo20\Saloon\Data\RequestDataType;
 use Sammyjo20\Saloon\Exceptions\DataBagException;
 
 class DataBag
@@ -10,6 +12,11 @@ class DataBag
      * @var mixed
      */
     protected mixed $data = [];
+
+    /**
+     * @var DataBagType|null
+     */
+    protected ?DataBagType $type = null;
 
     /**
      * @param mixed $data
@@ -51,9 +58,12 @@ class DataBag
      *
      * @param mixed $data
      * @return $this
+     * @throws DataBagException
      */
     public function set(mixed $data): self
     {
+        $this->validateType($data);
+
         $this->data = $data;
 
         return $this;
@@ -115,6 +125,26 @@ class DataBag
     }
 
     /**
+     * Validate the data type.
+     *
+     * @param mixed $data
+     * @return void
+     * @throws DataBagException
+     */
+    protected function validateType(mixed $data): void
+    {
+        $type = $this->type;
+
+        if (is_null($type)) {
+            return;
+        }
+
+        if ($type->validateData($data) === false) {
+            throw new DataBagException('Unacceptable data type. Allowed type: ' . $this->type->value);
+        }
+    }
+
+    /**
      * @return bool
      */
     public function isArray(): bool
@@ -128,5 +158,55 @@ class DataBag
     public function isNotArray(): bool
     {
         return ! $this->isArray();
+    }
+
+    /**
+     * Check if the data bag is empty.
+     *
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return empty($this->all());
+    }
+
+    /**
+     * Check if the data bag is not empty.
+     *
+     * @return bool
+     */
+    public function isNotEmpty(): bool
+    {
+        return ! $this->isEmpty();
+    }
+
+    /**
+     * @return DataBagType|null
+     */
+    public function getType(): ?DataBagType
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param DataBagType|null $type
+     * @return DataBag
+     */
+    public function setType(?DataBagType $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @param RequestDataType|null $type
+     * @return $this
+     */
+    public function setTypeFromRequestType(?RequestDataType $type): self
+    {
+        $this->type = $type->isArrayable() ? DataBagType::ARRAY : DataBagType::MIXED;
+
+        return $this;
     }
 }
