@@ -1,25 +1,27 @@
 {
     "name": "sammyjo20/saloon",
     "description": "A Laravel/PHP package that allows you to write your API integrations or SDKs in a beautiful, standardised syntax.",
-    "type": "library",
     "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Sammyjo20\\Saloon\\": "src/",
-            "Sammyjo20\\Saloon\\Tests\\": "tests/"
-        }
-    },
+    "type": "library",
+    "keywords": [
+        "sammyjo20",
+        "saloon",
+        "sdk",
+        "api",
+        "api-integrations"
+    ],
     "authors": [
         {
-            "name": "Sammyjo20",
-            "email": "29132017+Sammyjo20@users.noreply.github.com"
+            "name": "Sam Carré",
+            "email": "29132017+Sammyjo20@users.noreply.github.com",
+            "role": "Developer"
         }
     ],
-    "minimum-stability": "stable",
+    "homepage": "https://github.com/sammyjo20/saloon",
     "require": {
         "php": "^8.0",
         "guzzlehttp/guzzle": "^7.4",
-        "illuminate/support": "^8.0|^9.0",
+        "illuminate/support": "^8.0 || ^9.0",
         "nesbot/carbon": "^2.58"
     },
     "require-dev": {
@@ -27,17 +29,29 @@
         "pestphp/pest": "^1.21",
         "spatie/ray": "^1.33"
     },
-    "scripts": {
-        "test": [
-            "./vendor/bin/pest"
-        ],
-        "fix-code": [
-            "./vendor/bin/php-cs-fixer fix"
-        ]
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "Sammyjo20\\Saloon\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sammyjo20\\Saloon\\Tests\\": "tests/"
+        }
     },
     "config": {
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "sort-packages": true
         }
+    },
+    "scripts": {
+        "fix-code": [
+            "./vendor/bin/php-cs-fixer fix"
+        ],
+        "test": [
+            "./vendor/bin/pest"
+        ]
     }
 }
