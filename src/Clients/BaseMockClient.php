@@ -80,12 +80,12 @@ class BaseMockClient
     /**
      * Add a mock response to the client
      *
-     * @param MockResponse $response
+     * @param MockResponse|callable $response
      * @param string|null $captureMethod
      * @return void
      * @throws SaloonInvalidMockResponseCaptureMethodException
      */
-    public function addResponse(MockResponse $response, ?string $captureMethod = null): void
+    public function addResponse(MockResponse|callable $response, ?string $captureMethod = null): void
     {
         if (is_null($captureMethod)) {
             $this->sequenceResponses[] = $response;
@@ -144,26 +144,26 @@ class BaseMockClient
         $requestClass = get_class($request);
 
         if (array_key_exists($requestClass, $this->requestResponses)) {
-            return $this->requestResponses[$requestClass];
+            return $this->mockResponseValue($this->requestResponses[$requestClass], $request);
         }
 
         $connectorClass = get_class($request->getConnector());
 
         if (array_key_exists($connectorClass, $this->connectorResponses)) {
-            return $this->connectorResponses[$connectorClass];
+            return $this->mockResponseValue($this->connectorResponses[$connectorClass], $request);
         }
 
         $guessedResponse = $this->guessResponseFromUrl($request);
 
         if (! is_null($guessedResponse)) {
-            return $guessedResponse;
+            return $this->mockResponseValue($guessedResponse, $request);
         }
 
         if (empty($this->sequenceResponses)) {
             throw new SaloonNoMockResponseFoundException;
         }
 
-        return $this->getNextFromSequence();
+        return $this->mockResponseValue($this->getNextFromSequence(), $request);
     }
 
     /**
@@ -173,7 +173,7 @@ class BaseMockClient
      * @return MockResponse|null
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    private function guessResponseFromUrl(SaloonRequest $request): ?MockResponse
+    private function guessResponseFromUrl(SaloonRequest $request): MockResponse|callable|null
     {
         foreach ($this->urlResponses as $url => $response) {
             if (! URLHelper::matches($url, $request->getFullRequestUrl())) {
@@ -455,5 +455,21 @@ class BaseMockClient
     private function checkHistoryEmpty(): bool
     {
         return count($this->recordedResponses) <= 0;
+    }
+
+    /**
+     * Create the mock response. If it is a callable, we will call it.
+     *
+     * @param MockResponse|callable $mockResponse
+     * @param SaloonRequest $request
+     * @return MockResponse
+     */
+    private function mockResponseValue(MockResponse|callable $mockResponse, SaloonRequest $request): MockResponse
+    {
+        if ($mockResponse instanceof MockResponse) {
+            return $mockResponse;
+        }
+
+        return $mockResponse($request);
     }
 }
