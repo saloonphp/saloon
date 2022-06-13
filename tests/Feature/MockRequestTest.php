@@ -3,6 +3,7 @@
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
@@ -209,4 +210,15 @@ test('you can use a closure for the mock response', function () {
 
     expect($urlResponse->isMocked())->toBeTrue();
     expect($urlResponse->json())->toEqual(['request' => 'https://tests.saloon.dev/api/user']);
+});
+
+test('you can use a callable class as the mock response', function () {
+    $mockClient = new MockClient([
+        UserRequest::class => new CallableMockResponse,
+    ]);
+
+    $sequenceResponse = UserRequest::make()->send($mockClient);
+
+    expect($sequenceResponse->isMocked())->toBeTrue();
+    expect($sequenceResponse->json())->toEqual(['request_class' => UserRequest::class]);
 });
