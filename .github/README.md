@@ -39,6 +39,10 @@ $data = $response->json();
 - Authentication & OAuth2 boilerplate already built for you
 - Scalable with lots of API integrations across many team members
 
+## Documentation
+
+[Click here to read the documentation](https://docs.saloon.dev)
+
 ## Why Saloon?
 
 Building API integrations can be time consuming. After you have found an API client to use, you’re faced with lots of configuration to remember and it’s hard to repeat requests without copying and pasting, and then when you introduce patterns like OAuth2 everything gets complicated. You’ll often find yourself writing the same boilerplate code over and over again. 
@@ -46,10 +50,6 @@ Building API integrations can be time consuming. After you have found an API cli
 We’ve standardised the way we talk to APIs with PSR-7 and PSR-18 but we haven’t got a standard structure to build API integrations.
 
 Saloon aims to solve this.
-
-## Documentation
-
-[Click here to read the documentation](https://docs.saloon.dev)
 
 ## Contributing
 
