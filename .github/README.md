@@ -13,9 +13,9 @@ A Laravel / PHP package that helps you write beautiful API integrations and SDKs
 </div>
 
 ## Introduction
-Saloon offers a fluent, object-oriented pattern to build your next API integration or PHP SDK. It makes repeating requests and sharing them around your application a breeze. You don’t have to configure a HTTP client, so you can start making requests really quickly.
+Saloon offers a fluent, object-oriented pattern to build your next API integration or PHP SDK. It makes sharing API requests throughout your application a breeze. You don’t have to configure a HTTP client, so you can start sending requests really quickly.
 
-If you need request faking for your tests, Saloon has it out of the box alongside many other useful tools like OAuth2 boilerplate and caching support. If you are using Laravel, there's also a dedicated Laravel package with artisan commands to help you build even faster.
+If you need request faking for your tests, Saloon has it out of the box alongside many other useful tools like OAuth2 boilerplate and caching. If you use Laravel, there's also a dedicated Laravel package with artisan console commands to help you build even faster.
 
 ```php
 <?php
