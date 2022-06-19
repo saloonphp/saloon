@@ -4,7 +4,7 @@
 
 # 🚪 Saloon 🚪
 
-A Laravel / PHP package that helps you write beautiful API integrations and SDKs. It introduces a standardised, fluent syntax to communicate with third party services and has out of the box support for Laravel.
+A Laravel / PHP package that helps you write beautiful API integrations and SDKs. It introduces an object-oriented, fluent pattern to communicate with third party services.
 
 ![Build Status](https://github.com/sammyjo20/saloon/actions/workflows/tests.yml/badge.svg)
     
