@@ -3,10 +3,10 @@
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
 use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
