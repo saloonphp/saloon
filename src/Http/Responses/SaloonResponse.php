@@ -34,7 +34,7 @@ class SaloonResponse
     /**
      * The decoded XML response.
      *
-     * @var
+     * @var string
      */
     protected $decodedXml;
 
