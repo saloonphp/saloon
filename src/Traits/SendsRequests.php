@@ -32,10 +32,10 @@ trait SendsRequests
         // we should process this response right away.
 
         if ($pendingRequest->hasEarlyResponse()) {
-            return $requestSender->processResponse($pendingRequest, $pendingRequest->getEarlyResponse(), $asynchronous);
+            return $requestSender->handleResponse($pendingRequest, $pendingRequest->getEarlyResponse(), $asynchronous);
         }
 
-        return $requestSender->processRequest($pendingRequest, $asynchronous);
+        return $requestSender->sendRequest($pendingRequest, $asynchronous);
     }
 
     /**

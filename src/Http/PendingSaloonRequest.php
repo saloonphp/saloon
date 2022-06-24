@@ -106,7 +106,7 @@ class PendingSaloonRequest
         $this
             ->mergeRequestProperties()
             ->mergeData()
-            ->runAuthenticator()
+            ->authenticateRequest()
             ->bootConnectorAndRequest()
             ->bootPlugins()
             ->registerDefaultMiddleware()
@@ -127,15 +127,18 @@ class PendingSaloonRequest
         $this->queryParameters()->merge($connectorProperties->queryParameters, $requestProperties->queryParameters);
         $this->config()->merge($connectorProperties->config, $requestProperties->config);
 
-        // Merge together the middleware...
+        // Merge together the middleware pipelines...
 
-        $this->middlewarePipeline()->merge($connectorProperties->middleware);
-        $this->middlewarePipeline()->merge($requestProperties->middleware);
+        $this->middlewarePipeline()
+            ->merge($connectorProperties->middleware)
+            ->merge($requestProperties->middleware);
 
         return $this;
     }
 
     /**
+     * Merge together the data.
+     *
      * @return $this
      * @throws PendingSaloonRequestException
      * @throws \Sammyjo20\Saloon\Exceptions\DataBagException
@@ -183,7 +186,7 @@ class PendingSaloonRequest
      *
      * @return $this
      */
-    protected function runAuthenticator(): self
+    protected function authenticateRequest(): self
     {
         $authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
 

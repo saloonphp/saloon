@@ -16,7 +16,7 @@ interface RequestSenderInterface
      * @param bool $asynchronous
      * @return SaloonResponse|PromiseInterface
      */
-    public function processRequest(PendingSaloonRequest $pendingRequest, bool $asynchronous = false): SaloonResponse|PromiseInterface;
+    public function sendRequest(PendingSaloonRequest $pendingRequest, bool $asynchronous = false): SaloonResponse|PromiseInterface;
 
     /**
      * Process the response
@@ -26,12 +26,22 @@ interface RequestSenderInterface
      * @param bool $asPromise
      * @return SaloonResponse|PromiseInterface
      */
-    public function processResponse(PendingSaloonRequest $pendingRequest, SaloonResponse $saloonResponse, bool $asPromise = false): SaloonResponse|PromiseInterface;
+    public function handleResponse(SaloonResponse $saloonResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): SaloonResponse|PromiseInterface;
+
+    /**
+     * Handle a mock response.
+     *
+     * @param MockResponse $mockResponse
+     * @param PendingSaloonRequest $pendingRequest
+     * @param bool $asPromise
+     * @return SaloonResponse|PromiseInterface
+     */
+    public function handleMockResponse(MockResponse $mockResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): SaloonResponse|PromiseInterface;
 
     /**
      * Return the base response class used to validate the custom response.
      *
      * @return string
      */
-    public function getBaseResponseClass(): string;
+    public function getResponseClass(): string;
 }
