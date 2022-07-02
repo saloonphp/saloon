@@ -3,7 +3,9 @@
 namespace Sammyjo20\Saloon\Traits;
 
 use GuzzleHttp\Promise\PromiseInterface;
+use ReflectionException;
 use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 
 trait SendsRequests
@@ -14,19 +16,18 @@ trait SendsRequests
      * @param MockClient|null $mockClient
      * @param bool $asynchronous
      * @return SaloonResponse|PromiseInterface
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
+     * @throws SaloonException|ReflectionException
      */
     public function send(MockClient $mockClient = null, bool $asynchronous = false): SaloonResponse|PromiseInterface
     {
-        if ($mockClient instanceof MockClient) {
-            $this->withMockClient($mockClient);
-        }
-
         $pendingRequest = $this->createPendingRequest();
         $requestSender = $pendingRequest->getRequestSender();
 
-        dd($pendingRequest);
+        // If a mock client has been provided, we will only set it for this request.
+
+        if ($mockClient instanceof MockClient) {
+            $pendingRequest->setMockClient($mockClient);
+        }
 
         // If there is a mock client found, we should attempt to guess the next response
         // and then run the "handleMockResponse" method on the sender.
@@ -37,7 +38,8 @@ trait SendsRequests
             return $requestSender->handleMockResponse($mockResponse, $pendingRequest, $asynchronous);
         }
 
-        // If any of the middleware have registered early responses, we should process this response right away.
+        // If any of the middleware have registered early responses, we should
+        // process this response right away.
 
         if ($pendingRequest->hasEarlyResponse()) {
             return $requestSender->handleResponse($pendingRequest, $pendingRequest->getEarlyResponse(), $asynchronous);
@@ -53,8 +55,8 @@ trait SendsRequests
      *
      * @param MockClient|null $mockClient
      * @return PromiseInterface
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
+     * @throws ReflectionException
+     * @throws SaloonException
      */
     public function sendAsync(MockClient $mockClient = null): PromiseInterface
     {

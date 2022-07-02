@@ -200,10 +200,10 @@ class DataBag
     }
 
     /**
-     * @param RequestDataType|null $type
+     * @param RequestDataType $type
      * @return $this
      */
-    public function setTypeFromRequestType(?RequestDataType $type): self
+    public function setTypeFromRequestType(RequestDataType $type): self
     {
         $this->type = $type->isArrayable() ? DataBagType::ARRAY : DataBagType::MIXED;
 

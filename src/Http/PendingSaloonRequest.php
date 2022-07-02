@@ -119,7 +119,7 @@ class PendingSaloonRequest
      *
      * @return $this
      */
-    protected function mergeRequestProperties(): self
+    protected function mergeRequestProperties(): static
     {
         $connectorProperties = $this->connector->getRequestProperties();
         $requestProperties = $this->request->getRequestProperties();
@@ -144,7 +144,7 @@ class PendingSaloonRequest
      * @throws PendingSaloonRequestException
      * @throws \Sammyjo20\Saloon\Exceptions\DataBagException
      */
-    protected function mergeData(): self
+    protected function mergeData(): static
     {
         $connectorProperties = $this->connector->getRequestProperties();
         $requestProperties = $this->request->getRequestProperties();
@@ -187,11 +187,11 @@ class PendingSaloonRequest
         }
 
         if ($dataType === RequestDataType::MIXED) {
-            if (isset($connectorData)) {
+            if (! empty($connectorData)) {
                 $this->data()->set($connectorData);
             }
 
-            if (isset($requestData)) {
+            if (! empty($requestData)) {
                 $this->data()->set($requestData);
             }
         }
@@ -204,7 +204,7 @@ class PendingSaloonRequest
      *
      * @return $this
      */
-    protected function authenticateRequest(): self
+    protected function authenticateRequest(): static
     {
         $authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
 
@@ -220,7 +220,7 @@ class PendingSaloonRequest
      *
      * @return $this
      */
-    protected function bootConnectorAndRequest(): self
+    protected function bootConnectorAndRequest(): static
     {
         $this->connector->boot($this);
         $this->request->boot($this);
@@ -234,7 +234,7 @@ class PendingSaloonRequest
      * @return $this
      * @throws \ReflectionException
      */
-    protected function bootPlugins(): self
+    protected function bootPlugins(): static
     {
         $connector = $this->connector;
         $request = $this->request;
@@ -258,7 +258,7 @@ class PendingSaloonRequest
      *
      * @return $this
      */
-    protected function registerDefaultMiddleware(): self
+    protected function registerDefaultMiddleware(): static
     {
         $pipeline = $this->middlewarePipeline();
 
@@ -272,7 +272,7 @@ class PendingSaloonRequest
      *
      * @return $this
      */
-    protected function executeRequestPipeline(): self
+    protected function executeRequestPipeline(): static
     {
         $this->middlewarePipeline()->executeRequestPipeline($this);
 
@@ -392,7 +392,7 @@ class PendingSaloonRequest
      */
     public function getRequestSender(): RequestSenderInterface
     {
-        return $this->getConnector()->requestSender();
+        return $this->connector->requestSender();
     }
 
     /**
@@ -415,9 +415,22 @@ class PendingSaloonRequest
      * @param SaloonResponse|null $earlyResponse
      * @return PendingSaloonRequest
      */
-    public function setEarlyResponse(?SaloonResponse $earlyResponse): self
+    public function setEarlyResponse(?SaloonResponse $earlyResponse): static
     {
         $this->earlyResponse = $earlyResponse;
+
+        return $this;
+    }
+
+    /**
+     * Set the mock client
+     *
+     * @param MockClient|null $mockClient
+     * @return PendingSaloonRequest
+     */
+    public function setMockClient(?MockClient $mockClient): static
+    {
+        $this->mockClient = $mockClient;
 
         return $this;
     }
