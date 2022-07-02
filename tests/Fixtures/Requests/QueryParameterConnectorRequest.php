@@ -11,23 +11,23 @@ class QueryParameterConnectorRequest extends SaloonRequest
     /**
      * Define the method that the request will use.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $method = Saloon::GET;
+    protected string $method = Saloon::GET;
 
     /**
      * The connector.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $connector = QueryParameterConnector::class;
+    protected string $connector = QueryParameterConnector::class;
 
     /**
      * Define the endpoint for the request.
      *
      * @return string
      */
-    public function defineEndpoint(): string
+    protected function defineEndpoint(): string
     {
         return '/user';
     }

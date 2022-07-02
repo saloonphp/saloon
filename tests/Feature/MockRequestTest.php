@@ -1,5 +1,6 @@
 <?php
 
+use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
@@ -37,7 +38,7 @@ test('a request can be mocked with a sequence', function () {
     expect($responseC->json())->toEqual(['error' => 'Server Unavailable']);
     expect($responseC->status())->toEqual(500);
 
-    $this->expectException(SaloonNoMockResponsesProvidedException::class);
+    $this->expectException(SaloonNoMockResponseFoundException::class);
 
     (new UserRequest)->send($mockClient);
 });
@@ -163,7 +164,7 @@ test('you can create wildcard url mocks', function () {
 test('you can use a closure for the mock response', function () {
     $sequenceMock = new MockClient([
         function (SaloonRequest $request): MockResponse {
-            return new MockResponse(['request' => $request->getFullRequestUrl()]);
+            return new MockResponse(['request' => $request->getRequestUrl()]);
         },
     ]);
 
@@ -176,7 +177,7 @@ test('you can use a closure for the mock response', function () {
 
     $connectorMock = new MockClient([
         TestConnector::class => function (SaloonRequest $request): MockResponse {
-            return new MockResponse(['request' => $request->getFullRequestUrl()]);
+            return new MockResponse(['request' => $request->getRequestUrl()]);
         },
     ]);
 
@@ -189,7 +190,7 @@ test('you can use a closure for the mock response', function () {
 
     $requestMock = new MockClient([
         UserRequest::class => function (SaloonRequest $request): MockResponse {
-            return new MockResponse(['request' => $request->getFullRequestUrl()]);
+            return new MockResponse(['request' => $request->getRequestUrl()]);
         },
     ]);
 
@@ -202,7 +203,7 @@ test('you can use a closure for the mock response', function () {
 
     $urlMock = new MockClient([
         'tests.saloon.dev/*' => function (SaloonRequest $request): MockResponse {
-            return new MockResponse(['request' => $request->getFullRequestUrl()]);
+            return new MockResponse(['request' => $request->getRequestUrl()]);
         },
     ]);
 

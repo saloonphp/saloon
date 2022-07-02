@@ -170,13 +170,12 @@ class BaseMockClient
      * Guess the response from the URL.
      *
      * @param SaloonRequest $request
-     * @return MockResponse|null
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     * @return MockResponse|callable|null
      */
     private function guessResponseFromUrl(SaloonRequest $request): MockResponse|callable|null
     {
         foreach ($this->urlResponses as $url => $response) {
-            if (! URLHelper::matches($url, $request->getFullRequestUrl())) {
+            if (! URLHelper::matches($url, $request->getRequestUrl())) {
                 continue;
             }
 

@@ -137,9 +137,10 @@ class GuzzleSender extends RequestSender
      * @param PendingSaloonRequest $pendingSaloonRequest
      * @param Response $guzzleResponse
      * @param RequestException|null $exception
+     * @param bool $asPromise
      * @return SaloonResponse
      */
-    private function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $guzzleResponse, RequestException $exception = null): SaloonResponse
+    private function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $guzzleResponse, RequestException $exception = null, bool $asPromise = false): SaloonResponse
     {
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
@@ -148,7 +149,7 @@ class GuzzleSender extends RequestSender
 
         // Run the response pipeline
 
-        return $this->handleResponse($response, $pendingSaloonRequest);
+        return $this->handleResponse($response, $pendingSaloonRequest, $asPromise);
     }
 
     /**
@@ -181,14 +182,38 @@ class GuzzleSender extends RequestSender
      */
     public function getResponseClass(): string
     {
+        // TODO: Change to GuzzleResponse and implement simple methods in SaloonResponse.
+
         return SaloonResponse::class;
     }
 
+    /**
+     * Handle a mock response.
+     *
+     * @param MockResponse $mockResponse
+     * @param PendingSaloonRequest $pendingRequest
+     * @param bool $asPromise
+     * @return SaloonResponse|PromiseInterface
+     * @throws \JsonException
+     * @throws \Throwable
+     */
     public function handleMockResponse(MockResponse $mockResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): SaloonResponse|PromiseInterface
     {
-        dd('here', $mockResponse);
+        $status = $mockResponse->getStatus();
+        $headers = $mockResponse->getHeaders();
+        $data = $mockResponse->getData();
 
-        // TODO: Implement handleMockResponse() method.
+        $formattedData = $data->isArray() ? json_encode($data->all(), JSON_THROW_ON_ERROR) : $data->all();
+
+        if ($mockResponse->throwsException()) {
+            $guzzleRequest = new Request($pendingRequest->getMethod()->value, $pendingRequest->getUrl(), $headers->all(), $formattedData);
+
+            throw $mockResponse->getException($guzzleRequest);
+        }
+
+        $guzzleResponse = new Response($status, $headers->all(), $formattedData);
+
+        return $this->createResponse($pendingRequest, $guzzleResponse, null, $asPromise);
     }
 
     /**

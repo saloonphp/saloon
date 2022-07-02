@@ -2,30 +2,40 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Helpers\ContentBag;
+use Sammyjo20\Saloon\Helpers\DataBag;
+use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Throwable;
-use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
-use Sammyjo20\Saloon\Traits\CollectsData;
-use Sammyjo20\Saloon\Traits\CollectsConfig;
-use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Data\MockExceptionClosure;
 
 class MockResponse
 {
-    use CollectsHeaders;
-    use CollectsConfig;
-    use CollectsData;
+    /**
+     * Request Headers
+     *
+     * @var ContentBag
+     */
+    protected ContentBag $headers;
+
+    /**
+     * Request Data
+     *
+     * @var DataBag
+     */
+    protected DataBag $data;
+
+    /**
+     * Request Config
+     *
+     * @var ContentBag
+     */
+    protected ContentBag $config;
 
     /**
      * @var int
      */
     protected int $status;
-
-    /**
-     * @var mixed
-     */
-    protected mixed $rawData = null;
 
     /**
      * @var MockExceptionClosure|null
@@ -42,19 +52,10 @@ class MockResponse
      */
     public function __construct(mixed $data = [], int $status = 200, array $headers = [], array $config = [])
     {
+        $this->data = new DataBag($data);
         $this->status = $status;
-
-        // If the data type is an array, we'll assume that it should be JSON data.
-        // of course - if content-type is passed into $headers, it will replace this
-        // default.
-
-        if (is_array($data)) {
-            $this->mergeData($data)->addHeader('Content-Type', 'application/json');
-        } else {
-            $this->rawData = $data;
-        }
-
-        $this->mergeHeaders($headers)->mergeConfig($config);
+        $this->headers = new ContentBag($headers);
+        $this->config = new ContentBag($config);
     }
 
     /**
@@ -77,19 +78,10 @@ class MockResponse
      * @param SaloonRequest $request
      * @param int $status
      * @return static
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public static function fromRequest(SaloonRequest $request, int $status = 200): self
     {
-        // Let's try to work out where we should pull in the data in. If the request uses
-        // the HasBody trait, that means it's going to be raw data - so we'll just grab that
-        // raw data. Otherwise, use the normal "getData" method.
-
-        $data = array_key_exists(HasBody::class, class_uses($request)) && method_exists($request, 'defineBody')
-            ? $request->defineBody()
-            : $request->getData();
-
-        return new static($data, $status, $request->getHeaders(), $request->getConfig());
+        return new static($request->data()->all(), $status, $request->headers()->all(), $request->config()->all());
     }
 
     /**
@@ -121,21 +113,11 @@ class MockResponse
      * Get the formatted data on the response.
      *
      * @return mixed
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     * @throws \JsonException
      */
     public function getFormattedData(): mixed
     {
-        if (isset($this->rawData)) {
-            return $this->rawData;
-        }
-
-        $data = $this->getData();
-
-        if (is_array($data) && $this->getHeader('Content-Type') == 'application/json') {
-            return json_encode($data);
-        }
-
-        return $data;
+        return $this->data->isArray() ? json_encode($this->data->all(), JSON_THROW_ON_ERROR) : $this->data->all();
     }
 
     /**
@@ -157,5 +139,29 @@ class MockResponse
     public function getException(RequestInterface $psrRequest): Throwable
     {
         return $this->exceptionClosure->call($psrRequest);
+    }
+
+    /**
+     * @return ContentBag
+     */
+    public function getHeaders(): ContentBag
+    {
+        return $this->headers;
+    }
+
+    /**
+     * @return DataBag
+     */
+    public function getData(): DataBag
+    {
+        return $this->data;
+    }
+
+    /**
+     * @return ContentBag
+     */
+    public function getConfig(): ContentBag
+    {
+        return $this->config;
     }
 }

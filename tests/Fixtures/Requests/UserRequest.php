@@ -10,8 +10,6 @@ use Sammyjo20\Saloon\Traits\Plugins\AlwaysThrowsOnErrors;
 
 class UserRequest extends SaloonRequest implements SendsJsonBody
 {
-    use AlwaysThrowsOnErrors;
-
     /**
      * Define the method that the request will use.
      *

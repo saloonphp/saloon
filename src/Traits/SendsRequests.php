@@ -6,6 +6,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 use ReflectionException;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
+use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 
 trait SendsRequests

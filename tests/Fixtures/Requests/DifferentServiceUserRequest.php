@@ -13,14 +13,14 @@ class DifferentServiceUserRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::GET;
+    protected string $method = Saloon::GET;
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = DifferentServiceConnector::class;
+    protected string $connector = DifferentServiceConnector::class;
 
     /**
      * Define the endpoint for the request.
