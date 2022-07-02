@@ -28,8 +28,16 @@ trait SendsRequests
         $pendingRequest = $this->createPendingRequest();
         $requestSender = $pendingRequest->getRequestSender();
 
-        // If any of the middleware have registered early responses, like mocking or caching,
-        // we should process this response right away.
+        // If there is a mock client found, we should attempt to guess the next response
+        // and then run the "handleMockResponse" method on the sender.
+
+        if ($pendingRequest->isMocking()) {
+            $mockResponse = $pendingRequest->getMockClient()->guessNextResponse($pendingRequest->getRequest());
+
+            return $requestSender->handleMockResponse($mockResponse, $pendingRequest, $asynchronous);
+        }
+
+        // If any of the middleware have registered early responses, we should process this response right away.
 
         if ($pendingRequest->hasEarlyResponse()) {
             return $requestSender->handleResponse($pendingRequest, $pendingRequest->getEarlyResponse(), $asynchronous);

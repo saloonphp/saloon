@@ -244,9 +244,7 @@ class PendingSaloonRequest
     {
         $pipeline = $this->middlewarePipeline();
 
-        if ($this->isMocking()) {
-            $pipeline->addRequestPipe(new MockResponsePipe($this->getMockClient()));
-        }
+        // Todo: Register Laravel middleware pipe.
 
         return $this;
     }

@@ -84,28 +84,9 @@ class GuzzleSender extends RequestSender
         $guzzleRequest = $this->createGuzzleRequest($pendingRequest);
         $guzzleRequestOptions = $this->createRequestOptions($pendingRequest);
 
-        return $this->client->sendAsync($guzzleRequest, $guzzleRequestOptions)
-            ->then(
-                function (ResponseInterface $guzzleResponse) use ($pendingRequest) {
-                    // Instead of the promise returning a Guzzle response, we want to return
-                    // a Saloon response.
+        $promise = $this->client->sendAsync($guzzleRequest, $guzzleRequestOptions);
 
-                    return $this->createResponse($pendingRequest, $guzzleResponse);
-                },
-                function (GuzzleException $guzzleException) use ($pendingRequest) {
-                    // If the exception was a connect exception, we should return that in the
-                    // promise instead rather than trying to convert it into a
-                    // SaloonResponse, since there was no response.
-
-                    if (! $guzzleException instanceof RequestException) {
-                        throw $guzzleException;
-                    }
-
-                    $response = $this->createResponse($pendingRequest, $guzzleException->getResponse(), $guzzleException);
-
-                    throw $response->toException();
-                }
-            );
+        return $this->processPromise($promise, $pendingRequest);
     }
 
     /**
@@ -178,7 +159,7 @@ class GuzzleSender extends RequestSender
      * @param bool $asPromise
      * @return SaloonResponse|PromiseInterface
      */
-    public function handleResponse(SaloonResponse $saloonResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): SaloonResponse|PromiseInterface
+    public function handleResponse(SaloonResponse $saloonResponse, PendingSaloonRequest $pendingRequest): SaloonResponse|PromiseInterface
     {
         $saloonResponse = $pendingRequest->executeResponsePipeline($saloonResponse);
 
@@ -188,10 +169,6 @@ class GuzzleSender extends RequestSender
         if ($pendingRequest->isMocking()) {
             $saloonResponse->setMocked(true);
             $pendingRequest->getMockClient()->recordResponse($saloonResponse);
-        }
-
-        if ($asPromise === true) {
-            return new FulfilledPromise($saloonResponse);
         }
 
         return $saloonResponse;
@@ -209,6 +186,41 @@ class GuzzleSender extends RequestSender
 
     public function handleMockResponse(MockResponse $mockResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): SaloonResponse|PromiseInterface
     {
+        dd('here', $mockResponse);
+
         // TODO: Implement handleMockResponse() method.
+    }
+
+    /**
+     * Update the promise provided by Guzzle.
+     *
+     * @param PromiseInterface $promise
+     * @param PendingSaloonRequest $pendingRequest
+     * @return PromiseInterface
+     */
+    private function processPromise(PromiseInterface $promise, PendingSaloonRequest $pendingRequest): PromiseInterface
+    {
+        return $promise
+            ->then(
+                function (ResponseInterface $guzzleResponse) use ($pendingRequest) {
+                    // Instead of the promise returning a Guzzle response, we want to return
+                    // a Saloon response.
+
+                    return $this->createResponse($pendingRequest, $guzzleResponse);
+                },
+                function (GuzzleException $guzzleException) use ($pendingRequest) {
+                    // If the exception was a connect exception, we should return that in the
+                    // promise instead rather than trying to convert it into a
+                    // SaloonResponse, since there was no response.
+
+                    if (! $guzzleException instanceof RequestException) {
+                        throw $guzzleException;
+                    }
+
+                    $response = $this->createResponse($pendingRequest, $guzzleException->getResponse(), $guzzleException);
+
+                    throw $response->toException();
+                }
+            );
     }
 }

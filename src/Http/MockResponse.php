@@ -139,31 +139,6 @@ class MockResponse
     }
 
     /**
-     * Get the PSR response
-     *
-     * @return Response
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
-     */
-    protected function getPsrResponse(): Response
-    {
-        return new Response($this->getStatus(), $this->getHeaders(), $this->getFormattedData());
-    }
-
-    /**
-     * Convert the mock response into a Guzzle response
-     *
-     * @param PendingSaloonRequest $pendingRequest
-     * @return Response
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
-     */
-    public function toSaloonResponse(PendingSaloonRequest $pendingRequest): SaloonResponse
-    {
-        $responseClass = $pendingRequest->getResponseClass();
-
-        return new $responseClass($pendingRequest, $this->getPsrResponse());
-    }
-
-    /**
      * Checks if the response throws an exception.
      *
      * @return bool
