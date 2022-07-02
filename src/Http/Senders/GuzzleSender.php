@@ -213,7 +213,13 @@ class GuzzleSender extends RequestSender
 
         $guzzleResponse = new Response($status, $headers->all(), $formattedData);
 
-        return $this->createResponse($pendingRequest, $guzzleResponse, null, $asPromise);
+        $saloonResponse = $this->createResponse($pendingRequest, $guzzleResponse, null, $asPromise);
+
+        if ($asPromise === true) {
+            return new FulfilledPromise($saloonResponse);
+        }
+
+        return $saloonResponse;
     }
 
     /**

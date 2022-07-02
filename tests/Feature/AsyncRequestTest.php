@@ -33,6 +33,15 @@ test('an asynchronous request can be made successfully', function () {
     ]);
 });
 
+test('an asynchronous request can handle an exception properly', function () {
+    $request = new ErrorRequest();
+    $promise = $request->sendAsync();
+
+    $this->expectException(SaloonRequestException::class);
+
+    $promise->wait();
+});
+
 test('an asynchronous request will return a custom response', function () {
     $mockClient = new MockClient([MockResponse::make(['foo' => 'bar'], 200)]);
     $request = new UserRequestWithCustomResponse();
@@ -43,13 +52,4 @@ test('an asynchronous request will return a custom response', function () {
     expect($response)->toBeInstanceOf(UserResponse::class);
     expect($response)->customCastMethod()->toBeInstanceOf(UserData::class);
     expect($response)->foo()->toBe('bar');
-});
-
-test('an asynchronous request can handle an exception properly', function () {
-    $request = new ErrorRequest();
-    $promise = $request->sendAsync();
-
-    $this->expectException(SaloonRequestException::class);
-
-    $promise->wait();
 });
