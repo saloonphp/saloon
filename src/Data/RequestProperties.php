@@ -9,17 +9,18 @@ class RequestProperties
     /**
      * @param array $headers
      * @param array $queryParameters
-     * @param array $data
+     * @param mixed $data
      * @param array $config
      * @param MiddlewarePipeline $middleware
      */
     public function __construct(
         public array              $headers,
         public array              $queryParameters,
-        public array|string       $data,
+        public mixed              $data,
         public array              $config,
         public MiddlewarePipeline $middleware,
-    ) {
+    )
+    {
         //
     }
 }

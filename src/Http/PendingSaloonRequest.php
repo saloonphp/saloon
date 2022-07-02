@@ -4,6 +4,7 @@ namespace Sammyjo20\Saloon\Http;
 
 use ReflectionClass;
 use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Data\DataBagType;
 use Sammyjo20\Saloon\Data\RequestDataType;
 use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
@@ -160,22 +161,39 @@ class PendingSaloonRequest
 
         $dataType = $requestDataType ?? $connectorDataType;
 
-        $this->dataType = $dataType;
+        // If no data type was found, just continue.
+
+        if (! $dataType instanceof RequestDataType) {
+            if ($this->data()->isEmpty()) {
+                return $this;
+            }
+
+            throw new PendingSaloonRequestException('You have provided data without a data type interface defined on your request or connector.');
+        }
 
         // Now we'll enforce the type on the data.
 
         $this->data()->setTypeFromRequestType($dataType);
+        $this->dataType = $dataType;
 
-        if ($dataType instanceof RequestDataType && $dataType->isArrayable()) {
-            $this->data()->merge($connectorProperties->data, $requestProperties->data);
-        } else {
-            $this->data()->set($connectorProperties->data)->set($requestProperties->data);
+        // Now we'll set the data. If the data type is arrayable, we'll merge it together.
+        // If it's a mixed data type, we'll just set the data.
+
+        $connectorData = $connectorProperties->data;
+        $requestData = $requestProperties->data;
+
+        if ($dataType->isArrayable()) {
+            $this->data()->merge($connectorData ?? [], $requestData ?? []);
         }
 
-        // Throw an exception if the data bag is not empty.
+        if ($dataType === RequestDataType::MIXED) {
+            if (isset($connectorData)) {
+                $this->data()->set($connectorData);
+            }
 
-        if (is_null($dataType) && $this->data()->isNotEmpty()) {
-            throw new PendingSaloonRequestException('You have provided data without a data type interface defined on your request or connector.');
+            if (isset($requestData)) {
+                $this->data()->set($requestData);
+            }
         }
 
         return $this;

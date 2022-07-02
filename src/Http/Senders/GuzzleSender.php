@@ -159,7 +159,7 @@ class GuzzleSender extends RequestSender
      * @param bool $asPromise
      * @return SaloonResponse|PromiseInterface
      */
-    public function handleResponse(SaloonResponse $saloonResponse, PendingSaloonRequest $pendingRequest): SaloonResponse|PromiseInterface
+    public function handleResponse(SaloonResponse $saloonResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): SaloonResponse|PromiseInterface
     {
         $saloonResponse = $pendingRequest->executeResponsePipeline($saloonResponse);
 

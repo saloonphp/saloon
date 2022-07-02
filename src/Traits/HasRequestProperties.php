@@ -120,7 +120,7 @@ trait HasRequestProperties
      */
     protected function defaultData(): mixed
     {
-        return [];
+        return null;
     }
 
     /**

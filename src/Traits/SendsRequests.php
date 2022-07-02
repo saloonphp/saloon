@@ -23,10 +23,10 @@ trait SendsRequests
             $this->withMockClient($mockClient);
         }
 
-        // 🚀 ... 🌑 ... 💫
-
         $pendingRequest = $this->createPendingRequest();
         $requestSender = $pendingRequest->getRequestSender();
+
+        dd($pendingRequest);
 
         // If there is a mock client found, we should attempt to guess the next response
         // and then run the "handleMockResponse" method on the sender.
@@ -42,6 +42,8 @@ trait SendsRequests
         if ($pendingRequest->hasEarlyResponse()) {
             return $requestSender->handleResponse($pendingRequest, $pendingRequest->getEarlyResponse(), $asynchronous);
         }
+
+        // 🚀 ... 🌑 ... 💫
 
         return $requestSender->sendRequest($pendingRequest, $asynchronous);
     }
