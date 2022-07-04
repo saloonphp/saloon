@@ -33,6 +33,7 @@ $data = $response->json();
 - Simple, easy to learn syntax that standardises the way you interact with APIs
 - Abstract API integrations into classes so you can keep your code DRY
 - Configuration is fast and can be shared across all your requests
+- Built on top of Guzzle, one of the most popular PHP HTTP clients.
 - Framework agnostic
 - Mocking requests for testing
 - Great for building your own PHP SDKs
