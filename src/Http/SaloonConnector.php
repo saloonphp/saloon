@@ -82,6 +82,8 @@ abstract class SaloonConnector
      * @param SaloonRequest $request
      * @param MockClient|null $mockClient
      * @return PromiseInterface
+     * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */
     public function sendAsync(SaloonRequest $request, MockClient $mockClient = null): PromiseInterface
     {

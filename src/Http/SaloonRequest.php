@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
 use Sammyjo20\Saloon\Traits\BuildsUrls;
 use Sammyjo20\Saloon\Traits\CastsResponseToDto;
 use Sammyjo20\Saloon\Traits\MocksRequests;
@@ -11,6 +12,9 @@ use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Traits\BundlesRequestProperties;
 
+/**
+ * @method RequestSender requestSender
+ */
 abstract class SaloonRequest
 {
     use HasRequestProperties;
@@ -110,5 +114,24 @@ abstract class SaloonRequest
     public static function make(...$arguments): static
     {
         return new static(...$arguments);
+    }
+
+    /**
+     * Dynamically proxy other methods to the connector.
+     *
+     * @param $method
+     * @param $parameters
+     * @return mixed
+     * @throws SaloonMethodNotFoundException
+     */
+    public function __call($method, $parameters)
+    {
+        $connector = $this->getConnector();
+
+        if (method_exists($connector, $method) === false) {
+            throw new SaloonMethodNotFoundException($method, $connector);
+        }
+
+        return $connector->{$method}(...$parameters);
     }
 }

@@ -6,6 +6,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
@@ -13,6 +14,8 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Data\RequestDataType;
+use Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\RequestSender;
@@ -30,11 +33,27 @@ class GuzzleSender extends RequestSender
      */
     public function __construct()
     {
-        $this->client = new GuzzleClient([
+        $this->client = $this->createGuzzleClient();
+    }
+
+    /**
+     * Create a new Guzzle client
+     *
+     * @return GuzzleClient
+     * @throws SaloonDuplicateHandlerException
+     * @throws SaloonInvalidHandlerException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
+     */
+    private function createGuzzleClient(): GuzzleClient
+    {
+        $clientConfig = [
             'connect_timeout' => 10,
             'timeout' => 30,
             'http_errors' => true,
-        ]);
+            'handler' => $this->bootHandlers(HandlerStack::create()),
+        ];
+
+        return new GuzzleClient($clientConfig);
     }
 
     /**
