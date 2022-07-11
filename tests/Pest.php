@@ -43,3 +43,8 @@ function apiUrl()
 {
     return 'https://tests.saloon.dev/api';
 }
+
+function fixtureRecorderPath(): string
+{
+    return __DIR__ . '/Fixtures/Recorder';
+}

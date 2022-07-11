@@ -214,11 +214,24 @@ class SaloonResponse
     /**
      * Get the headers from the response.
      *
+     * @param bool $flatten
      * @return array
      */
-    public function headers(): array
+    public function headers(bool $flatten = false): array
     {
-        return $this->response->getHeaders();
+        $headers = $this->response->getHeaders();
+
+        if ($flatten === false) {
+            return $headers;
+        }
+
+        return (new Collection($headers))->mapWithKeys(function ($value, $key) {
+            if (! is_array($value)) {
+                return [$key => $value];
+            }
+
+            return [$key => $value[0]];
+        })->toArray();
     }
 
     /**
