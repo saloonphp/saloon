@@ -226,11 +226,7 @@ class SaloonResponse
         }
 
         return (new Collection($headers))->mapWithKeys(function ($value, $key) {
-            if (! is_array($value)) {
-                return [$key => $value];
-            }
-
-            return [$key => $value[0]];
+            return is_array($value) ? [$key => $value[0]] : [$key => $value];
         })->toArray();
     }
 
