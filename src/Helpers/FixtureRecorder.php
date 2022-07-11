@@ -149,4 +149,14 @@ class FixtureRecorder
     {
         return $this->fixtureDirectory;
     }
+
+    /**
+     * Check if the fixture recorder is recording failures.
+     *
+     * @return bool
+     */
+    public function isRecordingFailures(): bool
+    {
+        return $this->recordFailures;
+    }
 }

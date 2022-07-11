@@ -60,3 +60,22 @@ test('the fixtures mock response contains the correct structure with headers, st
     expect($unserialized)->toEqual($mockResponse);
 });
 
+test('you can retrieve the fixture directory from the fixture recorder', function () {
+    $recorder = new FixtureRecorder(fixtureRecorderPath());
+
+    expect($recorder->getFixtureDirectory())->toEqual(fixtureRecorderPath());
+});
+
+test('you can enable and disable recording failed responses', function () {
+    $recorder = new FixtureRecorder(fixtureRecorderPath());
+
+    expect($recorder->isRecordingFailures())->toBeFalse();
+
+    $recorder->recordFailures();
+
+    expect($recorder->isRecordingFailures())->toBeTrue();
+
+    $recorder->doNotRecordFailures();
+
+    expect($recorder->isRecordingFailures())->toBeFalse();
+});
