@@ -12,21 +12,31 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
+use GuzzleHttp\Utils;
 use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Data\RequestDataType;
 use Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\RequestSender;
+use Sammyjo20\Saloon\Http\Sender;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 
-class GuzzleSender extends RequestSender
+class GuzzleSender extends Sender
 {
     /**
+     * The Guzzle client.
+     *
      * @var GuzzleClient
      */
     protected GuzzleClient $client;
+
+    /**
+     * Guzzle's Handler Stack.
+     *
+     * @var HandlerStack
+     */
+    protected HandlerStack $handlerStack;
 
     /**
      * Create the HTTP client.
@@ -46,11 +56,13 @@ class GuzzleSender extends RequestSender
      */
     private function createGuzzleClient(): GuzzleClient
     {
+        $this->handlerStack = $this->createHandlerStack();
+
         $clientConfig = [
             'connect_timeout' => 10,
             'timeout' => 30,
             'http_errors' => true,
-            'handler' => $this->bootHandlers(HandlerStack::create()),
+            'handler' => $this->handlerStack,
         ];
 
         return new GuzzleClient($clientConfig);
@@ -272,5 +284,46 @@ class GuzzleSender extends RequestSender
                     throw $response->toException();
                 }
             );
+    }
+
+    /**
+     * Create a blank handler stack.
+     *
+     * @return HandlerStack
+     */
+    protected function createHandlerStack(): HandlerStack
+    {
+        $stack = new HandlerStack();
+        $stack->setHandler(Utils::chooseHandler());
+
+        return $stack;
+    }
+
+    public function pushMiddleware(callable $callable, string $withName = ''): self
+    {
+        $this->handlerStack->push($callable, $withName);
+
+        return $this;
+    }
+
+    public function pushMiddlewareBefore(string $name, callable $callable, string $withName = ''): self
+    {
+        $this->handlerStack->before($name, $callable, $withName);
+
+        return $this;
+    }
+
+    public function pushMiddlewareAfter(string $name, callable $callable, string $withName = ''): self
+    {
+        $this->handlerStack->after($name, $callable, $withName);
+
+        return $this;
+    }
+
+    public function removeMiddleware(string $name): self
+    {
+        $this->handlerStack->remove($name);
+
+        return $this;
     }
 }

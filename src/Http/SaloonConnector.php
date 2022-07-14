@@ -11,7 +11,7 @@ use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
-use Sammyjo20\Saloon\Traits\HasRequestSender;
+use Sammyjo20\Saloon\Traits\HasSender;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Traits\ProxiesRequests;
 use Sammyjo20\Saloon\Traits\BundlesRequestProperties;
@@ -22,7 +22,7 @@ abstract class SaloonConnector
     use BundlesRequestProperties;
     use AuthenticatesRequests;
     use HasCustomResponses;
-    use HasRequestSender;
+    use HasSender;
     use ProxiesRequests;
     use MocksRequests;
 

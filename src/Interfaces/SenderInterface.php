@@ -7,7 +7,7 @@ use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 
-interface RequestSenderInterface
+interface SenderInterface
 {
     /**
      * Send the request.

@@ -29,8 +29,8 @@ trait HasCustomResponses
         $response = $this->response;
 
         $baseResponseClass = $this instanceof SaloonRequest
-            ? $this->getConnector()->requestSender()->getResponseClass()
-            : $this->requestSender()->getResponseClass();
+            ? $this->getConnector()->sender()->getResponseClass()
+            : $this->sender()->getResponseClass();
 
         if (empty($response) === true) {
             $response = $this instanceof SaloonRequest ? $this->getConnector()->getResponseClass() : $baseResponseClass;

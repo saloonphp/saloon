@@ -17,7 +17,7 @@ use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
 use Sammyjo20\Saloon\Interfaces\Data\SendsMixedBody;
 use Sammyjo20\Saloon\Interfaces\Data\SendsMultipartBody;
 use Sammyjo20\Saloon\Interfaces\Data\SendsXMLBody;
-use Sammyjo20\Saloon\Interfaces\RequestSenderInterface;
+use Sammyjo20\Saloon\Interfaces\SenderInterface;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 
 class PendingSaloonRequest
@@ -388,11 +388,11 @@ class PendingSaloonRequest
     /**
      * Get the request sender.
      *
-     * @return RequestSenderInterface
+     * @return SenderInterface
      */
-    public function getRequestSender(): RequestSenderInterface
+    public function getSender(): SenderInterface
     {
-        return $this->connector->requestSender();
+        return $this->connector->sender();
     }
 
     /**

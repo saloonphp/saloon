@@ -22,7 +22,7 @@ trait SendsRequests
     public function send(MockClient $mockClient = null, bool $asynchronous = false): SaloonResponse|PromiseInterface
     {
         $pendingRequest = $this->createPendingRequest();
-        $requestSender = $pendingRequest->getRequestSender();
+        $requestSender = $pendingRequest->getSender();
 
         // If a mock client has been provided, we will only set it for this request.
 

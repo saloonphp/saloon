@@ -13,7 +13,7 @@ use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Traits\BundlesRequestProperties;
 
 /**
- * @method RequestSender requestSender
+ * @method Sender sender
  */
 abstract class SaloonRequest
 {
