@@ -95,13 +95,31 @@ class DataBag
      * @return $this
      * @throws DataBagException
      */
-    public function push(string $key, mixed $value): self
+    public function add(string $key, mixed $value): self
     {
         if ($this->isNotArray()) {
             throw new DataBagException('This method is only available for array data.');
         }
 
-        $this->data[$key] = $value;
+        $this->data[$key] = value($value);
+
+        return $this;
+    }
+
+    /**
+     * Store a given value if the condition is true.
+     *
+     * @param bool $condition
+     * @param string $key
+     * @param mixed $value
+     * @return $this
+     * @throws DataBagException
+     */
+    public function addWhen(bool $condition, string $key, mixed $value): self
+    {
+        if ($condition === true) {
+            return $this->add($key, $value);
+        }
 
         return $this;
     }

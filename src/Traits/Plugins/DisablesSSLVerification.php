@@ -15,6 +15,6 @@ trait DisablesSSLVerification
      */
     public static function bootDisablesSSLVerification(PendingSaloonRequest $request): void
     {
-        $request->config()->push('verify', false);
+        $request->config()->add('verify', false);
     }
 }

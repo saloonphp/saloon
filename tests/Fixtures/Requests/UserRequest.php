@@ -32,7 +32,7 @@ class UserRequest extends SaloonRequest implements SendsJsonBody
     {
         $this->middlewarePipeline()
             ->addRequestPipe(function (PendingSaloonRequest $request) {
-                $request->headers()->push('X-Name', 'Sam');
+                $request->headers()->add('X-Name', 'Sam');
             });
     }
 
