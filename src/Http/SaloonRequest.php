@@ -12,9 +12,6 @@ use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Traits\BundlesRequestProperties;
 
-/**
- * @method Sender sender
- */
 abstract class SaloonRequest
 {
     use HasRequestProperties;

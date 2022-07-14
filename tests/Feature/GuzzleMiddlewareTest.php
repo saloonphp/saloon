@@ -3,11 +3,23 @@
 use GuzzleHttp\Middleware;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Http\Senders\GuzzleSender;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('you can add middleware to the guzzle sender', function () {
     $request = new UserRequest();
+
+    // Use Saloon's middleware pipeline...
+
+    $request->middlewarePipeline()
+        ->addRequestPipe(function (PendingSaloonRequest $request) {
+            //
+        })
+        ->addResponsePipe(function (SaloonResponse $response) {
+            //
+        });
 
     /** @var GuzzleSender $sender */
     $sender = $request->sender();

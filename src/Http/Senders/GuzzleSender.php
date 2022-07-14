@@ -299,6 +299,13 @@ class GuzzleSender extends Sender
         return $stack;
     }
 
+    /**
+     * Add a middleware to the handler stack.
+     *
+     * @param callable $callable
+     * @param string $withName
+     * @return $this
+     */
     public function pushMiddleware(callable $callable, string $withName = ''): self
     {
         $this->handlerStack->push($callable, $withName);
@@ -306,6 +313,14 @@ class GuzzleSender extends Sender
         return $this;
     }
 
+    /**
+     * Push a middleware before another.
+     *
+     * @param string $name
+     * @param callable $callable
+     * @param string $withName
+     * @return $this
+     */
     public function pushMiddlewareBefore(string $name, callable $callable, string $withName = ''): self
     {
         $this->handlerStack->before($name, $callable, $withName);
@@ -313,6 +328,14 @@ class GuzzleSender extends Sender
         return $this;
     }
 
+    /**
+     * Push a middleware after another.
+     *
+     * @param string $name
+     * @param callable $callable
+     * @param string $withName
+     * @return $this
+     */
     public function pushMiddlewareAfter(string $name, callable $callable, string $withName = ''): self
     {
         $this->handlerStack->after($name, $callable, $withName);
@@ -320,6 +343,12 @@ class GuzzleSender extends Sender
         return $this;
     }
 
+    /**
+     * Remove a middleware by name.
+     *
+     * @param string $name
+     * @return $this
+     */
     public function removeMiddleware(string $name): self
     {
         $this->handlerStack->remove($name);
