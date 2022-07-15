@@ -16,14 +16,14 @@ class CustomResponseConnectorRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::GET;
+    protected string $method = 'GET';
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = CustomResponseConnector::class;
+    protected string $connector = CustomResponseConnector::class;
 
     /**
      * Define the endpoint for the request.

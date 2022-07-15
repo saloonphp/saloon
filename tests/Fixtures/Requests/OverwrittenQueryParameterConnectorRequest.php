@@ -13,14 +13,14 @@ class OverwrittenQueryParameterConnectorRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::GET;
+    protected string $method = 'GET';
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = QueryParameterConnector::class;
+    protected string $connector = QueryParameterConnector::class;
 
     /**
      * Define the endpoint for the request.

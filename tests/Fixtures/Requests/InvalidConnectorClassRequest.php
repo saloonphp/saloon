@@ -10,16 +10,16 @@ class InvalidConnectorClassRequest extends SaloonRequest
     /**
      * Define the method that the request will use.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $method = Saloon::GET;
+    protected string $method = 'GET';
 
     /**
      * The connector.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $connector = SaloonRequest::class;
+    protected string $connector = SaloonRequest::class;
 
     /**
      * Define the endpoint for the request.

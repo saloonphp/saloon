@@ -13,14 +13,14 @@ class UserRequestWithBoot extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::GET;
+    protected string $method = 'GET';
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = WithBootConnector::class;
+    protected string $connector = WithBootConnector::class;
 
     /**
      * Define the endpoint for the request.

@@ -13,12 +13,20 @@ class DefaultEndpointRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::POST;
+    protected string $method = 'POST';
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = TestConnector::class;
+    protected string $connector = TestConnector::class;
+
+    /**
+     * @return string
+     */
+    protected function defineEndpoint(): string
+    {
+        return '';
+    }
 }

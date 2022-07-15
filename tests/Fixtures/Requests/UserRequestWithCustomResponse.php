@@ -14,7 +14,7 @@ class UserRequestWithCustomResponse extends SaloonRequest
      *
      * @var string|null
      */
-    protected string $method = Saloon::GET;
+    protected string $method = 'GET';
 
     /**
      * @var string|null

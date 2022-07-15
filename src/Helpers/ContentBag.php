@@ -80,7 +80,7 @@ class ContentBag
     }
 
     /**
-     * Store a given value if the condition is true.
+     * Store a given value if a given condition is true.
      *
      * @param bool $condition
      * @param string $key

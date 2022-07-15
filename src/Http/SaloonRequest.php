@@ -2,9 +2,12 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
+use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 use Sammyjo20\Saloon\Traits\BuildsUrls;
 use Sammyjo20\Saloon\Traits\CastsResponseToDto;
+use Sammyjo20\Saloon\Traits\HasConnector;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
@@ -22,6 +25,7 @@ abstract class SaloonRequest
     use SendsRequests;
     use BuildsUrls;
     use CastsResponseToDto;
+    use HasConnector;
 
     /**
      * @var string
@@ -62,29 +66,6 @@ abstract class SaloonRequest
     public function getMethod(): string
     {
         return $this->method;
-    }
-
-    /**
-     * Retrieve the loaded connector.
-     *
-     * @return SaloonConnector
-     */
-    public function getConnector(): SaloonConnector
-    {
-        return $this->loadedConnector ??= new $this->connector;
-    }
-
-    /**
-     * Set the loaded connector at runtime.
-     *
-     * @param SaloonConnector $connector
-     * @return $this
-     */
-    public function setConnector(SaloonConnector $connector): self
-    {
-        $this->loadedConnector = $connector;
-
-        return $this;
     }
 
     /**

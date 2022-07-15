@@ -12,18 +12,18 @@ class InvalidResponseClass extends SaloonRequest
     /**
      * Define the method that the request will use.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $method = Saloon::GET;
+    protected string $method = 'GET';
 
     protected ?string $response = UserResponseNoExtendSaloonResponse::class;
 
     /**
      * The connector.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $connector = TestConnector::class;
+    protected string $connector = TestConnector::class;
 
     /**
      * Define the endpoint for the request.

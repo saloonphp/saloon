@@ -16,14 +16,14 @@ class OverwrittenPostRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::POST;
+    protected string $method = 'POST';
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = PostJsonConnector::class;
+    protected string $connector = PostJsonConnector::class;
 
     /**
      * Define the endpoint for the request.

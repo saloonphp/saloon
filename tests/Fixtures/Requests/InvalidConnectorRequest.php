@@ -12,14 +12,14 @@ class InvalidConnectorRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::GET;
+    protected string $method = 'GET';
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = 'abc';
+    protected string $connector = 'abc';
 
     /**
      * Define the endpoint for the request.

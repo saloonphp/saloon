@@ -16,14 +16,14 @@ class HasBodyConnectorRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::GET;
+    protected string $method = 'GET';
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = HasBodyConnector::class;
+    protected string $connector = HasBodyConnector::class;
 
     /**
      * Define the endpoint for the request.

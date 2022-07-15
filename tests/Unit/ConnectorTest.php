@@ -24,7 +24,7 @@ test('you can prepare a request through the connector', function () {
     $connector = new TestConnector();
     $connector->unique = true;
 
-    $request = $connector->send(new UserRequest);
+    $request = $connector->request(new UserRequest);
 
     expect($request)->toBeInstanceOf(SaloonRequest::class);
     expect($request->getConnector())->toEqual($connector);

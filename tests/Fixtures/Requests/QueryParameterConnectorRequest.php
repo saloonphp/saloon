@@ -13,7 +13,7 @@ class QueryParameterConnectorRequest extends SaloonRequest
      *
      * @var string
      */
-    protected string $method = Saloon::GET;
+    protected string $method = 'GET';
 
     /**
      * The connector.

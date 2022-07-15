@@ -16,14 +16,14 @@ class PostJsonRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::POST;
+    protected string $method = 'POST';
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = TestConnector::class;
+    protected string $connector = TestConnector::class;
 
     /**
      * Define the endpoint for the request.
