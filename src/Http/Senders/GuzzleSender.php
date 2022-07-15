@@ -17,6 +17,7 @@ use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Data\RequestDataType;
 use Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
+use Sammyjo20\Saloon\Http\Guzzle\Middleware\MockMiddleware;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Sender;
@@ -225,30 +226,22 @@ class GuzzleSender extends Sender
      * @param PendingSaloonRequest $pendingRequest
      * @param bool $asPromise
      * @return SaloonResponse|PromiseInterface
-     * @throws \JsonException
-     * @throws \Throwable
+     * @throws GuzzleException
      */
     public function handleMockResponse(MockResponse $mockResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): SaloonResponse|PromiseInterface
     {
-        $status = $mockResponse->getStatus();
-        $headers = $mockResponse->getHeaders();
-        $data = $mockResponse->getData();
+        // Todo: Make sure that this works even more concurrent requests.
+        // Alternatively...
 
-        $formattedData = $data->isArray() ? json_encode($data->all(), JSON_THROW_ON_ERROR) : $data->all();
+        // Always make sure the "MockMiddleware" is ALWAYS ready. Inside it, we check
+        // if there is a mock response ready to be consumed - it there is, we consume
+        // it, otherwise we continue. Might work better for concurrent requests.
 
-        if ($mockResponse->throwsException()) {
-            $guzzleRequest = new Request($pendingRequest->getMethod()->value, $pendingRequest->getUrl(), $headers->all(), $formattedData);
+        $this->pushMiddleware(new MockMiddleware($mockResponse), 'mock');
 
-            throw $mockResponse->getException($guzzleRequest);
-        }
+        $saloonResponse = $this->sendRequest($pendingRequest, $asPromise);
 
-        $guzzleResponse = new Response($status, $headers->all(), $formattedData);
-
-        $saloonResponse = $this->createResponse($pendingRequest, $guzzleResponse, null, $asPromise);
-
-        if ($asPromise === true) {
-            return new FulfilledPromise($saloonResponse);
-        }
+        $this->removeMiddleware('mock');
 
         return $saloonResponse;
     }
