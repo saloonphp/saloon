@@ -13,18 +13,6 @@ test('you can add middleware to the guzzle sender', function () {
 
     // Use Saloon's middleware pipeline...
 
-    $request->config()->add('timeout', 60);
-
-    dd($request->config());
-
-    $request->middleware()
-        ->addRequestStep(function (PendingSaloonRequest $request) {
-            //
-        })
-        ->addResponseStep(function (SaloonResponse $response) {
-            //
-        });
-
     /** @var GuzzleSender $sender */
     $sender = $request->sender();
 
@@ -44,5 +32,5 @@ test('you can add middleware to the guzzle sender', function () {
 
     $response = $request->send();
 
-    dd($response->headers());
+    dd($response->json());
 });

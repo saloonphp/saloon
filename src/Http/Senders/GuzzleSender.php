@@ -308,7 +308,7 @@ class GuzzleSender extends Sender
      */
     public function pushMiddleware(callable $callable, string $withName = ''): self
     {
-        $this->handlerStack->add($callable, $withName);
+        $this->handlerStack->push($callable, $withName);
 
         return $this;
     }
