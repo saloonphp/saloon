@@ -2,8 +2,8 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 
 trait HasConnector
 {

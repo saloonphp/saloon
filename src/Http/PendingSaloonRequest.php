@@ -3,21 +3,21 @@
 namespace Sammyjo20\Saloon\Http;
 
 use ReflectionClass;
+use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Data\RequestDataType;
-use Sammyjo20\Saloon\Enums\Method;
-use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
+use Sammyjo20\Saloon\Interfaces\SenderInterface;
+use Sammyjo20\Saloon\Traits\HasRequestProperties;
+use Sammyjo20\Saloon\Interfaces\Data\SendsXMLBody;
+use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
-use Sammyjo20\Saloon\Interfaces\Data\SendsFormParams;
 use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
 use Sammyjo20\Saloon\Interfaces\Data\SendsMixedBody;
+use Sammyjo20\Saloon\Interfaces\Data\SendsFormParams;
+use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 use Sammyjo20\Saloon\Interfaces\Data\SendsMultipartBody;
-use Sammyjo20\Saloon\Interfaces\Data\SendsXMLBody;
-use Sammyjo20\Saloon\Interfaces\SenderInterface;
-use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
-use Sammyjo20\Saloon\Traits\HasRequestProperties;
+use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
 
 class PendingSaloonRequest
 {

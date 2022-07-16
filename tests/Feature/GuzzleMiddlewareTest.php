@@ -3,8 +3,6 @@
 use GuzzleHttp\Middleware;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Http\Senders\GuzzleSender;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 

@@ -1,10 +1,10 @@
 <?php
 
-use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 
 test('you can add a request pipe to the middleware', function () {
     $pipeline = new MiddlewarePipeline;

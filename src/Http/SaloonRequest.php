@@ -2,15 +2,15 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
 use Sammyjo20\Saloon\Traits\BuildsUrls;
-use Sammyjo20\Saloon\Traits\CastsResponseToDto;
 use Sammyjo20\Saloon\Traits\HasConnector;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Traits\SendsRequests;
+use Sammyjo20\Saloon\Traits\CastsResponseToDto;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
+use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
 
 abstract class SaloonRequest
 {

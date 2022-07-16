@@ -19,8 +19,7 @@ class RequestProperties
         public mixed              $data,
         public array              $config,
         public MiddlewarePipeline $middleware,
-    )
-    {
+    ) {
         //
     }
 }

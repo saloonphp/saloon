@@ -1,13 +1,13 @@
 <?php
 
 use GuzzleHttp\Promise\Promise;
-use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\RequestSelectionConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\RequestSelectionConnector;
 
 test('a connector class can be instantiated using the make method', function () {
     $connectorA = TestConnector::make();

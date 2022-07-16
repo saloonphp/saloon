@@ -1,6 +1,5 @@
 <?php
 
-use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
@@ -11,11 +10,11 @@ use Sammyjo20\Saloon\Tests\Fixtures\Requests\NoConnectorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\ExtendedConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestProxyConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
+use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\DefaultEndpointRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\InvalidConnectorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ExtendedConnectorRequest;
-use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\CustomResponseConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidResponseConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\InvalidConnectorClassRequest;

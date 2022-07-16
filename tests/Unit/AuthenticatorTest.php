@@ -1,18 +1,18 @@
 <?php
 
-use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\AuthenticatorPluginRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\BootAuthenticatorRequest;
+use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Exceptions\MissingAuthenticatorException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\RequiresAuthRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Authenticators\PizzaAuthenticator;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\BootAuthenticatorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\RequiresBasicAuthRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\RequiresTokenAuthRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\RequiresDigestAuthRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\AuthenticatorPluginRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\DefaultAuthenticatorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\DefaultAuthenticatorConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\DefaultPizzaAuthenticatorRequest;

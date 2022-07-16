@@ -2,16 +2,16 @@
 
 namespace Sammyjo20\Saloon\Clients;
 
-use PHPUnit\Framework\Assert as PHPUnit;
 use ReflectionClass;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;
-use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
-use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 use Sammyjo20\Saloon\Helpers\URLHelper;
 use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Http\SaloonConnector;
+use PHPUnit\Framework\Assert as PHPUnit;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Helpers\ReflectionHelper;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;
 
 class BaseMockClient
 {

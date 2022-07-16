@@ -34,21 +34,21 @@ class DefaultPropertiesRequest extends SaloonRequest
     protected function defaultHeaders(): array
     {
         return [
-            'X-Favourite-Artist' => 'Luke Combs'
+            'X-Favourite-Artist' => 'Luke Combs',
         ];
     }
 
     protected function defaultQueryParameters(): array
     {
         return [
-            'format' => 'json'
+            'format' => 'json',
         ];
     }
 
     protected function defaultData(): mixed
     {
         return [
-            'song' => 'Call Me'
+            'song' => 'Call Me',
         ];
     }
 

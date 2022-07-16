@@ -3,13 +3,13 @@
 namespace Sammyjo20\Saloon\Interfaces;
 
 use Exception;
+use SimpleXMLElement;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\StreamInterface;
-use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 use Sammyjo20\Saloon\Helpers\ContentBag;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use SimpleXMLElement;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 
 interface SaloonResponseInterface
 {

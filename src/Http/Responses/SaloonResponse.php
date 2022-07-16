@@ -3,16 +3,15 @@
 namespace Sammyjo20\Saloon\Http\Responses;
 
 use Exception;
-use GuzzleHttp\Psr7\Response;
+use SimpleXMLElement;
 use Illuminate\Support\Arr;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
-use Psr\Http\Message\StreamInterface;
-use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 use Sammyjo20\Saloon\Interfaces\SaloonResponseInterface;
-use SimpleXMLElement;
 
 abstract class SaloonResponse implements SaloonResponseInterface
 {

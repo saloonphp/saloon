@@ -2,9 +2,9 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Sammyjo20\Saloon\Data\RequestProperties;
 use Sammyjo20\Saloon\Helpers\DataBag;
 use Sammyjo20\Saloon\Helpers\ContentBag;
+use Sammyjo20\Saloon\Data\RequestProperties;
 use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 
 trait HasRequestProperties

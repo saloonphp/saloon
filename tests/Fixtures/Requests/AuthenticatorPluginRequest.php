@@ -5,7 +5,6 @@ namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Plugins\AuthenticatorPlugin;
-use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 
 class AuthenticatorPluginRequest extends SaloonRequest
 {

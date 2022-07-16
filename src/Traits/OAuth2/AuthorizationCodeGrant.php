@@ -4,15 +4,15 @@ namespace Sammyjo20\Saloon\Traits\OAuth2;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
-use Sammyjo20\Saloon\Exceptions\InvalidStateException;
-use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
-use Sammyjo20\Saloon\Helpers\StateHelper;
 use Sammyjo20\Saloon\Helpers\URLHelper;
-use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
-use Sammyjo20\Saloon\Http\OAuth2\GetAccessTokenRequest;
-use Sammyjo20\Saloon\Http\OAuth2\GetRefreshTokenRequest;
+use Sammyjo20\Saloon\Helpers\StateHelper;
+use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
 use Sammyjo20\Saloon\Http\OAuth2\GetUserRequest;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Exceptions\InvalidStateException;
+use Sammyjo20\Saloon\Http\OAuth2\GetAccessTokenRequest;
+use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
+use Sammyjo20\Saloon\Http\OAuth2\GetRefreshTokenRequest;
 use Sammyjo20\Saloon\Interfaces\OAuthAuthenticatorInterface;
 
 trait AuthorizationCodeGrant
