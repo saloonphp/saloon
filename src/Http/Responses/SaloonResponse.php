@@ -236,7 +236,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
      * @param callable $callback
      * @return $this
      */
-    public function onError(callable $callback): self
+    public function onError(callable $callback): static
     {
         if ($this->failed()) {
             $callback($this);
@@ -301,7 +301,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
      * @param bool $cached
      * @return $this
      */
-    public function setCached(bool $cached): self
+    public function setCached(bool $cached): static
     {
         $this->isCached = $cached;
 
@@ -314,7 +314,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
      * @param bool $mocked
      * @return $this
      */
-    public function setMocked(bool $mocked): self
+    public function setMocked(bool $mocked): static
     {
         $this->isMocked = $mocked;
 

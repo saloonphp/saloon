@@ -4,6 +4,7 @@ namespace Sammyjo20\Saloon\Http\Responses;
 
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\StreamInterface;
+use Sammyjo20\Saloon\Helpers\ContentBag;
 
 class GuzzleResponse extends SaloonResponse
 {
@@ -43,9 +44,11 @@ class GuzzleResponse extends SaloonResponse
      *
      * @return array
      */
-    public function headers(): array
+    public function headers(): ContentBag
     {
-        return $this->response->getHeaders();
+        $headers = $this->response->getHeaders();
+
+        dd($headers);
     }
 
     /**
@@ -63,7 +66,7 @@ class GuzzleResponse extends SaloonResponse
      *
      * @return $this
      */
-    public function close(): self
+    public function close(): static
     {
         $this->response->getBody()->close();
 

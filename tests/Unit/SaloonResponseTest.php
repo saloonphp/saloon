@@ -197,3 +197,13 @@ test('the xml method will return xml as an array', function () {
 
     expect($simpleXml)->toBeInstanceOf(SimpleXMLElement::class);
 });
+
+test('the headers method returns a content bag', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 200, ['X-Greeting' => 'Howdy']),
+    ]);
+
+    $response = (new UserRequest())->send($mockClient);
+
+    dd($response->headers());
+});

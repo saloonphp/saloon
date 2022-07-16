@@ -3,12 +3,11 @@
 namespace Sammyjo20\Saloon\Interfaces;
 
 use Exception;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\StreamInterface;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
+use Sammyjo20\Saloon\Helpers\ContentBag;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use SimpleXMLElement;
 
@@ -70,7 +69,7 @@ interface SaloonResponseInterface
      * @param $key
      * @return Collection
      */
-    public function collect($key = null): Collection;
+    public function collect(string $key = null): Collection;
 
     /**
      * Cast the response to a DTO.
@@ -90,9 +89,9 @@ interface SaloonResponseInterface
     /**
      * Get the headers from the response.
      *
-     * @return array
+     * @return ContentBag
      */
-    public function headers(): array;
+    public function headers(): ContentBag;
 
     /**
      * Get the status code of the response.
@@ -149,21 +148,21 @@ interface SaloonResponseInterface
      * @param callable $callback
      * @return $this
      */
-    public function onError(callable $callback): SaloonResponse;
+    public function onError(callable $callback): static;
 
     /**
      * Close the stream and any underlying resources.
      *
      * @return $this
      */
-    public function close(): SaloonResponse;
+    public function close(): static;
 
     /**
      * Get the underlying PSR response for the response.
      *
-     * @return Response
+     * @return mixed
      */
-    public function toPsrResponse(): Response;
+    public function toPsrResponse(): mixed;
 
     /**
      * Create an exception if a server or client error occurred.
@@ -186,7 +185,7 @@ interface SaloonResponseInterface
      * @param bool $cached
      * @return $this
      */
-    public function setCached(bool $cached): SaloonResponse;
+    public function setCached(bool $cached): static;
 
     /**
      * Set if the response is mocked. Should only be used internally.
@@ -194,7 +193,7 @@ interface SaloonResponseInterface
      * @param bool $mocked
      * @return $this
      */
-    public function setMocked(bool $mocked): SaloonResponse;
+    public function setMocked(bool $mocked): static;
 
     /**
      * Check if the response has been cached
