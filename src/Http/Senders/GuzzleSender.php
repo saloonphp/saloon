@@ -20,6 +20,7 @@ use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
 use Sammyjo20\Saloon\Http\Guzzle\Middleware\MockMiddleware;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Http\Responses\GuzzleResponse;
 use Sammyjo20\Saloon\Http\Sender;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 
@@ -74,10 +75,10 @@ class GuzzleSender extends Sender
      *
      * @param PendingSaloonRequest $pendingRequest
      * @param bool $asynchronous
-     * @return SaloonResponse|PromiseInterface
+     * @return GuzzleResponse|PromiseInterface
      * @throws GuzzleException
      */
-    public function sendRequest(PendingSaloonRequest $pendingRequest, bool $asynchronous = false): SaloonResponse|PromiseInterface
+    public function sendRequest(PendingSaloonRequest $pendingRequest, bool $asynchronous = false): GuzzleResponse|PromiseInterface
     {
         return $asynchronous === true
             ? $this->sendAsynchronousRequest($pendingRequest)
@@ -190,9 +191,9 @@ class GuzzleSender extends Sender
      * @param PendingSaloonRequest $pendingRequest
      * @param SaloonResponse $saloonResponse
      * @param bool $asPromise
-     * @return SaloonResponse|PromiseInterface
+     * @return GuzzleResponse|PromiseInterface
      */
-    public function handleResponse(SaloonResponse $saloonResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): SaloonResponse|PromiseInterface
+    public function handleResponse(SaloonResponse $saloonResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): GuzzleResponse|PromiseInterface
     {
         $saloonResponse = $pendingRequest->executeResponsePipeline($saloonResponse);
 
@@ -214,9 +215,7 @@ class GuzzleSender extends Sender
      */
     public function getResponseClass(): string
     {
-        // TODO: Change to GuzzleResponse and implement simple methods in SaloonResponse.
-
-        return SaloonResponse::class;
+        return GuzzleResponse::class;
     }
 
     /**
@@ -225,10 +224,10 @@ class GuzzleSender extends Sender
      * @param MockResponse $mockResponse
      * @param PendingSaloonRequest $pendingRequest
      * @param bool $asPromise
-     * @return SaloonResponse|PromiseInterface
+     * @return GuzzleResponse|PromiseInterface
      * @throws GuzzleException
      */
-    public function handleMockResponse(MockResponse $mockResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): SaloonResponse|PromiseInterface
+    public function handleMockResponse(MockResponse $mockResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): GuzzleResponse|PromiseInterface
     {
         // Todo: Make sure that this works even more concurrent requests.
         // Alternatively...
@@ -347,5 +346,28 @@ class GuzzleSender extends Sender
         $this->handlerStack->remove($name);
 
         return $this;
+    }
+
+    /**
+     * Overwrite the entire handler stack.
+     *
+     * @param HandlerStack $handlerStack
+     * @return $this
+     */
+    public function setHandlerStack(HandlerStack $handlerStack): self
+    {
+        $this->handlerStack = $handlerStack;
+
+        return $this;
+    }
+
+    /**
+     * Get the handler stack.
+     *
+     * @return HandlerStack
+     */
+    public function getHandlerStack(): HandlerStack
+    {
+        return $this->handlerStack;
     }
 }

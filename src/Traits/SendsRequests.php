@@ -7,6 +7,7 @@ use ReflectionException;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Interfaces\SaloonResponseInterface;
 
 trait SendsRequests
 {
@@ -18,7 +19,7 @@ trait SendsRequests
      * @return SaloonResponse|PromiseInterface
      * @throws SaloonException|ReflectionException
      */
-    public function send(MockClient $mockClient = null, bool $asynchronous = false): SaloonResponse|PromiseInterface
+    public function send(MockClient $mockClient = null, bool $asynchronous = false): SaloonResponseInterface|PromiseInterface
     {
         $pendingRequest = $this->createPendingRequest();
         $requestSender = $pendingRequest->getSender();
