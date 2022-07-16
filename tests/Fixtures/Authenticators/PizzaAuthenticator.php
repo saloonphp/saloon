@@ -2,7 +2,7 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Authenticators;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 
 class PizzaAuthenticator implements AuthenticatorInterface
@@ -19,14 +19,16 @@ class PizzaAuthenticator implements AuthenticatorInterface
     }
 
     /**
-     * @param SaloonRequest $request
+     * Set the pending request.
+     *
+     * @param PendingSaloonRequest $pendingRequest
      * @return void
      */
-    public function set(SaloonRequest $request): void
+    public function set(PendingSaloonRequest $pendingRequest): void
     {
-        $request->addHeader('X-Pizza', $this->pizza);
-        $request->addHeader('X-Drink', $this->drink);
+        $pendingRequest->headers()->add('X-Pizza', $this->pizza);
+        $pendingRequest->headers()->add('X-Drink', $this->drink);
 
-        $request->addConfig('debug', true);
+        $pendingRequest->config()->add('debug', true);
     }
 }

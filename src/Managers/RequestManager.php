@@ -3,31 +3,31 @@
 namespace Sammyjo20\Saloon\Managers;
 
 use Exception;
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
+use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\ResponseInterface;
-use Sammyjo20\Saloon\Clients\BaseMockClient;
+use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
-use Sammyjo20\Saloon\Exceptions\SaloonMultipleMockMethodsException;
-use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
-use Sammyjo20\Saloon\Traits\CollectsConfig;
-use Sammyjo20\Saloon\Traits\CollectsHandlers;
-use Sammyjo20\Saloon\Traits\CollectsHeaders;
-use Sammyjo20\Saloon\Traits\CollectsInterceptors;
-use Sammyjo20\Saloon\Traits\CollectsQueryParams;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
+use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\ManagesGuzzle;
+use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\ManagesPlugins;
+use Sammyjo20\Saloon\Clients\BaseMockClient;
+use Sammyjo20\Saloon\Traits\CollectsHeaders;
+use GuzzleHttp\Psr7\Request as GuzzleRequest;
+use Sammyjo20\Saloon\Traits\CollectsHandlers;
+use GuzzleHttp\Exception\BadResponseException;
+use Sammyjo20\Saloon\Traits\CollectsQueryParams;
+use Sammyjo20\Saloon\Traits\CollectsInterceptors;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
+use Sammyjo20\Saloon\Exceptions\SaloonMultipleMockMethodsException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 
 class RequestManager
 {

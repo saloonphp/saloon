@@ -9,8 +9,8 @@ interface AuthenticatorInterface
     /**
      * Apply the authentication to the request.
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return void
      */
-    public function set(PendingSaloonRequest $request): void;
+    public function set(PendingSaloonRequest $pendingRequest): void;
 }

@@ -2,11 +2,10 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Sammyjo20\Saloon\Helpers\ContentBag;
-use Sammyjo20\Saloon\Helpers\DataBag;
-use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Throwable;
+use Sammyjo20\Saloon\Helpers\DataBag;
 use Psr\Http\Message\RequestInterface;
+use Sammyjo20\Saloon\Helpers\ContentBag;
 use Sammyjo20\Saloon\Data\MockExceptionClosure;
 
 class MockResponse
@@ -92,7 +91,7 @@ class MockResponse
      */
     public function throw(callable|Throwable $value): self
     {
-        $closure = $value instanceof Throwable ? static fn() => $value : $value;
+        $closure = $value instanceof Throwable ? static fn () => $value : $value;
 
         $this->exceptionClosure = new MockExceptionClosure($closure);
 

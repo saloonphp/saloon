@@ -2,7 +2,6 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Traits\Auth\RequiresAuth;
 use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
@@ -18,14 +17,14 @@ class DefaultAuthenticatorRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::GET;
+    protected string $method = 'GET';
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = TestConnector::class;
+    protected string $connector = TestConnector::class;
 
     /**
      * Define the endpoint for the request.
@@ -42,7 +41,7 @@ class DefaultAuthenticatorRequest extends SaloonRequest
      *
      * @return AuthenticatorInterface|null
      */
-    public function defaultAuth(): ?AuthenticatorInterface
+    protected function defaultAuth(): ?AuthenticatorInterface
     {
         return new TokenAuthenticator('yee-haw-request');
     }

@@ -2,7 +2,6 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
@@ -16,14 +15,14 @@ class PostJsonRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::POST;
+    protected string $method = 'POST';
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = TestConnector::class;
+    protected string $connector = TestConnector::class;
 
     /**
      * Define the endpoint for the request.

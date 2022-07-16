@@ -2,7 +2,6 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 
 class NoConnectorRequest extends SaloonRequest
@@ -10,16 +9,16 @@ class NoConnectorRequest extends SaloonRequest
     /**
      * Define the method that the request will use.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $method = Saloon::GET;
+    protected string $method = 'GET';
 
     /**
      * The connector.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $connector = null;
+    protected string $connector = '';
 
     /**
      * Define the endpoint for the request.

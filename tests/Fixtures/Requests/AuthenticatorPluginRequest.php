@@ -3,12 +3,13 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Data\User;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Plugins\AuthenticatorPlugin;
 
-class DTORequest extends SaloonRequest
+class AuthenticatorPluginRequest extends SaloonRequest
 {
+    use AuthenticatorPlugin;
+
     /**
      * Define the method that the request will use.
      *
@@ -24,28 +25,19 @@ class DTORequest extends SaloonRequest
     protected string $connector = TestConnector::class;
 
     /**
-     * Define the endpoint for the request.
-     *
-     * @return string
+     * @param int|null $userId
+     * @param int|null $groupId
      */
-    protected function defineEndpoint(): string
-    {
-        return '/user';
-    }
-
     public function __construct(public ?int $userId = null, public ?int $groupId = null)
     {
         //
     }
 
     /**
-     * Cast to a User.
-     *
-     * @param SaloonResponse $response
-     * @return object
+     * @return string
      */
-    public function createDtoFromResponse(SaloonResponse $response): object
+    protected function defineEndpoint(): string
     {
-        return User::fromSaloon($response);
+        return '/user';
     }
 }

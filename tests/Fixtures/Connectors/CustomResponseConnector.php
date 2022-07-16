@@ -7,7 +7,7 @@ use Sammyjo20\Saloon\Tests\Fixtures\Responses\CustomResponse;
 
 class CustomResponseConnector extends SaloonConnector
 {
-    protected string $response = CustomResponse::class;
+    protected ?string $response = CustomResponse::class;
 
     /**
      * Define the base url of the api.

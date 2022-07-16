@@ -1,20 +1,20 @@
 <?php
 
-use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 
 test('you can add a request pipe to the middleware', function () {
     $pipeline = new MiddlewarePipeline;
 
     $pipeline
         ->addRequestPipe(function (PendingSaloonRequest $request) {
-            $request->headers()->push('X-Pipe-One', 'Yee-Haw');
+            $request->headers()->add('X-Pipe-One', 'Yee-Haw');
         })
         ->addRequestPipe(function (PendingSaloonRequest $request) {
-            $request->headers()->push('X-Pipe-Two', 'Howdy');
+            $request->headers()->add('X-Pipe-Two', 'Howdy');
         });
 
     $pendingRequest = (new UserRequest)->createPendingRequest();
@@ -31,7 +31,7 @@ test('if a request pipe returns a pending request, we will use that in the next 
 
     $pipeline
         ->addRequestPipe(function (PendingSaloonRequest $request) use ($errorRequest) {
-            $request->headers()->push('X-Pipe-One', 'Yee-Haw');
+            $request->headers()->add('X-Pipe-One', 'Yee-Haw');
 
             return $errorRequest;
         });
@@ -47,10 +47,10 @@ test('you can define a high priority request pipe', function () {
 
     $pipeline
         ->addRequestPipe(function (PendingSaloonRequest $request) {
-            $request->headers()->push('X-Pipe-One', 'Yee-Haw');
+            $request->headers()->add('X-Pipe-One', 'Yee-Haw');
         })
         ->addRequestPipe(function (PendingSaloonRequest $request) {
-            $request->headers()->push('X-Pipe-One', 'Howdy');
+            $request->headers()->add('X-Pipe-One', 'Howdy');
         }, true);
 
     $pendingRequest = (new UserRequest)->createPendingRequest();
@@ -77,10 +77,10 @@ test('you can merge a middleware pipeline together', closure: function () {
 
     $pipelineA
         ->addRequestPipe(function (PendingSaloonRequest $request) {
-            $request->headers()->push('X-Pipe-One', 'Yee-Haw');
+            $request->headers()->add('X-Pipe-One', 'Yee-Haw');
         })
         ->addRequestPipe(function (PendingSaloonRequest $request) {
-            $request->headers()->push('X-Pipe-One', 'Howdy');
+            $request->headers()->add('X-Pipe-One', 'Howdy');
         })
         ->addResponsePipe(function (SaloonResponse $response) {
             return $response->throw();

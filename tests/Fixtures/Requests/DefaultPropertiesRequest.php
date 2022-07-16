@@ -3,11 +3,9 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Data\User;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class DTORequest extends SaloonRequest
+class DefaultPropertiesRequest extends SaloonRequest
 {
     /**
      * Define the method that the request will use.
@@ -28,24 +26,36 @@ class DTORequest extends SaloonRequest
      *
      * @return string
      */
-    protected function defineEndpoint(): string
+    public function defineEndpoint(): string
     {
         return '/user';
     }
 
-    public function __construct(public ?int $userId = null, public ?int $groupId = null)
+    protected function defaultHeaders(): array
     {
-        //
+        return [
+            'X-Favourite-Artist' => 'Luke Combs',
+        ];
     }
 
-    /**
-     * Cast to a User.
-     *
-     * @param SaloonResponse $response
-     * @return object
-     */
-    public function createDtoFromResponse(SaloonResponse $response): object
+    protected function defaultQueryParameters(): array
     {
-        return User::fromSaloon($response);
+        return [
+            'format' => 'json',
+        ];
+    }
+
+    protected function defaultData(): mixed
+    {
+        return [
+            'song' => 'Call Me',
+        ];
+    }
+
+    protected function defaultConfig(): array
+    {
+        return [
+            'debug' => true,
+        ];
     }
 }

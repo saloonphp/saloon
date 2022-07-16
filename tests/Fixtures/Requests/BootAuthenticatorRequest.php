@@ -3,11 +3,11 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Data\User;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class DTORequest extends SaloonRequest
+class BootAuthenticatorRequest extends SaloonRequest implements SendsJsonBody
 {
     /**
      * Define the method that the request will use.
@@ -24,8 +24,6 @@ class DTORequest extends SaloonRequest
     protected string $connector = TestConnector::class;
 
     /**
-     * Define the endpoint for the request.
-     *
      * @return string
      */
     protected function defineEndpoint(): string
@@ -33,19 +31,12 @@ class DTORequest extends SaloonRequest
         return '/user';
     }
 
-    public function __construct(public ?int $userId = null, public ?int $groupId = null)
-    {
-        //
-    }
-
     /**
-     * Cast to a User.
-     *
-     * @param SaloonResponse $response
-     * @return object
+     * @param PendingSaloonRequest $pendingRequest
+     * @return void
      */
-    public function createDtoFromResponse(SaloonResponse $response): object
+    public function boot(PendingSaloonRequest $pendingRequest): void
     {
-        return User::fromSaloon($response);
+        $pendingRequest->withTokenAuth('howdy-partner');
     }
 }

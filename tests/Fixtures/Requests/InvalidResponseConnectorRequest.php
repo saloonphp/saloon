@@ -2,7 +2,6 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Plugins\HasTestHandler;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidResponseConnector;
@@ -16,14 +15,14 @@ class InvalidResponseConnectorRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected ?string $method = Saloon::GET;
+    protected string $method = 'GET';
 
     /**
      * The connector.
      *
      * @var string|null
      */
-    protected ?string $connector = InvalidResponseConnector::class;
+    protected string $connector = InvalidResponseConnector::class;
 
     /**
      * Define the endpoint for the request.

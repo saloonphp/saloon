@@ -10,11 +10,11 @@ use Sammyjo20\Saloon\Tests\Fixtures\Requests\NoConnectorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\ExtendedConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestProxyConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
+use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\DefaultEndpointRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\InvalidConnectorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ExtendedConnectorRequest;
-use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\CustomResponseConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidResponseConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\InvalidConnectorClassRequest;
@@ -23,25 +23,27 @@ use Sammyjo20\Saloon\Tests\Fixtures\Requests\CustomResponseConnectorRequest;
 
 test('if you dont pass in a mock client to the saloon request it will not be in mocking mode', function () {
     $request = new UserRequest();
-    $requestManager = $request->getRequestManager();
+    $pendingRequest = $request->createPendingRequest();
 
-    expect($requestManager->isMocking())->toBeFalse();
+    expect($pendingRequest->isMocking())->toBeFalse();
 });
 
 test('you can pass a mock client to the saloon request and it will be in mock mode', function () {
     $request = new UserRequest();
     $mockClient = new MockClient([MockResponse::make([], 200)]);
 
-    $requestManager = $request->getRequestManager($mockClient);
+    $request->withMockClient($mockClient);
 
-    expect($requestManager->isMocking())->toBeTrue();
+    $pendingRequest = $request->createPendingRequest();
+
+    expect($pendingRequest->isMocking())->toBeTrue();
 });
 
-test('you cant pass a mock client without any responses', function () {
+test('you cant send a request with a mock client without any responses', function () {
     $mockClient = new MockClient();
     $request = new UserRequest();
 
-    $this->expectException(SaloonNoMockResponsesProvidedException::class);
+    $this->expectException(SaloonNoMockResponseFoundException::class);
 
     $request->send($mockClient);
 });
@@ -116,8 +118,8 @@ test('saloon throws an exception if the custom response is not a response class'
     expect($invalidConnectorClassRequest->getResponseClass());
 });
 
-test('defineEndpoint method may be omitted in request class to use the base url', function () {
-    expect(new DefaultEndpointRequest)->getFullRequestUrl()->toBe(apiUrl());
+test('defineEndpoint method may be blank in request class to use the base url', function () {
+    expect(new DefaultEndpointRequest)->getRequestUrl()->toBe(apiUrl());
 });
 
 test('a request class can be instantiated using the make method', function () {

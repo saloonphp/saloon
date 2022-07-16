@@ -2,24 +2,22 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Traits\HasSender;
 use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
-use Sammyjo20\Saloon\Traits\HasCustomResponses;
-use Sammyjo20\Saloon\Traits\HasRequestProperties;
-use Sammyjo20\Saloon\Traits\HasSender;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Traits\ProxiesRequests;
-use Sammyjo20\Saloon\Traits\BundlesRequestProperties;
+use Sammyjo20\Saloon\Traits\HasCustomResponses;
+use Sammyjo20\Saloon\Traits\HasRequestProperties;
+use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
+use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
 
 abstract class SaloonConnector
 {
     use HasRequestProperties;
-    use BundlesRequestProperties;
     use AuthenticatesRequests;
     use HasCustomResponses;
     use HasSender;

@@ -14,14 +14,14 @@ trait AuthenticatesRequests
      *
      * @var AuthenticatorInterface|null
      */
-    public ?AuthenticatorInterface $authenticator = null;
+    protected ?AuthenticatorInterface $authenticator = null;
 
     /**
      * Default authenticator used.
      *
      * @return AuthenticatorInterface|null
      */
-    public function defaultAuth(): ?AuthenticatorInterface
+    protected function defaultAuth(): ?AuthenticatorInterface
     {
         return null;
     }

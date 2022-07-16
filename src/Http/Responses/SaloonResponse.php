@@ -3,26 +3,26 @@
 namespace Sammyjo20\Saloon\Http\Responses;
 
 use Exception;
-use GuzzleHttp\Psr7\Response;
+use SimpleXMLElement;
 use Illuminate\Support\Arr;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
-use Psr\Http\Message\StreamInterface;
-use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use SimpleXMLElement;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
+use Sammyjo20\Saloon\Interfaces\SaloonResponseInterface;
 
-class SaloonResponse
+abstract class SaloonResponse implements SaloonResponseInterface
 {
     use Macroable;
 
     /**
-     * The underlying PSR response.
+     * The underlying response.
      *
-     * @var Response
+     * @var mixed
      */
-    protected Response $response;
+    protected mixed $response;
 
     /**
      * The decoded JSON response.
@@ -70,10 +70,10 @@ class SaloonResponse
      * Create a new response instance.
      *
      * @param PendingSaloonRequest $pendingSaloonRequest
-     * @param Response $response
+     * @param mixed $response
      * @param Exception|null $requestException
      */
-    public function __construct(PendingSaloonRequest $pendingSaloonRequest, Response $response, Exception $requestException = null)
+    public function __construct(PendingSaloonRequest $pendingSaloonRequest, mixed $response, Exception $requestException = null)
     {
         $this->pendingSaloonRequest = $pendingSaloonRequest;
         $this->response = $response;
@@ -99,36 +99,17 @@ class SaloonResponse
     }
 
     /**
-     * Get the body of the response as string.
-     *
-     * @return string
-     */
-    public function body()
-    {
-        return (string)$this->response->getBody();
-    }
-
-    /**
-     * Get the body as a stream. Don't forget to close the stream after using ->close().
-     *
-     * @return StreamInterface
-     */
-    public function stream(): StreamInterface
-    {
-        return $this->response->getBody();
-    }
-
-    /**
      * Get the JSON decoded body of the response as an array or scalar value.
      *
      * @param string|null $key
      * @param mixed $default
      * @return mixed
+     * @throws \JsonException
      */
-    public function json($key = null, $default = null)
+    public function json(string $key = null, mixed $default = null)
     {
         if (! $this->decodedJson) {
-            $this->decodedJson = json_decode($this->body(), true);
+            $this->decodedJson = json_decode($this->body(), true, 512, JSON_THROW_ON_ERROR);
         }
 
         if (is_null($key)) {
@@ -186,37 +167,6 @@ class SaloonResponse
         }
 
         return $this->getOriginalRequest()->createDtoFromResponse($this);
-    }
-
-    /**
-     * Get a header from the response.
-     *
-     * @param string $header
-     * @return string
-     */
-    public function header(string $header): string
-    {
-        return $this->response->getHeaderLine($header);
-    }
-
-    /**
-     * Get the headers from the response.
-     *
-     * @return array
-     */
-    public function headers(): array
-    {
-        return $this->response->getHeaders();
-    }
-
-    /**
-     * Get the status code of the response.
-     *
-     * @return int
-     */
-    public function status(): int
-    {
-        return $this->response->getStatusCode();
     }
 
     /**
@@ -285,35 +235,13 @@ class SaloonResponse
      * @param callable $callback
      * @return $this
      */
-    public function onError(callable $callback): self
+    public function onError(callable $callback): static
     {
         if ($this->failed()) {
             $callback($this);
         }
 
         return $this;
-    }
-
-    /**
-     * Close the stream and any underlying resources.
-     *
-     * @return $this
-     */
-    public function close(): self
-    {
-        $this->response->getBody()->close();
-
-        return $this;
-    }
-
-    /**
-     * Get the underlying PSR response for the response.
-     *
-     * @return Response
-     */
-    public function toPsrResponse(): Response
-    {
-        return $this->response;
     }
 
     /**
@@ -327,9 +255,7 @@ class SaloonResponse
             return;
         }
 
-        $body = $this->response?->getBody()?->getContents();
-
-        return $this->createException($body);
+        return $this->createException($this->body());
     }
 
     /**
@@ -374,7 +300,7 @@ class SaloonResponse
      * @param bool $cached
      * @return $this
      */
-    public function setCached(bool $cached): self
+    public function setCached(bool $cached): static
     {
         $this->isCached = $cached;
 
@@ -387,7 +313,7 @@ class SaloonResponse
      * @param bool $mocked
      * @return $this
      */
-    public function setMocked(bool $mocked): self
+    public function setMocked(bool $mocked): static
     {
         $this->isMocked = $mocked;
 

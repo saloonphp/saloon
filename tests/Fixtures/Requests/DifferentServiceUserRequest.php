@@ -2,7 +2,6 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Constants\Saloon;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
 
@@ -13,7 +12,7 @@ class DifferentServiceUserRequest extends SaloonRequest
      *
      * @var string|null
      */
-    protected string $method = Saloon::GET;
+    protected string $method = 'GET';
 
     /**
      * The connector.
