@@ -14,12 +14,10 @@ use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\HasSender;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Traits\ProxiesRequests;
-use Sammyjo20\Saloon\Traits\BundlesRequestProperties;
 
 abstract class SaloonConnector
 {
     use HasRequestProperties;
-    use BundlesRequestProperties;
     use AuthenticatesRequests;
     use HasCustomResponses;
     use HasSender;

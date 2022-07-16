@@ -16,11 +16,13 @@ use Sammyjo20\Saloon\Interfaces\Data\SendsMixedBody;
 use Sammyjo20\Saloon\Interfaces\Data\SendsMultipartBody;
 use Sammyjo20\Saloon\Interfaces\Data\SendsXMLBody;
 use Sammyjo20\Saloon\Interfaces\SenderInterface;
+use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 
 class PendingSaloonRequest
 {
     use HasRequestProperties;
+    use AuthenticatesRequests;
 
     /**
      * The original request class making the request.
@@ -98,6 +100,7 @@ class PendingSaloonRequest
         $this->method = Method::upperFrom($request->getMethod());
         $this->responseClass = $request->getResponseClass();
         $this->mockClient = $request->getMockClient() ?? $connector->getMockClient();
+        $this->authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
 
         // Now it's time to stitch together our PendingSaloonRequest. We will firstly merge everything
         // into this one class, and then run each of the various features at once. 🚀
@@ -105,11 +108,18 @@ class PendingSaloonRequest
         $this
             ->mergeRequestProperties()
             ->mergeData()
-            ->authenticateRequest()
             ->bootConnectorAndRequest()
             ->bootPlugins()
-            ->registerDefaultMiddleware()
-            ->executeRequestPipeline();
+            ->registerDefaultMiddleware();
+
+        // We'll now execute the request pipeline and the authenticator on the
+        // pending request. Make sure that "authenticateRequest" is always
+        // the last since the authenticator could be set at any step in
+        // the process.
+
+        $this
+            ->executeRequestPipeline()
+            ->authenticateRequest();
     }
 
     /**
@@ -204,7 +214,7 @@ class PendingSaloonRequest
      */
     protected function authenticateRequest(): static
     {
-        $authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
+        $authenticator = $this->getAuthenticator();
 
         if ($authenticator instanceof AuthenticatorInterface) {
             $authenticator->set($this);

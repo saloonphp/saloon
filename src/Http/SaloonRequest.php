@@ -2,9 +2,7 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
-use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 use Sammyjo20\Saloon\Traits\BuildsUrls;
 use Sammyjo20\Saloon\Traits\CastsResponseToDto;
 use Sammyjo20\Saloon\Traits\HasConnector;
@@ -13,12 +11,10 @@ use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
-use Sammyjo20\Saloon\Traits\BundlesRequestProperties;
 
 abstract class SaloonRequest
 {
     use HasRequestProperties;
-    use BundlesRequestProperties;
     use AuthenticatesRequests;
     use HasCustomResponses;
     use MocksRequests;
@@ -28,19 +24,18 @@ abstract class SaloonRequest
     use HasConnector;
 
     /**
+     * Define the connector.
+     *
      * @var string
      */
     protected string $connector = '';
 
     /**
+     * Define the method.
+     *
      * @var string
      */
     protected string $method = '';
-
-    /**
-     * @var SaloonConnector|null
-     */
-    private ?SaloonConnector $loadedConnector = null;
 
     /**
      * Define the API endpoint used.
@@ -50,22 +45,14 @@ abstract class SaloonRequest
     abstract protected function defineEndpoint(): string;
 
     /**
-     * @param PendingSaloonRequest $payload
+     * Handle the booting of a request.
+     *
+     * @param PendingSaloonRequest $pendingRequest
      * @return void
      */
-    public function boot(PendingSaloonRequest $payload): void
+    public function boot(PendingSaloonRequest $pendingRequest): void
     {
-        // Apply anything right before the request is sent.
-    }
-
-    /**
-     * Get the method of the request.
-     *
-     * @return string
-     */
-    public function getMethod(): string
-    {
-        return $this->method;
+        //
     }
 
     /**
@@ -81,6 +68,16 @@ abstract class SaloonRequest
     public function createPendingRequest(): PendingSaloonRequest
     {
         return new PendingSaloonRequest($this);
+    }
+
+    /**
+     * Get the method of the request.
+     *
+     * @return string
+     */
+    public function getMethod(): string
+    {
+        return $this->method;
     }
 
     /**

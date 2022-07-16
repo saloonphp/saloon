@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Traits\Auth;
 
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Exceptions\MissingAuthenticatorException;
 
@@ -10,22 +11,23 @@ trait RequiresTokenAuth
     use RequiresAuth;
 
     /**
+     * @param PendingSaloonRequest $pendingRequest
+     * @return void
      * @throws MissingAuthenticatorException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function bootRequiresTokenAuth(SaloonRequest $request): void
+    public function bootRequiresTokenAuth(PendingSaloonRequest $pendingRequest): void
     {
-        $this->bootRequiresAuth($request);
+        $this->bootRequiresAuth($pendingRequest);
     }
 
     /**
      * Default message.
      *
-     * @param SaloonRequest $request
+     * @param PendingSaloonRequest $request
      * @return string
      */
-    protected function getRequiresAuthMessage(SaloonRequest $request): string
+    protected function getRequiresAuthMessage(PendingSaloonRequest $pendingRequest): string
     {
-        return sprintf('The "%s" request requires authentication. Please provide authentication using the `withTokenAuth` method or return a default authenticator in your connector/request.', $request::class);
+        return sprintf('The "%s" request requires authentication. Please provide authentication using the `withTokenAuth` method or return a default authenticator in your connector/request.', $pendingRequest->getRequest()::class);
     }
 }

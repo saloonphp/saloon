@@ -3,21 +3,26 @@
 namespace Sammyjo20\Saloon\Traits;
 
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
-use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 
 trait HasConnector
 {
     /**
+     * The loaded connector used in requests.
+     *
+     * @var SaloonConnector|null
+     */
+    private ?SaloonConnector $loadedConnector = null;
+
+    /**
      * Retrieve the loaded connector.
      *
      * @return SaloonConnector
      * @throws SaloonInvalidConnectorException
-     * @throws \ReflectionException
      */
     public function getConnector(): SaloonConnector
     {
-        return $this->loadedConnector ??= $this->createConnector();
+        return $this->loadedConnector ??= $this->resolveConnector();
     }
 
     /**
@@ -38,17 +43,10 @@ trait HasConnector
      *
      * @return SaloonConnector
      * @throws SaloonInvalidConnectorException
-     * @throws \ReflectionException
      */
-    protected function createConnector(): SaloonConnector
+    protected function resolveConnector(): SaloonConnector
     {
         if (empty($this->connector) || ! class_exists($this->connector)) {
-            throw new SaloonInvalidConnectorException;
-        }
-
-        $isValidConnector = ReflectionHelper::isSubclassOf($this->connector, SaloonConnector::class);
-
-        if (! $isValidConnector) {
             throw new SaloonInvalidConnectorException;
         }
 

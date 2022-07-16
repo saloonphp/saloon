@@ -42,7 +42,7 @@ class DefaultAuthenticatorRequest extends SaloonRequest
      *
      * @return AuthenticatorInterface|null
      */
-    public function defaultAuth(): ?AuthenticatorInterface
+    protected function defaultAuth(): ?AuthenticatorInterface
     {
         return new TokenAuthenticator('yee-haw-request');
     }
