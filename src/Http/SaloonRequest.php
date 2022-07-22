@@ -107,7 +107,18 @@ abstract class SaloonRequest implements SaloonRequestInterface
             throw new SaloonInvalidConnectorException;
         }
 
-        $this->setConnector(new $this->connector);
+        $this->setConnector($this->resolveConnector($this->connector));
+    }
+
+    /**
+     * Resolve the connector.
+     *
+     * @param string $connectorClass
+     * @return SaloonConnector
+     */
+    protected function resolveConnector(string $connectorClass): SaloonConnector
+    {
+        return new $connectorClass;
     }
 
     /**
