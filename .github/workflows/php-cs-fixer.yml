@@ -2,7 +2,14 @@ name: Code Style
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - 'v1'
+      - 'v2'
+  pull_request:
+    branches:
+      - '*'
+  release:
+    types: [ released ]
 
 jobs:
   php-cs-fixer:
