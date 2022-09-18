@@ -4,7 +4,6 @@ namespace Sammyjo20\Saloon\Tests\Fixtures\Responses;
 
 class UserData
 {
-
     /**
      * CustomResponse constructor.
      * @param string $foo
