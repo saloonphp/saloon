@@ -2,9 +2,11 @@
 
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
 use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
@@ -156,4 +158,67 @@ test('you can create wildcard url mocks', function () {
     expect($responseC->isMocked())->toBeTrue();
     expect($responseC->json())->toEqual(['error' => 'Server Broken']);
     expect($responseC->status())->toEqual(500);
+});
+
+test('you can use a closure for the mock response', function () {
+    $sequenceMock = new MockClient([
+        function (SaloonRequest $request): MockResponse {
+            return new MockResponse(['request' => $request->getFullRequestUrl()]);
+        },
+    ]);
+
+    $sequenceResponse = UserRequest::make()->send($sequenceMock);
+
+    expect($sequenceResponse->isMocked())->toBeTrue();
+    expect($sequenceResponse->json())->toEqual(['request' => 'https://tests.saloon.dev/api/user']);
+
+    // Connector mock
+
+    $connectorMock = new MockClient([
+        TestConnector::class => function (SaloonRequest $request): MockResponse {
+            return new MockResponse(['request' => $request->getFullRequestUrl()]);
+        },
+    ]);
+
+    $connectorResponse = UserRequest::make()->send($connectorMock);
+
+    expect($connectorResponse->isMocked())->toBeTrue();
+    expect($connectorResponse->json())->toEqual(['request' => 'https://tests.saloon.dev/api/user']);
+
+    // Request mock
+
+    $requestMock = new MockClient([
+        UserRequest::class => function (SaloonRequest $request): MockResponse {
+            return new MockResponse(['request' => $request->getFullRequestUrl()]);
+        },
+    ]);
+
+    $requestResponse = UserRequest::make()->send($requestMock);
+
+    expect($requestResponse->isMocked())->toBeTrue();
+    expect($requestResponse->json())->toEqual(['request' => 'https://tests.saloon.dev/api/user']);
+
+    // URL mock
+
+    $urlMock = new MockClient([
+        'tests.saloon.dev/*' => function (SaloonRequest $request): MockResponse {
+            return new MockResponse(['request' => $request->getFullRequestUrl()]);
+        },
+    ]);
+
+    $urlResponse = UserRequest::make()->send($urlMock);
+
+    expect($urlResponse->isMocked())->toBeTrue();
+    expect($urlResponse->json())->toEqual(['request' => 'https://tests.saloon.dev/api/user']);
+});
+
+test('you can use a callable class as the mock response', function () {
+    $mockClient = new MockClient([
+        UserRequest::class => new CallableMockResponse,
+    ]);
+
+    $sequenceResponse = UserRequest::make()->send($mockClient);
+
+    expect($sequenceResponse->isMocked())->toBeTrue();
+    expect($sequenceResponse->json())->toEqual(['request_class' => UserRequest::class]);
 });

@@ -4,7 +4,7 @@
 
 # 🚪 Saloon 🚪
 
-A Laravel / PHP package that helps you write beautiful API integrations and SDKs. It introduces a standardised, fluent syntax to communicate with third party services and has out of the box support for Laravel.
+A Laravel / PHP package that helps you build beautiful API integrations and SDKs.
 
 ![Build Status](https://github.com/sammyjo20/saloon/actions/workflows/tests.yml/badge.svg)
     
@@ -13,9 +13,9 @@ A Laravel / PHP package that helps you write beautiful API integrations and SDKs
 </div>
 
 ## Introduction
-Building API integrations can be difficult. Once you have found the right API client to use, there's often lots of boilerplate configuration to remember and decision fatigue can settle in quickly. You may have even found yourself abstracting your API integrations into actions or service classes to avoid repeating yourself. Saloon offers a fluent framework for building your next API integration or PHP SDK. Saloon's syntax is object-oriented, standardised and easy to understand.
+Saloon offers a fluent, object-oriented wrapper to build your next API integration or PHP SDK. It makes sharing API requests throughout your application a breeze. You don’t have to configure a HTTP client, so you can start sending requests really quickly.
 
-If you're using Laravel, there's also a dedicated Laravel package with pre-written commands and a more advanced mocking toolbelt.
+If you need request faking for your tests, Saloon has it out of the box alongside many other useful tools like OAuth2 boilerplate and caching. If you use Laravel, there's also a dedicated Laravel package with artisan console commands to help you build even faster.
 
 ```php
 <?php
@@ -33,6 +33,7 @@ $data = $response->json();
 - Simple and easy to learn syntax that standardises the way you interact with APIs
 - Abstract API integrations into classes so you can keep your code DRY
 - Configuration is fast and can be shared across all your requests
+- Built on top of Guzzle, one of the most popular PHP HTTP clients.
 - Framework agnostic
 - Mocking requests for testing
 - Great for building your own PHP SDKs
@@ -42,6 +43,14 @@ $data = $response->json();
 ## Documentation
 
 [Click here to read the documentation](https://docs.saloon.dev)
+
+## Why Saloon?
+
+Building API integrations can be time consuming. After you have found an API client to use, you’re faced with lots of configuration to remember and it’s hard to repeat requests without copying and pasting, and then when you introduce patterns like OAuth2 everything gets complicated. You’ll often find yourself writing the same boilerplate code over and over again. 
+
+We’ve standardised the way we talk to APIs with PSR-7 and PSR-18 but we haven’t got a standard structure to build API integrations.
+
+Saloon aims to solve this.
 
 ## Contributing
 

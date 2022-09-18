@@ -2,8 +2,6 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use ReflectionClass;
-
 trait ManagesPlugins
 {
     /**
@@ -24,8 +22,8 @@ trait ManagesPlugins
         // any options. E.g if they have the "hasBody" interface, we need to add the
         // body to the request.
 
-        $connectorTraits = (new ReflectionClass($this->request->getConnector()))->getTraits();
-        $requestTraits = (new ReflectionClass($this->request))->getTraits();
+        $connectorTraits = class_uses_recursive($this->request->getConnector());
+        $requestTraits = class_uses_recursive($this->request);
 
         $this->scanTraits($connectorTraits, 'connector')
             ->scanTraits($requestTraits, 'request');
@@ -46,7 +44,7 @@ trait ManagesPlugins
         }
 
         foreach ($traits as $trait) {
-            $pluginName = $trait->getShortName();
+            $pluginName = class_basename($trait);
 
             if (in_array($pluginName, $this->plugins, true)) {
                 continue;
@@ -54,7 +52,7 @@ trait ManagesPlugins
 
             $bootName = 'boot' . $pluginName;
 
-            if ($trait->hasMethod($bootName) === false) {
+            if (method_exists($trait, $bootName) === false) {
                 continue;
             }
 
