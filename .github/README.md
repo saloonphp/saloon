@@ -30,7 +30,7 @@ $data = $response->json();
 
 ## Features
 
-- Simple, easy to learn syntax that standardises the way you interact with APIs
+- Simple and easy to learn syntax that standardises the way you interact with APIs
 - Abstract API integrations into classes so you can keep your code DRY
 - Configuration is fast and can be shared across all your requests
 - Framework agnostic
