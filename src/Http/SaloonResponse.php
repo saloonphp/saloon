@@ -193,7 +193,7 @@ class SaloonResponse
     /**
      * Cast the response to a DTO.
      *
-     * @return object|null
+     * @return mixed
      */
     public function dto(): mixed
     {
