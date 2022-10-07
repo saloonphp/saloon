@@ -2,12 +2,12 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Exception;
+use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use SimpleXMLElement;
-use Illuminate\Support\Arr;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Support\Collection;
+use Spatie\Macroable\Macroable;
 use Psr\Http\Message\StreamInterface;
-use Illuminate\Support\Traits\Macroable;
 use GuzzleHttp\Exception\RequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 
@@ -150,8 +150,11 @@ class SaloonResponse
         if (is_null($key)) {
             return $this->decodedJson;
         }
+        if (array_key_exists($key, $this->decodedJson)) {
+            return $this->decodedJson[$key];
+        }
 
-        return Arr::get($this->decodedJson, $key, $default);
+        return [];
     }
 
     /**
@@ -182,12 +185,17 @@ class SaloonResponse
     /**
      * Get the JSON decoded body of the response as a collection.
      *
-     * @param $key
-     * @return Collection
+     * @param null $key
+     * @return mixed
+     * @throws Exception
      */
-    public function collect($key = null): Collection
+    public function collect($key = null): mixed
     {
-        return Collection::make($this->json($key));
+        $collection = 'Illuminate\\Support\\Collection';
+        if (! class_exists($collection)) {
+            throw new ClassNotFoundException($collection);
+        }
+        return $collection::make($this->json($key));
     }
 
     /**

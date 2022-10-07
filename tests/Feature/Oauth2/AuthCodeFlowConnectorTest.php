@@ -1,7 +1,6 @@
 <?php
 
 use Carbon\CarbonImmutable;
-use Illuminate\Support\Str;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonResponse;
@@ -51,7 +50,7 @@ test('default state is generated automatically with every authorization url if s
 
     expect($state)->toBeString();
 
-    expect(Str::endsWith($url, $state))->toBeTrue();
+    expect(str_ends_with($url, $state))->toBeTrue();
 });
 
 test('you can request a token from a connector', function () {

@@ -21,11 +21,12 @@
     "require": {
         "php": "^8.0",
         "guzzlehttp/guzzle": "^7.4",
-        "illuminate/support": "^8.0 || ^9.0",
-        "nesbot/carbon": "^2.58"
+        "nesbot/carbon": "^2.58",
+        "ext-simplexml": "*"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.5",
+        "illuminate/support": "^9.34",
         "pestphp/pest": "^1.21",
         "spatie/ray": "^1.33"
     },
@@ -39,6 +40,9 @@
         "psr-4": {
             "Sammyjo20\\Saloon\\Tests\\": "tests/"
         }
+    },
+    "suggest": {
+        "illuminate/support": "Needs to support collect method in class Saloon Response"
     },
     "config": {
         "allow-plugins": {

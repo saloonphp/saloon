@@ -2,7 +2,6 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Illuminate\Support\Arr;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 
 trait CollectsQueryParams
@@ -97,8 +96,8 @@ trait CollectsQueryParams
             $queryBag = $this->customQuery;
         }
 
-        if (isset($key)) {
-            return Arr::get($queryBag, $key);
+        if (isset($key) && array_key_exists($key, $queryBag)) {
+            return $queryBag[$key];
         }
 
         return $queryBag;

@@ -2,8 +2,6 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
-use Illuminate\Support\Str;
-
 class URLHelper
 {
     /**
@@ -15,7 +13,7 @@ class URLHelper
      */
     public static function matches(string $pattern, string $value): bool
     {
-        return Str::is(Str::start($pattern, '*'), $value);
+        return self::is(self::start($pattern, '*'), $value);
     }
 
     /**
@@ -37,5 +35,42 @@ class URLHelper
         $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . '/' : $baseEndpoint;
 
         return $baseEndpoint . $endpoint;
+    }
+
+    /**
+     * Check if the url pattern matches the value
+     *
+     * @param string $pattern
+     * @param string $value
+     * @return bool
+     */
+    public static function is(string $pattern, string $value): bool
+    {
+        if ($pattern === $value) {
+            return true;
+        }
+
+        $pattern = preg_quote($pattern, '#');
+        $pattern = str_replace('\*', '.*', $pattern);
+
+        if (preg_match('#^' . $pattern . '\z#u', $value) === 1) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Give a url a prefix
+     *
+     * @param string $value
+     * @param string $prefix
+     * @return string
+     */
+    public static function start(string $value, string $prefix): string
+    {
+        $quoted = preg_quote($prefix, '/');
+
+        return $prefix.preg_replace('/^(?:'.$quoted.')+/u', '', $value);
     }
 }

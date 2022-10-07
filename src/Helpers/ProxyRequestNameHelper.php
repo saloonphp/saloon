@@ -3,8 +3,7 @@
 namespace Sammyjo20\Saloon\Helpers;
 
 use ReflectionClass;
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
+use ReflectionException;
 use Sammyjo20\Saloon\Exceptions\InvalidRequestKeyException;
 
 class ProxyRequestNameHelper
@@ -14,26 +13,34 @@ class ProxyRequestNameHelper
      *
      * @param array $requests
      * @return array
-     * @throws \ReflectionException
+     * @throws InvalidRequestKeyException
+     * @throws ReflectionException
      */
     public static function generateNames(array $requests): array
     {
-        return (new Collection($requests))->mapWithKeys(function ($value, $key) {
+        $guessed = [];
+        foreach ($requests as $key => $value) {
             if (is_array($value)) {
                 $value = static::generateNames($value);
             }
 
             if (is_string($key)) {
-                return [$key => $value];
+                $guessed[$key] = $value;
+                continue;
             }
 
             if (is_array($value)) {
                 throw new InvalidRequestKeyException('Request groups must be keyed.');
             }
 
-            $guessedKey = Str::camel((new ReflectionClass($value))->getShortName());
+            $name = (new ReflectionClass($value))->getShortName();
+            $words = explode(' ', str_replace(['-', '_'], ' ', $name));
+            $studlyWords = array_map(fn ($word) => ucfirst($word), $words);
+            $guessedKey = lcfirst(implode($studlyWords));
 
-            return [$guessedKey => $value];
-        })->toArray();
+            $guessed[$guessedKey] = $value;
+        }
+
+        return $guessed;
     }
 }

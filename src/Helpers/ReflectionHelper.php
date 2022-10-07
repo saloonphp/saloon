@@ -22,4 +22,26 @@ class ReflectionHelper
 
         return (new ReflectionClass($class))->isSubclassOf($subclass);
     }
+
+    public static function getTraitsRecursively($class): array
+    {
+        $traits = [];
+
+        do {
+            $traits = array_merge(class_uses($class, true), $traits);
+        } while ($class = get_parent_class($class));
+
+        foreach ($traits as $trait => $same) {
+            $traits = array_merge(class_uses($trait, true), $traits);
+        }
+
+        return array_unique($traits);
+    }
+
+    public static function classBaseName(string $class): string
+    {
+        $arr = explode('\\', $class);
+
+        return end($arr);
+    }
 }

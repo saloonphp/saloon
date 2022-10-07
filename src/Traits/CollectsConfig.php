@@ -2,8 +2,6 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Illuminate\Support\Arr;
-
 trait CollectsConfig
 {
     /**
@@ -87,8 +85,8 @@ trait CollectsConfig
             ? array_merge($this->defaultConfig(), $this->customConfig)
             : $this->customConfig;
 
-        if (isset($key)) {
-            return Arr::get($configBag, $key);
+        if (isset($key) && array_key_exists($key, $configBag)) {
+            return $configBag[$key];
         }
 
         return $configBag;

@@ -2,8 +2,6 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Illuminate\Support\Arr;
-
 trait CollectsHeaders
 {
     /**
@@ -86,8 +84,8 @@ trait CollectsHeaders
             ? array_merge($this->defaultHeaders(), $this->customHeaders)
             : $this->customHeaders;
 
-        if (isset($key)) {
-            return Arr::get($headerBag, $key);
+        if (isset($key) && array_key_exists($key, $headerBag)) {
+            return $headerBag[$key];
         }
 
         return $headerBag;
@@ -96,8 +94,8 @@ trait CollectsHeaders
     /**
      * Get an individual header
      *
-     * @param string|null $key
-     * @return array
+     * @param string $key
+     * @return string
      */
     public function getHeader(string $key): string
     {

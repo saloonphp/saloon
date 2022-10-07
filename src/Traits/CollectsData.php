@@ -101,8 +101,8 @@ trait CollectsData
             $dataBag = $this->customData;
         }
 
-        if (isset($key)) {
-            return Arr::get($dataBag, $key);
+        if (isset($key) && array_key_exists($key, $dataBag)) {
+            return $dataBag[$key];
         }
 
         return $dataBag;

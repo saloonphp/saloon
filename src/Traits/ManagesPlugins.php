@@ -2,6 +2,11 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
+use ReflectionException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
+use Sammyjo20\Saloon\Helpers\ReflectionHelper;
+use Sammyjo20\Saloon\Managers\RequestManager;
+
 trait ManagesPlugins
 {
     /**
@@ -14,16 +19,17 @@ trait ManagesPlugins
     /**
      * Load all the plugins.
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
+     * @throws SaloonInvalidConnectorException
      */
     private function loadPlugins(): void
     {
         // Check for the interfaces on the request class and see if we need to load
-        // any options. E.g if they have the "hasBody" interface, we need to add the
+        // any options. E.g. if they have the "hasBody" interface, we need to add the
         // body to the request.
 
-        $connectorTraits = class_uses_recursive($this->request->getConnector());
-        $requestTraits = class_uses_recursive($this->request);
+        $connectorTraits = ReflectionHelper::getTraitsRecursively($this->request->getConnector());
+        $requestTraits = ReflectionHelper::getTraitsRecursively($this->request);
 
         $this->scanTraits($connectorTraits, 'connector')
             ->scanTraits($requestTraits, 'request');
@@ -35,7 +41,7 @@ trait ManagesPlugins
      *
      * @param array $traits
      * @param string $type
-     * @return $this
+     * @return ManagesPlugins|RequestManager
      */
     private function scanTraits(array $traits, string $type): self
     {
@@ -44,7 +50,7 @@ trait ManagesPlugins
         }
 
         foreach ($traits as $trait) {
-            $pluginName = class_basename($trait);
+            $pluginName = ReflectionHelper::classBaseName($trait);
 
             if (in_array($pluginName, $this->plugins, true)) {
                 continue;
