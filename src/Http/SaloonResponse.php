@@ -3,12 +3,12 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Exception;
-use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use SimpleXMLElement;
 use GuzzleHttp\Psr7\Response;
 use Spatie\Macroable\Macroable;
 use Psr\Http\Message\StreamInterface;
 use GuzzleHttp\Exception\RequestException;
+use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 
 class SaloonResponse
@@ -195,6 +195,7 @@ class SaloonResponse
         if (! class_exists($collection)) {
             throw new ClassNotFoundException($collection);
         }
+
         return $collection::make($this->json($key));
     }
 

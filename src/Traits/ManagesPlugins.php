@@ -3,9 +3,9 @@
 namespace Sammyjo20\Saloon\Traits;
 
 use ReflectionException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
-use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 use Sammyjo20\Saloon\Managers\RequestManager;
+use Sammyjo20\Saloon\Helpers\ReflectionHelper;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 
 trait ManagesPlugins
 {

@@ -2,7 +2,6 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Illuminate\Support\Arr;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 
 trait CollectsData

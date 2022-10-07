@@ -26,7 +26,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.5",
-        "illuminate/support": "^9.34",
+        "illuminate/collections": "^9.0",
         "pestphp/pest": "^1.21",
         "spatie/ray": "^1.33"
     },
@@ -42,7 +42,7 @@
         }
     },
     "suggest": {
-        "illuminate/support": "Needs to support collect method in class Saloon Response"
+        "illuminate/collections": "Needs to support collect method in class SaloonResponse"
     },
     "config": {
         "allow-plugins": {
