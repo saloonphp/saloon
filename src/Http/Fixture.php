@@ -59,7 +59,7 @@ class Fixture
             return null;
         }
 
-        return FixtureData::fromFileContents($storage->get($fixturePath))->getMockResponse();
+        return FixtureData::fromFileContents($storage->get($fixturePath))->toMockResponse();
     }
 
     /**

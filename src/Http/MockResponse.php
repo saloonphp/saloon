@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
 use Throwable;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
@@ -95,12 +96,13 @@ class MockResponse
     /**
      * Create a new mock response from a fixture
      *
-     * @param string|null $fixtureName
+     * @param string $name
      * @return Fixture
+     * @throws DirectoryNotFoundException
      */
-    public static function fromFixture(string $fixtureName): Fixture
+    public static function fromFixture(string $name): Fixture
     {
-        return new Fixture($fixtureName);
+        return new Fixture($name);
     }
 
     /**

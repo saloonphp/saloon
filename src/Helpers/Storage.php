@@ -86,6 +86,6 @@ class Storage
 
     public function set(string $path, string $contents)
     {
-        // Todo 
+        // Todo
     }
 }
