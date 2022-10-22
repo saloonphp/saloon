@@ -24,6 +24,8 @@
 |
 */
 
+use Sammyjo20\Saloon\Helpers\MockConfig;
+
 expect()->extend('toBeOne', function () {
     return $this->toBe(1);
 });

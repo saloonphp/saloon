@@ -5,9 +5,11 @@ namespace Sammyjo20\Saloon\Traits;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Client as GuzzleClient;
+use Sammyjo20\Saloon\Http\Fixture;
 use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
 use Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException;
+use Sammyjo20\Saloon\Http\MockResponse;
 
 trait ManagesGuzzle
 {
@@ -56,7 +58,9 @@ trait ManagesGuzzle
      * @param HandlerStack $handlerStack
      * @return HandlerStack
      * @throws SaloonDuplicateHandlerException
-     * @throws SaloonInvalidHandlerException
+     * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException
      */
     private function bootHandlers(HandlerStack $handlerStack): HandlerStack
     {
@@ -82,9 +86,28 @@ trait ManagesGuzzle
         }
 
         if ($this->isMocking()) {
-            $mockResponse = $this->mockClient->guessNextResponse($this->request);
+            $mockObject = $this->mockClient->guessNextResponse($this->request);
 
-            $handlerStack->push(new MockMiddleware($mockResponse), 'saloonMockMiddleware');
+            // We'll attempt to get the mock response from the fixture - if it
+            // returns null then we will use the fixture middleware.
+
+            $mockResponse = $mockObject instanceof Fixture ? $mockObject->getMockResponse() : $mockObject;
+
+            dd($mockResponse);
+
+            // If the mock response has been found we will register the normal
+            // mock middleware.
+
+            if ($mockResponse instanceof MockResponse) {
+                $handlerStack->push(new MockMiddleware($mockResponse), 'saloonMockMiddleware');
+            }
+
+            // If it hasn't been found and the mock object is a fixture then
+            // we will register the fixture recorder middleware.
+
+            if (is_null($mockResponse) && $mockObject instanceof Fixture) {
+                $handlerStack->push(new FixtureRecorderMiddleware($mockObject), 'saloonFixtureMiddleware');
+            }
         }
 
         return $handlerStack;

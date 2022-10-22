@@ -93,6 +93,17 @@ class MockResponse
     }
 
     /**
+     * Create a new mock response from a fixture
+     *
+     * @param string|null $fixtureName
+     * @return Fixture
+     */
+    public static function fromFixture(string $fixtureName): Fixture
+    {
+        return new Fixture($fixtureName);
+    }
+
+    /**
      * Throw an exception on the request.
      *
      * @param callable|Throwable $value

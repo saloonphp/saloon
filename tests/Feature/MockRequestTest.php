@@ -1,5 +1,7 @@
 <?php
 
+use Sammyjo20\Saloon\Helpers\MockConfig;
+use Sammyjo20\Saloon\Http\Fixture;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
@@ -221,4 +223,17 @@ test('you can use a callable class as the mock response', function () {
 
     expect($sequenceResponse->isMocked())->toBeTrue();
     expect($sequenceResponse->json())->toEqual(['request_class' => UserRequest::class]);
+});
+
+test('you can tell the mock client to record requests and it will store recorded requests as a fixture', function () {
+    // Todo: We could also have MockResponse::fixture() as a more aligned alias to "new Fixture"
+
+    $mockClient = new MockClient([
+        UserRequest::class => MockResponse::fromFixture('user'),
+    ]);
+
+    $response = UserRequest::make()->send($mockClient);
+
+
+    dd($response->json());
 });
