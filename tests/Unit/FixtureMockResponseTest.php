@@ -1,11 +1,11 @@
 <?php
 
-use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
-use Sammyjo20\Saloon\Exceptions\FixtureMissingException;
-use Sammyjo20\Saloon\Helpers\MockConfig;
 use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Helpers\MockConfig;
+use Sammyjo20\Saloon\Exceptions\FixtureMissingException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
 
 test('you can change the default fixture path', function () {
     expect(MockConfig::getFixturePath())->toEqual('tests/Fixtures/Saloon');
@@ -36,5 +36,3 @@ test('you can throw an exception if the fixture does not exist', function () {
 
     UserRequest::make()->send($mockClient);
 })->throws(FixtureMissingException::class, 'The fixture "example.json" could not be found in storage.');
-
-

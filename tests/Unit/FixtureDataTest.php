@@ -9,10 +9,10 @@ test('you can create a fixture data object from a file string', function () {
     $data = [
         'statusCode' => 200,
         'headers' => [
-            'Content-Type' => 'application/json'
+            'Content-Type' => 'application/json',
         ],
         'data' => [
-            'name' => 'Sam'
+            'name' => 'Sam',
         ],
     ];
 
@@ -27,10 +27,10 @@ test('you can create a mock response from fixture data', function () {
     $data = [
         'statusCode' => 200,
         'headers' => [
-            'Content-Type' => 'application/json'
+            'Content-Type' => 'application/json',
         ],
         'data' => [
-            'name' => 'Sam'
+            'name' => 'Sam',
         ],
     ];
 
@@ -44,10 +44,10 @@ test('you can json serialize the fixture data or convert it into a file', functi
     $data = [
         'statusCode' => 200,
         'headers' => [
-            'Content-Type' => 'application/json'
+            'Content-Type' => 'application/json',
         ],
         'data' => [
-            'name' => 'Sam'
+            'name' => 'Sam',
         ],
     ];
 

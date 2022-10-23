@@ -1,11 +1,11 @@
 <?php
 
 use League\Flysystem\Filesystem;
-use League\Flysystem\Local\LocalFilesystemAdapter;
 use Sammyjo20\Saloon\Http\Fixture;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
@@ -418,7 +418,7 @@ test('a fixture can be used within a closure mock', function () use ($filesystem
             }
 
             return MockResponse::fixture('other');
-        }
+        },
     ]);
 
     expect($filesystem->fileExists('user.json'))->toBeFalse();

@@ -3,10 +3,10 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Helpers\Storage;
+use Sammyjo20\Saloon\Data\FixtureData;
 use Sammyjo20\Saloon\Helpers\MockConfig;
 use Sammyjo20\Saloon\Exceptions\FixtureMissingException;
 use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
-use Sammyjo20\Saloon\Data\FixtureData;
 
 class Fixture
 {

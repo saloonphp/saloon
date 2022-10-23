@@ -4,8 +4,8 @@ namespace Sammyjo20\Saloon\Http\Middleware;
 
 use Sammyjo20\Saloon\Http\Fixture;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Data\FixtureData;
+use Psr\Http\Message\ResponseInterface;
 
 class FixtureRecorderMiddleware
 {
