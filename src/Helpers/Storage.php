@@ -3,8 +3,8 @@
 namespace Sammyjo20\Saloon\Helpers;
 
 use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
-use Sammyjo20\Saloon\Exceptions\UnableToCreateDirectoryException;
 use Sammyjo20\Saloon\Exceptions\UnableToCreateFileException;
+use Sammyjo20\Saloon\Exceptions\UnableToCreateDirectoryException;
 
 class Storage
 {

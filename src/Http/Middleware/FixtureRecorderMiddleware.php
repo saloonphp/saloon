@@ -2,22 +2,23 @@
 
 namespace Sammyjo20\Saloon\Http\Middleware;
 
-use Psr\Http\Message\RequestInterface;
-use GuzzleHttp\Promise\RejectedPromise;
-use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Http\Fixture;
-use Sammyjo20\Saloon\Http\MockResponse;
-use GuzzleHttp\Promise\FulfilledPromise;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Tests\Fixtures\Data\FixtureData;
 
 class FixtureRecorderMiddleware
 {
     /**
+     * The fixture
+     *
      * @var Fixture
      */
     protected Fixture $fixture;
 
     /**
+     * Constructor
+     *
      * @param Fixture $fixture
      */
     public function __construct(Fixture $fixture)
@@ -44,6 +45,15 @@ class FixtureRecorderMiddleware
         };
     }
 
+    /**
+     * Store the response against the fixture.
+     *
+     * @param ResponseInterface $response
+     * @return void
+     * @throws \JsonException
+     * @throws \Sammyjo20\Saloon\Exceptions\UnableToCreateDirectoryException
+     * @throws \Sammyjo20\Saloon\Exceptions\UnableToCreateFileException
+     */
     protected function storeResponse(ResponseInterface $response): void
     {
         $fixtureData = FixtureData::fromGuzzleResponse($response);

@@ -1,6 +1,5 @@
 <?php
 
-use Sammyjo20\Saloon\Helpers\MockConfig;
 use Sammyjo20\Saloon\Http\Fixture;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;

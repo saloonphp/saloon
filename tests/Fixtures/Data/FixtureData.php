@@ -8,8 +8,6 @@ use Sammyjo20\Saloon\Http\MockResponse;
 
 class FixtureData implements JsonSerializable
 {
-    // Todo: Consider adding more to the mock response like host etc
-
     /**
      * Constructor
      *
@@ -21,8 +19,7 @@ class FixtureData implements JsonSerializable
         public int $statusCode,
         public array $headers = [],
         public mixed $data = null,
-    )
-    {
+    ) {
         //
     }
 

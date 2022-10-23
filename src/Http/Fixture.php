@@ -2,11 +2,11 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
-use Sammyjo20\Saloon\Exceptions\FixtureMissingException;
-use Sammyjo20\Saloon\Helpers\MockConfig;
 use Sammyjo20\Saloon\Helpers\Storage;
+use Sammyjo20\Saloon\Helpers\MockConfig;
 use Sammyjo20\Saloon\Tests\Fixtures\Data\FixtureData;
+use Sammyjo20\Saloon\Exceptions\FixtureMissingException;
+use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
 
 class Fixture
 {
@@ -68,17 +68,7 @@ class Fixture
     }
 
     /**
-     * Get the fixture path
-     *
-     * @return string
-     */
-    public function getFixturePath(): string
-    {
-        return sprintf('%s.%s', $this->name, $this::$fixtureExtension);
-    }
-
-    /**
-     * Store a fixture
+     * Store data as the fixture.
      *
      * @param FixtureData $fixtureData
      * @return $this
@@ -94,5 +84,15 @@ class Fixture
         $this->storage->put($fixturePath, $contents);
 
         return $this;
+    }
+
+    /**
+     * Get the fixture path
+     *
+     * @return string
+     */
+    public function getFixturePath(): string
+    {
+        return sprintf('%s.%s', $this->name, $this::$fixtureExtension);
     }
 }

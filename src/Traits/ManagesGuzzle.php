@@ -4,13 +4,13 @@ namespace Sammyjo20\Saloon\Traits;
 
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Client as GuzzleClient;
 use Sammyjo20\Saloon\Http\Fixture;
-use Sammyjo20\Saloon\Http\Middleware\FixtureRecorderMiddleware;
+use GuzzleHttp\Client as GuzzleClient;
+use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
+use Sammyjo20\Saloon\Http\Middleware\FixtureRecorderMiddleware;
 use Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException;
-use Sammyjo20\Saloon\Http\MockResponse;
 
 trait ManagesGuzzle
 {

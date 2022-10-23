@@ -2,7 +2,6 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
 use Throwable;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
@@ -11,6 +10,7 @@ use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\Plugins\HasBody;
 use Sammyjo20\Saloon\Data\MockExceptionClosure;
+use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
 
 class MockResponse
 {

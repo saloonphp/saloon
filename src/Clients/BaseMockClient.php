@@ -3,8 +3,8 @@
 namespace Sammyjo20\Saloon\Clients;
 
 use ReflectionClass;
-use Sammyjo20\Saloon\Helpers\URLHelper;
 use Sammyjo20\Saloon\Http\Fixture;
+use Sammyjo20\Saloon\Helpers\URLHelper;
 use Sammyjo20\Saloon\Http\MockResponse;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Sammyjo20\Saloon\Http\SaloonRequest;
