@@ -1,6 +1,6 @@
 <?php
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Data;
+namespace Sammyjo20\Saloon\Data;
 
 use JsonSerializable;
 use Psr\Http\Message\ResponseInterface;
