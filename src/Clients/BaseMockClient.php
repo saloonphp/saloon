@@ -175,7 +175,7 @@ class BaseMockClient
      * @return MockResponse|null
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    private function guessResponseFromUrl(SaloonRequest $request): MockResponse|callable|null
+    private function guessResponseFromUrl(SaloonRequest $request): MockResponse|Fixture|callable|null
     {
         foreach ($this->urlResponses as $url => $response) {
             if (! URLHelper::matches($url, $request->getFullRequestUrl())) {
