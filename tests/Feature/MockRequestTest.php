@@ -226,14 +226,18 @@ test('you can use a callable class as the mock response', function () {
 });
 
 test('you can tell the mock client to record requests and it will store recorded requests as a fixture', function () {
-    // Todo: We could also have MockResponse::fixture() as a more aligned alias to "new Fixture"
-
     $mockClient = new MockClient([
-        UserRequest::class => MockResponse::fromFixture('user'),
+        UserRequest::class => MockResponse::fixture('user'),
+        ErrorRequest::class => MockResponse::fixture('error'),
     ]);
 
     $response = UserRequest::make()->send($mockClient);
 
+    $errorResponse = ErrorRequest::make()->send($mockClient);
+
+    dd($errorResponse->status());
 
     dd($response->json());
 });
+
+// Tests: Make sure the fixture works with all the mocking types including closures

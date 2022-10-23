@@ -100,7 +100,7 @@ class MockResponse
      * @return Fixture
      * @throws DirectoryNotFoundException
      */
-    public static function fromFixture(string $name): Fixture
+    public static function fixture(string $name): Fixture
     {
         return new Fixture($name);
     }

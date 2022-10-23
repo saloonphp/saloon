@@ -3,6 +3,8 @@
 namespace Sammyjo20\Saloon\Helpers;
 
 use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
+use Sammyjo20\Saloon\Exceptions\UnableToCreateDirectoryException;
+use Sammyjo20\Saloon\Exceptions\UnableToCreateFileException;
 
 class Storage
 {
@@ -57,7 +59,7 @@ class Storage
      * @param string $path
      * @return bool
      */
-    public function has(string $path): bool
+    public function exists(string $path): bool
     {
         return file_exists($this->buildPath($path));
     }
@@ -70,11 +72,11 @@ class Storage
      */
     public function missing(string $path): bool
     {
-        return ! $this->has($path);
+        return ! $this->exists($path);
     }
 
     /**
-     * Get a path
+     * Retrieve an item from storage
      *
      * @param string $path
      * @return bool|string
@@ -84,8 +86,35 @@ class Storage
         return file_get_contents($this->buildPath($path));
     }
 
-    public function set(string $path, string $contents)
+    /**
+     * Put an item in storage
+     *
+     * @param string $path
+     * @param string $contents
+     * @return $this
+     * @throws UnableToCreateDirectoryException
+     * @throws UnableToCreateFileException
+     */
+    public function put(string $path, string $contents): static
     {
-        // Todo
+        $fullPath = $this->buildPath($path);
+
+        $directoryWithoutFilename = implode(DIRECTORY_SEPARATOR, explode(DIRECTORY_SEPARATOR, $fullPath, -1));
+
+        if (empty($directoryWithoutFilename) === false && is_dir($directoryWithoutFilename) === false) {
+            $createdDirectory = mkdir($directoryWithoutFilename, 0777, true);
+
+            if ($createdDirectory === false && is_dir($directoryWithoutFilename) === false) {
+                throw new UnableToCreateDirectoryException($directoryWithoutFilename);
+            }
+        }
+
+        $createdFile = file_put_contents($fullPath, $contents);
+
+        if ($createdFile === false) {
+            throw new UnableToCreateFileException($fullPath);
+        }
+
+        return $this;
     }
 }

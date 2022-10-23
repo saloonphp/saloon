@@ -2,8 +2,8 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use GuzzleHttp\Psr7\Response;
 use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
+use Sammyjo20\Saloon\Exceptions\FixtureMissingException;
 use Sammyjo20\Saloon\Helpers\MockConfig;
 use Sammyjo20\Saloon\Helpers\Storage;
 use Sammyjo20\Saloon\Tests\Fixtures\Data\FixtureData;
@@ -45,9 +45,10 @@ class Fixture
     }
 
     /**
-     * Get the mock response from the fixture
+     * Attempt to get the mock response from the fixture.
      *
      * @return MockResponse|null
+     * @throws FixtureMissingException
      * @throws \JsonException
      */
     public function getMockResponse(): ?MockResponse
@@ -55,11 +56,15 @@ class Fixture
         $storage = $this->storage;
         $fixturePath = $this->getFixturePath();
 
-        if ($storage->missing($fixturePath)) {
-            return null;
+        if ($storage->exists($fixturePath)) {
+            return FixtureData::fromFile($storage->get($fixturePath))->toMockResponse();
         }
 
-        return FixtureData::fromFileContents($storage->get($fixturePath))->toMockResponse();
+        if (MockConfig::isThrowingOnMissingFixtures() === true) {
+            throw new FixtureMissingException($fixturePath);
+        }
+
+        return null;
     }
 
     /**
@@ -77,13 +82,16 @@ class Fixture
      *
      * @param FixtureData $fixtureData
      * @return $this
+     * @throws \JsonException
+     * @throws \Sammyjo20\Saloon\Exceptions\UnableToCreateDirectoryException
+     * @throws \Sammyjo20\Saloon\Exceptions\UnableToCreateFileException
      */
     public function store(FixtureData $fixtureData): static
     {
         $fixturePath = $this->getFixturePath();
         $contents = $fixtureData->toFile();
 
-        $this->storage->set($fixturePath, $contents);
+        $this->storage->put($fixturePath, $contents);
 
         return $this;
     }
