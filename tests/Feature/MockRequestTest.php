@@ -1,5 +1,7 @@
 <?php
 
+use League\Flysystem\Filesystem;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use Sammyjo20\Saloon\Http\Fixture;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
@@ -12,6 +14,15 @@ use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponsesProvidedException;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
+use function PHPUnit\Framework\assertFileDoesNotExist;
+use function PHPUnit\Framework\assertFileExists;
+
+$filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon'));
+
+beforeEach(function () use ($filesystem) {
+    $filesystem->deleteDirectory('/');
+    $filesystem->createDirectory('/');
+});
 
 test('a request can be mocked with a sequence', function () {
     $mockClient = new MockClient([
@@ -224,19 +235,24 @@ test('you can use a callable class as the mock response', function () {
     expect($sequenceResponse->json())->toEqual(['request_class' => UserRequest::class]);
 });
 
-test('you can tell the mock client to record requests and it will store recorded requests as a fixture', function () {
+test('you can use a fixture mock response and it will record the request for future use', function () use ($filesystem) {
     $mockClient = new MockClient([
         UserRequest::class => MockResponse::fixture('user'),
-        ErrorRequest::class => MockResponse::fixture('error'),
     ]);
 
-    $response = UserRequest::make()->send($mockClient);
+    expect($filesystem->fileExists('user.json'))->toBeFalse();
 
-    $errorResponse = ErrorRequest::make()->send($mockClient);
+    $responseA = UserRequest::make()->send($mockClient);
 
-    dd($errorResponse->status());
+    expect($responseA->isMocked())->toBeFalse();
+    expect($responseA->status())->toEqual(200);
 
-    dd($response->json());
+    expect($filesystem->fileExists('user.json'))->toBeTrue();
+
+    $responseB = UserRequest::make()->send($mockClient);
+
+    expect($responseB->isMocked())->toBeTrue();
+    expect($responseB->status())->toEqual(200);
 });
 
 // Tests: Make sure the fixture works with all the mocking types including closures

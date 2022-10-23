@@ -105,6 +105,8 @@ trait ManagesGuzzle
             // we will register the fixture recorder middleware.
 
             if (is_null($mockResponse) && $mockObject instanceof Fixture) {
+                $this->request->setIsRecordingFixture(true);
+
                 $handlerStack->push(new FixtureRecorderMiddleware($mockObject), 'saloonFixtureMiddleware');
             }
         }

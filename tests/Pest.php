@@ -45,5 +45,3 @@ function apiUrl()
 {
     return 'https://tests.saloon.dev/api';
 }
-
-MockConfig::throwOnMissingFixtures();

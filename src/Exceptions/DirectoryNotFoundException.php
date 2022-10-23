@@ -2,9 +2,7 @@
 
 namespace Sammyjo20\Saloon\Exceptions;
 
-use Exception;
-
-class DirectoryNotFoundException extends Exception
+class DirectoryNotFoundException extends SaloonException
 {
     /**
      * Constructor

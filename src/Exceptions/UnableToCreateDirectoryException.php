@@ -2,9 +2,7 @@
 
 namespace Sammyjo20\Saloon\Exceptions;
 
-use Exception;
-
-class UnableToCreateDirectoryException extends Exception
+class UnableToCreateDirectoryException extends SaloonException
 {
     /**
      * Constructor
