@@ -10,6 +10,7 @@ use Sammyjo20\Saloon\Traits\CollectsConfig;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\Plugins\HasBody;
 use Sammyjo20\Saloon\Data\MockExceptionClosure;
+use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
 
 class MockResponse
 {
@@ -90,6 +91,18 @@ class MockResponse
             : $request->getData();
 
         return new static($data, $status, $request->getHeaders(), $request->getConfig());
+    }
+
+    /**
+     * Create a new mock response from a fixture
+     *
+     * @param string $name
+     * @return Fixture
+     * @throws DirectoryNotFoundException
+     */
+    public static function fixture(string $name): Fixture
+    {
+        return new Fixture($name);
     }
 
     /**

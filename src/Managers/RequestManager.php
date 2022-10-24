@@ -278,7 +278,7 @@ class RequestManager
         // If we are mocking, we should record the request and response on the mock manager,
         // so we can run assertions on the responses.
 
-        if ($this->isMocking()) {
+        if ($this->isMocking() && $request->isNotRecordingFixture()) {
             $response->setMocked(true);
             $this->mockClient->recordResponse($response);
         }
