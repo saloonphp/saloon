@@ -141,7 +141,7 @@ class PendingSaloonRequest
 
         // Merge together the middleware pipelines...
 
-        $this->middlewarePipeline()
+        $this->middleware()
             ->merge($connectorProperties->middleware)
             ->merge($requestProperties->middleware);
 
@@ -271,14 +271,14 @@ class PendingSaloonRequest
      */
     protected function registerDefaultMiddleware(): static
     {
-        $pipeline = $this->middlewarePipeline();
+        $pipeline = $this->middleware();
 
         // If the PendingSaloonRequest has a mock client then we
         // will add a "MockMiddleware" request pipe which will
         // check to see if there are any mock responses.
 
         if ($this->isMocking()) {
-            $pipeline->addRequestPipe(new MockMiddleware($this->getMockClient()));
+            $pipeline->onRequest(new MockMiddleware($this->getMockClient()));
         }
 
         // Todo: Register Laravel middleware pipe.
@@ -293,7 +293,7 @@ class PendingSaloonRequest
      */
     protected function executeRequestPipeline(): static
     {
-        $this->middlewarePipeline()->executeRequestPipeline($this);
+        $this->middleware()->executeRequestPipeline($this);
 
         return $this;
     }
@@ -306,7 +306,7 @@ class PendingSaloonRequest
      */
     public function executeResponsePipeline(SaloonResponse $response): SaloonResponse
     {
-        $this->middlewarePipeline()->executeResponsePipeline($response);
+        $this->middleware()->executeResponsePipeline($response);
 
         return $response;
     }

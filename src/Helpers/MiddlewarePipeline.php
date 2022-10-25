@@ -32,7 +32,7 @@ class MiddlewarePipeline
      * @param bool $highPriority
      * @return $this
      */
-    public function addRequestPipe(callable $closure, bool $highPriority = false): self
+    public function onRequest(callable $closure, bool $highPriority = false): self
     {
         $this->requestPipeline = $this->requestPipeline->pipe(function (PendingSaloonRequest $request) use ($closure) {
             $result = $closure($request);
@@ -56,7 +56,7 @@ class MiddlewarePipeline
      * @param bool $highPriority
      * @return $this
      */
-    public function addResponsePipe(callable $closure, bool $highPriority = false): self
+    public function onResponse(callable $closure, bool $highPriority = false): self
     {
         $this->responsePipeline = $this->responsePipeline->pipe(function (SaloonResponse $response) use ($closure) {
             $result = $closure($response);

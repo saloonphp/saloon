@@ -89,7 +89,7 @@ trait HasRequestProperties
      *
      * @return MiddlewarePipeline
      */
-    public function middlewarePipeline(): MiddlewarePipeline
+    public function middleware(): MiddlewarePipeline
     {
         return $this->middlewarePipeline ??= new MiddlewarePipeline;
     }
@@ -146,7 +146,7 @@ trait HasRequestProperties
             $this->queryParameters()->all(),
             $this->data()->all(),
             $this->config()->all(),
-            $this->middlewarePipeline(),
+            $this->middleware(),
         );
     }
 }

@@ -29,7 +29,7 @@ class TestConnector extends SaloonConnector implements SendsJsonBody
      *
      * @return string[]
      */
-    public function defaultHeaders(): array
+    protected function defaultHeaders(): array
     {
         return [];
     }

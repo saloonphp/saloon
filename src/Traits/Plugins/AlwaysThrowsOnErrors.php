@@ -15,6 +15,6 @@ trait AlwaysThrowsOnErrors
      */
     public static function bootAlwaysThrowsOnErrors(PendingSaloonRequest $request): void
     {
-        $request->middlewarePipeline()->addResponsePipe(new ThrowPipe);
+        $request->middleware()->onResponse(new ThrowPipe);
     }
 }
