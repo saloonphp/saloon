@@ -2,11 +2,13 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Exceptions\DataBagException;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Sammyjo20\Saloon\Interfaces\SaloonResponseInterface;
 use Sammyjo20\Saloon\Traits\BuildsUrls;
 use Sammyjo20\Saloon\Traits\HasConnector;
 use Sammyjo20\Saloon\Traits\MocksRequests;
@@ -23,7 +25,6 @@ abstract class SaloonRequest
     use AuthenticatesRequests;
     use HasCustomResponses;
     use MocksRequests;
-    use SendsRequests;
     use BuildsUrls;
     use CastsResponseToDto;
     use HasConnector;
@@ -154,5 +155,38 @@ abstract class SaloonRequest
         }
 
         return $connector->{$method}(...$parameters);
+    }
+
+    // Todo: Move below into trait
+
+    /**
+     * Send a request
+     *
+     * @param MockClient|null $mockClient
+     * @param bool $asynchronous
+     * @return SaloonResponseInterface|PromiseInterface
+     * @throws DataBagException
+     * @throws PendingSaloonRequestException
+     * @throws SaloonInvalidConnectorException
+     * @throws SaloonInvalidResponseClassException
+     * @throws \ReflectionException
+     */
+    public function send(MockClient $mockClient = null, bool $asynchronous = false): SaloonResponseInterface|PromiseInterface
+    {
+        return $this->getConnector()->send($this, $mockClient, $asynchronous);
+    }
+
+    /**
+     * Send a request asynchronously
+     *
+     * @param MockClient|null $mockClient
+     * @return PromiseInterface
+     * @throws SaloonInvalidConnectorException
+     * @throws SaloonInvalidResponseClassException
+     * @throws \ReflectionException
+     */
+    public function sendAsync(MockClient $mockClient = null): PromiseInterface
+    {
+        return $this->send($mockClient, true);
     }
 }

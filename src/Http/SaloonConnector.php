@@ -14,6 +14,7 @@ use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
+use Sammyjo20\Saloon\Traits\SendsRequests;
 
 abstract class SaloonConnector
 {
@@ -23,6 +24,7 @@ abstract class SaloonConnector
     use HasSender;
     use ProxiesRequests;
     use MocksRequests;
+    use SendsRequests;
 
     /**
      * Register Saloon requests that will become methods on the connector.
@@ -57,35 +59,6 @@ abstract class SaloonConnector
     public function request(SaloonRequest $request): SaloonRequest
     {
         return $request->setConnector($this);
-    }
-
-    /**
-     * Send a Saloon request with the current instance of the connector.
-     *
-     * @param SaloonRequest $request
-     * @param MockClient|null $mockClient
-     * @return SaloonResponse
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
-     */
-    public function send(SaloonRequest $request, MockClient $mockClient = null): SaloonResponse
-    {
-        return $this->request($request)->send($mockClient);
-    }
-
-    /**
-     * Send an asynchronous Saloon request with the current instance of the connector.
-     *
-     * @param SaloonRequest $request
-     * @param MockClient|null $mockClient
-     * @return PromiseInterface
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
-     */
-    public function sendAsync(SaloonRequest $request, MockClient $mockClient = null): PromiseInterface
-    {
-        return $this->request($request)->sendAsync($mockClient);
     }
 
     /**

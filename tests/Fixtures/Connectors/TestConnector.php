@@ -2,7 +2,11 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 
+use GuzzleHttp\Promise\PromiseInterface;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Interfaces\SaloonResponseInterface;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
 use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
 

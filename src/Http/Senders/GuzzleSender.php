@@ -88,10 +88,10 @@ class GuzzleSender extends Sender
      * Send a synchronous request.
      *
      * @param PendingSaloonRequest $pendingRequest
-     * @return SaloonResponse
+     * @return GuzzleResponse
      * @throws GuzzleException
      */
-    protected function sendSynchronousRequest(PendingSaloonRequest $pendingRequest): SaloonResponse
+    protected function sendSynchronousRequest(PendingSaloonRequest $pendingRequest): GuzzleResponse
     {
         $guzzleRequest = $this->createGuzzleRequest($pendingRequest);
         $guzzleRequestOptions = $this->createRequestOptions($pendingRequest);
@@ -148,8 +148,6 @@ class GuzzleSender extends Sender
             $requestOptions[$configVariable] = $value;
         }
 
-        // Build up the data options
-
         $data = $request->data()->all();
 
         match ($request->getDataType()) {
@@ -169,42 +167,14 @@ class GuzzleSender extends Sender
      * @param PendingSaloonRequest $pendingSaloonRequest
      * @param Response $guzzleResponse
      * @param RequestException|null $exception
-     * @param bool $asPromise
-     * @return SaloonResponse
+     * @return GuzzleResponse
      */
-    private function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $guzzleResponse, RequestException $exception = null, bool $asPromise = false): SaloonResponse
+    private function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $guzzleResponse, RequestException $exception = null): GuzzleResponse
     {
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
         /** @var SaloonResponse $response */
-        $response = new $responseClass($pendingSaloonRequest, $guzzleResponse, $exception);
-
-        // Run the response pipeline
-
-        return $this->handleResponse($response, $pendingSaloonRequest, $asPromise);
-    }
-
-    /**
-     * Process the response.
-     *
-     * @param PendingSaloonRequest $pendingRequest
-     * @param SaloonResponse $saloonResponse
-     * @param bool $asPromise
-     * @return GuzzleResponse|PromiseInterface
-     */
-    public function handleResponse(SaloonResponse $saloonResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): GuzzleResponse|PromiseInterface
-    {
-        $saloonResponse = $pendingRequest->executeResponsePipeline($saloonResponse);
-
-        // If we are mocking, we should record the request and response on the mock manager,
-        // so we can run assertions on the responses.
-
-        if ($pendingRequest->isMocking()) {
-            $saloonResponse->setMocked(true);
-            $pendingRequest->getMockClient()->recordResponse($saloonResponse);
-        }
-
-        return $saloonResponse;
+        return new $responseClass($pendingSaloonRequest, $guzzleResponse, $exception);
     }
 
     /**
@@ -215,33 +185,6 @@ class GuzzleSender extends Sender
     public function getResponseClass(): string
     {
         return GuzzleResponse::class;
-    }
-
-    /**
-     * Handle a mock response.
-     *
-     * @param MockResponse $mockResponse
-     * @param PendingSaloonRequest $pendingRequest
-     * @param bool $asPromise
-     * @return GuzzleResponse|PromiseInterface
-     * @throws GuzzleException
-     */
-    public function handleMockResponse(MockResponse $mockResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): GuzzleResponse|PromiseInterface
-    {
-        // Todo: Make sure that this works even more concurrent requests.
-        // Alternatively...
-
-        // Always make sure the "MockMiddleware" is ALWAYS ready. Inside it, we check
-        // if there is a mock response ready to be consumed - it there is, we consume
-        // it, otherwise we continue. Might work better for concurrent requests.
-
-        $this->pushMiddleware(new MockMiddleware($mockResponse), 'mock');
-
-        $saloonResponse = $this->sendRequest($pendingRequest, $asPromise);
-
-        $this->removeMiddleware('mock');
-
-        return $saloonResponse;
     }
 
     /**
