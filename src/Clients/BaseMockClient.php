@@ -7,6 +7,7 @@ use Sammyjo20\Saloon\Http\Fixture;
 use Sammyjo20\Saloon\Helpers\URLHelper;
 use Sammyjo20\Saloon\Http\MockResponse;
 use PHPUnit\Framework\Assert as PHPUnit;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Helpers\ReflectionHelper;
@@ -135,14 +136,15 @@ class BaseMockClient
     /**
      * Guess the next response based on the request.
      *
-     * @param SaloonRequest $request
+     * @param PendingSaloonRequest $request
      * @return MockResponse|Fixture
      * @throws SaloonNoMockResponseFoundException
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function guessNextResponse(SaloonRequest $request): MockResponse|Fixture
+    public function guessNextResponse(PendingSaloonRequest $pendingRequest): MockResponse|Fixture
     {
+        $request = $pendingRequest->getRequest();
         $requestClass = get_class($request);
 
         if (array_key_exists($requestClass, $this->requestResponses)) {

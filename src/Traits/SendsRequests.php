@@ -2,10 +2,13 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
+use GuzzleHttp\Promise\FulfilledPromise;
+use GuzzleHttp\Promise\Promise;
 use ReflectionException;
 use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
+use Sammyjo20\Saloon\Http\Responses\FakeResponse;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Interfaces\SaloonResponseInterface;
 
@@ -21,34 +24,26 @@ trait SendsRequests
      */
     public function send(MockClient $mockClient = null, bool $asynchronous = false): SaloonResponseInterface|PromiseInterface
     {
-        $pendingRequest = $this->createPendingRequest();
-        $requestSender = $pendingRequest->getSender();
+        $pendingRequest = $this->createPendingRequest($mockClient);
 
-        // If a mock client has been provided, we will only set it for this request.
+        // We'll now check if a mock response exists on the request, if it
+        // does, it means that we shouldn't dispatch the real request.
 
-        if ($mockClient instanceof MockClient) {
-            $pendingRequest->setMockClient($mockClient);
+        if ($pendingRequest->hasMockResponse()) {
+            $response = new FakeResponse($pendingRequest);
+
+            if ($asynchronous === true) {
+                return new FulfilledPromise($response);
+            }
+
+            return $response;
         }
 
-        // If there is a mock client found, we should attempt to guess the next response
-        // and then run the "handleMockResponse" method on the sender.
-
-        if ($pendingRequest->isMocking()) {
-            $mockResponse = $pendingRequest->getMockClient()->guessNextResponse($pendingRequest->getRequest());
-
-            return $requestSender->handleMockResponse($mockResponse, $pendingRequest, $asynchronous);
-        }
-
-        // If any of the middleware have registered early responses, we should
-        // process this response right away.
-
-        if ($pendingRequest->hasEarlyResponse()) {
-            return $requestSender->handleResponse($pendingRequest, $pendingRequest->getEarlyResponse(), $asynchronous);
-        }
+        // Otherwise we will send the request...
 
         // 🚀 ... 🌑 ... 💫
 
-        return $requestSender->sendRequest($pendingRequest, $asynchronous);
+        return $pendingRequest->getSender()->sendRequest($pendingRequest, $asynchronous);
     }
 
     /**

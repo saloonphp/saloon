@@ -1,9 +1,11 @@
 <?php
 
 use League\Flysystem\Filesystem;
+use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Http\Fixture;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;

@@ -2,6 +2,11 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Exceptions\DataBagException;
+use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 use Sammyjo20\Saloon\Traits\BuildsUrls;
 use Sammyjo20\Saloon\Traits\HasConnector;
 use Sammyjo20\Saloon\Traits\MocksRequests;
@@ -65,16 +70,17 @@ abstract class SaloonRequest
     /**
      * Create the request payload which will run all plugins, boot methods, everything.
      *
+     * @param MockClient|null $mockClient
      * @return PendingSaloonRequest
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\DataBagException
-     * @throws \Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
+     * @throws DataBagException
+     * @throws PendingSaloonRequestException
+     * @throws SaloonInvalidConnectorException
+     * @throws SaloonInvalidResponseClassException
      */
-    public function createPendingRequest(): PendingSaloonRequest
+    public function createPendingRequest(MockClient $mockClient = null): PendingSaloonRequest
     {
-        return new PendingSaloonRequest($this);
+        return new PendingSaloonRequest($this, $mockClient);
     }
 
     /**

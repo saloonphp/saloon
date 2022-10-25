@@ -129,6 +129,8 @@ class MockResponse
      */
     public function getFormattedData(): mixed
     {
+        // Todo: This should ALWAYS return a string.
+
         return $this->data->isArray() ? json_encode($this->data->all(), JSON_THROW_ON_ERROR) : $this->data->all();
     }
 

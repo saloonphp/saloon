@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
+use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 
@@ -36,7 +37,15 @@ class MiddlewarePipeline
         $this->requestPipeline = $this->requestPipeline->pipe(function (PendingSaloonRequest $request) use ($closure) {
             $result = $closure($request);
 
-            return $result instanceof PendingSaloonRequest ? $result : $request;
+            if ($result instanceof PendingSaloonRequest) {
+                return $result;
+            }
+
+            if ($result instanceof MockResponse) {
+                $request->setMockResponse($result);
+            }
+
+            return $request;
         }, $highPriority);
 
         return $this;
