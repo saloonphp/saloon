@@ -6,6 +6,9 @@ use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\StreamInterface;
 use Sammyjo20\Saloon\Helpers\ContentBag;
 
+/**
+ * @property Response $rawResponse
+ */
 class GuzzleResponse extends SaloonResponse
 {
     /**
@@ -13,9 +16,9 @@ class GuzzleResponse extends SaloonResponse
      *
      * @return string
      */
-    public function body()
+    public function body(): string
     {
-        return (string)$this->response->getBody();
+        return $this->rawResponse->getBody();
     }
 
     /**
@@ -25,7 +28,7 @@ class GuzzleResponse extends SaloonResponse
      */
     public function stream(): StreamInterface
     {
-        return $this->response->getBody();
+        return $this->rawResponse->getBody();
     }
 
     /**
@@ -36,7 +39,7 @@ class GuzzleResponse extends SaloonResponse
      */
     public function header(string $header): string
     {
-        return $this->response->getHeaderLine($header);
+        return $this->rawResponse->getHeaderLine($header);
     }
 
     /**
@@ -46,7 +49,9 @@ class GuzzleResponse extends SaloonResponse
      */
     public function headers(): ContentBag
     {
-        $headers = $this->response->getHeaders();
+        $headers = $this->rawResponse->getHeaders();
+
+        // Todo: Convert them into header dtos? (Would standardise headers with multiple values)
 
         dd($headers);
     }
@@ -58,7 +63,7 @@ class GuzzleResponse extends SaloonResponse
      */
     public function status(): int
     {
-        return $this->response->getStatusCode();
+        return $this->rawResponse->getStatusCode();
     }
 
     /**
@@ -68,7 +73,7 @@ class GuzzleResponse extends SaloonResponse
      */
     public function close(): static
     {
-        $this->response->getBody()->close();
+        $this->rawResponse->getBody()->close();
 
         return $this;
     }
@@ -80,6 +85,6 @@ class GuzzleResponse extends SaloonResponse
      */
     public function toPsrResponse(): Response
     {
-        return $this->response;
+        return $this->rawResponse;
     }
 }

@@ -3,9 +3,11 @@
 namespace Sammyjo20\Saloon\Http;
 
 use ReflectionClass;
+use ReflectionException;
 use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Data\RequestDataType;
+use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Interfaces\SenderInterface;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
@@ -68,6 +70,7 @@ class PendingSaloonRequest
 
     /**
      * The early response.
+     * Todo: Remove in favor of responses being created inside of middleware pipeline
      *
      * @var SaloonResponse|null
      */
@@ -85,10 +88,8 @@ class PendingSaloonRequest
      *
      * @param SaloonRequest $request
      * @throws PendingSaloonRequestException
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\DataBagException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
+     * @throws ReflectionException
+     * @throws SaloonException
      */
     public function __construct(SaloonRequest $request)
     {
@@ -102,24 +103,21 @@ class PendingSaloonRequest
         $this->mockClient = $request->getMockClient() ?? $connector->getMockClient();
         $this->authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
 
-        // Now it's time to stitch together our PendingSaloonRequest. We will firstly merge everything
-        // into this one class, and then run each of the various features at once. 🚀
+        // Let's build the PendingSaloonRequest. Since it is made up of many
+        // properties, we run an individual method for each one.
 
         $this
+            ->registerDefaultMiddleware()
             ->mergeRequestProperties()
             ->mergeData()
             ->bootConnectorAndRequest()
             ->bootPlugins()
-            ->registerDefaultMiddleware();
-
-        // We'll now execute the request pipeline and the authenticator on the
-        // pending request. Make sure that "authenticateRequest" is always
-        // the last since the authenticator could be set at any step in
-        // the process.
-
-        $this
-            ->executeRequestPipeline()
             ->authenticateRequest();
+
+        // Next, we will execute the request middleware pipeline which will
+        // process any middleware added on the connector or the request.
+
+        $this->executeRequestPipeline();
     }
 
     /**
@@ -240,7 +238,7 @@ class PendingSaloonRequest
      * Boot every plugin and apply to the payload.
      *
      * @return $this
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     protected function bootPlugins(): static
     {

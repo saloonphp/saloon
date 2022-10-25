@@ -23,14 +23,14 @@ interface SaloonResponseInterface
      *
      * @return SaloonRequest
      */
-    public function getOriginalRequest(): SaloonRequest;
+    public function getRequest(): SaloonRequest;
 
     /**
      * Get the body of the response as string.
      *
      * @return string
      */
-    public function body();
+    public function body(): string;
 
     /**
      * Get the body as a stream. Don't forget to close the stream after using ->close().
@@ -46,14 +46,14 @@ interface SaloonResponseInterface
      * @param mixed $default
      * @return mixed
      */
-    public function json(string $key = null, mixed $default = null);
+    public function json(string $key = null, mixed $default = null): mixed;
 
     /**
      * Get the JSON decoded body of the response as an object.
      *
      * @return object
      */
-    public function object();
+    public function object(): object;
 
     /**
      * Convert the XML response into a SimpleXMLElement.
@@ -105,42 +105,42 @@ interface SaloonResponseInterface
      *
      * @return bool
      */
-    public function successful();
+    public function successful(): bool;
 
     /**
      * Determine if the response code was "OK".
      *
      * @return bool
      */
-    public function ok();
+    public function ok(): bool;
 
     /**
      * Determine if the response was a redirect.
      *
      * @return bool
      */
-    public function redirect();
+    public function redirect(): bool;
 
     /**
      * Determine if the response indicates a client or server error occurred.
      *
      * @return bool
      */
-    public function failed();
+    public function failed(): bool;
 
     /**
      * Determine if the response indicates a client error occurred.
      *
      * @return bool
      */
-    public function clientError();
+    public function clientError(): bool;
 
     /**
      * Determine if the response indicates a server error occurred.
      *
      * @return bool
      */
-    public function serverError();
+    public function serverError(): bool;
 
     /**
      * Execute the given callback if there was a server or client error.
@@ -167,9 +167,9 @@ interface SaloonResponseInterface
     /**
      * Create an exception if a server or client error occurred.
      *
-     * @return Exception|void
+     * @return Exception|null
      */
-    public function toException();
+    public function toException(): ?Exception;
 
     /**
      * Throw an exception if a server or client error occurred.
@@ -177,7 +177,7 @@ interface SaloonResponseInterface
      * @return $this
      * @throws SaloonRequestException
      */
-    public function throw();
+    public function throw(): static;
 
     /**
      * Set if the response is cached. Should only be used internally.
@@ -215,4 +215,11 @@ interface SaloonResponseInterface
      * @return Exception|null
      */
     public function getRequestException(): ?Exception;
+
+    /**
+     * Get the body of the response.
+     *
+     * @return string
+     */
+    public function __toString(): string;
 }
