@@ -4,12 +4,12 @@ namespace Sammyjo20\Saloon\Http;
 
 use SimpleXMLElement;
 use GuzzleHttp\Psr7\Response;
+use Spatie\Macroable\Macroable;
+use Sammyjo20\Saloon\Helpers\Arr;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\StreamInterface;
 use GuzzleHttp\Exception\RequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
-use Spatie\Macroable\Macroable;
-use Sammyjo20\Saloon\Helpers\Arr;
 
 class SaloonResponse
 {
