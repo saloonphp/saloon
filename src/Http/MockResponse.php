@@ -7,6 +7,7 @@ use Sammyjo20\Saloon\Helpers\DataBag;
 use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Helpers\ContentBag;
 use Sammyjo20\Saloon\Data\MockExceptionClosure;
+use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
 
 class MockResponse
 {
@@ -81,6 +82,18 @@ class MockResponse
     public static function fromRequest(SaloonRequest $request, int $status = 200): self
     {
         return new static($request->data()->all(), $status, $request->headers()->all(), $request->config()->all());
+    }
+
+    /**
+     * Create a new mock response from a fixture
+     *
+     * @param string $name
+     * @return Fixture
+     * @throws DirectoryNotFoundException
+     */
+    public static function fixture(string $name): Fixture
+    {
+        return new Fixture($name);
     }
 
     /**

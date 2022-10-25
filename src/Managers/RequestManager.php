@@ -278,7 +278,7 @@ class RequestManager
         // If we are mocking, we should record the request and response on the mock manager,
         // so we can run assertions on the responses.
 
-        if ($this->isMocking()) {
+        if ($this->isMocking() && $request->isNotRecordingFixture()) {
             $response->setMocked(true);
             $this->mockClient->recordResponse($response);
         }
@@ -322,10 +322,10 @@ class RequestManager
         // If we can detect Laravel, let's run the internal Laravel resolve method to import
         // our facade and boot it up. This will return any added
 
-        $manager = resolve('saloon')->bootLaravelFeatures(new LaravelManager, $this->request);
+        $laravelManager = resolve('saloon')->bootLaravelFeatures(new LaravelManager, $this->request);
 
-        $this->laravelManger = $manager;
-        $this->mockClient = $manager->getMockClient();
+        $this->laravelManger = $laravelManager;
+        $this->mockClient = $laravelManager->getMockClient();
     }
 
     /**

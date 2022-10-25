@@ -30,9 +30,10 @@ $data = $response->json();
 
 ## Features
 
-- Simple, easy to learn syntax that standardises the way you interact with APIs
+- Simple and easy to learn syntax that standardises the way you interact with APIs
 - Abstract API integrations into classes so you can keep your code DRY
 - Configuration is fast and can be shared across all your requests
+- Built on top of Guzzle, one of the most popular PHP HTTP clients.
 - Framework agnostic
 - Mocking requests for testing
 - Great for building your own PHP SDKs
@@ -62,3 +63,7 @@ Please see [here](https://github.com/Sammyjo20/Saloon/blob/main/.github/SECURITY
 ## Banner Image Credit
 
 - Freepik.com
+
+## Support This Project
+
+<a href='https://ko-fi.com/sammyjo20' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' />

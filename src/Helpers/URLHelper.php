@@ -34,7 +34,11 @@ class URLHelper
         $requiresTrailingSlash = ! empty($endpoint) && $endpoint !== '/';
 
         $baseEndpoint = rtrim($baseUrl, '/ ');
-        $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . '/' : $baseEndpoint;
+
+        $endpointIsNotUrl = empty(filter_var($endpoint, FILTER_VALIDATE_URL));
+        $glue = $endpointIsNotUrl ? '/' : null;
+
+        $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . $glue : $baseEndpoint;
 
         return $baseEndpoint . $endpoint;
     }

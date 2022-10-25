@@ -3,6 +3,7 @@
 namespace Sammyjo20\Saloon\Clients;
 
 use ReflectionClass;
+use Sammyjo20\Saloon\Http\Fixture;
 use Sammyjo20\Saloon\Helpers\URLHelper;
 use Sammyjo20\Saloon\Http\MockResponse;
 use PHPUnit\Framework\Assert as PHPUnit;
@@ -80,12 +81,12 @@ class BaseMockClient
     /**
      * Add a mock response to the client
      *
-     * @param MockResponse|callable $response
+     * @param MockResponse|Fixture|callable $response
      * @param string|null $captureMethod
      * @return void
      * @throws SaloonInvalidMockResponseCaptureMethodException
      */
-    public function addResponse(MockResponse|callable $response, ?string $captureMethod = null): void
+    public function addResponse(MockResponse|Fixture|callable $response, ?string $captureMethod = null): void
     {
         if (is_null($captureMethod)) {
             $this->sequenceResponses[] = $response;
@@ -135,11 +136,12 @@ class BaseMockClient
      * Guess the next response based on the request.
      *
      * @param SaloonRequest $request
-     * @return MockResponse
+     * @return MockResponse|Fixture
      * @throws SaloonNoMockResponseFoundException
+     * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function guessNextResponse(SaloonRequest $request): MockResponse
+    public function guessNextResponse(SaloonRequest $request): MockResponse|Fixture
     {
         $requestClass = get_class($request);
 
@@ -172,7 +174,7 @@ class BaseMockClient
      * @param SaloonRequest $request
      * @return MockResponse|callable|null
      */
-    private function guessResponseFromUrl(SaloonRequest $request): MockResponse|callable|null
+    private function guessResponseFromUrl(SaloonRequest $request): MockResponse|Fixture|callable|null
     {
         foreach ($this->urlResponses as $url => $response) {
             if (! URLHelper::matches($url, $request->getRequestUrl())) {
@@ -457,18 +459,22 @@ class BaseMockClient
     }
 
     /**
-     * Create the mock response. If it is a callable, we will call it.
+     * Get the mock value.
      *
-     * @param MockResponse|callable $mockResponse
+     * @param MockResponse|Fixture|callable $mockable
      * @param SaloonRequest $request
-     * @return MockResponse
+     * @return MockResponse|Fixture
      */
-    private function mockResponseValue(MockResponse|callable $mockResponse, SaloonRequest $request): MockResponse
+    private function mockResponseValue(MockResponse|Fixture|callable $mockable, SaloonRequest $request): MockResponse|Fixture
     {
-        if ($mockResponse instanceof MockResponse) {
-            return $mockResponse;
+        if ($mockable instanceof MockResponse) {
+            return $mockable;
         }
 
-        return $mockResponse($request);
+        if ($mockable instanceof Fixture) {
+            return $mockable;
+        }
+
+        return $mockable($request);
     }
 }
