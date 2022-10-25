@@ -1,7 +1,7 @@
 <?php
 
 use Carbon\CarbonImmutable;
-use Illuminate\Support\Str;
+use Sammyjo20\Saloon\Helpers\Str;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonResponse;

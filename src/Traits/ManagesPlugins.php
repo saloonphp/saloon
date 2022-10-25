@@ -2,6 +2,8 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
+use Sammyjo20\Saloon\Helpers\Helpers;
+
 trait ManagesPlugins
 {
     /**
@@ -22,8 +24,8 @@ trait ManagesPlugins
         // any options. E.g if they have the "hasBody" interface, we need to add the
         // body to the request.
 
-        $connectorTraits = class_uses_recursive($this->request->getConnector());
-        $requestTraits = class_uses_recursive($this->request);
+        $connectorTraits = Helpers::classUsesRecursive($this->request->getConnector());
+        $requestTraits = Helpers::classUsesRecursive($this->request);
 
         $this->scanTraits($connectorTraits, 'connector')
             ->scanTraits($requestTraits, 'request');
@@ -44,7 +46,7 @@ trait ManagesPlugins
         }
 
         foreach ($traits as $trait) {
-            $pluginName = class_basename($trait);
+            $pluginName = Helpers::classBasename($trait);
 
             if (in_array($pluginName, $this->plugins, true)) {
                 continue;

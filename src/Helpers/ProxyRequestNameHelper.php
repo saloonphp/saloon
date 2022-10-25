@@ -3,7 +3,6 @@
 namespace Sammyjo20\Saloon\Helpers;
 
 use ReflectionClass;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Sammyjo20\Saloon\Exceptions\InvalidRequestKeyException;
 

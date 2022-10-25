@@ -21,11 +21,12 @@
     "require": {
         "php": "^8.0",
         "guzzlehttp/guzzle": "^7.4",
-        "illuminate/support": "^8.0 || ^9.0",
-        "nesbot/carbon": "^2.58"
+        "nesbot/carbon": "^2.58",
+        "spatie/macroable": "^2.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.5",
+        "illuminate/collections": "^9.36",
         "league/flysystem": "^3.0",
         "pestphp/pest": "^1.21",
         "spatie/ray": "^1.33"
@@ -55,5 +56,8 @@
         "test": [
             "./vendor/bin/pest"
         ]
+    },
+    "suggest": {
+        "illuminate/collections": "Required if you want to use the collect() method on responses"
     }
 }

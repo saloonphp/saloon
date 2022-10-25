@@ -2,14 +2,13 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
-use Illuminate\Support\Str;
-
 class StateHelper
 {
     /**
      * Generate a random string for the state.
      *
      * @return string
+     * @throws \Exception
      */
     public static function createRandomState(): string
     {

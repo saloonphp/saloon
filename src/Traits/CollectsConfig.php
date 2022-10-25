@@ -2,7 +2,7 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Illuminate\Support\Arr;
+use Sammyjo20\Saloon\Helpers\Arr;
 
 trait CollectsConfig
 {
