@@ -31,8 +31,6 @@ test('a request can be mocked with a sequence', function () {
         MockResponse::make(['error' => 'Server Unavailable'], 500),
     ]);
 
-    $req = new UserRequest;
-
     // So if a request has a request pipe that also returns a mockresponse/fakeresponse
     // it will take precedence over the mock response, is this what we want? I think
     // that the mock response should take the highest priority. The only ever time
@@ -43,11 +41,7 @@ test('a request can be mocked with a sequence', function () {
     // Todo: Instead of "MockResponse" as we can use SimulatedResponse for caching too and
     // Todo: The naming is better
 
-    $req->middlewarePipeline()->addRequestPipe(fn () => new MockResponse(['name' => 'Dennis']));
-
-    $responseA = $req->send($mockClient);
-
-    dd($responseA);
+    $responseA = (new UserRequest)->send($mockClient);
 
     expect($responseA->isMocked())->toBeTrue();
     expect($responseA->json())->toEqual(['name' => 'Sam']);

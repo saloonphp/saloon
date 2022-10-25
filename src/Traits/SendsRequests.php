@@ -42,15 +42,16 @@ trait SendsRequests
         // Now we'll create the pending request
 
         $pendingRequest = $request->createPendingRequest($mockClient);
-        $sender = $this->sender();
 
         // If the pending request has a mock response then we will create
         // a fake response. Otherwise, we will send the real request
         // with the sender.
 
-        $response = $pendingRequest->hasMockResponse()
-            ? new SimulatedResponse($pendingRequest)
-            : $sender->sendRequest($pendingRequest, $asynchronous);
+        if ($pendingRequest->hasMockResponse()) {
+            $response = new SimulatedResponse($pendingRequest);
+        } else {
+            $response = $this->sender()->sendRequest($pendingRequest, $asynchronous);
+        }
 
         // If the request was asynchronous we need to execute the middleware
         // pipeline as the first step in our promise.

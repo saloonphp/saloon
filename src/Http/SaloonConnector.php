@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Http\Senders\GuzzleSender;
 use Sammyjo20\Saloon\Traits\HasSender;
 use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
@@ -16,6 +17,9 @@ use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
 use Sammyjo20\Saloon\Traits\SendsRequests;
 
+/**
+ * @method GuzzleSender sender()
+ */
 abstract class SaloonConnector
 {
     use HasRequestProperties;
