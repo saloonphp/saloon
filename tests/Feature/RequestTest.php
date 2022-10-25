@@ -1,6 +1,8 @@
 <?php
 
 use GuzzleHttp\Promise\Utils;
+use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Http\Responses\GuzzleResponse;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
@@ -30,6 +32,25 @@ test('asynchronous requests work', function () {
     $responseC = $connector->sendAsync(new UserRequest);
 
     Utils::unwrap([$responseA, $responseB, $responseC]);
+});
+
+test('fake asynchronous requests work', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam'], 200),
+        MockResponse::make(['name' => 'Charlotte'], 200),
+        MockResponse::make(['name' => 'Gareth'], 200),
+    ]);
+
+    $connector = new TestConnector();
+    $connector->withMockClient($mockClient);
+
+    $responseA = $connector->sendAsync(new UserRequest);
+    $responseB = $connector->sendAsync(new UserRequest);
+    $responseC = $connector->sendAsync(new UserRequest);
+
+    Utils::unwrap([$responseA, $responseB, $responseC]);
+
+    dd($responseB);
 });
 
 test('a request can handle an exception properly', function () {
