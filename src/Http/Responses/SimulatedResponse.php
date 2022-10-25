@@ -12,7 +12,7 @@ use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 /**
  * @property MockResponse $rawResponse
  */
-class FakeResponse extends SaloonResponse
+class SimulatedResponse extends SaloonResponse
 {
     /**
      * Constructor

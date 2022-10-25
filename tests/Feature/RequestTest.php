@@ -24,7 +24,7 @@ test('a request can be made successfully', function () {
     ]);
 });
 
-test('asynchronous requests work', function () {
+test('(remove) asynchronous requests work', function () {
     $connector = new TestConnector();
 
     $responseA = $connector->sendAsync(new UserRequest);
@@ -34,7 +34,7 @@ test('asynchronous requests work', function () {
     Utils::unwrap([$responseA, $responseB, $responseC]);
 });
 
-test('fake asynchronous requests work', function () {
+test('(remove) fake asynchronous requests work', function () {
     $mockClient = new MockClient([
         MockResponse::make(['name' => 'Sam'], 200),
         MockResponse::make(['name' => 'Charlotte'], 200),

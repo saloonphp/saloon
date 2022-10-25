@@ -13,7 +13,7 @@ use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Http\Responses\FakeResponse;
+use Sammyjo20\Saloon\Http\Responses\SimulatedResponse;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Interfaces\SaloonResponseInterface;
@@ -49,14 +49,14 @@ trait SendsRequests
         // with the sender.
 
         $response = $pendingRequest->hasMockResponse()
-            ? new FakeResponse($pendingRequest)
+            ? new SimulatedResponse($pendingRequest)
             : $sender->sendRequest($pendingRequest, $asynchronous);
 
         // If the request was asynchronous we need to execute the middleware
         // pipeline as the first step in our promise.
 
         if ($asynchronous === true) {
-            $response = $response instanceof FakeResponse ? new FulfilledPromise($response) : $response;
+            $response = $response instanceof SimulatedResponse ? new FulfilledPromise($response) : $response;
 
             return $response->then(fn(SaloonResponse $response) => $pendingRequest->executeResponsePipeline($response));
         }
