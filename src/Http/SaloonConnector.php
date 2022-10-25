@@ -43,7 +43,7 @@ abstract class SaloonConnector
      *
      * @return string
      */
-    abstract protected function defineBaseUrl(): string;
+    abstract public function defineBaseUrl(): string;
 
     /**
      * @param PendingSaloonRequest $requestPayload
