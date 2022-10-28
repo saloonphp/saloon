@@ -8,6 +8,7 @@ use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Data\RequestDataType;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
+use Sammyjo20\Saloon\Interfaces\Data\SendsMixedBody;
 use Sammyjo20\Saloon\Interfaces\SenderInterface;
 use Sammyjo20\Saloon\Exceptions\DataBagException;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
@@ -271,14 +272,14 @@ class PendingSaloonRequest
      */
     protected function registerDefaultMiddleware(): static
     {
-        $pipeline = $this->middleware();
+        $middleware = $this->middleware();
 
         // If the PendingSaloonRequest has a mock client then we
         // will add a "MockMiddleware" request pipe which will
         // check to see if there are any mock responses.
 
         if ($this->isMocking()) {
-            $pipeline->onRequest(new MockMiddleware($this->getMockClient()));
+            $middleware->onRequest(new MockMiddleware($this->getMockClient()));
         }
 
         // Todo: Register Laravel middleware pipe.
@@ -331,7 +332,7 @@ class PendingSaloonRequest
             return RequestDataType::MULTIPART;
         }
 
-        if ($object instanceof SendsStringBody || $object instanceof SendsXMLBody) {
+        if ($object instanceof SendsMixedBody || $object instanceof SendsStringBody || $object instanceof SendsXMLBody) {
             return RequestDataType::STRING;
         }
 

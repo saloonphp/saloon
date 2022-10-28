@@ -28,11 +28,12 @@ class MiddlewarePipeline
     }
 
     /**
+     * Add a middleware before the request is sent
+     *
      * @param callable $closure
-     * @param bool $highPriority
      * @return $this
      */
-    public function onRequest(callable $closure, bool $highPriority = false): self
+    public function onRequest(callable $closure): self
     {
         $this->requestPipeline = $this->requestPipeline->pipe(function (PendingSaloonRequest $request) use ($closure) {
             $result = $closure($request);
@@ -46,23 +47,24 @@ class MiddlewarePipeline
             }
 
             return $request;
-        }, $highPriority);
+        });
 
         return $this;
     }
 
     /**
+     * Add a middleware after the request is sent
+     *
      * @param callable $closure
-     * @param bool $highPriority
      * @return $this
      */
-    public function onResponse(callable $closure, bool $highPriority = false): self
+    public function onResponse(callable $closure): self
     {
         $this->responsePipeline = $this->responsePipeline->pipe(function (SaloonResponse $response) use ($closure) {
             $result = $closure($response);
 
             return $result instanceof SaloonResponse ? $result : $response;
-        }, $highPriority);
+        });
 
         return $this;
     }

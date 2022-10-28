@@ -48,6 +48,8 @@ trait SendsRequests
         if ($pendingRequest->hasMockResponse()) {
             $response = new SimulatedResponse($pendingRequest, $pendingRequest->getMockResponse());
             $response->setIsMocked(true);
+
+            // Todo: Record the mocked response
         } else {
             $response = $this->sender()->sendRequest($pendingRequest, $asynchronous);
         }

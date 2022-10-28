@@ -19,13 +19,13 @@ use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
  */
 abstract class SaloonConnector
 {
-    use HasRequestProperties;
     use AuthenticatesRequests;
+    use HasRequestProperties;
     use HasCustomResponses;
-    use HasSender;
     use ProxiesRequests;
     use MocksRequests;
     use SendsRequests;
+    use HasSender;
 
     /**
      * Register Saloon requests that will become methods on the connector.
