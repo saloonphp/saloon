@@ -394,6 +394,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
     public function setIsCached(bool $isCached): SaloonResponse
     {
         $this->isCached = $isCached;
+
         return $this;
     }
 
@@ -406,6 +407,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
     public function setIsMocked(bool $isMocked): SaloonResponse
     {
         $this->isMocked = $isMocked;
+
         return $this;
     }
 }

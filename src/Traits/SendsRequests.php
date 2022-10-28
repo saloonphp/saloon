@@ -2,21 +2,19 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use GuzzleHttp\Promise\FulfilledPromise;
-use GuzzleHttp\Promise\Promise;
 use ReflectionException;
+use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Exceptions\DataBagException;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Http\Responses\SimulatedResponse;
+use Sammyjo20\Saloon\Interfaces\SaloonResponseInterface;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
-use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
-use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Http\Responses\SimulatedResponse;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Interfaces\SaloonResponseInterface;
 
 trait SendsRequests
 {
@@ -60,7 +58,7 @@ trait SendsRequests
         if ($asynchronous === true) {
             $response = $response instanceof SimulatedResponse ? new FulfilledPromise($response) : $response;
 
-            return $response->then(fn(SaloonResponse $response) => $pendingRequest->executeResponsePipeline($response));
+            return $response->then(fn (SaloonResponse $response) => $pendingRequest->executeResponsePipeline($response));
         }
 
         // Otherwise, we'll just return the result of the response pipeline.

@@ -7,7 +7,7 @@ enum RequestDataType: string
     case JSON = 'json';
     case FORM = 'form';
     case MULTIPART = 'multipart';
-    case MIXED = 'mixed';
+    case STRING = 'string';
 
     /**
      * Returns if the data type is defined as an array.

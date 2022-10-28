@@ -15,8 +15,6 @@ enum DataBagType: string
      */
     public function isCompatibleWith(array|string $data): bool
     {
-
-
         return match ($this) {
             self::ARRAY => is_array($data),
             default => ! is_array($data),

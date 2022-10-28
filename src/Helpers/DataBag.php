@@ -2,11 +2,11 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
+use Stringable;
 use Sammyjo20\Saloon\Data\DataBagType;
 use Sammyjo20\Saloon\Data\RequestDataType;
-use Sammyjo20\Saloon\Exceptions\DataBagException;
 use Sammyjo20\Saloon\Interfaces\Arrayable;
-use Stringable;
+use Sammyjo20\Saloon\Exceptions\DataBagException;
 
 class DataBag implements Stringable
 {

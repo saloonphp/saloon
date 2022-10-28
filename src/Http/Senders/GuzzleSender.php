@@ -16,8 +16,6 @@ use Sammyjo20\Saloon\Data\RequestDataType;
 use GuzzleHttp\Exception\BadResponseException;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Responses\PsrResponse;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
-use Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException;
 use Sammyjo20\Saloon\Interfaces\SenderInterface;
 
 class GuzzleSender implements SenderInterface

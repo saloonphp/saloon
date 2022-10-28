@@ -2,8 +2,8 @@
 
 namespace Sammyjo20\Saloon\Http\Responses;
 
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Helpers\ContentBag;
 
 /**

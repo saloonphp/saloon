@@ -7,22 +7,22 @@ use ReflectionException;
 use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Data\RequestDataType;
-use Sammyjo20\Saloon\Exceptions\DataBagException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
-use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
 use Sammyjo20\Saloon\Interfaces\SenderInterface;
+use Sammyjo20\Saloon\Exceptions\DataBagException;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Interfaces\Data\SendsXMLBody;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
-use Sammyjo20\Saloon\Interfaces\Data\SendsMixedBody;
+use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
 use Sammyjo20\Saloon\Interfaces\Data\SendsFormParams;
+use Sammyjo20\Saloon\Interfaces\Data\SendsStringBody;
 use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 use Sammyjo20\Saloon\Interfaces\Data\SendsMultipartBody;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 
 class PendingSaloonRequest
 {
@@ -149,7 +149,7 @@ class PendingSaloonRequest
     }
 
     /**
-     * Merge together the data.
+     * Merge the data together
      *
      * @return $this
      * @throws PendingSaloonRequestException
@@ -197,7 +197,7 @@ class PendingSaloonRequest
             $this->data()->merge($connectorData ?? [], $requestData ?? []);
         }
 
-        if ($dataType === RequestDataType::MIXED) {
+        if ($dataType === RequestDataType::STRING) {
             if (! empty($connectorData)) {
                 $this->data()->set($connectorData);
             }
@@ -331,8 +331,8 @@ class PendingSaloonRequest
             return RequestDataType::MULTIPART;
         }
 
-        if ($object instanceof SendsMixedBody || $object instanceof SendsXMLBody) {
-            return RequestDataType::MIXED;
+        if ($object instanceof SendsStringBody || $object instanceof SendsXMLBody) {
+            return RequestDataType::STRING;
         }
 
         return null;
