@@ -210,7 +210,7 @@ class GuzzleSender implements SenderInterface
      * @param string $withName
      * @return $this
      */
-    public function pushMiddleware(callable $callable, string $withName = ''): self
+    public function pushMiddleware(callable $callable, string $withName = ''): static
     {
         $this->handlerStack->push($callable, $withName);
 
@@ -225,7 +225,7 @@ class GuzzleSender implements SenderInterface
      * @param string $withName
      * @return $this
      */
-    public function pushMiddlewareBefore(string $name, callable $callable, string $withName = ''): self
+    public function pushMiddlewareBefore(string $name, callable $callable, string $withName = ''): static
     {
         $this->handlerStack->before($name, $callable, $withName);
 
@@ -240,7 +240,7 @@ class GuzzleSender implements SenderInterface
      * @param string $withName
      * @return $this
      */
-    public function pushMiddlewareAfter(string $name, callable $callable, string $withName = ''): self
+    public function pushMiddlewareAfter(string $name, callable $callable, string $withName = ''): static
     {
         $this->handlerStack->after($name, $callable, $withName);
 
@@ -253,7 +253,7 @@ class GuzzleSender implements SenderInterface
      * @param string $name
      * @return $this
      */
-    public function removeMiddleware(string $name): self
+    public function removeMiddleware(string $name): static
     {
         $this->handlerStack->remove($name);
 
@@ -266,7 +266,7 @@ class GuzzleSender implements SenderInterface
      * @param HandlerStack $handlerStack
      * @return $this
      */
-    public function setHandlerStack(HandlerStack $handlerStack): self
+    public function setHandlerStack(HandlerStack $handlerStack): static
     {
         $this->handlerStack = $handlerStack;
 
@@ -307,7 +307,7 @@ class GuzzleSender implements SenderInterface
     }
 
     /**
-     * Get the guzzle client on the sender
+     * Get the Guzzle client
      *
      * @return GuzzleClient
      */

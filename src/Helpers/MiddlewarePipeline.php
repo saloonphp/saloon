@@ -33,7 +33,7 @@ class MiddlewarePipeline
      * @param callable $closure
      * @return $this
      */
-    public function onRequest(callable $closure): self
+    public function onRequest(callable $closure): static
     {
         $this->requestPipeline = $this->requestPipeline->pipe(function (PendingSaloonRequest $request) use ($closure) {
             $result = $closure($request);
@@ -58,7 +58,7 @@ class MiddlewarePipeline
      * @param callable $closure
      * @return $this
      */
-    public function onResponse(callable $closure): self
+    public function onResponse(callable $closure): static
     {
         $this->responsePipeline = $this->responsePipeline->pipe(function (SaloonResponse $response) use ($closure) {
             $result = $closure($response);
@@ -101,7 +101,7 @@ class MiddlewarePipeline
      * @param MiddlewarePipeline $middlewarePipeline
      * @return $this
      */
-    public function merge(MiddlewarePipeline $middlewarePipeline): self
+    public function merge(MiddlewarePipeline $middlewarePipeline): static
     {
         $requestPipes = array_merge(
             $this->getRequestPipeline()->getPipes(),

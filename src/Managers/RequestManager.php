@@ -94,7 +94,7 @@ class RequestManager
     public function __construct(SaloonRequest $request, MockClient $mockClient = null, bool $asynchronous = false)
     {
         $this->request = $request;
-        $this->connector = $request->getConnector();
+        $this->connector = $request->connector();
         $this->inLaravelEnvironment = $this->detectLaravel();
         $this->asynchronous = $asynchronous;
 

@@ -143,11 +143,12 @@ abstract class SaloonRequest
      * @param $method
      * @param $parameters
      * @return mixed
+     * @throws SaloonInvalidConnectorException
      * @throws SaloonMethodNotFoundException
      */
     public function __call($method, $parameters)
     {
-        $connector = $this->getConnector();
+        $connector = $this->connector();
 
         if (method_exists($connector, $method) === false) {
             throw new SaloonMethodNotFoundException($method, $connector);
@@ -172,7 +173,7 @@ abstract class SaloonRequest
      */
     public function send(MockClient $mockClient = null, bool $asynchronous = false): SaloonResponseInterface|PromiseInterface
     {
-        return $this->getConnector()->send($this, $mockClient, $asynchronous);
+        return $this->connector()->send($this, $mockClient, $asynchronous);
     }
 
     /**

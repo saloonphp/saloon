@@ -22,7 +22,7 @@ trait ManagesPlugins
         // any options. E.g if they have the "hasBody" interface, we need to add the
         // body to the request.
 
-        $connectorTraits = class_uses_recursive($this->request->getConnector());
+        $connectorTraits = class_uses_recursive($this->request->connector());
         $requestTraits = class_uses_recursive($this->request);
 
         $this->scanTraits($connectorTraits, 'connector')
@@ -37,7 +37,7 @@ trait ManagesPlugins
      * @param string $type
      * @return $this
      */
-    private function scanTraits(array $traits, string $type): self
+    private function scanTraits(array $traits, string $type): static
     {
         if ($type !== 'connector' && $type !== 'request') {
             return $this;

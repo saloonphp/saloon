@@ -151,7 +151,7 @@ class BaseMockClient
             return $this->mockResponseValue($this->requestResponses[$requestClass], $request);
         }
 
-        $connectorClass = get_class($request->getConnector());
+        $connectorClass = get_class($request->connector());
 
         if (array_key_exists($connectorClass, $this->connectorResponses)) {
             return $this->mockResponseValue($this->connectorResponses[$connectorClass], $request);

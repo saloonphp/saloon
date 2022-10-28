@@ -99,7 +99,7 @@ class PendingSaloonRequest
      */
     public function __construct(SaloonRequest $request, MockClient $mockClient = null)
     {
-        $connector = $request->getConnector();
+        $connector = $request->connector();
 
         $this->request = $request;
         $this->connector = $connector;

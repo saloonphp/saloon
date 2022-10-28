@@ -45,7 +45,7 @@ class ContentBag
      * @param array $data
      * @return $this
      */
-    public function set(array $data): self
+    public function set(array $data): static
     {
         $this->data = $data;
 
@@ -58,7 +58,7 @@ class ContentBag
      * @param mixed ...$arrays
      * @return $this
      */
-    public function merge(...$arrays): self
+    public function merge(...$arrays): static
     {
         $this->data = array_merge($this->data, ...$arrays);
 
@@ -72,7 +72,7 @@ class ContentBag
      * @param mixed $value
      * @return $this
      */
-    public function add(string $key, mixed $value): self
+    public function add(string $key, mixed $value): static
     {
         $this->data[$key] = value($value);
 
@@ -87,7 +87,7 @@ class ContentBag
      * @param mixed $value
      * @return $this
      */
-    public function addWhen(bool $condition, string $key, mixed $value): self
+    public function addWhen(bool $condition, string $key, mixed $value): static
     {
         if ($condition === true) {
             return $this->add($key, $value);
@@ -102,7 +102,7 @@ class ContentBag
      * @param string $key
      * @return $this
      */
-    public function remove(string $key): self
+    public function remove(string $key): static
     {
         unset($this->data[$key]);
 

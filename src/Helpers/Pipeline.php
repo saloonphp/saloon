@@ -19,7 +19,7 @@ class Pipeline
      * @param callable $pipe
      * @return $this
      */
-    public function pipe(callable $pipe): self
+    public function pipe(callable $pipe): static
     {
         $this->pipes[] = $pipe;
 
@@ -49,7 +49,7 @@ class Pipeline
      * @param array $pipes
      * @return $this
      */
-    public function setPipes(array $pipes): self
+    public function setPipes(array $pipes): static
     {
         $this->pipes = $pipes;
 

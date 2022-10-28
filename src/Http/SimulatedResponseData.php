@@ -61,7 +61,7 @@ class SimulatedResponseData
      * @param array $headers
      * @return static
      */
-    public static function make(int $status = 200, mixed $data = [], array $headers = []): self
+    public static function make(int $status = 200, mixed $data = [], array $headers = []): static
     {
         return new static($status, $data, $headers);
     }
@@ -84,7 +84,7 @@ class SimulatedResponseData
      * @param callable|Throwable $value
      * @return $this
      */
-    public function throw(callable|Throwable $value): self
+    public function throw(callable|Throwable $value): static
     {
         $closure = $value instanceof Throwable ? static fn () => $value : $value;
 
