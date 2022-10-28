@@ -305,4 +305,14 @@ class GuzzleSender implements SenderInterface
     {
         return PsrResponse::class;
     }
+
+    /**
+     * Get the guzzle client on the sender
+     *
+     * @return GuzzleClient
+     */
+    public function getGuzzleClient(): GuzzleClient
+    {
+        return $this->client;
+    }
 }
