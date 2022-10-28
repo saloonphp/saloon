@@ -28,14 +28,14 @@ abstract class SaloonResponse implements SaloonResponseInterface
      *
      * @var array
      */
-    protected $decodedJson;
+    protected array $decodedJson;
 
     /**
      * The decoded XML response.
      *
      * @var string
      */
-    protected $decodedXml;
+    protected string $decodedXml;
 
     /**
      * The request options we attached to the request.
@@ -107,7 +107,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
      */
     public function json(string $key = null, mixed $default = null): mixed
     {
-        if (! $this->decodedJson) {
+        if (! isset($this->decodedJson)) {
             $this->decodedJson = json_decode($this->body(), true, 512, JSON_THROW_ON_ERROR);
         }
 
@@ -359,5 +359,53 @@ abstract class SaloonResponse implements SaloonResponseInterface
     public function getRawResponse(): mixed
     {
         return $this->rawResponse;
+    }
+
+    /**
+     * Get a header from the response.
+     *
+     * @param string $header
+     * @return string|null
+     */
+    public function header(string $header): ?string
+    {
+        return $this->headers()->get($header);
+    }
+
+    /**
+     * Close the stream and any underlying resources.
+     *
+     * @return $this
+     * @throws \JsonException
+     */
+    public function close(): static
+    {
+        $this->stream()->close();
+
+        return $this;
+    }
+
+    /**
+     * Set the isCached property
+     *
+     * @param bool $isCached
+     * @return SaloonResponse
+     */
+    public function setIsCached(bool $isCached): SaloonResponse
+    {
+        $this->isCached = $isCached;
+        return $this;
+    }
+
+    /**
+     * Set the isMocked property
+     *
+     * @param bool $isMocked
+     * @return SaloonResponse
+     */
+    public function setIsMocked(bool $isMocked): SaloonResponse
+    {
+        $this->isMocked = $isMocked;
+        return $this;
     }
 }

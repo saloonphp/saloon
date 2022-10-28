@@ -48,7 +48,8 @@ trait SendsRequests
         // with the sender.
 
         if ($pendingRequest->hasMockResponse()) {
-            $response = new SimulatedResponse($pendingRequest);
+            $response = new SimulatedResponse($pendingRequest, $pendingRequest->getMockResponse());
+            $response->setIsMocked(true);
         } else {
             $response = $this->sender()->sendRequest($pendingRequest, $asynchronous);
         }

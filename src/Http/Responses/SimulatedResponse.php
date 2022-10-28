@@ -2,62 +2,70 @@
 
 namespace Sammyjo20\Saloon\Http\Responses;
 
-use Exception;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Stream;
 use Psr\Http\Message\StreamInterface;
 use Sammyjo20\Saloon\Helpers\ContentBag;
-use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Http\SimulatedResponseData;
 
 /**
- * @property MockResponse $rawResponse
+ * @property SimulatedResponseData $rawResponse
  */
 class SimulatedResponse extends SaloonResponse
 {
     /**
-     * Constructor
+     * Get the body of the response as string.
      *
-     * @param PendingSaloonRequest $pendingSaloonRequest
+     * @return string
+     * @throws \JsonException
      */
-    public function __construct(PendingSaloonRequest $pendingSaloonRequest)
-    {
-        $rawResponse = $pendingSaloonRequest->getMockResponse();
-
-        parent::__construct($pendingSaloonRequest, $rawResponse);
-
-        $this->setMocked(true);
-    }
-
     public function body(): string
     {
-        return $this->rawResponse->getFormattedData();
+        return $this->rawResponse->getDataAsString();
     }
 
+    /**
+     * Get the body as a stream.
+     *
+     * @return StreamInterface
+     * @throws \JsonException
+     */
     public function stream(): StreamInterface
     {
-        // TODO: Implement stream() method.
+        $stream = fopen('php://temp', 'rb+');
+
+        fwrite($stream, $this->body());
+        rewind($stream);
+
+        return new Stream($stream);
     }
 
-    public function header(string $header): string
-    {
-        return $this->rawResponse->getHeaders()->get($header);
-    }
-
+    /**
+     * Get the headers from the response.
+     *
+     * @return ContentBag
+     */
     public function headers(): ContentBag
     {
         return $this->rawResponse->getHeaders();
     }
 
+    /**
+     * Get the status code of the response.
+     *
+     * @return int
+     */
     public function status(): int
     {
         return $this->rawResponse->getStatus();
     }
 
-    public function close(): static
-    {
-        // TODO: Implement close() method.
-    }
-
+    /**
+     * Get the underlying PSR response for the response.
+     *
+     * @return mixed
+     * @throws \JsonException
+     */
     public function toPsrResponse(): mixed
     {
         return new Response($this->status(), $this->headers()->all(), $this->body());

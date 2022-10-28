@@ -26,9 +26,9 @@ beforeEach(function () use ($filesystem) {
 
 test('a request can be mocked with a sequence', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Sam'], 200),
-        MockResponse::make(['name' => 'Alex'], 200),
-        MockResponse::make(['error' => 'Server Unavailable'], 500),
+        MockResponse::make(200, ['name' => 'Sam']),
+        MockResponse::make(200, ['name' => 'Alex']),
+        MockResponse::make(500, ['error' => 'Server Unavailable']),
     ]);
 
     // So if a request has a request pipe that also returns a mockresponse/fakeresponse

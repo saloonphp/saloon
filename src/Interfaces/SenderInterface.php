@@ -9,6 +9,13 @@ use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 interface SenderInterface
 {
     /**
+     * Get the sender's response class
+     *
+     * @return string
+     */
+    public function getResponseClass(): string;
+
+    /**
      * Send the request.
      *
      * @param PendingSaloonRequest $pendingRequest
@@ -16,11 +23,4 @@ interface SenderInterface
      * @return SaloonResponse|PromiseInterface
      */
     public function sendRequest(PendingSaloonRequest $pendingRequest, bool $asynchronous = false): SaloonResponseInterface|PromiseInterface;
-
-    /**
-     * Return the base response class used to validate the custom response.
-     *
-     * @return string
-     */
-    public function getResponseClass(): string;
 }

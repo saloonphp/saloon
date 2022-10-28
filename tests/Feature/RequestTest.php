@@ -1,11 +1,8 @@
 <?php
 
 use GuzzleHttp\Promise\Utils;
-use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Http\Responses\GuzzleResponse;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
@@ -39,9 +36,9 @@ test('(remove) asynchronous requests work', function () {
 
 test('(remove) fake asynchronous requests work', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Sam'], 200),
-        MockResponse::make(['name' => 'Charlotte'], 200),
-        MockResponse::make(['name' => 'Gareth'], 200),
+        MockResponse::make(200, ['name' => 'Sam']),
+        MockResponse::make(200, ['name' => 'Charlotte']),
+        MockResponse::make(200, ['name' => 'Gareth']),
     ]);
 
     $connector = new TestConnector();
@@ -53,7 +50,7 @@ test('(remove) fake asynchronous requests work', function () {
 
     Utils::unwrap([$responseA, $responseB, $responseC]);
 
-    dd($responseB);
+    dd($responseC);
 });
 
 test('a request can handle an exception properly', function () {

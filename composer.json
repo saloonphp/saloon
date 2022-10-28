@@ -25,13 +25,14 @@
         "illuminate/support": "^8.0 || ^9.0",
         "league/pipeline": "^1.0",
         "nesbot/carbon": "^2.58",
-        "psr/http-message": "^1.0"
+        "psr/http-message": "^1.0",
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.5",
         "league/flysystem": "^3.0",
         "pestphp/pest": "^1.21",
-        "spatie/ray": "^1.33"
+        "spatie/ray": "^1.33",
+        "ext-simplexml": "*"
     },
     "minimum-stability": "stable",
     "autoload": {

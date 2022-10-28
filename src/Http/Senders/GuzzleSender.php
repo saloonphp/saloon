@@ -7,23 +7,20 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
-use Sammyjo20\Saloon\Http\Sender;
 use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\ResponseInterface;
-use Sammyjo20\Saloon\Http\MockResponse;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Sammyjo20\Saloon\Data\RequestDataType;
 use GuzzleHttp\Exception\BadResponseException;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\Responses\GuzzleResponse;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Http\Guzzle\Middleware\MockMiddleware;
+use Sammyjo20\Saloon\Http\Responses\PsrResponse;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
 use Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException;
+use Sammyjo20\Saloon\Interfaces\SenderInterface;
 
-class GuzzleSender extends Sender
+class GuzzleSender implements SenderInterface
 {
     /**
      * The Guzzle client.
@@ -40,6 +37,8 @@ class GuzzleSender extends Sender
     protected HandlerStack $handlerStack;
 
     /**
+     * Constructor
+     *
      * Create the HTTP client.
      */
     public function __construct()
@@ -51,11 +50,8 @@ class GuzzleSender extends Sender
      * Create a new Guzzle client
      *
      * @return GuzzleClient
-     * @throws SaloonDuplicateHandlerException
-     * @throws SaloonInvalidHandlerException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
      */
-    private function createGuzzleClient(): GuzzleClient
+    protected function createGuzzleClient(): GuzzleClient
     {
         $this->handlerStack = $this->createHandlerStack();
 
@@ -74,10 +70,10 @@ class GuzzleSender extends Sender
      *
      * @param PendingSaloonRequest $pendingRequest
      * @param bool $asynchronous
-     * @return GuzzleResponse|PromiseInterface
+     * @return PsrResponse|PromiseInterface
      * @throws GuzzleException
      */
-    public function sendRequest(PendingSaloonRequest $pendingRequest, bool $asynchronous = false): GuzzleResponse|PromiseInterface
+    public function sendRequest(PendingSaloonRequest $pendingRequest, bool $asynchronous = false): PsrResponse|PromiseInterface
     {
         return $asynchronous === true
             ? $this->sendAsynchronousRequest($pendingRequest)
@@ -88,10 +84,10 @@ class GuzzleSender extends Sender
      * Send a synchronous request.
      *
      * @param PendingSaloonRequest $pendingRequest
-     * @return GuzzleResponse
+     * @return PsrResponse
      * @throws GuzzleException
      */
-    protected function sendSynchronousRequest(PendingSaloonRequest $pendingRequest): GuzzleResponse
+    protected function sendSynchronousRequest(PendingSaloonRequest $pendingRequest): PsrResponse
     {
         $guzzleRequest = $this->createGuzzleRequest($pendingRequest);
         $guzzleRequestOptions = $this->createRequestOptions($pendingRequest);
@@ -167,24 +163,13 @@ class GuzzleSender extends Sender
      * @param PendingSaloonRequest $pendingSaloonRequest
      * @param Response $guzzleResponse
      * @param RequestException|null $exception
-     * @return GuzzleResponse
+     * @return PsrResponse
      */
-    private function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $guzzleResponse, RequestException $exception = null): GuzzleResponse
+    private function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $guzzleResponse, RequestException $exception = null): PsrResponse
     {
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
-        /** @var SaloonResponse $response */
         return new $responseClass($pendingSaloonRequest, $guzzleResponse, $exception);
-    }
-
-    /**
-     * Get the base class that the custom responses should extend.
-     *
-     * @return string
-     */
-    public function getResponseClass(): string
-    {
-        return GuzzleResponse::class;
     }
 
     /**
@@ -218,19 +203,6 @@ class GuzzleSender extends Sender
                     throw $response->toException();
                 }
             );
-    }
-
-    /**
-     * Create a blank handler stack.
-     *
-     * @return HandlerStack
-     */
-    protected function createHandlerStack(): HandlerStack
-    {
-        $stack = new HandlerStack();
-        $stack->setHandler(Utils::chooseHandler());
-
-        return $stack;
     }
 
     /**
@@ -304,6 +276,19 @@ class GuzzleSender extends Sender
     }
 
     /**
+     * Create a blank handler stack.
+     *
+     * @return HandlerStack
+     */
+    protected function createHandlerStack(): HandlerStack
+    {
+        $stack = new HandlerStack();
+        $stack->setHandler(Utils::chooseHandler());
+
+        return $stack;
+    }
+
+    /**
      * Get the handler stack.
      *
      * @return HandlerStack
@@ -311,5 +296,15 @@ class GuzzleSender extends Sender
     public function getHandlerStack(): HandlerStack
     {
         return $this->handlerStack;
+    }
+
+    /**
+     * Get the sender's response class
+     *
+     * @return string
+     */
+    public function getResponseClass(): string
+    {
+        return PsrResponse::class;
     }
 }
