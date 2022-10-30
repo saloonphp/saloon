@@ -3,26 +3,29 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Traits\HasSender;
-use GuzzleHttp\Promise\PromiseInterface;
-use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Traits\MocksRequests;
+use Sammyjo20\Saloon\Traits\SendsRequests;
 use Sammyjo20\Saloon\Traits\ProxiesRequests;
+use Sammyjo20\Saloon\Http\Senders\GuzzleSender;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
 
+/**
+ * @method GuzzleSender sender()
+ */
 abstract class SaloonConnector
 {
-    use HasRequestProperties;
     use AuthenticatesRequests;
+    use HasRequestProperties;
     use HasCustomResponses;
-    use HasSender;
     use ProxiesRequests;
     use MocksRequests;
+    use SendsRequests;
+    use HasSender;
 
     /**
      * Register Saloon requests that will become methods on the connector.
@@ -37,7 +40,7 @@ abstract class SaloonConnector
      *
      * @return string
      */
-    abstract protected function defineBaseUrl(): string;
+    abstract public function defineBaseUrl(): string;
 
     /**
      * @param PendingSaloonRequest $requestPayload
@@ -57,35 +60,6 @@ abstract class SaloonConnector
     public function request(SaloonRequest $request): SaloonRequest
     {
         return $request->setConnector($this);
-    }
-
-    /**
-     * Send a Saloon request with the current instance of the connector.
-     *
-     * @param SaloonRequest $request
-     * @param MockClient|null $mockClient
-     * @return SaloonResponse
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
-     */
-    public function send(SaloonRequest $request, MockClient $mockClient = null): SaloonResponse
-    {
-        return $this->request($request)->send($mockClient);
-    }
-
-    /**
-     * Send an asynchronous Saloon request with the current instance of the connector.
-     *
-     * @param SaloonRequest $request
-     * @param MockClient|null $mockClient
-     * @return PromiseInterface
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
-     */
-    public function sendAsync(SaloonRequest $request, MockClient $mockClient = null): PromiseInterface
-    {
-        return $this->request($request)->sendAsync($mockClient);
     }
 
     /**

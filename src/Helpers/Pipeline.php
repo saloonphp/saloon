@@ -17,18 +17,11 @@ class Pipeline
      * Add a pipe to the pipeline.
      *
      * @param callable $pipe
-     * @param bool $highPriority
      * @return $this
      */
-    public function pipe(callable $pipe, bool $highPriority = false): self
+    public function pipe(callable $pipe): static
     {
-        if ($highPriority === true) {
-            array_unshift($this->pipes, $pipe);
-        } else {
-            $this->pipes[] = $pipe;
-        }
-
-        $this->pipes = array_values($this->pipes);
+        $this->pipes[] = $pipe;
 
         return $this;
     }
@@ -56,7 +49,7 @@ class Pipeline
      * @param array $pipes
      * @return $this
      */
-    public function setPipes(array $pipes): self
+    public function setPipes(array $pipes): static
     {
         $this->pipes = $pipes;
 

@@ -33,7 +33,7 @@ class LaravelManager
      * @param bool $isMocking
      * @return $this
      */
-    public function setIsMocking(bool $isMocking): self
+    public function setIsMocking(bool $isMocking): static
     {
         $this->isMocking = $isMocking;
 
@@ -56,7 +56,7 @@ class LaravelManager
      * @param BaseMockClient $mockClient
      * @return $this
      */
-    public function setMockClient(BaseMockClient $mockClient): self
+    public function setMockClient(BaseMockClient $mockClient): static
     {
         $this->mockClient = $mockClient;
 

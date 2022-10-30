@@ -17,7 +17,7 @@ enum Method: string
      * @param string $value
      * @return static
      */
-    public static function upperFrom(string $value): self
+    public static function upperFrom(string $value): static
     {
         return self::from(mb_strtoupper($value));
     }

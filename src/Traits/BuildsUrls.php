@@ -19,7 +19,7 @@ trait BuildsUrls
 
         $requiresTrailingSlash = ! empty($requestEndpoint) && $requestEndpoint !== '/';
 
-        $baseEndpoint = rtrim($this->getConnector()->defineBaseUrl(), '/ ');
+        $baseEndpoint = rtrim($this->connector()->defineBaseUrl(), '/ ');
         $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . '/' : $baseEndpoint;
 
         return $baseEndpoint . $requestEndpoint;

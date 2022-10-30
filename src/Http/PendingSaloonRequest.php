@@ -3,21 +3,27 @@
 namespace Sammyjo20\Saloon\Http;
 
 use ReflectionClass;
+use ReflectionException;
 use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Data\RequestDataType;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Interfaces\SenderInterface;
+use Sammyjo20\Saloon\Exceptions\DataBagException;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Interfaces\Data\SendsXMLBody;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
+use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
 use Sammyjo20\Saloon\Interfaces\Data\SendsMixedBody;
 use Sammyjo20\Saloon\Interfaces\Data\SendsFormParams;
+use Sammyjo20\Saloon\Interfaces\Data\SendsStringBody;
 use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 use Sammyjo20\Saloon\Interfaces\Data\SendsMultipartBody;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 
 class PendingSaloonRequest
 {
@@ -67,13 +73,6 @@ class PendingSaloonRequest
     protected ?MockClient $mockClient = null;
 
     /**
-     * The early response.
-     *
-     * @var SaloonResponse|null
-     */
-    protected ?SaloonResponse $earlyResponse = null;
-
-    /**
      * The data type.
      *
      * @var RequestDataType|null
@@ -81,45 +80,50 @@ class PendingSaloonRequest
     protected ?RequestDataType $dataType = null;
 
     /**
+     * The Mock Response Found
+     *
+     * @var MockResponse|null
+     */
+    protected ?MockResponse $mockResponse = null;
+
+    /**
      * Build up the request payload.
      *
      * @param SaloonRequest $request
+     * @param MockClient|null $mockClient
      * @throws PendingSaloonRequestException
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\DataBagException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException
+     * @throws ReflectionException
+     * @throws DataBagException
+     * @throws SaloonInvalidConnectorException
+     * @throws SaloonInvalidResponseClassException
      */
-    public function __construct(SaloonRequest $request)
+    public function __construct(SaloonRequest $request, MockClient $mockClient = null)
     {
-        $connector = $request->getConnector();
+        $connector = $request->connector();
 
         $this->request = $request;
         $this->connector = $connector;
         $this->url = $request->getRequestUrl();
         $this->method = Method::upperFrom($request->getMethod());
         $this->responseClass = $request->getResponseClass();
-        $this->mockClient = $request->getMockClient() ?? $connector->getMockClient();
+        $this->mockClient = $mockClient ?? ($request->getMockClient() ?? $connector->getMockClient());
         $this->authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
 
-        // Now it's time to stitch together our PendingSaloonRequest. We will firstly merge everything
-        // into this one class, and then run each of the various features at once. 🚀
+        // Let's build the PendingSaloonRequest. Since it is made up of many
+        // properties, we run an individual method for each one.
 
         $this
+            ->registerDefaultMiddleware()
             ->mergeRequestProperties()
             ->mergeData()
             ->bootConnectorAndRequest()
             ->bootPlugins()
-            ->registerDefaultMiddleware();
-
-        // We'll now execute the request pipeline and the authenticator on the
-        // pending request. Make sure that "authenticateRequest" is always
-        // the last since the authenticator could be set at any step in
-        // the process.
-
-        $this
-            ->executeRequestPipeline()
             ->authenticateRequest();
+
+        // Next, we will execute the request middleware pipeline which will
+        // process any middleware added on the connector or the request.
+
+        $this->executeRequestPipeline();
     }
 
     /**
@@ -138,7 +142,7 @@ class PendingSaloonRequest
 
         // Merge together the middleware pipelines...
 
-        $this->middlewarePipeline()
+        $this->middleware()
             ->merge($connectorProperties->middleware)
             ->merge($requestProperties->middleware);
 
@@ -146,7 +150,7 @@ class PendingSaloonRequest
     }
 
     /**
-     * Merge together the data.
+     * Merge the data together
      *
      * @return $this
      * @throws PendingSaloonRequestException
@@ -194,7 +198,7 @@ class PendingSaloonRequest
             $this->data()->merge($connectorData ?? [], $requestData ?? []);
         }
 
-        if ($dataType === RequestDataType::MIXED) {
+        if ($dataType === RequestDataType::STRING) {
             if (! empty($connectorData)) {
                 $this->data()->set($connectorData);
             }
@@ -240,7 +244,7 @@ class PendingSaloonRequest
      * Boot every plugin and apply to the payload.
      *
      * @return $this
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     protected function bootPlugins(): static
     {
@@ -268,7 +272,15 @@ class PendingSaloonRequest
      */
     protected function registerDefaultMiddleware(): static
     {
-        $pipeline = $this->middlewarePipeline();
+        $middleware = $this->middleware();
+
+        // If the PendingSaloonRequest has a mock client then we
+        // will add a "MockMiddleware" request pipe which will
+        // check to see if there are any mock responses.
+
+        if ($this->isMocking()) {
+            $middleware->onRequest(new MockMiddleware($this->getMockClient()));
+        }
 
         // Todo: Register Laravel middleware pipe.
 
@@ -282,7 +294,7 @@ class PendingSaloonRequest
      */
     protected function executeRequestPipeline(): static
     {
-        $this->middlewarePipeline()->executeRequestPipeline($this);
+        $this->middleware()->executeRequestPipeline($this);
 
         return $this;
     }
@@ -295,7 +307,7 @@ class PendingSaloonRequest
      */
     public function executeResponsePipeline(SaloonResponse $response): SaloonResponse
     {
-        $this->middlewarePipeline()->executeResponsePipeline($response);
+        $this->middleware()->executeResponsePipeline($response);
 
         return $response;
     }
@@ -320,8 +332,8 @@ class PendingSaloonRequest
             return RequestDataType::MULTIPART;
         }
 
-        if ($object instanceof SendsMixedBody || $object instanceof SendsXMLBody) {
-            return RequestDataType::MIXED;
+        if ($object instanceof SendsMixedBody || $object instanceof SendsStringBody || $object instanceof SendsXMLBody) {
+            return RequestDataType::STRING;
         }
 
         return null;
@@ -404,33 +416,6 @@ class PendingSaloonRequest
     }
 
     /**
-     * @return SaloonResponse|null
-     */
-    public function getEarlyResponse(): ?SaloonResponse
-    {
-        return $this->earlyResponse;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasEarlyResponse(): bool
-    {
-        return $this->earlyResponse instanceof SaloonResponse;
-    }
-
-    /**
-     * @param SaloonResponse|null $earlyResponse
-     * @return PendingSaloonRequest
-     */
-    public function setEarlyResponse(?SaloonResponse $earlyResponse): static
-    {
-        $this->earlyResponse = $earlyResponse;
-
-        return $this;
-    }
-
-    /**
      * Set the mock client
      *
      * @param MockClient|null $mockClient
@@ -441,5 +426,38 @@ class PendingSaloonRequest
         $this->mockClient = $mockClient;
 
         return $this;
+    }
+
+    /**
+     * Get the mocked response
+     *
+     * @return MockResponse|null
+     */
+    public function getMockResponse(): ?MockResponse
+    {
+        return $this->mockResponse;
+    }
+
+    /**
+     * Set the mocked response
+     *
+     * @param MockResponse|null $mockResponse
+     * @return PendingSaloonRequest
+     */
+    public function setMockResponse(?MockResponse $mockResponse): PendingSaloonRequest
+    {
+        $this->mockResponse = $mockResponse;
+
+        return $this;
+    }
+
+    /**
+     * Check if the pending request has a mock response
+     *
+     * @return bool
+     */
+    public function hasMockResponse(): bool
+    {
+        return $this->mockResponse instanceof MockResponse;
     }
 }

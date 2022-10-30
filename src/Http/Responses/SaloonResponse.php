@@ -5,7 +5,6 @@ namespace Sammyjo20\Saloon\Http\Responses;
 use Exception;
 use SimpleXMLElement;
 use Illuminate\Support\Arr;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
 use Sammyjo20\Saloon\Http\SaloonRequest;
@@ -18,25 +17,25 @@ abstract class SaloonResponse implements SaloonResponseInterface
     use Macroable;
 
     /**
-     * The underlying response.
+     * The raw response from the sender.
      *
      * @var mixed
      */
-    protected mixed $response;
+    protected mixed $rawResponse;
 
     /**
      * The decoded JSON response.
      *
      * @var array
      */
-    protected $decodedJson;
+    protected array $decodedJson;
 
     /**
      * The decoded XML response.
      *
      * @var string
      */
-    protected $decodedXml;
+    protected string $decodedXml;
 
     /**
      * The request options we attached to the request.
@@ -70,13 +69,13 @@ abstract class SaloonResponse implements SaloonResponseInterface
      * Create a new response instance.
      *
      * @param PendingSaloonRequest $pendingSaloonRequest
-     * @param mixed $response
+     * @param mixed $rawResponse
      * @param Exception|null $requestException
      */
-    public function __construct(PendingSaloonRequest $pendingSaloonRequest, mixed $response, Exception $requestException = null)
+    public function __construct(PendingSaloonRequest $pendingSaloonRequest, mixed $rawResponse, Exception $requestException = null)
     {
         $this->pendingSaloonRequest = $pendingSaloonRequest;
-        $this->response = $response;
+        $this->rawResponse = $rawResponse;
         $this->requestException = $requestException;
     }
 
@@ -93,7 +92,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
      *
      * @return SaloonRequest
      */
-    public function getOriginalRequest(): SaloonRequest
+    public function getRequest(): SaloonRequest
     {
         return $this->pendingSaloonRequest->getRequest();
     }
@@ -106,9 +105,9 @@ abstract class SaloonResponse implements SaloonResponseInterface
      * @return mixed
      * @throws \JsonException
      */
-    public function json(string $key = null, mixed $default = null)
+    public function json(string $key = null, mixed $default = null): mixed
     {
-        if (! $this->decodedJson) {
+        if (! isset($this->decodedJson)) {
             $this->decodedJson = json_decode($this->body(), true, 512, JSON_THROW_ON_ERROR);
         }
 
@@ -123,10 +122,11 @@ abstract class SaloonResponse implements SaloonResponseInterface
      * Get the JSON decoded body of the response as an object.
      *
      * @return object
+     * @throws \JsonException
      */
-    public function object()
+    public function object(): object
     {
-        return json_decode($this->body(), false);
+        return json_decode($this->body(), false, 512, JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -149,6 +149,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
      *
      * @param $key
      * @return Collection
+     * @throws \JsonException
      */
     public function collect($key = null): Collection
     {
@@ -174,7 +175,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
      *
      * @return bool
      */
-    public function successful()
+    public function successful(): bool
     {
         return $this->status() >= 200 && $this->status() < 300;
     }
@@ -184,7 +185,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
      *
      * @return bool
      */
-    public function ok()
+    public function ok(): bool
     {
         return $this->status() === 200;
     }
@@ -194,7 +195,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
      *
      * @return bool
      */
-    public function redirect()
+    public function redirect(): bool
     {
         return $this->status() >= 300 && $this->status() < 400;
     }
@@ -204,7 +205,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
      *
      * @return bool
      */
-    public function failed()
+    public function failed(): bool
     {
         return $this->serverError() || $this->clientError();
     }
@@ -214,7 +215,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
      *
      * @return bool
      */
-    public function clientError()
+    public function clientError(): bool
     {
         return $this->status() >= 400 && $this->status() < 500;
     }
@@ -224,7 +225,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
      *
      * @return bool
      */
-    public function serverError()
+    public function serverError(): bool
     {
         return $this->status() >= 500;
     }
@@ -247,12 +248,12 @@ abstract class SaloonResponse implements SaloonResponseInterface
     /**
      * Create an exception if a server or client error occurred.
      *
-     * @return Exception|void
+     * @return Exception|null
      */
-    public function toException()
+    public function toException(): ?Exception
     {
         if ($this->successful()) {
-            return;
+            return null;
         }
 
         return $this->createException($this->body());
@@ -275,7 +276,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
      * @return $this
      * @throws SaloonRequestException
      */
-    public function throw()
+    public function throw(): static
     {
         if ($this->failed()) {
             throw $this->toException();
@@ -289,7 +290,7 @@ abstract class SaloonResponse implements SaloonResponseInterface
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->body();
     }
@@ -348,5 +349,65 @@ abstract class SaloonResponse implements SaloonResponseInterface
     public function getRequestException(): ?Exception
     {
         return $this->requestException;
+    }
+
+    /**
+     * Get the raw response
+     *
+     * @return mixed
+     */
+    public function getRawResponse(): mixed
+    {
+        return $this->rawResponse;
+    }
+
+    /**
+     * Get a header from the response.
+     *
+     * @param string $header
+     * @return string|null
+     */
+    public function header(string $header): ?string
+    {
+        return $this->headers()->get($header);
+    }
+
+    /**
+     * Close the stream and any underlying resources.
+     *
+     * @return $this
+     * @throws \JsonException
+     */
+    public function close(): static
+    {
+        $this->stream()->close();
+
+        return $this;
+    }
+
+    /**
+     * Set the isCached property
+     *
+     * @param bool $isCached
+     * @return SaloonResponse
+     */
+    public function setIsCached(bool $isCached): SaloonResponse
+    {
+        $this->isCached = $isCached;
+
+        return $this;
+    }
+
+    /**
+     * Set the isMocked property
+     *
+     * @param bool $isMocked
+     * @return SaloonResponse
+     */
+    public function setIsMocked(bool $isMocked): SaloonResponse
+    {
+        $this->isMocked = $isMocked;
+
+        return $this;
     }
 }

@@ -7,23 +7,18 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
-use Sammyjo20\Saloon\Http\Sender;
 use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\ResponseInterface;
-use Sammyjo20\Saloon\Http\MockResponse;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Sammyjo20\Saloon\Data\RequestDataType;
 use GuzzleHttp\Exception\BadResponseException;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\Responses\GuzzleResponse;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Http\Guzzle\Middleware\MockMiddleware;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidHandlerException;
-use Sammyjo20\Saloon\Exceptions\SaloonDuplicateHandlerException;
+use Sammyjo20\Saloon\Http\Responses\PsrResponse;
+use Sammyjo20\Saloon\Interfaces\SenderInterface;
 
-class GuzzleSender extends Sender
+class GuzzleSender implements SenderInterface
 {
     /**
      * The Guzzle client.
@@ -40,6 +35,8 @@ class GuzzleSender extends Sender
     protected HandlerStack $handlerStack;
 
     /**
+     * Constructor
+     *
      * Create the HTTP client.
      */
     public function __construct()
@@ -51,11 +48,8 @@ class GuzzleSender extends Sender
      * Create a new Guzzle client
      *
      * @return GuzzleClient
-     * @throws SaloonDuplicateHandlerException
-     * @throws SaloonInvalidHandlerException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonMissingMockException
      */
-    private function createGuzzleClient(): GuzzleClient
+    protected function createGuzzleClient(): GuzzleClient
     {
         $this->handlerStack = $this->createHandlerStack();
 
@@ -74,10 +68,10 @@ class GuzzleSender extends Sender
      *
      * @param PendingSaloonRequest $pendingRequest
      * @param bool $asynchronous
-     * @return GuzzleResponse|PromiseInterface
+     * @return PsrResponse|PromiseInterface
      * @throws GuzzleException
      */
-    public function sendRequest(PendingSaloonRequest $pendingRequest, bool $asynchronous = false): GuzzleResponse|PromiseInterface
+    public function sendRequest(PendingSaloonRequest $pendingRequest, bool $asynchronous = false): PsrResponse|PromiseInterface
     {
         return $asynchronous === true
             ? $this->sendAsynchronousRequest($pendingRequest)
@@ -88,10 +82,10 @@ class GuzzleSender extends Sender
      * Send a synchronous request.
      *
      * @param PendingSaloonRequest $pendingRequest
-     * @return SaloonResponse
+     * @return PsrResponse
      * @throws GuzzleException
      */
-    protected function sendSynchronousRequest(PendingSaloonRequest $pendingRequest): SaloonResponse
+    protected function sendSynchronousRequest(PendingSaloonRequest $pendingRequest): PsrResponse
     {
         $guzzleRequest = $this->createGuzzleRequest($pendingRequest);
         $guzzleRequestOptions = $this->createRequestOptions($pendingRequest);
@@ -148,8 +142,6 @@ class GuzzleSender extends Sender
             $requestOptions[$configVariable] = $value;
         }
 
-        // Build up the data options
-
         $data = $request->data()->all();
 
         match ($request->getDataType()) {
@@ -169,79 +161,13 @@ class GuzzleSender extends Sender
      * @param PendingSaloonRequest $pendingSaloonRequest
      * @param Response $guzzleResponse
      * @param RequestException|null $exception
-     * @param bool $asPromise
-     * @return SaloonResponse
+     * @return PsrResponse
      */
-    private function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $guzzleResponse, RequestException $exception = null, bool $asPromise = false): SaloonResponse
+    private function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $guzzleResponse, RequestException $exception = null): PsrResponse
     {
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
-        /** @var SaloonResponse $response */
-        $response = new $responseClass($pendingSaloonRequest, $guzzleResponse, $exception);
-
-        // Run the response pipeline
-
-        return $this->handleResponse($response, $pendingSaloonRequest, $asPromise);
-    }
-
-    /**
-     * Process the response.
-     *
-     * @param PendingSaloonRequest $pendingRequest
-     * @param SaloonResponse $saloonResponse
-     * @param bool $asPromise
-     * @return GuzzleResponse|PromiseInterface
-     */
-    public function handleResponse(SaloonResponse $saloonResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): GuzzleResponse|PromiseInterface
-    {
-        $saloonResponse = $pendingRequest->executeResponsePipeline($saloonResponse);
-
-        // If we are mocking, we should record the request and response on the mock manager,
-        // so we can run assertions on the responses.
-
-        if ($pendingRequest->isMocking()) {
-            $saloonResponse->setMocked(true);
-            $pendingRequest->getMockClient()->recordResponse($saloonResponse);
-        }
-
-        return $saloonResponse;
-    }
-
-    /**
-     * Get the base class that the custom responses should extend.
-     *
-     * @return string
-     */
-    public function getResponseClass(): string
-    {
-        return GuzzleResponse::class;
-    }
-
-    /**
-     * Handle a mock response.
-     *
-     * @param MockResponse $mockResponse
-     * @param PendingSaloonRequest $pendingRequest
-     * @param bool $asPromise
-     * @return GuzzleResponse|PromiseInterface
-     * @throws GuzzleException
-     */
-    public function handleMockResponse(MockResponse $mockResponse, PendingSaloonRequest $pendingRequest, bool $asPromise = false): GuzzleResponse|PromiseInterface
-    {
-        // Todo: Make sure that this works even more concurrent requests.
-        // Alternatively...
-
-        // Always make sure the "MockMiddleware" is ALWAYS ready. Inside it, we check
-        // if there is a mock response ready to be consumed - it there is, we consume
-        // it, otherwise we continue. Might work better for concurrent requests.
-
-        $this->pushMiddleware(new MockMiddleware($mockResponse), 'mock');
-
-        $saloonResponse = $this->sendRequest($pendingRequest, $asPromise);
-
-        $this->removeMiddleware('mock');
-
-        return $saloonResponse;
+        return new $responseClass($pendingSaloonRequest, $guzzleResponse, $exception);
     }
 
     /**
@@ -278,26 +204,13 @@ class GuzzleSender extends Sender
     }
 
     /**
-     * Create a blank handler stack.
-     *
-     * @return HandlerStack
-     */
-    protected function createHandlerStack(): HandlerStack
-    {
-        $stack = new HandlerStack();
-        $stack->setHandler(Utils::chooseHandler());
-
-        return $stack;
-    }
-
-    /**
      * Add a middleware to the handler stack.
      *
      * @param callable $callable
      * @param string $withName
      * @return $this
      */
-    public function pushMiddleware(callable $callable, string $withName = ''): self
+    public function pushMiddleware(callable $callable, string $withName = ''): static
     {
         $this->handlerStack->push($callable, $withName);
 
@@ -312,7 +225,7 @@ class GuzzleSender extends Sender
      * @param string $withName
      * @return $this
      */
-    public function pushMiddlewareBefore(string $name, callable $callable, string $withName = ''): self
+    public function pushMiddlewareBefore(string $name, callable $callable, string $withName = ''): static
     {
         $this->handlerStack->before($name, $callable, $withName);
 
@@ -327,7 +240,7 @@ class GuzzleSender extends Sender
      * @param string $withName
      * @return $this
      */
-    public function pushMiddlewareAfter(string $name, callable $callable, string $withName = ''): self
+    public function pushMiddlewareAfter(string $name, callable $callable, string $withName = ''): static
     {
         $this->handlerStack->after($name, $callable, $withName);
 
@@ -340,7 +253,7 @@ class GuzzleSender extends Sender
      * @param string $name
      * @return $this
      */
-    public function removeMiddleware(string $name): self
+    public function removeMiddleware(string $name): static
     {
         $this->handlerStack->remove($name);
 
@@ -353,11 +266,24 @@ class GuzzleSender extends Sender
      * @param HandlerStack $handlerStack
      * @return $this
      */
-    public function setHandlerStack(HandlerStack $handlerStack): self
+    public function setHandlerStack(HandlerStack $handlerStack): static
     {
         $this->handlerStack = $handlerStack;
 
         return $this;
+    }
+
+    /**
+     * Create a blank handler stack.
+     *
+     * @return HandlerStack
+     */
+    protected function createHandlerStack(): HandlerStack
+    {
+        $stack = new HandlerStack();
+        $stack->setHandler(Utils::chooseHandler());
+
+        return $stack;
     }
 
     /**
@@ -368,5 +294,25 @@ class GuzzleSender extends Sender
     public function getHandlerStack(): HandlerStack
     {
         return $this->handlerStack;
+    }
+
+    /**
+     * Get the sender's response class
+     *
+     * @return string
+     */
+    public function getResponseClass(): string
+    {
+        return PsrResponse::class;
+    }
+
+    /**
+     * Get the Guzzle client
+     *
+     * @return GuzzleClient
+     */
+    public function getGuzzleClient(): GuzzleClient
+    {
+        return $this->client;
     }
 }

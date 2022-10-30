@@ -24,10 +24,20 @@ beforeEach(function () use ($filesystem) {
 
 test('a request can be mocked with a sequence', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Sam'], 200),
-        MockResponse::make(['name' => 'Alex'], 200),
-        MockResponse::make(['error' => 'Server Unavailable'], 500),
+        MockResponse::make(200, ['name' => 'Sam']),
+        MockResponse::make(200, ['name' => 'Alex']),
+        MockResponse::make(500, ['error' => 'Server Unavailable']),
     ]);
+
+    // So if a request has a request pipe that also returns a mockresponse/fakeresponse
+    // it will take precedence over the mock response, is this what we want? I think
+    // that the mock response should take the highest priority. The only ever time
+    // this should happen is if we are using the caching plugin. In that scenario
+    // our mocking should take priority.
+
+    // Todo: Internally, the request pipe should accept a SimulatedResponse / FakeResponse
+    // Todo: Instead of "MockResponse" as we can use SimulatedResponse for caching too and
+    // Todo: The naming is better
 
     $responseA = (new UserRequest)->send($mockClient);
 

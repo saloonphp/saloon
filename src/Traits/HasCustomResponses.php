@@ -29,11 +29,11 @@ trait HasCustomResponses
         $response = $this->response;
 
         $baseResponseClass = $this instanceof SaloonRequest
-            ? $this->getConnector()->sender()->getResponseClass()
+            ? $this->connector()->sender()->getResponseClass()
             : $this->sender()->getResponseClass();
 
         if (empty($response) === true) {
-            $response = $this instanceof SaloonRequest ? $this->getConnector()->getResponseClass() : $baseResponseClass;
+            $response = $this instanceof SaloonRequest ? $this->connector()->getResponseClass() : $baseResponseClass;
         }
 
         if (class_exists($response) === false) {

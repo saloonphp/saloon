@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
+use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 
@@ -27,33 +28,43 @@ class MiddlewarePipeline
     }
 
     /**
+     * Add a middleware before the request is sent
+     *
      * @param callable $closure
-     * @param bool $highPriority
      * @return $this
      */
-    public function addRequestPipe(callable $closure, bool $highPriority = false): self
+    public function onRequest(callable $closure): static
     {
         $this->requestPipeline = $this->requestPipeline->pipe(function (PendingSaloonRequest $request) use ($closure) {
             $result = $closure($request);
 
-            return $result instanceof PendingSaloonRequest ? $result : $request;
-        }, $highPriority);
+            if ($result instanceof PendingSaloonRequest) {
+                return $result;
+            }
+
+            if ($result instanceof MockResponse) {
+                $request->setMockResponse($result);
+            }
+
+            return $request;
+        });
 
         return $this;
     }
 
     /**
+     * Add a middleware after the request is sent
+     *
      * @param callable $closure
-     * @param bool $highPriority
      * @return $this
      */
-    public function addResponsePipe(callable $closure, bool $highPriority = false): self
+    public function onResponse(callable $closure): static
     {
         $this->responsePipeline = $this->responsePipeline->pipe(function (SaloonResponse $response) use ($closure) {
             $result = $closure($response);
 
             return $result instanceof SaloonResponse ? $result : $response;
-        }, $highPriority);
+        });
 
         return $this;
     }
@@ -90,7 +101,7 @@ class MiddlewarePipeline
      * @param MiddlewarePipeline $middlewarePipeline
      * @return $this
      */
-    public function merge(MiddlewarePipeline $middlewarePipeline): self
+    public function merge(MiddlewarePipeline $middlewarePipeline): static
     {
         $requestPipes = array_merge(
             $this->getRequestPipeline()->getPipes(),

@@ -20,7 +20,7 @@ trait HasConnector
      * @return SaloonConnector
      * @throws SaloonInvalidConnectorException
      */
-    public function getConnector(): SaloonConnector
+    public function connector(): SaloonConnector
     {
         return $this->loadedConnector ??= $this->resolveConnector();
     }
@@ -31,7 +31,7 @@ trait HasConnector
      * @param SaloonConnector $connector
      * @return $this
      */
-    public function setConnector(SaloonConnector $connector): self
+    public function setConnector(SaloonConnector $connector): static
     {
         $this->loadedConnector = $connector;
 

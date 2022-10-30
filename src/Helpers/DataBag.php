@@ -2,42 +2,50 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
+use Stringable;
 use Sammyjo20\Saloon\Data\DataBagType;
 use Sammyjo20\Saloon\Data\RequestDataType;
+use Sammyjo20\Saloon\Interfaces\Arrayable;
 use Sammyjo20\Saloon\Exceptions\DataBagException;
 
-class DataBag
+class DataBag implements Stringable
 {
     /**
+     * The Data
+     *
      * @var mixed
      */
-    protected mixed $data = [];
+    protected string|array $data = [];
 
     /**
-     * @var DataBagType|null
+     * The Type Of Data
+     *
+     * @var DataBagType
      */
-    protected ?DataBagType $type = null;
+    protected DataBagType $type;
 
     /**
-     * @param mixed $data
+     * Constructor
+     *
+     * @param array|Arrayable|Stringable $data
      */
-    public function __construct(mixed $data = [])
+    public function __construct(array|Arrayable|Stringable $data = [])
     {
-        $this->data = $data;
+        $this->set($data);
     }
 
     /**
-     * Retrieve all the items from the ContentBag.
+     * Retrieve all the data from the DataBag.
      *
-     * @return array
+     * @return string|array
      */
-    public function all(): mixed
+    public function all(): string|array
     {
         return $this->data;
     }
 
     /**
-     * Retrieve a single item from the ContentBag.
+     * Retrieve a single item from the DataBag.
      *
      * @param string $key
      * @param mixed|null $default
@@ -54,29 +62,35 @@ class DataBag
     }
 
     /**
-     * Overwrite the entire ContentBag. Will disable default values.
+     * Overwrite the entire DataBag.
      *
-     * @param mixed $data
+     * @param array|string|Arrayable|Stringable $data
      * @return $this
-     * @throws DataBagException
      */
-    public function set(mixed $data): self
+    public function set(array|string|Arrayable|Stringable $data): static
     {
-        $this->validateType($data);
+        if ($data instanceof Arrayable) {
+            $data = $data->toArray();
+        }
+
+        if ($data instanceof Stringable) {
+            $data = $data->__toString();
+        }
 
         $this->data = $data;
+        $this->type = is_string($data) ? DataBagType::STRING : DataBagType::ARRAY;
 
         return $this;
     }
 
     /**
-     * Merge in data into the content bag.
+     * Merge in data into the DataBag.
      *
      * @param mixed ...$arrays
      * @return $this
      * @throws DataBagException
      */
-    public function merge(...$arrays): self
+    public function merge(...$arrays): static
     {
         if ($this->isNotArray()) {
             throw new DataBagException('This method is only available for array data.');
@@ -88,14 +102,14 @@ class DataBag
     }
 
     /**
-     * Store and overwrite an item into the ContentBag.
+     * Store and overwrite an item into the DataBag.
      *
      * @param string $key
      * @param mixed $value
      * @return $this
      * @throws DataBagException
      */
-    public function add(string $key, mixed $value): self
+    public function add(string $key, mixed $value): static
     {
         if ($this->isNotArray()) {
             throw new DataBagException('This method is only available for array data.');
@@ -107,31 +121,13 @@ class DataBag
     }
 
     /**
-     * Store a given value if the condition is true.
-     *
-     * @param bool $condition
-     * @param string $key
-     * @param mixed $value
-     * @return $this
-     * @throws DataBagException
-     */
-    public function addWhen(bool $condition, string $key, mixed $value): self
-    {
-        if ($condition === true) {
-            return $this->add($key, $value);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove an item from the ContentBag.
+     * Remove an item from the DataBag.
      *
      * @param string $key
      * @return $this
      * @throws DataBagException
      */
-    public function delete(string $key): self
+    public function delete(string $key): static
     {
         if ($this->isNotArray()) {
             throw new DataBagException('This method is only available for array data.');
@@ -143,26 +139,8 @@ class DataBag
     }
 
     /**
-     * Validate the data type.
+     * Check if the data is an array.
      *
-     * @param mixed $data
-     * @return void
-     * @throws DataBagException
-     */
-    protected function validateType(mixed $data): void
-    {
-        $type = $this->type;
-
-        if (is_null($type)) {
-            return;
-        }
-
-        if ($type->validateData($data) === false) {
-            throw new DataBagException('Unacceptable data type. Allowed type: ' . $this->type->value);
-        }
-    }
-
-    /**
      * @return bool
      */
     public function isArray(): bool
@@ -171,6 +149,8 @@ class DataBag
     }
 
     /**
+     * Check if the data is not an array.
+     *
      * @return bool
      */
     public function isNotArray(): bool
@@ -199,6 +179,21 @@ class DataBag
     }
 
     /**
+     * Set the data type from a request's data type.
+     *
+     * @param RequestDataType $type
+     * @return $this
+     */
+    public function setTypeFromRequestType(RequestDataType $type): static
+    {
+        $this->type = $type->isArrayable() ? DataBagType::ARRAY : DataBagType::STRING;
+
+        return $this;
+    }
+
+    /**
+     * Get the data type
+     *
      * @return DataBagType|null
      */
     public function getType(): ?DataBagType
@@ -207,24 +202,15 @@ class DataBag
     }
 
     /**
-     * @param DataBagType|null $type
-     * @return DataBag
+     * Convert to string
+     *
+     * @return string
+     * @throws \JsonException
      */
-    public function setType(?DataBagType $type): self
+    public function __toString(): string
     {
-        $this->type = $type;
+        $all = $this->all();
 
-        return $this;
-    }
-
-    /**
-     * @param RequestDataType $type
-     * @return $this
-     */
-    public function setTypeFromRequestType(RequestDataType $type): self
-    {
-        $this->type = $type->isArrayable() ? DataBagType::ARRAY : DataBagType::MIXED;
-
-        return $this;
+        return $this->isArray() ? json_encode($all, JSON_THROW_ON_ERROR) : $all;
     }
 }

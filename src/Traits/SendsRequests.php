@@ -3,64 +3,85 @@
 namespace Sammyjo20\Saloon\Traits;
 
 use ReflectionException;
+use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Exceptions\SaloonException;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Exceptions\DataBagException;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Http\Responses\SimulatedResponse;
 use Sammyjo20\Saloon\Interfaces\SaloonResponseInterface;
+use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 
 trait SendsRequests
 {
     /**
      * Send the request synchronously.
      *
+     * @param SaloonRequest $request
      * @param MockClient|null $mockClient
      * @param bool $asynchronous
      * @return SaloonResponse|PromiseInterface
-     * @throws SaloonException|ReflectionException
+     * @throws ReflectionException
+     * @throws DataBagException
+     * @throws PendingSaloonRequestException
+     * @throws SaloonInvalidConnectorException
+     * @throws SaloonInvalidResponseClassException
      */
-    public function send(MockClient $mockClient = null, bool $asynchronous = false): SaloonResponseInterface|PromiseInterface
+    public function send(SaloonRequest $request, MockClient $mockClient = null, bool $asynchronous = false): SaloonResponseInterface|PromiseInterface
     {
-        $pendingRequest = $this->createPendingRequest();
-        $requestSender = $pendingRequest->getSender();
+        // We'll set the request's connector to the current instance.
 
-        // If a mock client has been provided, we will only set it for this request.
+        $request->setConnector($this);
 
-        if ($mockClient instanceof MockClient) {
-            $pendingRequest->setMockClient($mockClient);
+        // Now we'll create the pending request
+
+        $pendingRequest = $request->createPendingRequest($mockClient);
+
+        // If the pending request has a mock response then we will create
+        // a fake response. Otherwise, we will send the real request
+        // with the sender.
+
+        if ($pendingRequest->hasMockResponse()) {
+            $response = new SimulatedResponse($pendingRequest, $pendingRequest->getMockResponse());
+            $response->setIsMocked(true);
+
+        // Todo: Record the mocked response
+        } else {
+            $response = $this->sender()->sendRequest($pendingRequest, $asynchronous);
         }
 
-        // If there is a mock client found, we should attempt to guess the next response
-        // and then run the "handleMockResponse" method on the sender.
+        // If the request was asynchronous we need to execute the middleware
+        // pipeline as the first step in our promise.
 
-        if ($pendingRequest->isMocking()) {
-            $mockResponse = $pendingRequest->getMockClient()->guessNextResponse($pendingRequest->getRequest());
+        if ($asynchronous === true) {
+            $response = $response instanceof SimulatedResponse ? new FulfilledPromise($response) : $response;
 
-            return $requestSender->handleMockResponse($mockResponse, $pendingRequest, $asynchronous);
+            return $response->then(fn (SaloonResponse $response) => $pendingRequest->executeResponsePipeline($response));
         }
 
-        // If any of the middleware have registered early responses, we should
-        // process this response right away.
+        // Otherwise, we'll just return the result of the response pipeline.
 
-        if ($pendingRequest->hasEarlyResponse()) {
-            return $requestSender->handleResponse($pendingRequest, $pendingRequest->getEarlyResponse(), $asynchronous);
-        }
-
-        // 🚀 ... 🌑 ... 💫
-
-        return $requestSender->sendRequest($pendingRequest, $asynchronous);
+        return $pendingRequest->executeResponsePipeline($response);
     }
 
     /**
      * Send a request asynchronously
      *
+     * @param SaloonRequest $request
      * @param MockClient|null $mockClient
      * @return PromiseInterface
+     * @throws DataBagException
+     * @throws PendingSaloonRequestException
      * @throws ReflectionException
-     * @throws SaloonException
+     * @throws SaloonInvalidConnectorException
+     * @throws SaloonInvalidResponseClassException
      */
-    public function sendAsync(MockClient $mockClient = null): PromiseInterface
+    public function sendAsync(SaloonRequest $request, MockClient $mockClient = null): PromiseInterface
     {
-        return $this->send($mockClient, true);
+        return $this->send($request, $mockClient, true);
     }
 }

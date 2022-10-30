@@ -60,7 +60,7 @@ class OAuthConfig
      *
      * @return static
      */
-    public static function make(): self
+    public static function make(): static
     {
         return new static;
     }
@@ -81,7 +81,7 @@ class OAuthConfig
      * @param string $clientId
      * @return OAuthConfig
      */
-    public function setClientId(string $clientId): self
+    public function setClientId(string $clientId): static
     {
         $this->clientId = $clientId;
 
@@ -104,7 +104,7 @@ class OAuthConfig
      * @param string $clientSecret
      * @return OAuthConfig
      */
-    public function setClientSecret(string $clientSecret): self
+    public function setClientSecret(string $clientSecret): static
     {
         $this->clientSecret = $clientSecret;
 
@@ -127,7 +127,7 @@ class OAuthConfig
      * @param string $redirectUri
      * @return OAuthConfig
      */
-    public function setRedirectUri(string $redirectUri): self
+    public function setRedirectUri(string $redirectUri): static
     {
         $this->redirectUri = $redirectUri;
 
@@ -150,7 +150,7 @@ class OAuthConfig
      * @param string $authorizeEndpoint
      * @return OAuthConfig
      */
-    public function setAuthorizeEndpoint(string $authorizeEndpoint): self
+    public function setAuthorizeEndpoint(string $authorizeEndpoint): static
     {
         $this->authorizeEndpoint = $authorizeEndpoint;
 
@@ -173,7 +173,7 @@ class OAuthConfig
      * @param string $tokenEndpoint
      * @return OAuthConfig
      */
-    public function setTokenEndpoint(string $tokenEndpoint): self
+    public function setTokenEndpoint(string $tokenEndpoint): static
     {
         $this->tokenEndpoint = $tokenEndpoint;
 
@@ -196,7 +196,7 @@ class OAuthConfig
      * @param string $userEndpoint
      * @return OAuthConfig
      */
-    public function setUserEndpoint(string $userEndpoint): self
+    public function setUserEndpoint(string $userEndpoint): static
     {
         $this->userEndpoint = $userEndpoint;
 
@@ -219,7 +219,7 @@ class OAuthConfig
      * @param array $defaultScopes
      * @return OAuthConfig
      */
-    public function setDefaultScopes(array $defaultScopes): self
+    public function setDefaultScopes(array $defaultScopes): static
     {
         $this->defaultScopes = $defaultScopes;
 
