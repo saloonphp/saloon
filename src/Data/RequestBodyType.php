@@ -2,7 +2,7 @@
 
 namespace Sammyjo20\Saloon\Data;
 
-enum RequestDataType: string
+enum RequestBodyType: string
 {
     case JSON = 'json';
     case FORM = 'form';

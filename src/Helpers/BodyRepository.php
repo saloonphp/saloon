@@ -5,7 +5,7 @@ namespace Sammyjo20\Saloon\Helpers;
 use Sammyjo20\Saloon\Interfaces\Data\BodyRepository as BodyRepositoryContract;
 use Stringable;
 use Sammyjo20\Saloon\Data\DataBagType;
-use Sammyjo20\Saloon\Data\RequestDataType;
+use Sammyjo20\Saloon\Data\RequestBodyType;
 use Sammyjo20\Saloon\Interfaces\Arrayable;
 use Sammyjo20\Saloon\Exceptions\DataBagException;
 
@@ -182,10 +182,10 @@ class BodyRepository implements Stringable, BodyRepositoryContract
     /**
      * Set the data type from a request's data type.
      *
-     * @param RequestDataType $type
+     * @param RequestBodyType $type
      * @return $this
      */
-    public function setTypeFromRequestType(RequestDataType $type): static
+    public function setTypeFromRequestType(RequestBodyType $type): static
     {
         $this->type = $type->isArrayable() ? DataBagType::ARRAY : DataBagType::STRING;
 

@@ -25,4 +25,18 @@ interface BodyRepository
      * @return mixed
      */
     public function all(): mixed;
+
+    /**
+     * Determine if the repository is empty
+     *
+     * @return bool
+     */
+    public function isEmpty(): bool;
+
+    /**
+     * Determine if the repository is not empty
+     *
+     * @return bool
+     */
+    public function isNotEmpty(): bool;
 }

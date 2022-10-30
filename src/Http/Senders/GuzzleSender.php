@@ -12,7 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
-use Sammyjo20\Saloon\Data\RequestDataType;
+use Sammyjo20\Saloon\Data\RequestBodyType;
 use GuzzleHttp\Exception\BadResponseException;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Responses\PsrResponse;
@@ -142,13 +142,15 @@ class GuzzleSender implements SenderInterface
             $requestOptions[$configVariable] = $value;
         }
 
+        dd($request->getBody()->all());
+
         $data = $request->data()->all();
 
         match ($request->getDataType()) {
-            RequestDataType::JSON => $requestOptions['json'] = $data,
-            RequestDataType::MULTIPART => $requestOptions['multipart'] = $data,
-            RequestDataType::FORM => $requestOptions['form_params'] = $data,
-            RequestDataType::MIXED => $requestOptions['body'] = $data,
+            RequestBodyType::JSON => $requestOptions['json'] = $data,
+            RequestBodyType::MULTIPART => $requestOptions['multipart'] = $data,
+            RequestBodyType::FORM => $requestOptions['form_params'] = $data,
+            RequestBodyType::MIXED => $requestOptions['body'] = $data,
             default => null,
         };
 

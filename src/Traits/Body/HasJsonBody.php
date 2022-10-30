@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Traits\Body;
 
+use Sammyjo20\Saloon\Data\RequestBodyType;
 use Sammyjo20\Saloon\Helpers\ArrayBodyRepository;
 use Sammyjo20\Saloon\Helpers\BodyRepository;
 
@@ -13,6 +14,16 @@ trait HasJsonBody
      * @var BodyRepository
      */
     protected BodyRepository $body;
+
+    /**
+     * Define the body type.
+     *
+     * @return RequestBodyType
+     */
+    public function getBodyType(): RequestBodyType
+    {
+        return RequestBodyType::JSON;
+    }
 
     /**
      * Retrieve the data repository

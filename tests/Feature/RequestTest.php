@@ -26,7 +26,9 @@ test('a request can be made successfully', function () {
 test('(remove) a request can be sent with json data', function () {
     $request = new PostRequest();
 
-    dd($request->body()->all());
+    $response = $request->send();
+
+    dd($response);
 });
 
 test('(remove) asynchronous requests work', function () {

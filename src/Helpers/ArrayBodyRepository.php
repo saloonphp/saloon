@@ -39,12 +39,12 @@ class ArrayBodyRepository implements ArrayBodyRepositoryContract
     /**
      * Merge another array into the repository
      *
-     * @param array $value
+     * @param array ...$arrays
      * @return ArrayBodyRepositoryContract
      */
-    public function merge(array $value): static
+    public function merge(array ...$arrays): static
     {
-        $this->data = array_merge($this->data, $value);
+        $this->data = array_merge($this->data, ...$arrays);
 
         return $this;
     }
@@ -84,5 +84,25 @@ class ArrayBodyRepository implements ArrayBodyRepositoryContract
     public function all(): array
     {
         return $this->data;
+    }
+
+    /**
+     * Determine if the repository is empty
+     *
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return empty($this->data);
+    }
+
+    /**
+     * Determine if the repository is not empty
+     *
+     * @return bool
+     */
+    public function isNotEmpty(): bool
+    {
+        return ! $this->isEmpty();
     }
 }

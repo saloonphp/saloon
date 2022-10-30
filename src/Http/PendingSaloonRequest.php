@@ -6,8 +6,11 @@ use ReflectionClass;
 use ReflectionException;
 use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Data\RequestDataType;
+use Sammyjo20\Saloon\Data\RequestBodyType;
+use Sammyjo20\Saloon\Helpers\ArrayBodyRepository;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
+use Sammyjo20\Saloon\Interfaces\Data\BodyRepository;
+use Sammyjo20\Saloon\Interfaces\Data\WithBody;
 use Sammyjo20\Saloon\Interfaces\SenderInterface;
 use Sammyjo20\Saloon\Exceptions\DataBagException;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
@@ -73,11 +76,18 @@ class PendingSaloonRequest
     protected ?MockClient $mockClient = null;
 
     /**
-     * The data type.
+     * The body type.
      *
-     * @var RequestDataType|null
+     * @var RequestBodyType|null
      */
-    protected ?RequestDataType $dataType = null;
+    protected ?RequestBodyType $bodyType = null;
+
+    /**
+     * The body repository
+     *
+     * @var BodyRepository|null
+     */
+    protected ?BodyRepository $body = null;
 
     /**
      * The Mock Response Found
@@ -115,7 +125,7 @@ class PendingSaloonRequest
         $this
             ->registerDefaultMiddleware()
             ->mergeRequestProperties()
-            ->mergeData()
+            ->mergeBody()
             ->bootConnectorAndRequest()
             ->bootPlugins()
             ->authenticateRequest();
@@ -133,79 +143,81 @@ class PendingSaloonRequest
      */
     protected function mergeRequestProperties(): static
     {
-        $connectorProperties = $this->connector->getRequestProperties();
-        $requestProperties = $this->request->getRequestProperties();
+        $connector = $this->connector;
+        $request = $this->request;
 
-        $this->headers()->merge($connectorProperties->headers, $requestProperties->headers);
-        $this->queryParameters()->merge($connectorProperties->queryParameters, $requestProperties->queryParameters);
-        $this->config()->merge($connectorProperties->config, $requestProperties->config);
+        $this->headers()->merge($connector->headers()->all(), $request->headers()->all());
+        $this->queryParameters()->merge($connector->queryParameters()->all(), $request->queryParameters()->all());
+        $this->config()->merge($connector->config()->all(), $request->config()->all());
 
         // Merge together the middleware pipelines...
 
         $this->middleware()
-            ->merge($connectorProperties->middleware)
-            ->merge($requestProperties->middleware);
+            ->merge($connector->middleware())
+            ->merge($request->middleware());
 
         return $this;
     }
 
     /**
-     * Merge the data together
+     * Merge the body together
      *
      * @return $this
      * @throws PendingSaloonRequestException
-     * @throws \Sammyjo20\Saloon\Exceptions\DataBagException
      */
-    protected function mergeData(): static
+    protected function mergeBody(): static
     {
-        $connectorProperties = $this->connector->getRequestProperties();
-        $requestProperties = $this->request->getRequestProperties();
+        $connector = $this->connector;
+        $request = $this->request;
 
-        $connectorDataType = $this->determineDataType($this->connector);
-        $requestDataType = $this->determineDataType($this->request);
+        $connectorBodyType = null;
+        $connectorBody = null;
 
-        if (isset($connectorDataType, $requestDataType) && $connectorDataType !== $requestDataType) {
-            throw new PendingSaloonRequestException('Request data type and connector data type cannot be mixed.');
+        $requestBodyType = null;
+        $requestBody = null;
+
+        if ($connector instanceof WithBody) {
+            $connectorBodyType = $connector->getBodyType();
+            $connectorBody = $connector->body();
+        }
+
+        if ($request instanceof WithBody) {
+            $requestBodyType = $request->getBodyType();
+            $requestBody = $request->body();
+        }
+
+        if (is_null($connectorBodyType) && is_null($requestBodyType)) {
+            return $this;
+        }
+
+        if (isset($connectorBodyType, $requestBodyType) && $connectorBodyType !== $requestBodyType) {
+            throw new PendingSaloonRequestException('Request body type and connector body type cannot be mixed.');
         }
 
         // The primary data type will be the request data type, if one has not
         // been set, we will use the connector data.
 
-        $dataType = $requestDataType ?? $connectorDataType;
+        $this->bodyType = $requestBodyType ?? $connectorBodyType;
 
-        // If no data type was found, just continue.
+        // If both connector and request body types are ArrayBodyRepository then we will
+        // merge them together
 
-        if (! $dataType instanceof RequestDataType) {
-            if ($this->data()->isEmpty()) {
-                return $this;
-            }
+        if ($connectorBody instanceof ArrayBodyRepository && $requestBody instanceof ArrayBodyRepository) {
+            $repository = new ArrayBodyRepository([]);
+            $this->body = $repository->merge($connectorBody->all(), $requestBody->all());
 
-            throw new PendingSaloonRequestException('You have provided data without a data type interface defined on your request or connector.');
+            return $this;
         }
 
-        // Now we'll enforce the type on the data.
+        // Otherwise we'll prefer the request body over the connector body.
+        // Todo: Tidy up the below?
 
-        $this->data()->setTypeFromRequestType($dataType);
-        $this->dataType = $dataType;
-
-        // Now we'll set the data. If the data type is arrayable, we'll merge it together.
-        // If it's a mixed data type, we'll just set the data.
-
-        $connectorData = $connectorProperties->data;
-        $requestData = $requestProperties->data;
-
-        if ($dataType->isArrayable()) {
-            $this->data()->merge($connectorData ?? [], $requestData ?? []);
+        if ($connectorBody instanceof BodyRepository) {
+            $this->body = $connectorBody;
         }
 
-        if ($dataType === RequestDataType::STRING) {
-            if (! empty($connectorData)) {
-                $this->data()->set($connectorData);
-            }
-
-            if (! empty($requestData)) {
-                $this->data()->set($requestData);
-            }
+        if ($requestBody instanceof BodyRepository) {
+            $this->body = $requestBody;
         }
 
         return $this;
@@ -313,33 +325,6 @@ class PendingSaloonRequest
     }
 
     /**
-     * Calculate the data type.
-     *
-     * @param SaloonConnector|SaloonRequest $object
-     * @return RequestDataType|null
-     */
-    protected function determineDataType(SaloonConnector|SaloonRequest $object): ?RequestDataType
-    {
-        if ($object instanceof SendsJsonBody) {
-            return RequestDataType::JSON;
-        }
-
-        if ($object instanceof SendsFormParams) {
-            return RequestDataType::FORM;
-        }
-
-        if ($object instanceof SendsMultipartBody) {
-            return RequestDataType::MULTIPART;
-        }
-
-        if ($object instanceof SendsMixedBody || $object instanceof SendsStringBody || $object instanceof SendsXMLBody) {
-            return RequestDataType::STRING;
-        }
-
-        return null;
-    }
-
-    /**
      * @return SaloonRequest
      */
     public function getRequest(): SaloonRequest
@@ -398,9 +383,9 @@ class PendingSaloonRequest
     }
 
     /**
-     * @return RequestDataType|null
+     * @return RequestBodyType|null
      */
-    public function getDataType(): ?RequestDataType
+    public function getDataType(): ?RequestBodyType
     {
         return $this->dataType;
     }
@@ -459,5 +444,13 @@ class PendingSaloonRequest
     public function hasMockResponse(): bool
     {
         return $this->mockResponse instanceof MockResponse;
+    }
+
+    /**
+     * @return BodyRepository|null
+     */
+    public function getBody(): ?BodyRepository
+    {
+        return $this->body;
     }
 }
