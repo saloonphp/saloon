@@ -3,7 +3,7 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Throwable;
-use Sammyjo20\Saloon\Helpers\DataBag;
+use Sammyjo20\Saloon\Helpers\BodyRepository;
 use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Helpers\ContentBag;
 use Sammyjo20\Saloon\Data\MockExceptionClosure;
@@ -28,9 +28,9 @@ class SimulatedResponseData
     /**
      * Request Body
      *
-     * @var DataBag
+     * @var BodyRepository
      */
-    protected DataBag $data;
+    protected BodyRepository $data;
 
     /**
      * Exception Closure
@@ -49,7 +49,7 @@ class SimulatedResponseData
     public function __construct(int $status = 200, mixed $data = [], array $headers = [])
     {
         $this->status = $status;
-        $this->data = new DataBag($data);
+        $this->data = new BodyRepository($data);
         $this->headers = new ContentBag($headers);
     }
 
@@ -116,9 +116,9 @@ class SimulatedResponseData
     /**
      * Get the response body
      *
-     * @return DataBag
+     * @return BodyRepository
      */
-    public function getData(): DataBag
+    public function getData(): BodyRepository
     {
         return $this->data;
     }

@@ -2,7 +2,7 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Sammyjo20\Saloon\Helpers\DataBag;
+use Sammyjo20\Saloon\Helpers\BodyRepository;
 use Sammyjo20\Saloon\Helpers\ContentBag;
 use Sammyjo20\Saloon\Data\RequestProperties;
 use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
@@ -22,13 +22,6 @@ trait HasRequestProperties
      * @var ContentBag
      */
     protected ContentBag $queryParameters;
-
-    /**
-     * Request Data
-     *
-     * @var DataBag
-     */
-    protected DataBag $data;
 
     /**
      * Request Config
@@ -62,16 +55,6 @@ trait HasRequestProperties
     public function queryParameters(): ContentBag
     {
         return $this->queryParameters ??= new ContentBag($this->defaultQueryParameters());
-    }
-
-    /**
-     * Retrieve the data content bag.
-     *
-     * @return DataBag
-     */
-    public function data(): DataBag
-    {
-        return $this->data ??= new DataBag($this->defaultData());
     }
 
     /**

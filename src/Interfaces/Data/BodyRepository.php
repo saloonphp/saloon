@@ -1,0 +1,28 @@
+<?php
+
+namespace Sammyjo20\Saloon\Interfaces\Data;
+
+interface BodyRepository
+{
+    /**
+     * Constructor
+     *
+     * @param mixed $value
+     */
+    public function __construct(mixed $value);
+
+    /**
+     * Set a value inside the repository
+     *
+     * @param mixed $value
+     * @return $this
+     */
+    public function set(mixed $value): static;
+
+    /**
+     * Retrieve all in the repository
+     *
+     * @return mixed
+     */
+    public function all(): mixed;
+}

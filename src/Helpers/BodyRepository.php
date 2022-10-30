@@ -2,13 +2,14 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
+use Sammyjo20\Saloon\Interfaces\Data\BodyRepository as BodyRepositoryContract;
 use Stringable;
 use Sammyjo20\Saloon\Data\DataBagType;
 use Sammyjo20\Saloon\Data\RequestDataType;
 use Sammyjo20\Saloon\Interfaces\Arrayable;
 use Sammyjo20\Saloon\Exceptions\DataBagException;
 
-class DataBag implements Stringable
+class BodyRepository implements Stringable, BodyRepositoryContract
 {
     /**
      * The Data
