@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Repositories;
 
+use Sammyjo20\Saloon\Exceptions\UnableToCastToStringException;
 use Sammyjo20\Saloon\Interfaces\Data\ArrayBodyRepository as ArrayBodyRepositoryContract;
 
 class ArrayBodyRepository implements ArrayBodyRepositoryContract
@@ -103,5 +104,16 @@ class ArrayBodyRepository implements ArrayBodyRepositoryContract
     public function isNotEmpty(): bool
     {
         return ! $this->isEmpty();
+    }
+
+    /**
+     * Convert to a string
+     *
+     * @return string
+     * @throws UnableToCastToStringException
+     */
+    public function __toString(): string
+    {
+        throw new UnableToCastToStringException('Casting the ArrayBodyRepository as a string is currently not supported.');
     }
 }

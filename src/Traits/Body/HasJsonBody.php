@@ -22,8 +22,6 @@ trait HasJsonBody
      */
     public function bootHasJsonBody(PendingSaloonRequest $request): void
     {
-        // Todo: Make sure that request headers have the highest priority.
-
         $request->headers()->add('Content-Type', 'application/json');
     }
 

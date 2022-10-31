@@ -2,7 +2,9 @@
 
 namespace Sammyjo20\Saloon\Interfaces\Data;
 
-interface BodyRepository
+use Stringable;
+
+interface BodyRepository extends Stringable
 {
     /**
      * Constructor

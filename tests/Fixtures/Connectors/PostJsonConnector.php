@@ -17,7 +17,7 @@ class PostJsonConnector extends SaloonConnector implements WithBody
         return apiUrl();
     }
 
-    public function defaultData(): array
+    public function defaultBody(): array
     {
         return [
             'connectorId' => 1,

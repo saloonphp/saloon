@@ -65,4 +65,14 @@ class StringBodyRepository implements BodyRepositoryContract
     {
         return ! $this->isEmpty();
     }
+
+    /**
+     * Convert the repository into a string
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->all() ?? '';
+    }
 }

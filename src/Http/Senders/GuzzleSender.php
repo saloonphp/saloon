@@ -138,8 +138,6 @@ class GuzzleSender implements SenderInterface
      */
     private function createRequestOptions(PendingSaloonRequest $request): array
     {
-        dd($request->headers());
-
         $requestOptions = [
             RequestOptions::HEADERS => $request->headers()->all(),
         ];
@@ -159,7 +157,7 @@ class GuzzleSender implements SenderInterface
             MultipartBodyRepository::class => $requestOptions['multipart'] = $body->all(),
             FormBodyRepository::class => $requestOptions['form_params'] = $body->all(),
             StringBodyRepository::class => $requestOptions['body'] = $body->all(),
-            default => null,
+            default => $requestOptions['body'] = (string)$body,
         };
 
         return $requestOptions;
