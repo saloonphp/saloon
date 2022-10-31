@@ -4,7 +4,7 @@ namespace Sammyjo20\Saloon\Http\Responses;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Sammyjo20\Saloon\Repositories\ArrayRepository;
+use Sammyjo20\Saloon\Repositories\ArrayStore;
 
 /**
  * @property ResponseInterface $rawResponse
@@ -34,11 +34,11 @@ class PsrResponse extends SaloonResponse
     /**
      * Get the headers from the response.
      *
-     * @return ArrayRepository
+     * @return ArrayStore
      */
-    public function headers(): ArrayRepository
+    public function headers(): ArrayStore
     {
-        return new ArrayRepository($this->rawResponse->getHeaders());
+        return new ArrayStore($this->rawResponse->getHeaders());
     }
 
     /**

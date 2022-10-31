@@ -23,7 +23,7 @@ class MockMiddleware
      */
     public function __invoke(PendingSaloonRequest $request): PendingSaloonRequest|MockResponse
     {
-        if ($request->isMocking() === false) {
+        if ($request->hasMockClient() === false) {
             return $request;
         }
 

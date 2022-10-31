@@ -2,7 +2,7 @@
 
 namespace Sammyjo20\Saloon\Repositories;
 
-class ArrayRepository
+class ArrayStore
 {
     /**
      * The repository's store

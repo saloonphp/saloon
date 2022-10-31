@@ -31,9 +31,19 @@ class SendRequest
     {
         $pendingRequest = $this->pendingRequest;
 
-        $response = $pendingRequest->hasSimulatedResponseData() ? $this->createSimulatedResponse() : $this->createResponse();
+        // Let's start by checking if the pending request needs to make a request.
+        // If SimulatedResponsePayload has been set on the instance than we need
+        // to create the SimulatedResponse and return that. Otherwise, we
+        // will send a real request to the sender.
 
-        if (! $response instanceof PromiseInterface) {
+        $response = $pendingRequest->hasSimulatedResponsePayload() ? $this->createSimulatedResponse() : $this->createResponse();
+
+        // Next we will need to run the response pipeline. If the response
+        // is a SaloonResponse we can run it directly, but if it is
+        // a PromiseInterface we need to add a step to execute
+        // the response pipeline.
+
+        if ($response instanceof SaloonResponse) {
             return $pendingRequest->executeResponsePipeline($response);
         }
 
@@ -48,14 +58,26 @@ class SendRequest
     protected function createSimulatedResponse(): SaloonResponse|PromiseInterface
     {
         $pendingRequest = $this->pendingRequest;
-        $simulatedResponseData = $pendingRequest->getSimulatedResponseData();
+        $simulatedResponsePayload = $pendingRequest->getSimulatedResponsePayload();
 
-        $response = new SimulatedResponse($pendingRequest, $simulatedResponseData);
+        // When the pending request instance has SimulatedResponsePayload it means
+        // we shouldn't send a real request. We can use the custom response
+        // SimulatedResponse to parse this payload ad convert it into
+        // a SaloonResponse implementation.
 
-        if ($simulatedResponseData instanceof MockResponse) {
+        $response = new SimulatedResponse($pendingRequest, $simulatedResponsePayload);
+
+        // When the SimulatedResponsePayload is specifically a MockResponse then
+        // we will record the response, and we'll set the "isMocked" property
+        // on the response.
+
+        if ($simulatedResponsePayload instanceof MockResponse) {
             $pendingRequest->getMockClient()?->recordResponse($response);
             $response->setIsMocked(true);
         }
+
+        // When mocking asynchronous requests we need to wrap the response
+        // in FulfilledPromise to act like a real response.
 
         if ($this->asynchronous === true) {
             $response = new FulfilledPromise($response);
@@ -71,6 +93,10 @@ class SendRequest
      */
     protected function createResponse(): SaloonResponse|PromiseInterface
     {
+        // The PendingSaloonRequest will get the sender from the connector
+        // for example the GuzzleSender, and it will instantiate it if
+        // it does not exist already. Then it will run sendRequest.
+
         $pendingRequest = $this->pendingRequest;
 
         return $pendingRequest->getSender()->sendRequest($pendingRequest, $this->asynchronous);

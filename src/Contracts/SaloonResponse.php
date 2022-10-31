@@ -3,28 +3,17 @@
 namespace Sammyjo20\Saloon\Contracts;
 
 use Exception;
-use SimpleXMLElement;
 use Illuminate\Support\Collection;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Repositories\ArrayRepository;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Repositories\ArrayStore;
+use SimpleXMLElement;
 
 interface SaloonResponse
 {
-    /**
-     * @return PendingSaloonRequest
-     */
-    public function getPendingSaloonRequest(): PendingSaloonRequest;
-
-    /**
-     * Get the original request
-     *
-     * @return SaloonRequest
-     */
-    public function getRequest(): SaloonRequest;
-
     /**
      * Get the body of the response as string.
      *
@@ -40,11 +29,54 @@ interface SaloonResponse
     public function stream(): StreamInterface;
 
     /**
+     * Get the headers from the response.
+     *
+     * @return ArrayStore
+     */
+    public function headers(): ArrayStore;
+
+    /**
+     * Get the status code of the response.
+     *
+     * @return int
+     */
+    public function status(): int;
+
+    /**
+     * Get the underlying PSR response for the response.
+     *
+     * @return ResponseInterface
+     */
+    public function toPsrResponse(): ResponseInterface;
+
+    /**
+     * Create a new response instance.
+     *
+     * @param PendingSaloonRequest $pendingSaloonRequest
+     * @param mixed $rawResponse
+     * @param Exception|null $requestException
+     */
+    public function __construct(PendingSaloonRequest $pendingSaloonRequest, mixed $rawResponse, Exception $requestException = null);
+
+    /**
+     * @return PendingSaloonRequest
+     */
+    public function getPendingSaloonRequest(): PendingSaloonRequest;
+
+    /**
+     * Get the original request
+     *
+     * @return SaloonRequest
+     */
+    public function getRequest(): SaloonRequest;
+
+    /**
      * Get the JSON decoded body of the response as an array or scalar value.
      *
      * @param string|null $key
      * @param mixed $default
      * @return mixed
+     * @throws \JsonException
      */
     public function json(string $key = null, mixed $default = null): mixed;
 
@@ -52,6 +84,7 @@ interface SaloonResponse
      * Get the JSON decoded body of the response as an object.
      *
      * @return object
+     * @throws \JsonException
      */
     public function object(): object;
 
@@ -68,37 +101,16 @@ interface SaloonResponse
      *
      * @param $key
      * @return Collection
+     * @throws \JsonException
      */
-    public function collect(string $key = null): Collection;
+    public function collect($key = null): Collection;
 
     /**
      * Cast the response to a DTO.
      *
-     * @return object|null
+     * @return mixed
      */
     public function dto(): mixed;
-
-    /**
-     * Get a header from the response.
-     *
-     * @param string $header
-     * @return string|null
-     */
-    public function header(string $header): ?string;
-
-    /**
-     * Get the headers from the response.
-     *
-     * @return ArrayRepository
-     */
-    public function headers(): ArrayRepository;
-
-    /**
-     * Get the status code of the response.
-     *
-     * @return int
-     */
-    public function status(): int;
 
     /**
      * Determine if the request was successful.
@@ -151,20 +163,6 @@ interface SaloonResponse
     public function onError(callable $callback): static;
 
     /**
-     * Close the stream and any underlying resources.
-     *
-     * @return $this
-     */
-    public function close(): static;
-
-    /**
-     * Get the underlying PSR response for the response.
-     *
-     * @return mixed
-     */
-    public function toPsrResponse(): mixed;
-
-    /**
      * Create an exception if a server or client error occurred.
      *
      * @return Exception|null
@@ -178,6 +176,13 @@ interface SaloonResponse
      * @throws SaloonRequestException
      */
     public function throw(): static;
+
+    /**
+     * Get the body of the response.
+     *
+     * @return string
+     */
+    public function __toString(): string;
 
     /**
      * Set if the response is cached. Should only be used internally.
@@ -217,9 +222,41 @@ interface SaloonResponse
     public function getRequestException(): ?Exception;
 
     /**
-     * Get the body of the response.
+     * Get the raw response
      *
-     * @return string
+     * @return mixed
      */
-    public function __toString(): string;
+    public function getRawResponse(): mixed;
+
+    /**
+     * Get a header from the response.
+     *
+     * @param string $header
+     * @return string|null
+     */
+    public function header(string $header): ?string;
+
+    /**
+     * Close the stream and any underlying resources.
+     *
+     * @return $this
+     * @throws \JsonException
+     */
+    public function close(): static;
+
+    /**
+     * Set the isCached property
+     *
+     * @param bool $isCached
+     * @return SaloonResponse
+     */
+    public function setIsCached(bool $isCached): SaloonResponse;
+
+    /**
+     * Set the isMocked property
+     *
+     * @param bool $isMocked
+     * @return SaloonResponse
+     */
+    public function setIsMocked(bool $isMocked): SaloonResponse;
 }

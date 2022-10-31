@@ -4,7 +4,7 @@ namespace Sammyjo20\Saloon\Helpers;
 
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\SimulatedResponseData;
+use Sammyjo20\Saloon\Http\SimulatedResponsePayload;
 
 class MiddlewarePipeline
 {
@@ -46,8 +46,8 @@ class MiddlewarePipeline
                 return $result;
             }
 
-            if ($result instanceof SimulatedResponseData) {
-                $request->setSimulatedResponseData($result);
+            if ($result instanceof SimulatedResponsePayload) {
+                $request->setSimulatedResponsePayload($result);
             }
 
             return $request;

@@ -7,12 +7,11 @@ use Sammyjo20\Saloon\Repositories\Body\StringBodyRepository;
 use Throwable;
 use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Data\MockExceptionClosure;
-use Sammyjo20\Saloon\Repositories\ArrayRepository;
+use Sammyjo20\Saloon\Repositories\ArrayStore;
 use Sammyjo20\Saloon\Repositories\Body\JsonBodyRepository;
 use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
-use Sammyjo20\Saloon\Repositories\Body\ArrayBodyRepository;
 
-class SimulatedResponseData
+class SimulatedResponsePayload
 {
     /**
      * HTTP Status Code
@@ -24,9 +23,9 @@ class SimulatedResponseData
     /**
      * Headers
      *
-     * @var ArrayRepository
+     * @var ArrayStore
      */
-    protected ArrayRepository $headers;
+    protected ArrayStore $headers;
 
     /**
      * Request Body
@@ -53,7 +52,7 @@ class SimulatedResponseData
     {
         $this->status = $status;
         $this->data = is_array($data) ? new JsonBodyRepository($data) : new StringBodyRepository($data);
-        $this->headers = new ArrayRepository($headers);
+        $this->headers = new ArrayStore($headers);
     }
 
     /**
@@ -109,9 +108,9 @@ class SimulatedResponseData
     /**
      * Get the headers
      *
-     * @return ArrayRepository
+     * @return ArrayStore
      */
-    public function getHeaders(): ArrayRepository
+    public function getHeaders(): ArrayStore
     {
         return $this->headers;
     }

@@ -3,30 +3,30 @@
 namespace Sammyjo20\Saloon\Traits;
 
 use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
-use Sammyjo20\Saloon\Repositories\ArrayRepository;
+use Sammyjo20\Saloon\Repositories\ArrayStore;
 
 trait HasRequestProperties
 {
     /**
      * Request Headers
      *
-     * @var ArrayRepository
+     * @var ArrayStore
      */
-    protected ArrayRepository $headers;
+    protected ArrayStore $headers;
 
     /**
      * Request Query Parameters
      *
-     * @var ArrayRepository
+     * @var ArrayStore
      */
-    protected ArrayRepository $queryParameters;
+    protected ArrayStore $queryParameters;
 
     /**
      * Request Config
      *
-     * @var ArrayRepository
+     * @var ArrayStore
      */
-    protected ArrayRepository $config;
+    protected ArrayStore $config;
 
     /**
      * Saloon Middleware Pipeline
@@ -38,31 +38,31 @@ trait HasRequestProperties
     /**
      * Retrieve the headers content bag.
      *
-     * @return ArrayRepository
+     * @return ArrayStore
      */
-    public function headers(): ArrayRepository
+    public function headers(): ArrayStore
     {
-        return $this->headers ??= new ArrayRepository($this->defaultHeaders());
+        return $this->headers ??= new ArrayStore($this->defaultHeaders());
     }
 
     /**
      * Retrieve the query parameters content bag.
      *
-     * @return ArrayRepository
+     * @return ArrayStore
      */
-    public function queryParameters(): ArrayRepository
+    public function queryParameters(): ArrayStore
     {
-        return $this->queryParameters ??= new ArrayRepository($this->defaultQueryParameters());
+        return $this->queryParameters ??= new ArrayStore($this->defaultQueryParameters());
     }
 
     /**
      * Retrieve the config content bag.
      *
-     * @return ArrayRepository
+     * @return ArrayStore
      */
-    public function config(): ArrayRepository
+    public function config(): ArrayStore
     {
-        return $this->config ??= new ArrayRepository($this->defaultConfig());
+        return $this->config ??= new ArrayStore($this->defaultConfig());
     }
 
     /**

@@ -1,8 +1,11 @@
 <?php
 
 use GuzzleHttp\Promise\Utils;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Http\Responses\PsrResponse;
+use Sammyjo20\Saloon\Http\Responses\SimulatedResponse;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\PostRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
@@ -38,8 +41,6 @@ test('(remove) asynchronous requests work', function () {
     $responseC = $connector->sendAsync(new UserRequest);
 
     Utils::unwrap([$responseA, $responseB, $responseC]);
-
-    dd($responseA);
 });
 
 test('(remove) fake asynchronous requests work', function () {
