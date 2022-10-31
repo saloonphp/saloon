@@ -68,15 +68,14 @@ abstract class SaloonRequest
     }
 
     /**
-     * Create the request payload which will run all plugins, boot methods, everything.
+     * Create a pending request
      *
      * @param MockClient|null $mockClient
      * @return PendingSaloonRequest
-     * @throws \ReflectionException
-     * @throws DataBagException
      * @throws PendingSaloonRequestException
      * @throws SaloonInvalidConnectorException
      * @throws SaloonInvalidResponseClassException
+     * @throws \ReflectionException
      */
     public function createPendingRequest(MockClient $mockClient = null): PendingSaloonRequest
     {

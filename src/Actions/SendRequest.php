@@ -25,9 +25,9 @@ class SendRequest
     /**
      * Execute the action
      *
-     * @return SaloonResponse
+     * @return SaloonResponse|PromiseInterface
      */
-    public function execute(): SaloonResponse
+    public function execute(): SaloonResponse|PromiseInterface
     {
         $pendingRequest = $this->pendingRequest;
 

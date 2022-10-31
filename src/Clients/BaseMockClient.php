@@ -3,6 +3,7 @@
 namespace Sammyjo20\Saloon\Clients;
 
 use ReflectionClass;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Http\Fixture;
 use Sammyjo20\Saloon\Helpers\URLHelper;
 use Sammyjo20\Saloon\Http\MockResponse;
@@ -176,6 +177,7 @@ class BaseMockClient
      *
      * @param SaloonRequest $request
      * @return MockResponse|Fixture|callable|null
+     * @throws SaloonInvalidConnectorException
      */
     private function guessResponseFromUrl(SaloonRequest $request): MockResponse|Fixture|callable|null
     {
