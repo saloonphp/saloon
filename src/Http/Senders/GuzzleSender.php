@@ -12,15 +12,14 @@ use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
-use Sammyjo20\Saloon\Data\RequestBodyType;
 use GuzzleHttp\Exception\BadResponseException;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Responses\PsrResponse;
 use Sammyjo20\Saloon\Interfaces\SenderInterface;
 use Sammyjo20\Saloon\Repositories\FormBodyRepository;
 use Sammyjo20\Saloon\Repositories\JsonBodyRepository;
-use Sammyjo20\Saloon\Repositories\MultipartBodyRepository;
 use Sammyjo20\Saloon\Repositories\StringBodyRepository;
+use Sammyjo20\Saloon\Repositories\MultipartBodyRepository;
 
 class GuzzleSender implements SenderInterface
 {

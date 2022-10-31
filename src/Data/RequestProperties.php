@@ -18,8 +18,7 @@ class RequestProperties
         public array              $queryParameters,
         public array              $config,
         public MiddlewarePipeline $middleware,
-    )
-    {
+    ) {
         //
     }
 }

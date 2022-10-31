@@ -4,23 +4,21 @@ namespace Sammyjo20\Saloon\Http;
 
 use ReflectionClass;
 use ReflectionException;
-use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Data\RequestBodyType;
 use Sammyjo20\Saloon\Enums\Method;
-use Sammyjo20\Saloon\Exceptions\DataBagException;
+use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Helpers\PluginHelper;
+use Sammyjo20\Saloon\Interfaces\Data\WithBody;
+use Sammyjo20\Saloon\Interfaces\SenderInterface;
+use Sammyjo20\Saloon\Traits\HasRequestProperties;
+use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
+use Sammyjo20\Saloon\Interfaces\Data\BodyRepository;
+use Sammyjo20\Saloon\Repositories\ArrayBodyRepository;
+use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
-use Sammyjo20\Saloon\Helpers\PluginHelper;
-use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
-use Sammyjo20\Saloon\Interfaces\Data\BodyRepository;
-use Sammyjo20\Saloon\Interfaces\Data\WithBody;
-use Sammyjo20\Saloon\Interfaces\SenderInterface;
-use Sammyjo20\Saloon\Repositories\ArrayBodyRepository;
-use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
-use Sammyjo20\Saloon\Traits\HasRequestProperties;
 
 class PendingSaloonRequest
 {
@@ -90,7 +88,6 @@ class PendingSaloonRequest
      * @param MockClient|null $mockClient
      * @throws PendingSaloonRequestException
      * @throws ReflectionException
-     * @throws DataBagException
      * @throws SaloonInvalidConnectorException
      * @throws SaloonInvalidResponseClassException
      */
@@ -341,14 +338,6 @@ class PendingSaloonRequest
     public function isMocking(): bool
     {
         return $this->mockClient instanceof MockClient;
-    }
-
-    /**
-     * @return RequestBodyType|null
-     */
-    public function getDataType(): ?RequestBodyType
-    {
-        return $this->dataType;
     }
 
     /**
