@@ -2,9 +2,8 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Sammyjo20\Saloon\Helpers\BodyRepository;
-use Sammyjo20\Saloon\Helpers\ContentBag;
 use Sammyjo20\Saloon\Data\RequestProperties;
+use Sammyjo20\Saloon\Helpers\ContentBag;
 use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 
 trait HasRequestProperties
@@ -93,16 +92,6 @@ trait HasRequestProperties
      * @return array
      */
     protected function defaultQueryParameters(): array
-    {
-        return [];
-    }
-
-    /**
-     * Default Data
-     *
-     * @return mixed
-     */
-    protected function defaultData(): mixed
     {
         return [];
     }

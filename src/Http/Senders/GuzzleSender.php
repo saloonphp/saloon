@@ -17,6 +17,10 @@ use GuzzleHttp\Exception\BadResponseException;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Responses\PsrResponse;
 use Sammyjo20\Saloon\Interfaces\SenderInterface;
+use Sammyjo20\Saloon\Repositories\FormBodyRepository;
+use Sammyjo20\Saloon\Repositories\JsonBodyRepository;
+use Sammyjo20\Saloon\Repositories\MultipartBodyRepository;
+use Sammyjo20\Saloon\Repositories\StringBodyRepository;
 
 class GuzzleSender implements SenderInterface
 {
@@ -142,15 +146,17 @@ class GuzzleSender implements SenderInterface
             $requestOptions[$configVariable] = $value;
         }
 
-        dd($request->getBody()->all());
+        $body = $request->body();
 
-        $data = $request->data()->all();
+        if (is_null($body) || $body->isEmpty()) {
+            return $requestOptions;
+        }
 
-        match ($request->getDataType()) {
-            RequestBodyType::JSON => $requestOptions['json'] = $data,
-            RequestBodyType::MULTIPART => $requestOptions['multipart'] = $data,
-            RequestBodyType::FORM => $requestOptions['form_params'] = $data,
-            RequestBodyType::MIXED => $requestOptions['body'] = $data,
+        match ($body::class) {
+            JsonBodyRepository::class => $requestOptions['json'] = $body->all(),
+            MultipartBodyRepository::class => $requestOptions['multipart'] = $body->all(),
+            FormBodyRepository::class => $requestOptions['form_params'] = $body->all(),
+            StringBodyRepository::class => $requestOptions['body'] = $body->all(),
             default => null,
         };
 

@@ -1,10 +1,10 @@
 <?php
 
-use Sammyjo20\Saloon\Helpers\BodyRepository;
 use Sammyjo20\Saloon\Helpers\ContentBag;
 use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Repositories\BodyRepository;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\DefaultPropertiesRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('you can retrieve all the request parameters methods', function () {
     $request = new UserRequest;

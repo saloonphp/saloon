@@ -2,12 +2,12 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Throwable;
-use Sammyjo20\Saloon\Helpers\BodyRepository;
 use Psr\Http\Message\RequestInterface;
-use Sammyjo20\Saloon\Helpers\ContentBag;
 use Sammyjo20\Saloon\Data\MockExceptionClosure;
 use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
+use Sammyjo20\Saloon\Helpers\ContentBag;
+use Sammyjo20\Saloon\Repositories\BodyRepository;
+use Throwable;
 
 class SimulatedResponseData
 {

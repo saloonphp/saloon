@@ -38,7 +38,7 @@ class PostRequest extends SaloonRequest implements WithBody
     /**
      * @return string[]
      */
-    public function defaultData(): array
+    public function defaultBody(): array
     {
         return [
             'requestId' => '2',

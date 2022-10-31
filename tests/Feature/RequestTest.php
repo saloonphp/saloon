@@ -25,7 +25,6 @@ test('a request can be made successfully', function () {
 
 test('(remove) a request can be sent with json data', function () {
     $request = new PostRequest();
-
     $response = $request->send();
 
     dd($response);

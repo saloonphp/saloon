@@ -1,9 +1,8 @@
 <?php
 
-namespace Sammyjo20\Saloon\Helpers;
+namespace Sammyjo20\Saloon\Repositories;
 
 use Sammyjo20\Saloon\Interfaces\Data\ArrayBodyRepository as ArrayBodyRepositoryContract;
-use Sammyjo20\Saloon\Interfaces\Data\BodyRepository;
 
 class ArrayBodyRepository implements ArrayBodyRepositoryContract
 {
@@ -40,7 +39,7 @@ class ArrayBodyRepository implements ArrayBodyRepositoryContract
      * Merge another array into the repository
      *
      * @param array ...$arrays
-     * @return ArrayBodyRepositoryContract
+     * @return $this
      */
     public function merge(array ...$arrays): static
     {
@@ -54,7 +53,7 @@ class ArrayBodyRepository implements ArrayBodyRepositoryContract
      *
      * @param string $key
      * @param mixed $value
-     * @return ArrayBodyRepositoryContract
+     * @return $this
      */
     public function add(string $key, mixed $value): static
     {
@@ -67,7 +66,7 @@ class ArrayBodyRepository implements ArrayBodyRepositoryContract
      * Set a value inside the repository
      *
      * @param array $value
-     * @return ArrayBodyRepositoryContract
+     * @return $this
      */
     public function set(mixed $value): static
     {

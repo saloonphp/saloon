@@ -4,29 +4,23 @@ namespace Sammyjo20\Saloon\Http;
 
 use ReflectionClass;
 use ReflectionException;
-use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Data\RequestBodyType;
-use Sammyjo20\Saloon\Helpers\ArrayBodyRepository;
-use Sammyjo20\Saloon\Helpers\PluginHelper;
-use Sammyjo20\Saloon\Interfaces\Data\BodyRepository;
-use Sammyjo20\Saloon\Interfaces\Data\WithBody;
-use Sammyjo20\Saloon\Interfaces\SenderInterface;
+use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Exceptions\DataBagException;
-use Sammyjo20\Saloon\Traits\HasRequestProperties;
-use Sammyjo20\Saloon\Interfaces\Data\SendsXMLBody;
-use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
-use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
-use Sammyjo20\Saloon\Interfaces\Data\SendsMixedBody;
-use Sammyjo20\Saloon\Interfaces\Data\SendsFormParams;
-use Sammyjo20\Saloon\Interfaces\Data\SendsStringBody;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
-use Sammyjo20\Saloon\Interfaces\Data\SendsMultipartBody;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Sammyjo20\Saloon\Helpers\PluginHelper;
+use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
+use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
+use Sammyjo20\Saloon\Interfaces\Data\BodyRepository;
+use Sammyjo20\Saloon\Interfaces\Data\WithBody;
+use Sammyjo20\Saloon\Interfaces\SenderInterface;
+use Sammyjo20\Saloon\Repositories\ArrayBodyRepository;
+use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
+use Sammyjo20\Saloon\Traits\HasRequestProperties;
 
 class PendingSaloonRequest
 {
@@ -74,13 +68,6 @@ class PendingSaloonRequest
      * @var MockClient|null
      */
     protected ?MockClient $mockClient = null;
-
-    /**
-     * The body type.
-     *
-     * @var RequestBodyType|null
-     */
-    protected ?RequestBodyType $bodyType = null;
 
     /**
      * The body repository
@@ -170,55 +157,27 @@ class PendingSaloonRequest
         $connector = $this->connector;
         $request = $this->request;
 
-        $connectorBodyType = null;
-        $connectorBody = null;
+        $connectorBody = $connector instanceof WithBody ? $connector->body() : null;
+        $requestBody = $request instanceof WithBody ? $request->body() : null;
 
-        $requestBodyType = null;
-        $requestBody = null;
-
-        if ($connector instanceof WithBody) {
-            $connectorBodyType = $connector->getBodyType();
-            $connectorBody = $connector->body();
-        }
-
-        if ($request instanceof WithBody) {
-            $requestBodyType = $request->getBodyType();
-            $requestBody = $request->body();
-        }
-
-        if (is_null($connectorBodyType) && is_null($requestBodyType)) {
+        if (is_null($connectorBody) && is_null($requestBody)) {
             return $this;
         }
 
-        if (isset($connectorBodyType, $requestBodyType) && $connectorBodyType !== $requestBodyType) {
-            throw new PendingSaloonRequestException('Request body type and connector body type cannot be mixed.');
+        if (isset($connectorBody, $requestBody) && ! $connectorBody instanceof $requestBody) {
+            throw new PendingSaloonRequestException('Connector and request body types must be the same.');
         }
-
-        // The primary data type will be the request data type, if one has not
-        // been set, we will use the connector data.
-
-        $this->bodyType = $requestBodyType ?? $connectorBodyType;
-
-        // If both connector and request body types are ArrayBodyRepository then we will
-        // merge them together
 
         if ($connectorBody instanceof ArrayBodyRepository && $requestBody instanceof ArrayBodyRepository) {
-            $repository = new ArrayBodyRepository([]);
-            $this->body = $repository->merge($connectorBody->all(), $requestBody->all());
+            $repository = clone $connectorBody;
+            $repository->merge($requestBody->all());
+
+            $this->body = $repository;
 
             return $this;
         }
 
-        // Otherwise we'll prefer the request body over the connector body.
-        // Todo: Tidy up the below?
-
-        if ($connectorBody instanceof BodyRepository) {
-            $this->body = $connectorBody;
-        }
-
-        if ($requestBody instanceof BodyRepository) {
-            $this->body = $requestBody;
-        }
+        $this->body = clone $requestBody ?? clone $connectorBody;
 
         return $this;
     }
@@ -447,9 +406,11 @@ class PendingSaloonRequest
     }
 
     /**
+     * Retrieve the body on the pending saloon request
+     *
      * @return BodyRepository|null
      */
-    public function getBody(): ?BodyRepository
+    public function body(): ?BodyRepository
     {
         return $this->body;
     }
