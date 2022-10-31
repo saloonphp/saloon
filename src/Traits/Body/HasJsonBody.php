@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Traits\Body;
 
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Repositories\JsonBodyRepository;
 
 trait HasJsonBody
@@ -12,6 +13,19 @@ trait HasJsonBody
      * @var JsonBodyRepository
      */
     protected JsonBodyRepository $body;
+
+    /**
+     * Boot the plugin
+     *
+     * @param PendingSaloonRequest $request
+     * @return void
+     */
+    public function bootHasJsonBody(PendingSaloonRequest $request): void
+    {
+        // Todo: Make sure that request headers have the highest priority.
+
+        $request->headers()->add('Content-Type', 'application/json');
+    }
 
     /**
      * Retrieve the data repository

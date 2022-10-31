@@ -59,10 +59,10 @@ abstract class SaloonRequest
     /**
      * Handle the booting of a request.
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingSaloonRequest $request
      * @return void
      */
-    public function boot(PendingSaloonRequest $pendingRequest): void
+    public function boot(PendingSaloonRequest $request): void
     {
         //
     }

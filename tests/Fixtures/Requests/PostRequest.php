@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Interfaces\Data\WithBody;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\PostJsonConnector;

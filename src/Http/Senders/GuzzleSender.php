@@ -138,6 +138,8 @@ class GuzzleSender implements SenderInterface
      */
     private function createRequestOptions(PendingSaloonRequest $request): array
     {
+        dd($request->headers());
+
         $requestOptions = [
             RequestOptions::HEADERS => $request->headers()->all(),
         ];

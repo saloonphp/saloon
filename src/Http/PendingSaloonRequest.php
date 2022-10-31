@@ -109,13 +109,15 @@ class PendingSaloonRequest
         // Let's build the PendingSaloonRequest. Since it is made up of many
         // properties, we run an individual method for each one.
 
+        // Todo: Document the priority.
+
         $this
             ->registerDefaultMiddleware()
+            ->bootPlugins()
             ->mergeRequestProperties()
             ->mergeBody()
-            ->bootConnectorAndRequest()
-            ->bootPlugins()
-            ->authenticateRequest();
+            ->authenticateRequest()
+            ->bootConnectorAndRequest();
 
         // Next, we will execute the request middleware pipeline which will
         // process any middleware added on the connector or the request.
