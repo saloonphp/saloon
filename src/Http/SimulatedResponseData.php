@@ -2,6 +2,8 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
+use Sammyjo20\Saloon\Repositories\Body\StringBodyRepository;
 use Throwable;
 use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Data\MockExceptionClosure;
@@ -29,9 +31,9 @@ class SimulatedResponseData
     /**
      * Request Body
      *
-     * @var JsonBodyRepository
+     * @var BodyRepository
      */
-    protected JsonBodyRepository $data;
+    protected BodyRepository $data;
 
     /**
      * Exception Closure
@@ -44,13 +46,13 @@ class SimulatedResponseData
      * Create a new mock response
      *
      * @param int $status
-     * @param array $data
+     * @param array|string $data
      * @param array $headers
      */
-    public function __construct(int $status = 200, mixed $data = [], array $headers = [])
+    public function __construct(int $status = 200, array|string $data = [], array $headers = [])
     {
         $this->status = $status;
-        $this->data = new JsonBodyRepository($data);
+        $this->data = is_array($data) ? new JsonBodyRepository($data) : new StringBodyRepository($data);
         $this->headers = new ArrayRepository($headers);
     }
 
@@ -117,9 +119,9 @@ class SimulatedResponseData
     /**
      * Get the response body
      *
-     * @return ArrayBodyRepository
+     * @return BodyRepository
      */
-    public function getData(): ArrayBodyRepository
+    public function getData(): BodyRepository
     {
         return $this->data;
     }

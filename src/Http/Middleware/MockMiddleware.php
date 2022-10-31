@@ -25,15 +25,37 @@ class MockMiddleware
      * Guess a mock response
      *
      * @param PendingSaloonRequest $request
-     * @return Fixture|MockResponse
+     * @return PendingSaloonRequest|MockResponse
      * @throws SaloonInvalidConnectorException
      * @throws SaloonNoMockResponseFoundException
+     * @throws \JsonException
+     * @throws \Sammyjo20\Saloon\Exceptions\FixtureMissingException
      */
-    public function __invoke(PendingSaloonRequest $request)
+    public function __invoke(PendingSaloonRequest $request): PendingSaloonRequest|MockResponse
     {
-        // Todo: we'll probably have to move it out of here to support fixtures, i.e multiple middleware
-        // Todo: Or support adding more middleware while it is processing?
+        // When we guess the next response from the MockClient it will
+        // either return a MockResponse instance or a Fixture instance.
 
-        return $this->mockClient->guessNextResponse($request);
+        $mockObject = $this->mockClient->guessNextResponse($request);
+
+        $mockResponse = $mockObject instanceof Fixture ? $mockObject->getMockResponse() : $mockObject;
+
+        // If the mock response is a valid instance, we will return it.
+        // The middleware pipeline will recognise this and will set
+        // it as the "SimulatedResponse" on the request.
+
+        if ($mockResponse instanceof MockResponse) {
+            return $mockResponse;
+        }
+
+        // However if the mock response is not valid because it is
+        // an instance of a fixture instead, we will register a
+        // middleware on the response to record the response.
+
+        if (is_null($mockResponse) && $mockObject instanceof Fixture) {
+            $request->middleware()->onResponse(new FixtureRecorderMiddleware($mockObject));
+        }
+
+        return $request;
     }
 }

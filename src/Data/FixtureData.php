@@ -4,6 +4,7 @@ namespace Sammyjo20\Saloon\Data;
 
 use JsonSerializable;
 use Psr\Http\Message\ResponseInterface;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Http\MockResponse;
 
 class FixtureData implements JsonSerializable
@@ -57,6 +58,21 @@ class FixtureData implements JsonSerializable
     }
 
     /**
+     * Create an instance from a SaloonResponse
+     *
+     * @param SaloonResponse $response
+     * @return static
+     */
+    public static function fromResponse(SaloonResponse $response): static
+    {
+        return new static(
+            statusCode: $response->status(),
+            headers: $response->headers()->all(),
+            data: $response->body(),
+        );
+    }
+
+    /**
      * Encode the instance to be stored as a file
      *
      * @return string
@@ -74,7 +90,7 @@ class FixtureData implements JsonSerializable
      */
     public function toMockResponse(): MockResponse
     {
-        return new MockResponse($this->data, $this->statusCode, $this->headers);
+        return new MockResponse($this->statusCode, $this->data, $this->headers);
     }
 
     /**

@@ -40,7 +40,7 @@ class MiddlewarePipeline
     public function onRequest(callable $closure): static
     {
         $this->requestPipeline = $this->requestPipeline->pipe(function (PendingSaloonRequest $request) use ($closure) {
-            $result = $closure($request, $this);
+            $result = $closure($request);
 
             if ($result instanceof PendingSaloonRequest) {
                 return $result;
@@ -65,7 +65,7 @@ class MiddlewarePipeline
     public function onResponse(callable $closure): static
     {
         $this->responsePipeline = $this->responsePipeline->pipe(function (SaloonResponse $response) use ($closure) {
-            $result = $closure($response, $this);
+            $result = $closure($response);
 
             return $result instanceof SaloonResponse ? $result : $response;
         });
