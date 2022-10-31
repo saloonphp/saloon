@@ -6,6 +6,7 @@ use Throwable;
 use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Data\MockExceptionClosure;
 use Sammyjo20\Saloon\Repositories\ArrayRepository;
+use Sammyjo20\Saloon\Repositories\Body\JsonBodyRepository;
 use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
 use Sammyjo20\Saloon\Repositories\Body\ArrayBodyRepository;
 
@@ -28,9 +29,9 @@ class SimulatedResponseData
     /**
      * Request Body
      *
-     * @var ArrayBodyRepository
+     * @var JsonBodyRepository
      */
-    protected ArrayBodyRepository $data;
+    protected JsonBodyRepository $data;
 
     /**
      * Exception Closure
@@ -49,7 +50,7 @@ class SimulatedResponseData
     public function __construct(int $status = 200, mixed $data = [], array $headers = [])
     {
         $this->status = $status;
-        $this->data = new ArrayBodyRepository($data);
+        $this->data = new JsonBodyRepository($data);
         $this->headers = new ArrayRepository($headers);
     }
 

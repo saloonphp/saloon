@@ -2,9 +2,9 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
-use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Http\SimulatedResponseData;
 
 class MiddlewarePipeline
 {
@@ -46,8 +46,8 @@ class MiddlewarePipeline
                 return $result;
             }
 
-            if ($result instanceof MockResponse) {
-                $request->setMockResponse($result);
+            if ($result instanceof SimulatedResponseData) {
+                $request->setSimulatedResponseData($result);
             }
 
             return $request;

@@ -2,7 +2,6 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use ReflectionClass;
 use ReflectionException;
 use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Contracts\Sender;
@@ -10,10 +9,10 @@ use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Contracts\Body\WithBody;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
 use Sammyjo20\Saloon\Repositories\Body\ArrayBodyRepository;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
@@ -75,11 +74,11 @@ class PendingSaloonRequest
     protected ?BodyRepository $body = null;
 
     /**
-     * The Mock Response Found
+     * The simulated response.
      *
-     * @var MockResponse|null
+     * @var SimulatedResponseData|null
      */
-    protected ?MockResponse $mockResponse = null;
+    protected ?SimulatedResponseData $simulatedResponseData = null;
 
     /**
      * Build up the request payload.
@@ -221,8 +220,8 @@ class PendingSaloonRequest
         $connector = $this->connector;
         $request = $this->request;
 
-        $connectorTraits = (new ReflectionClass($connector))->getTraits();
-        $requestTraits = (new ReflectionClass($request))->getTraits();
+        $connectorTraits = class_uses_recursive($connector);
+        $requestTraits = class_uses_recursive($request);
 
         foreach ($connectorTraits as $connectorTrait) {
             PluginHelper::bootPlugin($this, $connector, $connectorTrait);
@@ -351,52 +350,6 @@ class PendingSaloonRequest
     }
 
     /**
-     * Set the mock client
-     *
-     * @param MockClient|null $mockClient
-     * @return PendingSaloonRequest
-     */
-    public function setMockClient(?MockClient $mockClient): static
-    {
-        $this->mockClient = $mockClient;
-
-        return $this;
-    }
-
-    /**
-     * Get the mocked response
-     *
-     * @return MockResponse|null
-     */
-    public function getMockResponse(): ?MockResponse
-    {
-        return $this->mockResponse;
-    }
-
-    /**
-     * Set the mocked response
-     *
-     * @param MockResponse|null $mockResponse
-     * @return PendingSaloonRequest
-     */
-    public function setMockResponse(?MockResponse $mockResponse): PendingSaloonRequest
-    {
-        $this->mockResponse = $mockResponse;
-
-        return $this;
-    }
-
-    /**
-     * Check if the pending request has a mock response
-     *
-     * @return bool
-     */
-    public function hasMockResponse(): bool
-    {
-        return $this->mockResponse instanceof MockResponse;
-    }
-
-    /**
      * Retrieve the body on the pending saloon request
      *
      * @return BodyRepository|null
@@ -404,5 +357,38 @@ class PendingSaloonRequest
     public function body(): ?BodyRepository
     {
         return $this->body;
+    }
+
+    /**
+     * Get the simulated response data
+     *
+     * @return SimulatedResponseData|null
+     */
+    public function getSimulatedResponseData(): ?SimulatedResponseData
+    {
+        return $this->simulatedResponseData;
+    }
+
+    /**
+     * Set the simulated response data
+     *
+     * @param SimulatedResponseData|null $simulatedResponseData
+     * @return PendingSaloonRequest
+     */
+    public function setSimulatedResponseData(?SimulatedResponseData $simulatedResponseData): PendingSaloonRequest
+    {
+        $this->simulatedResponseData = $simulatedResponseData;
+
+        return $this;
+    }
+
+    /**
+     * Check if simulated response data is present.
+     *
+     * @return bool
+     */
+    public function hasSimulatedResponseData(): bool
+    {
+        return $this->simulatedResponseData instanceof SimulatedResponseData;
     }
 }
