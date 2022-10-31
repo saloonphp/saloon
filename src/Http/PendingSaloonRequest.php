@@ -5,17 +5,17 @@ namespace Sammyjo20\Saloon\Http;
 use ReflectionClass;
 use ReflectionException;
 use Sammyjo20\Saloon\Enums\Method;
+use Sammyjo20\Saloon\Contracts\Sender;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
-use Sammyjo20\Saloon\Interfaces\Data\WithBody;
-use Sammyjo20\Saloon\Interfaces\SenderInterface;
+use Sammyjo20\Saloon\Contracts\Authenticator;
+use Sammyjo20\Saloon\Contracts\Body\WithBody;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
+use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
-use Sammyjo20\Saloon\Interfaces\Data\BodyRepository;
-use Sammyjo20\Saloon\Repositories\ArrayBodyRepository;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
+use Sammyjo20\Saloon\Repositories\Body\ArrayBodyRepository;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
@@ -109,12 +109,12 @@ class PendingSaloonRequest
         // Todo: Document the priority.
 
         $this
-            ->registerDefaultMiddleware()
             ->bootPlugins()
             ->mergeRequestProperties()
             ->mergeBody()
             ->authenticateRequest()
-            ->bootConnectorAndRequest();
+            ->bootConnectorAndRequest()
+            ->registerDefaultMiddleware();
 
         // Next, we will execute the request middleware pipeline which will
         // process any middleware added on the connector or the request.
@@ -190,7 +190,7 @@ class PendingSaloonRequest
     {
         $authenticator = $this->getAuthenticator();
 
-        if ($authenticator instanceof AuthenticatorInterface) {
+        if ($authenticator instanceof Authenticator) {
             $authenticator->set($this);
         }
 
@@ -343,9 +343,9 @@ class PendingSaloonRequest
     /**
      * Get the request sender.
      *
-     * @return SenderInterface
+     * @return Sender
      */
-    public function getSender(): SenderInterface
+    public function getSender(): Sender
     {
         return $this->connector->sender();
     }

@@ -5,8 +5,8 @@ namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 use Carbon\CarbonInterface;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
+use Sammyjo20\Saloon\Contracts\OAuthAuthenticator;
 use Sammyjo20\Saloon\Traits\OAuth2\AuthorizationCodeGrant;
-use Sammyjo20\Saloon\Interfaces\OAuthAuthenticatorInterface;
 use Sammyjo20\Saloon\Tests\Fixtures\Authenticators\CustomOAuthAuthenticator;
 
 class CustomResponseOAuth2Connector extends SaloonConnector
@@ -50,9 +50,9 @@ class CustomResponseOAuth2Connector extends SaloonConnector
      * @param string $accessToken
      * @param string $refreshToken
      * @param CarbonInterface $expiresAt
-     * @return OAuthAuthenticatorInterface
+     * @return OAuthAuthenticator
      */
-    protected function createOAuthAuthenticator(string $accessToken, string $refreshToken, CarbonInterface $expiresAt): OAuthAuthenticatorInterface
+    protected function createOAuthAuthenticator(string $accessToken, string $refreshToken, CarbonInterface $expiresAt): OAuthAuthenticator
     {
         return new CustomOAuthAuthenticator($accessToken, $refreshToken, $expiresAt, $this->greeting);
     }

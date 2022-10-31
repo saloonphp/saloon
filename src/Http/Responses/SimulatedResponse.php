@@ -5,8 +5,8 @@ namespace Sammyjo20\Saloon\Http\Responses;
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\StreamInterface;
-use Sammyjo20\Saloon\Helpers\ContentBag;
 use Sammyjo20\Saloon\Http\SimulatedResponseData;
+use Sammyjo20\Saloon\Repositories\ArrayRepository;
 
 /**
  * @property SimulatedResponseData $rawResponse
@@ -43,9 +43,9 @@ class SimulatedResponse extends SaloonResponse
     /**
      * Get the headers from the response.
      *
-     * @return ContentBag
+     * @return ArrayRepository
      */
-    public function headers(): ContentBag
+    public function headers(): ArrayRepository
     {
         return $this->rawResponse->getHeaders();
     }

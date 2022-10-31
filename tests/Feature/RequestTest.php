@@ -57,8 +57,6 @@ test('(remove) fake asynchronous requests work', function () {
     $responseC = $connector->sendAsync(new UserRequest);
 
     Utils::unwrap([$responseA, $responseB, $responseC]);
-
-    dd($responseC);
 });
 
 test('a request can handle an exception properly', function () {

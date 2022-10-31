@@ -2,10 +2,10 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Authenticators;
 
+use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 
-class PizzaAuthenticator implements AuthenticatorInterface
+class PizzaAuthenticator implements Authenticator
 {
     /**
      * @param string $pizza

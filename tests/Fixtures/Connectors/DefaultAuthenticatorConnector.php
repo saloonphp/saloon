@@ -3,9 +3,9 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 
 use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
 use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 
 class DefaultAuthenticatorConnector extends SaloonConnector
 {
@@ -34,9 +34,9 @@ class DefaultAuthenticatorConnector extends SaloonConnector
     /**
      * Provide default authentication.
      *
-     * @return AuthenticatorInterface|null
+     * @return Authenticator|null
      */
-    public function defaultAuth(): ?AuthenticatorInterface
+    public function defaultAuth(): ?Authenticator
     {
         return new TokenAuthenticator('yee-haw-connector');
     }

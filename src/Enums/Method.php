@@ -15,9 +15,9 @@ enum Method: string
      * Attempt to find an enum for the given value.
      *
      * @param string $value
-     * @return static
+     * @return $this
      */
-    public static function upperFrom(string $value): static
+    public static function upperFrom(string $value): self
     {
         return self::from(mb_strtoupper($value));
     }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Sammyjo20\Saloon\Repositories;
+namespace Sammyjo20\Saloon\Repositories\Body;
 
 use Sammyjo20\Saloon\Exceptions\UnableToCastToStringException;
-use Sammyjo20\Saloon\Interfaces\Data\ArrayBodyRepository as ArrayBodyRepositoryContract;
+use Sammyjo20\Saloon\Contracts\Body\ArrayBodyRepository as ArrayBodyRepositoryContract;
 
 class ArrayBodyRepository implements ArrayBodyRepositoryContract
 {

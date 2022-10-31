@@ -2,26 +2,26 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
+use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Http\Auth\BasicAuthenticator;
 use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
 use Sammyjo20\Saloon\Http\Auth\DigestAuthenticator;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 
 trait AuthenticatesRequests
 {
     /**
      * The authenticator used in requests.
      *
-     * @var AuthenticatorInterface|null
+     * @var Authenticator|null
      */
-    protected ?AuthenticatorInterface $authenticator = null;
+    protected ?Authenticator $authenticator = null;
 
     /**
      * Default authenticator used.
      *
-     * @return AuthenticatorInterface|null
+     * @return Authenticator|null
      */
-    protected function defaultAuth(): ?AuthenticatorInterface
+    protected function defaultAuth(): ?Authenticator
     {
         return null;
     }
@@ -29,9 +29,9 @@ trait AuthenticatesRequests
     /**
      * Retrieve the authenticator.
      *
-     * @return AuthenticatorInterface|null
+     * @return Authenticator|null
      */
-    public function getAuthenticator(): ?AuthenticatorInterface
+    public function getAuthenticator(): ?Authenticator
     {
         return $this->authenticator ?? $this->defaultAuth();
     }
@@ -39,10 +39,10 @@ trait AuthenticatesRequests
     /**
      * Register an authenticator
      *
-     * @param AuthenticatorInterface $authenticator
+     * @param Authenticator $authenticator
      * @return $this
      */
-    public function withAuth(AuthenticatorInterface $authenticator): static
+    public function withAuth(Authenticator $authenticator): static
     {
         $this->authenticator = $authenticator;
 
@@ -52,10 +52,10 @@ trait AuthenticatesRequests
     /**
      * Register an authenticator
      *
-     * @param AuthenticatorInterface $authenticator
+     * @param Authenticator $authenticator
      * @return $this
      */
-    public function authenticate(AuthenticatorInterface $authenticator): static
+    public function authenticate(Authenticator $authenticator): static
     {
         return $this->withAuth($authenticator);
     }

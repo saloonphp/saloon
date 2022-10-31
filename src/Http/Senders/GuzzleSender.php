@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Client as GuzzleClient;
+use Sammyjo20\Saloon\Contracts\Sender;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\GuzzleException;
@@ -15,13 +16,12 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\BadResponseException;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Responses\PsrResponse;
-use Sammyjo20\Saloon\Interfaces\SenderInterface;
-use Sammyjo20\Saloon\Repositories\FormBodyRepository;
-use Sammyjo20\Saloon\Repositories\JsonBodyRepository;
-use Sammyjo20\Saloon\Repositories\StringBodyRepository;
-use Sammyjo20\Saloon\Repositories\MultipartBodyRepository;
+use Sammyjo20\Saloon\Repositories\Body\FormBodyRepository;
+use Sammyjo20\Saloon\Repositories\Body\JsonBodyRepository;
+use Sammyjo20\Saloon\Repositories\Body\StringBodyRepository;
+use Sammyjo20\Saloon\Repositories\Body\MultipartBodyRepository;
 
-class GuzzleSender implements SenderInterface
+class GuzzleSender implements Sender
 {
     /**
      * The Guzzle client.

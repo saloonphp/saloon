@@ -1,17 +1,17 @@
 <?php
 
-namespace Sammyjo20\Saloon\Interfaces;
+namespace Sammyjo20\Saloon\Contracts;
 
 use Exception;
 use SimpleXMLElement;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\StreamInterface;
-use Sammyjo20\Saloon\Helpers\ContentBag;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Repositories\ArrayRepository;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 
-interface SaloonResponseInterface
+interface SaloonResponse
 {
     /**
      * @return PendingSaloonRequest
@@ -89,9 +89,9 @@ interface SaloonResponseInterface
     /**
      * Get the headers from the response.
      *
-     * @return ContentBag
+     * @return ArrayRepository
      */
-    public function headers(): ContentBag;
+    public function headers(): ArrayRepository;
 
     /**
      * Get the status code of the response.

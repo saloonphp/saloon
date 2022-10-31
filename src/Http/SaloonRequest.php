@@ -7,12 +7,12 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Traits\HasConnector;
 use Sammyjo20\Saloon\Traits\MocksRequests;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Traits\CastsResponseToDto;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Exceptions\DataBagException;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
-use Sammyjo20\Saloon\Interfaces\SaloonResponseInterface;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
@@ -164,14 +164,14 @@ abstract class SaloonRequest
      *
      * @param MockClient|null $mockClient
      * @param bool $asynchronous
-     * @return SaloonResponseInterface|PromiseInterface
+     * @return SaloonResponse|PromiseInterface
      * @throws DataBagException
      * @throws PendingSaloonRequestException
      * @throws SaloonInvalidConnectorException
      * @throws SaloonInvalidResponseClassException
      * @throws \ReflectionException
      */
-    public function send(MockClient $mockClient = null, bool $asynchronous = false): SaloonResponseInterface|PromiseInterface
+    public function send(MockClient $mockClient = null, bool $asynchronous = false): SaloonResponse|PromiseInterface
     {
         return $this->connector()->send($this, $mockClient, $asynchronous);
     }

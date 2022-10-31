@@ -9,17 +9,21 @@ use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 class MiddlewarePipeline
 {
     /**
+     * Request Pipeline
+     *
      * @var Pipeline
      */
     protected Pipeline $requestPipeline;
 
     /**
+     * Response Pipeline
+     *
      * @var Pipeline
      */
     protected Pipeline $responsePipeline;
 
     /**
-     * Instantiate the pipelines
+     * Constructor
      */
     public function __construct()
     {
@@ -120,6 +124,8 @@ class MiddlewarePipeline
     }
 
     /**
+     * Get the request pipeline
+     *
      * @return Pipeline
      */
     public function getRequestPipeline(): Pipeline
@@ -128,6 +134,8 @@ class MiddlewarePipeline
     }
 
     /**
+     * Get the response pipeline
+     *
      * @return Pipeline
      */
     public function getResponsePipeline(): Pipeline

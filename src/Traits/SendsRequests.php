@@ -8,10 +8,10 @@ use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Exceptions\DataBagException;
 use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Http\Responses\SimulatedResponse;
-use Sammyjo20\Saloon\Interfaces\SaloonResponseInterface;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
@@ -31,7 +31,7 @@ trait SendsRequests
      * @throws SaloonInvalidConnectorException
      * @throws SaloonInvalidResponseClassException
      */
-    public function send(SaloonRequest $request, MockClient $mockClient = null, bool $asynchronous = false): SaloonResponseInterface|PromiseInterface
+    public function send(SaloonRequest $request, MockClient $mockClient = null, bool $asynchronous = false): SaloonResponse|PromiseInterface
     {
         // We'll set the request's connector to the current instance.
 

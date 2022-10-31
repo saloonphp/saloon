@@ -1,15 +1,19 @@
 <?php
 
-namespace Sammyjo20\Saloon\Helpers;
+namespace Sammyjo20\Saloon\Repositories;
 
-class ContentBag
+class ArrayRepository
 {
     /**
+     * The repository's store
+     *
      * @var array
      */
     protected array $data = [];
 
     /**
+     * Constructor
+     *
      * @param array $data
      */
     public function __construct(array $data = [])
@@ -18,7 +22,7 @@ class ContentBag
     }
 
     /**
-     * Retrieve all the items from the ContentBag.
+     * Retrieve all the items.
      *
      * @return array
      */
@@ -28,7 +32,7 @@ class ContentBag
     }
 
     /**
-     * Retrieve a single item from the ContentBag.
+     * Retrieve a single item.
      *
      * @param string $key
      * @param mixed|null $default
@@ -40,7 +44,7 @@ class ContentBag
     }
 
     /**
-     * Overwrite the entire ContentBag. Will disable default values.
+     * Overwrite the entire repository.
      *
      * @param array $data
      * @return $this
@@ -53,7 +57,7 @@ class ContentBag
     }
 
     /**
-     * Merge in data into the content bag.
+     * Merge in other arrays.
      *
      * @param mixed ...$arrays
      * @return $this
@@ -66,7 +70,7 @@ class ContentBag
     }
 
     /**
-     * Store and overwrite an item into the ContentBag.
+     * Add an item to the repository.
      *
      * @param string $key
      * @param mixed $value
@@ -80,7 +84,7 @@ class ContentBag
     }
 
     /**
-     * Store a given value if a given condition is true.
+     * Add an item to the repository when a condition is true.
      *
      * @param bool $condition
      * @param string $key

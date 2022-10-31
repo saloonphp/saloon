@@ -3,8 +3,8 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Contracts\Body\WithBody;
 use Sammyjo20\Saloon\Traits\Body\HasJsonBody;
-use Sammyjo20\Saloon\Interfaces\Data\WithBody;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\PostJsonConnector;
 
 class PostRequest extends SaloonRequest implements WithBody

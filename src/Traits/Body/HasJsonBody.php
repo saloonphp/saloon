@@ -3,7 +3,7 @@
 namespace Sammyjo20\Saloon\Traits\Body;
 
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Repositories\JsonBodyRepository;
+use Sammyjo20\Saloon\Repositories\Body\JsonBodyRepository;
 
 trait HasJsonBody
 {

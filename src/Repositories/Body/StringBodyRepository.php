@@ -1,8 +1,8 @@
 <?php
 
-namespace Sammyjo20\Saloon\Repositories;
+namespace Sammyjo20\Saloon\Repositories\Body;
 
-use Sammyjo20\Saloon\Interfaces\Data\BodyRepository as BodyRepositoryContract;
+use Sammyjo20\Saloon\Contracts\Body\BodyRepository as BodyRepositoryContract;
 
 class StringBodyRepository implements BodyRepositoryContract
 {

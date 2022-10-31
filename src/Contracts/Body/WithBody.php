@@ -1,6 +1,6 @@
 <?php
 
-namespace Sammyjo20\Saloon\Interfaces\Data;
+namespace Sammyjo20\Saloon\Contracts\Body;
 
 interface WithBody
 {

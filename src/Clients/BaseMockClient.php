@@ -53,6 +53,8 @@ class BaseMockClient
     protected array $recordedResponses = [];
 
     /**
+     * Constructor
+     *
      * @param array $mockData
      * @throws SaloonInvalidMockResponseCaptureMethodException
      */
@@ -136,10 +138,9 @@ class BaseMockClient
     /**
      * Guess the next response based on the request.
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return MockResponse|Fixture
      * @throws SaloonNoMockResponseFoundException
-     * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function guessNextResponse(PendingSaloonRequest $pendingRequest): MockResponse|Fixture
@@ -174,7 +175,7 @@ class BaseMockClient
      * Guess the response from the URL.
      *
      * @param SaloonRequest $request
-     * @return MockResponse|callable|null
+     * @return MockResponse|Fixture|callable|null
      */
     private function guessResponseFromUrl(SaloonRequest $request): MockResponse|Fixture|callable|null
     {
@@ -227,7 +228,7 @@ class BaseMockClient
      */
     public function getLastRequest(): ?SaloonRequest
     {
-        return $this->getLastResponse()?->getOriginalRequest();
+        return $this->getLastResponse()?->getRequest();
     }
 
     /**
@@ -253,7 +254,7 @@ class BaseMockClient
      *
      * @param string|callable $value
      * @return void
-     * @throws \ReflectionException
+     * @throws \ReflectionException|\Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function assertSent(string|callable $value): void
     {
@@ -267,7 +268,7 @@ class BaseMockClient
      *
      * @param string|callable $request
      * @return void
-     * @throws \ReflectionException
+     * @throws \ReflectionException|\Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function assertNotSent(string|callable $request): void
     {
@@ -282,7 +283,7 @@ class BaseMockClient
      * @param string $request
      * @param array $data
      * @return void
-     * @throws \ReflectionException
+     * @throws \ReflectionException|\Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function assertSentJson(string $request, array $data): void
     {

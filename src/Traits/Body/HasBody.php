@@ -2,7 +2,7 @@
 
 namespace Sammyjo20\Saloon\Traits\Body;
 
-use Sammyjo20\Saloon\Repositories\StringBodyRepository;
+use Sammyjo20\Saloon\Repositories\Body\StringBodyRepository;
 
 trait HasBody
 {

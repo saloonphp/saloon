@@ -2,8 +2,8 @@
 
 namespace Sammyjo20\Saloon\Traits\Auth;
 
+use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 use Sammyjo20\Saloon\Exceptions\MissingAuthenticatorException;
 
 trait RequiresAuth
@@ -19,7 +19,7 @@ trait RequiresAuth
     {
         $authenticator = $pendingSaloonRequest->getAuthenticator();
 
-        if (! $authenticator instanceof AuthenticatorInterface) {
+        if (! $authenticator instanceof Authenticator) {
             throw new MissingAuthenticatorException($this->getRequiresAuthMessage($pendingSaloonRequest));
         }
     }
