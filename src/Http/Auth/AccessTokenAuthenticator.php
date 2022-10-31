@@ -4,9 +4,9 @@ namespace Sammyjo20\Saloon\Http\Auth;
 
 use Carbon\CarbonInterface;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Interfaces\OAuthAuthenticatorInterface;
+use Sammyjo20\Saloon\Contracts\OAuthAuthenticator;
 
-class AccessTokenAuthenticator implements OAuthAuthenticatorInterface
+class AccessTokenAuthenticator implements OAuthAuthenticator
 {
     /**
      * @param string $accessToken

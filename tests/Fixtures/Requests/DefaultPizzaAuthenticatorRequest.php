@@ -3,8 +3,8 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Traits\Auth\RequiresAuth;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Authenticators\PizzaAuthenticator;
 
@@ -37,9 +37,9 @@ class DefaultPizzaAuthenticatorRequest extends SaloonRequest
     }
 
     /**
-     * @return AuthenticatorInterface|null
+     * @return Authenticator|null
      */
-    public function defaultAuth(): ?AuthenticatorInterface
+    public function defaultAuth(): ?Authenticator
     {
         return new PizzaAuthenticator('BBQ Chicken', 'Lemonade');
     }

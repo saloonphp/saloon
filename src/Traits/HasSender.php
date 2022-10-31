@@ -2,24 +2,24 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
+use Sammyjo20\Saloon\Contracts\Sender;
 use Sammyjo20\Saloon\Http\Senders\GuzzleSender;
-use Sammyjo20\Saloon\Interfaces\SenderInterface;
 
 trait HasSender
 {
     /**
      * The request sender.
      *
-     * @var SenderInterface
+     * @var Sender
      */
-    protected SenderInterface $sender;
+    protected Sender $sender;
 
     /**
      * Manage the request sender.
      *
-     * @return SenderInterface
+     * @return Sender
      */
-    public function sender(): SenderInterface
+    public function sender(): Sender
     {
         return $this->sender ??= $this->defaultSender();
     }
@@ -27,9 +27,9 @@ trait HasSender
     /**
      * Define the default request sender.
      *
-     * @return SenderInterface
+     * @return Sender
      */
-    protected function defaultSender(): SenderInterface
+    protected function defaultSender(): Sender
     {
         return new GuzzleSender;
     }

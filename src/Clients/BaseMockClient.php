@@ -9,9 +9,10 @@ use Sammyjo20\Saloon\Http\MockResponse;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Helpers\ReflectionHelper;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;
 
@@ -53,6 +54,8 @@ class BaseMockClient
     protected array $recordedResponses = [];
 
     /**
+     * Constructor
+     *
      * @param array $mockData
      * @throws SaloonInvalidMockResponseCaptureMethodException
      */
@@ -136,10 +139,9 @@ class BaseMockClient
     /**
      * Guess the next response based on the request.
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return MockResponse|Fixture
      * @throws SaloonNoMockResponseFoundException
-     * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function guessNextResponse(PendingSaloonRequest $pendingRequest): MockResponse|Fixture
@@ -174,7 +176,8 @@ class BaseMockClient
      * Guess the response from the URL.
      *
      * @param SaloonRequest $request
-     * @return MockResponse|callable|null
+     * @return MockResponse|Fixture|callable|null
+     * @throws SaloonInvalidConnectorException
      */
     private function guessResponseFromUrl(SaloonRequest $request): MockResponse|Fixture|callable|null
     {
@@ -227,7 +230,7 @@ class BaseMockClient
      */
     public function getLastRequest(): ?SaloonRequest
     {
-        return $this->getLastResponse()?->getOriginalRequest();
+        return $this->getLastResponse()?->getRequest();
     }
 
     /**
@@ -253,7 +256,7 @@ class BaseMockClient
      *
      * @param string|callable $value
      * @return void
-     * @throws \ReflectionException
+     * @throws \ReflectionException|\Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function assertSent(string|callable $value): void
     {
@@ -267,7 +270,7 @@ class BaseMockClient
      *
      * @param string|callable $request
      * @return void
-     * @throws \ReflectionException
+     * @throws \ReflectionException|\Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function assertNotSent(string|callable $request): void
     {
@@ -282,7 +285,7 @@ class BaseMockClient
      * @param string $request
      * @param array $data
      * @return void
-     * @throws \ReflectionException
+     * @throws \ReflectionException|\Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function assertSentJson(string $request, array $data): void
     {

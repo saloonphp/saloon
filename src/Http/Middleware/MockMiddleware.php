@@ -2,8 +2,12 @@
 
 namespace Sammyjo20\Saloon\Http\Middleware;
 
+use Sammyjo20\Saloon\Http\Fixture;
+use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
+use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
 
 class MockMiddleware
 {
@@ -21,18 +25,15 @@ class MockMiddleware
      * Guess a mock response
      *
      * @param PendingSaloonRequest $request
-     * @return void
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException
+     * @return Fixture|MockResponse
+     * @throws SaloonInvalidConnectorException
+     * @throws SaloonNoMockResponseFoundException
      */
     public function __invoke(PendingSaloonRequest $request)
     {
-        $mockResponse = $this->mockClient->guessNextResponse($request);
-
         // Todo: we'll probably have to move it out of here to support fixtures, i.e multiple middleware
         // Todo: Or support adding more middleware while it is processing?
 
-        return $mockResponse;
+        return $this->mockClient->guessNextResponse($request);
     }
 }

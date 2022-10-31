@@ -1,15 +1,15 @@
 <?php
 
-use Sammyjo20\Saloon\Helpers\ContentBag;
+use Sammyjo20\Saloon\Repositories\ArrayRepository;
 
 test('the bag is empty by default', function () {
-    $bag = new ContentBag();
+    $bag = new ArrayRepository();
 
     expect($bag->all())->toEqual([]);
 });
 
 test('you can set it', function () {
-    $bag = new ContentBag();
+    $bag = new ArrayRepository();
 
     $bag->set(['name' => 'Sam']);
 
@@ -17,14 +17,14 @@ test('you can set it', function () {
 });
 
 test('you can add an item', function () {
-    $bag = new ContentBag();
+    $bag = new ArrayRepository();
     $bag->add('name', 'Sam');
 
     expect($bag->all())->toEqual(['name' => 'Sam']);
 });
 
 test('you can add an item based on condition', function () {
-    $bag = new ContentBag();
+    $bag = new ArrayRepository();
     $bag->addWhen(true, 'name', 'Gareth');
     $bag->addWhen(false, 'name', 'Sam');
     $bag->addWhen(true, 'sidekick', fn () => 'Mantas');
@@ -35,26 +35,26 @@ test('you can add an item based on condition', function () {
 });
 
 test('you can delete an item', function () {
-    $bag = new ContentBag(['name' => 'Sam']);
+    $bag = new ArrayRepository(['name' => 'Sam']);
     $bag->remove('name');
 
     expect($bag->all())->toEqual([]);
 });
 
 test('you can get an item', function () {
-    $bag = new ContentBag(['name' => 'Sam']);
+    $bag = new ArrayRepository(['name' => 'Sam']);
 
     expect($bag->get('name'))->toEqual('Sam');
 });
 
 test('you can get all items', function () {
-    $bag = new ContentBag(['name' => 'Sam', 'superhero' => 'Iron Man']);
+    $bag = new ArrayRepository(['name' => 'Sam', 'superhero' => 'Iron Man']);
 
     expect($bag->all())->toEqual(['name' => 'Sam', 'superhero' => 'Iron Man']);
 });
 
 test('you can merge items together into the content bag', function () {
-    $bag = new ContentBag(['name' => 'Sam', 'superhero' => 'Iron Man']);
+    $bag = new ArrayRepository(['name' => 'Sam', 'superhero' => 'Iron Man']);
 
     $bag->merge(['sidekick' => 'Gareth'], ['superhero' => 'Black Widow']);
 

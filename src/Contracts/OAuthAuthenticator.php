@@ -1,10 +1,10 @@
 <?php
 
-namespace Sammyjo20\Saloon\Interfaces;
+namespace Sammyjo20\Saloon\Contracts;
 
 use Carbon\CarbonInterface;
 
-interface OAuthAuthenticatorInterface extends AuthenticatorInterface
+interface OAuthAuthenticator extends Authenticator
 {
     /**
      * @return string

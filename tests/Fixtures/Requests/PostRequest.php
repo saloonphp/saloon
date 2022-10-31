@@ -3,24 +3,25 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
+use Sammyjo20\Saloon\Contracts\Body\WithBody;
+use Sammyjo20\Saloon\Traits\Body\HasJsonBody;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\PostJsonConnector;
 
-class PostRequest extends SaloonRequest
+class PostRequest extends SaloonRequest implements WithBody
 {
     use HasJsonBody;
 
     /**
      * Define the method that the request will use.
      *
-     * @var string|null
+     * @var string
      */
     protected string $method = 'POST';
 
     /**
      * The connector.
      *
-     * @var string|null
+     * @var string
      */
     protected string $connector = PostJsonConnector::class;
 
@@ -34,7 +35,10 @@ class PostRequest extends SaloonRequest
         return '/user';
     }
 
-    public function defaultData(): array
+    /**
+     * @return string[]
+     */
+    public function defaultBody(): array
     {
         return [
             'requestId' => '2',

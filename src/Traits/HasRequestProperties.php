@@ -2,40 +2,31 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Sammyjo20\Saloon\Helpers\DataBag;
-use Sammyjo20\Saloon\Helpers\ContentBag;
-use Sammyjo20\Saloon\Data\RequestProperties;
 use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
+use Sammyjo20\Saloon\Repositories\ArrayRepository;
 
 trait HasRequestProperties
 {
     /**
      * Request Headers
      *
-     * @var ContentBag
+     * @var ArrayRepository
      */
-    protected ContentBag $headers;
+    protected ArrayRepository $headers;
 
     /**
      * Request Query Parameters
      *
-     * @var ContentBag
+     * @var ArrayRepository
      */
-    protected ContentBag $queryParameters;
-
-    /**
-     * Request Data
-     *
-     * @var DataBag
-     */
-    protected DataBag $data;
+    protected ArrayRepository $queryParameters;
 
     /**
      * Request Config
      *
-     * @var ContentBag
+     * @var ArrayRepository
      */
-    protected ContentBag $config;
+    protected ArrayRepository $config;
 
     /**
      * Saloon Middleware Pipeline
@@ -47,41 +38,31 @@ trait HasRequestProperties
     /**
      * Retrieve the headers content bag.
      *
-     * @return ContentBag
+     * @return ArrayRepository
      */
-    public function headers(): ContentBag
+    public function headers(): ArrayRepository
     {
-        return $this->headers ??= new ContentBag($this->defaultHeaders());
+        return $this->headers ??= new ArrayRepository($this->defaultHeaders());
     }
 
     /**
      * Retrieve the query parameters content bag.
      *
-     * @return ContentBag
+     * @return ArrayRepository
      */
-    public function queryParameters(): ContentBag
+    public function queryParameters(): ArrayRepository
     {
-        return $this->queryParameters ??= new ContentBag($this->defaultQueryParameters());
-    }
-
-    /**
-     * Retrieve the data content bag.
-     *
-     * @return DataBag
-     */
-    public function data(): DataBag
-    {
-        return $this->data ??= new DataBag($this->defaultData());
+        return $this->queryParameters ??= new ArrayRepository($this->defaultQueryParameters());
     }
 
     /**
      * Retrieve the config content bag.
      *
-     * @return ContentBag
+     * @return ArrayRepository
      */
-    public function config(): ContentBag
+    public function config(): ArrayRepository
     {
-        return $this->config ??= new ContentBag($this->defaultConfig());
+        return $this->config ??= new ArrayRepository($this->defaultConfig());
     }
 
     /**
@@ -115,16 +96,6 @@ trait HasRequestProperties
     }
 
     /**
-     * Default Data
-     *
-     * @return mixed
-     */
-    protected function defaultData(): mixed
-    {
-        return [];
-    }
-
-    /**
      * Default Config
      *
      * @return array
@@ -132,21 +103,5 @@ trait HasRequestProperties
     protected function defaultConfig(): array
     {
         return [];
-    }
-
-    /**
-     * Get all the request properties with their default set.
-     *
-     * @return RequestProperties
-     */
-    public function getRequestProperties(): RequestProperties
-    {
-        return new RequestProperties(
-            $this->headers()->all(),
-            $this->queryParameters()->all(),
-            $this->data()->all(),
-            $this->config()->all(),
-            $this->middleware(),
-        );
     }
 }

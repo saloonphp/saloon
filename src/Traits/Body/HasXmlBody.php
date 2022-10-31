@@ -1,18 +1,20 @@
 <?php
 
-namespace Sammyjo20\Saloon\Traits\Plugins;
+namespace Sammyjo20\Saloon\Traits\Body;
 
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 
-trait HasXMLBody
+trait HasXmlBody
 {
+    use HasBody;
+
     /**
-     * Add the headers to send XML
+     * Boot the plugin
      *
      * @param PendingSaloonRequest $request
      * @return void
      */
-    public static function bootHasXMLBody(PendingSaloonRequest $request): void
+    public function bootHasXmlBody(PendingSaloonRequest $request): void
     {
         $request->headers()->add('Accept', 'application/xml');
         $request->headers()->add('Content-Type', 'application/xml');

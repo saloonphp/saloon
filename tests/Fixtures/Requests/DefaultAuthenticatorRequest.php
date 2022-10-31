@@ -3,9 +3,9 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Traits\Auth\RequiresAuth;
 use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class DefaultAuthenticatorRequest extends SaloonRequest
@@ -39,9 +39,9 @@ class DefaultAuthenticatorRequest extends SaloonRequest
     /**
      * Provide default authentication.
      *
-     * @return AuthenticatorInterface|null
+     * @return Authenticator|null
      */
-    protected function defaultAuth(): ?AuthenticatorInterface
+    protected function defaultAuth(): ?Authenticator
     {
         return new TokenAuthenticator('yee-haw-request');
     }

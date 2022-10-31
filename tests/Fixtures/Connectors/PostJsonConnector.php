@@ -3,10 +3,11 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 
 use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Contracts\Body\WithBody;
+use Sammyjo20\Saloon\Traits\Body\HasJsonBody;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
-use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
 
-class PostJsonConnector extends SaloonConnector
+class PostJsonConnector extends SaloonConnector implements WithBody
 {
     use AcceptsJson;
     use HasJsonBody;
@@ -16,7 +17,7 @@ class PostJsonConnector extends SaloonConnector
         return apiUrl();
     }
 
-    public function defaultData(): array
+    public function defaultBody(): array
     {
         return [
             'connectorId' => 1,

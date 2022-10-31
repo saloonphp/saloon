@@ -2,25 +2,19 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use ReflectionClass;
 use ReflectionException;
 use Sammyjo20\Saloon\Enums\Method;
+use Sammyjo20\Saloon\Contracts\Sender;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Data\RequestDataType;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
-use Sammyjo20\Saloon\Interfaces\SenderInterface;
-use Sammyjo20\Saloon\Exceptions\DataBagException;
+use Sammyjo20\Saloon\Contracts\Authenticator;
+use Sammyjo20\Saloon\Contracts\Body\WithBody;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
-use Sammyjo20\Saloon\Interfaces\Data\SendsXMLBody;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
+use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
 use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
-use Sammyjo20\Saloon\Interfaces\Data\SendsMixedBody;
-use Sammyjo20\Saloon\Interfaces\Data\SendsFormParams;
-use Sammyjo20\Saloon\Interfaces\Data\SendsStringBody;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
-use Sammyjo20\Saloon\Interfaces\Data\SendsMultipartBody;
+use Sammyjo20\Saloon\Repositories\Body\ArrayBodyRepository;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
@@ -73,18 +67,18 @@ class PendingSaloonRequest
     protected ?MockClient $mockClient = null;
 
     /**
-     * The data type.
+     * The body repository
      *
-     * @var RequestDataType|null
+     * @var BodyRepository|null
      */
-    protected ?RequestDataType $dataType = null;
+    protected ?BodyRepository $body = null;
 
     /**
-     * The Mock Response Found
+     * The simulated response.
      *
-     * @var MockResponse|null
+     * @var SimulatedResponseData|null
      */
-    protected ?MockResponse $mockResponse = null;
+    protected ?SimulatedResponseData $simulatedResponseData = null;
 
     /**
      * Build up the request payload.
@@ -93,7 +87,6 @@ class PendingSaloonRequest
      * @param MockClient|null $mockClient
      * @throws PendingSaloonRequestException
      * @throws ReflectionException
-     * @throws DataBagException
      * @throws SaloonInvalidConnectorException
      * @throws SaloonInvalidResponseClassException
      */
@@ -112,13 +105,15 @@ class PendingSaloonRequest
         // Let's build the PendingSaloonRequest. Since it is made up of many
         // properties, we run an individual method for each one.
 
+        // Todo: Document the priority.
+
         $this
-            ->registerDefaultMiddleware()
-            ->mergeRequestProperties()
-            ->mergeData()
-            ->bootConnectorAndRequest()
             ->bootPlugins()
-            ->authenticateRequest();
+            ->mergeRequestProperties()
+            ->mergeBody()
+            ->authenticateRequest()
+            ->bootConnectorAndRequest()
+            ->registerDefaultMiddleware();
 
         // Next, we will execute the request middleware pipeline which will
         // process any middleware added on the connector or the request.
@@ -133,80 +128,54 @@ class PendingSaloonRequest
      */
     protected function mergeRequestProperties(): static
     {
-        $connectorProperties = $this->connector->getRequestProperties();
-        $requestProperties = $this->request->getRequestProperties();
+        $connector = $this->connector;
+        $request = $this->request;
 
-        $this->headers()->merge($connectorProperties->headers, $requestProperties->headers);
-        $this->queryParameters()->merge($connectorProperties->queryParameters, $requestProperties->queryParameters);
-        $this->config()->merge($connectorProperties->config, $requestProperties->config);
+        $this->headers()->merge($connector->headers()->all(), $request->headers()->all());
+        $this->queryParameters()->merge($connector->queryParameters()->all(), $request->queryParameters()->all());
+        $this->config()->merge($connector->config()->all(), $request->config()->all());
 
         // Merge together the middleware pipelines...
 
         $this->middleware()
-            ->merge($connectorProperties->middleware)
-            ->merge($requestProperties->middleware);
+            ->merge($connector->middleware())
+            ->merge($request->middleware());
 
         return $this;
     }
 
     /**
-     * Merge the data together
+     * Merge the body together
      *
      * @return $this
      * @throws PendingSaloonRequestException
-     * @throws \Sammyjo20\Saloon\Exceptions\DataBagException
      */
-    protected function mergeData(): static
+    protected function mergeBody(): static
     {
-        $connectorProperties = $this->connector->getRequestProperties();
-        $requestProperties = $this->request->getRequestProperties();
+        $connector = $this->connector;
+        $request = $this->request;
 
-        $connectorDataType = $this->determineDataType($this->connector);
-        $requestDataType = $this->determineDataType($this->request);
+        $connectorBody = $connector instanceof WithBody ? $connector->body() : null;
+        $requestBody = $request instanceof WithBody ? $request->body() : null;
 
-        if (isset($connectorDataType, $requestDataType) && $connectorDataType !== $requestDataType) {
-            throw new PendingSaloonRequestException('Request data type and connector data type cannot be mixed.');
+        if (is_null($connectorBody) && is_null($requestBody)) {
+            return $this;
         }
 
-        // The primary data type will be the request data type, if one has not
-        // been set, we will use the connector data.
-
-        $dataType = $requestDataType ?? $connectorDataType;
-
-        // If no data type was found, just continue.
-
-        if (! $dataType instanceof RequestDataType) {
-            if ($this->data()->isEmpty()) {
-                return $this;
-            }
-
-            throw new PendingSaloonRequestException('You have provided data without a data type interface defined on your request or connector.');
+        if (isset($connectorBody, $requestBody) && ! $connectorBody instanceof $requestBody) {
+            throw new PendingSaloonRequestException('Connector and request body types must be the same.');
         }
 
-        // Now we'll enforce the type on the data.
+        if ($connectorBody instanceof ArrayBodyRepository && $requestBody instanceof ArrayBodyRepository) {
+            $repository = clone $connectorBody;
+            $repository->merge($requestBody->all());
 
-        $this->data()->setTypeFromRequestType($dataType);
-        $this->dataType = $dataType;
+            $this->body = $repository;
 
-        // Now we'll set the data. If the data type is arrayable, we'll merge it together.
-        // If it's a mixed data type, we'll just set the data.
-
-        $connectorData = $connectorProperties->data;
-        $requestData = $requestProperties->data;
-
-        if ($dataType->isArrayable()) {
-            $this->data()->merge($connectorData ?? [], $requestData ?? []);
+            return $this;
         }
 
-        if ($dataType === RequestDataType::STRING) {
-            if (! empty($connectorData)) {
-                $this->data()->set($connectorData);
-            }
-
-            if (! empty($requestData)) {
-                $this->data()->set($requestData);
-            }
-        }
+        $this->body = clone $requestBody ?? clone $connectorBody;
 
         return $this;
     }
@@ -220,7 +189,7 @@ class PendingSaloonRequest
     {
         $authenticator = $this->getAuthenticator();
 
-        if ($authenticator instanceof AuthenticatorInterface) {
+        if ($authenticator instanceof Authenticator) {
             $authenticator->set($this);
         }
 
@@ -251,8 +220,8 @@ class PendingSaloonRequest
         $connector = $this->connector;
         $request = $this->request;
 
-        $connectorTraits = (new ReflectionClass($connector))->getTraits();
-        $requestTraits = (new ReflectionClass($request))->getTraits();
+        $connectorTraits = class_uses_recursive($connector);
+        $requestTraits = class_uses_recursive($request);
 
         foreach ($connectorTraits as $connectorTrait) {
             PluginHelper::bootPlugin($this, $connector, $connectorTrait);
@@ -310,33 +279,6 @@ class PendingSaloonRequest
         $this->middleware()->executeResponsePipeline($response);
 
         return $response;
-    }
-
-    /**
-     * Calculate the data type.
-     *
-     * @param SaloonConnector|SaloonRequest $object
-     * @return RequestDataType|null
-     */
-    protected function determineDataType(SaloonConnector|SaloonRequest $object): ?RequestDataType
-    {
-        if ($object instanceof SendsJsonBody) {
-            return RequestDataType::JSON;
-        }
-
-        if ($object instanceof SendsFormParams) {
-            return RequestDataType::FORM;
-        }
-
-        if ($object instanceof SendsMultipartBody) {
-            return RequestDataType::MULTIPART;
-        }
-
-        if ($object instanceof SendsMixedBody || $object instanceof SendsStringBody || $object instanceof SendsXMLBody) {
-            return RequestDataType::STRING;
-        }
-
-        return null;
     }
 
     /**
@@ -398,66 +340,55 @@ class PendingSaloonRequest
     }
 
     /**
-     * @return RequestDataType|null
-     */
-    public function getDataType(): ?RequestDataType
-    {
-        return $this->dataType;
-    }
-
-    /**
      * Get the request sender.
      *
-     * @return SenderInterface
+     * @return Sender
      */
-    public function getSender(): SenderInterface
+    public function getSender(): Sender
     {
         return $this->connector->sender();
     }
 
     /**
-     * Set the mock client
+     * Retrieve the body on the pending saloon request
      *
-     * @param MockClient|null $mockClient
+     * @return BodyRepository|null
+     */
+    public function body(): ?BodyRepository
+    {
+        return $this->body;
+    }
+
+    /**
+     * Get the simulated response data
+     *
+     * @return SimulatedResponseData|null
+     */
+    public function getSimulatedResponseData(): ?SimulatedResponseData
+    {
+        return $this->simulatedResponseData;
+    }
+
+    /**
+     * Set the simulated response data
+     *
+     * @param SimulatedResponseData|null $simulatedResponseData
      * @return PendingSaloonRequest
      */
-    public function setMockClient(?MockClient $mockClient): static
+    public function setSimulatedResponseData(?SimulatedResponseData $simulatedResponseData): PendingSaloonRequest
     {
-        $this->mockClient = $mockClient;
+        $this->simulatedResponseData = $simulatedResponseData;
 
         return $this;
     }
 
     /**
-     * Get the mocked response
-     *
-     * @return MockResponse|null
-     */
-    public function getMockResponse(): ?MockResponse
-    {
-        return $this->mockResponse;
-    }
-
-    /**
-     * Set the mocked response
-     *
-     * @param MockResponse|null $mockResponse
-     * @return PendingSaloonRequest
-     */
-    public function setMockResponse(?MockResponse $mockResponse): PendingSaloonRequest
-    {
-        $this->mockResponse = $mockResponse;
-
-        return $this;
-    }
-
-    /**
-     * Check if the pending request has a mock response
+     * Check if simulated response data is present.
      *
      * @return bool
      */
-    public function hasMockResponse(): bool
+    public function hasSimulatedResponseData(): bool
     {
-        return $this->mockResponse instanceof MockResponse;
+        return $this->simulatedResponseData instanceof SimulatedResponseData;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sammyjo20\Saloon\Interfaces;
+namespace Sammyjo20\Saloon\Contracts;
 
 interface Arrayable
 {

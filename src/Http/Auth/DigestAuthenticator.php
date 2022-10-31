@@ -2,10 +2,10 @@
 
 namespace Sammyjo20\Saloon\Http\Auth;
 
+use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 
-class DigestAuthenticator implements AuthenticatorInterface
+class DigestAuthenticator implements Authenticator
 {
     /**
      * @param string $username

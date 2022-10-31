@@ -4,7 +4,7 @@ namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Interfaces\Data\SendsJsonBody;
+use Sammyjo20\Saloon\Contracts\Body\SendsJsonBody;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class BootAuthenticatorRequest extends SaloonRequest implements SendsJsonBody

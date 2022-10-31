@@ -2,24 +2,28 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
-use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Http\SimulatedResponseData;
 
 class MiddlewarePipeline
 {
     /**
+     * Request Pipeline
+     *
      * @var Pipeline
      */
     protected Pipeline $requestPipeline;
 
     /**
+     * Response Pipeline
+     *
      * @var Pipeline
      */
     protected Pipeline $responsePipeline;
 
     /**
-     * Instantiate the pipelines
+     * Constructor
      */
     public function __construct()
     {
@@ -42,8 +46,8 @@ class MiddlewarePipeline
                 return $result;
             }
 
-            if ($result instanceof MockResponse) {
-                $request->setMockResponse($result);
+            if ($result instanceof SimulatedResponseData) {
+                $request->setSimulatedResponseData($result);
             }
 
             return $request;
@@ -120,6 +124,8 @@ class MiddlewarePipeline
     }
 
     /**
+     * Get the request pipeline
+     *
      * @return Pipeline
      */
     public function getRequestPipeline(): Pipeline
@@ -128,6 +134,8 @@ class MiddlewarePipeline
     }
 
     /**
+     * Get the response pipeline
+     *
      * @return Pipeline
      */
     public function getResponsePipeline(): Pipeline

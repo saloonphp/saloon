@@ -3,11 +3,12 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Throwable;
-use Sammyjo20\Saloon\Helpers\DataBag;
 use Psr\Http\Message\RequestInterface;
-use Sammyjo20\Saloon\Helpers\ContentBag;
 use Sammyjo20\Saloon\Data\MockExceptionClosure;
+use Sammyjo20\Saloon\Repositories\ArrayRepository;
+use Sammyjo20\Saloon\Repositories\Body\JsonBodyRepository;
 use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
+use Sammyjo20\Saloon\Repositories\Body\ArrayBodyRepository;
 
 class SimulatedResponseData
 {
@@ -21,16 +22,16 @@ class SimulatedResponseData
     /**
      * Headers
      *
-     * @var ContentBag
+     * @var ArrayRepository
      */
-    protected ContentBag $headers;
+    protected ArrayRepository $headers;
 
     /**
      * Request Body
      *
-     * @var DataBag
+     * @var JsonBodyRepository
      */
-    protected DataBag $data;
+    protected JsonBodyRepository $data;
 
     /**
      * Exception Closure
@@ -49,8 +50,8 @@ class SimulatedResponseData
     public function __construct(int $status = 200, mixed $data = [], array $headers = [])
     {
         $this->status = $status;
-        $this->data = new DataBag($data);
-        $this->headers = new ContentBag($headers);
+        $this->data = new JsonBodyRepository($data);
+        $this->headers = new ArrayRepository($headers);
     }
 
     /**
@@ -106,9 +107,9 @@ class SimulatedResponseData
     /**
      * Get the headers
      *
-     * @return ContentBag
+     * @return ArrayRepository
      */
-    public function getHeaders(): ContentBag
+    public function getHeaders(): ArrayRepository
     {
         return $this->headers;
     }
@@ -116,9 +117,9 @@ class SimulatedResponseData
     /**
      * Get the response body
      *
-     * @return DataBag
+     * @return ArrayBodyRepository
      */
-    public function getData(): DataBag
+    public function getData(): ArrayBodyRepository
     {
         return $this->data;
     }

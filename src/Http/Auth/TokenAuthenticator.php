@@ -2,10 +2,10 @@
 
 namespace Sammyjo20\Saloon\Http\Auth;
 
+use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Interfaces\AuthenticatorInterface;
 
-class TokenAuthenticator implements AuthenticatorInterface
+class TokenAuthenticator implements Authenticator
 {
     /**
      * @param string $token

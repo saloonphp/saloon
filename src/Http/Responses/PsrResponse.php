@@ -4,7 +4,7 @@ namespace Sammyjo20\Saloon\Http\Responses;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Sammyjo20\Saloon\Helpers\ContentBag;
+use Sammyjo20\Saloon\Repositories\ArrayRepository;
 
 /**
  * @property ResponseInterface $rawResponse
@@ -34,11 +34,11 @@ class PsrResponse extends SaloonResponse
     /**
      * Get the headers from the response.
      *
-     * @return ContentBag
+     * @return ArrayRepository
      */
-    public function headers(): ContentBag
+    public function headers(): ArrayRepository
     {
-        return new ContentBag($this->rawResponse->getHeaders());
+        return new ArrayRepository($this->rawResponse->getHeaders());
     }
 
     /**

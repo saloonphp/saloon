@@ -2,12 +2,15 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
+use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
+
 trait BuildsUrls
 {
     /**
      * Build up the full request URL.
      *
      * @return string
+     * @throws SaloonInvalidConnectorException
      */
     public function getRequestUrl(): string
     {

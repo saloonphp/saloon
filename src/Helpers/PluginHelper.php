@@ -9,14 +9,19 @@ use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 class PluginHelper
 {
     /**
+     * Boot a given plugin/trait
+     *
      * @param PendingSaloonRequest $requestPayload
      * @param SaloonConnector|SaloonRequest $resource
-     * @param \ReflectionClass $trait
+     * @param string $trait
      * @return void
+     * @throws \ReflectionException
      */
-    public static function bootPlugin(PendingSaloonRequest $requestPayload, SaloonConnector|SaloonRequest $resource, \ReflectionClass $trait): void
+    public static function bootPlugin(PendingSaloonRequest $requestPayload, SaloonConnector|SaloonRequest $resource, string $trait): void
     {
-        $bootMethodName = 'boot' . $trait->getShortName();
+        $traitReflection = new \ReflectionClass($trait);
+
+        $bootMethodName = 'boot' . $traitReflection->getShortName();
 
         if (! method_exists($resource, $bootMethodName)) {
             return;

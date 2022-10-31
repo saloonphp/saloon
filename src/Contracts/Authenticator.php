@@ -1,10 +1,10 @@
 <?php
 
-namespace Sammyjo20\Saloon\Interfaces;
+namespace Sammyjo20\Saloon\Contracts;
 
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 
-interface AuthenticatorInterface
+interface Authenticator
 {
     /**
      * Apply the authentication to the request.

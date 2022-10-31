@@ -8,17 +8,20 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Client as GuzzleClient;
+use Sammyjo20\Saloon\Contracts\Sender;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
-use Sammyjo20\Saloon\Data\RequestDataType;
 use GuzzleHttp\Exception\BadResponseException;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Responses\PsrResponse;
-use Sammyjo20\Saloon\Interfaces\SenderInterface;
+use Sammyjo20\Saloon\Repositories\Body\FormBodyRepository;
+use Sammyjo20\Saloon\Repositories\Body\JsonBodyRepository;
+use Sammyjo20\Saloon\Repositories\Body\StringBodyRepository;
+use Sammyjo20\Saloon\Repositories\Body\MultipartBodyRepository;
 
-class GuzzleSender implements SenderInterface
+class GuzzleSender implements Sender
 {
     /**
      * The Guzzle client.
@@ -142,14 +145,18 @@ class GuzzleSender implements SenderInterface
             $requestOptions[$configVariable] = $value;
         }
 
-        $data = $request->data()->all();
+        $body = $request->body();
 
-        match ($request->getDataType()) {
-            RequestDataType::JSON => $requestOptions['json'] = $data,
-            RequestDataType::MULTIPART => $requestOptions['multipart'] = $data,
-            RequestDataType::FORM => $requestOptions['form_params'] = $data,
-            RequestDataType::MIXED => $requestOptions['body'] = $data,
-            default => null,
+        if (is_null($body) || $body->isEmpty()) {
+            return $requestOptions;
+        }
+
+        match ($body::class) {
+            JsonBodyRepository::class => $requestOptions['json'] = $body->all(),
+            MultipartBodyRepository::class => $requestOptions['multipart'] = $body->all(),
+            FormBodyRepository::class => $requestOptions['form_params'] = $body->all(),
+            StringBodyRepository::class => $requestOptions['body'] = $body->all(),
+            default => $requestOptions['body'] = (string)$body,
         };
 
         return $requestOptions;
