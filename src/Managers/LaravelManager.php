@@ -3,7 +3,7 @@
 namespace Sammyjo20\Saloon\Managers;
 
 use Sammyjo20\Saloon\Traits\CollectsConfig;
-use Sammyjo20\Saloon\Clients\BaseMockClient;
+use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Traits\CollectsHeaders;
 use Sammyjo20\Saloon\Traits\CollectsHandlers;
 use Sammyjo20\Saloon\Traits\CollectsInterceptors;
@@ -23,9 +23,9 @@ class LaravelManager
     protected bool $isMocking = false;
 
     /**
-     * @var BaseMockClient|null
+     * @var MockClient|null
      */
-    protected ?BaseMockClient $mockClient = null;
+    protected ?MockClient $mockClient = null;
 
     /**
      * Set if we are mocking or not
@@ -53,10 +53,10 @@ class LaravelManager
     /**
      * Set the mock client on the manager.
      *
-     * @param BaseMockClient $mockClient
+     * @param MockClient $mockClient
      * @return $this
      */
-    public function setMockClient(BaseMockClient $mockClient): static
+    public function setMockClient(MockClient $mockClient): static
     {
         $this->mockClient = $mockClient;
 
@@ -66,9 +66,9 @@ class LaravelManager
     /**
      * Return the mock client.
      *
-     * @return BaseMockClient|null
+     * @return MockClient|null
      */
-    public function getMockClient(): ?BaseMockClient
+    public function getMockClient(): ?MockClient
     {
         return $this->mockClient;
     }

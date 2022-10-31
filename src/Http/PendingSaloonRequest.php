@@ -4,9 +4,9 @@ namespace Sammyjo20\Saloon\Http;
 
 use Exception;
 use ReflectionException;
+use Sammyjo20\Saloon\Contracts\MockClient;
 use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Contracts\Sender;
-use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Contracts\Body\WithBody;
@@ -245,13 +245,11 @@ class PendingSaloonRequest
     {
         $middleware = $this->middleware();
 
-        if ($this->isMocking()) {
-            $middleware->onRequest(new MockMiddleware($this->getMockClient()));
-        }
-
         if ($this->isRunningOnLaravel()) {
             $middleware->onRequest(new SaloonLaravelMiddleware);
         }
+
+        $middleware->onRequest(new MockMiddleware);
 
         return $this;
     }
@@ -390,6 +388,19 @@ class PendingSaloonRequest
     public function hasSimulatedResponseData(): bool
     {
         return $this->simulatedResponseData instanceof SimulatedResponseData;
+    }
+
+    /**
+     * Set a mock client on the pending request.
+     *
+     * @param MockClient|null $mockClient
+     * @return PendingSaloonRequest
+     */
+    public function setMockClient(?MockClient $mockClient): PendingSaloonRequest
+    {
+        $this->mockClient = $mockClient;
+
+        return $this;
     }
 
     /**

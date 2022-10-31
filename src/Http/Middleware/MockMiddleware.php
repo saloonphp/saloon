@@ -12,16 +12,6 @@ use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
 class MockMiddleware
 {
     /**
-     * Constructor
-     *
-     * @param MockClient $mockClient
-     */
-    public function __construct(protected MockClient $mockClient)
-    {
-        //
-    }
-
-    /**
      * Guess a mock response
      *
      * @param PendingSaloonRequest $request
@@ -33,10 +23,16 @@ class MockMiddleware
      */
     public function __invoke(PendingSaloonRequest $request): PendingSaloonRequest|MockResponse
     {
+        if ($request->isMocking() === false) {
+            return $request;
+        }
+
+        $mockClient = $request->getMockClient();
+
         // When we guess the next response from the MockClient it will
         // either return a MockResponse instance or a Fixture instance.
 
-        $mockObject = $this->mockClient->guessNextResponse($request);
+        $mockObject = $mockClient->guessNextResponse($request);
 
         $mockResponse = $mockObject instanceof Fixture ? $mockObject->getMockResponse() : $mockObject;
 
