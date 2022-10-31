@@ -13,7 +13,7 @@ class Storage
      *
      * @var string
      */
-    public string $baseDirectory;
+    protected string $baseDirectory;
 
     /**
      * Constructor

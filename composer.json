@@ -28,11 +28,12 @@
         "psr/http-message": "^1.0"
     },
     "require-dev": {
+        "ext-simplexml": "*",
         "friendsofphp/php-cs-fixer": "^3.5",
         "league/flysystem": "^3.0",
+        "nunomaduro/phpinsights": "^2.6",
         "pestphp/pest": "^1.21",
-        "spatie/ray": "^1.33",
-        "ext-simplexml": "*"
+        "spatie/ray": "^1.33"
     },
     "minimum-stability": "stable",
     "autoload": {

@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Exception;
 use ReflectionException;
 use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Contracts\Sender;
@@ -18,6 +19,7 @@ use Sammyjo20\Saloon\Repositories\Body\ArrayBodyRepository;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Sammyjo20\SaloonLaravel\Middleware\SaloonLaravelMiddleware;
 
 class PendingSaloonRequest
 {
@@ -102,23 +104,48 @@ class PendingSaloonRequest
         $this->mockClient = $mockClient ?? ($request->getMockClient() ?? $connector->getMockClient());
         $this->authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
 
-        // Let's build the PendingSaloonRequest. Since it is made up of many
-        // properties, we run an individual method for each one.
-
         // Todo: Document the priority.
 
-        $this
-            ->bootPlugins()
+        $this->bootPlugins()
             ->mergeRequestProperties()
             ->mergeBody()
             ->authenticateRequest()
-            ->bootConnectorAndRequest()
-            ->registerDefaultMiddleware();
+            ->bootConnectorAndRequest();
 
-        // Next, we will execute the request middleware pipeline which will
+        // Now we will register the default middleware, this always needs to come
+        // at the end of the user's defined middleware.
+
+        $this->registerDefaultMiddleware();
+
+        // Finally, we will execute the request middleware pipeline which will
         // process any middleware added on the connector or the request.
 
         $this->executeRequestPipeline();
+    }
+
+    /**
+     * Boot every plugin and apply to the payload.
+     *
+     * @return $this
+     * @throws ReflectionException
+     */
+    protected function bootPlugins(): static
+    {
+        $connector = $this->connector;
+        $request = $this->request;
+
+        $connectorTraits = class_uses_recursive($connector);
+        $requestTraits = class_uses_recursive($request);
+
+        foreach ($connectorTraits as $connectorTrait) {
+            PluginHelper::bootPlugin($this, $connector, $connectorTrait);
+        }
+
+        foreach ($requestTraits as $requestTrait) {
+            PluginHelper::bootPlugin($this, $request, $requestTrait);
+        }
+
+        return $this;
     }
 
     /**
@@ -210,31 +237,6 @@ class PendingSaloonRequest
     }
 
     /**
-     * Boot every plugin and apply to the payload.
-     *
-     * @return $this
-     * @throws ReflectionException
-     */
-    protected function bootPlugins(): static
-    {
-        $connector = $this->connector;
-        $request = $this->request;
-
-        $connectorTraits = class_uses_recursive($connector);
-        $requestTraits = class_uses_recursive($request);
-
-        foreach ($connectorTraits as $connectorTrait) {
-            PluginHelper::bootPlugin($this, $connector, $connectorTrait);
-        }
-
-        foreach ($requestTraits as $requestTrait) {
-            PluginHelper::bootPlugin($this, $request, $requestTrait);
-        }
-
-        return $this;
-    }
-
-    /**
      * Register any default middleware that should be placed right at the top.
      *
      * @return $this
@@ -243,15 +245,13 @@ class PendingSaloonRequest
     {
         $middleware = $this->middleware();
 
-        // If the PendingSaloonRequest has a mock client then we
-        // will add a "MockMiddleware" request pipe which will
-        // check to see if there are any mock responses.
-
         if ($this->isMocking()) {
             $middleware->onRequest(new MockMiddleware($this->getMockClient()));
         }
 
-        // Todo: Register Laravel middleware pipe.
+        if ($this->isRunningOnLaravel()) {
+            $middleware->onRequest(new SaloonLaravelMiddleware);
+        }
 
         return $this;
     }
@@ -390,5 +390,19 @@ class PendingSaloonRequest
     public function hasSimulatedResponseData(): bool
     {
         return $this->simulatedResponseData instanceof SimulatedResponseData;
+    }
+
+    /**
+     * Check if Saloon is running on Laravel
+     *
+     * @return bool
+     */
+    protected function isRunningOnLaravel(): bool
+    {
+        try {
+            return function_exists('resolve') && resolve('saloon') instanceof \Sammyjo20\SaloonLaravel\Saloon && class_exists(SaloonLaravelMiddleware::class);
+        } catch (Exception $ex) {
+            return false;
+        }
     }
 }

@@ -34,13 +34,11 @@ class Pipeline
      */
     public function process(mixed $payload): mixed
     {
-        $basePipeline = new BasePipeline;
-
         foreach ($this->pipes as $pipe) {
-            $basePipeline = $basePipeline->pipe($pipe);
+            $payload = $pipe($payload);
         }
 
-        return $basePipeline->process($payload);
+        return $payload;
     }
 
     /**

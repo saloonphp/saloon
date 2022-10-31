@@ -15,7 +15,7 @@ class Fixture
      *
      * @var string
      */
-    public static string $fixtureExtension = 'json';
+    protected static string $fixtureExtension = 'json';
 
     /**
      * The name of the fixture
