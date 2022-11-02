@@ -54,7 +54,7 @@
     },
     "scripts": {
         "fix-code": [
-            "./vendor/bin/php-cs-fixer fix"
+            "./vendor/bin/php-cs-fixer fix --allow-risky=yes"
         ],
         "test": [
             "./vendor/bin/pest"

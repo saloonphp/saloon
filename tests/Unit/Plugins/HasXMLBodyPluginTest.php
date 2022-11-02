@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Managers\RequestManager;

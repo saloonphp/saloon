@@ -37,4 +37,5 @@ return $config->setRules([
     'return_type_declaration' => [
         'space_before' => 'none'
     ],
+    'declare_strict_types' => true,
 ])->setFinder($finder);

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserWithTestHandlerRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserWithTestHandlerConnectorRequest;

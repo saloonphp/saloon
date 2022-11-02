@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use GuzzleHttp\Middleware;
 use Psr\Http\Message\RequestInterface;

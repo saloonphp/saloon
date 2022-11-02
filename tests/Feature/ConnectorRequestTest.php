@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Sammyjo20\Saloon\Http\AnonymousRequestCollection;
 use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;

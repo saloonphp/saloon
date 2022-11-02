@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use League\Flysystem\Filesystem;
 use Sammyjo20\Saloon\Helpers\Storage;

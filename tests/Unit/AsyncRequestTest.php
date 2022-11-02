@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use GuzzleHttp\Promise\Promise;
 use Sammyjo20\Saloon\Http\MockResponse;
