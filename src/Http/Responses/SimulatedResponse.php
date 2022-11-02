@@ -4,10 +4,10 @@ namespace Sammyjo20\Saloon\Http\Responses;
 
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\Response;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-use Sammyjo20\Saloon\Http\SimulatedResponsePayload;
+use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Repositories\ArrayStore;
+use Sammyjo20\Saloon\Http\SimulatedResponsePayload;
 
 class SimulatedResponse extends SaloonResponse
 {

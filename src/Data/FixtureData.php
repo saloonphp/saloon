@@ -4,8 +4,8 @@ namespace Sammyjo20\Saloon\Data;
 
 use JsonSerializable;
 use Psr\Http\Message\ResponseInterface;
-use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 
 class FixtureData implements JsonSerializable
 {

@@ -2,14 +2,14 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
-use Sammyjo20\Saloon\Repositories\Body\StringBodyRepository;
 use Throwable;
 use Psr\Http\Message\RequestInterface;
-use Sammyjo20\Saloon\Data\MockExceptionClosure;
 use Sammyjo20\Saloon\Repositories\ArrayStore;
+use Sammyjo20\Saloon\Data\MockExceptionClosure;
+use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
 use Sammyjo20\Saloon\Repositories\Body\JsonBodyRepository;
 use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
+use Sammyjo20\Saloon\Repositories\Body\StringBodyRepository;
 
 class SimulatedResponsePayload
 {

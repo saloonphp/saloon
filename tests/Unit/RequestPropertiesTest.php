@@ -1,8 +1,8 @@
 <?php
 
+use Sammyjo20\Saloon\Repositories\ArrayStore;
 use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 use Sammyjo20\Saloon\Repositories\BodyRepository;
-use Sammyjo20\Saloon\Repositories\ArrayStore;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\DefaultPropertiesRequest;
 

@@ -4,9 +4,9 @@ namespace Sammyjo20\Saloon\Http;
 
 use Exception;
 use ReflectionException;
-use Sammyjo20\Saloon\Contracts\MockClient;
 use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Contracts\Sender;
+use Sammyjo20\Saloon\Contracts\MockClient;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Contracts\Body\WithBody;
@@ -17,9 +17,9 @@ use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
 use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
 use Sammyjo20\Saloon\Repositories\Body\ArrayBodyRepository;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
+use Sammyjo20\SaloonLaravel\Middleware\SaloonLaravelMiddleware;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
-use Sammyjo20\SaloonLaravel\Middleware\SaloonLaravelMiddleware;
 
 class PendingSaloonRequest
 {

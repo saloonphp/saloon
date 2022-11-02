@@ -2,10 +2,10 @@
 
 namespace Sammyjo20\Saloon\Http\OAuth2;
 
-use Sammyjo20\Saloon\Contracts\Body\WithBody;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
+use Sammyjo20\Saloon\Contracts\Body\WithBody;
 use Sammyjo20\Saloon\Traits\Body\HasFormBody;
+use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
 
 class GetAccessTokenRequest extends SaloonRequest implements WithBody

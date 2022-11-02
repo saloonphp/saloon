@@ -2,8 +2,6 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
-use League\Pipeline\Pipeline as BasePipeline;
-
 class Pipeline
 {
     /**

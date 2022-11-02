@@ -2,8 +2,8 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 use Sammyjo20\Saloon\Repositories\ArrayStore;
+use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 use Sammyjo20\Saloon\Contracts\ArrayStore as ArrayStoreContract;
 use Sammyjo20\Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
