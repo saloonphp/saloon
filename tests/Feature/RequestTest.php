@@ -16,6 +16,7 @@ test('a request can be made successfully', function () {
     $response = $request->send();
     $data = $response->json();
 
+    expect($response)->toBeInstanceOf(PsrResponse::class);
     expect($response->isMocked())->toBeFalse();
     expect($response->status())->toEqual(200);
 

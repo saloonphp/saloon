@@ -9,10 +9,10 @@ trait WithDebugData
     /**
      * Enable debug mode.
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return void
      */
-    public static function bootWithDebugData(PendingSaloonRequest $request): void
+    public static function bootWithDebugData(PendingSaloonRequest $pendingRequest): void
     {
         $request->config()->add('debug', true);
     }

@@ -121,31 +121,37 @@ class GuzzleSender implements Sender
     /**
      * Create the Guzzle request
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return Request
      */
-    private function createGuzzleRequest(PendingSaloonRequest $request): Request
+    protected function createGuzzleRequest(PendingSaloonRequest $pendingRequest): Request
     {
-        return new Request($request->getMethod()->value, $request->getUrl());
+        return new Request($pendingRequest->getMethod()->value, $pendingRequest->getUrl());
     }
 
     /**
      * Build up all the request options
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return array
      */
-    private function createRequestOptions(PendingSaloonRequest $request): array
+    protected function createRequestOptions(PendingSaloonRequest $pendingRequest): array
     {
-        $requestOptions = [
-            RequestOptions::HEADERS => $request->headers()->all(),
-        ];
+        $requestOptions = [];
 
-        foreach ($request->config()->all() as $configVariable => $value) {
+        if ($pendingRequest->headers()->isNotEmpty()) {
+            $requestOptions[RequestOptions::HEADERS] = $pendingRequest->headers()->all();
+        }
+
+        if ($pendingRequest->queryParameters()->isNotEmpty()) {
+            $requestOptions[RequestOptions::QUERY] = $pendingRequest->queryParameters()->all();
+        }
+
+        foreach ($pendingRequest->config()->all() as $configVariable => $value) {
             $requestOptions[$configVariable] = $value;
         }
 
-        $body = $request->body();
+        $body = $pendingRequest->body();
 
         if (is_null($body) || $body->isEmpty()) {
             return $requestOptions;
@@ -170,7 +176,7 @@ class GuzzleSender implements Sender
      * @param RequestException|null $exception
      * @return PsrResponse
      */
-    private function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $guzzleResponse, RequestException $exception = null): PsrResponse
+    protected function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $guzzleResponse, RequestException $exception = null): PsrResponse
     {
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
@@ -184,7 +190,7 @@ class GuzzleSender implements Sender
      * @param PendingSaloonRequest $pendingRequest
      * @return PromiseInterface
      */
-    private function processPromise(PromiseInterface $promise, PendingSaloonRequest $pendingRequest): PromiseInterface
+    protected function processPromise(PromiseInterface $promise, PendingSaloonRequest $pendingRequest): PromiseInterface
     {
         return $promise
             ->then(

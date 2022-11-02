@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Http;
 
+use Sammyjo20\Saloon\Traits\Bootable;
 use Sammyjo20\Saloon\Traits\HasSender;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Traits\SendsRequests;
@@ -26,14 +27,7 @@ abstract class SaloonConnector
     use MocksRequests;
     use SendsRequests;
     use HasSender;
-
-    /**
-     * Register Saloon requests that will become methods on the connector.
-     * For example, GetUserRequest would become $this->getUserRequest(...$args)
-     *
-     * @var array|string[]
-     */
-    protected array $requests = [];
+    use Bootable;
 
     /**
      * Define the base URL of the API.
@@ -41,15 +35,6 @@ abstract class SaloonConnector
      * @return string
      */
     abstract public function defineBaseUrl(): string;
-
-    /**
-     * @param PendingSaloonRequest $requestPayload
-     * @return void
-     */
-    public function boot(PendingSaloonRequest $requestPayload): void
-    {
-        //
-    }
 
     /**
      * Prepare a new request by providing it the current instance of the connector.

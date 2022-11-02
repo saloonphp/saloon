@@ -4,6 +4,7 @@ use League\Flysystem\Filesystem;
 use Sammyjo20\Saloon\Http\Fixture;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Http\Responses\SimulatedResponse;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
@@ -31,18 +32,21 @@ test('a request can be mocked with a sequence', function () {
 
     $responseA = (new UserRequest)->send($mockClient);
 
+    expect($responseA)->toBeInstanceOf(SimulatedResponse::class);
     expect($responseA->isMocked())->toBeTrue();
     expect($responseA->json())->toEqual(['name' => 'Sam']);
     expect($responseA->status())->toEqual(200);
 
     $responseB = (new UserRequest)->send($mockClient);
 
+    expect($responseB)->toBeInstanceOf(SimulatedResponse::class);
     expect($responseB->isMocked())->toBeTrue();
     expect($responseB->json())->toEqual(['name' => 'Alex']);
     expect($responseB->status())->toEqual(200);
 
     $responseC = (new UserRequest)->send($mockClient);
 
+    expect($responseC)->toBeInstanceOf(SimulatedResponse::class);
     expect($responseC->isMocked())->toBeTrue();
     expect($responseC->json())->toEqual(['error' => 'Server Unavailable']);
     expect($responseC->status())->toEqual(500);

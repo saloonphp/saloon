@@ -6,11 +6,15 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Repositories\ArrayStore;
 
-/**
- * @property ResponseInterface $rawResponse
- */
 class PsrResponse extends SaloonResponse
 {
+    /**
+     * The raw response from the sender.
+     *
+     * @var ResponseInterface
+     */
+    protected ResponseInterface $rawResponse;
+
     /**
      * Get the body of the response as string.
      *

@@ -7,11 +7,11 @@ use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 trait AcceptsJson
 {
     /**
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return void
      */
-    public static function bootAcceptsJson(PendingSaloonRequest $request): void
+    public static function bootAcceptsJson(PendingSaloonRequest $pendingRequest): void
     {
-        $request->headers()->add('Accept', 'application/json');
+        $pendingRequest->headers()->add('Accept', 'application/json');
     }
 }

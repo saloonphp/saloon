@@ -17,13 +17,6 @@ abstract class SaloonResponse implements SaloonResponseContract
     use Macroable;
 
     /**
-     * The raw response from the sender.
-     *
-     * @var mixed
-     */
-    protected mixed $rawResponse;
-
-    /**
      * The decoded JSON response.
      *
      * @var array

@@ -4,73 +4,75 @@ namespace Sammyjo20\Saloon\Traits;
 
 use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
 use Sammyjo20\Saloon\Repositories\ArrayStore;
+use Sammyjo20\Saloon\Contracts\ArrayStore as ArrayStoreContract;
+use Sammyjo20\Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
 trait HasRequestProperties
 {
     /**
      * Request Headers
      *
-     * @var ArrayStore
+     * @var ArrayStoreContract
      */
-    protected ArrayStore $headers;
+    protected ArrayStoreContract $headers;
 
     /**
      * Request Query Parameters
      *
-     * @var ArrayStore
+     * @var ArrayStoreContract
      */
-    protected ArrayStore $queryParameters;
+    protected ArrayStoreContract $queryParameters;
 
     /**
      * Request Config
      *
-     * @var ArrayStore
+     * @var ArrayStoreContract
      */
-    protected ArrayStore $config;
+    protected ArrayStoreContract $config;
 
     /**
-     * Saloon Middleware Pipeline
+     * Middleware Pipeline
      *
-     * @var MiddlewarePipeline
+     * @var MiddlewarePipelineContract
      */
-    protected MiddlewarePipeline $middlewarePipeline;
+    protected MiddlewarePipelineContract $middlewarePipeline;
 
     /**
-     * Retrieve the headers content bag.
+     * Access the headers
      *
-     * @return ArrayStore
+     * @return ArrayStoreContract
      */
-    public function headers(): ArrayStore
+    public function headers(): ArrayStoreContract
     {
         return $this->headers ??= new ArrayStore($this->defaultHeaders());
     }
 
     /**
-     * Retrieve the query parameters content bag.
+     * Access the query parameters
      *
-     * @return ArrayStore
+     * @return ArrayStoreContract
      */
-    public function queryParameters(): ArrayStore
+    public function queryParameters(): ArrayStoreContract
     {
         return $this->queryParameters ??= new ArrayStore($this->defaultQueryParameters());
     }
 
     /**
-     * Retrieve the config content bag.
+     * Access the config
      *
-     * @return ArrayStore
+     * @return ArrayStoreContract
      */
-    public function config(): ArrayStore
+    public function config(): ArrayStoreContract
     {
         return $this->config ??= new ArrayStore($this->defaultConfig());
     }
 
     /**
-     * Retrieve the guzzle middleware content bag.
+     * Access the middleware pipeline
      *
-     * @return MiddlewarePipeline
+     * @return MiddlewarePipelineContract
      */
-    public function middleware(): MiddlewarePipeline
+    public function middleware(): MiddlewarePipelineContract
     {
         return $this->middlewarePipeline ??= new MiddlewarePipeline;
     }

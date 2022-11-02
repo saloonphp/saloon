@@ -11,10 +11,10 @@ trait HasXmlBody
     /**
      * Boot the plugin
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return void
      */
-    public function bootHasXmlBody(PendingSaloonRequest $request): void
+    public function bootHasXmlBody(PendingSaloonRequest $pendingRequest): void
     {
         $request->headers()->add('Accept', 'application/xml');
         $request->headers()->add('Content-Type', 'application/xml');

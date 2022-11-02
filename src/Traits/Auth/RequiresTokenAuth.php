@@ -22,7 +22,7 @@ trait RequiresTokenAuth
     /**
      * Default message.
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return string
      */
     protected function getRequiresAuthMessage(PendingSaloonRequest $pendingRequest): string

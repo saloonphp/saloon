@@ -23,11 +23,11 @@ class DigestAuthenticator implements Authenticator
     /**
      * Apply the authentication to the request.
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return void
      */
-    public function set(PendingSaloonRequest $request): void
+    public function set(PendingSaloonRequest $pendingRequest): void
     {
-        $request->config()->add('auth', [$this->username, $this->password, $this->digest]);
+        $pendingRequest->config()->add('auth', [$this->username, $this->password, $this->digest]);
     }
 }

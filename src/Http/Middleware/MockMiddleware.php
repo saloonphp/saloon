@@ -14,25 +14,25 @@ class MockMiddleware
     /**
      * Guess a mock response
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return PendingSaloonRequest|MockResponse
      * @throws SaloonInvalidConnectorException
      * @throws SaloonNoMockResponseFoundException
      * @throws \JsonException
      * @throws \Sammyjo20\Saloon\Exceptions\FixtureMissingException
      */
-    public function __invoke(PendingSaloonRequest $request): PendingSaloonRequest|MockResponse
+    public function __invoke(PendingSaloonRequest $pendingRequest): PendingSaloonRequest|MockResponse
     {
-        if ($request->hasMockClient() === false) {
-            return $request;
+        if ($pendingRequest->hasMockClient() === false) {
+            return $pendingRequest;
         }
 
-        $mockClient = $request->getMockClient();
+        $mockClient = $pendingRequest->getMockClient();
 
         // When we guess the next response from the MockClient it will
         // either return a MockResponse instance or a Fixture instance.
 
-        $mockObject = $mockClient->guessNextResponse($request);
+        $mockObject = $mockClient->guessNextResponse($pendingRequest);
 
         $mockResponse = $mockObject instanceof Fixture ? $mockObject->getMockResponse() : $mockObject;
 
@@ -49,9 +49,9 @@ class MockMiddleware
         // middleware on the response to record the response.
 
         if (is_null($mockResponse) && $mockObject instanceof Fixture) {
-            $request->middleware()->onResponse(new FixtureRecorderMiddleware($mockObject));
+            $pendingRequest->middleware()->onResponse(new FixtureRecorderMiddleware($mockObject));
         }
 
-        return $request;
+        return $pendingRequest;
     }
 }

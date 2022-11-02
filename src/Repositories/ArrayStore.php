@@ -2,7 +2,9 @@
 
 namespace Sammyjo20\Saloon\Repositories;
 
-class ArrayStore
+use Sammyjo20\Saloon\Contracts\ArrayStore as ArrayStoreContract;
+
+class ArrayStore implements ArrayStoreContract
 {
     /**
      * The repository's store
@@ -101,7 +103,7 @@ class ArrayStore
     }
 
     /**
-     * Remove an item from the ContentBag.
+     * Remove an item from the store.
      *
      * @param string $key
      * @return $this
@@ -111,5 +113,25 @@ class ArrayStore
         unset($this->data[$key]);
 
         return $this;
+    }
+
+    /**
+     * Determine if the store is empty
+     *
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return empty($this->data);
+    }
+
+    /**
+     * Determine if the store is not empty
+     *
+     * @return bool
+     */
+    public function isNotEmpty(): bool
+    {
+        return ! $this->isEmpty();
     }
 }

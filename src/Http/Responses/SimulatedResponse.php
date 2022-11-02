@@ -9,11 +9,15 @@ use Psr\Http\Message\StreamInterface;
 use Sammyjo20\Saloon\Http\SimulatedResponsePayload;
 use Sammyjo20\Saloon\Repositories\ArrayStore;
 
-/**
- * @property SimulatedResponsePayload $rawResponse
- */
 class SimulatedResponse extends SaloonResponse
 {
+    /**
+     * The raw response from the sender.
+     *
+     * @var SimulatedResponsePayload
+     */
+    protected SimulatedResponsePayload $rawResponse;
+
     /**
      * Get the body of the response as string.
      *

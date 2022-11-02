@@ -17,12 +17,12 @@ trait HasJsonBody
     /**
      * Boot the plugin
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return void
      */
-    public function bootHasJsonBody(PendingSaloonRequest $request): void
+    public function bootHasJsonBody(PendingSaloonRequest $pendingRequest): void
     {
-        $request->headers()->add('Content-Type', 'application/json');
+        $pendingRequest->headers()->add('Content-Type', 'application/json');
     }
 
     /**
