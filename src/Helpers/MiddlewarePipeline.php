@@ -1,12 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Helpers;
 
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\SimulatedResponseData;
+use Sammyjo20\Saloon\Http\SimulatedResponsePayload;
+use Sammyjo20\Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
-class MiddlewarePipeline
+class MiddlewarePipeline implements MiddlewarePipelineContract
 {
     /**
      * Request Pipeline
@@ -39,18 +40,18 @@ class MiddlewarePipeline
      */
     public function onRequest(callable $closure): static
     {
-        $this->requestPipeline = $this->requestPipeline->pipe(function (PendingSaloonRequest $request) use ($closure) {
-            $result = $closure($request);
+        $this->requestPipeline = $this->requestPipeline->pipe(function (PendingSaloonRequest $pendingRequest) use ($closure) {
+            $result = $closure($pendingRequest);
 
             if ($result instanceof PendingSaloonRequest) {
                 return $result;
             }
 
-            if ($result instanceof SimulatedResponseData) {
-                $request->setSimulatedResponseData($result);
+            if ($result instanceof SimulatedResponsePayload) {
+                $pendingRequest->setSimulatedResponsePayload($result);
             }
 
-            return $request;
+            return $pendingRequest;
         });
 
         return $this;
@@ -76,14 +77,14 @@ class MiddlewarePipeline
     /**
      * Process the request pipeline.
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return PendingSaloonRequest
      */
-    public function executeRequestPipeline(PendingSaloonRequest $request): PendingSaloonRequest
+    public function executeRequestPipeline(PendingSaloonRequest $pendingRequest): PendingSaloonRequest
     {
-        $this->requestPipeline->process($request);
+        $this->requestPipeline->process($pendingRequest);
 
-        return $request;
+        return $pendingRequest;
     }
 
     /**
@@ -105,7 +106,7 @@ class MiddlewarePipeline
      * @param MiddlewarePipeline $middlewarePipeline
      * @return $this
      */
-    public function merge(MiddlewarePipeline $middlewarePipeline): static
+    public function merge(MiddlewarePipelineContract $middlewarePipeline): static
     {
         $requestPipes = array_merge(
             $this->getRequestPipeline()->getPipes(),

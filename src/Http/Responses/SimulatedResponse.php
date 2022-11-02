@@ -1,18 +1,23 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Http\Responses;
 
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\StreamInterface;
-use Sammyjo20\Saloon\Http\SimulatedResponseData;
-use Sammyjo20\Saloon\Repositories\ArrayRepository;
+use Psr\Http\Message\ResponseInterface;
+use Sammyjo20\Saloon\Repositories\ArrayStore;
+use Sammyjo20\Saloon\Http\SimulatedResponsePayload;
 
-/**
- * @property SimulatedResponseData $rawResponse
- */
 class SimulatedResponse extends SaloonResponse
 {
+    /**
+     * The raw response from the sender.
+     *
+     * @var SimulatedResponsePayload
+     */
+    protected SimulatedResponsePayload $rawResponse;
+
     /**
      * Get the body of the response as string.
      *
@@ -43,9 +48,9 @@ class SimulatedResponse extends SaloonResponse
     /**
      * Get the headers from the response.
      *
-     * @return ArrayRepository
+     * @return ArrayStore
      */
-    public function headers(): ArrayRepository
+    public function headers(): ArrayStore
     {
         return $this->rawResponse->getHeaders();
     }
@@ -66,7 +71,7 @@ class SimulatedResponse extends SaloonResponse
      * @return mixed
      * @throws \JsonException
      */
-    public function toPsrResponse(): mixed
+    public function toPsrResponse(): ResponseInterface
     {
         return new Response($this->status(), $this->headers()->all(), $this->body());
     }

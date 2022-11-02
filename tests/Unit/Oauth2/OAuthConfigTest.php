@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
 use Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException;

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use GuzzleHttp\Middleware;
 use Psr\Http\Message\RequestInterface;
@@ -31,4 +31,4 @@ test('you can add middleware to the guzzle sender', function () {
     $response = $request->send();
 
     dd($response->json());
-});
+})->skip('SAM TODO');

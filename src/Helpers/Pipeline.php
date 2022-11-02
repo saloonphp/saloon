@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Helpers;
-
-use League\Pipeline\Pipeline as BasePipeline;
 
 class Pipeline
 {
@@ -34,13 +32,11 @@ class Pipeline
      */
     public function process(mixed $payload): mixed
     {
-        $basePipeline = new BasePipeline;
-
         foreach ($this->pipes as $pipe) {
-            $basePipeline = $basePipeline->pipe($pipe);
+            $payload = $pipe($payload);
         }
 
-        return $basePipeline->process($payload);
+        return $payload;
     }
 
     /**

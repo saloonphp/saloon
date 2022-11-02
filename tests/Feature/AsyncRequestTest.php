@@ -1,9 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
-use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Promise\PromiseInterface;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 use Sammyjo20\Saloon\Tests\Fixtures\Responses\UserData;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
@@ -15,7 +15,7 @@ test('an asynchronous request can be made successfully', function () {
     $request = new UserRequest();
     $promise = $request->sendAsync();
 
-    expect($promise)->toBeInstanceOf(Promise::class);
+    expect($promise)->toBeInstanceOf(PromiseInterface::class);
 
     $response = $promise->wait();
 
@@ -42,11 +42,32 @@ test('an asynchronous request can handle an exception properly', function () {
     $promise->wait();
 });
 
+test('an asynchronous response will still be passed through response middleware', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(200, ['name' => 'Sam'])
+    ]);
+
+    $request = new UserRequest();
+
+    $request->middleware()->onResponse(function (SaloonResponse $response) {
+        $response->setCached(true);
+    });
+
+    $promise = $request->sendAsync($mockClient);
+    $response = $promise->wait();
+
+    expect($response->isCached())->toBeTrue();
+});
+
 test('an asynchronous request will return a custom response', function () {
-    $mockClient = new MockClient([MockResponse::make(['foo' => 'bar'], 200)]);
+    $mockClient = new MockClient([
+        MockResponse::make(200, ['foo' => 'bar'])
+    ]);
+
     $request = new UserRequestWithCustomResponse();
 
     $promise = $request->sendAsync($mockClient);
+
     $response = $promise->wait();
 
     expect($response)->toBeInstanceOf(UserResponse::class);

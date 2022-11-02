@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use GuzzleHttp\Promise\Promise;
 use Sammyjo20\Saloon\Http\MockResponse;
@@ -27,12 +27,19 @@ test('you can prepare a request through the connector', function () {
     $request = $connector->request(new UserRequest);
 
     expect($request)->toBeInstanceOf(SaloonRequest::class);
-    expect($request->getConnector())->toEqual($connector);
+    expect($request->connector())->toEqual($connector);
+});
+
+test('the same connector instance is kept if you instantiate it on the request', function () {
+    $request = new UserRequest;
+    $connector = $request->connector();
+
+    expect($connector)->toBe($request->connector());
 });
 
 test('you can send a request through the connector', function () {
     $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
+        new MockResponse(200, ['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
     ]);
 
     $connector = new TestConnector();
@@ -44,7 +51,7 @@ test('you can send a request through the connector', function () {
 
 test('you can send an asynchronous request through the connector', function () {
     $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
+        new MockResponse(200, ['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
     ]);
 
     $connector = new TestConnector();

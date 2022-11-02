@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Traits\Plugins;
 
-use Sammyjo20\Saloon\Http\Middleware\ThrowPipe;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 
 trait AlwaysThrowsOnErrors
@@ -10,11 +10,11 @@ trait AlwaysThrowsOnErrors
     /**
      * Always throw if there is something wrong with the request.
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return void
      */
-    public static function bootAlwaysThrowsOnErrors(PendingSaloonRequest $request): void
+    public static function bootAlwaysThrowsOnErrors(PendingSaloonRequest $pendingRequest): void
     {
-        $request->middleware()->onResponse(new ThrowPipe);
+        $request->middleware()->onResponse(fn (SaloonResponse $response) => $response->throw());
     }
 }

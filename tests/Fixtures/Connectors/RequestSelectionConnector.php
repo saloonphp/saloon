@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 
@@ -44,20 +44,6 @@ class RequestSelectionConnector extends SaloonConnector
     public function defaultHeaders(): array
     {
         return [];
-    }
-
-    /**
-     * Get the user from the system.
-     *
-     * @param ...$args
-     * @return SaloonRequest
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\ClassNotFoundException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException
-     */
-    public function getUser(...$args): SaloonRequest
-    {
-        return $this->forwardCallToRequest(UserRequest::class, $args);
     }
 
     public function __construct(public ?string $apiKey = null)

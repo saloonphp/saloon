@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Traits\Auth;
 
@@ -22,7 +22,7 @@ trait RequiresTokenAuth
     /**
      * Default message.
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return string
      */
     protected function getRequiresAuthMessage(PendingSaloonRequest $pendingRequest): string

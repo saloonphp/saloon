@@ -1,16 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Http;
 
 use Throwable;
 use Psr\Http\Message\RequestInterface;
+use Sammyjo20\Saloon\Repositories\ArrayStore;
 use Sammyjo20\Saloon\Data\MockExceptionClosure;
-use Sammyjo20\Saloon\Repositories\ArrayRepository;
+use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
 use Sammyjo20\Saloon\Repositories\Body\JsonBodyRepository;
 use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
-use Sammyjo20\Saloon\Repositories\Body\ArrayBodyRepository;
+use Sammyjo20\Saloon\Repositories\Body\StringBodyRepository;
 
-class SimulatedResponseData
+class SimulatedResponsePayload
 {
     /**
      * HTTP Status Code
@@ -22,16 +23,16 @@ class SimulatedResponseData
     /**
      * Headers
      *
-     * @var ArrayRepository
+     * @var ArrayStore
      */
-    protected ArrayRepository $headers;
+    protected ArrayStore $headers;
 
     /**
      * Request Body
      *
-     * @var JsonBodyRepository
+     * @var BodyRepository
      */
-    protected JsonBodyRepository $data;
+    protected BodyRepository $data;
 
     /**
      * Exception Closure
@@ -44,14 +45,14 @@ class SimulatedResponseData
      * Create a new mock response
      *
      * @param int $status
-     * @param array $data
+     * @param array|string $data
      * @param array $headers
      */
-    public function __construct(int $status = 200, mixed $data = [], array $headers = [])
+    public function __construct(int $status = 200, array|string $data = [], array $headers = [])
     {
         $this->status = $status;
-        $this->data = new JsonBodyRepository($data);
-        $this->headers = new ArrayRepository($headers);
+        $this->data = is_array($data) ? new JsonBodyRepository($data) : new StringBodyRepository($data);
+        $this->headers = new ArrayStore($headers);
     }
 
     /**
@@ -107,9 +108,9 @@ class SimulatedResponseData
     /**
      * Get the headers
      *
-     * @return ArrayRepository
+     * @return ArrayStore
      */
-    public function getHeaders(): ArrayRepository
+    public function getHeaders(): ArrayStore
     {
         return $this->headers;
     }
@@ -117,9 +118,9 @@ class SimulatedResponseData
     /**
      * Get the response body
      *
-     * @return ArrayBodyRepository
+     * @return BodyRepository
      */
-    public function getData(): ArrayBodyRepository
+    public function getData(): BodyRepository
     {
         return $this->data;
     }

@@ -1,21 +1,24 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Http;
 
+use Exception;
 use ReflectionException;
 use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Contracts\Sender;
-use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Contracts\MockClient;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Contracts\Body\WithBody;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
+use Sammyjo20\Saloon\Http\Middleware\AuthenticateMiddleware;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
 use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
 use Sammyjo20\Saloon\Repositories\Body\ArrayBodyRepository;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
+use Sammyjo20\SaloonLaravel\Middleware\SaloonLaravelMiddleware;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 
@@ -25,14 +28,14 @@ class PendingSaloonRequest
     use AuthenticatesRequests;
 
     /**
-     * The original request class making the request.
+     * The request used by the instance.
      *
      * @var SaloonRequest
      */
     protected SaloonRequest $request;
 
     /**
-     * The original connector making the request.
+     * The connector making the request.
      *
      * @var SaloonConnector
      */
@@ -53,21 +56,21 @@ class PendingSaloonRequest
     protected Method $method;
 
     /**
-     * The response class used to create a response.
+     * The class used for responses.
      *
      * @var string
      */
     protected string $responseClass;
 
     /**
-     * The mock client if provided on the connector or request.
+     * The mock client used to replace requests.
      *
      * @var MockClient|null
      */
     protected ?MockClient $mockClient = null;
 
     /**
-     * The body repository
+     * The body of the request.
      *
      * @var BodyRepository|null
      */
@@ -76,9 +79,9 @@ class PendingSaloonRequest
     /**
      * The simulated response.
      *
-     * @var SimulatedResponseData|null
+     * @var SimulatedResponsePayload|null
      */
-    protected ?SimulatedResponseData $simulatedResponseData = null;
+    protected ?SimulatedResponsePayload $simulatedResponsePayload = null;
 
     /**
      * Build up the request payload.
@@ -102,23 +105,54 @@ class PendingSaloonRequest
         $this->mockClient = $mockClient ?? ($request->getMockClient() ?? $connector->getMockClient());
         $this->authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
 
-        // Let's build the PendingSaloonRequest. Since it is made up of many
-        // properties, we run an individual method for each one.
+        // After we have defined each of our properties, we will run the various
+        // methods that build up the PendingSaloonRequest. It's important that
+        // the order remains the same.
 
-        // Todo: Document the priority.
+        // Plugins should be booted first, then we will merge the properties
+        // from the connector and request, then authenticate the request
+        // followed by finally running the "boot" method with an
+        // almost complete PendingSaloonRequest.
 
-        $this
-            ->bootPlugins()
+        $this->bootPlugins()
             ->mergeRequestProperties()
             ->mergeBody()
-            ->authenticateRequest()
-            ->bootConnectorAndRequest()
-            ->registerDefaultMiddleware();
+            ->bootConnectorAndRequest();
 
-        // Next, we will execute the request middleware pipeline which will
+        // Now we will register the default middleware, this always needs to come
+        // at the end of the user's defined middleware.
+
+        $this->registerDefaultMiddleware();
+
+        // Finally, we will execute the request middleware pipeline which will
         // process any middleware added on the connector or the request.
 
         $this->executeRequestPipeline();
+    }
+
+    /**
+     * Boot every plugin on the connector and request.
+     *
+     * @return $this
+     * @throws ReflectionException
+     */
+    protected function bootPlugins(): static
+    {
+        $connector = $this->connector;
+        $request = $this->request;
+
+        $connectorTraits = class_uses_recursive($connector);
+        $requestTraits = class_uses_recursive($request);
+
+        foreach ($connectorTraits as $connectorTrait) {
+            PluginHelper::bootPlugin($this, $connector, $connectorTrait);
+        }
+
+        foreach ($requestTraits as $requestTrait) {
+            PluginHelper::bootPlugin($this, $request, $requestTrait);
+        }
+
+        return $this;
     }
 
     /**
@@ -181,22 +215,6 @@ class PendingSaloonRequest
     }
 
     /**
-     * Authenticate the request.
-     *
-     * @return $this
-     */
-    protected function authenticateRequest(): static
-    {
-        $authenticator = $this->getAuthenticator();
-
-        if ($authenticator instanceof Authenticator) {
-            $authenticator->set($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * Run the boot method on the connector and request.
      *
      * @return $this
@@ -210,32 +228,7 @@ class PendingSaloonRequest
     }
 
     /**
-     * Boot every plugin and apply to the payload.
-     *
-     * @return $this
-     * @throws ReflectionException
-     */
-    protected function bootPlugins(): static
-    {
-        $connector = $this->connector;
-        $request = $this->request;
-
-        $connectorTraits = class_uses_recursive($connector);
-        $requestTraits = class_uses_recursive($request);
-
-        foreach ($connectorTraits as $connectorTrait) {
-            PluginHelper::bootPlugin($this, $connector, $connectorTrait);
-        }
-
-        foreach ($requestTraits as $requestTrait) {
-            PluginHelper::bootPlugin($this, $request, $requestTrait);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Register any default middleware that should be placed right at the top.
+     * Register any default middleware to run at the end of the middleware stack.
      *
      * @return $this
      */
@@ -243,15 +236,13 @@ class PendingSaloonRequest
     {
         $middleware = $this->middleware();
 
-        // If the PendingSaloonRequest has a mock client then we
-        // will add a "MockMiddleware" request pipe which will
-        // check to see if there are any mock responses.
+        $middleware->onRequest(new AuthenticateMiddleware);
 
-        if ($this->isMocking()) {
-            $middleware->onRequest(new MockMiddleware($this->getMockClient()));
+        if ($this->isRunningOnLaravel()) {
+            $middleware->onRequest(new SaloonLaravelMiddleware);
         }
 
-        // Todo: Register Laravel middleware pipe.
+        $middleware->onRequest(new MockMiddleware);
 
         return $this;
     }
@@ -269,7 +260,7 @@ class PendingSaloonRequest
     }
 
     /**
-     * Run the response through a pipeline
+     * Execute the response pipeline.
      *
      * @param SaloonResponse $response
      * @return SaloonResponse
@@ -282,6 +273,8 @@ class PendingSaloonRequest
     }
 
     /**
+     * Get the request.
+     *
      * @return SaloonRequest
      */
     public function getRequest(): SaloonRequest
@@ -290,6 +283,8 @@ class PendingSaloonRequest
     }
 
     /**
+     * Get the conector.
+     *
      * @return SaloonConnector
      */
     public function getConnector(): SaloonConnector
@@ -298,6 +293,8 @@ class PendingSaloonRequest
     }
 
     /**
+     * Get the URL of the request.
+     *
      * @return string
      */
     public function getUrl(): string
@@ -306,6 +303,8 @@ class PendingSaloonRequest
     }
 
     /**
+     * Get the HTTP method used for the request
+     *
      * @return Method
      */
     public function getMethod(): Method
@@ -314,6 +313,8 @@ class PendingSaloonRequest
     }
 
     /**
+     * Get the response class used for the request
+     *
      * @return string
      */
     public function getResponseClass(): string
@@ -322,6 +323,8 @@ class PendingSaloonRequest
     }
 
     /**
+     * Get the mock client.
+     *
      * @return MockClient|null
      */
     public function getMockClient(): ?MockClient
@@ -330,11 +333,11 @@ class PendingSaloonRequest
     }
 
     /**
-     * Check if the pending Saloon request is being mocked.
+     * Determine if the instance is "mocking"
      *
      * @return bool
      */
-    public function isMocking(): bool
+    public function hasMockClient(): bool
     {
         return $this->mockClient instanceof MockClient;
     }
@@ -350,7 +353,7 @@ class PendingSaloonRequest
     }
 
     /**
-     * Retrieve the body on the pending saloon request
+     * Retrieve the body on the instance
      *
      * @return BodyRepository|null
      */
@@ -360,35 +363,62 @@ class PendingSaloonRequest
     }
 
     /**
-     * Get the simulated response data
+     * Get the simulated response payload
      *
-     * @return SimulatedResponseData|null
+     * @return SimulatedResponsePayload|null
      */
-    public function getSimulatedResponseData(): ?SimulatedResponseData
+    public function getSimulatedResponsePayload(): ?SimulatedResponsePayload
     {
-        return $this->simulatedResponseData;
+        return $this->simulatedResponsePayload;
     }
 
     /**
-     * Set the simulated response data
+     * Set the simulated response payload
      *
-     * @param SimulatedResponseData|null $simulatedResponseData
+     * @param SimulatedResponsePayload|null $simulatedResponsePayload
      * @return PendingSaloonRequest
      */
-    public function setSimulatedResponseData(?SimulatedResponseData $simulatedResponseData): PendingSaloonRequest
+    public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): PendingSaloonRequest
     {
-        $this->simulatedResponseData = $simulatedResponseData;
+        $this->simulatedResponsePayload = $simulatedResponsePayload;
 
         return $this;
     }
 
     /**
-     * Check if simulated response data is present.
+     * Check if simulated response payload is present.
      *
      * @return bool
      */
-    public function hasSimulatedResponseData(): bool
+    public function hasSimulatedResponsePayload(): bool
     {
-        return $this->simulatedResponseData instanceof SimulatedResponseData;
+        return $this->simulatedResponsePayload instanceof SimulatedResponsePayload;
+    }
+
+    /**
+     * Set a mock client on the pending request.
+     *
+     * @param MockClient|null $mockClient
+     * @return PendingSaloonRequest
+     */
+    public function setMockClient(?MockClient $mockClient): PendingSaloonRequest
+    {
+        $this->mockClient = $mockClient;
+
+        return $this;
+    }
+
+    /**
+     * Determine if Saloon is running in a Laravel environment
+     *
+     * @return bool
+     */
+    protected function isRunningOnLaravel(): bool
+    {
+        try {
+            return function_exists('resolve') && resolve('saloon') instanceof \Sammyjo20\SaloonLaravel\Saloon && class_exists(SaloonLaravelMiddleware::class);
+        } catch (Exception $ex) {
+            return false;
+        }
     }
 }

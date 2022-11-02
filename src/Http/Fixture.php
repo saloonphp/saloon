@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Http;
 
@@ -15,7 +15,7 @@ class Fixture
      *
      * @var string
      */
-    public static string $fixtureExtension = 'json';
+    protected static string $fixtureExtension = 'json';
 
     /**
      * The name of the fixture

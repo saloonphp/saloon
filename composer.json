@@ -23,16 +23,16 @@
         "guzzlehttp/guzzle": "^7.4",
         "guzzlehttp/promises": "^1.5",
         "illuminate/support": "^8.0 || ^9.0",
-        "league/pipeline": "^1.0",
         "nesbot/carbon": "^2.58",
         "psr/http-message": "^1.0"
     },
     "require-dev": {
+        "ext-simplexml": "*",
         "friendsofphp/php-cs-fixer": "^3.5",
         "league/flysystem": "^3.0",
+        "nunomaduro/phpinsights": "^2.6",
         "pestphp/pest": "^1.21",
-        "spatie/ray": "^1.33",
-        "ext-simplexml": "*"
+        "spatie/ray": "^1.33"
     },
     "minimum-stability": "stable",
     "autoload": {
@@ -54,7 +54,7 @@
     },
     "scripts": {
         "fix-code": [
-            "./vendor/bin/php-cs-fixer fix"
+            "./vendor/bin/php-cs-fixer fix --allow-risky=yes"
         ],
         "test": [
             "./vendor/bin/pest"

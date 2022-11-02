@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Http\Middleware;
 
@@ -12,28 +12,46 @@ use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
 class MockMiddleware
 {
     /**
-     * Constructor
-     *
-     * @param MockClient $mockClient
-     */
-    public function __construct(protected MockClient $mockClient)
-    {
-        //
-    }
-
-    /**
      * Guess a mock response
      *
-     * @param PendingSaloonRequest $request
-     * @return Fixture|MockResponse
+     * @param PendingSaloonRequest $pendingRequest
+     * @return PendingSaloonRequest|MockResponse
      * @throws SaloonInvalidConnectorException
      * @throws SaloonNoMockResponseFoundException
+     * @throws \JsonException
+     * @throws \Sammyjo20\Saloon\Exceptions\FixtureMissingException
      */
-    public function __invoke(PendingSaloonRequest $request)
+    public function __invoke(PendingSaloonRequest $pendingRequest): PendingSaloonRequest|MockResponse
     {
-        // Todo: we'll probably have to move it out of here to support fixtures, i.e multiple middleware
-        // Todo: Or support adding more middleware while it is processing?
+        if ($pendingRequest->hasMockClient() === false) {
+            return $pendingRequest;
+        }
 
-        return $this->mockClient->guessNextResponse($request);
+        $mockClient = $pendingRequest->getMockClient();
+
+        // When we guess the next response from the MockClient it will
+        // either return a MockResponse instance or a Fixture instance.
+
+        $mockObject = $mockClient->guessNextResponse($pendingRequest);
+
+        $mockResponse = $mockObject instanceof Fixture ? $mockObject->getMockResponse() : $mockObject;
+
+        // If the mock response is a valid instance, we will return it.
+        // The middleware pipeline will recognise this and will set
+        // it as the "SimulatedResponse" on the request.
+
+        if ($mockResponse instanceof MockResponse) {
+            return $mockResponse;
+        }
+
+        // However if the mock response is not valid because it is
+        // an instance of a fixture instead, we will register a
+        // middleware on the response to record the response.
+
+        if (is_null($mockResponse) && $mockObject instanceof Fixture) {
+            $pendingRequest->middleware()->onResponse(new FixtureRecorderMiddleware($mockObject));
+        }
+
+        return $pendingRequest;
     }
 }

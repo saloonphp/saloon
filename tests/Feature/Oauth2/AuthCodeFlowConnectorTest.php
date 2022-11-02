@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Str;
@@ -56,14 +56,14 @@ test('default state is generated automatically with every authorization url if s
 
 test('you can request a token from a connector', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600]),
+        MockResponse::make(200, ['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600]),
     ]);
 
     $connector = new OAuth2Connector;
 
     $connector->withMockClient($mockClient);
 
-    $authenticator = $connector->getAccessToken('code', false);
+    $authenticator = $connector->getAccessToken('code');
 
     expect($authenticator)->toBeInstanceOf(AccessTokenAuthenticator::class);
     expect($authenticator->getAccessToken())->toEqual('access');
@@ -73,7 +73,7 @@ test('you can request a token from a connector', function () {
 
 test('you can request the original response instead of the authenticator on the create tokens method', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600]),
+        MockResponse::make(200, ['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600]),
     ]);
 
     $connector = new OAuth2Connector;
@@ -97,7 +97,7 @@ test('it will throw an exception if state is invalid', function () {
 
 test('you can refresh a token from a connector', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
+        MockResponse::make(200, ['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
     ]);
 
     $connector = new OAuth2Connector;
@@ -116,7 +116,7 @@ test('you can refresh a token from a connector', function () {
 
 test('you can request the original response instead of the authenticator on the refresh tokens method', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
+        MockResponse::make(200, ['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
     ]);
 
     $connector = new OAuth2Connector;
@@ -133,7 +133,7 @@ test('you can request the original response instead of the authenticator on the 
 
 test('you can get the user from an oauth connector', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['user' => 'Sam']),
+        MockResponse::make(200, ['user' => 'Sam']),
     ]);
 
     $connector = new OAuth2Connector;
@@ -145,9 +145,9 @@ test('you can get the user from an oauth connector', function () {
 
     expect($response)->toBeInstanceOf(SaloonResponse::class);
 
-    $originalRequest = $response->getOriginalRequest();
+    $pendingRequest = $response->getPendingSaloonRequest();
 
-    expect($originalRequest->getHeaders())->toEqual([
+    expect($pendingRequest->headers()->all())->toEqual([
         'Accept' => 'application/json',
         'Authorization' => 'Bearer access',
     ]);
@@ -155,7 +155,7 @@ test('you can get the user from an oauth connector', function () {
 
 test('you can customize the oauth authenticator', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
+        MockResponse::make(200, ['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
     ]);
 
     $customConnector = new CustomResponseOAuth2Connector('Howdy!');

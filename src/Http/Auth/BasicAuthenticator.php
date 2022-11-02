@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Http\Auth;
 
@@ -21,11 +21,11 @@ class BasicAuthenticator implements Authenticator
     /**
      * Apply the authentication to the request.
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return void
      */
-    public function set(PendingSaloonRequest $request): void
+    public function set(PendingSaloonRequest $pendingRequest): void
     {
-        $request->config()->add('auth', [$this->username, $this->password]);
+        $pendingRequest->config()->add('auth', [$this->username, $this->password]);
     }
 }

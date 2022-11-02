@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Traits\Plugins;
 
@@ -9,10 +9,10 @@ trait WithDebugData
     /**
      * Enable debug mode.
      *
-     * @param PendingSaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return void
      */
-    public static function bootWithDebugData(PendingSaloonRequest $request): void
+    public static function bootWithDebugData(PendingSaloonRequest $pendingRequest): void
     {
         $request->config()->add('debug', true);
     }

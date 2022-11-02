@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Http\Responses;
 
@@ -15,13 +15,6 @@ use Sammyjo20\Saloon\Contracts\SaloonResponse as SaloonResponseContract;
 abstract class SaloonResponse implements SaloonResponseContract
 {
     use Macroable;
-
-    /**
-     * The raw response from the sender.
-     *
-     * @var mixed
-     */
-    protected mixed $rawResponse;
 
     /**
      * The decoded JSON response.

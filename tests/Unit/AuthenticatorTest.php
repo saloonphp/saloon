@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
@@ -166,8 +166,8 @@ test('you can customise the authenticator inside of a middleware pipeline', func
 
     expect($request->getAuthenticator())->toBeNull();
 
-    $request->middlewarePipeline()
-        ->addRequestPipe(function (PendingSaloonRequest $pendingRequest) {
+    $request->middleware()
+        ->onRequest(function (PendingSaloonRequest $pendingRequest) {
             $pendingRequest->withTokenAuth('ooh-this-is-cool');
         });
 

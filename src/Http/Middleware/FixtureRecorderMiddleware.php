@@ -1,11 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Http\Middleware;
 
 use Sammyjo20\Saloon\Http\Fixture;
-use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Data\FixtureData;
-use Psr\Http\Message\ResponseInterface;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 
 class FixtureRecorderMiddleware
 {
@@ -29,34 +28,15 @@ class FixtureRecorderMiddleware
     /**
      * Store the response
      *
-     * @param callable $handler
-     * @return \Closure
-     */
-    public function __invoke(callable $handler)
-    {
-        return function (RequestInterface $request, array $options) use ($handler) {
-            $promise = $handler($request, $options);
-
-            return $promise->then(function (ResponseInterface $response) {
-                $this->storeResponse($response);
-
-                return $response;
-            });
-        };
-    }
-
-    /**
-     * Store the response against the fixture.
-     *
-     * @param ResponseInterface $response
+     * @param SaloonResponse $response
      * @return void
      * @throws \JsonException
      * @throws \Sammyjo20\Saloon\Exceptions\UnableToCreateDirectoryException
      * @throws \Sammyjo20\Saloon\Exceptions\UnableToCreateFileException
      */
-    protected function storeResponse(ResponseInterface $response): void
+    public function __invoke(SaloonResponse $response): void
     {
-        $fixtureData = FixtureData::fromGuzzleResponse($response);
+        $fixtureData = FixtureData::fromResponse($response);
 
         $this->fixture->store($fixtureData);
     }

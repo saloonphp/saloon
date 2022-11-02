@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Traits;
 
@@ -92,7 +92,7 @@ trait ProxiesRequests
      * @return array
      * @throws \ReflectionException
      */
-    protected function getRegisteredRequests(): array
+    public function getRegisteredRequests(): array
     {
         if (empty($this->requests)) {
             return [];

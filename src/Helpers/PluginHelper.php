@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Helpers;
 
@@ -11,13 +11,13 @@ class PluginHelper
     /**
      * Boot a given plugin/trait
      *
-     * @param PendingSaloonRequest $requestPayload
+     * @param PendingSaloonRequest $pendingRequest
      * @param SaloonConnector|SaloonRequest $resource
      * @param string $trait
      * @return void
      * @throws \ReflectionException
      */
-    public static function bootPlugin(PendingSaloonRequest $requestPayload, SaloonConnector|SaloonRequest $resource, string $trait): void
+    public static function bootPlugin(PendingSaloonRequest $pendingRequest, SaloonConnector|SaloonRequest $resource, string $trait): void
     {
         $traitReflection = new \ReflectionClass($trait);
 
@@ -27,6 +27,6 @@ class PluginHelper
             return;
         }
 
-        $resource->{$bootMethodName}($requestPayload);
+        $resource->{$bootMethodName}($pendingRequest);
     }
 }
