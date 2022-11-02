@@ -15,28 +15,12 @@ use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidServiceRequestConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidRequestSelectionConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidDefinedRequestSelectionConnector;
 
-test('you can create a method that will be proxied to a request', function () {
-    $connector = new RequestSelectionConnector;
-    $request = $connector->getUser();
-
-    expect($request)->toBeInstanceOf(UserRequest::class);
-});
-
 test('a request can be called statically', function () {
     $userRequest = RequestSelectionConnector::getMyUser();
     $errorRequest = RequestSelectionConnector::errorRequest();
 
     expect($userRequest)->toBeInstanceOf(UserRequest::class);
     expect($errorRequest)->toBeInstanceOf(ErrorRequest::class);
-});
-
-test('you can pass parameters into the request method', function () {
-    $connector = new RequestSelectionConnector;
-    $request = $connector->getUser(123, 4);
-
-    expect($request)->toBeInstanceOf(UserRequest::class);
-    expect($request)->userId->toEqual(123);
-    expect($request)->groupId->toEqual(4);
 });
 
 test('you can pass parameters into a guessed request method', function () {

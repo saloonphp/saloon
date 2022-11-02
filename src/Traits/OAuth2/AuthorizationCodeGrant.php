@@ -99,7 +99,7 @@ trait AuthorizationCodeGrant
      * @param bool $returnResponse
      * @return OAuthAuthenticator|SaloonResponse
      * @throws InvalidStateException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \JsonException
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException

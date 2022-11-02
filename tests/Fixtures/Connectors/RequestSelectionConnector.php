@@ -46,20 +46,6 @@ class RequestSelectionConnector extends SaloonConnector
         return [];
     }
 
-    /**
-     * Get the user from the system.
-     *
-     * @param ...$args
-     * @return SaloonRequest
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\ClassNotFoundException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException
-     */
-    public function getUser(...$args): SaloonRequest
-    {
-        return $this->forwardCallToRequest(UserRequest::class, $args);
-    }
-
     public function __construct(public ?string $apiKey = null)
     {
         //

@@ -151,26 +151,26 @@ class MockClient implements MockClientContract
         $requestClass = get_class($request);
 
         if (array_key_exists($requestClass, $this->requestResponses)) {
-            return $this->mockResponseValue($this->requestResponses[$requestClass], $request);
+            return $this->mockResponseValue($this->requestResponses[$requestClass], $pendingRequest);
         }
 
         $connectorClass = get_class($request->connector());
 
         if (array_key_exists($connectorClass, $this->connectorResponses)) {
-            return $this->mockResponseValue($this->connectorResponses[$connectorClass], $request);
+            return $this->mockResponseValue($this->connectorResponses[$connectorClass], $pendingRequest);
         }
 
         $guessedResponse = $this->guessResponseFromUrl($request);
 
         if (! is_null($guessedResponse)) {
-            return $this->mockResponseValue($guessedResponse, $request);
+            return $this->mockResponseValue($guessedResponse, $pendingRequest);
         }
 
         if (empty($this->sequenceResponses)) {
             throw new SaloonNoMockResponseFoundException;
         }
 
-        return $this->mockResponseValue($this->getNextFromSequence(), $request);
+        return $this->mockResponseValue($this->getNextFromSequence(), $pendingRequest);
     }
 
     /**
@@ -468,10 +468,10 @@ class MockClient implements MockClientContract
      * Get the mock value.
      *
      * @param MockResponse|Fixture|callable $mockable
-     * @param SaloonRequest $request
+     * @param PendingSaloonRequest $pendingRequest
      * @return MockResponse|Fixture
      */
-    private function mockResponseValue(MockResponse|Fixture|callable $mockable, SaloonRequest $request): MockResponse|Fixture
+    private function mockResponseValue(MockResponse|Fixture|callable $mockable, PendingSaloonRequest $pendingRequest): MockResponse|Fixture
     {
         if ($mockable instanceof MockResponse) {
             return $mockable;
@@ -481,6 +481,6 @@ class MockClient implements MockClientContract
             return $mockable;
         }
 
-        return $mockable($request);
+        return $mockable($pendingRequest);
     }
 }

@@ -4,6 +4,7 @@ use League\Flysystem\Filesystem;
 use Sammyjo20\Saloon\Http\Fixture;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use Sammyjo20\Saloon\Http\Responses\SimulatedResponse;
@@ -57,8 +58,8 @@ test('a request can be mocked with a sequence', function () {
 });
 
 test('a request can be mocked with a connector defined', function () {
-    $responseA = MockResponse::make(['name' => 'Sammyjo20'], 200);
-    $responseB = MockResponse::make(['name' => 'Alex'], 200);
+    $responseA = MockResponse::make(200, ['name' => 'Sammyjo20']);
+    $responseB = MockResponse::make(200, ['name' => 'Alex']);
 
     $connectorARequest = new UserRequest;
     $connectorBRequest = new QueryParameterConnectorRequest;
@@ -82,8 +83,8 @@ test('a request can be mocked with a connector defined', function () {
 });
 
 test('a request can be mocked with a request defined', function () {
-    $responseA = MockResponse::make(['name' => 'Sammyjo20'], 200);
-    $responseB = MockResponse::make(['name' => 'Alex'], 200);
+    $responseA = MockResponse::make(200, ['name' => 'Sammyjo20']);
+    $responseB = MockResponse::make(200, ['name' => 'Alex']);
 
     $requestA = new UserRequest;
     $requestB = new QueryParameterConnectorRequest;
@@ -107,9 +108,9 @@ test('a request can be mocked with a request defined', function () {
 });
 
 test('a request can be mocked with a url defined', function () {
-    $responseA = MockResponse::make(['name' => 'Sammyjo20'], 200);
-    $responseB = MockResponse::make(['name' => 'Alex'], 200);
-    $responseC = MockResponse::make(['error' => 'Server Broken'], 500);
+    $responseA = MockResponse::make(200, ['name' => 'Sammyjo20']);
+    $responseB = MockResponse::make(200, ['name' => 'Alex']);
+    $responseC = MockResponse::make(500, ['error' => 'Server Broken']);
 
     $requestA = new UserRequest;
     $requestB = new ErrorRequest;
@@ -141,9 +142,9 @@ test('a request can be mocked with a url defined', function () {
 });
 
 test('you can create wildcard url mocks', function () {
-    $responseA = MockResponse::make(['name' => 'Sammyjo20'], 200);
-    $responseB = MockResponse::make(['name' => 'Alex'], 200);
-    $responseC = MockResponse::make(['error' => 'Server Broken'], 500);
+    $responseA = MockResponse::make(200, ['name' => 'Sammyjo20']);
+    $responseB = MockResponse::make(200, ['name' => 'Alex']);
+    $responseC = MockResponse::make(500, ['error' => 'Server Broken']);
 
     $requestA = new UserRequest;
     $requestB = new ErrorRequest;
@@ -176,8 +177,8 @@ test('you can create wildcard url mocks', function () {
 
 test('you can use a closure for the mock response', function () {
     $sequenceMock = new MockClient([
-        function (SaloonRequest $request): MockResponse {
-            return new MockResponse(['request' => $request->getRequestUrl()]);
+        function (PendingSaloonRequest $pendingRequest): MockResponse {
+            return new MockResponse(200, ['request' => $pendingRequest->getRequest()->getRequestUrl()]);
         },
     ]);
 
@@ -189,8 +190,8 @@ test('you can use a closure for the mock response', function () {
     // Connector mock
 
     $connectorMock = new MockClient([
-        TestConnector::class => function (SaloonRequest $request): MockResponse {
-            return new MockResponse(['request' => $request->getRequestUrl()]);
+        TestConnector::class => function (PendingSaloonRequest $pendingRequest): MockResponse {
+            return new MockResponse(200, ['request' => $pendingRequest->getRequest()->getRequestUrl()]);
         },
     ]);
 
@@ -202,8 +203,8 @@ test('you can use a closure for the mock response', function () {
     // Request mock
 
     $requestMock = new MockClient([
-        UserRequest::class => function (SaloonRequest $request): MockResponse {
-            return new MockResponse(['request' => $request->getRequestUrl()]);
+        UserRequest::class => function (PendingSaloonRequest $pendingRequest): MockResponse {
+            return new MockResponse(200, ['request' => $pendingRequest->getRequest()->getRequestUrl()]);
         },
     ]);
 
@@ -215,8 +216,8 @@ test('you can use a closure for the mock response', function () {
     // URL mock
 
     $urlMock = new MockClient([
-        'tests.saloon.dev/*' => function (SaloonRequest $request): MockResponse {
-            return new MockResponse(['request' => $request->getRequestUrl()]);
+        'tests.saloon.dev/*' => function (PendingSaloonRequest $pendingRequest): MockResponse {
+            return new MockResponse(200, ['request' => $pendingRequest->getRequest()->getRequestUrl()]);
         },
     ]);
 
@@ -416,8 +417,8 @@ test('a fixture can be used with a wildcard url mock', function () {
 
 test('a fixture can be used within a closure mock', function () use ($filesystem) {
     $mockClient = new MockClient([
-        '*' => function (SaloonRequest $request) {
-            if ($request instanceof UserRequest) {
+        '*' => function (PendingSaloonRequest $pendingRequest) {
+            if ($pendingRequest->getRequest() instanceof UserRequest) {
                 return MockResponse::fixture('user');
             }
 
