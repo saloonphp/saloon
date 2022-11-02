@@ -37,7 +37,7 @@ test('you can create a mock response from fixture data', function () {
     $fixtureData = FixtureData::fromFile(json_encode($data));
     $mockResponse = $fixtureData->toMockResponse();
 
-    expect($mockResponse)->toEqual(new MockResponse($data['data'], $data['statusCode'], $data['headers']));
+    expect($mockResponse)->toEqual(new MockResponse($data['statusCode'], $data['data'], $data['headers']));
 });
 
 test('you can json serialize the fixture data or convert it into a file', function () {

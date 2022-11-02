@@ -11,6 +11,7 @@ use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Contracts\Body\WithBody;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
+use Sammyjo20\Saloon\Http\Middleware\AuthenticateMiddleware;
 use Sammyjo20\Saloon\Traits\HasRequestProperties;
 use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
 use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
@@ -116,7 +117,6 @@ class PendingSaloonRequest
         $this->bootPlugins()
             ->mergeRequestProperties()
             ->mergeBody()
-            ->authenticateRequest()
             ->bootConnectorAndRequest();
 
         // Now we will register the default middleware, this always needs to come
@@ -215,22 +215,6 @@ class PendingSaloonRequest
     }
 
     /**
-     * Authenticate the request.
-     *
-     * @return $this
-     */
-    protected function authenticateRequest(): static
-    {
-        $authenticator = $this->getAuthenticator();
-
-        if ($authenticator instanceof Authenticator) {
-            $authenticator->set($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * Run the boot method on the connector and request.
      *
      * @return $this
@@ -251,6 +235,8 @@ class PendingSaloonRequest
     protected function registerDefaultMiddleware(): static
     {
         $middleware = $this->middleware();
+
+        $middleware->onRequest(new AuthenticateMiddleware);
 
         if ($this->isRunningOnLaravel()) {
             $middleware->onRequest(new SaloonLaravelMiddleware);
