@@ -24,7 +24,7 @@ class Storage
     public function __construct(string $baseDirectory)
     {
         if (! is_dir($baseDirectory)) {
-            throw new DirectoryNotFoundException($baseDirectory);
+            @mkdir($baseDirectory, 0755, true);
         }
 
         $this->baseDirectory = $baseDirectory;
