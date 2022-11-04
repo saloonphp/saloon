@@ -3,6 +3,7 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Traits\Bootable;
+use Sammyjo20\Saloon\Traits\Connector\HasPool;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Http\Senders\GuzzleSender;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
@@ -28,6 +29,7 @@ abstract class SaloonConnector
     use SendsRequests;
     use HasSender;
     use Bootable;
+    use HasPool;
 
     /**
      * Define the base URL of the API.
