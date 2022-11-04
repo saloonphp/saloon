@@ -3,6 +3,7 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 
 use Sammyjo20\Saloon\Http\SaloonConnector;
+use Sammyjo20\Saloon\Http\Senders\GuzzleSender;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
 
 class TestConnector extends SaloonConnector

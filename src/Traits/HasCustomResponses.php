@@ -11,11 +11,11 @@ use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 trait HasCustomResponses
 {
     /**
-     * Specify a custom response.
+     * Specify a default response.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $response = null;
+    protected string $defaultResponse = '';
 
     /**
      * Get the response class
@@ -48,10 +48,10 @@ trait HasCustomResponses
     /**
      * Resolve the custom response class
      *
-     * @return string|null
+     * @return string
      */
-    protected function resolveResponse(): ?string
+    protected function resolveResponse(): string
     {
-        return $this->response;
+        return $this->defaultResponse;
     }
 }

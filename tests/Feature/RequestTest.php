@@ -6,6 +6,9 @@ use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 
 test('a request can be made successfully', function () {
     $request = new UserRequest();
+
+    dd(get_class_methods($request));
+
     $response = $request->send();
     $data = $response->json();
 

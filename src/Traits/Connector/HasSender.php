@@ -8,6 +8,13 @@ use Sammyjo20\Saloon\Helpers\SenderHelper;
 trait HasSender
 {
     /**
+     * Specify the default sender
+     *
+     * @var string
+     */
+    protected string $defaultSender = '';
+
+    /**
      * The request sender.
      *
      * @var Sender
@@ -31,6 +38,10 @@ trait HasSender
      */
     protected function defaultSender(): Sender
     {
-        return SenderHelper::defaultSender();
+        if (empty($this->defaultSender)) {
+            return SenderHelper::defaultSender();
+        }
+
+        return new $this->defaultSender;
     }
 }
