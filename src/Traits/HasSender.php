@@ -3,6 +3,8 @@
 namespace Sammyjo20\Saloon\Traits;
 
 use Sammyjo20\Saloon\Contracts\Sender;
+use Sammyjo20\Saloon\Helpers\Environment;
+use Sammyjo20\Saloon\Helpers\SenderHelper;
 use Sammyjo20\Saloon\Http\Senders\GuzzleSender;
 
 trait HasSender
@@ -31,6 +33,6 @@ trait HasSender
      */
     protected function defaultSender(): Sender
     {
-        return new GuzzleSender;
+        return SenderHelper::defaultSender();
     }
 }

@@ -176,7 +176,7 @@ class GuzzleSender implements Sender
      * @param RequestException|null $exception
      * @return PsrResponse
      */
-    protected function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $guzzleResponse, RequestException $exception = null): PsrResponse
+    protected function createResponse(PendingSaloonRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse, RequestException $exception = null): PsrResponse
     {
         $responseClass = $pendingSaloonRequest->getResponseClass();
 

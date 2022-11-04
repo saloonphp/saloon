@@ -7,6 +7,7 @@ use ReflectionException;
 use Sammyjo20\Saloon\Enums\Method;
 use Sammyjo20\Saloon\Contracts\Sender;
 use Sammyjo20\Saloon\Contracts\MockClient;
+use Sammyjo20\Saloon\Helpers\Environment;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Contracts\Body\WithBody;
@@ -238,7 +239,7 @@ class PendingSaloonRequest
 
         $middleware->onRequest(new AuthenticateMiddleware);
 
-        if ($this->isRunningOnLaravel()) {
+        if (Environment::detectsLaravel() && class_exists(SaloonLaravelMiddleware::class)) {
             $middleware->onRequest(new SaloonLaravelMiddleware);
         }
 
@@ -406,19 +407,5 @@ class PendingSaloonRequest
         $this->mockClient = $mockClient;
 
         return $this;
-    }
-
-    /**
-     * Determine if Saloon is running in a Laravel environment
-     *
-     * @return bool
-     */
-    protected function isRunningOnLaravel(): bool
-    {
-        try {
-            return function_exists('resolve') && resolve('saloon') instanceof \Sammyjo20\SaloonLaravel\Saloon && class_exists(SaloonLaravelMiddleware::class);
-        } catch (Exception $ex) {
-            return false;
-        }
     }
 }
