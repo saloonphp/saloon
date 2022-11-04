@@ -11,10 +11,11 @@ use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Contracts\Body\WithBody;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
-use Sammyjo20\Saloon\Http\Middleware\MockMiddleware;
 use Sammyjo20\Saloon\Traits\Auth\AuthenticatesRequests;
+use Sammyjo20\Saloon\Http\Middleware\AuthenticateRequest;
+use Sammyjo20\Saloon\Http\Faking\SimulatedResponsePayload;
+use Sammyjo20\Saloon\Http\Middleware\DetermineMockResponse;
 use Sammyjo20\Saloon\Repositories\Body\ArrayBodyRepository;
-use Sammyjo20\Saloon\Http\Middleware\AuthenticateMiddleware;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
 use Sammyjo20\SaloonLaravel\Middleware\SaloonLaravelMiddleware;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
@@ -235,13 +236,13 @@ class PendingSaloonRequest
     {
         $middleware = $this->middleware();
 
-        $middleware->onRequest(new AuthenticateMiddleware);
+        $middleware->onRequest(new AuthenticateRequest);
 
         if (Environment::detectsLaravel() && class_exists(SaloonLaravelMiddleware::class)) {
             $middleware->onRequest(new SaloonLaravelMiddleware);
         }
 
-        $middleware->onRequest(new MockMiddleware);
+        $middleware->onRequest(new DetermineMockResponse);
 
         return $this;
     }

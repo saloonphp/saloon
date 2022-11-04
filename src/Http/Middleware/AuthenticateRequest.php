@@ -5,7 +5,7 @@ namespace Sammyjo20\Saloon\Http\Middleware;
 use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 
-class AuthenticateMiddleware
+class AuthenticateRequest
 {
     /**
      * Authenticate the pending request

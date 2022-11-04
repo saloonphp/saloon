@@ -5,9 +5,9 @@ namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Collections\UserGroup;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Collections\UserCollection;
-use Sammyjo20\Saloon\Tests\Fixtures\Collections\GuessedCollection;
+use Sammyjo20\Saloon\Tests\Fixtures\Collections\GuessedGroup;
 
 class ServiceRequestConnector extends SaloonConnector
 {
@@ -22,9 +22,9 @@ class ServiceRequestConnector extends SaloonConnector
         'user' => [
             'get' => UserRequest::class,
         ],
-        'custom' => UserCollection::class,
+        'custom' => UserGroup::class,
         ErrorRequest::class,
-        GuessedCollection::class,
+        GuessedGroup::class,
     ];
 
     /**

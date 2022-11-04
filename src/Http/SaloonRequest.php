@@ -5,7 +5,7 @@ namespace Sammyjo20\Saloon\Http;
 use Sammyjo20\Saloon\Traits\Bootable;
 use Sammyjo20\Saloon\Contracts\Sender;
 use GuzzleHttp\Promise\PromiseInterface;
-use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Contracts\MockClient;
 use Sammyjo20\Saloon\Traits\MocksRequests;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;

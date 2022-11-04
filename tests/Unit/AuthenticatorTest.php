@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Http\Faking\MockClient;
+use Sammyjo20\Saloon\Http\Faking\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;

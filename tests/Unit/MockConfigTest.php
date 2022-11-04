@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Helpers\MockConfig;
+use Sammyjo20\Saloon\Http\Faking\MockClient;
+use Sammyjo20\Saloon\Http\Faking\MockResponse;
 use Sammyjo20\Saloon\Exceptions\FixtureMissingException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;

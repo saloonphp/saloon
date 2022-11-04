@@ -4,9 +4,9 @@ namespace Sammyjo20\Saloon\Traits\Connector;
 
 use ReflectionException;
 use GuzzleHttp\Promise\PromiseInterface;
-use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Actions\SendRequest;
+use Sammyjo20\Saloon\Http\Faking\MockClient;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
 

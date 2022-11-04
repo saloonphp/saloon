@@ -3,7 +3,7 @@
 namespace Sammyjo20\Saloon\Tests\Unit;
 
 use Sammyjo20\Saloon\Data\FixtureData;
-use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Http\Faking\MockResponse;
 
 test('you can create a fixture data object from a file string', function () {
     $data = [

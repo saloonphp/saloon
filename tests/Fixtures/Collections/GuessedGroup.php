@@ -2,9 +2,9 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Collections;
 
-use Sammyjo20\Saloon\Http\RequestCollection;
+use Sammyjo20\Saloon\Http\Groups\RequestGroup;
 
-class GuessedCollection extends RequestCollection
+class GuessedGroup extends RequestGroup
 {
     public function test(): bool
     {

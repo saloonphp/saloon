@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
 use GuzzleHttp\Promise\Promise;
-use Sammyjo20\Saloon\Http\MockResponse;
 use GuzzleHttp\Promise\PromiseInterface;
-use Sammyjo20\Saloon\Clients\MockClient;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use Sammyjo20\Saloon\Http\Faking\MockClient;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
+use Sammyjo20\Saloon\Http\Faking\MockResponse;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 

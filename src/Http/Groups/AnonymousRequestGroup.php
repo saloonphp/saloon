@@ -1,13 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http;
+namespace Sammyjo20\Saloon\Http\Groups;
 
+use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Helpers\RequestHelper;
 use Sammyjo20\Saloon\Exceptions\NestedRequestNotFoundException;
 
-class AnonymousRequestCollection extends RequestCollection
+class AnonymousRequestGroup extends RequestGroup
 {
     /**
+     * Constructor
+     *
      * @param SaloonConnector $connector
      * @param string $collectionName
      * @param array $requests
@@ -20,9 +23,8 @@ class AnonymousRequestCollection extends RequestCollection
         parent::__construct($connector);
     }
 
-
     /**
-     * Call a request on a connector.
+     * Invoke a request from a connector.
      *
      * @param string $name
      * @param array $arguments

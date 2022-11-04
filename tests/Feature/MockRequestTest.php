@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
 
 use League\Flysystem\Filesystem;
-use Sammyjo20\Saloon\Http\Fixture;
-use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Http\Faking\MockClient;
+use Sammyjo20\Saloon\Http\Faking\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use Sammyjo20\Saloon\Http\Responses\SimulatedResponse;

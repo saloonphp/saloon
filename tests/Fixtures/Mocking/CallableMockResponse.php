@@ -2,7 +2,7 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Mocking;
 
-use Sammyjo20\Saloon\Http\MockResponse;
+use Sammyjo20\Saloon\Http\Faking\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 
 class CallableMockResponse

@@ -2,11 +2,11 @@
 
 namespace Sammyjo20\Saloon\Http\Middleware;
 
-use Sammyjo20\Saloon\Http\Fixture;
 use Sammyjo20\Saloon\Data\FixtureData;
+use Sammyjo20\Saloon\Http\Faking\Fixture;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
 
-class FixtureRecorderMiddleware
+class RecordFixture
 {
     /**
      * The fixture

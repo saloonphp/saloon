@@ -2,20 +2,19 @@
 
 namespace Sammyjo20\Saloon\Http\Middleware;
 
-use Sammyjo20\Saloon\Http\Fixture;
-use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Http\Faking\Fixture;
+use Sammyjo20\Saloon\Http\Faking\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
 
-class MockMiddleware
+class DetermineMockResponse
 {
     /**
      * Guess a mock response
      *
      * @param PendingSaloonRequest $pendingRequest
-     * @return PendingSaloonRequest|MockResponse
+     * @return PendingSaloonRequest|DetermineMockResponse
      * @throws SaloonInvalidConnectorException
      * @throws SaloonNoMockResponseFoundException
      * @throws \JsonException
@@ -49,7 +48,7 @@ class MockMiddleware
         // middleware on the response to record the response.
 
         if (is_null($mockResponse) && $mockObject instanceof Fixture) {
-            $pendingRequest->middleware()->onResponse(new FixtureRecorderMiddleware($mockObject));
+            $pendingRequest->middleware()->onResponse(new RecordFixture($mockObject));
         }
 
         return $pendingRequest;

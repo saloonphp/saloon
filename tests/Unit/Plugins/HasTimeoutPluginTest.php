@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
 use Psr\Http\Message\RequestInterface;
-use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Http\Faking\MockClient;
 use Sammyjo20\Saloon\Managers\RequestManager;
+use Sammyjo20\Saloon\Http\Faking\MockResponse;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\TimeoutRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TimeoutConnector;

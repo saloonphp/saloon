@@ -7,7 +7,7 @@ use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use Sammyjo20\Saloon\Repositories\ArrayStore;
-use Sammyjo20\Saloon\Http\SimulatedResponsePayload;
+use Sammyjo20\Saloon\Http\Faking\SimulatedResponsePayload;
 
 class SimulatedResponse extends SaloonResponse
 {

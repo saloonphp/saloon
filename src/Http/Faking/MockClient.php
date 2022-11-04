@@ -1,11 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Clients;
+namespace Sammyjo20\Saloon\Http\Faking;
 
 use ReflectionClass;
-use Sammyjo20\Saloon\Http\Fixture;
 use Sammyjo20\Saloon\Helpers\URLHelper;
-use Sammyjo20\Saloon\Http\MockResponse;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonConnector;

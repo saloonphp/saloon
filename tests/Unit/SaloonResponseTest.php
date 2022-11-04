@@ -2,8 +2,8 @@
 
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
-use Sammyjo20\Saloon\Http\MockResponse;
-use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Http\Faking\MockClient;
+use Sammyjo20\Saloon\Http\Faking\MockResponse;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 

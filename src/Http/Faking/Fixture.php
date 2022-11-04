@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http;
+namespace Sammyjo20\Saloon\Http\Faking;
 
 use Sammyjo20\Saloon\Helpers\Storage;
 use Sammyjo20\Saloon\Data\FixtureData;

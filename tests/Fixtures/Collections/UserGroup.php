@@ -3,10 +3,10 @@
 namespace Sammyjo20\Saloon\Tests\Fixtures\Collections;
 
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\RequestCollection;
+use Sammyjo20\Saloon\Http\Groups\RequestGroup;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 
-class UserCollection extends RequestCollection
+class UserGroup extends RequestGroup
 {
     /**
      * @return SaloonRequest
