@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits;
+namespace Sammyjo20\Saloon\Traits\Request;
 
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 
-trait CastsResponseToDto
+trait CastDtoFromResponse
 {
     /**
      * Cast the response to a DTO.

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits;
+namespace Sammyjo20\Saloon\Traits\Auth;
 
 use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Http\Auth\BasicAuthenticator;
@@ -42,22 +42,11 @@ trait AuthenticatesRequests
      * @param Authenticator $authenticator
      * @return $this
      */
-    public function withAuth(Authenticator $authenticator): static
+    public function authenticateWith(Authenticator $authenticator): static
     {
         $this->authenticator = $authenticator;
 
         return $this;
-    }
-
-    /**
-     * Register an authenticator
-     *
-     * @param Authenticator $authenticator
-     * @return $this
-     */
-    public function authenticate(Authenticator $authenticator): static
-    {
-        return $this->withAuth($authenticator);
     }
 
     /**
@@ -69,7 +58,7 @@ trait AuthenticatesRequests
      */
     public function withTokenAuth(string $token, string $prefix = 'Bearer'): static
     {
-        return $this->withAuth(new TokenAuthenticator($token, $prefix));
+        return $this->authenticateWith(new TokenAuthenticator($token, $prefix));
     }
 
     /**
@@ -81,7 +70,7 @@ trait AuthenticatesRequests
      */
     public function withBasicAuth(string $username, string $password): static
     {
-        return $this->withAuth(new BasicAuthenticator($username, $password));
+        return $this->authenticateWith(new BasicAuthenticator($username, $password));
     }
 
     /**
@@ -94,6 +83,6 @@ trait AuthenticatesRequests
      */
     public function withDigestAuth(string $username, string $password, string $digest): static
     {
-        return $this->withAuth(new DigestAuthenticator($username, $password, $digest));
+        return $this->authenticateWith(new DigestAuthenticator($username, $password, $digest));
     }
 }

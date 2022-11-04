@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits;
+namespace Sammyjo20\Saloon\Traits\Request;
 
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;

@@ -4,7 +4,6 @@ namespace Sammyjo20\Saloon\Tests\Fixtures\Mocking;
 
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonRequest;
 
 class CallableMockResponse
 {

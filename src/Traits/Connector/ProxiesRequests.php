@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits;
+namespace Sammyjo20\Saloon\Traits\Connector;
 
 use Sammyjo20\Saloon\Helpers\RequestHelper;
 use Sammyjo20\Saloon\Http\RequestCollection;

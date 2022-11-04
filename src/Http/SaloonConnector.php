@@ -3,16 +3,16 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Traits\Bootable;
-use Sammyjo20\Saloon\Traits\HasSender;
 use Sammyjo20\Saloon\Traits\MocksRequests;
-use Sammyjo20\Saloon\Traits\SendsRequests;
-use Sammyjo20\Saloon\Traits\ProxiesRequests;
 use Sammyjo20\Saloon\Http\Senders\GuzzleSender;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
-use Sammyjo20\Saloon\Traits\HasRequestProperties;
-use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
+use Sammyjo20\Saloon\Traits\Connector\HasSender;
+use Sammyjo20\Saloon\Traits\Connector\SendsRequests;
+use Sammyjo20\Saloon\Traits\Connector\ProxiesRequests;
 use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
+use Sammyjo20\Saloon\Traits\Auth\AuthenticatesRequests;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
+use Sammyjo20\Saloon\Traits\RequestProperties\HasRequestProperties;
 use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
 
 /**

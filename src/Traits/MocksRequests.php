@@ -2,17 +2,19 @@
 
 namespace Sammyjo20\Saloon\Traits;
 
-use Sammyjo20\Saloon\Clients\MockClient;
+use Sammyjo20\Saloon\Contracts\MockClient;
 
 trait MocksRequests
 {
     /**
+     * Mock Client
+     *
      * @var MockClient|null
      */
     protected ?MockClient $mockClient = null;
 
     /**
-     * Register a mock client for the request.
+     * Specify a mock client.
      *
      * @param MockClient $mockClient
      * @return $this
@@ -25,7 +27,7 @@ trait MocksRequests
     }
 
     /**
-     * Get the mock client on the request.
+     * Get the mock client.
      *
      * @return MockClient|null
      */

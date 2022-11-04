@@ -3,33 +3,31 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Traits\Bootable;
-use Sammyjo20\Saloon\Traits\BuildsUrls;
+use Sammyjo20\Saloon\Contracts\Sender;
 use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Clients\MockClient;
-use Sammyjo20\Saloon\Traits\HasConnector;
 use Sammyjo20\Saloon\Traits\MocksRequests;
-use Sammyjo20\Saloon\Traits\RecordsFixtures;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
-use Sammyjo20\Saloon\Traits\CastsResponseToDto;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
-use Sammyjo20\Saloon\Traits\HasRequestProperties;
-use Sammyjo20\Saloon\Traits\AuthenticatesRequests;
+use Sammyjo20\Saloon\Traits\Request\BuildsUrls;
+use Sammyjo20\Saloon\Traits\Request\HasConnector;
+use Sammyjo20\Saloon\Traits\Auth\AuthenticatesRequests;
+use Sammyjo20\Saloon\Traits\Request\CastDtoFromResponse;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
-use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
+use Sammyjo20\Saloon\Traits\RequestProperties\HasRequestProperties;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
 
 abstract class SaloonRequest
 {
-    use HasRequestProperties;
     use AuthenticatesRequests;
+    use HasRequestProperties;
+    use CastDtoFromResponse;
     use HasCustomResponses;
     use MocksRequests;
-    use BuildsUrls;
-    use CastsResponseToDto;
     use HasConnector;
+    use BuildsUrls;
     use Bootable;
-    use RecordsFixtures;
 
     /**
      * Define the connector.
@@ -68,13 +66,14 @@ abstract class SaloonRequest
     }
 
     /**
-     * Get the method of the request.
+     * Access the HTTP sender
      *
-     * @return string
+     * @return Sender
+     * @throws SaloonInvalidConnectorException
      */
-    public function getMethod(): string
+    public function sender(): Sender
     {
-        return $this->method;
+        return $this->connector()->sender();
     }
 
     /**
@@ -118,22 +117,12 @@ abstract class SaloonRequest
     }
 
     /**
-     * Dynamically proxy other methods to the connector.
+     * Get the method of the request.
      *
-     * @param $method
-     * @param $parameters
-     * @return mixed
-     * @throws SaloonInvalidConnectorException
-     * @throws SaloonMethodNotFoundException
+     * @return string
      */
-    public function __call($method, $parameters)
+    public function getMethod(): string
     {
-        $connector = $this->connector();
-
-        if (method_exists($connector, $method) === false) {
-            throw new SaloonMethodNotFoundException($method, $connector);
-        }
-
-        return $connector->{$method}(...$parameters);
+        return $this->method;
     }
 }
