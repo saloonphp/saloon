@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
@@ -10,7 +11,7 @@ test('the guzzle sender will send to the right url using the correct method', fu
 
     $pendingRequest = $request->createPendingRequest();
 
-    $sender->pushMiddleware(function (callable $handler) use ($pendingRequest) {
+    $sender->addMiddleware(function (callable $handler) use ($pendingRequest) {
         return function (RequestInterface $request, array $options) use ($handler, $pendingRequest) {
             expect($request->getMethod())->toEqual($pendingRequest->getMethod()->value);
 
@@ -37,7 +38,7 @@ test('the guzzle sender will send all headers, query parameters and config', fun
 
     $sender = $request->connector()->sender();
 
-    $sender->pushMiddleware(function (callable $handler) {
+    $sender->addMiddleware(function (callable $handler) {
         return function (RequestInterface $request, array $options) use ($handler) {
             expect($options['timeout'])->toEqual(120);
             expect($options['debug'])->toBeTrue();
