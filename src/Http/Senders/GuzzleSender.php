@@ -59,7 +59,7 @@ class GuzzleSender implements Sender
         $clientConfig = [
             'connect_timeout' => 10,
             'timeout' => 30,
-            'http_errors' => true,
+            'http_errors' => false,
             'handler' => $this->handlerStack,
         ];
 
