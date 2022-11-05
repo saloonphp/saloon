@@ -1,6 +1,5 @@
 <?php declare(strict_types=1);
 
-use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;

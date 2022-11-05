@@ -1,18 +1,18 @@
-<?php
+<?php declare(strict_types=1);
 
-use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Promise\PromiseInterface;
-use Sammyjo20\Saloon\Contracts\SaloonResponse;
-use Sammyjo20\Saloon\Exceptions\FatalRequestException;
+use GuzzleHttp\Exception\ConnectException;
 use Sammyjo20\Saloon\Http\Faking\MockClient;
+use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Http\Faking\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Responses\PsrResponse;
+use Sammyjo20\Saloon\Exceptions\FatalRequestException;
 use Sammyjo20\Saloon\Http\Responses\SimulatedResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidConnectionConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidConnectionConnector;
 
 test('you can create a pool on a connector', function () {
     $connector = new TestConnector;

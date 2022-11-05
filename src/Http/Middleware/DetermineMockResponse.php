@@ -2,13 +2,14 @@
 
 namespace Sammyjo20\Saloon\Http\Middleware;
 
+use Sammyjo20\Saloon\Contracts\RequestMiddleware;
 use Sammyjo20\Saloon\Http\Faking\Fixture;
 use Sammyjo20\Saloon\Http\Faking\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
 
-class DetermineMockResponse
+class DetermineMockResponse implements RequestMiddleware
 {
     /**
      * Guess a mock response

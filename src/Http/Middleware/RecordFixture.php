@@ -2,11 +2,12 @@
 
 namespace Sammyjo20\Saloon\Http\Middleware;
 
+use Sammyjo20\Saloon\Contracts\ResponseMiddleware;
 use Sammyjo20\Saloon\Data\FixtureData;
 use Sammyjo20\Saloon\Http\Faking\Fixture;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
 
-class RecordFixture
+class RecordFixture implements ResponseMiddleware
 {
     /**
      * The fixture

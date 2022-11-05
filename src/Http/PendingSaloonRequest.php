@@ -11,6 +11,7 @@ use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Contracts\Body\WithBody;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
+use Sammyjo20\Saloon\Http\Middleware\BootConnectorAndRequest;
 use Sammyjo20\Saloon\Traits\Auth\AuthenticatesRequests;
 use Sammyjo20\Saloon\Http\Middleware\AuthenticateRequest;
 use Sammyjo20\Saloon\Http\Faking\SimulatedResponsePayload;
@@ -165,11 +166,20 @@ class PendingSaloonRequest
         $connector = $this->connector;
         $request = $this->request;
 
-        $this->headers()->merge($connector->headers()->all(), $request->headers()->all());
-        $this->queryParameters()->merge($connector->queryParameters()->all(), $request->queryParameters()->all());
-        $this->config()->merge($connector->config()->all(), $request->config()->all());
+        $this->headers()->merge(
+            $connector->headers()->all(),
+            $request->headers()->all()
+        );
 
-        // Merge together the middleware pipelines...
+        $this->queryParameters()->merge(
+            $connector->queryParameters()->all(),
+            $request->queryParameters()->all()
+        );
+
+        $this->config()->merge(
+            $connector->config()->all(),
+            $request->config()->all()
+        );
 
         $this->middleware()
             ->merge($connector->middleware())
@@ -221,6 +231,9 @@ class PendingSaloonRequest
      */
     protected function bootConnectorAndRequest(): static
     {
+        // This method is not going to be part of a middleware because the
+        // users may wish to register middleware inside the boot methods.
+
         $this->connector->boot($this);
         $this->request->boot($this);
 
@@ -236,11 +249,22 @@ class PendingSaloonRequest
     {
         $middleware = $this->middleware();
 
+        // We're going to register the internal middleware that should be run before
+        // a request is sent. This order should remain exactly the same.
+
         $middleware->onRequest(new AuthenticateRequest);
+
+        // Next we will check if we are in a Laravel environment and if we have the
+        // Laravel middleware. If we do then Laravel can make changes to the
+        // request like add its MockClient.
 
         if (Environment::detectsLaravel() && class_exists(SaloonLaravelMiddleware::class)) {
             $middleware->onRequest(new SaloonLaravelMiddleware);
         }
+
+        // Next we will run the MockClient and determine if we should send a real
+        // request or not. Keep DetermineMockResponse at the bottom so other
+        // middleware can set the MockClient before we run the MockResponse.
 
         $middleware->onRequest(new DetermineMockResponse);
 

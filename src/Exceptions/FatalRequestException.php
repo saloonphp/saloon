@@ -1,9 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Exceptions;
 
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Throwable;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 
 class FatalRequestException extends SaloonException
 {

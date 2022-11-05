@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Sammyjo20\Saloon\Http;
 
@@ -117,7 +117,7 @@ class Pool
         }
 
         if (is_iterable($requests)) {
-            $requests = static fn(): Generator => yield from $requests;
+            $requests = static fn (): Generator => yield from $requests;
         }
 
         $requests = function () use ($requests) {

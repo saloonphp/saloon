@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 use GuzzleHttp\Promise\PromiseInterface;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 it('accepts an array for requests', function () {
     $requests = [
