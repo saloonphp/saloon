@@ -94,7 +94,7 @@ class Pool
      * @param int $concurrentRequests
      * @return Pool
      */
-    public function setConcurrentRequests(int $concurrentRequests): Pool
+    public function setConcurrency(int $concurrentRequests): Pool
     {
         $this->concurrentRequests = $concurrentRequests;
 
@@ -139,6 +139,16 @@ class Pool
         $this->requests = $requests();
 
         return $this;
+    }
+
+    /**
+     * Get the request generator
+     *
+     * @return Generator
+     */
+    public function getRequests(): Generator
+    {
+        return $this->requests;
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Exceptions\FatalRequestException;
 use Sammyjo20\Saloon\Http\Faking\MockClient;
@@ -25,7 +26,7 @@ test('you can create a pool on a connector', function () {
         new UserRequest,
     ]);
 
-    $pool->setConcurrentRequests(5);
+    $pool->setConcurrency(5);
 
     $pool->handleResponse(function (SaloonResponse $response) use (&$count) {
         expect($response)->toBeInstanceOf(PsrResponse::class);
@@ -39,6 +40,8 @@ test('you can create a pool on a connector', function () {
     });
 
     $promise = $pool->send();
+
+    expect($promise)->toBeInstanceOf(PromiseInterface::class);
 
     $promise->wait();
 
@@ -57,7 +60,7 @@ test('if a pool has a request that cannot connect it will be caught in the handl
         new UserRequest,
     ]);
 
-    $pool->setConcurrentRequests(5);
+    $pool->setConcurrency(5);
 
     $pool->handleException(function (FatalRequestException $ex) use (&$count) {
         expect($ex)->toBeInstanceOf(FatalRequestException::class);
@@ -97,7 +100,7 @@ test('you can use pool with a mock client added and it wont send real requests',
         new ErrorRequest,
     ]);
 
-    $pool->setConcurrentRequests(6);
+    $pool->setConcurrency(6);
 
     $pool->handleResponse(function (SaloonResponse $response) use (&$count, $mockResponses) {
         expect($response)->toBeInstanceOf(SimulatedResponse::class);

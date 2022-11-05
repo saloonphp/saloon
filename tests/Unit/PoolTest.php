@@ -1,9 +1,25 @@
 <?php
 
+use GuzzleHttp\Promise\PromiseInterface;
+use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 
 it('accepts an array for requests', function () {
-    //
+    $requests = [
+        new UserRequest,
+        new UserRequest,
+    ];
+
+    $connector = new TestConnector;
+    $pool = $connector->pool($requests);
+
+    $generator = $pool->getRequests();
+
+    foreach ($generator as $key => $item) {
+        expect($item)->toBeInstanceOf(PromiseInterface::class);
+
+        dd($item);
+    }
 });
 
 it('accepts a generator for requests', function () {
