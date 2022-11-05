@@ -11,12 +11,15 @@ trait HasPool
     /**
      * Create a request pool
      *
-     * @param array $requests
+     * @param iterable|Generator|Closure|callable $requests
      * @param int $concurrentRequests
      * @return Pool
+     * @throws \ReflectionException
+     * @throws \Sammyjo20\Saloon\Exceptions\InvalidPoolItemException
+     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */
-    public function pool(array|Generator|Closure|callable $requestPayload, int $concurrentRequests = 5): Pool
+    public function pool(iterable|Generator|Closure|callable $requests = [], int $concurrentRequests = 5): Pool
     {
-        return new Pool($this, $requestPayload, $concurrentRequests);
+        return new Pool($this, $requests, $concurrentRequests);
     }
 }

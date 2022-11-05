@@ -26,7 +26,7 @@ class SimulatedResponse extends SaloonResponse
      */
     public function body(): string
     {
-        return $this->rawResponse->getDataAsString();
+        return $this->rawResponse->getBodyAsString();
     }
 
     /**

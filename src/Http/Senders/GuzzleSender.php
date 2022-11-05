@@ -14,6 +14,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\BadResponseException;
+use Sammyjo20\Saloon\Exceptions\FatalRequestException;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Responses\PsrResponse;
 use Sammyjo20\Saloon\Repositories\Body\FormBodyRepository;
@@ -229,7 +230,7 @@ class GuzzleSender implements Sender
                     // SaloonResponse, since there was no response.
 
                     if (! $guzzleException instanceof RequestException) {
-                        throw $guzzleException;
+                        throw new FatalRequestException($guzzleException, $pendingRequest);
                     }
 
                     $response = $this->createResponse($pendingRequest, $guzzleException->getResponse(), $guzzleException);

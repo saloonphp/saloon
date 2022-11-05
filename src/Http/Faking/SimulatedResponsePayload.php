@@ -5,7 +5,6 @@ namespace Sammyjo20\Saloon\Http\Faking;
 use Throwable;
 use Psr\Http\Message\RequestInterface;
 use Sammyjo20\Saloon\Repositories\ArrayStore;
-use Sammyjo20\Saloon\Data\MockExceptionClosure;
 use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
 use Sammyjo20\Saloon\Repositories\Body\JsonBodyRepository;
 use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
@@ -32,7 +31,7 @@ class SimulatedResponsePayload
      *
      * @var BodyRepository
      */
-    protected BodyRepository $data;
+    protected BodyRepository $body;
 
     /**
      * Exception Closure
@@ -45,27 +44,27 @@ class SimulatedResponsePayload
      * Create a new mock response
      *
      * @param int $status
-     * @param array|string $data
+     * @param array|string $body
      * @param array $headers
      */
-    public function __construct(int $status = 200, array|string $data = [], array $headers = [])
+    public function __construct(int $status = 200, array|string $body = [], array $headers = [])
     {
         $this->status = $status;
-        $this->data = is_array($data) ? new JsonBodyRepository($data) : new StringBodyRepository($data);
+        $this->body = is_array($body) ? new JsonBodyRepository($body) : new StringBodyRepository($body);
         $this->headers = new ArrayStore($headers);
     }
 
     /**
      * Create a new mock response
      *
-     * @param mixed $data
+     * @param mixed $body
      * @param int $status
      * @param array $headers
      * @return static
      */
-    public static function make(int $status = 200, mixed $data = [], array $headers = []): static
+    public static function make(int $status = 200, mixed $body = [], array $headers = []): static
     {
-        return new static($status, $data, $headers);
+        return new static($status, $body, $headers);
     }
 
     /**
@@ -120,19 +119,19 @@ class SimulatedResponsePayload
      *
      * @return BodyRepository
      */
-    public function getData(): BodyRepository
+    public function getBody(): BodyRepository
     {
-        return $this->data;
+        return $this->body;
     }
 
     /**
-     * Get the formatted data on the response.
+     * Get the formatted body on the response.
      *
      * @return string
      */
-    public function getDataAsString(): string
+    public function getBodyAsString(): string
     {
-        return (string)$this->data;
+        return (string)$this->body;
     }
 
     /**
