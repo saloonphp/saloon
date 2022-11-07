@@ -2,11 +2,11 @@
 
 namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Contracts\Body\WithBody;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Contracts\Body\WithBody;
+use Sammyjo20\Saloon\Traits\Body\HasJsonBody;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Sammyjo20\Saloon\Traits\Body\HasJsonBody;
 
 class BootAuthenticatorRequest extends SaloonRequest implements WithBody
 {

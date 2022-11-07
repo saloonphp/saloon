@@ -12,4 +12,5 @@ test('the URL helper will join two URLs together', function ($baseUrl, $endpoint
     ['https://google.com//', '//search', 'https://google.com/search'],
     ['', 'https://google.com/search', 'https://google.com/search'],
     ['', 'google.com/search', '/google.com/search'],
+    ['https://google.com', 'https://api.google.com/search', 'https://api.google.com/search'],
 ]);

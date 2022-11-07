@@ -14,6 +14,7 @@ class ProxyRequestNameHelper
      *
      * @param array $requests
      * @return array
+     * @throws InvalidRequestKeyException
      * @throws \ReflectionException
      */
     public static function generateNames(array $requests): array

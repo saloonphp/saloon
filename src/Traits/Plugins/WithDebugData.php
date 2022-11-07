@@ -14,6 +14,6 @@ trait WithDebugData
      */
     public static function bootWithDebugData(PendingSaloonRequest $pendingRequest): void
     {
-        $request->config()->add('debug', true);
+        $pendingRequest->config()->add('debug', true);
     }
 }

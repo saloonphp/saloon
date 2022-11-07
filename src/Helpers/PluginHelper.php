@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Helpers;
 
+use ReflectionClass;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\SaloonConnector;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
@@ -19,7 +20,7 @@ class PluginHelper
      */
     public static function bootPlugin(PendingSaloonRequest $pendingRequest, SaloonConnector|SaloonRequest $resource, string $trait): void
     {
-        $traitReflection = new \ReflectionClass($trait);
+        $traitReflection = new ReflectionClass($trait);
 
         $bootMethodName = 'boot' . $traitReflection->getShortName();
 

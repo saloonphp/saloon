@@ -14,11 +14,11 @@ class RequestHelper
      * @param SaloonConnector $connector
      * @param string $request
      * @param array $arguments
-     * @return mixed
+     * @return SaloonRequest
      * @throws SaloonInvalidRequestException
      * @throws \ReflectionException
      */
-    public static function callFromConnector(SaloonConnector $connector, string $request, array $arguments = [])
+    public static function callFromConnector(SaloonConnector $connector, string $request, array $arguments = []): SaloonRequest
     {
         $isValidRequest = ReflectionHelper::isSubclassOf($request, SaloonRequest::class);
 

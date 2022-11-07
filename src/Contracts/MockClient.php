@@ -2,9 +2,9 @@
 
 namespace Sammyjo20\Saloon\Contracts;
 
-use Sammyjo20\Saloon\Http\Fixture;
-use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Http\SaloonRequest;
+use Sammyjo20\Saloon\Http\Faking\Fixture;
+use Sammyjo20\Saloon\Http\Faking\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;

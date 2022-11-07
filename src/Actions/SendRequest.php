@@ -2,10 +2,10 @@
 
 namespace Sammyjo20\Saloon\Actions;
 
-use Sammyjo20\Saloon\Http\MockResponse;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
+use Sammyjo20\Saloon\Http\Faking\MockResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Responses\SimulatedResponse;
 

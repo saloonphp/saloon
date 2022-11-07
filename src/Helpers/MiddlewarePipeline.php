@@ -4,7 +4,7 @@ namespace Sammyjo20\Saloon\Helpers;
 
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\SimulatedResponsePayload;
+use Sammyjo20\Saloon\Http\Faking\SimulatedResponsePayload;
 use Sammyjo20\Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
 class MiddlewarePipeline implements MiddlewarePipelineContract

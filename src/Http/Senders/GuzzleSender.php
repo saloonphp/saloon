@@ -16,6 +16,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\BadResponseException;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Http\Responses\PsrResponse;
+use Sammyjo20\Saloon\Exceptions\FatalRequestException;
 use Sammyjo20\Saloon\Repositories\Body\FormBodyRepository;
 use Sammyjo20\Saloon\Repositories\Body\JsonBodyRepository;
 use Sammyjo20\Saloon\Repositories\Body\StringBodyRepository;
@@ -48,6 +49,16 @@ class GuzzleSender implements Sender
     }
 
     /**
+     * Get the sender's response class
+     *
+     * @return string
+     */
+    public function getResponseClass(): string
+    {
+        return PsrResponse::class;
+    }
+
+    /**
      * Create a new Guzzle client
      *
      * @return GuzzleClient
@@ -59,11 +70,24 @@ class GuzzleSender implements Sender
         $clientConfig = [
             'connect_timeout' => 10,
             'timeout' => 30,
-            'http_errors' => true,
+            'http_errors' => false,
             'handler' => $this->handlerStack,
         ];
 
         return new GuzzleClient($clientConfig);
+    }
+
+    /**
+     * Create a blank handler stack.
+     *
+     * @return HandlerStack
+     */
+    protected function createHandlerStack(): HandlerStack
+    {
+        $stack = new HandlerStack();
+        $stack->setHandler(Utils::chooseHandler());
+
+        return $stack;
     }
 
     /**
@@ -176,7 +200,7 @@ class GuzzleSender implements Sender
      * @param RequestException|null $exception
      * @return PsrResponse
      */
-    protected function createResponse(PendingSaloonRequest $pendingSaloonRequest, Response $guzzleResponse, RequestException $exception = null): PsrResponse
+    protected function createResponse(PendingSaloonRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse, RequestException $exception = null): PsrResponse
     {
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
@@ -206,7 +230,7 @@ class GuzzleSender implements Sender
                     // SaloonResponse, since there was no response.
 
                     if (! $guzzleException instanceof RequestException) {
-                        throw $guzzleException;
+                        throw new FatalRequestException($guzzleException, $pendingRequest);
                     }
 
                     $response = $this->createResponse($pendingRequest, $guzzleException->getResponse(), $guzzleException);
@@ -220,55 +244,12 @@ class GuzzleSender implements Sender
      * Add a middleware to the handler stack.
      *
      * @param callable $callable
-     * @param string $withName
-     * @return $this
-     */
-    public function pushMiddleware(callable $callable, string $withName = ''): static
-    {
-        $this->handlerStack->push($callable, $withName);
-
-        return $this;
-    }
-
-    /**
-     * Push a middleware before another.
-     *
-     * @param string $name
-     * @param callable $callable
-     * @param string $withName
-     * @return $this
-     */
-    public function pushMiddlewareBefore(string $name, callable $callable, string $withName = ''): static
-    {
-        $this->handlerStack->before($name, $callable, $withName);
-
-        return $this;
-    }
-
-    /**
-     * Push a middleware after another.
-     *
-     * @param string $name
-     * @param callable $callable
-     * @param string $withName
-     * @return $this
-     */
-    public function pushMiddlewareAfter(string $name, callable $callable, string $withName = ''): static
-    {
-        $this->handlerStack->after($name, $callable, $withName);
-
-        return $this;
-    }
-
-    /**
-     * Remove a middleware by name.
-     *
      * @param string $name
      * @return $this
      */
-    public function removeMiddleware(string $name): static
+    public function addMiddleware(callable $callable, string $name = ''): static
     {
-        $this->handlerStack->remove($name);
+        $this->handlerStack->push($callable, $name);
 
         return $this;
     }
@@ -287,19 +268,6 @@ class GuzzleSender implements Sender
     }
 
     /**
-     * Create a blank handler stack.
-     *
-     * @return HandlerStack
-     */
-    protected function createHandlerStack(): HandlerStack
-    {
-        $stack = new HandlerStack();
-        $stack->setHandler(Utils::chooseHandler());
-
-        return $stack;
-    }
-
-    /**
      * Get the handler stack.
      *
      * @return HandlerStack
@@ -307,16 +275,6 @@ class GuzzleSender implements Sender
     public function getHandlerStack(): HandlerStack
     {
         return $this->handlerStack;
-    }
-
-    /**
-     * Get the sender's response class
-     *
-     * @return string
-     */
-    public function getResponseClass(): string
-    {
-        return PsrResponse::class;
     }
 
     /**
