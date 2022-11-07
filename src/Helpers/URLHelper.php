@@ -27,6 +27,10 @@ class URLHelper
      */
     public static function join(string $baseUrl, string $endpoint): string
     {
+        if (static::isValidUrl($endpoint)) {
+            return $endpoint;
+        }
+
         if ($endpoint !== '/') {
             $endpoint = ltrim($endpoint, '/ ');
         }
@@ -35,11 +39,13 @@ class URLHelper
 
         $baseEndpoint = rtrim($baseUrl, '/ ');
 
-        $endpointIsNotUrl = empty(filter_var($endpoint, FILTER_VALIDATE_URL));
-        $glue = $endpointIsNotUrl ? '/' : null;
-
-        $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . $glue : $baseEndpoint;
+        $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . '/' : $baseEndpoint;
 
         return $baseEndpoint . $endpoint;
+    }
+
+    public static function isValidUrl(string $url): bool
+    {
+        return ! empty(filter_var($url, FILTER_VALIDATE_URL));
     }
 }
