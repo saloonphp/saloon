@@ -4,6 +4,7 @@ use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
 use Sammyjo20\Saloon\Http\Faking\MockClient;
 use Sammyjo20\Saloon\Http\Faking\MockResponse;
+use Symfony\Component\DomCrawler\Crawler;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 
@@ -198,12 +199,25 @@ test('the xml method will return xml as an array', function () {
     expect($simpleXml)->toBeInstanceOf(SimpleXMLElement::class);
 });
 
-test('the headers method returns a content bag', function () {
+test('the headers method returns an array store', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 200, ['X-Greeting' => 'Howdy']),
+        MockResponse::make(200, ['name' => 'Sam', 'work' => 'Codepotato'], ['X-Greeting' => 'Howdy']),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
 
     dd($response->headers());
+});
+
+test('the dom method will return a crawler instance', function () {
+    $dom = '<p>Howdy <i>Partner</i></p>';
+
+    $mockClient = new MockClient([
+        new MockResponse(200, $dom),
+    ]);
+
+    $response = (new UserRequest())->send($mockClient);
+
+    expect($response->dom())->toBeInstanceOf(Crawler::class);
+    expect($response->dom())->toEqual(new Crawler($dom));
 });

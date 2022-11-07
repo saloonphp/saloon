@@ -9,6 +9,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Symfony\Component\DomCrawler\Crawler;
+use GuzzleHttp\Exception\RequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 use Sammyjo20\Saloon\Contracts\SaloonResponse as SaloonResponseContract;
 
@@ -160,7 +162,20 @@ abstract class SaloonResponse implements SaloonResponseContract
             return null;
         }
 
-        return $this->getOriginalRequest()->createDtoFromResponse($this);
+        return $this->getRequest()->createDtoFromResponse($this);
+    }
+
+    /**
+     * Parse the HTML or XML body into a Symfony DomCrawler instance.
+     *
+     * Requires Symfony Crawler (composer require symfony/dom-crawler)
+     * @see https://symfony.com/doc/current/components/dom_crawler.html
+     *
+     * @return Crawler
+     */
+    public function dom(): Crawler
+    {
+        return new Crawler($this->body());
     }
 
     /**
