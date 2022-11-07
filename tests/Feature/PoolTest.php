@@ -28,7 +28,7 @@ test('you can create a pool on a connector', function () {
 
     $pool->setConcurrency(5);
 
-    $pool->handleResponse(function (SaloonResponse $response) use (&$count) {
+    $pool->withResponseHandler(function (SaloonResponse $response) use (&$count) {
         expect($response)->toBeInstanceOf(PsrResponse::class);
         expect($response->json())->toEqual([
             'name' => 'Sammyjo20',
@@ -62,7 +62,7 @@ test('if a pool has a request that cannot connect it will be caught in the handl
 
     $pool->setConcurrency(5);
 
-    $pool->handleException(function (FatalRequestException $ex) use (&$count) {
+    $pool->withExceptionHandler(function (FatalRequestException $ex) use (&$count) {
         expect($ex)->toBeInstanceOf(FatalRequestException::class);
         expect($ex->getPrevious())->toBeInstanceOf(ConnectException::class);
         expect($ex->getPendingSaloonRequest())->toBeInstanceOf(PendingSaloonRequest::class);
@@ -102,7 +102,7 @@ test('you can use pool with a mock client added and it wont send real requests',
 
     $pool->setConcurrency(6);
 
-    $pool->handleResponse(function (SaloonResponse $response) use (&$count, $mockResponses) {
+    $pool->withResponseHandler(function (SaloonResponse $response) use (&$count, $mockResponses) {
         expect($response)->toBeInstanceOf(SimulatedResponse::class);
         expect($response->json())->toEqual($mockResponses[$count]->getBody()->all());
 

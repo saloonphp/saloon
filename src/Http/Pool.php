@@ -7,6 +7,8 @@ use Generator;
 use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Exceptions\InvalidPoolItemException;
+use Sammyjo20\Saloon\Exceptions\SaloonException;
+use function GuzzleHttp\Promise\inspect;
 
 class Pool
 {
@@ -22,14 +24,14 @@ class Pool
      *
      * @var callable
      */
-    protected mixed $onResponse = null;
+    protected mixed $responseHandler = null;
 
     /**
      * Handle Exception Callback
      *
      * @var callable
      */
-    protected mixed $onException = null;
+    protected mixed $exceptionHandler = null;
 
     /**
      * Connector
@@ -39,27 +41,33 @@ class Pool
     protected SaloonConnector $connector;
 
     /**
-     * Concurrent Requests
+     * Concurrency
      *
-     * @var int
+     * How many requests will be sent at once.
+     *
+     * @var int|callable
      */
-    protected int $concurrentRequests;
+    protected mixed $concurrency;
 
     /**
      * Constructor
      *
      * @param SaloonConnector $connector
-     * @param array|Generator|Closure|callable $requestPayload
-     * @param int $concurrentRequests
+     * @param callable|iterable $requestPayload
+     * @param int|callable $concurrency
+     * @param callable|null $responseHandler
+     * @param callable|null $exceptionHandler
      * @throws InvalidPoolItemException
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
+     * @throws SaloonException
      */
-    public function __construct(SaloonConnector $connector, iterable|Generator|Closure|callable $requestPayload = [], int $concurrentRequests = 5)
+    public function __construct(SaloonConnector $connector, callable|iterable $requestPayload = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null)
     {
         $this->connector = $connector;
         $this->setRequests($requestPayload);
-        $this->concurrentRequests = $concurrentRequests;
+        $this->concurrency = $concurrency;
+        $this->responseHandler = $responseHandler;
+        $this->exceptionHandler = $exceptionHandler;
     }
 
     /**
@@ -68,9 +76,9 @@ class Pool
      * @param callable $callable
      * @return $this
      */
-    public function handleResponse(callable $callable): static
+    public function withResponseHandler(callable $callable): static
     {
-        $this->onResponse = $callable;
+        $this->responseHandler = $callable;
 
         return $this;
     }
@@ -81,9 +89,9 @@ class Pool
      * @param callable $callable
      * @return $this
      */
-    public function handleException(callable $callable): static
+    public function withExceptionHandler(callable $callable): static
     {
-        $this->onException = $callable;
+        $this->exceptionHandler = $callable;
 
         return $this;
     }
@@ -91,12 +99,12 @@ class Pool
     /**
      * Set the amount of concurrent requests that should be sent
      *
-     * @param int $concurrentRequests
+     * @param int|callable $concurrency
      * @return Pool
      */
-    public function setConcurrency(int $concurrentRequests): Pool
+    public function setConcurrency(int|callable $concurrency): Pool
     {
-        $this->concurrentRequests = $concurrentRequests;
+        $this->concurrency = $concurrency;
 
         return $this;
     }
@@ -104,37 +112,18 @@ class Pool
     /**
      * Set the requests
      *
-     * @param array|Generator|callable<iterable> $requests
+     * @param callable|iterable $requests
      * @return $this
-     * @throws InvalidPoolItemException
-     * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */
-    public function setRequests(iterable|Generator|callable $requests): Pool
+    public function setRequests(callable|iterable $requests): Pool
     {
         if (is_callable($requests)) {
             $requests = $requests();
         }
 
         if (is_iterable($requests)) {
-            $requests = static fn (): Generator => yield from $requests;
+            $requests = static fn(): Generator => yield from $requests;
         }
-
-        $requests = function () use ($requests) {
-            foreach ($requests() as $request) {
-                if ($request instanceof PromiseInterface) {
-                    yield $request;
-                    continue;
-                }
-
-                if ($request instanceof SaloonRequest) {
-                    yield $this->connector->sendAsync($request);
-                    continue;
-                }
-
-                throw new InvalidPoolItemException;
-            }
-        };
 
         $this->requests = $requests();
 
@@ -155,15 +144,33 @@ class Pool
      * Send the pool and create a Promise
      *
      * @return PromiseInterface
+     * @throws InvalidPoolItemException
+     * @throws SaloonException
+     * @throws \ReflectionException
      */
     public function send(): PromiseInterface
     {
-        $requests = $this->requests;
+        // Iterate through the existing generator and "prepare" the requests.
+        // If they are SaloonRequests then we should convert them into
+        // promises.
 
-        $eachPromise = new EachPromise($requests, [
-            'concurrency' => $this->concurrentRequests,
-            'fulfilled' => $this->onResponse,
-            'rejected' => $this->onException,
+        $preparedRequests = function () : Generator {
+            foreach ($this->requests as $key => $request) {
+                match (true) {
+                    $request instanceof SaloonRequest => yield $key => $this->connector->sendAsync($request),
+                    $request instanceof PromiseInterface => yield $key => $request,
+                    default => throw new InvalidPoolItemException
+                };
+            }
+        };
+
+        // Next we'll use an EachPromise which accepts an iterator of
+        // requests and will process them as the concurrency we set.
+
+        $eachPromise = new EachPromise($preparedRequests(), [
+            'concurrency' => $this->concurrency,
+            'fulfilled' => $this->responseHandler,
+            'rejected' => $this->exceptionHandler,
         ]);
 
         return $eachPromise->promise();

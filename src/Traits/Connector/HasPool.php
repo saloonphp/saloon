@@ -4,6 +4,8 @@ namespace Sammyjo20\Saloon\Traits\Connector;
 
 use Closure;
 use Generator;
+use Sammyjo20\Saloon\Exceptions\InvalidPoolItemException;
+use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Sammyjo20\Saloon\Http\Pool;
 
 trait HasPool
@@ -11,15 +13,17 @@ trait HasPool
     /**
      * Create a request pool
      *
-     * @param iterable|Generator|Closure|callable $requests
-     * @param int $concurrentRequests
+     * @param iterable|callable $requests
+     * @param int|callable $concurrency
+     * @param callable|null $responseHandler
+     * @param callable|null $exceptionHandler
      * @return Pool
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\InvalidPoolItemException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
+     * @throws InvalidPoolItemException
+     * @throws SaloonException
      */
-    public function pool(iterable|Generator|Closure|callable $requests = [], int $concurrentRequests = 5): Pool
+    public function pool(iterable|callable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null): Pool
     {
-        return new Pool($this, $requests, $concurrentRequests);
+        return new Pool($this, $requests, $concurrency, $responseHandler, $exceptionHandler);
     }
 }
