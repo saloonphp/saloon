@@ -2,13 +2,11 @@
 
 namespace Sammyjo20\Saloon\Http;
 
-use Closure;
 use Generator;
 use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use Sammyjo20\Saloon\Exceptions\InvalidPoolItemException;
 use Sammyjo20\Saloon\Exceptions\SaloonException;
-use function GuzzleHttp\Promise\inspect;
+use Sammyjo20\Saloon\Exceptions\InvalidPoolItemException;
 
 class Pool
 {
@@ -122,7 +120,7 @@ class Pool
         }
 
         if (is_iterable($requests)) {
-            $requests = static fn(): Generator => yield from $requests;
+            $requests = static fn (): Generator => yield from $requests;
         }
 
         $this->requests = $requests();
@@ -154,7 +152,7 @@ class Pool
         // If they are SaloonRequests then we should convert them into
         // promises.
 
-        $preparedRequests = function () : Generator {
+        $preparedRequests = function (): Generator {
             foreach ($this->requests as $key => $request) {
                 match (true) {
                     $request instanceof SaloonRequest => yield $key => $this->connector->sendAsync($request),

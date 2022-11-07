@@ -8,9 +8,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
 use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Symfony\Component\DomCrawler\Crawler;
-use GuzzleHttp\Exception\RequestException;
+use Sammyjo20\Saloon\Http\PendingSaloonRequest;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 use Sammyjo20\Saloon\Contracts\SaloonResponse as SaloonResponseContract;
 

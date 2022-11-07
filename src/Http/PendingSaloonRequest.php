@@ -11,7 +11,6 @@ use Sammyjo20\Saloon\Helpers\PluginHelper;
 use Sammyjo20\Saloon\Contracts\Body\WithBody;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
-use Sammyjo20\Saloon\Http\Middleware\BootConnectorAndRequest;
 use Sammyjo20\Saloon\Traits\Auth\AuthenticatesRequests;
 use Sammyjo20\Saloon\Http\Middleware\AuthenticateRequest;
 use Sammyjo20\Saloon\Http\Faking\SimulatedResponsePayload;

@@ -2,11 +2,9 @@
 
 namespace Sammyjo20\Saloon\Traits\Connector;
 
-use Closure;
-use Generator;
-use Sammyjo20\Saloon\Exceptions\InvalidPoolItemException;
-use Sammyjo20\Saloon\Exceptions\SaloonException;
 use Sammyjo20\Saloon\Http\Pool;
+use Sammyjo20\Saloon\Exceptions\SaloonException;
+use Sammyjo20\Saloon\Exceptions\InvalidPoolItemException;
 
 trait HasPool
 {
