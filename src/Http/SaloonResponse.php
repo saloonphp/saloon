@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\StreamInterface;
 use Illuminate\Support\Traits\Macroable;
+use Symfony\Component\DomCrawler\Crawler;
 use GuzzleHttp\Exception\RequestException;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 
@@ -198,6 +199,19 @@ class SaloonResponse
     public function dto(): mixed
     {
         return $this->dto;
+    }
+
+    /**
+     * Parse the HTML or XML body into a Symfony DomCrawler instance.
+     *
+     * Requires Symfony Crawler (composer require symfony/dom-crawler)
+     * @see https://symfony.com/doc/current/components/dom_crawler.html
+     *
+     * @return Crawler
+     */
+    public function dom(): Crawler
+    {
+        return new Crawler($this->body());
     }
 
     /**
