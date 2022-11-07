@@ -32,6 +32,7 @@
         "league/flysystem": "^3.0",
         "nunomaduro/phpinsights": "^2.6",
         "pestphp/pest": "^1.21",
+        "phpstan/phpstan": "^1.9",
         "spatie/ray": "^1.33",
         "symfony/dom-crawler": "^6.0"
     },
