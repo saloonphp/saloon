@@ -4,6 +4,7 @@ use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
 use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
+use Symfony\Component\DomCrawler\Crawler;
 use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 
@@ -196,4 +197,17 @@ test('the xml method will return xml as an array', function () {
     $simpleXml = $response->xml();
 
     expect($simpleXml)->toBeInstanceOf(SimpleXMLElement::class);
+});
+
+test('the dom method will return a crawler instance', function () {
+    $dom = '<p>Howdy <i>Partner</i></p>';
+
+    $mockClient = new MockClient([
+        new MockResponse($dom, 200),
+    ]);
+
+    $response = (new UserRequest())->send($mockClient);
+
+    expect($response->dom())->toBeInstanceOf(Crawler::class);
+    expect($response->dom())->toEqual(new Crawler($dom));
 });
