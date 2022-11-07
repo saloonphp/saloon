@@ -29,7 +29,7 @@
         "league/flysystem": "^3.0",
         "pestphp/pest": "^1.21",
         "spatie/ray": "^1.33",
-        "symfony/dom-crawler": "^6.1"
+        "symfony/dom-crawler": "^6.0"
     },
     "suggest": {
         "symfony/dom-crawler": "Required for the SaloonResponse dom() method to parse HTML and XML."
