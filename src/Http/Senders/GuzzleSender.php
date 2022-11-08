@@ -2,6 +2,7 @@
 
 namespace Sammyjo20\Saloon\Http\Senders;
 
+use Exception;
 use GuzzleHttp\Utils;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
@@ -197,10 +198,10 @@ class GuzzleSender implements Sender
      *
      * @param PendingSaloonRequest $pendingSaloonRequest
      * @param Response $guzzleResponse
-     * @param RequestException|null $exception
+     * @param Exception|null $exception
      * @return PsrResponse
      */
-    protected function createResponse(PendingSaloonRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse, RequestException $exception = null): PsrResponse
+    protected function createResponse(PendingSaloonRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse, Exception $exception = null): PsrResponse
     {
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
