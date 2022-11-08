@@ -4,6 +4,7 @@ namespace Sammyjo20\Saloon\Traits\Auth;
 
 use Sammyjo20\Saloon\Contracts\Authenticator;
 use Sammyjo20\Saloon\Http\Auth\BasicAuthenticator;
+use Sammyjo20\Saloon\Http\Auth\QueryAuthenticator;
 use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
 use Sammyjo20\Saloon\Http\Auth\DigestAuthenticator;
 
@@ -37,7 +38,7 @@ trait AuthenticatesRequests
     }
 
     /**
-     * Register an authenticator
+     * Authenticate the request with an authenticator.
      *
      * @param Authenticator $authenticator
      * @return $this
@@ -50,7 +51,7 @@ trait AuthenticatesRequests
     }
 
     /**
-     * Attach an Authorization token to the request.
+     * Authenticate the request with an Authorization header..
      *
      * @param string $token
      * @param string $prefix
@@ -62,7 +63,7 @@ trait AuthenticatesRequests
     }
 
     /**
-     * Attach basic authentication to the request.
+     * Authenticate the request with "basic" authentication.
      *
      * @param string $username
      * @param string $password
@@ -74,7 +75,7 @@ trait AuthenticatesRequests
     }
 
     /**
-     * Attach basic authentication to the request.
+     * Authenticate the request with "digest" authentication.
      *
      * @param string $username
      * @param string $password
@@ -84,5 +85,17 @@ trait AuthenticatesRequests
     public function withDigestAuth(string $username, string $password, string $digest): static
     {
         return $this->authenticateWith(new DigestAuthenticator($username, $password, $digest));
+    }
+
+    /**
+     * Authenticate the request with a query parameter token.
+     *
+     * @param string $parameter
+     * @param string $value
+     * @return $this
+     */
+    public function withQueryAuth(string $parameter, string $value): static
+    {
+        return $this->authenticateWith(new QueryAuthenticator($parameter, $value));
     }
 }

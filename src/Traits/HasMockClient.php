@@ -4,7 +4,7 @@ namespace Sammyjo20\Saloon\Traits;
 
 use Sammyjo20\Saloon\Contracts\MockClient;
 
-trait MocksRequests
+trait HasMockClient
 {
     /**
      * Mock Client
@@ -34,5 +34,15 @@ trait MocksRequests
     public function getMockClient(): ?MockClient
     {
         return $this->mockClient;
+    }
+
+    /**
+     * Determine if the instance has a mock client
+     *
+     * @return bool
+     */
+    public function hasMockClient(): bool
+    {
+        return $this->mockClient instanceof MockClient;
     }
 }

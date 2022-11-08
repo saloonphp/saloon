@@ -3,7 +3,7 @@
 namespace Sammyjo20\Saloon\Http;
 
 use Sammyjo20\Saloon\Traits\Bootable;
-use Sammyjo20\Saloon\Traits\MocksRequests;
+use Sammyjo20\Saloon\Traits\HasMockClient;
 use Sammyjo20\Saloon\Traits\Connector\HasPool;
 use Sammyjo20\Saloon\Http\Senders\GuzzleSender;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
@@ -25,7 +25,7 @@ abstract class SaloonConnector
     use HasRequestProperties;
     use HasCustomResponses;
     use ProxiesRequests;
-    use MocksRequests;
+    use HasMockClient;
     use SendsRequests;
     use HasSender;
     use Bootable;

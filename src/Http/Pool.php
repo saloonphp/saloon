@@ -116,7 +116,7 @@ class Pool
     public function setRequests(callable|iterable $requests): Pool
     {
         if (is_callable($requests)) {
-            $requests = $requests();
+            $requests = $requests($this->connector);
         }
 
         if (is_iterable($requests)) {

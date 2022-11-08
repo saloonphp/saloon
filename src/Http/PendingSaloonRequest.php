@@ -8,6 +8,7 @@ use Sammyjo20\Saloon\Contracts\Sender;
 use Sammyjo20\Saloon\Helpers\Environment;
 use Sammyjo20\Saloon\Contracts\MockClient;
 use Sammyjo20\Saloon\Helpers\PluginHelper;
+use Sammyjo20\Saloon\Traits\HasMockClient;
 use Sammyjo20\Saloon\Contracts\Body\WithBody;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
@@ -26,6 +27,7 @@ class PendingSaloonRequest
 {
     use HasRequestProperties;
     use AuthenticatesRequests;
+    use HasMockClient;
 
     /**
      * The request used by the instance.
@@ -61,13 +63,6 @@ class PendingSaloonRequest
      * @var string
      */
     protected string $responseClass;
-
-    /**
-     * The mock client used to replace requests.
-     *
-     * @var MockClient|null
-     */
-    protected ?MockClient $mockClient = null;
 
     /**
      * The body of the request.
@@ -346,26 +341,6 @@ class PendingSaloonRequest
     }
 
     /**
-     * Get the mock client.
-     *
-     * @return MockClient|null
-     */
-    public function getMockClient(): ?MockClient
-    {
-        return $this->mockClient;
-    }
-
-    /**
-     * Determine if the instance is "mocking"
-     *
-     * @return bool
-     */
-    public function hasMockClient(): bool
-    {
-        return $this->mockClient instanceof MockClient;
-    }
-
-    /**
      * Get the request sender.
      *
      * @return Sender
@@ -416,18 +391,5 @@ class PendingSaloonRequest
     public function hasSimulatedResponsePayload(): bool
     {
         return $this->simulatedResponsePayload instanceof SimulatedResponsePayload;
-    }
-
-    /**
-     * Set a mock client on the pending request.
-     *
-     * @param MockClient|null $mockClient
-     * @return PendingSaloonRequest
-     */
-    public function setMockClient(?MockClient $mockClient): PendingSaloonRequest
-    {
-        $this->mockClient = $mockClient;
-
-        return $this;
     }
 }

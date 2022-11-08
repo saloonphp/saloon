@@ -6,7 +6,7 @@ use Sammyjo20\Saloon\Traits\Bootable;
 use Sammyjo20\Saloon\Contracts\Sender;
 use GuzzleHttp\Promise\PromiseInterface;
 use Sammyjo20\Saloon\Contracts\MockClient;
-use Sammyjo20\Saloon\Traits\MocksRequests;
+use Sammyjo20\Saloon\Traits\HasMockClient;
 use Sammyjo20\Saloon\Contracts\SaloonResponse;
 use Sammyjo20\Saloon\Traits\HasCustomResponses;
 use Sammyjo20\Saloon\Traits\Request\BuildsUrls;
@@ -24,7 +24,7 @@ abstract class SaloonRequest
     use HasRequestProperties;
     use CastDtoFromResponse;
     use HasCustomResponses;
-    use MocksRequests;
+    use HasMockClient;
     use HasConnector;
     use BuildsUrls;
     use Bootable;
