@@ -35,3 +35,12 @@ test('you can attach an authorization token to a request', function () {
 
     expect($headers)->toHaveKey('Authorization', 'Bearer Sammyjo20');
 });
+
+test('you can add a token to a query parameter', function () {
+    $request = UserRequest::make()->withQueryAuth('token', 'Sammyjo20');
+
+    $pendingRequest = $request->createPendingRequest();
+    $query = $pendingRequest->queryParameters()->all();
+
+    expect($query)->toHaveKey('token', 'Sammyjo20');
+});
