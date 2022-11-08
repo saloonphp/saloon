@@ -32,7 +32,7 @@ trait HasJsonBody
      */
     public function body(): JsonBodyRepository
     {
-        return $this->data ??= new JsonBodyRepository($this->defaultBody());
+        return $this->body ??= new JsonBodyRepository($this->defaultBody());
     }
 
     /**

@@ -20,7 +20,7 @@ trait HasFormBody
      */
     public function body(): FormBodyRepository
     {
-        return $this->data ??= new FormBodyRepository($this->defaultBody());
+        return $this->body ??= new FormBodyRepository($this->defaultBody());
     }
 
     /**

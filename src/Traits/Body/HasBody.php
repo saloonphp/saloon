@@ -20,7 +20,7 @@ trait HasBody
      */
     public function body(): StringBodyRepository
     {
-        return $this->data ??= new StringBodyRepository($this->defaultBody());
+        return $this->body ??= new StringBodyRepository($this->defaultBody());
     }
 
     /**

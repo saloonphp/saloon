@@ -20,7 +20,7 @@ trait HasMultipartBody
      */
     public function body(): MultipartBodyRepository
     {
-        return $this->data ??= new MultipartBodyRepository($this->defaultBody());
+        return $this->body ??= new MultipartBodyRepository($this->defaultBody());
     }
 
     /**
