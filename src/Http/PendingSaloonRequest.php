@@ -18,7 +18,7 @@ use Sammyjo20\Saloon\Http\Faking\SimulatedResponsePayload;
 use Sammyjo20\Saloon\Http\Middleware\DetermineMockResponse;
 use Sammyjo20\Saloon\Repositories\Body\ArrayBodyRepository;
 use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
-use Sammyjo20\SaloonLaravel\Middleware\SaloonLaravelMiddleware;
+use Sammyjo20\SaloonLaravel\Http\Middleware\SaloonLaravelMiddleware;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
 use Sammyjo20\Saloon\Traits\RequestProperties\HasRequestProperties;
 use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
