@@ -2,8 +2,8 @@
 
 namespace Saloon\Http\Auth;
 
-use Saloon\Contracts\Authenticator;
 use Saloon\Http\PendingRequest;
+use Saloon\Contracts\Authenticator;
 
 class TokenAuthenticator implements Authenticator
 {

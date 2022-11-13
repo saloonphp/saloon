@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
+use Saloon\Contracts\Response;
+use Saloon\Http\PendingRequest;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\Responses\PsrResponse;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
-use Saloon\Http\Faking\MockClient;
-use Saloon\Contracts\Response;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use Saloon\Http\Responses\PsrResponse;
 use Saloon\Exceptions\FatalRequestException;
 use Saloon\Http\Responses\SimulatedResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;

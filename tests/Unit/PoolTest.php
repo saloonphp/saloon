@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
 use Saloon\Http\Connector;
-use Saloon\Http\Faking\MockClient;
 use Saloon\Contracts\Response;
+use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\InvalidPoolItemException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;

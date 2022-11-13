@@ -4,8 +4,8 @@ namespace Saloon\Contracts;
 
 use Saloon\Http\Request;
 use Saloon\Http\Faking\Fixture;
-use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
+use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\SaloonNoMockResponseFoundException;
 use Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;
 

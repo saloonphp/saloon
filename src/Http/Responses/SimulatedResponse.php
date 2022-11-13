@@ -4,9 +4,9 @@ namespace Saloon\Http\Responses;
 
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\Response;
+use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Repositories\ArrayStore;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
 class SimulatedResponse extends Response

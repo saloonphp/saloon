@@ -3,9 +3,9 @@
 namespace Saloon\Data;
 
 use JsonSerializable;
-use Psr\Http\Message\ResponseInterface;
 use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockResponse;
+use Psr\Http\Message\ResponseInterface;
 
 class FixtureData implements JsonSerializable
 {

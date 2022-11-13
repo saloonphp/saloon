@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-use GuzzleHttp\Promise\Promise;
 use Saloon\Http\Request;
+use GuzzleHttp\Promise\Promise;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Responses\Response;
+use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Connectors\RequestSelectionConnector;

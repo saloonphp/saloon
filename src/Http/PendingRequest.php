@@ -5,12 +5,12 @@ namespace Saloon\Http;
 use ReflectionException;
 use Saloon\Enums\Method;
 use Saloon\Contracts\Sender;
+use Saloon\Contracts\Response;
 use Saloon\Helpers\Environment;
 use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\WithBody;
-use Saloon\Contracts\Response;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Http\Middleware\AuthenticateRequest;
@@ -18,10 +18,10 @@ use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
 use Saloon\Exceptions\PendingSaloonRequestException;
-use Sammyjo20\SaloonLaravel\Http\Middleware\SaloonLaravelMiddleware;
 use Saloon\Exceptions\SaloonInvalidConnectorException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Sammyjo20\SaloonLaravel\Http\Middleware\SaloonLaravelMiddleware;
 
 class PendingRequest
 {

@@ -3,8 +3,8 @@
 namespace Saloon\Http\Middleware;
 
 use Saloon\Data\FixtureData;
-use Saloon\Http\Faking\Fixture;
 use Saloon\Contracts\Response;
+use Saloon\Http\Faking\Fixture;
 use Saloon\Contracts\ResponseMiddleware;
 
 class RecordFixture implements ResponseMiddleware

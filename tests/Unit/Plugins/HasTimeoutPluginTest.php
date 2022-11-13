@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-use Psr\Http\Message\RequestInterface;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Managers\RequestManager;
 use Saloon\Http\Faking\MockResponse;
+use Psr\Http\Message\RequestInterface;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\TimeoutRequest;
 use Saloon\Tests\Fixtures\Connectors\TimeoutConnector;

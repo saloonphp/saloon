@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-use GuzzleHttp\Exception\ConnectException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use GuzzleHttp\Exception\ConnectException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
 use Saloon\Http\Auth\TokenAuthenticator;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Exceptions\MissingAuthenticatorException;

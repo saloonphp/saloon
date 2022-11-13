@@ -4,8 +4,8 @@ namespace Saloon\Http;
 
 use Generator;
 use GuzzleHttp\Promise\EachPromise;
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\SaloonException;
+use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\InvalidPoolItemException;
 
 class Pool

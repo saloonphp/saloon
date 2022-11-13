@@ -2,8 +2,8 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Sammyjo20\MissingClass;
 use Saloon\Http\Connector;
+use Sammyjo20\MissingClass;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;

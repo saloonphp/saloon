@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
 use GuzzleHttp\Middleware;
+use Saloon\Http\Senders\GuzzleSender;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Http\Senders\GuzzleSender;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('you can add middleware to the guzzle sender', function () {

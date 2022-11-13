@@ -3,10 +3,10 @@
 namespace Saloon\Traits\Responses;
 
 use ReflectionException;
+use Saloon\Http\Request;
+use Saloon\Helpers\ReflectionHelper;
 use Saloon\Exceptions\SaloonInvalidConnectorException;
 use Saloon\Exceptions\SaloonInvalidResponseClassException;
-use Saloon\Helpers\ReflectionHelper;
-use Saloon\Http\Request;
 
 trait HasCustomResponses
 {

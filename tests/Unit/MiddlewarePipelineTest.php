@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
 use Saloon\Http\PendingRequest;
-use Saloon\Helpers\MiddlewarePipeline;
 use Saloon\Http\Responses\Response;
+use Saloon\Helpers\MiddlewarePipeline;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 

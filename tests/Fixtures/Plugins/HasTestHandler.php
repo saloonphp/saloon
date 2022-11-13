@@ -2,10 +2,10 @@
 
 namespace Saloon\Tests\Fixtures\Plugins;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Saloon\Http\Request;
 use Saloon\Http\Connector;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 trait HasTestHandler
 {

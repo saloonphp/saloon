@@ -3,13 +3,13 @@
 namespace Saloon\Http\Faking;
 
 use ReflectionClass;
-use Saloon\Helpers\URLHelper;
-use PHPUnit\Framework\Assert as PHPUnit;
 use Saloon\Http\Request;
 use Saloon\Http\Connector;
+use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Response;
-use Saloon\Helpers\ReflectionHelper;
 use Saloon\Http\PendingRequest;
+use Saloon\Helpers\ReflectionHelper;
+use PHPUnit\Framework\Assert as PHPUnit;
 use Saloon\Contracts\MockClient as MockClientContract;
 use Saloon\Exceptions\SaloonInvalidConnectorException;
 use Saloon\Exceptions\SaloonNoMockResponseFoundException;

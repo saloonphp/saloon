@@ -2,9 +2,9 @@
 
 namespace Saloon\Http\Responses;
 
+use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Repositories\ArrayStore;
 
 class PsrResponse extends Response
 {

@@ -4,12 +4,12 @@ namespace Saloon\Http\Responses;
 
 use Exception;
 use SimpleXMLElement;
+use Saloon\Http\Request;
 use Illuminate\Support\Arr;
+use Saloon\Http\PendingRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
-use Saloon\Http\Request;
 use Symfony\Component\DomCrawler\Crawler;
-use Saloon\Http\PendingRequest;
 use Saloon\Exceptions\SaloonRequestException;
 use Saloon\Contracts\Response as ResponseContract;
 

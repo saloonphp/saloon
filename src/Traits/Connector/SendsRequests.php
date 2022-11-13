@@ -3,12 +3,12 @@
 namespace Saloon\Traits\Connector;
 
 use ReflectionException;
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Http\Request;
+use Saloon\Contracts\Response;
 use Saloon\Actions\SendRequest;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Contracts\Response;
 use Saloon\Exceptions\SaloonException;
+use GuzzleHttp\Promise\PromiseInterface;
 
 trait SendsRequests
 {

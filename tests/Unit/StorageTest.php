@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-use League\Flysystem\Filesystem;
 use Saloon\Helpers\Storage;
-use League\Flysystem\Local\LocalFilesystemAdapter;
+use League\Flysystem\Filesystem;
 use Saloon\Exceptions\DirectoryNotFoundException;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 
 test('it will throw an exception if the base directory does not exist', function () {
     new Storage('example');

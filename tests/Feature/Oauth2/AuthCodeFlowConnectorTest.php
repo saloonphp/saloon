@@ -3,8 +3,8 @@
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Str;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Responses\Response;
+use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\InvalidStateException;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
 use Saloon\Tests\Fixtures\Connectors\OAuth2Connector;

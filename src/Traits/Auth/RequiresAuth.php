@@ -2,8 +2,8 @@
 
 namespace Saloon\Traits\Auth;
 
-use Saloon\Contracts\Authenticator;
 use Saloon\Http\PendingRequest;
+use Saloon\Contracts\Authenticator;
 use Saloon\Exceptions\MissingAuthenticatorException;
 
 trait RequiresAuth

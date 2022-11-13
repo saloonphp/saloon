@@ -4,12 +4,12 @@ namespace Saloon\Contracts;
 
 use Exception;
 use SimpleXMLElement;
+use Saloon\Http\Request;
+use Saloon\Http\PendingRequest;
 use Illuminate\Support\Collection;
+use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Http\Request;
-use Saloon\Repositories\ArrayStore;
-use Saloon\Http\PendingRequest;
 use Saloon\Exceptions\SaloonRequestException;
 
 interface Response

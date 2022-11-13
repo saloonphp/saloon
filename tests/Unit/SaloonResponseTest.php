@@ -2,9 +2,9 @@
 
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
-use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Exceptions\SaloonRequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 

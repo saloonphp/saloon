@@ -2,9 +2,9 @@
 
 namespace Saloon\Contracts;
 
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Responses\Response;
+use GuzzleHttp\Promise\PromiseInterface;
 
 interface Sender
 {

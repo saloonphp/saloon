@@ -2,21 +2,21 @@
 
 namespace Saloon\Http;
 
-use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Contracts\MockClient;
-use Saloon\Contracts\Response;
-use Saloon\Contracts\Sender;
-use Saloon\Exceptions\PendingSaloonRequestException;
-use Saloon\Exceptions\SaloonInvalidConnectorException;
-use Saloon\Exceptions\SaloonInvalidResponseClassException;
-use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\Bootable;
+use Saloon\Contracts\Sender;
+use Saloon\Contracts\Response;
+use Saloon\Contracts\MockClient;
 use Saloon\Traits\HasMockClient;
 use Saloon\Traits\Request\BuildsUrls;
-use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Request\HasConnector;
-use Saloon\Traits\RequestProperties\HasRequestProperties;
+use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
+use Saloon\Exceptions\PendingSaloonRequestException;
+use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Traits\RequestProperties\HasRequestProperties;
+use Saloon\Exceptions\SaloonInvalidResponseClassException;
 
 abstract class Request
 {

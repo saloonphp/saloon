@@ -2,8 +2,8 @@
 
 namespace Saloon\Tests\Fixtures\Mocking;
 
-use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
+use Saloon\Http\Faking\MockResponse;
 
 class CallableMockResponse
 {

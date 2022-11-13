@@ -3,9 +3,9 @@
 namespace Saloon\Tests\Fixtures\Connectors;
 
 use Saloon\Http\Connector;
+use Saloon\Http\Responses\Response;
 use Saloon\Traits\Plugins\CastsToDto;
 use Saloon\Traits\Plugins\AcceptsJson;
-use Saloon\Http\Responses\Response;
 use Saloon\Tests\Fixtures\Data\ApiResponse;
 
 class DtoConnector extends Connector

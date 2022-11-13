@@ -2,8 +2,8 @@
 
 use Saloon\Http\Request;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Responses\Response;
+use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Responses\UserData;
 use Saloon\Tests\Fixtures\Requests\MockRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
