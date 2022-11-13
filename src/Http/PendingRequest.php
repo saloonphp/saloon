@@ -301,7 +301,7 @@ class PendingRequest
     }
 
     /**
-     * Get the conector.
+     * Get the connector.
      *
      * @return Connector
      */
