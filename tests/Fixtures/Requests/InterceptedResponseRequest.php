@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
-use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Request;
+use Saloon\Http\Responses\Response;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class InterceptedResponseRequest extends SaloonRequest
+class InterceptedResponseRequest extends Request
 {
     /**
      * Define the method that the request will use.
@@ -32,9 +32,9 @@ class InterceptedResponseRequest extends SaloonRequest
         return '/error';
     }
 
-    public function boot(SaloonRequest $request): void
+    public function boot(Request $request): void
     {
-        $this->addResponseInterceptor(function (SaloonRequest $request, SaloonResponse $response) {
+        $this->addResponseInterceptor(function (Request $request, Response $response) {
             $response->setCached(true);
 
             return $response;

@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
-use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Request;
+use Saloon\Http\Responses\Response;
 use Saloon\Tests\Fixtures\Connectors\InterceptedConnector;
 
-class InterceptedConnectorErrorRequest extends SaloonRequest
+class InterceptedConnectorErrorRequest extends Request
 {
     /**
      * Define the method that the request will use.
@@ -32,9 +32,9 @@ class InterceptedConnectorErrorRequest extends SaloonRequest
         return '/error';
     }
 
-    public function boot(SaloonRequest $request): void
+    public function boot(Request $request): void
     {
-        $this->addResponseInterceptor(function (SaloonRequest $request, SaloonResponse $response) {
+        $this->addResponseInterceptor(function (Request $request, Response $response) {
             $response->throw();
 
             return $response;

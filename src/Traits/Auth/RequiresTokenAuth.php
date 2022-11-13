@@ -2,7 +2,7 @@
 
 namespace Saloon\Traits\Auth;
 
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Exceptions\MissingAuthenticatorException;
 
 trait RequiresTokenAuth
@@ -10,11 +10,11 @@ trait RequiresTokenAuth
     use RequiresAuth;
 
     /**
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return void
      * @throws MissingAuthenticatorException
      */
-    public function bootRequiresTokenAuth(PendingSaloonRequest $pendingRequest): void
+    public function bootRequiresTokenAuth(PendingRequest $pendingRequest): void
     {
         $this->bootRequiresAuth($pendingRequest);
     }
@@ -22,10 +22,10 @@ trait RequiresTokenAuth
     /**
      * Default message.
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return string
      */
-    protected function getRequiresAuthMessage(PendingSaloonRequest $pendingRequest): string
+    protected function getRequiresAuthMessage(PendingRequest $pendingRequest): string
     {
         return sprintf('The "%s" request requires authentication. Please provide authentication using the `withTokenAuth` method or return a default authenticator in your connector/request.', $pendingRequest->getRequest()::class);
     }

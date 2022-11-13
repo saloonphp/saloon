@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Traits\Plugins\HasTimeout;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class TimeoutRequest extends SaloonRequest
+class TimeoutRequest extends Request
 {
     use HasTimeout;
 

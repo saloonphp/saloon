@@ -2,7 +2,7 @@
 
 namespace Saloon\Traits\Request;
 
-use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Exceptions\InvalidConnectorException;
 
 trait BuildsUrls
 {
@@ -10,7 +10,7 @@ trait BuildsUrls
      * Build up the full request URL.
      *
      * @return string
-     * @throws SaloonInvalidConnectorException
+     * @throws InvalidConnectorException
      */
     public function getRequestUrl(): string
     {

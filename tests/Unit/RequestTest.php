@@ -5,13 +5,13 @@ use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Responses\UserResponse;
 use Saloon\Tests\Fixtures\Responses\CustomResponse;
-use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Tests\Fixtures\Requests\NoConnectorRequest;
 use Saloon\Tests\Fixtures\Connectors\ExtendedConnector;
 use Saloon\Tests\Fixtures\Connectors\TestProxyConnector;
 use Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
-use Saloon\Exceptions\SaloonNoMockResponseFoundException;
-use Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Saloon\Exceptions\NoMockResponseFoundException;
+use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Tests\Fixtures\Requests\DefaultEndpointRequest;
 use Saloon\Tests\Fixtures\Requests\InvalidConnectorRequest;
 use Saloon\Tests\Fixtures\Requests\ExtendedConnectorRequest;
@@ -43,7 +43,7 @@ test('you cant send a request with a mock client without any responses', functio
     $mockClient = new MockClient();
     $request = new UserRequest();
 
-    $this->expectException(SaloonNoMockResponseFoundException::class);
+    $this->expectException(NoMockResponseFoundException::class);
 
     $request->send($mockClient);
 });
@@ -51,7 +51,7 @@ test('you cant send a request with a mock client without any responses', functio
 test('saloon throws an exception if if no connector is specified', function () {
     $noConnectorRequest = new NoConnectorRequest;
 
-    $this->expectException(SaloonInvalidConnectorException::class);
+    $this->expectException(InvalidConnectorException::class);
 
     expect($noConnectorRequest->getConnector());
 });
@@ -59,7 +59,7 @@ test('saloon throws an exception if if no connector is specified', function () {
 test('saloon throws an exception if the connector is invalid', function () {
     $invalidConnectorRequest = new InvalidConnectorRequest;
 
-    $this->expectException(SaloonInvalidConnectorException::class);
+    $this->expectException(InvalidConnectorException::class);
 
     expect($invalidConnectorRequest->getConnector());
 });
@@ -67,7 +67,7 @@ test('saloon throws an exception if the connector is invalid', function () {
 test('saloon throws an exception if the connector is not a connector class', function () {
     $invalidConnectorClassRequest = new InvalidConnectorClassRequest;
 
-    $this->expectException(SaloonInvalidConnectorException::class);
+    $this->expectException(InvalidConnectorException::class);
 
     expect($invalidConnectorClassRequest->getConnector());
 });
@@ -87,7 +87,7 @@ test('saloon works with a custom response class in connector', function () {
 test('saloon throws an exception if the extended connector return a response is not a response class', function () {
     $invalidConnectorResponse = new InvalidResponseConnector();
 
-    $this->expectException(SaloonInvalidResponseClassException::class);
+    $this->expectException(InvalidResponseClassException::class);
 
     $invalidConnectorResponse->getResponseClass();
 });
@@ -113,7 +113,7 @@ test('saloon can handle with custom response in request and custom response in c
 test('saloon throws an exception if the custom response is not a response class', function () {
     $invalidConnectorClassRequest = new InvalidResponseClass();
 
-    $this->expectException(SaloonInvalidResponseClassException::class);
+    $this->expectException(InvalidResponseClassException::class);
 
     expect($invalidConnectorClassRequest->getResponseClass());
 });

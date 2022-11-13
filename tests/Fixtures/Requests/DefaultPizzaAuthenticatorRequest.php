@@ -2,13 +2,13 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Contracts\Authenticator;
 use Saloon\Traits\Auth\RequiresAuth;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Authenticators\PizzaAuthenticator;
 
-class DefaultPizzaAuthenticatorRequest extends SaloonRequest
+class DefaultPizzaAuthenticatorRequest extends Request
 {
     use RequiresAuth;
 

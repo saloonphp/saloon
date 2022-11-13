@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-use Psr\Http\Message\RequestInterface;
-use GuzzleHttp\Exception\RequestException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Managers\RequestManager;
 use Saloon\Http\Faking\MockResponse;
+use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Exception\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Requests\HeaderRequest;

@@ -4,15 +4,15 @@ namespace Saloon\Contracts;
 
 use Exception;
 use SimpleXMLElement;
+use Saloon\Http\Request;
+use Saloon\Http\PendingRequest;
 use Illuminate\Support\Collection;
+use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Http\SaloonRequest;
-use Saloon\Repositories\ArrayStore;
-use Saloon\Http\PendingSaloonRequest;
-use Saloon\Exceptions\SaloonRequestException;
+use Saloon\Exceptions\RequestException;
 
-interface SaloonResponse
+interface Response
 {
     /**
      * Get the body of the response as string.
@@ -43,32 +43,32 @@ interface SaloonResponse
     public function status(): int;
 
     /**
-     * Get the underlying PSR response for the response.
+     * Create a PSR response from the raw response.
      *
      * @return ResponseInterface
      */
-    public function toPsrResponse(): ResponseInterface;
+    public function getPsrResponse(): ResponseInterface;
 
     /**
      * Create a new response instance.
      *
-     * @param PendingSaloonRequest $pendingSaloonRequest
+     * @param PendingRequest $pendingSaloonRequest
      * @param mixed $rawResponse
      * @param Exception|null $requestException
      */
-    public function __construct(PendingSaloonRequest $pendingSaloonRequest, mixed $rawResponse, Exception $requestException = null);
+    public function __construct(PendingRequest $pendingSaloonRequest, mixed $rawResponse, Exception $requestException = null);
 
     /**
-     * @return PendingSaloonRequest
+     * @return PendingRequest
      */
-    public function getPendingSaloonRequest(): PendingSaloonRequest;
+    public function getPendingRequest(): PendingRequest;
 
     /**
      * Get the original request
      *
-     * @return SaloonRequest
+     * @return Request
      */
-    public function getRequest(): SaloonRequest;
+    public function getRequest(): Request;
 
     /**
      * Get the JSON decoded body of the response as an array or scalar value.
@@ -173,7 +173,7 @@ interface SaloonResponse
      * Throw an exception if a server or client error occurred.
      *
      * @return $this
-     * @throws SaloonRequestException
+     * @throws RequestException
      */
     public function throw(): static;
 
@@ -248,15 +248,15 @@ interface SaloonResponse
      * Set the isCached property
      *
      * @param bool $isCached
-     * @return SaloonResponse
+     * @return Response
      */
-    public function setIsCached(bool $isCached): SaloonResponse;
+    public function setIsCached(bool $isCached): Response;
 
     /**
      * Set the isMocked property
      *
      * @param bool $isMocked
-     * @return SaloonResponse
+     * @return Response
      */
-    public function setIsMocked(bool $isMocked): SaloonResponse;
+    public function setIsMocked(bool $isMocked): Response;
 }

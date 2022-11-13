@@ -7,8 +7,8 @@ use Saloon\Tests\Fixtures\Collections\UserGroup;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Exceptions\InvalidRequestKeyException;
 use Saloon\Tests\Fixtures\Collections\GuessedGroup;
-use Saloon\Exceptions\SaloonInvalidRequestException;
-use Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
+use Saloon\Exceptions\InvalidRequestException;
+use Saloon\Exceptions\ConnectorMethodNotFoundException;
 use Saloon\Tests\Fixtures\Connectors\ServiceRequestConnector;
 use Saloon\Tests\Fixtures\Connectors\RequestSelectionConnector;
 use Saloon\Tests\Fixtures\Connectors\InvalidServiceRequestConnector;
@@ -53,13 +53,13 @@ test('it can call a request from the requests array', function () {
 test('it throws an exception if the request method does not exist on the connector', function () {
     $connector = new RequestSelectionConnector;
 
-    $this->expectException(SaloonConnectorMethodNotFoundException::class);
+    $this->expectException(ConnectorMethodNotFoundException::class);
 
     $connector->missingRequest();
 });
 
 test('it throws an exception if the static request method does not exist on the connector', function () {
-    $this->expectException(SaloonConnectorMethodNotFoundException::class);
+    $this->expectException(ConnectorMethodNotFoundException::class);
 
     RequestSelectionConnector::missingRequest();
 });
@@ -83,7 +83,7 @@ test('it throws an exception if one of the provided guessed request classes does
 test('it throws an exception if one of the provided request classes is not a saloon request', function () {
     $connector = new InvalidDefinedRequestSelectionConnector;
 
-    $this->expectException(SaloonInvalidRequestException::class);
+    $this->expectException(InvalidRequestException::class);
 
     $connector->test_connector();
 });

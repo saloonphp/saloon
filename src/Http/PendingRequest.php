@@ -5,25 +5,25 @@ namespace Saloon\Http;
 use ReflectionException;
 use Saloon\Enums\Method;
 use Saloon\Contracts\Sender;
+use Saloon\Contracts\Response;
 use Saloon\Helpers\Environment;
 use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\WithBody;
-use Saloon\Contracts\SaloonResponse;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
-use Saloon\Exceptions\PendingSaloonRequestException;
-use Sammyjo20\SaloonLaravel\Http\Middleware\SaloonLaravelMiddleware;
-use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Exceptions\PendingRequestException;
+use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Saloon\Exceptions\InvalidResponseClassException;
+use Sammyjo20\SaloonLaravel\Http\Middleware\SaloonLaravelMiddleware;
 
-class PendingSaloonRequest
+class PendingRequest
 {
     use HasRequestProperties;
     use AuthenticatesRequests;
@@ -32,16 +32,16 @@ class PendingSaloonRequest
     /**
      * The request used by the instance.
      *
-     * @var SaloonRequest
+     * @var Request
      */
-    protected SaloonRequest $request;
+    protected Request $request;
 
     /**
      * The connector making the request.
      *
-     * @var SaloonConnector
+     * @var Connector
      */
-    protected SaloonConnector $connector;
+    protected Connector $connector;
 
     /**
      * The URL the request will be made to.
@@ -81,14 +81,14 @@ class PendingSaloonRequest
     /**
      * Build up the request payload.
      *
-     * @param SaloonRequest $request
+     * @param Request $request
      * @param MockClient|null $mockClient
-     * @throws PendingSaloonRequestException
+     * @throws PendingRequestException
      * @throws ReflectionException
-     * @throws SaloonInvalidConnectorException
-     * @throws SaloonInvalidResponseClassException
+     * @throws InvalidConnectorException
+     * @throws InvalidResponseClassException
      */
-    public function __construct(SaloonRequest $request, MockClient $mockClient = null)
+    public function __construct(Request $request, MockClient $mockClient = null)
     {
         $connector = $request->connector();
 
@@ -101,13 +101,13 @@ class PendingSaloonRequest
         $this->authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
 
         // After we have defined each of our properties, we will run the various
-        // methods that build up the PendingSaloonRequest. It's important that
+        // methods that build up the PendingRequest. It's important that
         // the order remains the same.
 
         // Plugins should be booted first, then we will merge the properties
         // from the connector and request, then authenticate the request
         // followed by finally running the "boot" method with an
-        // almost complete PendingSaloonRequest.
+        // almost complete PendingRequest.
 
         $this->bootPlugins()
             ->mergeRequestProperties()
@@ -186,7 +186,7 @@ class PendingSaloonRequest
      * Merge the body together
      *
      * @return $this
-     * @throws PendingSaloonRequestException
+     * @throws PendingRequestException
      */
     protected function mergeBody(): static
     {
@@ -201,7 +201,7 @@ class PendingSaloonRequest
         }
 
         if (isset($connectorBody, $requestBody) && ! $connectorBody instanceof $requestBody) {
-            throw new PendingSaloonRequestException('Connector and request body types must be the same.');
+            throw new PendingRequestException('Connector and request body types must be the same.');
         }
 
         if ($connectorBody instanceof ArrayBodyRepository && $requestBody instanceof ArrayBodyRepository) {
@@ -280,10 +280,10 @@ class PendingSaloonRequest
     /**
      * Execute the response pipeline.
      *
-     * @param SaloonResponse $response
-     * @return SaloonResponse
+     * @param Response $response
+     * @return Response
      */
-    public function executeResponsePipeline(SaloonResponse $response): SaloonResponse
+    public function executeResponsePipeline(Response $response): Response
     {
         $this->middleware()->executeResponsePipeline($response);
 
@@ -293,19 +293,19 @@ class PendingSaloonRequest
     /**
      * Get the request.
      *
-     * @return SaloonRequest
+     * @return Request
      */
-    public function getRequest(): SaloonRequest
+    public function getRequest(): Request
     {
         return $this->request;
     }
 
     /**
-     * Get the conector.
+     * Get the connector.
      *
-     * @return SaloonConnector
+     * @return Connector
      */
-    public function getConnector(): SaloonConnector
+    public function getConnector(): Connector
     {
         return $this->connector;
     }
@@ -374,9 +374,9 @@ class PendingSaloonRequest
      * Set the simulated response payload
      *
      * @param SimulatedResponsePayload|null $simulatedResponsePayload
-     * @return PendingSaloonRequest
+     * @return PendingRequest
      */
-    public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): PendingSaloonRequest
+    public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): PendingRequest
     {
         $this->simulatedResponsePayload = $simulatedResponsePayload;
 

@@ -2,14 +2,14 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Collections\UserGroup;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Collections\GuessedGroup;
 
-class ServiceRequestConnector extends SaloonConnector
+class ServiceRequestConnector extends Connector
 {
     use AcceptsJson;
 

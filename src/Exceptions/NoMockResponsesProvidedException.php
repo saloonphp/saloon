@@ -2,7 +2,7 @@
 
 namespace Saloon\Exceptions;
 
-class SaloonNoMockResponsesProvidedException extends SaloonException
+class NoMockResponsesProvidedException extends SaloonException
 {
     public function __construct()
     {

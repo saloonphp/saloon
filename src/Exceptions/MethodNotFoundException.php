@@ -2,17 +2,17 @@
 
 namespace Saloon\Exceptions;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 
-class SaloonMethodNotFoundException extends SaloonException
+class MethodNotFoundException extends SaloonException
 {
     /**
      * Exception
      *
      * @param string $method
-     * @param SaloonConnector $connector
+     * @param Connector $connector
      */
-    public function __construct(string $method, SaloonConnector $connector)
+    public function __construct(string $method, Connector $connector)
     {
         parent::__construct(sprintf('Unable to find the "%s" method on the request class or the "%s" connector.', $method, get_class($connector)));
     }

@@ -4,16 +4,16 @@ namespace Saloon\Http\Responses;
 
 use Exception;
 use SimpleXMLElement;
+use Saloon\Http\Request;
 use Illuminate\Support\Arr;
+use Saloon\Http\PendingRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
-use Saloon\Http\SaloonRequest;
 use Symfony\Component\DomCrawler\Crawler;
-use Saloon\Http\PendingSaloonRequest;
-use Saloon\Exceptions\SaloonRequestException;
-use Saloon\Contracts\SaloonResponse as SaloonResponseContract;
+use Saloon\Exceptions\RequestException;
+use Saloon\Contracts\Response as ResponseContract;
 
-abstract class SaloonResponse implements SaloonResponseContract
+abstract class Response implements ResponseContract
 {
     use Macroable;
 
@@ -34,9 +34,9 @@ abstract class SaloonResponse implements SaloonResponseContract
     /**
      * The request options we attached to the request.
      *
-     * @var PendingSaloonRequest
+     * @var PendingRequest
      */
-    protected PendingSaloonRequest $pendingSaloonRequest;
+    protected PendingRequest $pendingSaloonRequest;
 
     /**
      * The original request exception
@@ -62,11 +62,11 @@ abstract class SaloonResponse implements SaloonResponseContract
     /**
      * Create a new response instance.
      *
-     * @param PendingSaloonRequest $pendingSaloonRequest
+     * @param PendingRequest $pendingSaloonRequest
      * @param mixed $rawResponse
      * @param Exception|null $requestException
      */
-    public function __construct(PendingSaloonRequest $pendingSaloonRequest, mixed $rawResponse, Exception $requestException = null)
+    public function __construct(PendingRequest $pendingSaloonRequest, mixed $rawResponse, Exception $requestException = null)
     {
         $this->pendingSaloonRequest = $pendingSaloonRequest;
         $this->rawResponse = $rawResponse;
@@ -74,9 +74,9 @@ abstract class SaloonResponse implements SaloonResponseContract
     }
 
     /**
-     * @return PendingSaloonRequest
+     * @return PendingRequest
      */
-    public function getPendingSaloonRequest(): PendingSaloonRequest
+    public function getPendingRequest(): PendingRequest
     {
         return $this->pendingSaloonRequest;
     }
@@ -84,9 +84,9 @@ abstract class SaloonResponse implements SaloonResponseContract
     /**
      * Get the original request
      *
-     * @return SaloonRequest
+     * @return Request
      */
-    public function getRequest(): SaloonRequest
+    public function getRequest(): Request
     {
         return $this->pendingSaloonRequest->getRequest();
     }
@@ -274,14 +274,14 @@ abstract class SaloonResponse implements SaloonResponseContract
      */
     protected function createException(string $body): Exception
     {
-        return new SaloonRequestException($this, $body, 0, $this->getRequestException());
+        return new RequestException($this, $body, 0, $this->getRequestException());
     }
 
     /**
      * Throw an exception if a server or client error occurred.
      *
      * @return $this
-     * @throws SaloonRequestException
+     * @throws RequestException
      */
     public function throw(): static
     {
@@ -396,9 +396,9 @@ abstract class SaloonResponse implements SaloonResponseContract
      * Set the isCached property
      *
      * @param bool $isCached
-     * @return SaloonResponse
+     * @return Response
      */
-    public function setIsCached(bool $isCached): SaloonResponse
+    public function setIsCached(bool $isCached): Response
     {
         $this->isCached = $isCached;
 
@@ -409,9 +409,9 @@ abstract class SaloonResponse implements SaloonResponseContract
      * Set the isMocked property
      *
      * @param bool $isMocked
-     * @return SaloonResponse
+     * @return Response
      */
-    public function setIsMocked(bool $isMocked): SaloonResponse
+    public function setIsMocked(bool $isMocked): Response
     {
         $this->isMocked = $isMocked;
 

@@ -2,17 +2,17 @@
 
 namespace Saloon\Traits;
 
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 
 trait Bootable
 {
     /**
      * Handle the boot lifecycle hook
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return void
      */
-    public function boot(PendingSaloonRequest $pendingRequest): void
+    public function boot(PendingRequest $pendingRequest): void
     {
         //
     }

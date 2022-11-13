@@ -2,7 +2,7 @@
 
 namespace Saloon\Contracts;
 
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
 interface RequestMiddleware
@@ -10,8 +10,8 @@ interface RequestMiddleware
     /**
      * Register a request middleware
      *
-     * @param PendingSaloonRequest $pendingRequest
-     * @return PendingSaloonRequest|SimulatedResponsePayload|void
+     * @param PendingRequest $pendingRequest
+     * @return PendingRequest|SimulatedResponsePayload|void
      */
-    public function __invoke(PendingSaloonRequest $pendingRequest);
+    public function __invoke(PendingRequest $pendingRequest);
 }

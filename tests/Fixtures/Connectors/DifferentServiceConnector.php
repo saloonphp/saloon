@@ -2,10 +2,10 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 
-class DifferentServiceConnector extends SaloonConnector
+class DifferentServiceConnector extends Connector
 {
     use AcceptsJson;
 

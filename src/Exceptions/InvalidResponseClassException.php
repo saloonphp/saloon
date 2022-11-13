@@ -2,7 +2,7 @@
 
 namespace Saloon\Exceptions;
 
-class SaloonInvalidResponseClassException extends SaloonException
+class InvalidResponseClassException extends SaloonException
 {
     /**
      * Constructor
@@ -11,6 +11,6 @@ class SaloonInvalidResponseClassException extends SaloonException
      */
     public function __construct(string $message = null)
     {
-        parent::__construct($message ?? 'The provided response must implement the SaloonResponse contract.');
+        parent::__construct($message ?? 'The provided response must implement the Response contract.');
     }
 }

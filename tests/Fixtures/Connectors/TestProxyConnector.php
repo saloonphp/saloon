@@ -2,12 +2,12 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Http\SaloonRequest;
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Request;
+use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
-class TestProxyConnector extends SaloonConnector
+class TestProxyConnector extends Connector
 {
     use AcceptsJson;
 
@@ -35,10 +35,10 @@ class TestProxyConnector extends SaloonConnector
      * Get the user from the system.
      *
      * @param ...$args
-     * @return SaloonRequest
+     * @return Request
      * @throws \ReflectionException
      */
-    public function getUser(...$args): SaloonRequest
+    public function getUser(...$args): Request
     {
         return $this->forwardCallToRequest(UserRequest::class, $args);
     }

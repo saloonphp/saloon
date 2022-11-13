@@ -2,17 +2,17 @@
 
 namespace Saloon\Traits\Plugins;
 
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 
 trait WithDebugData
 {
     /**
      * Enable debug mode.
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return void
      */
-    public static function bootWithDebugData(PendingSaloonRequest $pendingRequest): void
+    public static function bootWithDebugData(PendingRequest $pendingRequest): void
     {
         $pendingRequest->config()->add('debug', true);
     }

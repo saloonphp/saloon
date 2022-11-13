@@ -2,7 +2,7 @@
 
 namespace Saloon\Http\Groups;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Helpers\RequestHelper;
 use Saloon\Exceptions\NestedRequestNotFoundException;
 
@@ -11,14 +11,14 @@ class AnonymousRequestGroup extends RequestGroup
     /**
      * Constructor
      *
-     * @param SaloonConnector $connector
+     * @param Connector $connector
      * @param string $collectionName
      * @param array $requests
      */
     public function __construct(
-        SaloonConnector $connector,
+        Connector        $connector,
         protected string $collectionName,
-        protected array $requests,
+        protected array  $requests,
     ) {
         parent::__construct($connector);
     }

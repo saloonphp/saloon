@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
+use Saloon\Http\Request;
 use GuzzleHttp\Promise\Promise;
-use Saloon\Http\SaloonRequest;
 use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\Responses\SaloonResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Connectors\RequestSelectionConnector;
@@ -26,7 +26,7 @@ test('you can prepare a request through the connector', function () {
 
     $request = $connector->request(new UserRequest);
 
-    expect($request)->toBeInstanceOf(SaloonRequest::class);
+    expect($request)->toBeInstanceOf(Request::class);
     expect($request->connector())->toEqual($connector);
 });
 
@@ -45,7 +45,7 @@ test('you can send a request through the connector', function () {
     $connector = new TestConnector();
     $response = $connector->send(new UserRequest, $mockClient);
 
-    expect($response)->toBeInstanceOf(SaloonResponse::class);
+    expect($response)->toBeInstanceOf(Response::class);
     expect($response->json())->toEqual(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']);
 });
 
@@ -61,6 +61,6 @@ test('you can send an asynchronous request through the connector', function () {
 
     $response = $promise->wait();
 
-    expect($response)->toBeInstanceOf(SaloonResponse::class);
+    expect($response)->toBeInstanceOf(Response::class);
     expect($response->json())->toEqual(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']);
 });

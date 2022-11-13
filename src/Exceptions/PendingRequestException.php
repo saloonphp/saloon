@@ -2,7 +2,7 @@
 
 namespace Saloon\Exceptions;
 
-class PendingSaloonRequestException extends SaloonException
+class PendingRequestException extends SaloonException
 {
     //
 }

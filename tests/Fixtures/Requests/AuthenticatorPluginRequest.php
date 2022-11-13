@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Plugins\AuthenticatorPlugin;
 
-class AuthenticatorPluginRequest extends SaloonRequest
+class AuthenticatorPluginRequest extends Request
 {
     use AuthenticatorPlugin;
 

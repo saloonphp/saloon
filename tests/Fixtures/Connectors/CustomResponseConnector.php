@@ -2,10 +2,10 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Tests\Fixtures\Responses\CustomResponse;
 
-class CustomResponseConnector extends SaloonConnector
+class CustomResponseConnector extends Connector
 {
     protected ?string $response = CustomResponse::class;
 

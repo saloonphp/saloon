@@ -2,12 +2,12 @@
 
 namespace Saloon\Contracts;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Http\Faking\Fixture;
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingSaloonRequest;
-use Saloon\Exceptions\SaloonNoMockResponseFoundException;
-use Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;
+use Saloon\Exceptions\NoMockResponseFoundException;
+use Saloon\Exceptions\InvalidMockResponseCaptureMethodException;
 
 interface MockClient
 {
@@ -16,7 +16,7 @@ interface MockClient
      *
      * @param array $responses
      * @return void
-     * @throws SaloonInvalidMockResponseCaptureMethodException
+     * @throws InvalidMockResponseCaptureMethodException
      */
     public function addResponses(array $responses): void;
 
@@ -26,7 +26,7 @@ interface MockClient
      * @param MockResponse|Fixture|callable $response
      * @param string|null $captureMethod
      * @return void
-     * @throws SaloonInvalidMockResponseCaptureMethodException
+     * @throws InvalidMockResponseCaptureMethodException
      */
     public function addResponse(MockResponse|Fixture|callable $response, ?string $captureMethod = null): void;
 
@@ -40,12 +40,12 @@ interface MockClient
     /**
      * Guess the next response based on the request.
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return MockResponse|Fixture
-     * @throws SaloonNoMockResponseFoundException
+     * @throws NoMockResponseFoundException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function guessNextResponse(PendingSaloonRequest $pendingRequest): MockResponse|Fixture;
+    public function guessNextResponse(PendingRequest $pendingRequest): MockResponse|Fixture;
 
     /**
      * Check if the responses are empty.
@@ -57,10 +57,10 @@ interface MockClient
     /**
      * Record a response.
      *
-     * @param SaloonResponse $response
+     * @param Response $response
      * @return void
      */
-    public function recordResponse(SaloonResponse $response): void;
+    public function recordResponse(Response $response): void;
 
     /**
      * Get all the recorded responses
@@ -72,16 +72,16 @@ interface MockClient
     /**
      * Get the last request that the mock manager sent.
      *
-     * @return SaloonRequest|null
+     * @return Request|null
      */
-    public function getLastRequest(): ?SaloonRequest;
+    public function getLastRequest(): ?Request;
 
     /**
      * Get the last response that the mock manager sent.
      *
-     * @return SaloonResponse|null
+     * @return Response|null
      */
-    public function getLastResponse(): ?SaloonResponse;
+    public function getLastResponse(): ?Response;
 
     /**
      * Assert that a given request was sent.
@@ -130,16 +130,16 @@ interface MockClient
      * Assert a given request was sent.
      *
      * @param string $request
-     * @return SaloonResponse|null
+     * @return Response|null
      */
-    public function findResponseByRequest(string $request): ?SaloonResponse;
+    public function findResponseByRequest(string $request): ?Response;
 
     /**
      * Find a request that matches a given url pattern
      *
      * @param string $url
-     * @return SaloonResponse|null
+     * @return Response|null
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function findResponseByRequestUrl(string $url): ?SaloonResponse;
+    public function findResponseByRequestUrl(string $url): ?Response;
 }

@@ -3,13 +3,13 @@
 namespace Saloon\Http\Responses;
 
 use GuzzleHttp\Psr7\Stream;
-use GuzzleHttp\Psr7\Response;
+use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Repositories\ArrayStore;
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
-class SimulatedResponse extends SaloonResponse
+class SimulatedResponse extends Response
 {
     /**
      * The raw response from the sender.
@@ -71,8 +71,8 @@ class SimulatedResponse extends SaloonResponse
      * @return mixed
      * @throws \JsonException
      */
-    public function toPsrResponse(): ResponseInterface
+    public function getPsrResponse(): ResponseInterface
     {
-        return new Response($this->status(), $this->headers()->all(), $this->body());
+        return new GuzzleResponse($this->status(), $this->headers()->all(), $this->body());
     }
 }

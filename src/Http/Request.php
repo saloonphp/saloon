@@ -4,21 +4,21 @@ namespace Saloon\Http;
 
 use Saloon\Traits\Bootable;
 use Saloon\Contracts\Sender;
-use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Contracts\Response;
 use Saloon\Contracts\MockClient;
 use Saloon\Traits\HasMockClient;
-use Saloon\Contracts\SaloonResponse;
-use Saloon\Traits\HasCustomResponses;
 use Saloon\Traits\Request\BuildsUrls;
 use Saloon\Traits\Request\HasConnector;
+use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\Request\CastDtoFromResponse;
-use Saloon\Exceptions\PendingSaloonRequestException;
-use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Traits\Responses\HasCustomResponses;
+use Saloon\Exceptions\PendingRequestException;
+use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Saloon\Exceptions\InvalidResponseClassException;
 
-abstract class SaloonRequest
+abstract class Request
 {
     use AuthenticatesRequests;
     use HasRequestProperties;
@@ -54,22 +54,22 @@ abstract class SaloonRequest
      * Create a pending request
      *
      * @param MockClient|null $mockClient
-     * @return PendingSaloonRequest
-     * @throws PendingSaloonRequestException
-     * @throws SaloonInvalidConnectorException
-     * @throws SaloonInvalidResponseClassException
+     * @return PendingRequest
+     * @throws PendingRequestException
+     * @throws InvalidConnectorException
+     * @throws InvalidResponseClassException
      * @throws \ReflectionException
      */
-    public function createPendingRequest(MockClient $mockClient = null): PendingSaloonRequest
+    public function createPendingRequest(MockClient $mockClient = null): PendingRequest
     {
-        return new PendingSaloonRequest($this, $mockClient);
+        return new PendingRequest($this, $mockClient);
     }
 
     /**
      * Access the HTTP sender
      *
      * @return Sender
-     * @throws SaloonInvalidConnectorException
+     * @throws InvalidConnectorException
      */
     public function sender(): Sender
     {
@@ -81,12 +81,12 @@ abstract class SaloonRequest
      *
      * @param MockClient|null $mockClient
      * @param bool $asynchronous
-     * @return SaloonResponse|PromiseInterface
-     * @throws SaloonInvalidConnectorException
+     * @return Response|PromiseInterface
+     * @throws InvalidConnectorException
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */
-    public function send(MockClient $mockClient = null, bool $asynchronous = false): SaloonResponse|PromiseInterface
+    public function send(MockClient $mockClient = null, bool $asynchronous = false): Response|PromiseInterface
     {
         return $this->connector()->send($this, $mockClient, $asynchronous);
     }
@@ -96,7 +96,7 @@ abstract class SaloonRequest
      *
      * @param MockClient|null $mockClient
      * @return PromiseInterface
-     * @throws SaloonInvalidConnectorException
+     * @throws InvalidConnectorException
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */

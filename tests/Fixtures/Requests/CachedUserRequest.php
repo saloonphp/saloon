@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Traits\Plugins\CachesRequests;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class CachedUserRequest extends SaloonRequest
+class CachedUserRequest extends Request
 {
     use CachesRequests;
 

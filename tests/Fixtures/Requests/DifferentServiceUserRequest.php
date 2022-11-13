@@ -2,10 +2,10 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
 
-class DifferentServiceUserRequest extends SaloonRequest
+class DifferentServiceUserRequest extends Request
 {
     /**
      * Define the method that the request will use.

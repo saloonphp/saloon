@@ -2,25 +2,25 @@
 
 namespace Saloon\Traits\Request;
 
-use Saloon\Http\SaloonConnector;
-use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Http\Connector;
+use Saloon\Exceptions\InvalidConnectorException;
 
 trait HasConnector
 {
     /**
      * The loaded connector used in requests.
      *
-     * @var SaloonConnector|null
+     * @var Connector|null
      */
-    private ?SaloonConnector $loadedConnector = null;
+    private ?Connector $loadedConnector = null;
 
     /**
      * Retrieve the loaded connector.
      *
-     * @return SaloonConnector
-     * @throws SaloonInvalidConnectorException
+     * @return Connector
+     * @throws InvalidConnectorException
      */
-    public function connector(): SaloonConnector
+    public function connector(): Connector
     {
         return $this->loadedConnector ??= $this->resolveConnector();
     }
@@ -28,10 +28,10 @@ trait HasConnector
     /**
      * Set the loaded connector at runtime.
      *
-     * @param SaloonConnector $connector
+     * @param Connector $connector
      * @return $this
      */
-    public function setConnector(SaloonConnector $connector): static
+    public function setConnector(Connector $connector): static
     {
         $this->loadedConnector = $connector;
 
@@ -41,13 +41,13 @@ trait HasConnector
     /**
      * Create a new connector instance.
      *
-     * @return SaloonConnector
-     * @throws SaloonInvalidConnectorException
+     * @return Connector
+     * @throws InvalidConnectorException
      */
-    protected function resolveConnector(): SaloonConnector
+    protected function resolveConnector(): Connector
     {
         if (empty($this->connector) || ! class_exists($this->connector)) {
-            throw new SaloonInvalidConnectorException;
+            throw new InvalidConnectorException;
         }
 
         return new $this->connector;

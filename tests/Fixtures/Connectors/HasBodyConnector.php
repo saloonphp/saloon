@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\HasBody;
 use Saloon\Traits\Plugins\AcceptsJson;
 
-class HasBodyConnector extends SaloonConnector
+class HasBodyConnector extends Connector
 {
     use AcceptsJson;
     use HasBody;

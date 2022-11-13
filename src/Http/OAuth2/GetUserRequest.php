@@ -2,13 +2,13 @@
 
 namespace Saloon\Http\OAuth2;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Contracts\Body\WithBody;
 use Saloon\Traits\Body\HasFormBody;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Traits\Plugins\AcceptsJson;
 
-class GetUserRequest extends SaloonRequest implements WithBody
+class GetUserRequest extends Request implements WithBody
 {
     use HasFormBody;
     use AcceptsJson;

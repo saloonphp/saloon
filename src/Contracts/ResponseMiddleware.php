@@ -7,8 +7,8 @@ interface ResponseMiddleware
     /**
      * Register a request middleware
      *
-     * @param SaloonResponse $response
-     * @return SaloonResponse|void
+     * @param Response $response
+     * @return Response|void
      */
-    public function __invoke(SaloonResponse $response);
+    public function __invoke(Response $response);
 }

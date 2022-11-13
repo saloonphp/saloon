@@ -3,10 +3,10 @@
 namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class ErrorRequest extends SaloonRequest
+class ErrorRequest extends Request
 {
     /**
      * Define the method that the request will use.

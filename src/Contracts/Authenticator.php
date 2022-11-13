@@ -2,15 +2,15 @@
 
 namespace Saloon\Contracts;
 
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 
 interface Authenticator
 {
     /**
      * Apply the authentication to the request.
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return void
      */
-    public function set(PendingSaloonRequest $pendingRequest): void;
+    public function set(PendingRequest $pendingRequest): void;
 }

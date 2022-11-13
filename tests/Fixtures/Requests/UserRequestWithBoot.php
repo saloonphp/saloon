@@ -2,10 +2,10 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Connectors\WithBootConnector;
 
-class UserRequestWithBoot extends SaloonRequest
+class UserRequestWithBoot extends Request
 {
     /**
      * Define the method that the request will use.
@@ -31,7 +31,7 @@ class UserRequestWithBoot extends SaloonRequest
         return '/user';
     }
 
-    public function boot(SaloonRequest $request): void
+    public function boot(Request $request): void
     {
         $this->addHeader('X-Request-Boot-Header', 'Yee-haw!');
         $this->addHeader('X-Request-Boot-With-Data', $request->farewell);

@@ -2,12 +2,12 @@
 
 namespace Saloon\Tests\Fixtures\Mocking;
 
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingSaloonRequest;
 
 class CallableMockResponse
 {
-    public function __invoke(PendingSaloonRequest $pendingRequest): MockResponse
+    public function __invoke(PendingRequest $pendingRequest): MockResponse
     {
         return new MockResponse(200, ['request_class' => get_class($pendingRequest->getRequest())]);
     }

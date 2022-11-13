@@ -2,10 +2,10 @@
 
 namespace Saloon\Tests\Fixtures\Plugins;
 
+use Saloon\Http\Request;
+use Saloon\Http\Connector;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Http\SaloonRequest;
-use Saloon\Http\SaloonConnector;
 
 trait HasTestHandler
 {
@@ -14,7 +14,7 @@ trait HasTestHandler
      *
      * @return void
      */
-    public function bootHasTestHandler(SaloonRequest $request)
+    public function bootHasTestHandler(Request $request)
     {
         $this->addHandler('testHandler', function (callable $handler) {
             return function (RequestInterface $request, array $options) use ($handler) {
@@ -24,11 +24,11 @@ trait HasTestHandler
                     function (ResponseInterface $response) {
                         $response = $response->withHeader('X-Test-Handler', true);
 
-                        if ($this instanceof SaloonConnector) {
+                        if ($this instanceof Connector) {
                             $response = $response->withHeader('X-Handler-Added-To', 'connector');
                         }
 
-                        if ($this instanceof SaloonRequest) {
+                        if ($this instanceof Request) {
                             $response = $response->withHeader('X-Handler-Added-To', 'request');
                         }
 

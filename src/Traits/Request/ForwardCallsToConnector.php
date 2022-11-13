@@ -2,8 +2,8 @@
 
 namespace Saloon\Traits\Request;
 
-use Saloon\Exceptions\SaloonMethodNotFoundException;
-use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Exceptions\MethodNotFoundException;
+use Saloon\Exceptions\InvalidConnectorException;
 
 trait ForwardCallsToConnector
 {
@@ -13,15 +13,15 @@ trait ForwardCallsToConnector
      * @param $method
      * @param $parameters
      * @return mixed
-     * @throws SaloonInvalidConnectorException
-     * @throws SaloonMethodNotFoundException
+     * @throws InvalidConnectorException
+     * @throws MethodNotFoundException
      */
     public function __call($method, $parameters)
     {
         $connector = $this->connector();
 
         if (method_exists($connector, $method) === false) {
-            throw new SaloonMethodNotFoundException($method, $connector);
+            throw new MethodNotFoundException($method, $connector);
         }
 
         return $connector->{$method}(...$parameters);

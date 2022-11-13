@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Contracts\SaloonResponse;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Exceptions\SaloonRequestException;
+use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Exceptions\RequestException;
 use Saloon\Tests\Fixtures\Responses\UserData;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
@@ -19,7 +19,7 @@ test('an asynchronous request can be made successfully', function () {
 
     $response = $promise->wait();
 
-    expect($response)->toBeInstanceOf(SaloonResponse::class);
+    expect($response)->toBeInstanceOf(Response::class);
 
     $data = $response->json();
 
@@ -37,7 +37,7 @@ test('an asynchronous request can handle an exception properly', function () {
     $request = new ErrorRequest();
     $promise = $request->sendAsync();
 
-    $this->expectException(SaloonRequestException::class);
+    $this->expectException(RequestException::class);
 
     $promise->wait();
 });
@@ -49,7 +49,7 @@ test('an asynchronous response will still be passed through response middleware'
 
     $request = new UserRequest();
 
-    $request->middleware()->onResponse(function (SaloonResponse $response) {
+    $request->middleware()->onResponse(function (Response $response) {
         $response->setCached(true);
     });
 

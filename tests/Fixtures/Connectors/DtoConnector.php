@@ -2,13 +2,13 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
+use Saloon\Http\Responses\Response;
 use Saloon\Traits\Plugins\CastsToDto;
 use Saloon\Traits\Plugins\AcceptsJson;
-use Saloon\Http\Responses\SaloonResponse;
 use Saloon\Tests\Fixtures\Data\ApiResponse;
 
-class DtoConnector extends SaloonConnector
+class DtoConnector extends Connector
 {
     use AcceptsJson;
     use CastsToDto;
@@ -34,10 +34,10 @@ class DtoConnector extends SaloonConnector
     }
 
     /**
-     * @param SaloonResponse $response
+     * @param Response $response
      * @return object
      */
-    protected function castToDto(SaloonResponse $response): object
+    protected function castToDto(Response $response): object
     {
         return ApiResponse::fromSaloon($response);
     }

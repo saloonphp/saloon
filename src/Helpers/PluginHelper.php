@@ -3,22 +3,22 @@
 namespace Saloon\Helpers;
 
 use ReflectionClass;
-use Saloon\Http\SaloonRequest;
-use Saloon\Http\SaloonConnector;
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\Request;
+use Saloon\Http\Connector;
+use Saloon\Http\PendingRequest;
 
 class PluginHelper
 {
     /**
      * Boot a given plugin/trait
      *
-     * @param PendingSaloonRequest $pendingRequest
-     * @param SaloonConnector|SaloonRequest $resource
+     * @param PendingRequest $pendingRequest
+     * @param Connector|Request $resource
      * @param string $trait
      * @return void
      * @throws \ReflectionException
      */
-    public static function bootPlugin(PendingSaloonRequest $pendingRequest, SaloonConnector|SaloonRequest $resource, string $trait): void
+    public static function bootPlugin(PendingRequest $pendingRequest, Connector|Request $resource, string $trait): void
     {
         $traitReflection = new ReflectionClass($trait);
 

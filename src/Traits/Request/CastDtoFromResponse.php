@@ -2,17 +2,17 @@
 
 namespace Saloon\Traits\Request;
 
-use Saloon\Contracts\SaloonResponse;
+use Saloon\Contracts\Response;
 
 trait CastDtoFromResponse
 {
     /**
      * Cast the response to a DTO.
      *
-     * @param SaloonResponse $response
+     * @param Response $response
      * @return mixed
      */
-    public function createDtoFromResponse(SaloonResponse $response): mixed
+    public function createDtoFromResponse(Response $response): mixed
     {
         return null;
     }

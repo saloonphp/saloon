@@ -2,10 +2,10 @@
 
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
-use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Exceptions\SaloonRequestException;
+use Symfony\Component\DomCrawler\Crawler;
+use Saloon\Exceptions\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('you can get the original request options', function () {
@@ -39,7 +39,7 @@ test('it will throw an exception when you use the throw method', function () {
 
     $response = (new UserRequest())->send($mockClient);
 
-    $this->expectException(SaloonRequestException::class);
+    $this->expectException(RequestException::class);
 
     $response->throw();
 });
@@ -62,7 +62,7 @@ test('to exception will return a saloon request exception', function () {
     $response = (new UserRequest())->send($mockClient);
     $exception = $response->toException();
 
-    expect($exception)->toBeInstanceOf(SaloonRequestException::class);
+    expect($exception)->toBeInstanceOf(RequestException::class);
 });
 
 test('to exception wont return anything if the request did not fail', function () {
@@ -130,7 +130,7 @@ test('the toGuzzleResponse and toPsrResponse methods will return a guzzle respon
     $response = (new UserRequest())->send($mockClient);
 
     expect($response)->toGuzzleResponse()->toBeInstanceOf(Response::class);
-    expect($response)->toPsrResponse()->toBeInstanceOf(Response::class);
+    expect($response)->getPsrResponse()->toBeInstanceOf(Response::class);
 });
 
 test('you can get an individual header from the response', function () {

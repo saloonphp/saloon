@@ -3,8 +3,8 @@
 namespace Saloon\Http\Faking;
 
 use Throwable;
-use Psr\Http\Message\RequestInterface;
 use Saloon\Repositories\ArrayStore;
+use Psr\Http\Message\RequestInterface;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Repositories\Body\JsonBodyRepository;
 use Saloon\Exceptions\DirectoryNotFoundException;

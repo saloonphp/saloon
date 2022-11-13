@@ -2,11 +2,11 @@
 
 namespace Saloon\Actions;
 
+use Saloon\Contracts\Response;
+use Saloon\Http\PendingRequest;
+use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Contracts\SaloonResponse;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingSaloonRequest;
 use Saloon\Http\Responses\SimulatedResponse;
 
 class SendRequest
@@ -14,10 +14,10 @@ class SendRequest
     /**
      * Constructor
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @param bool $asynchronous
      */
-    public function __construct(protected PendingSaloonRequest $pendingRequest, protected bool $asynchronous = false)
+    public function __construct(protected PendingRequest $pendingRequest, protected bool $asynchronous = false)
     {
         //
     }
@@ -25,9 +25,9 @@ class SendRequest
     /**
      * Execute the action
      *
-     * @return SaloonResponse|PromiseInterface
+     * @return Response|PromiseInterface
      */
-    public function execute(): SaloonResponse|PromiseInterface
+    public function execute(): Response|PromiseInterface
     {
         $pendingRequest = $this->pendingRequest;
 
@@ -39,23 +39,23 @@ class SendRequest
         $response = $pendingRequest->hasSimulatedResponsePayload() ? $this->createSimulatedResponse() : $this->createResponse();
 
         // Next we will need to run the response pipeline. If the response
-        // is a SaloonResponse we can run it directly, but if it is
+        // is a Response we can run it directly, but if it is
         // a PromiseInterface we need to add a step to execute
         // the response pipeline.
 
-        if ($response instanceof SaloonResponse) {
+        if ($response instanceof Response) {
             return $pendingRequest->executeResponsePipeline($response);
         }
 
-        return $response->then(fn (SaloonResponse $response) => $pendingRequest->executeResponsePipeline($response));
+        return $response->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
     }
 
     /**
      * Process a simulated response
      *
-     * @return SaloonResponse|PromiseInterface
+     * @return Response|PromiseInterface
      */
-    protected function createSimulatedResponse(): SaloonResponse|PromiseInterface
+    protected function createSimulatedResponse(): Response|PromiseInterface
     {
         $pendingRequest = $this->pendingRequest;
         $simulatedResponsePayload = $pendingRequest->getSimulatedResponsePayload();
@@ -63,7 +63,7 @@ class SendRequest
         // When the pending request instance has SimulatedResponsePayload it means
         // we shouldn't send a real request. We can use the custom response
         // SimulatedResponse to parse this payload ad convert it into
-        // a SaloonResponse implementation.
+        // a Response implementation.
 
         $response = new SimulatedResponse($pendingRequest, $simulatedResponsePayload);
 
@@ -89,11 +89,11 @@ class SendRequest
     /**
      * Send the request and create a response
      *
-     * @return SaloonResponse|PromiseInterface
+     * @return Response|PromiseInterface
      */
-    protected function createResponse(): SaloonResponse|PromiseInterface
+    protected function createResponse(): Response|PromiseInterface
     {
-        // The PendingSaloonRequest will get the sender from the connector
+        // The PendingRequest will get the sender from the connector
         // for example the GuzzleSender, and it will instantiate it if
         // it does not exist already. Then it will run sendRequest.
 

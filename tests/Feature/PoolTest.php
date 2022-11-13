@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
+use Saloon\Contracts\Response;
+use Saloon\Http\PendingRequest;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\Responses\PsrResponse;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
-use Saloon\Http\Faking\MockClient;
-use Saloon\Contracts\SaloonResponse;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingSaloonRequest;
-use Saloon\Http\Responses\PsrResponse;
 use Saloon\Exceptions\FatalRequestException;
 use Saloon\Http\Responses\SimulatedResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
@@ -28,7 +28,7 @@ test('you can create a pool on a connector', function () {
 
     $pool->setConcurrency(5);
 
-    $pool->withResponseHandler(function (SaloonResponse $response) use (&$count) {
+    $pool->withResponseHandler(function (Response $response) use (&$count) {
         expect($response)->toBeInstanceOf(PsrResponse::class);
         expect($response->json())->toEqual([
             'name' => 'Sammyjo20',
@@ -65,7 +65,7 @@ test('if a pool has a request that cannot connect it will be caught in the handl
     $pool->withExceptionHandler(function (FatalRequestException $ex) use (&$count) {
         expect($ex)->toBeInstanceOf(FatalRequestException::class);
         expect($ex->getPrevious())->toBeInstanceOf(ConnectException::class);
-        expect($ex->getPendingSaloonRequest())->toBeInstanceOf(PendingSaloonRequest::class);
+        expect($ex->getPendingRequest())->toBeInstanceOf(PendingRequest::class);
 
         $count++;
     });
@@ -102,7 +102,7 @@ test('you can use pool with a mock client added and it wont send real requests',
 
     $pool->setConcurrency(6);
 
-    $pool->withResponseHandler(function (SaloonResponse $response) use (&$count, $mockResponses) {
+    $pool->withResponseHandler(function (Response $response) use (&$count, $mockResponses) {
         expect($response)->toBeInstanceOf(SimulatedResponse::class);
         expect($response->json())->toEqual($mockResponses[$count]->getBody()->all());
 

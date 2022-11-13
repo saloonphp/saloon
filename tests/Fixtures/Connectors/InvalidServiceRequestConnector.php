@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
-class InvalidServiceRequestConnector extends SaloonConnector
+class InvalidServiceRequestConnector extends Connector
 {
     use AcceptsJson;
 

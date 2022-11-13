@@ -2,11 +2,11 @@
 
 namespace Saloon\Http\Responses;
 
+use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Repositories\ArrayStore;
 
-class PsrResponse extends SaloonResponse
+class PsrResponse extends Response
 {
     /**
      * The raw response from the sender.
@@ -56,11 +56,11 @@ class PsrResponse extends SaloonResponse
     }
 
     /**
-     * Get the underlying PSR response for the response.
+     * Create a PSR response from the raw response.
      *
      * @return ResponseInterface
      */
-    public function toPsrResponse(): ResponseInterface
+    public function getPsrResponse(): ResponseInterface
     {
         return $this->rawResponse;
     }

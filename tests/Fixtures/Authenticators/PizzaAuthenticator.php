@@ -2,8 +2,8 @@
 
 namespace Saloon\Tests\Fixtures\Authenticators;
 
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Authenticator;
-use Saloon\Http\PendingSaloonRequest;
 
 class PizzaAuthenticator implements Authenticator
 {
@@ -21,10 +21,10 @@ class PizzaAuthenticator implements Authenticator
     /**
      * Set the pending request.
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return void
      */
-    public function set(PendingSaloonRequest $pendingRequest): void
+    public function set(PendingRequest $pendingRequest): void
     {
         $pendingRequest->headers()->add('X-Pizza', $this->pizza);
         $pendingRequest->headers()->add('X-Drink', $this->drink);

@@ -3,25 +3,25 @@
 namespace Saloon\Http\Middleware;
 
 use Saloon\Http\Faking\Fixture;
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingSaloonRequest;
 use Saloon\Contracts\RequestMiddleware;
-use Saloon\Exceptions\SaloonInvalidConnectorException;
-use Saloon\Exceptions\SaloonNoMockResponseFoundException;
+use Saloon\Exceptions\InvalidConnectorException;
+use Saloon\Exceptions\NoMockResponseFoundException;
 
 class DetermineMockResponse implements RequestMiddleware
 {
     /**
      * Guess a mock response
      *
-     * @param PendingSaloonRequest $pendingRequest
-     * @return PendingSaloonRequest|DetermineMockResponse
-     * @throws SaloonInvalidConnectorException
-     * @throws SaloonNoMockResponseFoundException
+     * @param PendingRequest $pendingRequest
+     * @return PendingRequest|DetermineMockResponse
+     * @throws InvalidConnectorException
+     * @throws NoMockResponseFoundException
      * @throws \JsonException
      * @throws \Sammyjo20\Saloon\Exceptions\FixtureMissingException
      */
-    public function __invoke(PendingSaloonRequest $pendingRequest): PendingSaloonRequest|MockResponse
+    public function __invoke(PendingRequest $pendingRequest): PendingRequest|MockResponse
     {
         if ($pendingRequest->hasMockClient() === false) {
             return $pendingRequest;

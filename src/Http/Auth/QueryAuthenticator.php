@@ -2,8 +2,8 @@
 
 namespace Saloon\Http\Auth;
 
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Authenticator;
-use Saloon\Http\PendingSaloonRequest;
 
 class QueryAuthenticator implements Authenticator
 {
@@ -23,10 +23,10 @@ class QueryAuthenticator implements Authenticator
     /**
      * Apply the authentication to the request.
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return void
      */
-    public function set(PendingSaloonRequest $pendingRequest): void
+    public function set(PendingRequest $pendingRequest): void
     {
         $pendingRequest->queryParameters()->add($this->parameter, $this->value);
     }

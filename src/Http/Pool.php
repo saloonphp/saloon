@@ -4,8 +4,8 @@ namespace Saloon\Http;
 
 use Generator;
 use GuzzleHttp\Promise\EachPromise;
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\SaloonException;
+use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\InvalidPoolItemException;
 
 class Pool
@@ -34,9 +34,9 @@ class Pool
     /**
      * Connector
      *
-     * @var SaloonConnector
+     * @var Connector
      */
-    protected SaloonConnector $connector;
+    protected Connector $connector;
 
     /**
      * Concurrency
@@ -50,7 +50,7 @@ class Pool
     /**
      * Constructor
      *
-     * @param SaloonConnector $connector
+     * @param Connector $connector
      * @param callable|iterable $requestPayload
      * @param int|callable $concurrency
      * @param callable|null $responseHandler
@@ -59,7 +59,7 @@ class Pool
      * @throws \ReflectionException
      * @throws SaloonException
      */
-    public function __construct(SaloonConnector $connector, callable|iterable $requestPayload = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null)
+    public function __construct(Connector $connector, callable|iterable $requestPayload = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null)
     {
         $this->connector = $connector;
         $this->setRequests($requestPayload);
@@ -155,7 +155,7 @@ class Pool
         $preparedRequests = function (): Generator {
             foreach ($this->requests as $key => $request) {
                 match (true) {
-                    $request instanceof SaloonRequest => yield $key => $this->connector->sendAsync($request),
+                    $request instanceof Request => yield $key => $this->connector->sendAsync($request),
                     $request instanceof PromiseInterface => yield $key => $request,
                     default => throw new InvalidPoolItemException
                 };

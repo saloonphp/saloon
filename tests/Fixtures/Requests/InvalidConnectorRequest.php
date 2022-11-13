@@ -2,9 +2,9 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 
-class InvalidConnectorRequest extends SaloonRequest
+class InvalidConnectorRequest extends Request
 {
     /**
      * Define the method that the request will use.

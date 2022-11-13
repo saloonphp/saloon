@@ -6,20 +6,20 @@ use Saloon\Traits\Bootable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Traits\Connector\HasPool;
 use Saloon\Http\Senders\GuzzleSender;
-use Saloon\Traits\HasCustomResponses;
 use Saloon\Traits\Connector\HasSender;
 use Saloon\Traits\Connector\SendsRequests;
 use Saloon\Traits\Connector\ProxiesRequests;
 use Saloon\Exceptions\ClassNotFoundException;
 use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Exceptions\SaloonInvalidRequestException;
+use Saloon\Traits\Responses\HasCustomResponses;
+use Saloon\Exceptions\InvalidRequestException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
+use Saloon\Exceptions\ConnectorMethodNotFoundException;
 
 /**
  * @method GuzzleSender sender()
  */
-abstract class SaloonConnector
+abstract class Connector
 {
     use AuthenticatesRequests;
     use HasRequestProperties;
@@ -41,10 +41,10 @@ abstract class SaloonConnector
     /**
      * Prepare a new request by providing it the current instance of the connector.
      *
-     * @param SaloonRequest $request
-     * @return SaloonRequest
+     * @param Request $request
+     * @return Request
      */
-    public function request(SaloonRequest $request): SaloonRequest
+    public function request(Request $request): Request
     {
         return $request->setConnector($this);
     }
@@ -56,8 +56,8 @@ abstract class SaloonConnector
      * @param $arguments
      * @return mixed
      * @throws ClassNotFoundException
-     * @throws SaloonConnectorMethodNotFoundException
-     * @throws SaloonInvalidRequestException
+     * @throws ConnectorMethodNotFoundException
+     * @throws InvalidRequestException
      * @throws \ReflectionException
      */
     public function __call($method, $arguments)
@@ -72,8 +72,8 @@ abstract class SaloonConnector
      * @param $arguments
      * @return mixed
      * @throws ClassNotFoundException
-     * @throws SaloonConnectorMethodNotFoundException
-     * @throws SaloonInvalidRequestException
+     * @throws ConnectorMethodNotFoundException
+     * @throws InvalidRequestException
      * @throws \ReflectionException
      */
     public static function __callStatic($method, $arguments)
@@ -85,7 +85,7 @@ abstract class SaloonConnector
      * Instantiate a new class with the arguments.
      *
      * @param mixed ...$arguments
-     * @return SaloonConnector
+     * @return Connector
      */
     public static function make(...$arguments): static
     {
