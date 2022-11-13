@@ -4,7 +4,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Support\Str;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Responses\Response;
 use Saloon\Exceptions\InvalidStateException;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
 use Saloon\Tests\Fixtures\Connectors\OAuth2Connector;
@@ -82,7 +82,7 @@ test('you can request the original response instead of the authenticator on the 
 
     $response = $connector->getAccessToken('code', null, null, true);
 
-    expect($response)->toBeInstanceOf(SaloonResponse::class);
+    expect($response)->toBeInstanceOf(Response::class);
     expect($response->json())->toEqual(['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600]);
 });
 
@@ -127,7 +127,7 @@ test('you can request the original response instead of the authenticator on the 
 
     $response = $connector->refreshAccessToken($authenticator, true);
 
-    expect($response)->toBeInstanceOf(SaloonResponse::class);
+    expect($response)->toBeInstanceOf(Response::class);
     expect($response->json())->toEqual(['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]);
 });
 
@@ -143,7 +143,7 @@ test('you can get the user from an oauth connector', function () {
 
     $response = $connector->getUser($accessToken);
 
-    expect($response)->toBeInstanceOf(SaloonResponse::class);
+    expect($response)->toBeInstanceOf(Response::class);
 
     $pendingRequest = $response->getPendingRequest();
 

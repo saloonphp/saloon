@@ -11,9 +11,9 @@ use Saloon\Http\Request;
 use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Http\PendingRequest;
 use Saloon\Exceptions\SaloonRequestException;
-use Saloon\Contracts\SaloonResponse as SaloonResponseContract;
+use Saloon\Contracts\Response as ResponseContract;
 
-abstract class SaloonResponse implements SaloonResponseContract
+abstract class Response implements ResponseContract
 {
     use Macroable;
 
@@ -396,9 +396,9 @@ abstract class SaloonResponse implements SaloonResponseContract
      * Set the isCached property
      *
      * @param bool $isCached
-     * @return SaloonResponse
+     * @return Response
      */
-    public function setIsCached(bool $isCached): SaloonResponse
+    public function setIsCached(bool $isCached): Response
     {
         $this->isCached = $isCached;
 
@@ -409,9 +409,9 @@ abstract class SaloonResponse implements SaloonResponseContract
      * Set the isMocked property
      *
      * @param bool $isMocked
-     * @return SaloonResponse
+     * @return Response
      */
-    public function setIsMocked(bool $isMocked): SaloonResponse
+    public function setIsMocked(bool $isMocked): Response
     {
         $this->isMocked = $isMocked;
 

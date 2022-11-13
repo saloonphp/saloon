@@ -9,7 +9,7 @@ use Saloon\Helpers\StateHelper;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Http\OAuth2\GetUserRequest;
 use Saloon\Contracts\OAuthAuthenticator;
-use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Responses\Response;
 use Saloon\Exceptions\InvalidStateException;
 use Saloon\Http\OAuth2\GetAccessTokenRequest;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
@@ -97,7 +97,7 @@ trait AuthorizationCodeGrant
      * @param string|null $state
      * @param string|null $expectedState
      * @param bool $returnResponse
-     * @return OAuthAuthenticator|SaloonResponse
+     * @return OAuthAuthenticator|Response
      * @throws InvalidStateException
      * @throws \JsonException
      * @throws \ReflectionException
@@ -105,7 +105,7 @@ trait AuthorizationCodeGrant
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonRequestException
      */
-    public function getAccessToken(string $code, string $state = null, string $expectedState = null, bool $returnResponse = false): OAuthAuthenticator|SaloonResponse
+    public function getAccessToken(string $code, string $state = null, string $expectedState = null, bool $returnResponse = false): OAuthAuthenticator|Response
     {
         $this->oauthConfig()->validate();
 
@@ -129,14 +129,14 @@ trait AuthorizationCodeGrant
      *
      * @param OAuthAuthenticator|string $refreshToken
      * @param bool $returnResponse
-     * @return OAuthAuthenticator|SaloonResponse
+     * @return OAuthAuthenticator|Response
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonRequestException
      */
-    public function refreshAccessToken(OAuthAuthenticator|string $refreshToken, bool $returnResponse = false): OAuthAuthenticator|SaloonResponse
+    public function refreshAccessToken(OAuthAuthenticator|string $refreshToken, bool $returnResponse = false): OAuthAuthenticator|Response
     {
         $this->oauthConfig()->validate();
 
@@ -158,12 +158,12 @@ trait AuthorizationCodeGrant
     /**
      * Create the OAuthAuthenticator from a response.
      *
-     * @param SaloonResponse $response
+     * @param Response $response
      * @param string|null $fallbackRefreshToken
      * @return OAuthAuthenticator
      * @throws \JsonException
      */
-    protected function createOAuthAuthenticatorFromResponse(SaloonResponse $response, string $fallbackRefreshToken = null): OAuthAuthenticator
+    protected function createOAuthAuthenticatorFromResponse(Response $response, string $fallbackRefreshToken = null): OAuthAuthenticator
     {
         $responseData = $response->object();
 
@@ -191,12 +191,12 @@ trait AuthorizationCodeGrant
      * Get the authenticated user.s
      *
      * @param OAuthAuthenticator $oauthAuthenticator
-     * @return SaloonResponse
+     * @return Response
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */
-    public function getUser(OAuthAuthenticator $oauthAuthenticator): SaloonResponse
+    public function getUser(OAuthAuthenticator $oauthAuthenticator): Response
     {
         return $this->send(
             GetUserRequest::make($this->oauthConfig())->withAuth($oauthAuthenticator)

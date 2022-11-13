@@ -7,7 +7,7 @@ use Saloon\Helpers\URLHelper;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Saloon\Http\Request;
 use Saloon\Http\Connector;
-use Saloon\Contracts\SaloonResponse;
+use Saloon\Contracts\Response;
 use Saloon\Helpers\ReflectionHelper;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\MockClient as MockClientContract;
@@ -204,10 +204,10 @@ class MockClient implements MockClientContract
     /**
      * Record a response.
      *
-     * @param SaloonResponse $response
+     * @param Response $response
      * @return void
      */
-    public function recordResponse(SaloonResponse $response): void
+    public function recordResponse(Response $response): void
     {
         $this->recordedResponses[] = $response;
     }
@@ -235,9 +235,9 @@ class MockClient implements MockClientContract
     /**
      * Get the last response that the mock manager sent.
      *
-     * @return SaloonResponse|null
+     * @return Response|null
      */
-    public function getLastResponse(): ?SaloonResponse
+    public function getLastResponse(): ?Response
     {
         if (empty($this->recordedResponses)) {
             return null;
@@ -332,9 +332,9 @@ class MockClient implements MockClientContract
 
         if (is_string($request)) {
             if (class_exists($request) && ReflectionHelper::isSubclassOf($request, Request::class)) {
-                $passed = $this->findResponseByRequest($request) instanceof SaloonResponse;
+                $passed = $this->findResponseByRequest($request) instanceof Response;
             } else {
-                $passed = $this->findResponseByRequestUrl($request) instanceof SaloonResponse;
+                $passed = $this->findResponseByRequestUrl($request) instanceof Response;
             }
         }
 
@@ -358,9 +358,9 @@ class MockClient implements MockClientContract
      * Assert a given request was sent.
      *
      * @param string $request
-     * @return SaloonResponse|null
+     * @return Response|null
      */
-    public function findResponseByRequest(string $request): ?SaloonResponse
+    public function findResponseByRequest(string $request): ?Response
     {
         if ($this->checkHistoryEmpty() === true) {
             return null;
@@ -385,10 +385,10 @@ class MockClient implements MockClientContract
      * Find a request that matches a given url pattern
      *
      * @param string $url
-     * @return SaloonResponse|null
+     * @return Response|null
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function findResponseByRequestUrl(string $url): ?SaloonResponse
+    public function findResponseByRequestUrl(string $url): ?Response
     {
         if ($this->checkHistoryEmpty() === true) {
             return null;
@@ -428,7 +428,7 @@ class MockClient implements MockClientContract
 
         $lastResponse = $this->getLastResponse();
 
-        if ($lastResponse instanceof SaloonResponse) {
+        if ($lastResponse instanceof Response) {
             $passed = $closure($lastResponse->getOriginalRequest(), $lastResponse);
 
             if ($passed === true) {

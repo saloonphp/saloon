@@ -6,7 +6,7 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Repositories\ArrayStore;
 
-class PsrResponse extends SaloonResponse
+class PsrResponse extends Response
 {
     /**
      * The raw response from the sender.

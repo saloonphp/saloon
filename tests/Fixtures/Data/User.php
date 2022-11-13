@@ -2,7 +2,7 @@
 
 namespace Saloon\Tests\Fixtures\Data;
 
-use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Responses\Response;
 
 class User
 {
@@ -20,10 +20,10 @@ class User
     }
 
     /**
-     * @param SaloonResponse $response
+     * @param Response $response
      * @return static
      */
-    public static function fromSaloon(SaloonResponse $response): self
+    public static function fromSaloon(Response $response): self
     {
         $data = $response->json();
 

@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Saloon\Repositories\ArrayStore;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
-class SimulatedResponse extends SaloonResponse
+class SimulatedResponse extends Response
 {
     /**
      * The raw response from the sender.

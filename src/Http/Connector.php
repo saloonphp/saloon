@@ -2,19 +2,19 @@
 
 namespace Saloon\Http;
 
-use Saloon\Traits\Bootable;
-use Saloon\Traits\HasMockClient;
-use Saloon\Traits\Connector\HasPool;
-use Saloon\Http\Senders\GuzzleSender;
-use Saloon\Traits\HasCustomResponses;
-use Saloon\Traits\Connector\HasSender;
-use Saloon\Traits\Connector\SendsRequests;
-use Saloon\Traits\Connector\ProxiesRequests;
 use Saloon\Exceptions\ClassNotFoundException;
-use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Exceptions\SaloonInvalidRequestException;
-use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
+use Saloon\Exceptions\SaloonInvalidRequestException;
+use Saloon\Http\Senders\GuzzleSender;
+use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Traits\Bootable;
+use Saloon\Traits\Connector\HasPool;
+use Saloon\Traits\Connector\HasSender;
+use Saloon\Traits\Connector\ProxiesRequests;
+use Saloon\Traits\Connector\SendsRequests;
+use Saloon\Traits\HasMockClient;
+use Saloon\Traits\RequestProperties\HasRequestProperties;
+use Saloon\Traits\Responses\HasCustomResponses;
 
 /**
  * @method GuzzleSender sender()

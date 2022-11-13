@@ -2,21 +2,21 @@
 
 namespace Saloon\Http;
 
-use Saloon\Traits\Bootable;
-use Saloon\Contracts\Sender;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\MockClient;
-use Saloon\Traits\HasMockClient;
-use Saloon\Contracts\SaloonResponse;
-use Saloon\Traits\HasCustomResponses;
-use Saloon\Traits\Request\BuildsUrls;
-use Saloon\Traits\Request\HasConnector;
-use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Traits\Request\CastDtoFromResponse;
+use Saloon\Contracts\Response;
+use Saloon\Contracts\Sender;
 use Saloon\Exceptions\PendingSaloonRequestException;
 use Saloon\Exceptions\SaloonInvalidConnectorException;
-use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Traits\Bootable;
+use Saloon\Traits\HasMockClient;
+use Saloon\Traits\Request\BuildsUrls;
+use Saloon\Traits\Request\CastDtoFromResponse;
+use Saloon\Traits\Request\HasConnector;
+use Saloon\Traits\RequestProperties\HasRequestProperties;
+use Saloon\Traits\Responses\HasCustomResponses;
 
 abstract class Request
 {
@@ -81,12 +81,12 @@ abstract class Request
      *
      * @param MockClient|null $mockClient
      * @param bool $asynchronous
-     * @return SaloonResponse|PromiseInterface
+     * @return Response|PromiseInterface
      * @throws SaloonInvalidConnectorException
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */
-    public function send(MockClient $mockClient = null, bool $asynchronous = false): SaloonResponse|PromiseInterface
+    public function send(MockClient $mockClient = null, bool $asynchronous = false): Response|PromiseInterface
     {
         return $this->connector()->send($this, $mockClient, $asynchronous);
     }

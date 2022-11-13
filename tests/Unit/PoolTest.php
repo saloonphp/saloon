@@ -2,7 +2,7 @@
 
 use Saloon\Http\Connector;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Contracts\SaloonResponse;
+use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\InvalidPoolItemException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
@@ -29,7 +29,7 @@ it('accepts an array for requests', function () {
 
     $pool->setConcurrency(5);
 
-    $pool->withResponseHandler(function (SaloonResponse $response, int $index) use ($requests, &$count) {
+    $pool->withResponseHandler(function (Response $response, int $index) use ($requests, &$count) {
         expect($response->getRequest())->toBe($requests[$index]);
 
         $count++;
@@ -61,7 +61,7 @@ it('accepts an array for aliased requests', function () {
 
     $pool->setConcurrency(5);
 
-    $pool->withResponseHandler(function (SaloonResponse $response, string $name) use ($requests, &$count) {
+    $pool->withResponseHandler(function (Response $response, string $name) use ($requests, &$count) {
         expect($response->getRequest())->toBe($requests[$name]);
 
         $count++;
@@ -100,7 +100,7 @@ it('accepts a generator for requests', function () {
 
     $pool = $connector->pool($generatorCallback());
     $pool->setConcurrency(5);
-    $pool->withResponseHandler(function (SaloonResponse $response, int $index) use ($requests, &$count) {
+    $pool->withResponseHandler(function (Response $response, int $index) use ($requests, &$count) {
         expect($response->getRequest())->toBe($requests[$index]);
 
         $count++;
@@ -138,7 +138,7 @@ it('accepts a generator for aliased requests', function () {
 
     $pool = $connector->pool($generatorCallback());
     $pool->setConcurrency(5);
-    $pool->withResponseHandler(function (SaloonResponse $response, string $name) use ($requests, &$count) {
+    $pool->withResponseHandler(function (Response $response, string $name) use ($requests, &$count) {
         expect($response->getRequest())->toBe($requests[$name]);
 
         $count++;
@@ -180,7 +180,7 @@ it('accepts a callback that returns an array for requests', function () {
 
     $pool->setConcurrency(5);
 
-    $pool->withResponseHandler(function (SaloonResponse $response, int $index) use ($requests, &$count) {
+    $pool->withResponseHandler(function (Response $response, int $index) use ($requests, &$count) {
         expect($response->getRequest())->toBe($requests[$index]);
 
         $count++;
@@ -221,7 +221,7 @@ it('accepts a callback that returns an array for aliased requests', function () 
 
     $pool = $connector->pool($arrayCallback);
     $pool->setConcurrency(5);
-    $pool->withResponseHandler(function (SaloonResponse $response, string $name) use ($requests, &$count) {
+    $pool->withResponseHandler(function (Response $response, string $name) use ($requests, &$count) {
         expect($response->getRequest())->toBe($requests[$name]);
 
         $count++;
@@ -260,7 +260,7 @@ it('accepts a callback that returns a generator for requests', function () {
 
     $pool = $connector->pool($generatorCallback);
     $pool->setConcurrency(5);
-    $pool->withResponseHandler(function (SaloonResponse $response, int $index) use ($requests, &$count) {
+    $pool->withResponseHandler(function (Response $response, int $index) use ($requests, &$count) {
         expect($response->getRequest())->toBe($requests[$index]);
 
         $count++;
@@ -298,7 +298,7 @@ it('accepts a callback that returns a generator for aliased requests', function 
 
     $pool = $connector->pool($generatorCallback);
     $pool->setConcurrency(5);
-    $pool->withResponseHandler(function (SaloonResponse $response, string $name) use ($requests, &$count) {
+    $pool->withResponseHandler(function (Response $response, string $name) use ($requests, &$count) {
         expect($response->getRequest())->toBe($requests[$name]);
 
         $count++;

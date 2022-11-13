@@ -3,7 +3,7 @@
 namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Http\Request;
-use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Responses\Response;
 use Saloon\Tests\Fixtures\Connectors\InterceptedConnector;
 
 class InterceptedConnectorErrorRequest extends Request
@@ -34,7 +34,7 @@ class InterceptedConnectorErrorRequest extends Request
 
     public function boot(Request $request): void
     {
-        $this->addResponseInterceptor(function (Request $request, SaloonResponse $response) {
+        $this->addResponseInterceptor(function (Request $request, Response $response) {
             $response->throw();
 
             return $response;

@@ -12,7 +12,7 @@ use Saloon\Repositories\ArrayStore;
 use Saloon\Http\PendingRequest;
 use Saloon\Exceptions\SaloonRequestException;
 
-interface SaloonResponse
+interface Response
 {
     /**
      * Get the body of the response as string.
@@ -248,15 +248,15 @@ interface SaloonResponse
      * Set the isCached property
      *
      * @param bool $isCached
-     * @return SaloonResponse
+     * @return Response
      */
-    public function setIsCached(bool $isCached): SaloonResponse;
+    public function setIsCached(bool $isCached): Response;
 
     /**
      * Set the isMocked property
      *
      * @param bool $isMocked
-     * @return SaloonResponse
+     * @return Response
      */
-    public function setIsMocked(bool $isMocked): SaloonResponse;
+    public function setIsMocked(bool $isMocked): Response;
 }

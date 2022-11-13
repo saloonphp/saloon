@@ -5,7 +5,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Contracts\SaloonResponse;
+use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\SaloonRequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
@@ -22,7 +22,7 @@ test('an asynchronous request will return a saloon response on a successful requ
 
     $response = $promise->wait();
 
-    expect($response)->toBeInstanceOf(SaloonResponse::class);
+    expect($response)->toBeInstanceOf(Response::class);
     expect($response->json())->toEqual(['name' => 'Sam']);
     expect($response->status())->toEqual(200);
 });
@@ -46,7 +46,7 @@ test('an asynchronous request will throw a saloon exception on an unsuccessful r
 
         $response = $exception->getResponse();
 
-        expect($response)->toBeInstanceOf(SaloonResponse::class);
+        expect($response)->toBeInstanceOf(Response::class);
         expect($response->json())->toEqual(['error' => 'Server Error']);
         expect($response->status())->toEqual(500);
         expect($response->getGuzzleException())->toBeInstanceOf(RequestException::class);
@@ -69,7 +69,7 @@ test('an asynchronous request will return a connect exception if a connection er
     }
 });
 
-test('if you chain an asynchronous request you can have a SaloonResponse', function () {
+test('if you chain an asynchronous request you can have a Response', function () {
     $mockClient = new MockClient([
         MockResponse::make(200, ['name' => 'Sam']),
     ]);
@@ -78,8 +78,8 @@ test('if you chain an asynchronous request you can have a SaloonResponse', funct
     $promise = $request->sendAsync($mockClient);
 
     $promise->then(
-        function (SaloonResponse $response) {
-            expect($response)->toBeInstanceOf(SaloonResponse::class);
+        function (Response $response) {
+            expect($response)->toBeInstanceOf(Response::class);
         }
     );
 
@@ -99,7 +99,7 @@ test('if you chain an erroneous asynchronous request the error can be caught in 
         function (SaloonRequestException $exception) {
             $response = $exception->getResponse();
 
-            expect($response)->toBeInstanceOf(SaloonResponse::class);
+            expect($response)->toBeInstanceOf(Response::class);
             expect($response->status())->toEqual(500);
             expect($response->getGuzzleException())->toBeInstanceOf(RequestException::class);
         }

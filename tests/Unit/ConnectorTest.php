@@ -4,7 +4,7 @@ use GuzzleHttp\Promise\Promise;
 use Saloon\Http\Request;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Responses\Response;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Connectors\RequestSelectionConnector;
@@ -45,7 +45,7 @@ test('you can send a request through the connector', function () {
     $connector = new TestConnector();
     $response = $connector->send(new UserRequest, $mockClient);
 
-    expect($response)->toBeInstanceOf(SaloonResponse::class);
+    expect($response)->toBeInstanceOf(Response::class);
     expect($response->json())->toEqual(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']);
 });
 
@@ -61,6 +61,6 @@ test('you can send an asynchronous request through the connector', function () {
 
     $response = $promise->wait();
 
-    expect($response)->toBeInstanceOf(SaloonResponse::class);
+    expect($response)->toBeInstanceOf(Response::class);
     expect($response->json())->toEqual(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']);
 });

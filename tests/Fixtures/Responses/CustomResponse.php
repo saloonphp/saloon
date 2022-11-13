@@ -2,8 +2,8 @@
 
 namespace Saloon\Tests\Fixtures\Responses;
 
-use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Responses\Response;
 
-class CustomResponse extends SaloonResponse
+class CustomResponse extends Response
 {
 }

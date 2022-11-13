@@ -57,10 +57,10 @@ interface MockClient
     /**
      * Record a response.
      *
-     * @param SaloonResponse $response
+     * @param Response $response
      * @return void
      */
-    public function recordResponse(SaloonResponse $response): void;
+    public function recordResponse(Response $response): void;
 
     /**
      * Get all the recorded responses
@@ -79,9 +79,9 @@ interface MockClient
     /**
      * Get the last response that the mock manager sent.
      *
-     * @return SaloonResponse|null
+     * @return Response|null
      */
-    public function getLastResponse(): ?SaloonResponse;
+    public function getLastResponse(): ?Response;
 
     /**
      * Assert that a given request was sent.
@@ -130,16 +130,16 @@ interface MockClient
      * Assert a given request was sent.
      *
      * @param string $request
-     * @return SaloonResponse|null
+     * @return Response|null
      */
-    public function findResponseByRequest(string $request): ?SaloonResponse;
+    public function findResponseByRequest(string $request): ?Response;
 
     /**
      * Find a request that matches a given url pattern
      *
      * @param string $url
-     * @return SaloonResponse|null
+     * @return Response|null
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function findResponseByRequestUrl(string $url): ?SaloonResponse;
+    public function findResponseByRequestUrl(string $url): ?Response;
 }

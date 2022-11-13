@@ -2,7 +2,7 @@
 
 namespace Saloon\Helpers;
 
-use Saloon\Contracts\SaloonResponse;
+use Saloon\Contracts\Response;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
@@ -65,10 +65,10 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      */
     public function onResponse(callable $closure): static
     {
-        $this->responsePipeline = $this->responsePipeline->pipe(function (SaloonResponse $response) use ($closure) {
+        $this->responsePipeline = $this->responsePipeline->pipe(function (Response $response) use ($closure) {
             $result = $closure($response);
 
-            return $result instanceof SaloonResponse ? $result : $response;
+            return $result instanceof Response ? $result : $response;
         });
 
         return $this;
@@ -90,10 +90,10 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Process the response pipeline.
      *
-     * @param SaloonResponse $response
-     * @return SaloonResponse
+     * @param Response $response
+     * @return Response
      */
-    public function executeResponsePipeline(SaloonResponse $response): SaloonResponse
+    public function executeResponsePipeline(Response $response): Response
     {
         $this->responsePipeline->process($response);
 

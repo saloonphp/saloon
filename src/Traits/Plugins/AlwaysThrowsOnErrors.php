@@ -2,7 +2,7 @@
 
 namespace Saloon\Traits\Plugins;
 
-use Saloon\Contracts\SaloonResponse;
+use Saloon\Contracts\Response;
 use Saloon\Http\PendingRequest;
 
 trait AlwaysThrowsOnErrors
@@ -15,6 +15,6 @@ trait AlwaysThrowsOnErrors
      */
     public static function bootAlwaysThrowsOnErrors(PendingRequest $pendingRequest): void
     {
-        $pendingRequest->middleware()->onResponse(fn (SaloonResponse $response) => $response->throw());
+        $pendingRequest->middleware()->onResponse(fn (Response $response) => $response->throw());
     }
 }

@@ -3,26 +3,26 @@
 namespace Saloon\Exceptions;
 
 use Throwable;
-use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Responses\Response;
 
 class SaloonRequestException extends SaloonException
 {
     /**
      * The Saloon Response
      *
-     * @var SaloonResponse
+     * @var Response
      */
-    protected SaloonResponse $saloonResponse;
+    protected Response $saloonResponse;
 
     /**
      * Create the SaloonRequestException
      *
-     * @param SaloonResponse $response
+     * @param Response $response
      * @param $message
      * @param $code
      * @param Throwable|null $previous
      */
-    public function __construct(SaloonResponse $response, $message = '', $code = 0, Throwable $previous = null)
+    public function __construct(Response $response, $message = '', $code = 0, Throwable $previous = null)
     {
         $this->saloonResponse = $response;
 
@@ -32,9 +32,9 @@ class SaloonRequestException extends SaloonException
     /**
      * Get the Saloon Response Class.
      *
-     * @return SaloonResponse
+     * @return Response
      */
-    public function getResponse(): SaloonResponse
+    public function getResponse(): Response
     {
         return $this->saloonResponse;
     }

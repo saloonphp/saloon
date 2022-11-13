@@ -34,10 +34,10 @@ interface MiddlewarePipeline
     /**
      * Process the response pipeline.
      *
-     * @param SaloonResponse $response
-     * @return SaloonResponse
+     * @param Response $response
+     * @return Response
      */
-    public function executeResponsePipeline(SaloonResponse $response): SaloonResponse;
+    public function executeResponsePipeline(Response $response): Response;
 
     /**
      * Merge in another middleware pipeline.

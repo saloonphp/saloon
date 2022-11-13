@@ -4,7 +4,7 @@ namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Data\User;
-use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Responses\Response;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class DTORequest extends Request
@@ -41,10 +41,10 @@ class DTORequest extends Request
     /**
      * Cast to a User.
      *
-     * @param SaloonResponse $response
+     * @param Response $response
      * @return object
      */
-    public function createDtoFromResponse(SaloonResponse $response): object
+    public function createDtoFromResponse(Response $response): object
     {
         return User::fromSaloon($response);
     }

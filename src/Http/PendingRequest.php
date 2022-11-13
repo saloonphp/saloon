@@ -10,7 +10,7 @@ use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\WithBody;
-use Saloon\Contracts\SaloonResponse;
+use Saloon\Contracts\Response;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Http\Middleware\AuthenticateRequest;
@@ -280,10 +280,10 @@ class PendingRequest
     /**
      * Execute the response pipeline.
      *
-     * @param SaloonResponse $response
-     * @return SaloonResponse
+     * @param Response $response
+     * @return Response
      */
-    public function executeResponsePipeline(SaloonResponse $response): SaloonResponse
+    public function executeResponsePipeline(Response $response): Response
     {
         $this->middleware()->executeResponsePipeline($response);
 

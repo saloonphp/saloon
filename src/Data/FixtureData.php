@@ -4,7 +4,7 @@ namespace Saloon\Data;
 
 use JsonSerializable;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Contracts\SaloonResponse;
+use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockResponse;
 
 class FixtureData implements JsonSerializable
@@ -58,12 +58,12 @@ class FixtureData implements JsonSerializable
     }
 
     /**
-     * Create an instance from a SaloonResponse
+     * Create an instance from a Response
      *
-     * @param SaloonResponse $response
+     * @param Response $response
      * @return static
      */
-    public static function fromResponse(SaloonResponse $response): static
+    public static function fromResponse(Response $response): static
     {
         return new static(
             statusCode: $response->status(),

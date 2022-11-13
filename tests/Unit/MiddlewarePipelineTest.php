@@ -2,7 +2,7 @@
 
 use Saloon\Http\PendingRequest;
 use Saloon\Helpers\MiddlewarePipeline;
-use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Responses\Response;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 
@@ -65,7 +65,7 @@ test('you can merge a middleware pipeline together', closure: function () {
         ->onRequest(function (PendingRequest $request) {
             $request->headers()->add('X-Pipe-One', 'Howdy');
         })
-        ->onResponse(function (SaloonResponse $response) {
+        ->onResponse(function (Response $response) {
             return $response->throw();
         });
 

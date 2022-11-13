@@ -4,7 +4,7 @@ namespace Saloon\Contracts;
 
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Http\PendingRequest;
-use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Responses\Response;
 
 interface Sender
 {
@@ -20,7 +20,7 @@ interface Sender
      *
      * @param PendingRequest $pendingRequest
      * @param bool $asynchronous
-     * @return SaloonResponse|PromiseInterface
+     * @return Response|PromiseInterface
      */
-    public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): SaloonResponse|PromiseInterface;
+    public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): Response|PromiseInterface;
 }

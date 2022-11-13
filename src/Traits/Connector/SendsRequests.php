@@ -7,7 +7,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Http\Request;
 use Saloon\Actions\SendRequest;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Contracts\SaloonResponse;
+use Saloon\Contracts\Response;
 use Saloon\Exceptions\SaloonException;
 
 trait SendsRequests
@@ -18,11 +18,11 @@ trait SendsRequests
      * @param Request $request
      * @param MockClient|null $mockClient
      * @param bool $asynchronous
-     * @return SaloonResponse|PromiseInterface
+     * @return Response|PromiseInterface
      * @throws SaloonException
      * @throws ReflectionException
      */
-    public function send(Request $request, MockClient $mockClient = null, bool $asynchronous = false): SaloonResponse|PromiseInterface
+    public function send(Request $request, MockClient $mockClient = null, bool $asynchronous = false): Response|PromiseInterface
     {
         $request->setConnector($this);
 
