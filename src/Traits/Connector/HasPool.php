@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits\Connector;
+namespace Saloon\Traits\Connector;
 
-use Sammyjo20\Saloon\Http\Pool;
-use Sammyjo20\Saloon\Exceptions\SaloonException;
-use Sammyjo20\Saloon\Exceptions\InvalidPoolItemException;
+use Saloon\Http\Pool;
+use Saloon\Exceptions\SaloonException;
+use Saloon\Exceptions\InvalidPoolItemException;
 
 trait HasPool
 {

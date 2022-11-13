@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\Middleware;
+namespace Saloon\Http\Middleware;
 
-use Sammyjo20\Saloon\Data\FixtureData;
-use Sammyjo20\Saloon\Http\Faking\Fixture;
-use Sammyjo20\Saloon\Contracts\SaloonResponse;
-use Sammyjo20\Saloon\Contracts\ResponseMiddleware;
+use Saloon\Data\FixtureData;
+use Saloon\Http\Faking\Fixture;
+use Saloon\Contracts\SaloonResponse;
+use Saloon\Contracts\ResponseMiddleware;
 
 class RecordFixture implements ResponseMiddleware
 {

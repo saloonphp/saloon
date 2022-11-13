@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Managers\RequestManager;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\PostRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\PostJsonRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\OverwrittenPostRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\PostConnectorDataBlankRequest;
+use Saloon\Managers\RequestManager;
+use Saloon\Tests\Fixtures\Requests\PostRequest;
+use Saloon\Tests\Fixtures\Requests\PostJsonRequest;
+use Saloon\Tests\Fixtures\Requests\OverwrittenPostRequest;
+use Saloon\Tests\Fixtures\Requests\PostConnectorDataBlankRequest;
 
 test('a request with the hasJsonBody plugin sends the json data', function () {
     $request = new PostJsonRequest();

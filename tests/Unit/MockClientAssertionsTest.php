@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\Faking\MockClient;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Http\SaloonRequest;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 
 test('assertSent works with a request', function () {
     $mockClient = new MockClient([

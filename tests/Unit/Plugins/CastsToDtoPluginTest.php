@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Http\Faking\MockClient;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Data\User;
-use Sammyjo20\Saloon\Tests\Fixtures\Data\ApiResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\DTORequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\DtoConnector;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Tests\Fixtures\Data\User;
+use Saloon\Tests\Fixtures\Data\ApiResponse;
+use Saloon\Tests\Fixtures\Requests\DTORequest;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Connectors\DtoConnector;
 
 test('it can cast to a dto that is defined on the request', function () {
     $mockClient = new MockClient([

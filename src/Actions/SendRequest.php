@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Actions;
+namespace Saloon\Actions;
 
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use Sammyjo20\Saloon\Contracts\SaloonResponse;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\Responses\SimulatedResponse;
+use Saloon\Contracts\SaloonResponse;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\Responses\SimulatedResponse;
 
 class SendRequest
 {

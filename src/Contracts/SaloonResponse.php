@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Contracts;
+namespace Saloon\Contracts;
 
 use Exception;
 use SimpleXMLElement;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Repositories\ArrayStore;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
+use Saloon\Http\SaloonRequest;
+use Saloon\Repositories\ArrayStore;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Exceptions\SaloonRequestException;
 
 interface SaloonResponse
 {

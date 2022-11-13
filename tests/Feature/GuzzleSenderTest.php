@@ -2,7 +2,7 @@
 
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\RequestInterface;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('the guzzle sender will send to the right url using the correct method', function () {
     $request = new UserRequest;

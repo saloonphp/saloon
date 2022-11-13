@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Contracts;
+namespace Saloon\Contracts;
 
-use Sammyjo20\Saloon\Helpers\Pipeline;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Saloon\Helpers\Pipeline;
+use Saloon\Http\PendingSaloonRequest;
 
 interface MiddlewarePipeline
 {

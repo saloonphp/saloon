@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Data;
+namespace Saloon\Data;
 
 use JsonSerializable;
 use Psr\Http\Message\ResponseInterface;
-use Sammyjo20\Saloon\Contracts\SaloonResponse;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
+use Saloon\Contracts\SaloonResponse;
+use Saloon\Http\Faking\MockResponse;
 
 class FixtureData implements JsonSerializable
 {

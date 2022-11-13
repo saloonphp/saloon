@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Http\Responses\PsrResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Http\Responses\PsrResponse;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 
 test('a request can be made successfully', function () {
     $request = new UserRequest();

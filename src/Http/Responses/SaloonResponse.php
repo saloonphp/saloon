@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\Responses;
+namespace Saloon\Http\Responses;
 
 use Exception;
 use SimpleXMLElement;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
-use Sammyjo20\Saloon\Http\SaloonRequest;
+use Saloon\Http\SaloonRequest;
 use Symfony\Component\DomCrawler\Crawler;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
-use Sammyjo20\Saloon\Contracts\SaloonResponse as SaloonResponseContract;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Exceptions\SaloonRequestException;
+use Saloon\Contracts\SaloonResponse as SaloonResponseContract;
 
 abstract class SaloonResponse implements SaloonResponseContract
 {

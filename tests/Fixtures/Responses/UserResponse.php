@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Responses;
+namespace Saloon\Tests\Fixtures\Responses;
 
-use Sammyjo20\Saloon\Http\Responses\PsrResponse;
+use Saloon\Http\Responses\PsrResponse;
 
 class UserResponse extends PsrResponse
 {

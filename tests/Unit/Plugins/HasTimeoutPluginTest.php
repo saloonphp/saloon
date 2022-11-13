@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
 use Psr\Http\Message\RequestInterface;
-use Sammyjo20\Saloon\Http\Faking\MockClient;
-use Sammyjo20\Saloon\Managers\RequestManager;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\TimeoutRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TimeoutConnector;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Managers\RequestManager;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Requests\TimeoutRequest;
+use Saloon\Tests\Fixtures\Connectors\TimeoutConnector;
 
 test('a request is given a default timeout and connect timeout', function () {
     $mockClient = new MockClient([new MockResponse()]);

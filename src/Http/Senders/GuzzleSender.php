@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\Senders;
+namespace Saloon\Http\Senders;
 
 use Exception;
 use GuzzleHttp\Utils;
@@ -9,19 +9,19 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Client as GuzzleClient;
-use Sammyjo20\Saloon\Contracts\Sender;
+use Saloon\Contracts\Sender;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\BadResponseException;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\Responses\PsrResponse;
-use Sammyjo20\Saloon\Exceptions\FatalRequestException;
-use Sammyjo20\Saloon\Repositories\Body\FormBodyRepository;
-use Sammyjo20\Saloon\Repositories\Body\JsonBodyRepository;
-use Sammyjo20\Saloon\Repositories\Body\StringBodyRepository;
-use Sammyjo20\Saloon\Repositories\Body\MultipartBodyRepository;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\Responses\PsrResponse;
+use Saloon\Exceptions\FatalRequestException;
+use Saloon\Repositories\Body\FormBodyRepository;
+use Saloon\Repositories\Body\JsonBodyRepository;
+use Saloon\Repositories\Body\StringBodyRepository;
+use Saloon\Repositories\Body\MultipartBodyRepository;
 
 class GuzzleSender implements Sender
 {

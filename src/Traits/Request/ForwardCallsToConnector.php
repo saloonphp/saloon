@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits\Request;
+namespace Saloon\Traits\Request;
 
-use Sammyjo20\Saloon\Exceptions\SaloonMethodNotFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Exceptions\SaloonMethodNotFoundException;
+use Saloon\Exceptions\SaloonInvalidConnectorException;
 
 trait ForwardCallsToConnector
 {

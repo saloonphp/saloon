@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits\Plugins;
+namespace Saloon\Traits\Plugins;
 
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingSaloonRequest;
 
 trait WithDebugData
 {

@@ -1,19 +1,19 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\Faking;
+namespace Saloon\Http\Faking;
 
 use ReflectionClass;
-use Sammyjo20\Saloon\Helpers\URLHelper;
+use Saloon\Helpers\URLHelper;
 use PHPUnit\Framework\Assert as PHPUnit;
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Contracts\SaloonResponse;
-use Sammyjo20\Saloon\Helpers\ReflectionHelper;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Contracts\MockClient as MockClientContract;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
-use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;
+use Saloon\Http\SaloonRequest;
+use Saloon\Http\SaloonConnector;
+use Saloon\Contracts\SaloonResponse;
+use Saloon\Helpers\ReflectionHelper;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Contracts\MockClient as MockClientContract;
+use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Exceptions\SaloonNoMockResponseFoundException;
+use Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;
 
 class MockClient implements MockClientContract
 {

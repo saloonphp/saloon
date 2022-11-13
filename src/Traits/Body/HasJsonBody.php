@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits\Body;
+namespace Saloon\Traits\Body;
 
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Repositories\Body\JsonBodyRepository;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Repositories\Body\JsonBodyRepository;
 
 trait HasJsonBody
 {

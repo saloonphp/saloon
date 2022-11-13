@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\Responses;
+namespace Saloon\Http\Responses;
 
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Sammyjo20\Saloon\Repositories\ArrayStore;
+use Saloon\Repositories\ArrayStore;
 
 class PsrResponse extends SaloonResponse
 {

@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
+namespace Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Contracts\Body\WithBody;
-use Sammyjo20\Saloon\Traits\Body\HasJsonBody;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\PostJsonConnector;
+use Saloon\Http\SaloonRequest;
+use Saloon\Contracts\Body\WithBody;
+use Saloon\Traits\Body\HasJsonBody;
+use Saloon\Tests\Fixtures\Connectors\PostJsonConnector;
 
 class PostRequest extends SaloonRequest implements WithBody
 {

@@ -42,12 +42,12 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "Sammyjo20\\Saloon\\": "src/"
+            "Saloon\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Sammyjo20\\Saloon\\Tests\\": "tests/"
+            "Saloon\\Tests\\": "tests/"
         }
     },
     "config": {

@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Collections;
+namespace Saloon\Tests\Fixtures\Collections;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\Groups\RequestGroup;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Http\SaloonRequest;
+use Saloon\Http\Groups\RequestGroup;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 class UserGroup extends RequestGroup
 {

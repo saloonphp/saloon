@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Repositories;
+namespace Saloon\Repositories;
 
-use Sammyjo20\Saloon\Contracts\ArrayStore as ArrayStoreContract;
+use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
 class ArrayStore implements ArrayStoreContract
 {

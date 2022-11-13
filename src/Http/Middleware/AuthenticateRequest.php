@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\Middleware;
+namespace Saloon\Http\Middleware;
 
-use Sammyjo20\Saloon\Contracts\Authenticator;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Contracts\RequestMiddleware;
+use Saloon\Contracts\Authenticator;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Contracts\RequestMiddleware;
 
 class AuthenticateRequest implements RequestMiddleware
 {

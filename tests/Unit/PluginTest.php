@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Managers\RequestManager;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\SubRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequestWithBootPlugin;
+use Saloon\Managers\RequestManager;
+use Saloon\Tests\Fixtures\Requests\SubRequest;
+use Saloon\Tests\Fixtures\Requests\UserRequestWithBootPlugin;
 
 test('a plugin boot method has access to the request', function () {
     $requestManager = new RequestManager(new UserRequestWithBootPlugin(1, 2));

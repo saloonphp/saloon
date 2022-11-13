@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
+namespace Saloon\Tests\Fixtures\Connectors;
 
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Responses\CustomResponse;
+use Saloon\Http\SaloonConnector;
+use Saloon\Tests\Fixtures\Responses\CustomResponse;
 
 class CustomResponseConnector extends SaloonConnector
 {

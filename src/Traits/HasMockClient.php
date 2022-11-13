@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits;
+namespace Saloon\Traits;
 
-use Sammyjo20\Saloon\Contracts\MockClient;
+use Saloon\Contracts\MockClient;
 
 trait HasMockClient
 {

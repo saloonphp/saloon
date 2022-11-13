@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Data;
+namespace Saloon\Data;
 
-use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
+use Saloon\Helpers\MiddlewarePipeline;
 
 class RequestProperties
 {

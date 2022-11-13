@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Http\Faking\MockClient;
-use Sammyjo20\Saloon\Contracts\SaloonResponse;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Exceptions\InvalidPoolItemException;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Http\SaloonConnector;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Contracts\SaloonResponse;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Exceptions\InvalidPoolItemException;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 it('accepts an array for requests', function () {
     $mockClient = new MockClient([

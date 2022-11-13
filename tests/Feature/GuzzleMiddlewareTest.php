@@ -3,8 +3,8 @@
 use GuzzleHttp\Middleware;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Sammyjo20\Saloon\Http\Senders\GuzzleSender;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Http\Senders\GuzzleSender;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('you can add middleware to the guzzle sender', function () {
     $request = new UserRequest();

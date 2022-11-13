@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits\Request;
+namespace Saloon\Traits\Request;
 
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Exceptions\SaloonInvalidConnectorException;
 
 trait BuildsUrls
 {

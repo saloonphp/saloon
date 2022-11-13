@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Http\Faking\MockClient;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('saloon request exception contains the guzzle exception', function () {
     $mockClient = new MockClient([

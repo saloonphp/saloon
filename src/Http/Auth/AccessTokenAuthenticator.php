@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\Auth;
+namespace Saloon\Http\Auth;
 
 use Carbon\CarbonInterface;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Contracts\OAuthAuthenticator;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Contracts\OAuthAuthenticator;
 
 class AccessTokenAuthenticator implements OAuthAuthenticator
 {

@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits\Connector;
+namespace Saloon\Traits\Connector;
 
-use Sammyjo20\Saloon\Helpers\RequestHelper;
-use Sammyjo20\Saloon\Helpers\ReflectionHelper;
-use Sammyjo20\Saloon\Http\Groups\RequestGroup;
-use Sammyjo20\Saloon\Helpers\ProxyRequestNameHelper;
-use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
-use Sammyjo20\Saloon\Http\Groups\AnonymousRequestGroup;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
-use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
+use Saloon\Helpers\RequestHelper;
+use Saloon\Helpers\ReflectionHelper;
+use Saloon\Http\Groups\RequestGroup;
+use Saloon\Helpers\ProxyRequestNameHelper;
+use Saloon\Exceptions\ClassNotFoundException;
+use Saloon\Http\Groups\AnonymousRequestGroup;
+use Saloon\Exceptions\SaloonInvalidRequestException;
+use Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
 
 trait ProxiesRequests
 {

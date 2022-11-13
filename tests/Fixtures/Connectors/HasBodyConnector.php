@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
+namespace Saloon\Tests\Fixtures\Connectors;
 
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Traits\Plugins\HasBody;
-use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\Http\SaloonConnector;
+use Saloon\Traits\Plugins\HasBody;
+use Saloon\Traits\Plugins\AcceptsJson;
 
 class HasBodyConnector extends SaloonConnector
 {

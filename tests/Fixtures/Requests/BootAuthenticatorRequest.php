@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
+namespace Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Contracts\Body\WithBody;
-use Sammyjo20\Saloon\Traits\Body\HasJsonBody;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Http\SaloonRequest;
+use Saloon\Contracts\Body\WithBody;
+use Saloon\Traits\Body\HasJsonBody;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class BootAuthenticatorRequest extends SaloonRequest implements WithBody
 {

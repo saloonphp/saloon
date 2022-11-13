@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserWithTestHandlerRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserWithTestHandlerConnectorRequest;
+use Saloon\Tests\Fixtures\Requests\UserWithTestHandlerRequest;
+use Saloon\Tests\Fixtures\Requests\UserWithTestHandlerConnectorRequest;
 
 test('you can define a handler within a plugin', function () {
     $request = new UserWithTestHandlerRequest();

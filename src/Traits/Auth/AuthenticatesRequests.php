@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits\Auth;
+namespace Saloon\Traits\Auth;
 
-use Sammyjo20\Saloon\Contracts\Authenticator;
-use Sammyjo20\Saloon\Http\Auth\BasicAuthenticator;
-use Sammyjo20\Saloon\Http\Auth\QueryAuthenticator;
-use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
-use Sammyjo20\Saloon\Http\Auth\DigestAuthenticator;
+use Saloon\Contracts\Authenticator;
+use Saloon\Http\Auth\BasicAuthenticator;
+use Saloon\Http\Auth\QueryAuthenticator;
+use Saloon\Http\Auth\TokenAuthenticator;
+use Saloon\Http\Auth\DigestAuthenticator;
 
 trait AuthenticatesRequests
 {

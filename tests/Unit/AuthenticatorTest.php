@@ -1,21 +1,21 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Http\Faking\MockClient;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Exceptions\MissingAuthenticatorException;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\RequiresAuthRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Authenticators\PizzaAuthenticator;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\BootAuthenticatorRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\RequiresBasicAuthRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\RequiresTokenAuthRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\RequiresDigestAuthRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\AuthenticatorPluginRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\DefaultAuthenticatorRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\DefaultAuthenticatorConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\DefaultPizzaAuthenticatorRequest;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\Auth\TokenAuthenticator;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Exceptions\MissingAuthenticatorException;
+use Saloon\Tests\Fixtures\Requests\RequiresAuthRequest;
+use Saloon\Tests\Fixtures\Authenticators\PizzaAuthenticator;
+use Saloon\Tests\Fixtures\Requests\BootAuthenticatorRequest;
+use Saloon\Tests\Fixtures\Requests\RequiresBasicAuthRequest;
+use Saloon\Tests\Fixtures\Requests\RequiresTokenAuthRequest;
+use Saloon\Tests\Fixtures\Requests\RequiresDigestAuthRequest;
+use Saloon\Tests\Fixtures\Requests\AuthenticatorPluginRequest;
+use Saloon\Tests\Fixtures\Requests\DefaultAuthenticatorRequest;
+use Saloon\Tests\Fixtures\Connectors\DefaultAuthenticatorConnector;
+use Saloon\Tests\Fixtures\Requests\DefaultPizzaAuthenticatorRequest;
 
 test('you can add an authenticator to a request and it will be applied', function () {
     $request = new DefaultAuthenticatorRequest();

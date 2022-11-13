@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Helpers\Pipeline;
+use Saloon\Helpers\Pipeline;
 
 test('a pipeline can be executed', function () {
     $pipeline = new Pipeline();

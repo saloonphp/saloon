@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
+namespace Saloon\Tests\Fixtures\Connectors;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\Http\SaloonRequest;
+use Saloon\Http\SaloonConnector;
+use Saloon\Traits\Plugins\AcceptsJson;
 
 class WithBootConnector extends SaloonConnector
 {

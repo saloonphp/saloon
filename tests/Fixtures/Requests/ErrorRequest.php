@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
+namespace Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Enums\Method;
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Enums\Method;
+use Saloon\Http\SaloonRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class ErrorRequest extends SaloonRequest
 {

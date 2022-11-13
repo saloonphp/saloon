@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Collections;
+namespace Saloon\Tests\Fixtures\Collections;
 
-use Sammyjo20\Saloon\Http\Groups\RequestGroup;
+use Saloon\Http\Groups\RequestGroup;
 
 class GuessedGroup extends RequestGroup
 {

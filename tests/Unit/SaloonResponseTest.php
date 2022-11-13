@@ -3,10 +3,10 @@
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
 use Symfony\Component\DomCrawler\Crawler;
-use Sammyjo20\Saloon\Http\Faking\MockClient;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Exceptions\SaloonRequestException;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('you can get the original request options', function () {
     $mockClient = new MockClient([

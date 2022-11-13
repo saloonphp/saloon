@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\Faking;
+namespace Saloon\Http\Faking;
 
-use Sammyjo20\Saloon\Helpers\Storage;
-use Sammyjo20\Saloon\Data\FixtureData;
-use Sammyjo20\Saloon\Helpers\MockConfig;
-use Sammyjo20\Saloon\Exceptions\FixtureMissingException;
-use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
+use Saloon\Helpers\Storage;
+use Saloon\Data\FixtureData;
+use Saloon\Helpers\MockConfig;
+use Saloon\Exceptions\FixtureMissingException;
+use Saloon\Exceptions\DirectoryNotFoundException;
 
 class Fixture
 {

@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 use Carbon\CarbonImmutable;
-use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
+use Saloon\Http\Auth\AccessTokenAuthenticator;
 
 it('can be serialized and unserialized', function () {
     $accessToken = 'access';
