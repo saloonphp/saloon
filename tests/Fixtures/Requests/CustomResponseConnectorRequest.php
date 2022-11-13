@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Plugins\HasTestHandler;
 use Saloon\Tests\Fixtures\Connectors\CustomResponseConnector;
 
-class CustomResponseConnectorRequest extends SaloonRequest
+class CustomResponseConnectorRequest extends Request
 {
     use HasTestHandler;
 

@@ -3,7 +3,7 @@
 namespace Saloon\Http\Auth;
 
 use Carbon\CarbonInterface;
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\OAuthAuthenticator;
 
 class AccessTokenAuthenticator implements OAuthAuthenticator
@@ -24,10 +24,10 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
     /**
      * Apply the authentication to the request.
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return void
      */
-    public function set(PendingSaloonRequest $pendingRequest): void
+    public function set(PendingRequest $pendingRequest): void
     {
         $pendingRequest->headers()->add('Authorization', 'Bearer ' . $this->getAccessToken());
     }

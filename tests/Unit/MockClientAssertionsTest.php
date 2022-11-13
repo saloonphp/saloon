@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Responses\SaloonResponse;
@@ -27,7 +27,7 @@ test('assertSent works with a closure', function () {
     $originalResponse = $originalRequest->send($mockClient);
 
     $mockClient->assertSent(function ($request, $response) use ($originalRequest, $originalResponse) {
-        expect($request)->toBeInstanceOf(SaloonRequest::class);
+        expect($request)->toBeInstanceOf(Request::class);
         expect($response)->toBeInstanceOf(SaloonResponse::class);
 
         expect($request)->toBe($originalRequest);
@@ -40,7 +40,7 @@ test('assertSent works with a closure', function () {
     $newResponse = $newRequest->send($mockClient);
 
     $mockClient->assertSent(function ($request, $response) use ($newRequest, $newResponse) {
-        expect($request)->toBeInstanceOf(SaloonRequest::class);
+        expect($request)->toBeInstanceOf(Request::class);
         expect($response)->toBeInstanceOf(SaloonResponse::class);
 
         expect($request)->toBe($newRequest);

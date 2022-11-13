@@ -2,7 +2,7 @@
 
 namespace Saloon\Traits\Body;
 
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Repositories\Body\JsonBodyRepository;
 
 trait HasJsonBody
@@ -17,10 +17,10 @@ trait HasJsonBody
     /**
      * Boot the plugin
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return void
      */
-    public function bootHasJsonBody(PendingSaloonRequest $pendingRequest): void
+    public function bootHasJsonBody(PendingRequest $pendingRequest): void
     {
         $pendingRequest->headers()->add('Content-Type', 'application/json');
     }

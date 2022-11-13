@@ -3,7 +3,7 @@
 namespace Saloon\Http\Middleware;
 
 use Saloon\Contracts\Authenticator;
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\RequestMiddleware;
 
 class AuthenticateRequest implements RequestMiddleware
@@ -11,10 +11,10 @@ class AuthenticateRequest implements RequestMiddleware
     /**
      * Authenticate the pending request
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return void
      */
-    public function __invoke(PendingSaloonRequest $pendingRequest): void
+    public function __invoke(PendingRequest $pendingRequest): void
     {
         $authenticator = $pendingRequest->getAuthenticator();
 

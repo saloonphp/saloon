@@ -6,7 +6,7 @@ use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\SaloonResponse;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Responses\SimulatedResponse;
 
 class SendRequest
@@ -14,10 +14,10 @@ class SendRequest
     /**
      * Constructor
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @param bool $asynchronous
      */
-    public function __construct(protected PendingSaloonRequest $pendingRequest, protected bool $asynchronous = false)
+    public function __construct(protected PendingRequest $pendingRequest, protected bool $asynchronous = false)
     {
         //
     }
@@ -93,7 +93,7 @@ class SendRequest
      */
     protected function createResponse(): SaloonResponse|PromiseInterface
     {
-        // The PendingSaloonRequest will get the sender from the connector
+        // The PendingRequest will get the sender from the connector
         // for example the GuzzleSender, and it will instantiate it if
         // it does not exist already. Then it will run sendRequest.
 

@@ -3,13 +3,13 @@
 namespace Saloon\Tests\Fixtures\Connectors;
 
 use Carbon\CarbonInterface;
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Contracts\OAuthAuthenticator;
 use Saloon\Traits\OAuth2\AuthorizationCodeGrant;
 use Saloon\Tests\Fixtures\Authenticators\CustomOAuthAuthenticator;
 
-class CustomResponseOAuth2Connector extends SaloonConnector
+class CustomResponseOAuth2Connector extends Connector
 {
     use AuthorizationCodeGrant;
 

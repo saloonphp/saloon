@@ -2,7 +2,7 @@
 
 namespace Saloon\Tests\Fixtures\Plugins;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 
 trait WithBootTestPlugin
 {
@@ -11,7 +11,7 @@ trait WithBootTestPlugin
      *
      * @return void
      */
-    public function bootWithBootTestPlugin(SaloonRequest $request)
+    public function bootWithBootTestPlugin(Request $request)
     {
         $this->addHeader('X-Plugin-User-Id', $request->userId);
         $this->addHeader('X-Plugin-Group-Id', $request->groupId);

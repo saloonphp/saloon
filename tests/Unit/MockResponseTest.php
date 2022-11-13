@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Responses\SaloonResponse;
@@ -45,7 +45,7 @@ test('a response can have a method added to it', function () {
     $mockClient = new MockClient([MockResponse::make([], 200)]);
     $request = new UserRequest();
 
-    $request->addResponseInterceptor(function (SaloonRequest $request, SaloonResponse $response) {
+    $request->addResponseInterceptor(function (Request $request, SaloonResponse $response) {
         $response::macro('yeehaw', function () {
             return 'Yee-haw!';
         });

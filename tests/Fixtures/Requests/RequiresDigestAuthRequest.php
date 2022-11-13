@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Traits\Auth\RequiresDigestAuth;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class RequiresDigestAuthRequest extends SaloonRequest
+class RequiresDigestAuthRequest extends Request
 {
     use RequiresDigestAuth;
 

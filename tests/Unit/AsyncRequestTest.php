@@ -44,7 +44,7 @@ test('an asynchronous request will throw a saloon exception on an unsuccessful r
     } catch (Exception $exception) {
         expect($exception)->toBeInstanceOf(SaloonRequestException::class);
 
-        $response = $exception->getSaloonResponse();
+        $response = $exception->getResponse();
 
         expect($response)->toBeInstanceOf(SaloonResponse::class);
         expect($response->json())->toEqual(['error' => 'Server Error']);
@@ -97,7 +97,7 @@ test('if you chain an erroneous asynchronous request the error can be caught in 
     $promise->then(
         null,
         function (SaloonRequestException $exception) {
-            $response = $exception->getSaloonResponse();
+            $response = $exception->getResponse();
 
             expect($response)->toBeInstanceOf(SaloonResponse::class);
             expect($response->status())->toEqual(500);

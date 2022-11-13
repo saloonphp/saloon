@@ -2,9 +2,9 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 
-class InvalidConnectorClassRequest extends SaloonRequest
+class InvalidConnectorClassRequest extends Request
 {
     /**
      * Define the method that the request will use.
@@ -18,7 +18,7 @@ class InvalidConnectorClassRequest extends SaloonRequest
      *
      * @var string
      */
-    protected string $connector = SaloonRequest::class;
+    protected string $connector = Request::class;
 
     /**
      * Define the endpoint for the request.

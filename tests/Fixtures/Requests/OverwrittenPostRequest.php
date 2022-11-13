@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Traits\Plugins\HasJsonBody;
 use Saloon\Tests\Fixtures\Connectors\PostJsonConnector;
 
-class OverwrittenPostRequest extends SaloonRequest
+class OverwrittenPostRequest extends Request
 {
     use HasJsonBody;
 

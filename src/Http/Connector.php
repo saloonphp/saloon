@@ -19,7 +19,7 @@ use Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
 /**
  * @method GuzzleSender sender()
  */
-abstract class SaloonConnector
+abstract class Connector
 {
     use AuthenticatesRequests;
     use HasRequestProperties;
@@ -41,10 +41,10 @@ abstract class SaloonConnector
     /**
      * Prepare a new request by providing it the current instance of the connector.
      *
-     * @param SaloonRequest $request
-     * @return SaloonRequest
+     * @param Request $request
+     * @return Request
      */
-    public function request(SaloonRequest $request): SaloonRequest
+    public function request(Request $request): Request
     {
         return $request->setConnector($this);
     }
@@ -85,7 +85,7 @@ abstract class SaloonConnector
      * Instantiate a new class with the arguments.
      *
      * @param mixed ...$arguments
-     * @return SaloonConnector
+     * @return Connector
      */
     public static function make(...$arguments): static
     {

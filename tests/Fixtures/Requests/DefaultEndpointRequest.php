@@ -2,10 +2,10 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class DefaultEndpointRequest extends SaloonRequest
+class DefaultEndpointRequest extends Request
 {
     /**
      * Define the method that the request will use.

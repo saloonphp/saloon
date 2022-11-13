@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Responses\UserResponse;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class UserRequestWithCustomResponse extends SaloonRequest
+class UserRequestWithCustomResponse extends Request
 {
     /**
      * Define the method that the request will use.

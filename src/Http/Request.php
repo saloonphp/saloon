@@ -18,7 +18,7 @@ use Saloon\Exceptions\SaloonInvalidConnectorException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Exceptions\SaloonInvalidResponseClassException;
 
-abstract class SaloonRequest
+abstract class Request
 {
     use AuthenticatesRequests;
     use HasRequestProperties;
@@ -54,15 +54,15 @@ abstract class SaloonRequest
      * Create a pending request
      *
      * @param MockClient|null $mockClient
-     * @return PendingSaloonRequest
+     * @return PendingRequest
      * @throws PendingSaloonRequestException
      * @throws SaloonInvalidConnectorException
      * @throws SaloonInvalidResponseClassException
      * @throws \ReflectionException
      */
-    public function createPendingRequest(MockClient $mockClient = null): PendingSaloonRequest
+    public function createPendingRequest(MockClient $mockClient = null): PendingRequest
     {
-        return new PendingSaloonRequest($this, $mockClient);
+        return new PendingRequest($this, $mockClient);
     }
 
     /**

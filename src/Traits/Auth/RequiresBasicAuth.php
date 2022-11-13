@@ -2,7 +2,7 @@
 
 namespace Saloon\Traits\Auth;
 
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Exceptions\MissingAuthenticatorException;
 
 trait RequiresBasicAuth
@@ -13,7 +13,7 @@ trait RequiresBasicAuth
      * @throws MissingAuthenticatorException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function bootRequiresBasicAuth(PendingSaloonRequest $pendingRequest): void
+    public function bootRequiresBasicAuth(PendingRequest $pendingRequest): void
     {
         $this->bootRequiresAuth($pendingRequest);
     }
@@ -21,10 +21,10 @@ trait RequiresBasicAuth
     /**
      * Default message.
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return string
      */
-    protected function getRequiresAuthMessage(PendingSaloonRequest $pendingRequest): string
+    protected function getRequiresAuthMessage(PendingRequest $pendingRequest): string
     {
         return sprintf('The "%s" request requires authentication. Please provide authentication using the `withBasicAuth` method or return a default authenticator in your connector/request.', $pendingRequest->getRequest()::class);
     }

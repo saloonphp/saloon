@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Helpers\MiddlewarePipeline;
 use Saloon\Http\Responses\SaloonResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
@@ -10,10 +10,10 @@ test('you can add a request pipe to the middleware', function () {
     $pipeline = new MiddlewarePipeline;
 
     $pipeline
-        ->onRequest(function (PendingSaloonRequest $request) {
+        ->onRequest(function (PendingRequest $request) {
             $request->headers()->add('X-Pipe-One', 'Yee-Haw');
         })
-        ->onRequest(function (PendingSaloonRequest $request) {
+        ->onRequest(function (PendingRequest $request) {
             $request->headers()->add('X-Pipe-Two', 'Howdy');
         });
 
@@ -30,7 +30,7 @@ test('if a request pipe returns a pending request, we will use that in the next 
     $errorRequest = (new ErrorRequest())->createPendingRequest();
 
     $pipeline
-        ->onRequest(function (PendingSaloonRequest $request) use ($errorRequest) {
+        ->onRequest(function (PendingRequest $request) use ($errorRequest) {
             $request->headers()->add('X-Pipe-One', 'Yee-Haw');
 
             return $errorRequest;
@@ -59,10 +59,10 @@ test('you can merge a middleware pipeline together', closure: function () {
     $pipelineB = new MiddlewarePipeline;
 
     $pipelineA
-        ->onRequest(function (PendingSaloonRequest $request) {
+        ->onRequest(function (PendingRequest $request) {
             $request->headers()->add('X-Pipe-One', 'Yee-Haw');
         })
-        ->onRequest(function (PendingSaloonRequest $request) {
+        ->onRequest(function (PendingRequest $request) {
             $request->headers()->add('X-Pipe-One', 'Howdy');
         })
         ->onResponse(function (SaloonResponse $response) {

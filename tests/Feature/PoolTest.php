@@ -5,7 +5,7 @@ use GuzzleHttp\Exception\ConnectException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Contracts\SaloonResponse;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Responses\PsrResponse;
 use Saloon\Exceptions\FatalRequestException;
 use Saloon\Http\Responses\SimulatedResponse;
@@ -65,7 +65,7 @@ test('if a pool has a request that cannot connect it will be caught in the handl
     $pool->withExceptionHandler(function (FatalRequestException $ex) use (&$count) {
         expect($ex)->toBeInstanceOf(FatalRequestException::class);
         expect($ex->getPrevious())->toBeInstanceOf(ConnectException::class);
-        expect($ex->getPendingSaloonRequest())->toBeInstanceOf(PendingSaloonRequest::class);
+        expect($ex->getPendingRequest())->toBeInstanceOf(PendingRequest::class);
 
         $count++;
     });

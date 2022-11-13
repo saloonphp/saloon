@@ -2,15 +2,15 @@
 
 namespace Saloon\Tests\Fixtures\Plugins;
 
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 
 trait AuthenticatorPlugin
 {
     /**
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return void
      */
-    public function bootAuthenticatorPlugin(PendingSaloonRequest $pendingRequest): void
+    public function bootAuthenticatorPlugin(PendingRequest $pendingRequest): void
     {
         $pendingRequest->withTokenAuth('plugin-auth');
     }

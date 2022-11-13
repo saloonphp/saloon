@@ -7,9 +7,9 @@ use SimpleXMLElement;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Repositories\ArrayStore;
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Exceptions\SaloonRequestException;
 
 interface SaloonResponse
@@ -52,23 +52,23 @@ interface SaloonResponse
     /**
      * Create a new response instance.
      *
-     * @param PendingSaloonRequest $pendingSaloonRequest
+     * @param PendingRequest $pendingSaloonRequest
      * @param mixed $rawResponse
      * @param Exception|null $requestException
      */
-    public function __construct(PendingSaloonRequest $pendingSaloonRequest, mixed $rawResponse, Exception $requestException = null);
+    public function __construct(PendingRequest $pendingSaloonRequest, mixed $rawResponse, Exception $requestException = null);
 
     /**
-     * @return PendingSaloonRequest
+     * @return PendingRequest
      */
-    public function getPendingSaloonRequest(): PendingSaloonRequest;
+    public function getPendingRequest(): PendingRequest;
 
     /**
      * Get the original request
      *
-     * @return SaloonRequest
+     * @return Request
      */
-    public function getRequest(): SaloonRequest;
+    public function getRequest(): Request;
 
     /**
      * Get the JSON decoded body of the response as an array or scalar value.

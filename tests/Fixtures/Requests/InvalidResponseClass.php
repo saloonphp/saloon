@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Responses\UserResponseNoExtendSaloonResponse;
 
-class InvalidResponseClass extends SaloonRequest
+class InvalidResponseClass extends Request
 {
     /**
      * Define the method that the request will use.

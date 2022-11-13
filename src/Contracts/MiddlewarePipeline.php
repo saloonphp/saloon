@@ -3,7 +3,7 @@
 namespace Saloon\Contracts;
 
 use Saloon\Helpers\Pipeline;
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 
 interface MiddlewarePipeline
 {
@@ -26,10 +26,10 @@ interface MiddlewarePipeline
     /**
      * Process the request pipeline.
      *
-     * @param PendingSaloonRequest $pendingRequest
-     * @return PendingSaloonRequest
+     * @param PendingRequest $pendingRequest
+     * @return PendingRequest
      */
-    public function executeRequestPipeline(PendingSaloonRequest $pendingRequest): PendingSaloonRequest;
+    public function executeRequestPipeline(PendingRequest $pendingRequest): PendingRequest;
 
     /**
      * Process the response pipeline.

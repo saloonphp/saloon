@@ -2,13 +2,13 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Contracts\Body\WithBody;
 use Saloon\Traits\Body\HasJsonBody;
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class BootAuthenticatorRequest extends SaloonRequest implements WithBody
+class BootAuthenticatorRequest extends Request implements WithBody
 {
     use HasJsonBody;
 
@@ -35,10 +35,10 @@ class BootAuthenticatorRequest extends SaloonRequest implements WithBody
     }
 
     /**
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return void
      */
-    public function boot(PendingSaloonRequest $pendingRequest): void
+    public function boot(PendingRequest $pendingRequest): void
     {
         $pendingRequest->withTokenAuth('howdy-partner');
     }

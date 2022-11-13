@@ -2,10 +2,10 @@
 
 namespace Saloon\Contracts;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Http\Faking\Fixture;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Exceptions\SaloonNoMockResponseFoundException;
 use Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;
 
@@ -40,12 +40,12 @@ interface MockClient
     /**
      * Guess the next response based on the request.
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return MockResponse|Fixture
      * @throws SaloonNoMockResponseFoundException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function guessNextResponse(PendingSaloonRequest $pendingRequest): MockResponse|Fixture;
+    public function guessNextResponse(PendingRequest $pendingRequest): MockResponse|Fixture;
 
     /**
      * Check if the responses are empty.
@@ -72,9 +72,9 @@ interface MockClient
     /**
      * Get the last request that the mock manager sent.
      *
-     * @return SaloonRequest|null
+     * @return Request|null
      */
-    public function getLastRequest(): ?SaloonRequest;
+    public function getLastRequest(): ?Request;
 
     /**
      * Get the last response that the mock manager sent.

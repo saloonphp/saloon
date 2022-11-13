@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Traits\Auth\RequiresAuth;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class RequiresAuthRequest extends SaloonRequest
+class RequiresAuthRequest extends Request
 {
     use RequiresAuth;
 

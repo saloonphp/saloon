@@ -7,9 +7,9 @@ use SimpleXMLElement;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Symfony\Component\DomCrawler\Crawler;
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Exceptions\SaloonRequestException;
 use Saloon\Contracts\SaloonResponse as SaloonResponseContract;
 
@@ -34,9 +34,9 @@ abstract class SaloonResponse implements SaloonResponseContract
     /**
      * The request options we attached to the request.
      *
-     * @var PendingSaloonRequest
+     * @var PendingRequest
      */
-    protected PendingSaloonRequest $pendingSaloonRequest;
+    protected PendingRequest $pendingSaloonRequest;
 
     /**
      * The original request exception
@@ -62,11 +62,11 @@ abstract class SaloonResponse implements SaloonResponseContract
     /**
      * Create a new response instance.
      *
-     * @param PendingSaloonRequest $pendingSaloonRequest
+     * @param PendingRequest $pendingSaloonRequest
      * @param mixed $rawResponse
      * @param Exception|null $requestException
      */
-    public function __construct(PendingSaloonRequest $pendingSaloonRequest, mixed $rawResponse, Exception $requestException = null)
+    public function __construct(PendingRequest $pendingSaloonRequest, mixed $rawResponse, Exception $requestException = null)
     {
         $this->pendingSaloonRequest = $pendingSaloonRequest;
         $this->rawResponse = $rawResponse;
@@ -74,9 +74,9 @@ abstract class SaloonResponse implements SaloonResponseContract
     }
 
     /**
-     * @return PendingSaloonRequest
+     * @return PendingRequest
      */
-    public function getPendingSaloonRequest(): PendingSaloonRequest
+    public function getPendingRequest(): PendingRequest
     {
         return $this->pendingSaloonRequest;
     }
@@ -84,9 +84,9 @@ abstract class SaloonResponse implements SaloonResponseContract
     /**
      * Get the original request
      *
-     * @return SaloonRequest
+     * @return Request
      */
-    public function getRequest(): SaloonRequest
+    public function getRequest(): Request
     {
         return $this->pendingSaloonRequest->getRequest();
     }

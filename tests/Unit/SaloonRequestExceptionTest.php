@@ -12,6 +12,6 @@ test('saloon request exception contains the guzzle exception', function () {
     $response = (new UserRequest())->send($mockClient);
     $exception = $response->toException();
 
-    expect($exception->getSaloonResponse())->toBe($response);
+    expect($exception->getResponse())->toBe($response);
     expect($exception->getPrevious())->toBe($response->getGuzzleException());
 });

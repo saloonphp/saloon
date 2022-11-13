@@ -4,7 +4,7 @@ namespace Saloon\Traits\Connector;
 
 use ReflectionException;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Actions\SendRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Contracts\SaloonResponse;
@@ -15,14 +15,14 @@ trait SendsRequests
     /**
      * Send a request
      *
-     * @param SaloonRequest $request
+     * @param Request $request
      * @param MockClient|null $mockClient
      * @param bool $asynchronous
      * @return SaloonResponse|PromiseInterface
      * @throws SaloonException
      * @throws ReflectionException
      */
-    public function send(SaloonRequest $request, MockClient $mockClient = null, bool $asynchronous = false): SaloonResponse|PromiseInterface
+    public function send(Request $request, MockClient $mockClient = null, bool $asynchronous = false): SaloonResponse|PromiseInterface
     {
         $request->setConnector($this);
 
@@ -34,13 +34,13 @@ trait SendsRequests
     /**
      * Send a request asynchronously
      *
-     * @param SaloonRequest $request
+     * @param Request $request
      * @param MockClient|null $mockClient
      * @return PromiseInterface
      * @throws ReflectionException
      * @throws SaloonException
      */
-    public function sendAsync(SaloonRequest $request, MockClient $mockClient = null): PromiseInterface
+    public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface
     {
         return $this->send($request, $mockClient, true);
     }

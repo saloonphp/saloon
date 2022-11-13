@@ -2,15 +2,15 @@
 
 namespace Saloon\Traits\Plugins;
 
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 
 trait AcceptsJson
 {
     /**
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return void
      */
-    public static function bootAcceptsJson(PendingSaloonRequest $pendingRequest): void
+    public static function bootAcceptsJson(PendingRequest $pendingRequest): void
     {
         $pendingRequest->headers()->add('Accept', 'application/json');
     }

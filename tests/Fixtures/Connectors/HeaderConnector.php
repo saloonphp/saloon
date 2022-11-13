@@ -2,12 +2,12 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Traits\Plugins\HasJsonBody;
 use Saloon\Traits\Plugins\WithDebugData;
 
-class HeaderConnector extends SaloonConnector
+class HeaderConnector extends Connector
 {
     use AcceptsJson;
     use WithDebugData;

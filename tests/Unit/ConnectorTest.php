@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 use GuzzleHttp\Promise\Promise;
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Responses\SaloonResponse;
@@ -26,7 +26,7 @@ test('you can prepare a request through the connector', function () {
 
     $request = $connector->request(new UserRequest);
 
-    expect($request)->toBeInstanceOf(SaloonRequest::class);
+    expect($request)->toBeInstanceOf(Request::class);
     expect($request->connector())->toEqual($connector);
 });
 

@@ -2,12 +2,12 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Data\User;
 use Saloon\Http\Responses\SaloonResponse;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class DTORequest extends SaloonRequest
+class DTORequest extends Request
 {
     /**
      * Define the method that the request will use.

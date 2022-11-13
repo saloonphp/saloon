@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Plugins\WithBootTestPlugin;
 
-class UserRequestWithBootPlugin extends SaloonRequest
+class UserRequestWithBootPlugin extends Request
 {
     use WithBootTestPlugin;
 

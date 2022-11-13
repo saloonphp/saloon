@@ -34,7 +34,7 @@ class SaloonRequestException extends SaloonException
      *
      * @return SaloonResponse
      */
-    public function getSaloonResponse(): SaloonResponse
+    public function getResponse(): SaloonResponse
     {
         return $this->saloonResponse;
     }

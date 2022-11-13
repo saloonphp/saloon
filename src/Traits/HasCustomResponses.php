@@ -3,7 +3,7 @@
 namespace Saloon\Traits;
 
 use ReflectionException;
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Helpers\ReflectionHelper;
 use Saloon\Exceptions\SaloonInvalidConnectorException;
 use Saloon\Exceptions\SaloonInvalidResponseClassException;
@@ -31,7 +31,7 @@ trait HasCustomResponses
         $response = $this->resolveResponse();
 
         if (empty($response)) {
-            $response = $this instanceof SaloonRequest ? $this->connector()->getResponseClass() : $baseResponse;
+            $response = $this instanceof Request ? $this->connector()->getResponseClass() : $baseResponse;
         }
 
         if (! class_exists($response)) {

@@ -145,7 +145,7 @@ test('you can get the user from an oauth connector', function () {
 
     expect($response)->toBeInstanceOf(SaloonResponse::class);
 
-    $pendingRequest = $response->getPendingSaloonRequest();
+    $pendingRequest = $response->getPendingRequest();
 
     expect($pendingRequest->headers()->all())->toEqual([
         'Accept' => 'application/json',

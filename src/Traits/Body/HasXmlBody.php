@@ -2,7 +2,7 @@
 
 namespace Saloon\Traits\Body;
 
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 
 trait HasXmlBody
 {
@@ -11,10 +11,10 @@ trait HasXmlBody
     /**
      * Boot the plugin
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return void
      */
-    public function bootHasXmlBody(PendingSaloonRequest $pendingRequest): void
+    public function bootHasXmlBody(PendingRequest $pendingRequest): void
     {
         $pendingRequest->headers()->add('Accept', 'application/xml');
         $pendingRequest->headers()->add('Content-Type', 'application/xml');

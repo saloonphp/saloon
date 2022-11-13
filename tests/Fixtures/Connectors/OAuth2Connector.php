@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Traits\OAuth2\AuthorizationCodeGrant;
 
-class OAuth2Connector extends SaloonConnector
+class OAuth2Connector extends Connector
 {
     use AuthorizationCodeGrant;
 

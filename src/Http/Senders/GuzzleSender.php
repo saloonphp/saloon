@@ -15,7 +15,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\BadResponseException;
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Responses\PsrResponse;
 use Saloon\Exceptions\FatalRequestException;
 use Saloon\Repositories\Body\FormBodyRepository;
@@ -94,12 +94,12 @@ class GuzzleSender implements Sender
     /**
      * Send a request
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @param bool $asynchronous
      * @return PsrResponse|PromiseInterface
      * @throws GuzzleException
      */
-    public function sendRequest(PendingSaloonRequest $pendingRequest, bool $asynchronous = false): PsrResponse|PromiseInterface
+    public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): PsrResponse|PromiseInterface
     {
         return $asynchronous === true
             ? $this->sendAsynchronousRequest($pendingRequest)
@@ -109,11 +109,11 @@ class GuzzleSender implements Sender
     /**
      * Send a synchronous request.
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return PsrResponse
      * @throws GuzzleException
      */
-    protected function sendSynchronousRequest(PendingSaloonRequest $pendingRequest): PsrResponse
+    protected function sendSynchronousRequest(PendingRequest $pendingRequest): PsrResponse
     {
         $guzzleRequest = $this->createGuzzleRequest($pendingRequest);
         $guzzleRequestOptions = $this->createRequestOptions($pendingRequest);
@@ -130,10 +130,10 @@ class GuzzleSender implements Sender
     /**
      * Send an asynchronous request
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return PromiseInterface
      */
-    protected function sendAsynchronousRequest(PendingSaloonRequest $pendingRequest): PromiseInterface
+    protected function sendAsynchronousRequest(PendingRequest $pendingRequest): PromiseInterface
     {
         $guzzleRequest = $this->createGuzzleRequest($pendingRequest);
         $guzzleRequestOptions = $this->createRequestOptions($pendingRequest);
@@ -146,10 +146,10 @@ class GuzzleSender implements Sender
     /**
      * Create the Guzzle request
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return Request
      */
-    protected function createGuzzleRequest(PendingSaloonRequest $pendingRequest): Request
+    protected function createGuzzleRequest(PendingRequest $pendingRequest): Request
     {
         return new Request($pendingRequest->getMethod()->value, $pendingRequest->getUrl());
     }
@@ -157,10 +157,10 @@ class GuzzleSender implements Sender
     /**
      * Build up all the request options
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return array
      */
-    protected function createRequestOptions(PendingSaloonRequest $pendingRequest): array
+    protected function createRequestOptions(PendingRequest $pendingRequest): array
     {
         $requestOptions = [];
 
@@ -196,12 +196,12 @@ class GuzzleSender implements Sender
     /**
      * Create a response.
      *
-     * @param PendingSaloonRequest $pendingSaloonRequest
+     * @param PendingRequest $pendingSaloonRequest
      * @param Response $guzzleResponse
      * @param Exception|null $exception
      * @return PsrResponse
      */
-    protected function createResponse(PendingSaloonRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse, Exception $exception = null): PsrResponse
+    protected function createResponse(PendingRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse, Exception $exception = null): PsrResponse
     {
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
@@ -212,10 +212,10 @@ class GuzzleSender implements Sender
      * Update the promise provided by Guzzle.
      *
      * @param PromiseInterface $promise
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return PromiseInterface
      */
-    protected function processPromise(PromiseInterface $promise, PendingSaloonRequest $pendingRequest): PromiseInterface
+    protected function processPromise(PromiseInterface $promise, PendingRequest $pendingRequest): PromiseInterface
     {
         return $promise
             ->then(

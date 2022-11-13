@@ -2,8 +2,8 @@
 
 namespace Saloon\Helpers;
 
-use Saloon\Http\SaloonRequest;
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Request;
+use Saloon\Http\Connector;
 use Saloon\Exceptions\SaloonInvalidRequestException;
 
 class RequestHelper
@@ -11,16 +11,16 @@ class RequestHelper
     /**
      * Call a request from a connector.
      *
-     * @param SaloonConnector $connector
+     * @param Connector $connector
      * @param string $request
      * @param array $arguments
-     * @return SaloonRequest
+     * @return Request
      * @throws SaloonInvalidRequestException
      * @throws \ReflectionException
      */
-    public static function callFromConnector(SaloonConnector $connector, string $request, array $arguments = []): SaloonRequest
+    public static function callFromConnector(Connector $connector, string $request, array $arguments = []): Request
     {
-        $isValidRequest = ReflectionHelper::isSubclassOf($request, SaloonRequest::class);
+        $isValidRequest = ReflectionHelper::isSubclassOf($request, Request::class);
 
         if (! $isValidRequest) {
             throw new SaloonInvalidRequestException($request);

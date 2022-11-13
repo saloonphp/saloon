@@ -2,12 +2,12 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Contracts\Body\WithBody;
 use Saloon\Traits\Body\HasJsonBody;
 use Saloon\Traits\Plugins\AcceptsJson;
 
-class PostJsonConnector extends SaloonConnector implements WithBody
+class PostJsonConnector extends Connector implements WithBody
 {
     use AcceptsJson;
     use HasJsonBody;

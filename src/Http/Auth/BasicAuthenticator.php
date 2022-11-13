@@ -3,7 +3,7 @@
 namespace Saloon\Http\Auth;
 
 use Saloon\Contracts\Authenticator;
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 
 class BasicAuthenticator implements Authenticator
 {
@@ -21,10 +21,10 @@ class BasicAuthenticator implements Authenticator
     /**
      * Apply the authentication to the request.
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return void
      */
-    public function set(PendingSaloonRequest $pendingRequest): void
+    public function set(PendingRequest $pendingRequest): void
     {
         $pendingRequest->config()->add('auth', [$this->username, $this->password]);
     }

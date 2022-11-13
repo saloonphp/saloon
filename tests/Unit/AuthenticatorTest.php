@@ -2,7 +2,7 @@
 
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Auth\TokenAuthenticator;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Exceptions\MissingAuthenticatorException;
@@ -167,7 +167,7 @@ test('you can customise the authenticator inside of a middleware pipeline', func
     expect($request->getAuthenticator())->toBeNull();
 
     $request->middleware()
-        ->onRequest(function (PendingSaloonRequest $pendingRequest) {
+        ->onRequest(function (PendingRequest $pendingRequest) {
             $pendingRequest->withTokenAuth('ooh-this-is-cool');
         });
 

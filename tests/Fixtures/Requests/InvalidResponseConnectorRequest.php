@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Plugins\HasTestHandler;
 use Saloon\Tests\Fixtures\Connectors\InvalidResponseConnector;
 
-class InvalidResponseConnectorRequest extends SaloonRequest
+class InvalidResponseConnectorRequest extends Request
 {
     use HasTestHandler;
 

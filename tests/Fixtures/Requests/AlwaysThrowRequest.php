@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Traits\Plugins\AlwaysThrowsOnErrors;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class AlwaysThrowRequest extends SaloonRequest
+class AlwaysThrowRequest extends Request
 {
     use AlwaysThrowsOnErrors;
 

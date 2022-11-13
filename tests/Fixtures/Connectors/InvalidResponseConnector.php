@@ -2,10 +2,10 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
 
-class InvalidResponseConnector extends SaloonConnector
+class InvalidResponseConnector extends Connector
 {
     protected ?string $response = InvalidResponseClass::class;
 

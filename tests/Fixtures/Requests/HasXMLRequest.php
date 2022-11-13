@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Http\SaloonRequest;
+use Saloon\Http\Request;
 use Saloon\Traits\Plugins\HasXMLBody;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class HasXMLRequest extends SaloonRequest
+class HasXMLRequest extends Request
 {
     use HasXMLBody;
 

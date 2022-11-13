@@ -2,11 +2,11 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\HasTimeout;
 use Saloon\Traits\Plugins\AcceptsJson;
 
-class TimeoutConnector extends SaloonConnector
+class TimeoutConnector extends Connector
 {
     use AcceptsJson;
     use HasTimeout;

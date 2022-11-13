@@ -5,11 +5,11 @@ namespace Saloon\Http\Faking;
 use ReflectionClass;
 use Saloon\Helpers\URLHelper;
 use PHPUnit\Framework\Assert as PHPUnit;
-use Saloon\Http\SaloonRequest;
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Request;
+use Saloon\Http\Connector;
 use Saloon\Contracts\SaloonResponse;
 use Saloon\Helpers\ReflectionHelper;
-use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\MockClient as MockClientContract;
 use Saloon\Exceptions\SaloonInvalidConnectorException;
 use Saloon\Exceptions\SaloonNoMockResponseFoundException;
@@ -107,13 +107,13 @@ class MockClient implements MockClientContract
         if ($captureMethod && class_exists($captureMethod)) {
             $reflection = new ReflectionClass($captureMethod);
 
-            if ($reflection->isSubclassOf(SaloonConnector::class)) {
+            if ($reflection->isSubclassOf(Connector::class)) {
                 $this->connectorResponses[$captureMethod] = $response;
 
                 return;
             }
 
-            if ($reflection->isSubclassOf(SaloonRequest::class)) {
+            if ($reflection->isSubclassOf(Request::class)) {
                 $this->requestResponses[$captureMethod] = $response;
 
                 return;
@@ -138,12 +138,12 @@ class MockClient implements MockClientContract
     /**
      * Guess the next response based on the request.
      *
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return MockResponse|Fixture
      * @throws SaloonNoMockResponseFoundException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
-    public function guessNextResponse(PendingSaloonRequest $pendingRequest): MockResponse|Fixture
+    public function guessNextResponse(PendingRequest $pendingRequest): MockResponse|Fixture
     {
         $request = $pendingRequest->getRequest();
         $requestClass = get_class($request);
@@ -174,11 +174,11 @@ class MockClient implements MockClientContract
     /**
      * Guess the response from the URL.
      *
-     * @param SaloonRequest $request
+     * @param Request $request
      * @return MockResponse|Fixture|callable|null
      * @throws SaloonInvalidConnectorException
      */
-    private function guessResponseFromUrl(SaloonRequest $request): MockResponse|Fixture|callable|null
+    private function guessResponseFromUrl(Request $request): MockResponse|Fixture|callable|null
     {
         foreach ($this->urlResponses as $url => $response) {
             if (! URLHelper::matches($url, $request->getRequestUrl())) {
@@ -225,9 +225,9 @@ class MockClient implements MockClientContract
     /**
      * Get the last request that the mock manager sent.
      *
-     * @return SaloonRequest|null
+     * @return Request|null
      */
-    public function getLastRequest(): ?SaloonRequest
+    public function getLastRequest(): ?Request
     {
         return $this->getLastResponse()?->getRequest();
     }
@@ -331,7 +331,7 @@ class MockClient implements MockClientContract
         }
 
         if (is_string($request)) {
-            if (class_exists($request) && ReflectionHelper::isSubclassOf($request, SaloonRequest::class)) {
+            if (class_exists($request) && ReflectionHelper::isSubclassOf($request, Request::class)) {
                 $passed = $this->findResponseByRequest($request) instanceof SaloonResponse;
             } else {
                 $passed = $this->findResponseByRequestUrl($request) instanceof SaloonResponse;
@@ -396,7 +396,7 @@ class MockClient implements MockClientContract
 
         $lastRequest = $this->getLastRequest();
 
-        if ($lastRequest instanceof SaloonRequest && URLHelper::matches($url, $lastRequest->getFullRequestUrl())) {
+        if ($lastRequest instanceof Request && URLHelper::matches($url, $lastRequest->getFullRequestUrl())) {
             return $this->getLastResponse();
         }
 
@@ -466,10 +466,10 @@ class MockClient implements MockClientContract
      * Get the mock value.
      *
      * @param MockResponse|Fixture|callable $mockable
-     * @param PendingSaloonRequest $pendingRequest
+     * @param PendingRequest $pendingRequest
      * @return MockResponse|Fixture
      */
-    private function mockResponseValue(MockResponse|Fixture|callable $mockable, PendingSaloonRequest $pendingRequest): MockResponse|Fixture
+    private function mockResponseValue(MockResponse|Fixture|callable $mockable, PendingRequest $pendingRequest): MockResponse|Fixture
     {
         if ($mockable instanceof MockResponse) {
             return $mockable;

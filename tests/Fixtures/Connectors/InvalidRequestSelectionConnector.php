@@ -3,7 +3,7 @@
 namespace Saloon\Tests\Fixtures\Connectors;
 
 use Sammyjo20\MissingClass;
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
@@ -12,7 +12,7 @@ use Saloon\Tests\Fixtures\Requests\ErrorRequest;
  * @method getMyUser($userId, $groupId): UserRequest
  * @method errorRequest(...$args): UserRequest
  */
-class InvalidRequestSelectionConnector extends SaloonConnector
+class InvalidRequestSelectionConnector extends Connector
 {
     use AcceptsJson;
 

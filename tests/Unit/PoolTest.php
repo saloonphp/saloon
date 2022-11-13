@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Contracts\SaloonResponse;
 use Saloon\Http\Faking\MockResponse;
@@ -204,7 +204,7 @@ it('accepts a callback that returns an array for aliased requests', function () 
 
     $requests = collect();
 
-    $arrayCallback = function (SaloonConnector $callbackConnector) use (&$requests, $connector) {
+    $arrayCallback = function (Connector $callbackConnector) use (&$requests, $connector) {
         expect($callbackConnector)->toEqual($connector);
 
         $requests = $requests->merge([

@@ -2,12 +2,12 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Contracts\Authenticator;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Http\Auth\TokenAuthenticator;
 
-class DefaultAuthenticatorConnector extends SaloonConnector
+class DefaultAuthenticatorConnector extends Connector
 {
     use AcceptsJson;
 

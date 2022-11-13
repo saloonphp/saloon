@@ -2,23 +2,23 @@
 
 namespace Saloon\Http\Groups;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 
 abstract class RequestGroup
 {
     /**
      * Saloon Connector
      *
-     * @var SaloonConnector
+     * @var Connector
      */
-    protected SaloonConnector $connector;
+    protected Connector $connector;
 
     /**
      * Constructor
      *
-     * @param SaloonConnector $connector
+     * @param Connector $connector
      */
-    public function __construct(SaloonConnector $connector)
+    public function __construct(Connector $connector)
     {
         $this->connector = $connector;
     }

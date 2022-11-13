@@ -2,13 +2,13 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Http\SaloonConnector;
+use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\CastsToDto;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Http\Responses\SaloonResponse;
 use Saloon\Tests\Fixtures\Data\ApiResponse;
 
-class DtoConnector extends SaloonConnector
+class DtoConnector extends Connector
 {
     use AcceptsJson;
     use CastsToDto;

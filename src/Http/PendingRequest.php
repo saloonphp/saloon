@@ -23,7 +23,7 @@ use Saloon\Exceptions\SaloonInvalidConnectorException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Exceptions\SaloonInvalidResponseClassException;
 
-class PendingSaloonRequest
+class PendingRequest
 {
     use HasRequestProperties;
     use AuthenticatesRequests;
@@ -32,16 +32,16 @@ class PendingSaloonRequest
     /**
      * The request used by the instance.
      *
-     * @var SaloonRequest
+     * @var Request
      */
-    protected SaloonRequest $request;
+    protected Request $request;
 
     /**
      * The connector making the request.
      *
-     * @var SaloonConnector
+     * @var Connector
      */
-    protected SaloonConnector $connector;
+    protected Connector $connector;
 
     /**
      * The URL the request will be made to.
@@ -81,14 +81,14 @@ class PendingSaloonRequest
     /**
      * Build up the request payload.
      *
-     * @param SaloonRequest $request
+     * @param Request $request
      * @param MockClient|null $mockClient
      * @throws PendingSaloonRequestException
      * @throws ReflectionException
      * @throws SaloonInvalidConnectorException
      * @throws SaloonInvalidResponseClassException
      */
-    public function __construct(SaloonRequest $request, MockClient $mockClient = null)
+    public function __construct(Request $request, MockClient $mockClient = null)
     {
         $connector = $request->connector();
 
@@ -101,13 +101,13 @@ class PendingSaloonRequest
         $this->authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
 
         // After we have defined each of our properties, we will run the various
-        // methods that build up the PendingSaloonRequest. It's important that
+        // methods that build up the PendingRequest. It's important that
         // the order remains the same.
 
         // Plugins should be booted first, then we will merge the properties
         // from the connector and request, then authenticate the request
         // followed by finally running the "boot" method with an
-        // almost complete PendingSaloonRequest.
+        // almost complete PendingRequest.
 
         $this->bootPlugins()
             ->mergeRequestProperties()
@@ -293,9 +293,9 @@ class PendingSaloonRequest
     /**
      * Get the request.
      *
-     * @return SaloonRequest
+     * @return Request
      */
-    public function getRequest(): SaloonRequest
+    public function getRequest(): Request
     {
         return $this->request;
     }
@@ -303,9 +303,9 @@ class PendingSaloonRequest
     /**
      * Get the conector.
      *
-     * @return SaloonConnector
+     * @return Connector
      */
-    public function getConnector(): SaloonConnector
+    public function getConnector(): Connector
     {
         return $this->connector;
     }
@@ -374,9 +374,9 @@ class PendingSaloonRequest
      * Set the simulated response payload
      *
      * @param SimulatedResponsePayload|null $simulatedResponsePayload
-     * @return PendingSaloonRequest
+     * @return PendingRequest
      */
-    public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): PendingSaloonRequest
+    public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): PendingRequest
     {
         $this->simulatedResponsePayload = $simulatedResponsePayload;
 
