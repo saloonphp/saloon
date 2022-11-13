@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http;
+namespace Saloon\Http;
 
 use Generator;
 use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use Sammyjo20\Saloon\Exceptions\SaloonException;
-use Sammyjo20\Saloon\Exceptions\InvalidPoolItemException;
+use Saloon\Exceptions\SaloonException;
+use Saloon\Exceptions\InvalidPoolItemException;
 
 class Pool
 {

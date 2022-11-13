@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\Groups;
+namespace Saloon\Http\Groups;
 
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Helpers\RequestHelper;
-use Sammyjo20\Saloon\Exceptions\NestedRequestNotFoundException;
+use Saloon\Http\SaloonConnector;
+use Saloon\Helpers\RequestHelper;
+use Saloon\Exceptions\NestedRequestNotFoundException;
 
 class AnonymousRequestGroup extends RequestGroup
 {

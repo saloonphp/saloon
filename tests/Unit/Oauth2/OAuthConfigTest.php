@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
-use Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException;
+use Saloon\Helpers\OAuth2\OAuthConfig;
+use Saloon\Exceptions\OAuthConfigValidationException;
 
 test('all default properties are correct and all getters and setters work properly', function () {
     $config = new OAuthConfig;

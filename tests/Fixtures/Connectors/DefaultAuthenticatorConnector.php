@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
+namespace Saloon\Tests\Fixtures\Connectors;
 
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Contracts\Authenticator;
-use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
-use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
+use Saloon\Http\SaloonConnector;
+use Saloon\Contracts\Authenticator;
+use Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\Http\Auth\TokenAuthenticator;
 
 class DefaultAuthenticatorConnector extends SaloonConnector
 {

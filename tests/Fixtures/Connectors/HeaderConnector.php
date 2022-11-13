@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
+namespace Saloon\Tests\Fixtures\Connectors;
 
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
-use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
-use Sammyjo20\Saloon\Traits\Plugins\WithDebugData;
+use Saloon\Http\SaloonConnector;
+use Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\Traits\Plugins\HasJsonBody;
+use Saloon\Traits\Plugins\WithDebugData;
 
 class HeaderConnector extends SaloonConnector
 {

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Repositories\Body;
+namespace Saloon\Repositories\Body;
 
-use Sammyjo20\Saloon\Exceptions\UnableToCastToStringException;
+use Saloon\Exceptions\UnableToCastToStringException;
 
 class MultipartBodyRepository extends ArrayBodyRepository
 {

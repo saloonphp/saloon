@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
+namespace Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Responses\UserResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Http\SaloonRequest;
+use Saloon\Tests\Fixtures\Responses\UserResponse;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class UserRequestWithCustomResponse extends SaloonRequest
 {

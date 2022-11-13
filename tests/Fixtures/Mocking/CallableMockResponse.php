@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Mocking;
+namespace Saloon\Tests\Fixtures\Mocking;
 
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingSaloonRequest;
 
 class CallableMockResponse
 {

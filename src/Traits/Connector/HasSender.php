@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits\Connector;
+namespace Saloon\Traits\Connector;
 
-use Sammyjo20\Saloon\Contracts\Sender;
-use Sammyjo20\Saloon\Helpers\SenderHelper;
+use Saloon\Contracts\Sender;
+use Saloon\Helpers\SenderHelper;
 
 trait HasSender
 {

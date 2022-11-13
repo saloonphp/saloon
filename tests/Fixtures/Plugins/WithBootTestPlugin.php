@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Plugins;
+namespace Saloon\Tests\Fixtures\Plugins;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
+use Saloon\Http\SaloonRequest;
 
 trait WithBootTestPlugin
 {

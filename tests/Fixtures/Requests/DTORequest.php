@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
+namespace Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Data\User;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Http\SaloonRequest;
+use Saloon\Tests\Fixtures\Data\User;
+use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class DTORequest extends SaloonRequest
 {

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Exceptions;
+namespace Saloon\Exceptions;
 
-use Sammyjo20\Saloon\Http\SaloonConnector;
+use Saloon\Http\SaloonConnector;
 
 class NestedRequestNotFoundException extends SaloonException
 {

@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\Middleware;
+namespace Saloon\Http\Middleware;
 
-use Sammyjo20\Saloon\Http\Faking\Fixture;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Contracts\RequestMiddleware;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
-use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
+use Saloon\Http\Faking\Fixture;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Contracts\RequestMiddleware;
+use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Exceptions\SaloonNoMockResponseFoundException;
 
 class DetermineMockResponse implements RequestMiddleware
 {

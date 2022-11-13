@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Unit;
+namespace Saloon\Tests\Unit;
 
-use Sammyjo20\Saloon\Data\FixtureData;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
+use Saloon\Data\FixtureData;
+use Saloon\Http\Faking\MockResponse;
 
 test('you can create a fixture data object from a file string', function () {
     $data = [

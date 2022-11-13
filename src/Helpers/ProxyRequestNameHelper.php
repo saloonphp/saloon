@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Helpers;
+namespace Saloon\Helpers;
 
 use ReflectionClass;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
-use Sammyjo20\Saloon\Exceptions\InvalidRequestKeyException;
+use Saloon\Exceptions\InvalidRequestKeyException;
 
 class ProxyRequestNameHelper
 {

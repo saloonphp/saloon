@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Responses;
+namespace Saloon\Tests\Fixtures\Responses;
 
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Responses\SaloonResponse;
 
 class CustomResponse extends SaloonResponse
 {

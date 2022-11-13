@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
 use Psr\Http\Message\RequestInterface;
-use Sammyjo20\Saloon\Managers\RequestManager;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\HasXMLRequest;
+use Saloon\Managers\RequestManager;
+use Saloon\Tests\Fixtures\Requests\HasXMLRequest;
 
 test('with the hasXMLBody trait, you can pass in a string body response', function () {
     $request = new HasXMLRequest;

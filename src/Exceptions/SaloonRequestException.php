@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Exceptions;
+namespace Saloon\Exceptions;
 
 use Throwable;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Responses\SaloonResponse;
 
 class SaloonRequestException extends SaloonException
 {

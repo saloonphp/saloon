@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits\Auth;
+namespace Saloon\Traits\Auth;
 
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Exceptions\MissingAuthenticatorException;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Exceptions\MissingAuthenticatorException;
 
 trait RequiresBasicAuth
 {

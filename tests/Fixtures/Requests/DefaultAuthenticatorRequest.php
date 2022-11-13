@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
+namespace Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Contracts\Authenticator;
-use Sammyjo20\Saloon\Traits\Auth\RequiresAuth;
-use Sammyjo20\Saloon\Http\Auth\TokenAuthenticator;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Http\SaloonRequest;
+use Saloon\Contracts\Authenticator;
+use Saloon\Traits\Auth\RequiresAuth;
+use Saloon\Http\Auth\TokenAuthenticator;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class DefaultAuthenticatorRequest extends SaloonRequest
 {

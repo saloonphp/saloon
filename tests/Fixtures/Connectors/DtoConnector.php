@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
+namespace Saloon\Tests\Fixtures\Connectors;
 
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Traits\Plugins\CastsToDto;
-use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Data\ApiResponse;
+use Saloon\Http\SaloonConnector;
+use Saloon\Traits\Plugins\CastsToDto;
+use Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Tests\Fixtures\Data\ApiResponse;
 
 class DtoConnector extends SaloonConnector
 {

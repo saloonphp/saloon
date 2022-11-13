@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits\Body;
+namespace Saloon\Traits\Body;
 
-use Sammyjo20\Saloon\Repositories\Body\FormBodyRepository;
+use Saloon\Repositories\Body\FormBodyRepository;
 
 trait HasFormBody
 {

@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Requests;
+namespace Saloon\Tests\Fixtures\Requests;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Traits\Plugins\HasJsonBody;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\HeaderConnector;
+use Saloon\Http\SaloonRequest;
+use Saloon\Traits\Plugins\HasJsonBody;
+use Saloon\Tests\Fixtures\Connectors\HeaderConnector;
 
 class ReplaceHeaderRequest extends SaloonRequest
 {

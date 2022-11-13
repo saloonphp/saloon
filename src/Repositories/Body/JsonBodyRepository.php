@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Repositories\Body;
+namespace Saloon\Repositories\Body;
 
 class JsonBodyRepository extends ArrayBodyRepository
 {

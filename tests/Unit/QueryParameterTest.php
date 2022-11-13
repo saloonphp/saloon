@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Managers\RequestManager;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\QueryParameterRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\QueryParameterConnectorBlankRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\OverwrittenQueryParameterConnectorRequest;
+use Saloon\Managers\RequestManager;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Requests\QueryParameterRequest;
+use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
+use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorBlankRequest;
+use Saloon\Tests\Fixtures\Requests\OverwrittenQueryParameterConnectorRequest;
 
 test('a request with query params added sends the query params', function () {
     $request = new QueryParameterRequest();

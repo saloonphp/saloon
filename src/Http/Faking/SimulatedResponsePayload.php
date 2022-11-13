@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\Faking;
+namespace Saloon\Http\Faking;
 
 use Throwable;
 use Psr\Http\Message\RequestInterface;
-use Sammyjo20\Saloon\Repositories\ArrayStore;
-use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
-use Sammyjo20\Saloon\Repositories\Body\JsonBodyRepository;
-use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
-use Sammyjo20\Saloon\Repositories\Body\StringBodyRepository;
+use Saloon\Repositories\ArrayStore;
+use Saloon\Contracts\Body\BodyRepository;
+use Saloon\Repositories\Body\JsonBodyRepository;
+use Saloon\Exceptions\DirectoryNotFoundException;
+use Saloon\Repositories\Body\StringBodyRepository;
 
 class SimulatedResponsePayload
 {

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits\RequestProperties;
+namespace Saloon\Traits\RequestProperties;
 
-use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
-use Sammyjo20\Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
+use Saloon\Helpers\MiddlewarePipeline;
+use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
 trait HasMiddleware
 {

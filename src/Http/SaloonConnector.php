@@ -1,20 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http;
+namespace Saloon\Http;
 
-use Sammyjo20\Saloon\Traits\Bootable;
-use Sammyjo20\Saloon\Traits\HasMockClient;
-use Sammyjo20\Saloon\Traits\Connector\HasPool;
-use Sammyjo20\Saloon\Http\Senders\GuzzleSender;
-use Sammyjo20\Saloon\Traits\HasCustomResponses;
-use Sammyjo20\Saloon\Traits\Connector\HasSender;
-use Sammyjo20\Saloon\Traits\Connector\SendsRequests;
-use Sammyjo20\Saloon\Traits\Connector\ProxiesRequests;
-use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
-use Sammyjo20\Saloon\Traits\Auth\AuthenticatesRequests;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
-use Sammyjo20\Saloon\Traits\RequestProperties\HasRequestProperties;
-use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
+use Saloon\Traits\Bootable;
+use Saloon\Traits\HasMockClient;
+use Saloon\Traits\Connector\HasPool;
+use Saloon\Http\Senders\GuzzleSender;
+use Saloon\Traits\HasCustomResponses;
+use Saloon\Traits\Connector\HasSender;
+use Saloon\Traits\Connector\SendsRequests;
+use Saloon\Traits\Connector\ProxiesRequests;
+use Saloon\Exceptions\ClassNotFoundException;
+use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Exceptions\SaloonInvalidRequestException;
+use Saloon\Traits\RequestProperties\HasRequestProperties;
+use Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
 
 /**
  * @method GuzzleSender sender()

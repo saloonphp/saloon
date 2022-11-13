@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\Responses;
+namespace Saloon\Http\Responses;
 
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Sammyjo20\Saloon\Repositories\ArrayStore;
-use Sammyjo20\Saloon\Http\Faking\SimulatedResponsePayload;
+use Saloon\Repositories\ArrayStore;
+use Saloon\Http\Faking\SimulatedResponsePayload;
 
 class SimulatedResponse extends SaloonResponse
 {

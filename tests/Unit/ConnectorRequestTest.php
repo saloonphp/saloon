@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\RequestSelectionConnector;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Tests\Fixtures\Connectors\RequestSelectionConnector;
 
 test('you can view the available requests', function () {
     $connector = new RequestSelectionConnector;

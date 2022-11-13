@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Contracts;
+namespace Saloon\Contracts;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\Faking\Fixture;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;
+use Saloon\Http\SaloonRequest;
+use Saloon\Http\Faking\Fixture;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Exceptions\SaloonNoMockResponseFoundException;
+use Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;
 
 interface MockClient
 {

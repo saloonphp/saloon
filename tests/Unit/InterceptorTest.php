@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\InterceptedResponseRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\InterceptedConnectorErrorRequest;
+use Saloon\Exceptions\SaloonRequestException;
+use Saloon\Tests\Fixtures\Requests\InterceptedResponseRequest;
+use Saloon\Tests\Fixtures\Requests\InterceptedConnectorErrorRequest;
 
 test('a connector response can be intercepted', function () {
     $request = new InterceptedConnectorErrorRequest();

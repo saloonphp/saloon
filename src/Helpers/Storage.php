@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Helpers;
+namespace Saloon\Helpers;
 
-use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
-use Sammyjo20\Saloon\Exceptions\UnableToCreateFileException;
-use Sammyjo20\Saloon\Exceptions\UnableToCreateDirectoryException;
+use Saloon\Exceptions\DirectoryNotFoundException;
+use Saloon\Exceptions\UnableToCreateFileException;
+use Saloon\Exceptions\UnableToCreateDirectoryException;
 
 class Storage
 {

@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Helpers\MockConfig;
-use Sammyjo20\Saloon\Http\Faking\MockClient;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Exceptions\FixtureMissingException;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Exceptions\DirectoryNotFoundException;
+use Saloon\Helpers\MockConfig;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Exceptions\FixtureMissingException;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Exceptions\DirectoryNotFoundException;
 
 test('you can change the default fixture path', function () {
     expect(MockConfig::getFixturePath())->toEqual('tests/Fixtures/Saloon');

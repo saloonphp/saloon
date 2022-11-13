@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits\Request;
+namespace Saloon\Traits\Request;
 
-use Sammyjo20\Saloon\Contracts\SaloonResponse;
+use Saloon\Contracts\SaloonResponse;
 
 trait CastDtoFromResponse
 {

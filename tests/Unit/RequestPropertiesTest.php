@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Repositories\ArrayStore;
-use Sammyjo20\Saloon\Helpers\MiddlewarePipeline;
-use Sammyjo20\Saloon\Repositories\BodyRepository;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\DefaultPropertiesRequest;
+use Saloon\Repositories\ArrayStore;
+use Saloon\Helpers\MiddlewarePipeline;
+use Saloon\Repositories\BodyRepository;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Requests\DefaultPropertiesRequest;
 
 test('you can retrieve all the request parameters methods', function () {
     $request = new UserRequest;

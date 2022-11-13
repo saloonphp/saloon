@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Authenticators;
+namespace Saloon\Tests\Fixtures\Authenticators;
 
 use Carbon\CarbonInterface;
-use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
+use Saloon\Http\Auth\AccessTokenAuthenticator;
 
 class CustomOAuthAuthenticator extends AccessTokenAuthenticator
 {

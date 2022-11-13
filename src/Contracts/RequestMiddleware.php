@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Contracts;
+namespace Saloon\Contracts;
 
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\Faking\SimulatedResponsePayload;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\Faking\SimulatedResponsePayload;
 
 interface RequestMiddleware
 {

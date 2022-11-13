@@ -2,14 +2,14 @@
 
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Str;
-use Sammyjo20\Saloon\Http\Faking\MockClient;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
-use Sammyjo20\Saloon\Exceptions\InvalidStateException;
-use Sammyjo20\Saloon\Http\Auth\AccessTokenAuthenticator;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\OAuth2Connector;
-use Sammyjo20\Saloon\Tests\Fixtures\Authenticators\CustomOAuthAuthenticator;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\CustomResponseOAuth2Connector;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\Responses\SaloonResponse;
+use Saloon\Exceptions\InvalidStateException;
+use Saloon\Http\Auth\AccessTokenAuthenticator;
+use Saloon\Tests\Fixtures\Connectors\OAuth2Connector;
+use Saloon\Tests\Fixtures\Authenticators\CustomOAuthAuthenticator;
+use Saloon\Tests\Fixtures\Connectors\CustomResponseOAuth2Connector;
 
 test('you can get the redirect url from a connector', function () {
     $connector = new OAuth2Connector;

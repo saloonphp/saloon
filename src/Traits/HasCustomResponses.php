@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Traits;
+namespace Saloon\Traits;
 
 use ReflectionException;
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Helpers\ReflectionHelper;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Saloon\Http\SaloonRequest;
+use Saloon\Helpers\ReflectionHelper;
+use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Exceptions\SaloonInvalidResponseClassException;
 
 trait HasCustomResponses
 {

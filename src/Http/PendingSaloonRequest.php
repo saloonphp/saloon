@@ -1,27 +1,27 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http;
+namespace Saloon\Http;
 
 use ReflectionException;
-use Sammyjo20\Saloon\Enums\Method;
-use Sammyjo20\Saloon\Contracts\Sender;
-use Sammyjo20\Saloon\Helpers\Environment;
-use Sammyjo20\Saloon\Contracts\MockClient;
-use Sammyjo20\Saloon\Helpers\PluginHelper;
-use Sammyjo20\Saloon\Traits\HasMockClient;
-use Sammyjo20\Saloon\Contracts\Body\WithBody;
-use Sammyjo20\Saloon\Contracts\SaloonResponse;
-use Sammyjo20\Saloon\Contracts\Body\BodyRepository;
-use Sammyjo20\Saloon\Traits\Auth\AuthenticatesRequests;
-use Sammyjo20\Saloon\Http\Middleware\AuthenticateRequest;
-use Sammyjo20\Saloon\Http\Faking\SimulatedResponsePayload;
-use Sammyjo20\Saloon\Http\Middleware\DetermineMockResponse;
-use Sammyjo20\Saloon\Repositories\Body\ArrayBodyRepository;
-use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
+use Saloon\Enums\Method;
+use Saloon\Contracts\Sender;
+use Saloon\Helpers\Environment;
+use Saloon\Contracts\MockClient;
+use Saloon\Helpers\PluginHelper;
+use Saloon\Traits\HasMockClient;
+use Saloon\Contracts\Body\WithBody;
+use Saloon\Contracts\SaloonResponse;
+use Saloon\Contracts\Body\BodyRepository;
+use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Http\Middleware\AuthenticateRequest;
+use Saloon\Http\Faking\SimulatedResponsePayload;
+use Saloon\Http\Middleware\DetermineMockResponse;
+use Saloon\Repositories\Body\ArrayBodyRepository;
+use Saloon\Exceptions\PendingSaloonRequestException;
 use Sammyjo20\SaloonLaravel\Http\Middleware\SaloonLaravelMiddleware;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
-use Sammyjo20\Saloon\Traits\RequestProperties\HasRequestProperties;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Traits\RequestProperties\HasRequestProperties;
+use Saloon\Exceptions\SaloonInvalidResponseClassException;
 
 class PendingSaloonRequest
 {

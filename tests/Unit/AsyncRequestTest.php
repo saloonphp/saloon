@@ -4,11 +4,11 @@ use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
-use Sammyjo20\Saloon\Http\Faking\MockClient;
-use Sammyjo20\Saloon\Contracts\SaloonResponse;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Exceptions\SaloonRequestException;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Contracts\SaloonResponse;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Exceptions\SaloonRequestException;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('an asynchronous request will return a saloon response on a successful request', function () {
     $mockClient = new MockClient([

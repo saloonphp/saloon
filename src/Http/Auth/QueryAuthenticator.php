@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\Auth;
+namespace Saloon\Http\Auth;
 
-use Sammyjo20\Saloon\Contracts\Authenticator;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Saloon\Contracts\Authenticator;
+use Saloon\Http\PendingSaloonRequest;
 
 class QueryAuthenticator implements Authenticator
 {

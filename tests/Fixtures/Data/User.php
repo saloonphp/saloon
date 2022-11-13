@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Data;
+namespace Saloon\Tests\Fixtures\Data;
 
-use Sammyjo20\Saloon\Http\Responses\SaloonResponse;
+use Saloon\Http\Responses\SaloonResponse;
 
 class User
 {

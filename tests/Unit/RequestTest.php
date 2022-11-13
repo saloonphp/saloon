@@ -1,25 +1,25 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Http\Faking\MockClient;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Responses\UserResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Responses\CustomResponse;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\NoConnectorRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\ExtendedConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestProxyConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
-use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\DefaultEndpointRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\InvalidConnectorRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\ExtendedConnectorRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\CustomResponseConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidResponseConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\InvalidConnectorClassRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\CustomResponseConnectorRequest;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Responses\UserResponse;
+use Saloon\Tests\Fixtures\Responses\CustomResponse;
+use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Tests\Fixtures\Requests\NoConnectorRequest;
+use Saloon\Tests\Fixtures\Connectors\ExtendedConnector;
+use Saloon\Tests\Fixtures\Connectors\TestProxyConnector;
+use Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
+use Saloon\Exceptions\SaloonNoMockResponseFoundException;
+use Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Saloon\Tests\Fixtures\Requests\DefaultEndpointRequest;
+use Saloon\Tests\Fixtures\Requests\InvalidConnectorRequest;
+use Saloon\Tests\Fixtures\Requests\ExtendedConnectorRequest;
+use Saloon\Tests\Fixtures\Connectors\CustomResponseConnector;
+use Saloon\Tests\Fixtures\Connectors\InvalidResponseConnector;
+use Saloon\Tests\Fixtures\Requests\InvalidConnectorClassRequest;
+use Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
+use Saloon\Tests\Fixtures\Requests\CustomResponseConnectorRequest;
 
 test('if you dont pass in a mock client to the saloon request it will not be in mocking mode', function () {
     $request = new UserRequest();

@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
+namespace Saloon\Tests\Fixtures\Connectors;
 
 use Carbon\CarbonInterface;
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
-use Sammyjo20\Saloon\Contracts\OAuthAuthenticator;
-use Sammyjo20\Saloon\Traits\OAuth2\AuthorizationCodeGrant;
-use Sammyjo20\Saloon\Tests\Fixtures\Authenticators\CustomOAuthAuthenticator;
+use Saloon\Http\SaloonConnector;
+use Saloon\Helpers\OAuth2\OAuthConfig;
+use Saloon\Contracts\OAuthAuthenticator;
+use Saloon\Traits\OAuth2\AuthorizationCodeGrant;
+use Saloon\Tests\Fixtures\Authenticators\CustomOAuthAuthenticator;
 
 class CustomResponseOAuth2Connector extends SaloonConnector
 {

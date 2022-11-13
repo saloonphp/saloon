@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('you can add basic auth to a request', function () {
     $request = new UserRequest;

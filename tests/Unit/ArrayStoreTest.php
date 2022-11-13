@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Repositories\ArrayStore;
+use Saloon\Repositories\ArrayStore;
 
 test('the store is empty by default', function () {
     $store = new ArrayStore();

@@ -1,19 +1,19 @@
 <?php declare(strict_types=1);
 
 use League\Flysystem\Filesystem;
-use Sammyjo20\Saloon\Http\Faking\MockClient;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingSaloonRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
-use Sammyjo20\Saloon\Http\Responses\SimulatedResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
-use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
+use Saloon\Http\Responses\SimulatedResponse;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
+use Saloon\Exceptions\SaloonNoMockResponseFoundException;
+use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
+use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
+use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
 
 $filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon'));
 

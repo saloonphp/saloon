@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\OAuth2;
+namespace Saloon\Http\OAuth2;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Contracts\Body\WithBody;
-use Sammyjo20\Saloon\Traits\Body\HasFormBody;
-use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
-use Sammyjo20\Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\Http\SaloonRequest;
+use Saloon\Contracts\Body\WithBody;
+use Saloon\Traits\Body\HasFormBody;
+use Saloon\Helpers\OAuth2\OAuthConfig;
+use Saloon\Traits\Plugins\AcceptsJson;
 
 class GetAccessTokenRequest extends SaloonRequest implements WithBody
 {

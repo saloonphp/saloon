@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Helpers;
+namespace Saloon\Helpers;
 
-use Sammyjo20\Saloon\Contracts\SaloonResponse;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
-use Sammyjo20\Saloon\Http\Faking\SimulatedResponsePayload;
-use Sammyjo20\Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
+use Saloon\Contracts\SaloonResponse;
+use Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\Faking\SimulatedResponsePayload;
+use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
 class MiddlewarePipeline implements MiddlewarePipelineContract
 {

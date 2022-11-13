@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
 use GuzzleHttp\Exception\ConnectException;
-use Sammyjo20\Saloon\Http\Faking\MockClient;
-use Sammyjo20\Saloon\Http\Faking\MockResponse;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Sammyjo20\Saloon\Exceptions\SaloonNoMockResponseFoundException;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Exceptions\SaloonNoMockResponseFoundException;
+use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
+use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
+use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
 
 test('you can create sequence mocks', function () {
     $responseA = MockResponse::make(['name' => 'Sammyjo20'], 200);

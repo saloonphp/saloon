@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Helpers;
+namespace Saloon\Helpers;
 
-use Sammyjo20\Saloon\Contracts\Sender;
-use Sammyjo20\Saloon\Http\Senders\GuzzleSender;
+use Saloon\Contracts\Sender;
+use Saloon\Http\Senders\GuzzleSender;
 
 class SenderHelper
 {

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Helpers\OAuth2;
+namespace Saloon\Helpers\OAuth2;
 
-use Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException;
+use Saloon\Exceptions\OAuthConfigValidationException;
 
 class OAuthConfig
 {

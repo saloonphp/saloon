@@ -1,19 +1,19 @@
 <?php declare(strict_types=1);
 
-use Sammyjo20\Saloon\Exceptions\ClassNotFoundException;
-use Sammyjo20\Saloon\Http\Groups\AnonymousRequestGroup;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
-use Sammyjo20\Saloon\Tests\Fixtures\Collections\UserGroup;
-use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
-use Sammyjo20\Saloon\Exceptions\InvalidRequestKeyException;
-use Sammyjo20\Saloon\Tests\Fixtures\Collections\GuessedGroup;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
-use Sammyjo20\Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\ServiceRequestConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\RequestSelectionConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidServiceRequestConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidRequestSelectionConnector;
-use Sammyjo20\Saloon\Tests\Fixtures\Connectors\InvalidDefinedRequestSelectionConnector;
+use Saloon\Exceptions\ClassNotFoundException;
+use Saloon\Http\Groups\AnonymousRequestGroup;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Collections\UserGroup;
+use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Exceptions\InvalidRequestKeyException;
+use Saloon\Tests\Fixtures\Collections\GuessedGroup;
+use Saloon\Exceptions\SaloonInvalidRequestException;
+use Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
+use Saloon\Tests\Fixtures\Connectors\ServiceRequestConnector;
+use Saloon\Tests\Fixtures\Connectors\RequestSelectionConnector;
+use Saloon\Tests\Fixtures\Connectors\InvalidServiceRequestConnector;
+use Saloon\Tests\Fixtures\Connectors\InvalidRequestSelectionConnector;
+use Saloon\Tests\Fixtures\Connectors\InvalidDefinedRequestSelectionConnector;
 
 test('a request can be called statically', function () {
     $userRequest = RequestSelectionConnector::getMyUser();

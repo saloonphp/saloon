@@ -1,22 +1,22 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http;
+namespace Saloon\Http;
 
-use Sammyjo20\Saloon\Traits\Bootable;
-use Sammyjo20\Saloon\Contracts\Sender;
+use Saloon\Traits\Bootable;
+use Saloon\Contracts\Sender;
 use GuzzleHttp\Promise\PromiseInterface;
-use Sammyjo20\Saloon\Contracts\MockClient;
-use Sammyjo20\Saloon\Traits\HasMockClient;
-use Sammyjo20\Saloon\Contracts\SaloonResponse;
-use Sammyjo20\Saloon\Traits\HasCustomResponses;
-use Sammyjo20\Saloon\Traits\Request\BuildsUrls;
-use Sammyjo20\Saloon\Traits\Request\HasConnector;
-use Sammyjo20\Saloon\Traits\Auth\AuthenticatesRequests;
-use Sammyjo20\Saloon\Traits\Request\CastDtoFromResponse;
-use Sammyjo20\Saloon\Exceptions\PendingSaloonRequestException;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException;
-use Sammyjo20\Saloon\Traits\RequestProperties\HasRequestProperties;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Saloon\Contracts\MockClient;
+use Saloon\Traits\HasMockClient;
+use Saloon\Contracts\SaloonResponse;
+use Saloon\Traits\HasCustomResponses;
+use Saloon\Traits\Request\BuildsUrls;
+use Saloon\Traits\Request\HasConnector;
+use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Traits\Request\CastDtoFromResponse;
+use Saloon\Exceptions\PendingSaloonRequestException;
+use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Traits\RequestProperties\HasRequestProperties;
+use Saloon\Exceptions\SaloonInvalidResponseClassException;
 
 abstract class SaloonRequest
 {

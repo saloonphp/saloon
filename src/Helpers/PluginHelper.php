@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Helpers;
+namespace Saloon\Helpers;
 
 use ReflectionClass;
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Http\PendingSaloonRequest;
+use Saloon\Http\SaloonRequest;
+use Saloon\Http\SaloonConnector;
+use Saloon\Http\PendingSaloonRequest;
 
 class PluginHelper
 {

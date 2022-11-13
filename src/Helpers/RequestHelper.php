@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Helpers;
+namespace Saloon\Helpers;
 
-use Sammyjo20\Saloon\Http\SaloonRequest;
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Exceptions\SaloonInvalidRequestException;
+use Saloon\Http\SaloonRequest;
+use Saloon\Http\SaloonConnector;
+use Saloon\Exceptions\SaloonInvalidRequestException;
 
 class RequestHelper
 {

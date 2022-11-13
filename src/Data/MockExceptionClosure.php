@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Data;
+namespace Saloon\Data;
 
 use Throwable;
 use Psr\Http\Message\RequestInterface;

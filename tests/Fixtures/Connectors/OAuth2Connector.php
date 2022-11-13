@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Tests\Fixtures\Connectors;
+namespace Saloon\Tests\Fixtures\Connectors;
 
-use Sammyjo20\Saloon\Http\SaloonConnector;
-use Sammyjo20\Saloon\Helpers\OAuth2\OAuthConfig;
-use Sammyjo20\Saloon\Traits\OAuth2\AuthorizationCodeGrant;
+use Saloon\Http\SaloonConnector;
+use Saloon\Helpers\OAuth2\OAuthConfig;
+use Saloon\Traits\OAuth2\AuthorizationCodeGrant;
 
 class OAuth2Connector extends SaloonConnector
 {

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Sammyjo20\Saloon\Http\Groups;
+namespace Saloon\Http\Groups;
 
-use Sammyjo20\Saloon\Http\SaloonConnector;
+use Saloon\Http\SaloonConnector;
 
 abstract class RequestGroup
 {
