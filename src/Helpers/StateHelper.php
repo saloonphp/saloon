@@ -2,7 +2,7 @@
 
 namespace Saloon\Helpers;
 
-use Illuminate\Support\Str;
+use Saloon\Helpers\Str;
 
 class StateHelper
 {

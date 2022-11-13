@@ -2,7 +2,7 @@
 
 namespace Saloon\Http\Auth;
 
-use Carbon\CarbonInterface;
+use DateTimeImmutable;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\OAuthAuthenticator;
 
@@ -11,12 +11,12 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
     /**
      * @param string $accessToken
      * @param string $refreshToken
-     * @param CarbonInterface $expiresAt
+     * @param DateTimeImmutable $expiresAt
      */
     public function __construct(
         public string $accessToken,
         public string $refreshToken,
-        public CarbonInterface $expiresAt,
+        public DateTimeImmutable $expiresAt,
     ) {
         //
     }
@@ -60,7 +60,7 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
      */
     public function hasExpired(): bool
     {
-        return $this->expiresAt->isPast();
+        return $this->expiresAt->getTimestamp() <= (new DateTimeImmutable)->getTimestamp();
     }
 
     /**
@@ -90,9 +90,9 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
     }
 
     /**
-     * @return CarbonInterface
+     * @return DateTimeImmutable
      */
-    public function getExpiresAt(): CarbonInterface
+    public function getExpiresAt(): DateTimeImmutable
     {
         return $this->expiresAt;
     }

@@ -2,6 +2,7 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
+use DateTimeImmutable;
 use Saloon\Http\Connector;
 use Carbon\CarbonInterface;
 use Saloon\Helpers\OAuth2\OAuthConfig;
@@ -49,10 +50,10 @@ class CustomResponseOAuth2Connector extends Connector
      *
      * @param string $accessToken
      * @param string $refreshToken
-     * @param CarbonInterface $expiresAt
+     * @param DateTimeImmutable $expiresAt
      * @return OAuthAuthenticator
      */
-    protected function createOAuthAuthenticator(string $accessToken, string $refreshToken, CarbonInterface $expiresAt): OAuthAuthenticator
+    protected function createOAuthAuthenticator(string $accessToken, string $refreshToken, DateTimeImmutable $expiresAt): OAuthAuthenticator
     {
         return new CustomOAuthAuthenticator($accessToken, $refreshToken, $expiresAt, $this->greeting);
     }

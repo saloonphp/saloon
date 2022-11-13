@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
 use Carbon\CarbonImmutable;
-use Illuminate\Support\Str;
+use Saloon\Helpers\Date;
+use Saloon\Helpers\Str;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
@@ -68,7 +69,7 @@ test('you can request a token from a connector', function () {
     expect($authenticator)->toBeInstanceOf(AccessTokenAuthenticator::class);
     expect($authenticator->getAccessToken())->toEqual('access');
     expect($authenticator->getRefreshToken())->toEqual('refresh');
-    expect($authenticator->getExpiresAt())->toBeInstanceOf(CarbonImmutable::class);
+    expect($authenticator->getExpiresAt())->toBeInstanceOf(DateTimeImmutable::class);
 });
 
 test('you can request the original response instead of the authenticator on the create tokens method', function () {
@@ -104,14 +105,14 @@ test('you can refresh a token from a connector', function () {
 
     $connector->withMockClient($mockClient);
 
-    $authenticator = new AccessTokenAuthenticator('access', 'refresh', CarbonImmutable::now()->addSeconds(3600));
+    $authenticator = new AccessTokenAuthenticator('access', 'refresh', Date::now()->addSeconds(3600)->toDateTime());
 
     $newAuthenticator = $connector->refreshAccessToken($authenticator);
 
     expect($newAuthenticator)->toBeInstanceOf(AccessTokenAuthenticator::class);
     expect($newAuthenticator->getAccessToken())->toEqual('access-new');
     expect($newAuthenticator->getRefreshToken())->toEqual('refresh-new');
-    expect($newAuthenticator->getExpiresAt())->toBeInstanceOf(CarbonImmutable::class);
+    expect($newAuthenticator->getExpiresAt())->toBeInstanceOf(DateTimeImmutable::class);
 });
 
 test('you can request the original response instead of the authenticator on the refresh tokens method', function () {
@@ -123,7 +124,7 @@ test('you can request the original response instead of the authenticator on the 
 
     $connector->withMockClient($mockClient);
 
-    $authenticator = new AccessTokenAuthenticator('access', 'refresh', CarbonImmutable::now()->addSeconds(3600));
+    $authenticator = new AccessTokenAuthenticator('access', 'refresh', Date::now()->addSeconds(3600)->toDateTime());
 
     $response = $connector->refreshAccessToken($authenticator, true);
 
@@ -139,7 +140,7 @@ test('you can get the user from an oauth connector', function () {
     $connector = new OAuth2Connector;
     $connector->withMockClient($mockClient);
 
-    $accessToken = new AccessTokenAuthenticator('access', 'refresh', CarbonImmutable::now()->addSeconds(3600));
+    $accessToken = new AccessTokenAuthenticator('access', 'refresh', Date::now()->addSeconds(3600)->toDateTime());
 
     $response = $connector->getUser($accessToken);
 

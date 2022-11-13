@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use Carbon\CarbonImmutable;
+use Saloon\Helpers\Date;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
 
 it('can be serialized and unserialized', function () {
@@ -26,7 +27,7 @@ it('can be serialized and unserialized', function () {
 it('can return if it has expired or not', function () {
     $accessToken = 'access';
     $refreshToken = 'refresh';
-    $expiresAt = CarbonImmutable::now()->subMinutes(5);
+    $expiresAt = Date::now()->subMinutes(5)->toDateTime();
 
     $authenticator = new AccessTokenAuthenticator($accessToken, $refreshToken, $expiresAt);
 
