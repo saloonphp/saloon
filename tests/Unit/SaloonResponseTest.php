@@ -130,7 +130,7 @@ test('the toGuzzleResponse and toPsrResponse methods will return a guzzle respon
     $response = (new UserRequest())->send($mockClient);
 
     expect($response)->toGuzzleResponse()->toBeInstanceOf(Response::class);
-    expect($response)->toPsrResponse()->toBeInstanceOf(Response::class);
+    expect($response)->getPsrResponse()->toBeInstanceOf(Response::class);
 });
 
 test('you can get an individual header from the response', function () {

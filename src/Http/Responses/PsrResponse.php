@@ -56,11 +56,11 @@ class PsrResponse extends Response
     }
 
     /**
-     * Get the underlying PSR response for the response.
+     * Create a PSR response from the raw response.
      *
      * @return ResponseInterface
      */
-    public function toPsrResponse(): ResponseInterface
+    public function getPsrResponse(): ResponseInterface
     {
         return $this->rawResponse;
     }
