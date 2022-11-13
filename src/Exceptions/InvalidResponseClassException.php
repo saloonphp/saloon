@@ -2,7 +2,7 @@
 
 namespace Saloon\Exceptions;
 
-class SaloonInvalidResponseClassException extends SaloonException
+class InvalidResponseClassException extends SaloonException
 {
     /**
      * Constructor

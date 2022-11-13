@@ -6,8 +6,8 @@ use Saloon\Http\Request;
 use Saloon\Http\Faking\Fixture;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Exceptions\SaloonNoMockResponseFoundException;
-use Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;
+use Saloon\Exceptions\NoMockResponseFoundException;
+use Saloon\Exceptions\InvalidMockResponseCaptureMethodException;
 
 interface MockClient
 {
@@ -16,7 +16,7 @@ interface MockClient
      *
      * @param array $responses
      * @return void
-     * @throws SaloonInvalidMockResponseCaptureMethodException
+     * @throws InvalidMockResponseCaptureMethodException
      */
     public function addResponses(array $responses): void;
 
@@ -26,7 +26,7 @@ interface MockClient
      * @param MockResponse|Fixture|callable $response
      * @param string|null $captureMethod
      * @return void
-     * @throws SaloonInvalidMockResponseCaptureMethodException
+     * @throws InvalidMockResponseCaptureMethodException
      */
     public function addResponse(MockResponse|Fixture|callable $response, ?string $captureMethod = null): void;
 
@@ -42,7 +42,7 @@ interface MockClient
      *
      * @param PendingRequest $pendingRequest
      * @return MockResponse|Fixture
-     * @throws SaloonNoMockResponseFoundException
+     * @throws NoMockResponseFoundException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function guessNextResponse(PendingRequest $pendingRequest): MockResponse|Fixture;

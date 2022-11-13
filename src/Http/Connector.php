@@ -12,9 +12,9 @@ use Saloon\Traits\Connector\ProxiesRequests;
 use Saloon\Exceptions\ClassNotFoundException;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\Responses\HasCustomResponses;
-use Saloon\Exceptions\SaloonInvalidRequestException;
+use Saloon\Exceptions\InvalidRequestException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
+use Saloon\Exceptions\ConnectorMethodNotFoundException;
 
 /**
  * @method GuzzleSender sender()
@@ -56,8 +56,8 @@ abstract class Connector
      * @param $arguments
      * @return mixed
      * @throws ClassNotFoundException
-     * @throws SaloonConnectorMethodNotFoundException
-     * @throws SaloonInvalidRequestException
+     * @throws ConnectorMethodNotFoundException
+     * @throws InvalidRequestException
      * @throws \ReflectionException
      */
     public function __call($method, $arguments)
@@ -72,8 +72,8 @@ abstract class Connector
      * @param $arguments
      * @return mixed
      * @throws ClassNotFoundException
-     * @throws SaloonConnectorMethodNotFoundException
-     * @throws SaloonInvalidRequestException
+     * @throws ConnectorMethodNotFoundException
+     * @throws InvalidRequestException
      * @throws \ReflectionException
      */
     public static function __callStatic($method, $arguments)

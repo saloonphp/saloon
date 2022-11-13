@@ -5,8 +5,8 @@ namespace Saloon\Traits\Responses;
 use ReflectionException;
 use Saloon\Http\Request;
 use Saloon\Helpers\ReflectionHelper;
-use Saloon\Exceptions\SaloonInvalidConnectorException;
-use Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Saloon\Exceptions\InvalidConnectorException;
+use Saloon\Exceptions\InvalidResponseClassException;
 
 trait HasCustomResponses
 {
@@ -22,8 +22,8 @@ trait HasCustomResponses
      *
      * @return string
      * @throws ReflectionException
-     * @throws SaloonInvalidConnectorException
-     * @throws SaloonInvalidResponseClassException
+     * @throws InvalidConnectorException
+     * @throws InvalidResponseClassException
      */
     public function getResponseClass(): string
     {
@@ -35,11 +35,11 @@ trait HasCustomResponses
         }
 
         if (! class_exists($response)) {
-            throw new SaloonInvalidResponseClassException;
+            throw new InvalidResponseClassException;
         }
 
         if (! ReflectionHelper::isSubclassOf($response, $baseResponse)) {
-            throw new SaloonInvalidResponseClassException(sprintf('The custom response must extend the "%s" class.', $baseResponse));
+            throw new InvalidResponseClassException(sprintf('The custom response must extend the "%s" class.', $baseResponse));
         }
 
         return $response;

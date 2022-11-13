@@ -2,7 +2,7 @@
 
 namespace Saloon\Exceptions;
 
-class SaloonInvalidConnectorException extends SaloonException
+class InvalidConnectorException extends SaloonException
 {
     public function __construct()
     {

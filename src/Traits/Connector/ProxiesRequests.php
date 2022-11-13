@@ -8,8 +8,8 @@ use Saloon\Http\Groups\RequestGroup;
 use Saloon\Helpers\ProxyRequestNameHelper;
 use Saloon\Exceptions\ClassNotFoundException;
 use Saloon\Http\Groups\AnonymousRequestGroup;
-use Saloon\Exceptions\SaloonInvalidRequestException;
-use Saloon\Exceptions\SaloonConnectorMethodNotFoundException;
+use Saloon\Exceptions\InvalidRequestException;
+use Saloon\Exceptions\ConnectorMethodNotFoundException;
 
 trait ProxiesRequests
 {
@@ -47,14 +47,14 @@ trait ProxiesRequests
      * @param $arguments
      * @return mixed
      * @throws ClassNotFoundException
-     * @throws SaloonConnectorMethodNotFoundException
-     * @throws SaloonInvalidRequestException
+     * @throws ConnectorMethodNotFoundException
+     * @throws InvalidRequestException
      * @throws \ReflectionException
      */
     protected function proxyRequest($method, $arguments): mixed
     {
         if ($this->requestExists($method) === false) {
-            throw new SaloonConnectorMethodNotFoundException($method, $this);
+            throw new ConnectorMethodNotFoundException($method, $this);
         }
 
         $requests = $this->getRegisteredRequests();

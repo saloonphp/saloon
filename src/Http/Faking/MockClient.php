@@ -11,9 +11,9 @@ use Saloon\Http\PendingRequest;
 use Saloon\Helpers\ReflectionHelper;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Saloon\Contracts\MockClient as MockClientContract;
-use Saloon\Exceptions\SaloonInvalidConnectorException;
-use Saloon\Exceptions\SaloonNoMockResponseFoundException;
-use Saloon\Exceptions\SaloonInvalidMockResponseCaptureMethodException;
+use Saloon\Exceptions\InvalidConnectorException;
+use Saloon\Exceptions\NoMockResponseFoundException;
+use Saloon\Exceptions\InvalidMockResponseCaptureMethodException;
 
 class MockClient implements MockClientContract
 {
@@ -56,7 +56,7 @@ class MockClient implements MockClientContract
      * Constructor
      *
      * @param array $mockData
-     * @throws SaloonInvalidMockResponseCaptureMethodException
+     * @throws InvalidMockResponseCaptureMethodException
      */
     public function __construct(array $mockData = [])
     {
@@ -68,7 +68,7 @@ class MockClient implements MockClientContract
      *
      * @param array $responses
      * @return void
-     * @throws SaloonInvalidMockResponseCaptureMethodException
+     * @throws InvalidMockResponseCaptureMethodException
      */
     public function addResponses(array $responses): void
     {
@@ -87,7 +87,7 @@ class MockClient implements MockClientContract
      * @param MockResponse|Fixture|callable $response
      * @param string|null $captureMethod
      * @return void
-     * @throws SaloonInvalidMockResponseCaptureMethodException
+     * @throws InvalidMockResponseCaptureMethodException
      */
     public function addResponse(MockResponse|Fixture|callable $response, ?string $captureMethod = null): void
     {
@@ -98,7 +98,7 @@ class MockClient implements MockClientContract
         }
 
         if (! is_string($captureMethod)) {
-            throw new SaloonInvalidMockResponseCaptureMethodException;
+            throw new InvalidMockResponseCaptureMethodException;
         }
 
         // Let's detect if the capture method is either a connector or
@@ -140,7 +140,7 @@ class MockClient implements MockClientContract
      *
      * @param PendingRequest $pendingRequest
      * @return MockResponse|Fixture
-     * @throws SaloonNoMockResponseFoundException
+     * @throws NoMockResponseFoundException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function guessNextResponse(PendingRequest $pendingRequest): MockResponse|Fixture
@@ -165,7 +165,7 @@ class MockClient implements MockClientContract
         }
 
         if (empty($this->sequenceResponses)) {
-            throw new SaloonNoMockResponseFoundException;
+            throw new NoMockResponseFoundException;
         }
 
         return $this->mockResponseValue($this->getNextFromSequence(), $pendingRequest);
@@ -176,7 +176,7 @@ class MockClient implements MockClientContract
      *
      * @param Request $request
      * @return MockResponse|Fixture|callable|null
-     * @throws SaloonInvalidConnectorException
+     * @throws InvalidConnectorException
      */
     private function guessResponseFromUrl(Request $request): MockResponse|Fixture|callable|null
     {

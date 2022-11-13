@@ -4,7 +4,7 @@ namespace Saloon\Exceptions;
 
 use Saloon\Http\Connector;
 
-class SaloonMethodNotFoundException extends SaloonException
+class MethodNotFoundException extends SaloonException
 {
     /**
      * Exception

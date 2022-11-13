@@ -6,7 +6,7 @@ use GuzzleHttp\Exception\ConnectException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Exceptions\SaloonNoMockResponseFoundException;
+use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
@@ -113,7 +113,7 @@ test('saloon throws an exception if it cant work out the url response', function
     expect($mockClient->guessNextResponse($requestA))->toEqual($responseA);
     expect($mockClient->guessNextResponse($requestB))->toEqual($responseB);
 
-    $this->expectException(SaloonNoMockResponseFoundException::class);
+    $this->expectException(NoMockResponseFoundException::class);
 
     expect($mockClient->guessNextResponse($requestC))->toEqual($responseC);
 });

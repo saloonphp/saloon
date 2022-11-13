@@ -5,7 +5,7 @@ use Illuminate\Support\Collection;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Symfony\Component\DomCrawler\Crawler;
-use Saloon\Exceptions\SaloonRequestException;
+use Saloon\Exceptions\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('you can get the original request options', function () {
@@ -39,7 +39,7 @@ test('it will throw an exception when you use the throw method', function () {
 
     $response = (new UserRequest())->send($mockClient);
 
-    $this->expectException(SaloonRequestException::class);
+    $this->expectException(RequestException::class);
 
     $response->throw();
 });
@@ -62,7 +62,7 @@ test('to exception will return a saloon request exception', function () {
     $response = (new UserRequest())->send($mockClient);
     $exception = $response->toException();
 
-    expect($exception)->toBeInstanceOf(SaloonRequestException::class);
+    expect($exception)->toBeInstanceOf(RequestException::class);
 });
 
 test('to exception wont return anything if the request did not fail', function () {

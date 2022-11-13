@@ -6,8 +6,8 @@ use Saloon\Http\Faking\Fixture;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Contracts\RequestMiddleware;
-use Saloon\Exceptions\SaloonInvalidConnectorException;
-use Saloon\Exceptions\SaloonNoMockResponseFoundException;
+use Saloon\Exceptions\InvalidConnectorException;
+use Saloon\Exceptions\NoMockResponseFoundException;
 
 class DetermineMockResponse implements RequestMiddleware
 {
@@ -16,8 +16,8 @@ class DetermineMockResponse implements RequestMiddleware
      *
      * @param PendingRequest $pendingRequest
      * @return PendingRequest|DetermineMockResponse
-     * @throws SaloonInvalidConnectorException
-     * @throws SaloonNoMockResponseFoundException
+     * @throws InvalidConnectorException
+     * @throws NoMockResponseFoundException
      * @throws \JsonException
      * @throws \Sammyjo20\Saloon\Exceptions\FixtureMissingException
      */

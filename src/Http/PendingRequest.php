@@ -17,10 +17,10 @@ use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
-use Saloon\Exceptions\PendingSaloonRequestException;
-use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Exceptions\PendingRequestException;
+use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Saloon\Exceptions\InvalidResponseClassException;
 use Sammyjo20\SaloonLaravel\Http\Middleware\SaloonLaravelMiddleware;
 
 class PendingRequest
@@ -83,10 +83,10 @@ class PendingRequest
      *
      * @param Request $request
      * @param MockClient|null $mockClient
-     * @throws PendingSaloonRequestException
+     * @throws PendingRequestException
      * @throws ReflectionException
-     * @throws SaloonInvalidConnectorException
-     * @throws SaloonInvalidResponseClassException
+     * @throws InvalidConnectorException
+     * @throws InvalidResponseClassException
      */
     public function __construct(Request $request, MockClient $mockClient = null)
     {
@@ -186,7 +186,7 @@ class PendingRequest
      * Merge the body together
      *
      * @return $this
-     * @throws PendingSaloonRequestException
+     * @throws PendingRequestException
      */
     protected function mergeBody(): static
     {
@@ -201,7 +201,7 @@ class PendingRequest
         }
 
         if (isset($connectorBody, $requestBody) && ! $connectorBody instanceof $requestBody) {
-            throw new PendingSaloonRequestException('Connector and request body types must be the same.');
+            throw new PendingRequestException('Connector and request body types must be the same.');
         }
 
         if ($connectorBody instanceof ArrayBodyRepository && $requestBody instanceof ArrayBodyRepository) {

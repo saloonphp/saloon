@@ -13,10 +13,10 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
-use Saloon\Exceptions\PendingSaloonRequestException;
-use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Exceptions\PendingRequestException;
+use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Saloon\Exceptions\SaloonInvalidResponseClassException;
+use Saloon\Exceptions\InvalidResponseClassException;
 
 abstract class Request
 {
@@ -55,9 +55,9 @@ abstract class Request
      *
      * @param MockClient|null $mockClient
      * @return PendingRequest
-     * @throws PendingSaloonRequestException
-     * @throws SaloonInvalidConnectorException
-     * @throws SaloonInvalidResponseClassException
+     * @throws PendingRequestException
+     * @throws InvalidConnectorException
+     * @throws InvalidResponseClassException
      * @throws \ReflectionException
      */
     public function createPendingRequest(MockClient $mockClient = null): PendingRequest
@@ -69,7 +69,7 @@ abstract class Request
      * Access the HTTP sender
      *
      * @return Sender
-     * @throws SaloonInvalidConnectorException
+     * @throws InvalidConnectorException
      */
     public function sender(): Sender
     {
@@ -82,7 +82,7 @@ abstract class Request
      * @param MockClient|null $mockClient
      * @param bool $asynchronous
      * @return Response|PromiseInterface
-     * @throws SaloonInvalidConnectorException
+     * @throws InvalidConnectorException
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */
@@ -96,7 +96,7 @@ abstract class Request
      *
      * @param MockClient|null $mockClient
      * @return PromiseInterface
-     * @throws SaloonInvalidConnectorException
+     * @throws InvalidConnectorException
      * @throws \ReflectionException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */

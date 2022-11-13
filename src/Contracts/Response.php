@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Exceptions\SaloonRequestException;
+use Saloon\Exceptions\RequestException;
 
 interface Response
 {
@@ -173,7 +173,7 @@ interface Response
      * Throw an exception if a server or client error occurred.
      *
      * @return $this
-     * @throws SaloonRequestException
+     * @throws RequestException
      */
     public function throw(): static;
 

@@ -4,7 +4,7 @@ use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Exceptions\SaloonRequestException;
+use Saloon\Exceptions\RequestException;
 use Saloon\Tests\Fixtures\Responses\UserData;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
@@ -37,7 +37,7 @@ test('an asynchronous request can handle an exception properly', function () {
     $request = new ErrorRequest();
     $promise = $request->sendAsync();
 
-    $this->expectException(SaloonRequestException::class);
+    $this->expectException(RequestException::class);
 
     $promise->wait();
 });

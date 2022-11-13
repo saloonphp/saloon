@@ -4,7 +4,7 @@ namespace Saloon\Helpers;
 
 use Saloon\Http\Request;
 use Saloon\Http\Connector;
-use Saloon\Exceptions\SaloonInvalidRequestException;
+use Saloon\Exceptions\InvalidRequestException;
 
 class RequestHelper
 {
@@ -15,7 +15,7 @@ class RequestHelper
      * @param string $request
      * @param array $arguments
      * @return Request
-     * @throws SaloonInvalidRequestException
+     * @throws InvalidRequestException
      * @throws \ReflectionException
      */
     public static function callFromConnector(Connector $connector, string $request, array $arguments = []): Request
@@ -23,7 +23,7 @@ class RequestHelper
         $isValidRequest = ReflectionHelper::isSubclassOf($request, Request::class);
 
         if (! $isValidRequest) {
-            throw new SaloonInvalidRequestException($request);
+            throw new InvalidRequestException($request);
         }
 
         return (new $request(...$arguments))->setConnector($connector);

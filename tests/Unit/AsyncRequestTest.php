@@ -6,8 +6,8 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
-use Saloon\Exceptions\SaloonRequestException;
+use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
+use Saloon\Exceptions\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('an asynchronous request will return a saloon response on a successful request', function () {
@@ -42,7 +42,7 @@ test('an asynchronous request will throw a saloon exception on an unsuccessful r
     try {
         $promise->wait();
     } catch (Exception $exception) {
-        expect($exception)->toBeInstanceOf(SaloonRequestException::class);
+        expect($exception)->toBeInstanceOf(RequestException::class);
 
         $response = $exception->getResponse();
 
@@ -96,7 +96,7 @@ test('if you chain an erroneous asynchronous request the error can be caught in 
 
     $promise->then(
         null,
-        function (SaloonRequestException $exception) {
+        function (RequestException $exception) {
             $response = $exception->getResponse();
 
             expect($response)->toBeInstanceOf(Response::class);

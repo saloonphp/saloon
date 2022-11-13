@@ -10,7 +10,7 @@ use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
-use Saloon\Exceptions\SaloonNoMockResponseFoundException;
+use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
@@ -50,7 +50,7 @@ test('a request can be mocked with a sequence', function () {
     expect($responseC->json())->toEqual(['error' => 'Server Unavailable']);
     expect($responseC->status())->toEqual(500);
 
-    $this->expectException(SaloonNoMockResponseFoundException::class);
+    $this->expectException(NoMockResponseFoundException::class);
 
     (new UserRequest)->send($mockClient);
 });

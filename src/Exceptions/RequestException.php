@@ -5,7 +5,7 @@ namespace Saloon\Exceptions;
 use Throwable;
 use Saloon\Http\Responses\Response;
 
-class SaloonRequestException extends SaloonException
+class RequestException extends SaloonException
 {
     /**
      * The Saloon Response
@@ -15,7 +15,7 @@ class SaloonRequestException extends SaloonException
     protected Response $saloonResponse;
 
     /**
-     * Create the SaloonRequestException
+     * Create the RequestException
      *
      * @param Response $response
      * @param $message

@@ -4,7 +4,7 @@ namespace Saloon\Exceptions;
 
 use Saloon\Http\Connector;
 
-class SaloonConnectorMethodNotFoundException extends SaloonException
+class ConnectorMethodNotFoundException extends SaloonException
 {
     public function __construct(string $method, Connector $connector)
     {

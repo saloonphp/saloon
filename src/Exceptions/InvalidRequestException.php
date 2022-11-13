@@ -2,7 +2,7 @@
 
 namespace Saloon\Exceptions;
 
-class SaloonInvalidRequestException extends SaloonException
+class InvalidRequestException extends SaloonException
 {
     /**
      * @param string $request

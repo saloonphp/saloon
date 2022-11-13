@@ -3,7 +3,7 @@
 namespace Saloon\Traits\Request;
 
 use Saloon\Http\Connector;
-use Saloon\Exceptions\SaloonInvalidConnectorException;
+use Saloon\Exceptions\InvalidConnectorException;
 
 trait HasConnector
 {
@@ -18,7 +18,7 @@ trait HasConnector
      * Retrieve the loaded connector.
      *
      * @return Connector
-     * @throws SaloonInvalidConnectorException
+     * @throws InvalidConnectorException
      */
     public function connector(): Connector
     {
@@ -42,12 +42,12 @@ trait HasConnector
      * Create a new connector instance.
      *
      * @return Connector
-     * @throws SaloonInvalidConnectorException
+     * @throws InvalidConnectorException
      */
     protected function resolveConnector(): Connector
     {
         if (empty($this->connector) || ! class_exists($this->connector)) {
-            throw new SaloonInvalidConnectorException;
+            throw new InvalidConnectorException;
         }
 
         return new $this->connector;

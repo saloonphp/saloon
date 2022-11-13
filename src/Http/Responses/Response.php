@@ -10,7 +10,7 @@ use Saloon\Http\PendingRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
 use Symfony\Component\DomCrawler\Crawler;
-use Saloon\Exceptions\SaloonRequestException;
+use Saloon\Exceptions\RequestException;
 use Saloon\Contracts\Response as ResponseContract;
 
 abstract class Response implements ResponseContract
@@ -274,14 +274,14 @@ abstract class Response implements ResponseContract
      */
     protected function createException(string $body): Exception
     {
-        return new SaloonRequestException($this, $body, 0, $this->getRequestException());
+        return new RequestException($this, $body, 0, $this->getRequestException());
     }
 
     /**
      * Throw an exception if a server or client error occurred.
      *
      * @return $this
-     * @throws SaloonRequestException
+     * @throws RequestException
      */
     public function throw(): static
     {
