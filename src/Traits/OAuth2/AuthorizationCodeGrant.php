@@ -4,6 +4,8 @@ namespace Saloon\Traits\OAuth2;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
+use DateTimeImmutable;
+use Saloon\Helpers\Date;
 use Saloon\Helpers\URLHelper;
 use Saloon\Helpers\StateHelper;
 use Saloon\Http\Responses\Response;
@@ -169,7 +171,7 @@ trait AuthorizationCodeGrant
 
         $accessToken = $responseData->access_token;
         $refreshToken = $responseData->refresh_token ?? $fallbackRefreshToken;
-        $expiresAt = CarbonImmutable::now()->addSeconds($responseData->expires_in);
+        $expiresAt = Date::now()->addSeconds($responseData->expires_in)->toDateTime();
 
         return $this->createOAuthAuthenticator($accessToken, $refreshToken, $expiresAt);
     }
@@ -179,10 +181,10 @@ trait AuthorizationCodeGrant
      *
      * @param string $accessToken
      * @param string $refreshToken
-     * @param CarbonInterface $expiresAt
+     * @param DateTimeImmutable $expiresAt
      * @return OAuthAuthenticator
      */
-    protected function createOAuthAuthenticator(string $accessToken, string $refreshToken, CarbonInterface $expiresAt): OAuthAuthenticator
+    protected function createOAuthAuthenticator(string $accessToken, string $refreshToken, DateTimeImmutable $expiresAt): OAuthAuthenticator
     {
         return new AccessTokenAuthenticator($accessToken, $refreshToken, $expiresAt);
     }
@@ -199,7 +201,7 @@ trait AuthorizationCodeGrant
     public function getUser(OAuthAuthenticator $oauthAuthenticator): Response
     {
         return $this->send(
-            GetUserRequest::make($this->oauthConfig())->withAuth($oauthAuthenticator)
+            GetUserRequest::make($this->oauthConfig())->authenticateWith($oauthAuthenticator)
         );
     }
 

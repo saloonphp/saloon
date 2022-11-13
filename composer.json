@@ -1,6 +1,6 @@
 {
     "name": "sammyjo20/saloon",
-    "description": "A Laravel/PHP package that allows you to write your API integrations or SDKs in a beautiful, standardised syntax.",
+    "description": "A PHP package for interacting with third-party APIs or building SDKs in a beautiful, reusable way. Cowboy hats included.",
     "license": "MIT",
     "type": "library",
     "keywords": [
@@ -22,13 +22,12 @@
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.4",
         "guzzlehttp/promises": "^1.5",
-        "illuminate/support": "^8.0 || ^9.0",
-        "nesbot/carbon": "^2.58",
         "psr/http-message": "^1.0"
     },
     "require-dev": {
         "ext-simplexml": "*",
         "friendsofphp/php-cs-fixer": "^3.5",
+        "illuminate/collections": "^9.39",
         "league/flysystem": "^3.0",
         "nunomaduro/phpinsights": "^2.6",
         "pestphp/pest": "^1.21",
@@ -37,7 +36,8 @@
         "symfony/dom-crawler": "^6.0"
     },
     "suggest": {
-        "symfony/dom-crawler": "Required for the SaloonResponse dom() method to parse HTML and XML."
+        "illuminate/collections": "Required for the response collect() method.",
+        "symfony/dom-crawler": "Required for the response dom() method."
     },
     "minimum-stability": "stable",
     "autoload": {

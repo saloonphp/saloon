@@ -3,6 +3,7 @@
 namespace Saloon\Repositories;
 
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
+use Saloon\Helpers\Helpers;
 
 class ArrayStore implements ArrayStoreContract
 {
@@ -80,7 +81,7 @@ class ArrayStore implements ArrayStoreContract
      */
     public function add(string $key, mixed $value): static
     {
-        $this->data[$key] = value($value);
+        $this->data[$key] = Helpers::value($value);
 
         return $this;
     }

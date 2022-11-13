@@ -2,21 +2,21 @@
 
 namespace Saloon\Tests\Fixtures\Authenticators;
 
-use Carbon\CarbonInterface;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
+use DateTimeImmutable;
 
 class CustomOAuthAuthenticator extends AccessTokenAuthenticator
 {
     /**
      * @param string $accessToken
      * @param string $refreshToken
-     * @param CarbonInterface $expiresAt
+     * @param DateTimeImmutable $expiresAt
      * @param string $greeting
      */
     public function __construct(
         public string $accessToken,
         public string $refreshToken,
-        public CarbonInterface $expiresAt,
+        public DateTimeImmutable $expiresAt,
         public string $greeting,
     ) {
         //

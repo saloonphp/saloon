@@ -2,8 +2,6 @@
 
 namespace Saloon\Helpers;
 
-use Illuminate\Support\Str;
-
 class URLHelper
 {
     /**

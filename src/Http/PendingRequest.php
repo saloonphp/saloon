@@ -8,6 +8,7 @@ use Saloon\Contracts\Sender;
 use Saloon\Contracts\Response;
 use Saloon\Helpers\Environment;
 use Saloon\Contracts\MockClient;
+use Saloon\Helpers\Helpers;
 use Saloon\Helpers\PluginHelper;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\WithBody;
@@ -136,8 +137,8 @@ class PendingRequest
         $connector = $this->connector;
         $request = $this->request;
 
-        $connectorTraits = class_uses_recursive($connector);
-        $requestTraits = class_uses_recursive($request);
+        $connectorTraits = Helpers::classUsesRecursive($connector);
+        $requestTraits = Helpers::classUsesRecursive($request);
 
         foreach ($connectorTraits as $connectorTrait) {
             PluginHelper::bootPlugin($this, $connector, $connectorTrait);

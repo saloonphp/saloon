@@ -107,7 +107,7 @@ test('the object method will return an object', function () {
 
 test('the collect method will return a collection', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 500),
+        MockResponse::make(500, ['name' => 'Sam', 'work' => 'Codepotato']),
     ]);
 
     $response = (new UserRequest())->send($mockClient);

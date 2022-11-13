@@ -3,6 +3,7 @@
 namespace Saloon\Contracts;
 
 use Carbon\CarbonInterface;
+use DateTimeImmutable;
 
 interface OAuthAuthenticator extends Authenticator
 {
@@ -17,9 +18,9 @@ interface OAuthAuthenticator extends Authenticator
     public function getRefreshToken(): string;
 
     /**
-     * @return CarbonInterface
+     * @return DateTimeImmutable
      */
-    public function getExpiresAt(): CarbonInterface;
+    public function getExpiresAt(): DateTimeImmutable;
 
     /**
      * @return bool
