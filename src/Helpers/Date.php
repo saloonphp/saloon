@@ -44,6 +44,21 @@ class Date
     }
 
     /**
+     * Subtract minutes
+     *
+     * @param int $minutes
+     * @return $this
+     */
+    public function subMinutes(int $minutes): static
+    {
+        $this->dateTime->sub(
+            DateInterval::createFromDateString($minutes . ' minutes')
+        );
+
+        return $this;
+    }
+
+    /**
      * Get the datetime instance
      *
      * @return DateTimeImmutable

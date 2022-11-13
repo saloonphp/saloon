@@ -60,7 +60,7 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
      */
     public function hasExpired(): bool
     {
-        return $this->expiresAt->isPast();
+        return $this->expiresAt->getTimestamp() <= (new DateTimeImmutable)->getTimestamp();
     }
 
     /**
