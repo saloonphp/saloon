@@ -3,9 +3,9 @@
 namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Http\Request;
-use Saloon\Http\Responses\Response;
 use Saloon\Tests\Fixtures\Data\User;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Contracts\Response;
 
 class DTORequest extends Request
 {

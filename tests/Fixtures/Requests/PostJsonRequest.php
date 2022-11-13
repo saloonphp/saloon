@@ -2,11 +2,12 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
+use Saloon\Contracts\Body\WithBody;
 use Saloon\Http\Request;
-use Saloon\Traits\Plugins\HasJsonBody;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Traits\Body\HasJsonBody;
 
-class PostJsonRequest extends Request
+class PostJsonRequest extends Request implements WithBody
 {
     use HasJsonBody;
 
@@ -34,7 +35,7 @@ class PostJsonRequest extends Request
         return '/user';
     }
 
-    public function defaultData(): array
+    public function defaultBody(): array
     {
         return [
             'foo' => 'bar',

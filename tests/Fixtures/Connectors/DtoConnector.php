@@ -4,14 +4,12 @@ namespace Saloon\Tests\Fixtures\Connectors;
 
 use Saloon\Http\Connector;
 use Saloon\Http\Responses\Response;
-use Saloon\Traits\Plugins\CastsToDto;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Tests\Fixtures\Data\ApiResponse;
 
 class DtoConnector extends Connector
 {
     use AcceptsJson;
-    use CastsToDto;
 
     /**
      * Define the base url of the api.
