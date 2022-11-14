@@ -16,9 +16,6 @@ use Saloon\Exceptions\InvalidRequestException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Exceptions\ConnectorMethodNotFoundException;
 
-/**
- * @method GuzzleSender sender()
- */
 abstract class Connector
 {
     use AuthenticatesRequests;

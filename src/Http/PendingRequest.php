@@ -2,26 +2,27 @@
 
 namespace Saloon\Http;
 
+use GuzzleHttp\Promise\PromiseInterface;
 use ReflectionException;
-use Saloon\Enums\Method;
-use Saloon\Contracts\Sender;
-use Saloon\Contracts\Response;
-use Saloon\Helpers\Environment;
+use Saloon\Contracts\Body\BodyRepository;
+use Saloon\Contracts\Body\WithBody;
 use Saloon\Contracts\MockClient;
+use Saloon\Contracts\Response;
+use Saloon\Contracts\Sender;
+use Saloon\Enums\Method;
+use Saloon\Exceptions\InvalidConnectorException;
+use Saloon\Exceptions\InvalidResponseClassException;
+use Saloon\Exceptions\PendingRequestException;
+use Saloon\Helpers\Environment;
 use Saloon\Helpers\Helpers;
 use Saloon\Helpers\PluginHelper;
-use Saloon\Traits\HasMockClient;
-use Saloon\Contracts\Body\WithBody;
-use Saloon\Contracts\Body\BodyRepository;
-use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Faking\SimulatedResponsePayload;
+use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
-use Saloon\Exceptions\PendingRequestException;
-use Saloon\Exceptions\InvalidConnectorException;
+use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Traits\HasMockClient;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Saloon\Exceptions\InvalidResponseClassException;
 use Sammyjo20\SaloonLaravel\Http\Middleware\SaloonLaravelMiddleware;
 
 class PendingRequest
@@ -392,5 +393,25 @@ class PendingRequest
     public function hasSimulatedResponsePayload(): bool
     {
         return $this->simulatedResponsePayload instanceof SimulatedResponsePayload;
+    }
+
+    /**
+     * Send the PendingRequest
+     *
+     * @return Response
+     */
+    public function send(): Response
+    {
+        return (new Dispatcher($this))->execute();
+    }
+
+    /**
+     * Send the PendingRequest asynchronously
+     *
+     * @return PromiseInterface
+     */
+    public function sendAsync(): PromiseInterface
+    {
+        return (new Dispatcher($this, true))->execute();
     }
 }

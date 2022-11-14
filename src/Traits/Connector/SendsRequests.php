@@ -2,13 +2,12 @@
 
 namespace Saloon\Traits\Connector;
 
-use ReflectionException;
-use Saloon\Http\Request;
-use Saloon\Contracts\Response;
-use Saloon\Actions\SendRequest;
-use Saloon\Http\Faking\MockClient;
-use Saloon\Exceptions\SaloonException;
 use GuzzleHttp\Promise\PromiseInterface;
+use ReflectionException;
+use Saloon\Contracts\Response;
+use Saloon\Exceptions\SaloonException;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Request;
 
 trait SendsRequests
 {
@@ -17,18 +16,17 @@ trait SendsRequests
      *
      * @param Request $request
      * @param MockClient|null $mockClient
-     * @param bool $asynchronous
-     * @return Response|PromiseInterface
-     * @throws SaloonException
+     * @return Response
      * @throws ReflectionException
+     * @throws \Saloon\Exceptions\InvalidConnectorException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
+     * @throws \Saloon\Exceptions\PendingRequestException
      */
-    public function send(Request $request, MockClient $mockClient = null, bool $asynchronous = false): Response|PromiseInterface
+    public function send(Request $request, MockClient $mockClient = null): Response
     {
         $request->setConnector($this);
 
-        $pendingRequest = $request->createPendingRequest($mockClient);
-
-        return (new SendRequest($pendingRequest, $asynchronous))->execute();
+        return $request->createPendingRequest($mockClient)->send();
     }
 
     /**
@@ -42,6 +40,8 @@ trait SendsRequests
      */
     public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface
     {
-        return $this->send($request, $mockClient, true);
+        $request->setConnector($this);
+
+        return $request->createPendingRequest($mockClient)->sendAsync();
     }
 }

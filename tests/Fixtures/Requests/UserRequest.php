@@ -37,4 +37,11 @@ class UserRequest extends Request
     {
         return '/user';
     }
+
+    protected function defaultHeaders(): array
+    {
+        return [
+            'X-Foo' => 'Bar'
+        ];
+    }
 }

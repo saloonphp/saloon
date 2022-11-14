@@ -77,18 +77,18 @@ abstract class Request
     }
 
     /**
-     * Send a request
+     * Send a request synchronously
      *
      * @param MockClient|null $mockClient
-     * @param bool $asynchronous
-     * @return Response|PromiseInterface
+     * @return Response
      * @throws InvalidConnectorException
+     * @throws InvalidResponseClassException
+     * @throws PendingRequestException
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
      */
-    public function send(MockClient $mockClient = null, bool $asynchronous = false): Response|PromiseInterface
+    public function send(MockClient $mockClient = null): Response
     {
-        return $this->connector()->send($this, $mockClient, $asynchronous);
+        return $this->connector()->send($this, $mockClient);
     }
 
     /**
@@ -98,11 +98,11 @@ abstract class Request
      * @return PromiseInterface
      * @throws InvalidConnectorException
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
+     * @throws \Saloon\Exceptions\SaloonException
      */
     public function sendAsync(MockClient $mockClient = null): PromiseInterface
     {
-        return $this->send($mockClient, true);
+        return $this->connector()->sendAsync($this, $mockClient);
     }
 
     /**

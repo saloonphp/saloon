@@ -1,15 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Saloon\Actions;
+namespace Saloon\Http;
 
-use Saloon\Contracts\Response;
-use Saloon\Http\PendingRequest;
-use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Contracts\Response;
+use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Responses\SimulatedResponse;
 
-class SendRequest
+class Dispatcher
 {
     /**
      * Constructor
