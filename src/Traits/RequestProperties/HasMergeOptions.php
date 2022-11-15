@@ -4,7 +4,7 @@ namespace Saloon\Traits\RequestProperties;
 
 use Saloon\Data\MergeOptions;
 
-trait ControlsConnectorMerging
+trait HasMergeOptions
 {
     /**
      * Merge Options
