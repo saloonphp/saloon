@@ -9,6 +9,7 @@ use Saloon\Contracts\Body\WithBody;
 use Saloon\Contracts\MockClient;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\Sender;
+use Saloon\Data\MergeOptions;
 use Saloon\Enums\Method;
 use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Exceptions\InvalidResponseClassException;
@@ -81,6 +82,15 @@ class PendingRequest
     protected ?SimulatedResponsePayload $simulatedResponsePayload = null;
 
     /**
+     * Merge Options
+     *
+     * Used to determine what to merge from the connector.
+     *
+     * @var MergeOptions
+     */
+    protected MergeOptions $mergeOptions;
+
+    /**
      * Build up the request payload.
      *
      * @param Request $request
@@ -100,7 +110,8 @@ class PendingRequest
         $this->method = Method::upperFrom($request->getMethod());
         $this->responseClass = $request->getResponseClass();
         $this->mockClient = $mockClient ?? ($request->getMockClient() ?? $connector->getMockClient());
-        $this->authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
+        $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
+        $this->mergeOptions = $request->mergeOptions();
 
         // After we have defined each of our properties, we will run the various
         // methods that build up the PendingRequest. It's important that
@@ -161,16 +172,21 @@ class PendingRequest
     {
         $connector = $this->connector;
         $request = $this->request;
+        $mergeOptions = $this->mergeOptions;
 
-        $this->headers()->merge(
-            $connector->headers()->all(),
-            $request->headers()->all()
-        );
+        // Firstly merge the connector options if the merge options
+        // allow us to do so.
 
-        $this->queryParameters()->merge(
-            $connector->queryParameters()->all(),
-            $request->queryParameters()->all()
-        );
+        if ($mergeOptions->includesConnectorHeaders()) {
+            $this->headers()->merge($connector->headers()->all());
+        }
+
+        if ($mergeOptions->includesConnectorQueryParameters()) {
+            $this->queryParameters()->merge($connector->queryParameters()->all());
+        }
+
+        $this->headers()->merge($request->headers()->all());
+        $this->queryParameters()->merge($request->queryParameters()->all());
 
         $this->config()->merge(
             $connector->config()->all(),

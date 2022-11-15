@@ -3,24 +3,21 @@
 namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Http\Request;
-use Saloon\Traits\Plugins\HasJsonBody;
 use Saloon\Tests\Fixtures\Connectors\HeaderConnector;
 
 class HeaderRequest extends Request
 {
-    use HasJsonBody;
-
     /**
      * Define the method that the request will use.
      *
-     * @var string|null
+     * @var string
      */
     protected string $method = 'GET';
 
     /**
      * The connector.
      *
-     * @var string|null
+     * @var string
      */
     protected string $connector = HeaderConnector::class;
 
@@ -29,29 +26,22 @@ class HeaderRequest extends Request
      *
      * @return string
      */
-    public function defineEndpoint(): string
+    protected function defineEndpoint(): string
     {
         return '/user';
     }
 
-    public function defaultHeaders(): array
+    protected function defaultHeaders(): array
     {
         return [
             'X-Custom-Header' => 'Howdy',
         ];
     }
 
-    public function defaultConfig(): array
+    protected function defaultConfig(): array
     {
         return [
             'timeout' => 5,
-        ];
-    }
-
-    public function defaultData(): array
-    {
-        return [
-            'foo' => 'bar',
         ];
     }
 }

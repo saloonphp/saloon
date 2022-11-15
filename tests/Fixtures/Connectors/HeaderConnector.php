@@ -4,14 +4,12 @@ namespace Saloon\Tests\Fixtures\Connectors;
 
 use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
-use Saloon\Traits\Plugins\HasJsonBody;
 use Saloon\Traits\Plugins\WithDebugData;
 
 class HeaderConnector extends Connector
 {
     use AcceptsJson;
     use WithDebugData;
-    use HasJsonBody;
 
     public function defineBaseUrl(): string
     {

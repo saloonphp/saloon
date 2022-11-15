@@ -51,7 +51,7 @@ trait AuthenticatesRequests
     }
 
     /**
-     * Authenticate the request with an Authorization header..
+     * Authenticate the request with an Authorization header.
      *
      * @param string $token
      * @param string $prefix
