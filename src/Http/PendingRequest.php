@@ -11,7 +11,6 @@ use Saloon\Contracts\Response;
 use Saloon\Contracts\Sender;
 use Saloon\Data\MergeOptions;
 use Saloon\Enums\Method;
-use Saloon\Exceptions\DispatcherException;
 use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Exceptions\PendingRequestException;
@@ -23,14 +22,16 @@ use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
 use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Sammyjo20\SaloonLaravel\Http\Middleware\SaloonLaravelMiddleware;
 
 class PendingRequest
 {
-    use HasRequestProperties;
     use AuthenticatesRequests;
+    use HasRequestProperties;
+    use Conditionable;
     use HasMockClient;
 
     /**

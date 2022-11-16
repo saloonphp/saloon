@@ -3,6 +3,7 @@
 namespace Saloon\Http;
 
 use Saloon\Traits\Bootable;
+use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Traits\Connector\HasPool;
 use Saloon\Http\Senders\GuzzleSender;
@@ -24,6 +25,7 @@ abstract class Connector
     use ProxiesRequests;
     use HasMockClient;
     use SendsRequests;
+    use Conditionable;
     use HasSender;
     use Bootable;
     use HasPool;

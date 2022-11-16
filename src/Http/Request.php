@@ -6,6 +6,7 @@ use Saloon\Traits\Bootable;
 use Saloon\Contracts\Sender;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\MockClient;
+use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Traits\Request\BuildsUrls;
 use Saloon\Traits\Request\HasConnector;
@@ -27,6 +28,7 @@ abstract class Request
     use HasCustomResponses;
     use HasMergeOptions;
     use HasMockClient;
+    use Conditionable;
     use HasConnector;
     use BuildsUrls;
     use Bootable;
