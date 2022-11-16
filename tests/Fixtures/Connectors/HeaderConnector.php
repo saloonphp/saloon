@@ -9,7 +9,6 @@ use Saloon\Traits\Plugins\WithDebugData;
 class HeaderConnector extends Connector
 {
     use AcceptsJson;
-    use WithDebugData;
 
     public function defineBaseUrl(): string
     {

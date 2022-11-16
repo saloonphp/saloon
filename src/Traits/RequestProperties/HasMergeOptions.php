@@ -16,6 +16,9 @@ trait HasMergeOptions
     /**
      * Manage Merge Options
      *
+     * When a PendingRequest is created the MergeOptions will be used to determine
+     * which properties will be merged from the connector.
+     *
      * @return MergeOptions
      */
     public function mergeOptions(): MergeOptions

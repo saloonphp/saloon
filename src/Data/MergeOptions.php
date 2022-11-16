@@ -60,35 +60,5 @@ class MergeOptions
         return $this->includeConnectorHeaders;
     }
 
-    /**
-     * @return $this
-     */
-    public function withConnectorQueryParameters(): static
-    {
-        $this->includeConnectorQueryParameters = true;
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function withoutConnectorQueryParameters(): static
-    {
-        $this->includeConnectorQueryParameters = false;
-
-        return $this;
-    }
-
-    /**
-     * Check if we should include connector headers
-     *
-     * @return bool
-     */
-    public function includesConnectorQueryParameters(): bool
-    {
-        return $this->includeConnectorQueryParameters;
-    }
-
-
+    // Todo: Write other merge options
 }

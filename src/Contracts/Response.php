@@ -185,22 +185,6 @@ interface Response
     public function __toString(): string;
 
     /**
-     * Set if the response is cached. Should only be used internally.
-     *
-     * @param bool $cached
-     * @return $this
-     */
-    public function setCached(bool $cached): static;
-
-    /**
-     * Set if the response is mocked. Should only be used internally.
-     *
-     * @param bool $mocked
-     * @return $this
-     */
-    public function setMocked(bool $mocked): static;
-
-    /**
      * Check if the response has been cached
      *
      * @return bool
@@ -243,20 +227,4 @@ interface Response
      * @throws \JsonException
      */
     public function close(): static;
-
-    /**
-     * Set the isCached property
-     *
-     * @param bool $isCached
-     * @return Response
-     */
-    public function setIsCached(bool $isCached): Response;
-
-    /**
-     * Set the isMocked property
-     *
-     * @param bool $isMocked
-     * @return Response
-     */
-    public function setIsMocked(bool $isMocked): Response;
 }

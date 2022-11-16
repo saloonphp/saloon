@@ -2,13 +2,14 @@
 
 namespace Saloon\Http\Faking;
 
-use Throwable;
+use Closure;
+use Saloon\Http\PendingRequest;
 use Saloon\Repositories\ArrayStore;
-use Psr\Http\Message\RequestInterface;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Repositories\Body\JsonBodyRepository;
 use Saloon\Exceptions\DirectoryNotFoundException;
 use Saloon\Repositories\Body\StringBodyRepository;
+use Throwable;
 
 class SimulatedResponsePayload
 {
@@ -36,9 +37,9 @@ class SimulatedResponsePayload
     /**
      * Exception Closure
      *
-     * @var MockExceptionClosure|null
+     * @var Closure|null
      */
-    protected ?MockExceptionClosure $exceptionClosure = null;
+    protected ?Closure $responseException = null;
 
     /**
      * Create a new mock response
@@ -77,21 +78,6 @@ class SimulatedResponsePayload
     public static function fixture(string $name): Fixture
     {
         return new Fixture($name);
-    }
-
-    /**
-     * Throw an exception on the request.
-     *
-     * @param callable|Throwable $value
-     * @return $this
-     */
-    public function throw(callable|Throwable $value): static
-    {
-        $closure = $value instanceof Throwable ? static fn () => $value : $value;
-
-        $this->exceptionClosure = new MockExceptionClosure($closure);
-
-        return $this;
     }
 
     /**
@@ -135,23 +121,42 @@ class SimulatedResponsePayload
     }
 
     /**
+     * Throw an exception on the request.
+     *
+     * @param Closure|Throwable $value
+     * @return $this
+     */
+    public function throw(Closure|Throwable $value): static
+    {
+        $closure = $value instanceof Throwable ? static fn () => $value : $value;
+
+        $this->responseException = $closure;
+
+        return $this;
+    }
+
+    /**
      * Checks if the response throws an exception.
      *
      * @return bool
      */
     public function throwsException(): bool
     {
-        return $this->exceptionClosure instanceof MockExceptionClosure;
+        return $this->responseException instanceof Closure;
     }
 
     /**
-     * Retrieve the exception.
+     * Invoke the exception.
      *
-     * @param RequestInterface $psrRequest
-     * @return Throwable
+     * @param PendingRequest $pendingRequest
+     * @return Throwable|null
      */
-    public function getException(RequestInterface $psrRequest): Throwable
+    public function getException(PendingRequest $pendingRequest): ?Throwable
     {
-        return $this->exceptionClosure->call($psrRequest);
+        if (is_null($this->responseException)) {
+            return null;
+        }
+
+        return call_user_func($this->responseException, $pendingRequest);
     }
 }

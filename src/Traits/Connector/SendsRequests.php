@@ -18,9 +18,7 @@ trait SendsRequests
      * @param MockClient|null $mockClient
      * @return Response
      * @throws ReflectionException
-     * @throws \Saloon\Exceptions\InvalidConnectorException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
-     * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws \Saloon\Exceptions\SaloonException
      */
     public function send(Request $request, MockClient $mockClient = null): Response
     {

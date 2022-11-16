@@ -11,6 +11,7 @@ use Saloon\Contracts\Response;
 use Saloon\Contracts\Sender;
 use Saloon\Data\MergeOptions;
 use Saloon\Enums\Method;
+use Saloon\Exceptions\DispatcherException;
 use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Exceptions\PendingRequestException;
@@ -181,12 +182,12 @@ class PendingRequest
             $this->headers()->merge($connector->headers()->all());
         }
 
-        if ($mergeOptions->includesConnectorQueryParameters()) {
-            $this->queryParameters()->merge($connector->queryParameters()->all());
-        }
-
         $this->headers()->merge($request->headers()->all());
-        $this->queryParameters()->merge($request->queryParameters()->all());
+
+        $this->queryParameters()->merge(
+            $connector->queryParameters()->all(),
+            $request->queryParameters()->all()
+        );
 
         $this->config()->merge(
             $connector->config()->all(),

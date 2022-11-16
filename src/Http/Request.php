@@ -83,10 +83,8 @@ abstract class Request
      *
      * @param MockClient|null $mockClient
      * @return Response
-     * @throws InvalidConnectorException
-     * @throws InvalidResponseClassException
-     * @throws PendingRequestException
      * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\SaloonException
      */
     public function send(MockClient $mockClient = null): Response
     {
@@ -98,7 +96,6 @@ abstract class Request
      *
      * @param MockClient|null $mockClient
      * @return PromiseInterface
-     * @throws InvalidConnectorException
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\SaloonException
      */

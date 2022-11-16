@@ -46,20 +46,6 @@ abstract class Response implements ResponseContract
     protected ?Exception $requestException = null;
 
     /**
-     * Determines if the response has been cached
-     *
-     * @var bool
-     */
-    private bool $isCached = false;
-
-    /**
-     * Determines if the response has been mocked.
-     *
-     * @var bool
-     */
-    private bool $isMocked = false;
-
-    /**
      * Create a new response instance.
      *
      * @param PendingRequest $pendingSaloonRequest
@@ -303,52 +289,6 @@ abstract class Response implements ResponseContract
     }
 
     /**
-     * Set if the response is cached. Should only be used internally.
-     *
-     * @param bool $cached
-     * @return $this
-     */
-    public function setCached(bool $cached): static
-    {
-        $this->isCached = $cached;
-
-        return $this;
-    }
-
-    /**
-     * Set if the response is mocked. Should only be used internally.
-     *
-     * @param bool $mocked
-     * @return $this
-     */
-    public function setMocked(bool $mocked): static
-    {
-        $this->isMocked = $mocked;
-
-        return $this;
-    }
-
-    /**
-     * Check if the response has been cached
-     *
-     * @return bool
-     */
-    public function isCached(): bool
-    {
-        return $this->isCached;
-    }
-
-    /**
-     * Check if the response has been mocked
-     *
-     * @return bool
-     */
-    public function isMocked(): bool
-    {
-        return $this->isMocked;
-    }
-
-    /**
      * Get the original request exception
      *
      * @return Exception|null
@@ -393,28 +333,22 @@ abstract class Response implements ResponseContract
     }
 
     /**
-     * Set the isCached property
+     * Check if the response has been cached
      *
-     * @param bool $isCached
-     * @return Response
+     * @return bool
      */
-    public function setIsCached(bool $isCached): Response
+    public function isCached(): bool
     {
-        $this->isCached = $isCached;
-
-        return $this;
+        return false;
     }
 
     /**
-     * Set the isMocked property
+     * Check if the response has been mocked
      *
-     * @param bool $isMocked
-     * @return Response
+     * @return bool
      */
-    public function setIsMocked(bool $isMocked): Response
+    public function isMocked(): bool
     {
-        $this->isMocked = $isMocked;
-
-        return $this;
+        return false;
     }
 }

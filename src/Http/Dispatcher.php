@@ -5,7 +5,9 @@ namespace Saloon\Http;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Response;
+use Saloon\Exceptions\DispatcherException;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Http\Responses\SimulatedResponse;
 
 class Dispatcher
@@ -72,7 +74,6 @@ class Dispatcher
 
         if ($simulatedResponsePayload instanceof MockResponse) {
             $pendingRequest->getMockClient()?->recordResponse($response);
-            $response->setIsMocked(true);
         }
 
         // When mocking asynchronous requests we need to wrap the response

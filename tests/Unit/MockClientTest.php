@@ -212,8 +212,8 @@ test('it will find the response by url if it is not the last response', function
 
 test('you can mock guzzle exceptions', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Sam']),
-        MockResponse::make(['name' => 'Patrick'])->throw(fn ($guzzleRequest) => new ConnectException('Unable to connect!', $guzzleRequest)),
+        MockResponse::make(200, ['name' => 'Sam']),
+        MockResponse::make(200, ['name' => 'Patrick'])->throw(fn ($guzzleRequest) => new ConnectException('Unable to connect!')),
     ]);
 
     $okResponse = (new UserRequest())->send($mockClient);

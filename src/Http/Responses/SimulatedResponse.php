@@ -3,6 +3,7 @@
 namespace Saloon\Http\Responses;
 
 use GuzzleHttp\Psr7\Stream;
+use Saloon\Http\Faking\MockResponse;
 use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -74,5 +75,15 @@ class SimulatedResponse extends Response
     public function getPsrResponse(): ResponseInterface
     {
         return new GuzzleResponse($this->status(), $this->headers()->all(), $this->body());
+    }
+
+    /**
+     * Determine if the response has been mocked.
+     *
+     * @return bool
+     */
+    public function isMocked(): bool
+    {
+        return $this->rawResponse instanceof MockResponse;
     }
 }
