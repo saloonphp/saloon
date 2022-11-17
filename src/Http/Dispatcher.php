@@ -2,12 +2,10 @@
 
 namespace Saloon\Http;
 
-use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Http\Faking\SimulatedResponsePayload;
-use Saloon\Contracts\Response as ResponseContract;
+use Saloon\Contracts\Response;
 
 class Dispatcher
 {
@@ -25,9 +23,9 @@ class Dispatcher
     /**
      * Execute the action
      *
-     * @return ResponseContract|PromiseInterface
+     * @return Response|PromiseInterface
      */
-    public function execute(): ResponseContract|PromiseInterface
+    public function execute(): Response|PromiseInterface
     {
         $pendingRequest = $this->pendingRequest;
 
@@ -43,19 +41,19 @@ class Dispatcher
         // a PromiseInterface we need to add a step to execute
         // the response pipeline.
 
-        if ($response instanceof ResponseContract) {
+        if ($response instanceof Response) {
             return $pendingRequest->executeResponsePipeline($response);
         }
 
-        return $response->then(fn (ResponseContract $response) => $pendingRequest->executeResponsePipeline($response));
+        return $response->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
     }
 
     /**
      * Process a simulated response
      *
-     * @return ResponseContract|PromiseInterface
+     * @return Response|PromiseInterface
      */
-    protected function createSimulatedResponse(): ResponseContract|PromiseInterface
+    protected function createSimulatedResponse(): Response|PromiseInterface
     {
         $pendingRequest = $this->pendingRequest;
         $simulatedResponsePayload = $pendingRequest->getSimulatedResponsePayload();
@@ -67,7 +65,7 @@ class Dispatcher
 
         $responseClass = $pendingRequest->getResponseClass();
 
-        /** @var ResponseContract $response */
+        /** @var Response $response */
         $response = new $responseClass($pendingRequest, $simulatedResponsePayload);
 
         // When the SimulatedResponsePayload is specifically a MockResponse then
@@ -97,9 +95,9 @@ class Dispatcher
     /**
      * Send the request and create a response
      *
-     * @return ResponseContract|PromiseInterface
+     * @return Response|PromiseInterface
      */
-    protected function createResponse(): ResponseContract|PromiseInterface
+    protected function createResponse(): Response|PromiseInterface
     {
         // The PendingRequest will get the sender from the connector
         // for example the GuzzleSender, and it will instantiate it if
