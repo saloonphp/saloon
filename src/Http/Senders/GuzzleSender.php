@@ -9,7 +9,7 @@ use GuzzleHttp\Psr7\Request;
 use Saloon\Contracts\Sender;
 use GuzzleHttp\RequestOptions;
 use Saloon\Http\PendingRequest;
-use Saloon\Http\Responses\Response;
+use Saloon\Contracts\Response as ResponseContract;
 use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -17,6 +17,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Saloon\Exceptions\FatalRequestException;
 use GuzzleHttp\Exception\BadResponseException;
+use Saloon\Http\Responses\Response;
 use Saloon\Repositories\Body\FormBodyRepository;
 use Saloon\Repositories\Body\JsonBodyRepository;
 use Saloon\Repositories\Body\StringBodyRepository;
@@ -95,10 +96,10 @@ class GuzzleSender implements Sender
      *
      * @param PendingRequest $pendingRequest
      * @param bool $asynchronous
-     * @return Response|PromiseInterface
+     * @return ResponseContract|PromiseInterface
      * @throws GuzzleException
      */
-    public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): Response|PromiseInterface
+    public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): ResponseContract|PromiseInterface
     {
         return $asynchronous === true
             ? $this->sendAsynchronousRequest($pendingRequest)
@@ -109,10 +110,10 @@ class GuzzleSender implements Sender
      * Send a synchronous request.
      *
      * @param PendingRequest $pendingRequest
-     * @return Response
+     * @return ResponseContract
      * @throws GuzzleException
      */
-    protected function sendSynchronousRequest(PendingRequest $pendingRequest): Response
+    protected function sendSynchronousRequest(PendingRequest $pendingRequest): ResponseContract
     {
         $guzzleRequest = $this->createGuzzleRequest($pendingRequest);
         $guzzleRequestOptions = $this->createRequestOptions($pendingRequest);
@@ -198,9 +199,9 @@ class GuzzleSender implements Sender
      * @param PendingRequest $pendingSaloonRequest
      * @param ResponseInterface $guzzleResponse
      * @param Exception|null $exception
-     * @return Response
+     * @return ResponseContract
      */
-    protected function createResponse(PendingRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse, Exception $exception = null): Response
+    protected function createResponse(PendingRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse, Exception $exception = null): ResponseContract
     {
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
