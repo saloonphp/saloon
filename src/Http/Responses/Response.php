@@ -4,6 +4,7 @@ namespace Saloon\Http\Responses;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
+use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Repositories\ArrayStore;
 use Saloon\Traits\Macroable;
 use Saloon\Traits\Responses\HasResponseHelpers;
@@ -16,20 +17,6 @@ class Response implements ResponseContract
 {
     use Macroable;
     use HasResponseHelpers;
-
-    /**
-     * The decoded JSON response.
-     *
-     * @var array
-     */
-    protected array $decodedJson;
-
-    /**
-     * The decoded XML response.
-     *
-     * @var string
-     */
-    protected string $decodedXml;
 
     /**
      * The request options we attached to the request.
@@ -56,17 +43,23 @@ class Response implements ResponseContract
      * Create a new response instance.
      *
      * @param PendingRequest $pendingSaloonRequest
-     * @param ResponseInterface $rawResponse
+     * @param ResponseInterface|SimulatedResponsePayload $rawResponse
      * @param Throwable|null $requestException
      */
-    public function __construct(PendingRequest $pendingSaloonRequest, ResponseInterface $rawResponse, Throwable $requestException = null)
+    public function __construct(PendingRequest $pendingSaloonRequest, ResponseInterface|SimulatedResponsePayload $rawResponse, Throwable $requestException = null)
     {
+        if ($rawResponse instanceof SimulatedResponsePayload) {
+            $rawResponse = $rawResponse->getPsrResponse();
+        }
+
         $this->pendingSaloonRequest = $pendingSaloonRequest;
         $this->rawResponse = $rawResponse;
         $this->requestException = $requestException;
     }
 
     /**
+     * Get the pending request that created the response.
+     *
      * @return PendingRequest
      */
     public function getPendingRequest(): PendingRequest
@@ -75,7 +68,7 @@ class Response implements ResponseContract
     }
 
     /**
-     * Get the original request
+     * Get the original request that created the response.
      *
      * @return Request
      */
@@ -85,7 +78,7 @@ class Response implements ResponseContract
     }
 
     /**
-     * Get the original request exception
+     * Get the request exception
      *
      * @return Throwable|null
      */
@@ -102,26 +95,6 @@ class Response implements ResponseContract
     public function getRawResponse(): mixed
     {
         return $this->rawResponse;
-    }
-
-    /**
-     * Check if the response has been cached
-     *
-     * @return bool
-     */
-    public function isCached(): bool
-    {
-        return false;
-    }
-
-    /**
-     * Check if the response has been mocked
-     *
-     * @return bool
-     */
-    public function isMocked(): bool
-    {
-        return false;
     }
 
     /**

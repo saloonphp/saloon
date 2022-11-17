@@ -5,12 +5,50 @@ namespace Saloon\Traits\Responses;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Saloon\Exceptions\RequestException;
+use Saloon\Http\Faking\SimulatedResponsePayload;
 use SimpleXMLElement;
 use Symfony\Component\DomCrawler\Crawler;
 use Throwable;
 
 trait HasResponseHelpers
 {
+    use HasSimulationMethods;
+
+    /**
+     * The decoded JSON response.
+     *
+     * @var array
+     */
+    protected array $decodedJson;
+
+    /**
+     * The decoded XML response.
+     *
+     * @var string
+     */
+    protected string $decodedXml;
+
+    /**
+     * Denotes if the response has been mocked.
+     *
+     * @var bool
+     */
+    protected bool $mocked = false;
+
+    /**
+     * Denotes if the response has been cached.
+     *
+     * @var bool
+     */
+    protected bool $cached = false;
+
+    /**
+     * The simulated response payload if the response was simulated.
+     *
+     * @var SimulatedResponsePayload|null
+     */
+    protected ?SimulatedResponsePayload $simulatedResponsePayload = null;
+
     /**
      * Get the JSON decoded body of the response as an array or scalar value.
      *

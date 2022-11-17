@@ -62,11 +62,14 @@ class Dispatcher
         $simulatedResponsePayload = $pendingRequest->getSimulatedResponsePayload();
 
         // When the pending request instance has SimulatedResponsePayload it means
-        // we shouldn't send a real request. We can use the custom response
-        // SimulatedAbstractResponse to parse this payload ad convert it into
-        // a AbstractResponse implementation.
+        // we shouldn't send a real request. We can convert the payload into
+        // a PSR-compatible ResponseInterface class which means we can use
+        // can also make use of custom responses.
 
-        $response = new Response($pendingRequest, $simulatedResponsePayload->getPsrResponse());
+        $responseClass = $pendingRequest->getResponseClass();
+
+        /** @var ResponseContract $response */
+        $response = new $responseClass($pendingRequest, $simulatedResponsePayload);
 
         // When the SimulatedResponsePayload is specifically a MockResponse then
         // we will record the response, and we'll set the "isMocked" property
@@ -74,6 +77,9 @@ class Dispatcher
 
         if ($simulatedResponsePayload instanceof MockResponse) {
             $pendingRequest->getMockClient()?->recordResponse($response);
+
+            $response->setSimulatedResponsePayload($simulatedResponsePayload);
+            $response->setMocked(true);
         }
 
         // When mocking asynchronous requests we need to wrap the response

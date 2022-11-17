@@ -16,9 +16,11 @@ class UserRequestWithCustomResponse extends Request
     protected string $method = 'GET';
 
     /**
-     * @var string|null
+     * Default Response
+     *
+     * @var string
      */
-    protected ?string $response = UserResponse::class;
+    protected string $defaultResponse = UserResponse::class;
 
     /**
      * The connector.

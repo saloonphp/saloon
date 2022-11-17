@@ -3,6 +3,7 @@
 namespace Saloon\Contracts;
 
 use Exception;
+use Saloon\Http\Faking\SimulatedResponsePayload;
 use SimpleXMLElement;
 use Saloon\Http\Request;
 use Saloon\Http\PendingRequest;
@@ -189,6 +190,44 @@ interface Response
      * @return bool
      */
     public function isMocked(): bool;
+
+    /**
+     * Check if a response has been simulated
+     *
+     * @return bool
+     */
+    public function isSimulated(): bool;
+
+    /**
+     * Set if a response has been mocked or not.
+     *
+     * @param bool $value
+     * @return mixed
+     */
+    public function setMocked(bool $value): static;
+
+    /**
+     * Set if a response has been cached or not.
+     *
+     * @param bool $value
+     * @return mixed
+     */
+    public function setCached(bool $value): static;
+
+    /**
+     * Set the simulated response payload if the response was simulated.
+     *
+     * @param SimulatedResponsePayload $simulatedResponsePayload
+     * @return mixed
+     */
+    public function setSimulatedResponsePayload(SimulatedResponsePayload $simulatedResponsePayload): static;
+
+    /**
+     * Get the simulated response payload if the response was simulated.
+     *
+     * @return simulatedResponsePayload|null
+     */
+    public function getSimulatedResponsePayload(): ?SimulatedResponsePayload;
 
     /**
      * Get the original request exception
