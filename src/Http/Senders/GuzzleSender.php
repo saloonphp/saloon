@@ -7,11 +7,11 @@ use GuzzleHttp\Utils;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use Saloon\Contracts\Sender;
-use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use GuzzleHttp\RequestOptions;
 use Saloon\Http\PendingRequest;
 use GuzzleHttp\Client as GuzzleClient;
-use Saloon\Http\Responses\PsrResponse;
+use Saloon\Http\Responses\Response;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\GuzzleException;
@@ -56,7 +56,7 @@ class GuzzleSender implements Sender
      */
     public function getResponseClass(): string
     {
-        return PsrResponse::class;
+        return Response::class;
     }
 
     /**
@@ -96,10 +96,10 @@ class GuzzleSender implements Sender
      *
      * @param PendingRequest $pendingRequest
      * @param bool $asynchronous
-     * @return PsrResponse|PromiseInterface
+     * @return Response|PromiseInterface
      * @throws GuzzleException
      */
-    public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): PsrResponse|PromiseInterface
+    public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): Response|PromiseInterface
     {
         return $asynchronous === true
             ? $this->sendAsynchronousRequest($pendingRequest)
@@ -110,10 +110,10 @@ class GuzzleSender implements Sender
      * Send a synchronous request.
      *
      * @param PendingRequest $pendingRequest
-     * @return PsrResponse
+     * @return Response
      * @throws GuzzleException
      */
-    protected function sendSynchronousRequest(PendingRequest $pendingRequest): PsrResponse
+    protected function sendSynchronousRequest(PendingRequest $pendingRequest): Response
     {
         $guzzleRequest = $this->createGuzzleRequest($pendingRequest);
         $guzzleRequestOptions = $this->createRequestOptions($pendingRequest);
@@ -197,11 +197,11 @@ class GuzzleSender implements Sender
      * Create a response.
      *
      * @param PendingRequest $pendingSaloonRequest
-     * @param Response $guzzleResponse
+     * @param ResponseInterface $guzzleResponse
      * @param Exception|null $exception
-     * @return PsrResponse
+     * @return Response
      */
-    protected function createResponse(PendingRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse, Exception $exception = null): PsrResponse
+    protected function createResponse(PendingRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse, Exception $exception = null): Response
     {
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
@@ -228,7 +228,7 @@ class GuzzleSender implements Sender
                 function (GuzzleException $guzzleException) use ($pendingRequest) {
                     // If the exception was a connect exception, we should return that in the
                     // promise instead rather than trying to convert it into a
-                    // Response, since there was no response.
+                    // AbstractResponse, since there was no response.
 
                     if (! $guzzleException instanceof RequestException) {
                         throw new FatalRequestException($guzzleException, $pendingRequest);

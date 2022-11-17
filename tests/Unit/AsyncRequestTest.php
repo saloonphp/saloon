@@ -69,7 +69,7 @@ test('an asynchronous request will return a connect exception if a connection er
     }
 });
 
-test('if you chain an asynchronous request you can have a Response', function () {
+test('if you chain an asynchronous request you can have a AbstractResponse', function () {
     $mockClient = new MockClient([
         MockResponse::make(200, ['name' => 'Sam']),
     ]);

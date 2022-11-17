@@ -5,7 +5,7 @@ namespace Saloon\Tests\Fixtures\Responses;
 class UserData
 {
     /**
-     * CustomResponse constructor.
+     * CustomAbstractResponse constructor.
      * @param string $foo
      */
     public function __construct(

@@ -2,20 +2,20 @@
 
 namespace Saloon\Http\Responses;
 
-use Exception;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
+use Saloon\Repositories\ArrayStore;
 use Saloon\Traits\Macroable;
-use SimpleXMLElement;
+use Saloon\Traits\Responses\HasResponseHelpers;
 use Saloon\Http\Request;
-use Illuminate\Support\Arr;
 use Saloon\Http\PendingRequest;
-use Illuminate\Support\Collection;
-use Symfony\Component\DomCrawler\Crawler;
-use Saloon\Exceptions\RequestException;
 use Saloon\Contracts\Response as ResponseContract;
+use Throwable;
 
-abstract class Response implements ResponseContract
+class Response implements ResponseContract
 {
     use Macroable;
+    use HasResponseHelpers;
 
     /**
      * The decoded JSON response.
@@ -39,20 +39,27 @@ abstract class Response implements ResponseContract
     protected PendingRequest $pendingSaloonRequest;
 
     /**
+     * The raw PSR response from the sender.
+     *
+     * @var ResponseInterface|mixed
+     */
+    protected ResponseInterface $rawResponse;
+
+    /**
      * The original request exception
      *
-     * @var Exception|null
+     * @var Throwable|null
      */
-    protected ?Exception $requestException = null;
+    protected ?Throwable $requestException = null;
 
     /**
      * Create a new response instance.
      *
      * @param PendingRequest $pendingSaloonRequest
-     * @param mixed $rawResponse
-     * @param Exception|null $requestException
+     * @param ResponseInterface $rawResponse
+     * @param Throwable|null $requestException
      */
-    public function __construct(PendingRequest $pendingSaloonRequest, mixed $rawResponse, Exception $requestException = null)
+    public function __construct(PendingRequest $pendingSaloonRequest, ResponseInterface $rawResponse, Throwable $requestException = null)
     {
         $this->pendingSaloonRequest = $pendingSaloonRequest;
         $this->rawResponse = $rawResponse;
@@ -78,222 +85,11 @@ abstract class Response implements ResponseContract
     }
 
     /**
-     * Get the JSON decoded body of the response as an array or scalar value.
-     *
-     * @param string|null $key
-     * @param mixed $default
-     * @return mixed
-     * @throws \JsonException
-     */
-    public function json(string $key = null, mixed $default = null): mixed
-    {
-        if (! isset($this->decodedJson)) {
-            $this->decodedJson = json_decode($this->body(), true, 512, JSON_THROW_ON_ERROR);
-        }
-
-        if (is_null($key)) {
-            return $this->decodedJson;
-        }
-
-        return Arr::get($this->decodedJson, $key, $default);
-    }
-
-    /**
-     * Get the JSON decoded body of the response as an object.
-     *
-     * @return object
-     * @throws \JsonException
-     */
-    public function object(): object
-    {
-        return json_decode($this->body(), false, 512, JSON_THROW_ON_ERROR);
-    }
-
-    /**
-     * Convert the XML response into a SimpleXMLElement.
-     *
-     * @param ...$arguments
-     * @return SimpleXMLElement|bool
-     */
-    public function xml(...$arguments): SimpleXMLElement|bool
-    {
-        if (! $this->decodedXml) {
-            $this->decodedXml = $this->body();
-        }
-
-        return simplexml_load_string($this->decodedXml, ...$arguments);
-    }
-
-    /**
-     * Get the JSON decoded body of the response as a collection.
-     *
-     * @param $key
-     * @return Collection
-     * @throws \JsonException
-     */
-    public function collect($key = null): Collection
-    {
-        return Collection::make($this->json($key));
-    }
-
-    /**
-     * Cast the response to a DTO.
-     *
-     * @return mixed
-     */
-    public function dto(): mixed
-    {
-        if ($this->failed()) {
-            return null;
-        }
-
-        return $this->getRequest()->createDtoFromResponse($this);
-    }
-
-    /**
-     * Parse the HTML or XML body into a Symfony DomCrawler instance.
-     *
-     * Requires Symfony Crawler (composer require symfony/dom-crawler)
-     * @see https://symfony.com/doc/current/components/dom_crawler.html
-     *
-     * @return Crawler
-     */
-    public function dom(): Crawler
-    {
-        return new Crawler($this->body());
-    }
-
-    /**
-     * Determine if the request was successful.
-     *
-     * @return bool
-     */
-    public function successful(): bool
-    {
-        return $this->status() >= 200 && $this->status() < 300;
-    }
-
-    /**
-     * Determine if the response code was "OK".
-     *
-     * @return bool
-     */
-    public function ok(): bool
-    {
-        return $this->status() === 200;
-    }
-
-    /**
-     * Determine if the response was a redirect.
-     *
-     * @return bool
-     */
-    public function redirect(): bool
-    {
-        return $this->status() >= 300 && $this->status() < 400;
-    }
-
-    /**
-     * Determine if the response indicates a client or server error occurred.
-     *
-     * @return bool
-     */
-    public function failed(): bool
-    {
-        return $this->serverError() || $this->clientError();
-    }
-
-    /**
-     * Determine if the response indicates a client error occurred.
-     *
-     * @return bool
-     */
-    public function clientError(): bool
-    {
-        return $this->status() >= 400 && $this->status() < 500;
-    }
-
-    /**
-     * Determine if the response indicates a server error occurred.
-     *
-     * @return bool
-     */
-    public function serverError(): bool
-    {
-        return $this->status() >= 500;
-    }
-
-    /**
-     * Execute the given callback if there was a server or client error.
-     *
-     * @param callable $callback
-     * @return $this
-     */
-    public function onError(callable $callback): static
-    {
-        if ($this->failed()) {
-            $callback($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Create an exception if a server or client error occurred.
-     *
-     * @return Exception|null
-     */
-    public function toException(): ?Exception
-    {
-        if ($this->successful()) {
-            return null;
-        }
-
-        return $this->createException($this->body());
-    }
-
-    /**
-     * Create the request exception
-     *
-     * @param string $body
-     * @return Exception
-     */
-    protected function createException(string $body): Exception
-    {
-        return new RequestException($this, $body, 0, $this->getRequestException());
-    }
-
-    /**
-     * Throw an exception if a server or client error occurred.
-     *
-     * @return $this
-     * @throws RequestException
-     */
-    public function throw(): static
-    {
-        if ($this->failed()) {
-            throw $this->toException();
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get the body of the response.
-     *
-     * @return string
-     */
-    public function __toString(): string
-    {
-        return $this->body();
-    }
-
-    /**
      * Get the original request exception
      *
-     * @return Exception|null
+     * @return Throwable|null
      */
-    public function getRequestException(): ?Exception
+    public function getRequestException(): ?Throwable
     {
         return $this->requestException;
     }
@@ -306,30 +102,6 @@ abstract class Response implements ResponseContract
     public function getRawResponse(): mixed
     {
         return $this->rawResponse;
-    }
-
-    /**
-     * Get a header from the response.
-     *
-     * @param string $header
-     * @return string|null
-     */
-    public function header(string $header): ?string
-    {
-        return $this->headers()->get($header);
-    }
-
-    /**
-     * Close the stream and any underlying resources.
-     *
-     * @return $this
-     * @throws \JsonException
-     */
-    public function close(): static
-    {
-        $this->stream()->close();
-
-        return $this;
     }
 
     /**
@@ -350,5 +122,55 @@ abstract class Response implements ResponseContract
     public function isMocked(): bool
     {
         return false;
+    }
+
+    /**
+     * Get the body of the response as string.
+     *
+     * @return string
+     */
+    public function body(): string
+    {
+        return (string)$this->stream();
+    }
+
+    /**
+     * Get the body as a stream. Don't forget to close the stream after using ->close().
+     *
+     * @return StreamInterface
+     */
+    public function stream(): StreamInterface
+    {
+        return $this->rawResponse->getBody();
+    }
+
+    /**
+     * Get the headers from the response.
+     *
+     * @return ArrayStore
+     */
+    public function headers(): ArrayStore
+    {
+        return new ArrayStore($this->rawResponse->getHeaders());
+    }
+
+    /**
+     * Get the status code of the response.
+     *
+     * @return int
+     */
+    public function status(): int
+    {
+        return $this->rawResponse->getStatusCode();
+    }
+
+    /**
+     * Create a PSR response from the raw response.
+     *
+     * @return ResponseInterface
+     */
+    public function getPsrResponse(): ResponseInterface
+    {
+        return $this->rawResponse;
     }
 }

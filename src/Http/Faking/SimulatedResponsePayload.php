@@ -3,6 +3,8 @@
 namespace Saloon\Http\Faking;
 
 use Closure;
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use Psr\Http\Message\ResponseInterface;
 use Saloon\Http\PendingRequest;
 use Saloon\Repositories\ArrayStore;
 use Saloon\Contracts\Body\BodyRepository;
@@ -158,5 +160,15 @@ class SimulatedResponsePayload
         }
 
         return call_user_func($this->responseException, $pendingRequest);
+    }
+
+    /**
+     * Get the response as a ResponseInterface
+     *
+     * @return ResponseInterface
+     */
+    public function getPsrResponse(): ResponseInterface
+    {
+        return new GuzzleResponse($this->getStatus(), $this->getHeaders()->all(), $this->getBodyAsString());
     }
 }

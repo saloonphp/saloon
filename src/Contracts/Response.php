@@ -11,6 +11,7 @@ use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Exceptions\RequestException;
+use Throwable;
 
 interface Response
 {
@@ -48,15 +49,6 @@ interface Response
      * @return ResponseInterface
      */
     public function getPsrResponse(): ResponseInterface;
-
-    /**
-     * Create a new response instance.
-     *
-     * @param PendingRequest $pendingSaloonRequest
-     * @param mixed $rawResponse
-     * @param Exception|null $requestException
-     */
-    public function __construct(PendingRequest $pendingSaloonRequest, mixed $rawResponse, Exception $requestException = null);
 
     /**
      * @return PendingRequest
@@ -165,9 +157,9 @@ interface Response
     /**
      * Create an exception if a server or client error occurred.
      *
-     * @return Exception|null
+     * @return Throwable|null
      */
-    public function toException(): ?Exception;
+    public function toException(): ?Throwable;
 
     /**
      * Throw an exception if a server or client error occurred.
@@ -201,9 +193,9 @@ interface Response
     /**
      * Get the original request exception
      *
-     * @return Exception|null
+     * @return Throwable|null
      */
-    public function getRequestException(): ?Exception;
+    public function getRequestException(): ?Throwable;
 
     /**
      * Get the raw response

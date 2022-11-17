@@ -4,11 +4,11 @@ namespace Saloon\Http;
 
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Contracts\Response;
+use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Exceptions\DispatcherException;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Faking\SimulatedResponsePayload;
-use Saloon\Http\Responses\SimulatedResponse;
+use Saloon\Http\Responses\Response;
 
 class Dispatcher
 {
@@ -26,47 +26,47 @@ class Dispatcher
     /**
      * Execute the action
      *
-     * @return Response|PromiseInterface
+     * @return ResponseContract|PromiseInterface
      */
-    public function execute(): Response|PromiseInterface
+    public function execute(): ResponseContract|PromiseInterface
     {
         $pendingRequest = $this->pendingRequest;
 
         // Let's start by checking if the pending request needs to make a request.
         // If SimulatedResponsePayload has been set on the instance than we need
-        // to create the SimulatedResponse and return that. Otherwise, we
+        // to create the SimulatedAbstractResponse and return that. Otherwise, we
         // will send a real request to the sender.
 
         $response = $pendingRequest->hasSimulatedResponsePayload() ? $this->createSimulatedResponse() : $this->createResponse();
 
         // Next we will need to run the response pipeline. If the response
-        // is a Response we can run it directly, but if it is
+        // is a AbstractResponse we can run it directly, but if it is
         // a PromiseInterface we need to add a step to execute
         // the response pipeline.
 
-        if ($response instanceof Response) {
+        if ($response instanceof ResponseContract) {
             return $pendingRequest->executeResponsePipeline($response);
         }
 
-        return $response->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
+        return $response->then(fn (ResponseContract $response) => $pendingRequest->executeResponsePipeline($response));
     }
 
     /**
      * Process a simulated response
      *
-     * @return Response|PromiseInterface
+     * @return ResponseContract|PromiseInterface
      */
-    protected function createSimulatedResponse(): Response|PromiseInterface
+    protected function createSimulatedResponse(): ResponseContract|PromiseInterface
     {
         $pendingRequest = $this->pendingRequest;
         $simulatedResponsePayload = $pendingRequest->getSimulatedResponsePayload();
 
         // When the pending request instance has SimulatedResponsePayload it means
         // we shouldn't send a real request. We can use the custom response
-        // SimulatedResponse to parse this payload ad convert it into
-        // a Response implementation.
+        // SimulatedAbstractResponse to parse this payload ad convert it into
+        // a AbstractResponse implementation.
 
-        $response = new SimulatedResponse($pendingRequest, $simulatedResponsePayload);
+        $response = new Response($pendingRequest, $simulatedResponsePayload->getPsrResponse());
 
         // When the SimulatedResponsePayload is specifically a MockResponse then
         // we will record the response, and we'll set the "isMocked" property
@@ -89,9 +89,9 @@ class Dispatcher
     /**
      * Send the request and create a response
      *
-     * @return Response|PromiseInterface
+     * @return ResponseContract|PromiseInterface
      */
-    protected function createResponse(): Response|PromiseInterface
+    protected function createResponse(): ResponseContract|PromiseInterface
     {
         // The PendingRequest will get the sender from the connector
         // for example the GuzzleSender, and it will instantiate it if

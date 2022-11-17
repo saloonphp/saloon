@@ -4,11 +4,11 @@ use Saloon\Contracts\Response;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\Responses\PsrResponse;
+use Saloon\Http\Responses\Response;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
 use Saloon\Exceptions\FatalRequestException;
-use Saloon\Http\Responses\SimulatedResponse;
+use Saloon\Http\Responses\SimulatedAbstractResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
@@ -29,7 +29,7 @@ test('you can create a pool on a connector', function () {
     $pool->setConcurrency(5);
 
     $pool->withResponseHandler(function (Response $response) use (&$count) {
-        expect($response)->toBeInstanceOf(PsrResponse::class);
+        expect($response)->toBeInstanceOf(Response::class);
         expect($response->json())->toEqual([
             'name' => 'Sammyjo20',
             'actual_name' => 'Sam',
@@ -103,7 +103,7 @@ test('you can use pool with a mock client added and it wont send real requests',
     $pool->setConcurrency(6);
 
     $pool->withResponseHandler(function (Response $response) use (&$count, $mockResponses) {
-        expect($response)->toBeInstanceOf(SimulatedResponse::class);
+        expect($response)->toBeInstanceOf(SimulatedAbstractResponse::class);
         expect($response->json())->toEqual($mockResponses[$count]->getBody()->all());
 
         $count++;

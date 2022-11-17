@@ -4,7 +4,7 @@ use Saloon\Http\PendingRequest;
 use League\Flysystem\Filesystem;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\Responses\SimulatedResponse;
+use Saloon\Http\Responses\Response;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
@@ -31,21 +31,23 @@ test('a request can be mocked with a sequence', function () {
 
     $responseA = (new UserRequest)->send($mockClient);
 
-    expect($responseA)->toBeInstanceOf(SimulatedResponse::class);
+    dd($responseA);
+
+    expect($responseA)->toBeInstanceOf(Response::class);
     expect($responseA->isMocked())->toBeTrue();
     expect($responseA->json())->toEqual(['name' => 'Sam']);
     expect($responseA->status())->toEqual(200);
 
     $responseB = (new UserRequest)->send($mockClient);
 
-    expect($responseB)->toBeInstanceOf(SimulatedResponse::class);
+    expect($responseB)->toBeInstanceOf(Response::class);
     expect($responseB->isMocked())->toBeTrue();
     expect($responseB->json())->toEqual(['name' => 'Alex']);
     expect($responseB->status())->toEqual(200);
 
     $responseC = (new UserRequest)->send($mockClient);
 
-    expect($responseC)->toBeInstanceOf(SimulatedResponse::class);
+    expect($responseC)->toBeInstanceOf(Response::class);
     expect($responseC->isMocked())->toBeTrue();
     expect($responseC->json())->toEqual(['error' => 'Server Unavailable']);
     expect($responseC->status())->toEqual(500);

@@ -18,7 +18,7 @@ class Pool
     protected Generator $requests;
 
     /**
-     * Handle Response Callback
+     * Handle AbstractResponse Callback
      *
      * @var callable
      */

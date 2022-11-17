@@ -43,7 +43,7 @@ test('you can pass parameters into the static request method', function () {
 test('it can call a request from the requests array', function () {
     $connector = new RequestSelectionConnector;
 
-    $userRequest = $connector->getMyUser(); // Manually defined name
+    $userRequest = $connector->getMyUser(123, 4); // Manually defined name
     $errorRequest = $connector->errorRequest(); // Guessed name
 
     expect($userRequest)->toBeInstanceOf(UserRequest::class);
@@ -114,9 +114,9 @@ test('it throws an exception if you do not key an array of requests', function (
     $connector->custom();
 });
 
-test('it can guess the name of a collection', function () {
+test('it can guess the name of a group', function () {
     $connector = new ServiceRequestConnector;
-    $collection = $connector->guessedCollection();
+    $group = $connector->guessedGroup();
 
-    expect($collection)->toBeInstanceOf(GuessedGroup::class);
+    expect($group)->toBeInstanceOf(GuessedGroup::class);
 });

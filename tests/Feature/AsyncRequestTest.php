@@ -5,6 +5,7 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\RequestException;
+use Saloon\Http\Responses\SimulatedAbstractResponse;
 use Saloon\Tests\Fixtures\Responses\UserData;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
@@ -49,14 +50,22 @@ test('an asynchronous response will still be passed through response middleware'
 
     $request = new UserRequest();
 
+    SimulatedAbstractResponse::macro('setValue', function ($value) {
+        $this->value = $value;
+    });
+
+    SimulatedAbstractResponse::macro('getValue', function () {
+        return $this->value;
+    });
+
     $request->middleware()->onResponse(function (Response $response) {
-        $response->setCached(true);
+        $response->setValue(true);
     });
 
     $promise = $request->sendAsync($mockClient);
     $response = $promise->wait();
 
-    expect($response->isCached())->toBeTrue();
+    expect($response->getValue())->toBeTrue();
 });
 
 test('an asynchronous request will return a custom response', function () {

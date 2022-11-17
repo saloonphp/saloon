@@ -11,6 +11,6 @@ class InvalidResponseClassException extends SaloonException
      */
     public function __construct(string $message = null)
     {
-        parent::__construct($message ?? 'The provided response must implement the Response contract.');
+        parent::__construct($message ?? 'The provided response must implement the AbstractResponse contract.');
     }
 }
