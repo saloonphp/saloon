@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use Carbon\CarbonImmutable;
+use Saloon\Helpers\Date;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Helpers\OAuth2\OAuthConfig;
@@ -42,14 +43,14 @@ test('the oauth config is validated when refreshing access tokens', function () 
 
 test('the old refresh token is carried over if a response does not include a new refresh token', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['access_token' => 'access-new', 'expires_in' => 3600]),
+        MockResponse::make(200, ['access_token' => 'access-new', 'expires_in' => 3600]),
     ]);
 
     $connector = new OAuth2Connector;
 
     $connector->withMockClient($mockClient);
 
-    $authenticator = new AccessTokenAuthenticator('access', 'refresh-old', CarbonImmutable::now()->addSeconds(3600));
+    $authenticator = new AccessTokenAuthenticator('access', 'refresh-old', Date::now()->addSeconds(3600)->toDateTime());
 
     $newAuthenticator = $connector->refreshAccessToken($authenticator);
 
@@ -58,7 +59,7 @@ test('the old refresh token is carried over if a response does not include a new
 
 test('the old refresh token is carried over if a response does not include a new refresh token and the refresh is a string', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['access_token' => 'access-new', 'expires_in' => 3600]),
+        MockResponse::make(200, ['access_token' => 'access-new', 'expires_in' => 3600]),
     ]);
 
     $connector = new OAuth2Connector;

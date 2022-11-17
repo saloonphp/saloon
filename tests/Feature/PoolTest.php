@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Saloon\Contracts\Response;
+use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Responses\Response;
@@ -28,7 +28,7 @@ test('you can create a pool on a connector', function () {
 
     $pool->setConcurrency(5);
 
-    $pool->withResponseHandler(function (Response $response) use (&$count) {
+    $pool->withResponseHandler(function (ResponseContract $response) use (&$count) {
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->json())->toEqual([
             'name' => 'Sammyjo20',
@@ -102,8 +102,8 @@ test('you can use pool with a mock client added and it wont send real requests',
 
     $pool->setConcurrency(6);
 
-    $pool->withResponseHandler(function (Response $response) use (&$count, $mockResponses) {
-        expect($response)->toBeInstanceOf(SimulatedAbstractResponse::class);
+    $pool->withResponseHandler(function (ResponseContract $response) use (&$count, $mockResponses) {
+        expect($response)->toBeInstanceOf(Response::class);
         expect($response->json())->toEqual($mockResponses[$count]->getBody()->all());
 
         $count++;

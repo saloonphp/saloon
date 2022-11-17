@@ -2,8 +2,8 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
+use Saloon\Contracts\Response;
 use Saloon\Http\Connector;
-use Saloon\Http\Responses\Response;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Tests\Fixtures\Data\ApiResponse;
 
@@ -32,10 +32,12 @@ class DtoConnector extends Connector
     }
 
     /**
+     * Create DTO from Response
+     *
      * @param Response $response
-     * @return object
+     * @return mixed
      */
-    protected function castToDto(Response $response): object
+    public function createDtoFromResponse(Response $response): mixed
     {
         return ApiResponse::fromSaloon($response);
     }

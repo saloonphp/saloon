@@ -20,7 +20,7 @@ class UserRequestWithCustomResponse extends Request
      *
      * @var string
      */
-    protected string $defaultResponse = UserResponse::class;
+    protected string $response = UserResponse::class;
 
     /**
      * The connector.

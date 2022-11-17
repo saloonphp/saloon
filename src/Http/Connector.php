@@ -12,6 +12,7 @@ use Saloon\Traits\Connector\ProxiesRequests;
 use Saloon\Exceptions\ClassNotFoundException;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Exceptions\InvalidRequestException;
+use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Exceptions\ConnectorMethodNotFoundException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
@@ -20,6 +21,7 @@ abstract class Connector
 {
     use AuthenticatesRequests;
     use HasRequestProperties;
+    use CastDtoFromResponse;
     use HasCustomResponses;
     use ProxiesRequests;
     use HasMockClient;

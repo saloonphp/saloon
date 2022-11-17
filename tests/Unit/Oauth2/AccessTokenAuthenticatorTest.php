@@ -7,7 +7,7 @@ use Saloon\Http\Auth\AccessTokenAuthenticator;
 it('can be serialized and unserialized', function () {
     $accessToken = 'access';
     $refreshToken = 'refresh';
-    $expiresAt = CarbonImmutable::now();
+    $expiresAt = Date::now()->toDateTime();
 
     $authenticator = new AccessTokenAuthenticator($accessToken, $refreshToken, $expiresAt);
 

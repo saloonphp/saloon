@@ -2,7 +2,7 @@
 
 namespace Saloon\Tests\Fixtures\Data;
 
-use Saloon\Http\Responses\Response;
+use Saloon\Contracts\Response;
 
 class ApiResponse
 {

@@ -373,7 +373,7 @@ class MockClient implements MockClientContract
         }
 
         foreach ($this->getRecordedResponses() as $recordedResponse) {
-            if ($recordedResponse->getOriginalRequest() instanceof $request) {
+            if ($recordedResponse->getRequest() instanceof $request) {
                 return $recordedResponse;
             }
         }
@@ -396,14 +396,14 @@ class MockClient implements MockClientContract
 
         $lastRequest = $this->getLastRequest();
 
-        if ($lastRequest instanceof Request && URLHelper::matches($url, $lastRequest->getFullRequestUrl())) {
+        if ($lastRequest instanceof Request && URLHelper::matches($url, $lastRequest->getRequestUrl())) {
             return $this->getLastResponse();
         }
 
         foreach ($this->getRecordedResponses() as $response) {
-            $request = $response->getOriginalRequest();
+            $request = $response->getRequest();
 
-            if (URLHelper::matches($url, $request->getFullRequestUrl())) {
+            if (URLHelper::matches($url, $request->getRequestUrl())) {
                 return $response;
             }
         }
@@ -429,7 +429,7 @@ class MockClient implements MockClientContract
         $lastResponse = $this->getLastResponse();
 
         if ($lastResponse instanceof Response) {
-            $passed = $closure($lastResponse->getOriginalRequest(), $lastResponse);
+            $passed = $closure($lastResponse->getRequest(), $lastResponse);
 
             if ($passed === true) {
                 return true;
@@ -440,7 +440,7 @@ class MockClient implements MockClientContract
         // responses and break out if we get a match.
 
         foreach ($this->getRecordedResponses() as $response) {
-            $request = $response->getOriginalRequest();
+            $request = $response->getRequest();
 
             $passed = $closure($request, $response);
 

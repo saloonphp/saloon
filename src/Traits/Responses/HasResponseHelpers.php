@@ -2,6 +2,7 @@
 
 namespace Saloon\Traits\Responses;
 
+use Saloon\Exceptions\InvalidConnectorException;
 use Throwable;
 use SimpleXMLElement;
 use Illuminate\Support\Arr;
@@ -112,6 +113,7 @@ trait HasResponseHelpers
      * Cast the response to a DTO.
      *
      * @return mixed
+     * @throws InvalidConnectorException
      */
     public function dto(): mixed
     {
@@ -119,7 +121,9 @@ trait HasResponseHelpers
             return null;
         }
 
-        return $this->getRequest()->createDtoFromResponse($this);
+        $request = $this->getRequest();
+
+        return $request->createDtoFromResponse($this) ?? $request->connector()->createDtoFromResponse($this);
     }
 
     /**

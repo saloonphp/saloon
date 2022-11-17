@@ -1,15 +1,14 @@
 <?php declare(strict_types=1);
 
-use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Http\Responses\Response;
 use Saloon\Tests\Fixtures\Responses\UserData;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Responses\UserResponse;
-use Saloon\Http\Responses\SimulatedAbstractResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
 
 test('an asynchronous request can be made successfully', function () {
@@ -50,11 +49,11 @@ test('an asynchronous response will still be passed through response middleware'
 
     $request = new UserRequest();
 
-    SimulatedAbstractResponse::macro('setValue', function ($value) {
+    Response::macro('setValue', function ($value) {
         $this->value = $value;
     });
 
-    SimulatedAbstractResponse::macro('getValue', function () {
+    Response::macro('getValue', function () {
         return $this->value;
     });
 

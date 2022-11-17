@@ -2,6 +2,7 @@
 
 namespace Saloon\Tests\Fixtures\Plugins;
 
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Request;
 
 trait WithBootTestPlugin
@@ -11,9 +12,11 @@ trait WithBootTestPlugin
      *
      * @return void
      */
-    public function bootWithBootTestPlugin(Request $request)
+    public function bootWithBootTestPlugin(PendingRequest $pendingRequest)
     {
-        $this->addHeader('X-Plugin-User-Id', $request->userId);
-        $this->addHeader('X-Plugin-Group-Id', $request->groupId);
+        $request = $pendingRequest->getRequest();
+
+        $pendingRequest->headers()->add('X-Plugin-User-Id', $request->userId);
+        $pendingRequest->headers()->add('X-Plugin-Group-Id', $request->groupId);
     }
 }
