@@ -2,12 +2,12 @@
 
 namespace Saloon\Tests\Fixtures\Plugins;
 
-use Saloon\Exceptions\InvalidConnectorException;
-use Saloon\Http\PendingRequest;
 use Saloon\Http\Request;
 use Saloon\Http\Connector;
+use Saloon\Http\PendingRequest;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Saloon\Exceptions\InvalidConnectorException;
 
 trait HasTestHandler
 {
@@ -19,7 +19,7 @@ trait HasTestHandler
      */
     public function bootHasTestHandler(PendingRequest $pendingRequest)
     {
-        $this->sender()->addMiddleware( function (callable $handler) {
+        $this->sender()->addMiddleware(function (callable $handler) {
             return function (RequestInterface $request, array $options) use ($handler) {
                 $promise = $handler($request, $options);
 

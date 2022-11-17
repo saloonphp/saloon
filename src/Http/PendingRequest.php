@@ -2,28 +2,28 @@
 
 namespace Saloon\Http;
 
-use GuzzleHttp\Promise\PromiseInterface;
 use ReflectionException;
-use Saloon\Contracts\Body\BodyRepository;
-use Saloon\Contracts\Body\WithBody;
-use Saloon\Contracts\MockClient;
-use Saloon\Contracts\Response;
+use Saloon\Enums\Method;
+use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Sender;
 use Saloon\Data\MergeOptions;
-use Saloon\Enums\Method;
-use Saloon\Exceptions\InvalidConnectorException;
-use Saloon\Exceptions\InvalidResponseClassException;
-use Saloon\Exceptions\PendingRequestException;
+use Saloon\Contracts\Response;
 use Saloon\Helpers\Environment;
-use Saloon\Helpers\Helpers;
+use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
-use Saloon\Http\Faking\SimulatedResponsePayload;
-use Saloon\Http\Middleware\AuthenticateRequest;
-use Saloon\Http\Middleware\DetermineMockResponse;
-use Saloon\Repositories\Body\ArrayBodyRepository;
-use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
+use Saloon\Contracts\Body\WithBody;
+use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Contracts\Body\BodyRepository;
+use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Exceptions\PendingRequestException;
+use Saloon\Http\Middleware\AuthenticateRequest;
+use Saloon\Exceptions\InvalidConnectorException;
+use Saloon\Http\Faking\SimulatedResponsePayload;
+use Saloon\Http\Middleware\DetermineMockResponse;
+use Saloon\Repositories\Body\ArrayBodyRepository;
+use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Sammyjo20\SaloonLaravel\Http\Middleware\SaloonLaravelMiddleware;
 

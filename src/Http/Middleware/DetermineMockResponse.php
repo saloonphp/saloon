@@ -6,7 +6,6 @@ use Saloon\Http\Faking\Fixture;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Contracts\RequestMiddleware;
-use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Exceptions\NoMockResponseFoundException;
 
 class DetermineMockResponse implements RequestMiddleware

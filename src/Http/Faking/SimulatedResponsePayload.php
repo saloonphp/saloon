@@ -3,15 +3,15 @@
 namespace Saloon\Http\Faking;
 
 use Closure;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
-use Psr\Http\Message\ResponseInterface;
+use Throwable;
 use Saloon\Http\PendingRequest;
 use Saloon\Repositories\ArrayStore;
+use Psr\Http\Message\ResponseInterface;
 use Saloon\Contracts\Body\BodyRepository;
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Saloon\Repositories\Body\JsonBodyRepository;
 use Saloon\Exceptions\DirectoryNotFoundException;
 use Saloon\Repositories\Body\StringBodyRepository;
-use Throwable;
 
 class SimulatedResponsePayload
 {

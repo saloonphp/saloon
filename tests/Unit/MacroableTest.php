@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Saloon\Tests\Unit;
 
@@ -108,4 +108,3 @@ test('it will throw an exception if a static method does not exist', function ()
 
     $this->macroableClass::nonExistingMethod();
 });
-

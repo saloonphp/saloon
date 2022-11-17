@@ -4,8 +4,8 @@ use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Collection;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Exceptions\RequestException;
+use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('you can get the original request options', function () {

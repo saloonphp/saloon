@@ -10,9 +10,9 @@ use Saloon\Contracts\Response;
 use Saloon\Http\PendingRequest;
 use Saloon\Helpers\ReflectionHelper;
 use PHPUnit\Framework\Assert as PHPUnit;
-use Saloon\Contracts\MockClient as MockClientContract;
 use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Exceptions\NoMockResponseFoundException;
+use Saloon\Contracts\MockClient as MockClientContract;
 use Saloon\Exceptions\InvalidMockResponseCaptureMethodException;
 
 class MockClient implements MockClientContract

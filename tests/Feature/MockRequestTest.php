@@ -1,17 +1,16 @@
 <?php declare(strict_types=1);
 
-use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Http\PendingRequest;
 use League\Flysystem\Filesystem;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Responses\Response;
+use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
+use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
-use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;

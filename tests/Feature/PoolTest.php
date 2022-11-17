@@ -3,15 +3,15 @@
 use Saloon\Contracts\Response;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Responses\Response;
+use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
 use Saloon\Exceptions\FatalRequestException;
-use Saloon\Http\Responses\SimulatedAbstractResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Http\Responses\SimulatedAbstractResponse;
 use Saloon\Tests\Fixtures\Connectors\InvalidConnectionConnector;
 
 test('you can create a pool on a connector', function () {

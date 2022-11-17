@@ -2,8 +2,8 @@
 
 namespace Saloon\Tests\Fixtures\Authenticators;
 
-use Saloon\Http\Auth\AccessTokenAuthenticator;
 use DateTimeImmutable;
+use Saloon\Http\Auth\AccessTokenAuthenticator;
 
 class CustomOAuthAuthenticator extends AccessTokenAuthenticator
 {

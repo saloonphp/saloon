@@ -3,13 +3,13 @@
 use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\RequestException;
-use Saloon\Http\Responses\SimulatedAbstractResponse;
+use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Tests\Fixtures\Responses\UserData;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Responses\UserResponse;
+use Saloon\Http\Responses\SimulatedAbstractResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
 
 test('an asynchronous request can be made successfully', function () {

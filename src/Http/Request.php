@@ -12,13 +12,13 @@ use Saloon\Traits\Request\BuildsUrls;
 use Saloon\Traits\Request\HasConnector;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Traits\Request\CastDtoFromResponse;
-use Saloon\Traits\RequestProperties\HasMergeOptions;
-use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Exceptions\PendingRequestException;
+use Saloon\Traits\Request\CastDtoFromResponse;
+use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Exceptions\InvalidConnectorException;
-use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Exceptions\InvalidResponseClassException;
+use Saloon\Traits\RequestProperties\HasMergeOptions;
+use Saloon\Traits\RequestProperties\HasRequestProperties;
 
 abstract class Request
 {

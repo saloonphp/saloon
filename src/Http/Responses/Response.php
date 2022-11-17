@@ -2,16 +2,16 @@
 
 namespace Saloon\Http\Responses;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
-use Saloon\Http\Faking\SimulatedResponsePayload;
-use Saloon\Repositories\ArrayStore;
-use Saloon\Traits\Macroable;
-use Saloon\Traits\Responses\HasResponseHelpers;
-use Saloon\Http\Request;
-use Saloon\Http\PendingRequest;
-use Saloon\Contracts\Response as ResponseContract;
 use Throwable;
+use Saloon\Http\Request;
+use Saloon\Traits\Macroable;
+use Saloon\Http\PendingRequest;
+use Saloon\Repositories\ArrayStore;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\ResponseInterface;
+use Saloon\Traits\Responses\HasResponseHelpers;
+use Saloon\Http\Faking\SimulatedResponsePayload;
+use Saloon\Contracts\Response as ResponseContract;
 
 class Response implements ResponseContract
 {

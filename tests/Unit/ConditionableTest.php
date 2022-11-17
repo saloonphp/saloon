@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
@@ -35,7 +35,8 @@ test('you can use the unless method to invoke a callback when a given condition 
 test('you can provide a callback as the value of the when condition', function () {
     $request = new UserRequest;
 
-    $request->when(fn() => true,
+    $request->when(
+        fn () => true,
         function (UserRequest $request) {
             $request->headers()->add('X-Name', 'Sam');
         }
@@ -48,7 +49,8 @@ test('you can provide a callback as the value of the when condition', function (
 test('you can provide a callback as the value of the unless condition', function () {
     $request = new UserRequest;
 
-    $request->unless(fn() => false,
+    $request->unless(
+        fn () => false,
         function (UserRequest $request) {
             $request->headers()->add('X-Name', 'Alex');
         }
@@ -61,7 +63,8 @@ test('you can provide a callback as the value of the unless condition', function
 test('you can provide a callback as the default value of the when condition', function () {
     $request = new UserRequest;
 
-    $request->when(false,
+    $request->when(
+        false,
         function (UserRequest $request) {
             $request->headers()->add('X-Name', 'Sam');
         },
@@ -77,7 +80,8 @@ test('you can provide a callback as the default value of the when condition', fu
 test('you can provide a callback as the default value of the unless condition', function () {
     $request = new UserRequest;
 
-    $request->unless(true,
+    $request->unless(
+        true,
         function (UserRequest $request) {
             $request->headers()->add('X-Name', 'Sam');
         },

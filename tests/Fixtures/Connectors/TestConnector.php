@@ -27,7 +27,7 @@ class TestConnector extends Connector
     protected function defaultHeaders(): array
     {
         return [
-            'Accept' => 'application/json'
+            'Accept' => 'application/json',
         ];
     }
 }

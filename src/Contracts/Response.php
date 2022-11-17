@@ -3,7 +3,7 @@
 namespace Saloon\Contracts;
 
 use Exception;
-use Saloon\Http\Faking\SimulatedResponsePayload;
+use Throwable;
 use SimpleXMLElement;
 use Saloon\Http\Request;
 use Saloon\Http\PendingRequest;
@@ -12,7 +12,7 @@ use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Exceptions\RequestException;
-use Throwable;
+use Saloon\Http\Faking\SimulatedResponsePayload;
 
 interface Response
 {

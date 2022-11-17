@@ -2,10 +2,10 @@
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Contracts\Body\WithBody;
 use Saloon\Http\Request;
-use Saloon\Tests\Fixtures\Connectors\PostJsonConnector;
+use Saloon\Contracts\Body\WithBody;
 use Saloon\Traits\Body\HasJsonBody;
+use Saloon\Tests\Fixtures\Connectors\PostJsonConnector;
 
 class PostConnectorDataBlankRequest extends Request implements WithBody
 {

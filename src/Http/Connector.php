@@ -6,16 +6,15 @@ use Saloon\Traits\Bootable;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Traits\Connector\HasPool;
-use Saloon\Http\Senders\GuzzleSender;
 use Saloon\Traits\Connector\HasSender;
 use Saloon\Traits\Connector\SendsRequests;
 use Saloon\Traits\Connector\ProxiesRequests;
 use Saloon\Exceptions\ClassNotFoundException;
 use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Exceptions\InvalidRequestException;
-use Saloon\Traits\RequestProperties\HasRequestProperties;
+use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Exceptions\ConnectorMethodNotFoundException;
+use Saloon\Traits\RequestProperties\HasRequestProperties;
 
 abstract class Connector
 {

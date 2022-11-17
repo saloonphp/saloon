@@ -2,12 +2,12 @@
 
 use Saloon\Exceptions\ClassNotFoundException;
 use Saloon\Http\Groups\AnonymousRequestGroup;
+use Saloon\Exceptions\InvalidRequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Collections\UserGroup;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Exceptions\InvalidRequestKeyException;
 use Saloon\Tests\Fixtures\Collections\GuessedGroup;
-use Saloon\Exceptions\InvalidRequestException;
 use Saloon\Exceptions\ConnectorMethodNotFoundException;
 use Saloon\Tests\Fixtures\Connectors\ServiceRequestConnector;
 use Saloon\Tests\Fixtures\Connectors\RequestSelectionConnector;

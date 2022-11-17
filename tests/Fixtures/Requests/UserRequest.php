@@ -41,7 +41,7 @@ class UserRequest extends Request
     protected function defaultHeaders(): array
     {
         return [
-            'X-Foo' => 'Bar'
+            'X-Foo' => 'Bar',
         ];
     }
 }

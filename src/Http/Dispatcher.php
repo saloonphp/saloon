@@ -2,13 +2,12 @@
 
 namespace Saloon\Http;
 
+use Saloon\Http\Responses\Response;
+use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Contracts\Response as ResponseContract;
-use Saloon\Exceptions\DispatcherException;
-use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Faking\SimulatedResponsePayload;
-use Saloon\Http\Responses\Response;
+use Saloon\Contracts\Response as ResponseContract;
 
 class Dispatcher
 {

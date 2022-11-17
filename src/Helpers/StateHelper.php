@@ -2,8 +2,6 @@
 
 namespace Saloon\Helpers;
 
-use Saloon\Helpers\Str;
-
 class StateHelper
 {
     /**

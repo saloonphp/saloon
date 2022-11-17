@@ -4,10 +4,9 @@ use Saloon\Contracts\Response;
 use GuzzleHttp\Promise\Promise;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Exceptions\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
-use Saloon\Exceptions\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('an asynchronous request will return a saloon response on a successful request', function () {

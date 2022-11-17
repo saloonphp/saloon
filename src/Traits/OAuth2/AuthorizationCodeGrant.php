@@ -2,8 +2,6 @@
 
 namespace Saloon\Traits\OAuth2;
 
-use Carbon\CarbonImmutable;
-use Carbon\CarbonInterface;
 use DateTimeImmutable;
 use Saloon\Helpers\Date;
 use Saloon\Helpers\URLHelper;

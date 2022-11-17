@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 // Todo: Other Tests
 
@@ -14,7 +14,7 @@ test('when merging properties if withoutConnectorHeaders was used it will not me
     expect($pendingRequest->headers()->all())->toEqual([
         'Accept' => 'application/json', // Added by a plugin
         'X-Connector-Header' => 'Sam', // Merged default from connector
-        'X-Foo' => 'Bar' // Header added to the request.
+        'X-Foo' => 'Bar', // Header added to the request.
     ]);
 
     // Now we'll disable the merging
@@ -25,7 +25,7 @@ test('when merging properties if withoutConnectorHeaders was used it will not me
 
     expect($pendingRequest->headers()->all())->toEqual([
         'Accept' => 'application/json',
-        'X-Foo' => 'Bar'
+        'X-Foo' => 'Bar',
     ]);
 
     $request->send();
