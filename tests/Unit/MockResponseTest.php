@@ -1,14 +1,12 @@
 <?php declare(strict_types=1);
 
-use Saloon\Http\Request;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Tests\Fixtures\Responses\UserData;
-use Saloon\Tests\Fixtures\Requests\MockRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Responses\UserResponse;
+use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
 
 test('pulling a response from the sequence will return the correct response', function () {

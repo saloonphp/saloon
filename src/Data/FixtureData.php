@@ -58,7 +58,7 @@ class FixtureData implements JsonSerializable
     }
 
     /**
-     * Create an instance from a AbstractResponse
+     * Create an instance from a Response
      *
      * @param Response $response
      * @return static

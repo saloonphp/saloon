@@ -1,6 +1,5 @@
 <?php declare(strict_types=1);
 
-use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Responses\Response;
@@ -10,8 +9,8 @@ use GuzzleHttp\Exception\ConnectException;
 use Saloon\Exceptions\FatalRequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Http\Responses\SimulatedAbstractResponse;
 use Saloon\Tests\Fixtures\Connectors\InvalidConnectionConnector;
 
 test('you can create a pool on a connector', function () {

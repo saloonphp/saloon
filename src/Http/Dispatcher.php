@@ -33,13 +33,13 @@ class Dispatcher
 
         // Let's start by checking if the pending request needs to make a request.
         // If SimulatedResponsePayload has been set on the instance than we need
-        // to create the SimulatedAbstractResponse and return that. Otherwise, we
+        // to create the SimulatedResponse and return that. Otherwise, we
         // will send a real request to the sender.
 
         $response = $pendingRequest->hasSimulatedResponsePayload() ? $this->createSimulatedResponse() : $this->createResponse();
 
         // Next we will need to run the response pipeline. If the response
-        // is a AbstractResponse we can run it directly, but if it is
+        // is a Response we can run it directly, but if it is
         // a PromiseInterface we need to add a step to execute
         // the response pipeline.
 

@@ -2,13 +2,13 @@
 
 namespace Saloon\Traits\Responses;
 
-use Saloon\Exceptions\InvalidConnectorException;
 use Throwable;
 use SimpleXMLElement;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Saloon\Exceptions\RequestException;
 use Symfony\Component\DomCrawler\Crawler;
+use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
 trait HasResponseHelpers

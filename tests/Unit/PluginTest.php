@@ -1,6 +1,5 @@
 <?php declare(strict_types=1);
 
-use Saloon\Managers\RequestManager;
 use Saloon\Tests\Fixtures\Requests\SubRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequestWithBootPlugin;
 

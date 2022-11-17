@@ -36,7 +36,7 @@ class DetermineMockResponse implements RequestMiddleware
 
         // If the mock response is a valid instance, we will return it.
         // The middleware pipeline will recognise this and will set
-        // it as the "SimulatedAbstractResponse" on the request.
+        // it as the "SimulatedResponse" on the request.
 
         if ($mockResponse instanceof MockResponse) {
             return $mockResponse;

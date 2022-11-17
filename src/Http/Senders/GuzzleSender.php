@@ -227,7 +227,7 @@ class GuzzleSender implements Sender
                 function (GuzzleException $guzzleException) use ($pendingRequest) {
                     // If the exception was a connect exception, we should return that in the
                     // promise instead rather than trying to convert it into a
-                    // AbstractResponse, since there was no response.
+                    // Response, since there was no response.
 
                     if (! $guzzleException instanceof RequestException) {
                         throw new FatalRequestException($guzzleException, $pendingRequest);

@@ -8,7 +8,7 @@ use Saloon\Http\Responses\Response;
 class RequestException extends SaloonException
 {
     /**
-     * The Saloon AbstractResponse
+     * The Saloon Response
      *
      * @var Response
      */
@@ -30,7 +30,7 @@ class RequestException extends SaloonException
     }
 
     /**
-     * Get the Saloon AbstractResponse Class.
+     * Get the Saloon Response Class.
      *
      * @return Response
      */

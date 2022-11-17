@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 
 use Saloon\Helpers\Date;
-use Carbon\CarbonImmutable;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
 
 it('can be serialized and unserialized', function () {

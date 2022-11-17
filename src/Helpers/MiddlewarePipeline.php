@@ -17,7 +17,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     protected Pipeline $requestPipeline;
 
     /**
-     * AbstractResponse Pipeline
+     * Response Pipeline
      *
      * @var Pipeline
      */

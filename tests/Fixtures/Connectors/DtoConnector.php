@@ -2,8 +2,8 @@
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Contracts\Response;
 use Saloon\Http\Connector;
+use Saloon\Contracts\Response;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Tests\Fixtures\Data\ApiResponse;
 

@@ -3,7 +3,6 @@
 namespace Saloon\Tests\Fixtures\Plugins;
 
 use Saloon\Http\PendingRequest;
-use Saloon\Http\Request;
 
 trait WithBootTestPlugin
 {
