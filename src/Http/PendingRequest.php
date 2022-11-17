@@ -4,30 +4,34 @@ namespace Saloon\Http;
 
 use ReflectionException;
 use Saloon\Enums\Method;
+use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Sender;
+use Saloon\Data\MergeOptions;
 use Saloon\Contracts\Response;
 use Saloon\Helpers\Environment;
 use Saloon\Contracts\MockClient;
-use Saloon\Helpers\Helpers;
 use Saloon\Helpers\PluginHelper;
+use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\WithBody;
+use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Exceptions\PendingRequestException;
 use Saloon\Http\Middleware\AuthenticateRequest;
+use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
-use Saloon\Exceptions\PendingRequestException;
-use Saloon\Exceptions\InvalidConnectorException;
-use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Exceptions\InvalidResponseClassException;
+use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Sammyjo20\SaloonLaravel\Http\Middleware\SaloonLaravelMiddleware;
 
 class PendingRequest
 {
-    use HasRequestProperties;
     use AuthenticatesRequests;
+    use HasRequestProperties;
+    use Conditionable;
     use HasMockClient;
 
     /**
@@ -80,6 +84,15 @@ class PendingRequest
     protected ?SimulatedResponsePayload $simulatedResponsePayload = null;
 
     /**
+     * Merge Options
+     *
+     * Used to determine what to merge from the connector.
+     *
+     * @var MergeOptions
+     */
+    protected MergeOptions $mergeOptions;
+
+    /**
      * Build up the request payload.
      *
      * @param Request $request
@@ -99,7 +112,8 @@ class PendingRequest
         $this->method = Method::upperFrom($request->getMethod());
         $this->responseClass = $request->getResponseClass();
         $this->mockClient = $mockClient ?? ($request->getMockClient() ?? $connector->getMockClient());
-        $this->authenticator = $this->request->getAuthenticator() ?? $this->connector->getAuthenticator();
+        $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
+        $this->mergeOptions = $request->mergeOptions();
 
         // After we have defined each of our properties, we will run the various
         // methods that build up the PendingRequest. It's important that
@@ -160,11 +174,16 @@ class PendingRequest
     {
         $connector = $this->connector;
         $request = $this->request;
+        $mergeOptions = $this->mergeOptions;
 
-        $this->headers()->merge(
-            $connector->headers()->all(),
-            $request->headers()->all()
-        );
+        // Firstly merge the connector options if the merge options
+        // allow us to do so.
+
+        if ($mergeOptions->includesConnectorHeaders()) {
+            $this->headers()->merge($connector->headers()->all());
+        }
+
+        $this->headers()->merge($request->headers()->all());
 
         $this->queryParameters()->merge(
             $connector->queryParameters()->all(),
@@ -392,5 +411,25 @@ class PendingRequest
     public function hasSimulatedResponsePayload(): bool
     {
         return $this->simulatedResponsePayload instanceof SimulatedResponsePayload;
+    }
+
+    /**
+     * Send the PendingRequest
+     *
+     * @return Response
+     */
+    public function send(): Response
+    {
+        return (new Dispatcher($this))->execute();
+    }
+
+    /**
+     * Send the PendingRequest asynchronously
+     *
+     * @return PromiseInterface
+     */
+    public function sendAsync(): PromiseInterface
+    {
+        return (new Dispatcher($this, true))->execute();
     }
 }

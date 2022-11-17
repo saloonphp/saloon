@@ -3,12 +3,13 @@
 namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Http\Request;
-use Saloon\Traits\Plugins\HasXMLBody;
+use Saloon\Traits\Body\HasXmlBody;
+use Saloon\Contracts\Body\WithBody;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class HasXMLRequest extends Request
+class HasXMLRequest extends Request implements WithBody
 {
-    use HasXMLBody;
+    use HasXmlBody;
 
     /**
      * Define the method that the request will use.
@@ -34,7 +35,7 @@ class HasXMLRequest extends Request
         return '/user';
     }
 
-    public function defineXMLBody(): ?string
+    protected function defaultBody(): ?string
     {
         return '<xml></xml>';
     }

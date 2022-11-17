@@ -3,14 +3,14 @@
 use Saloon\Http\PendingRequest;
 use League\Flysystem\Filesystem;
 use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\Responses\SimulatedResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
+use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
-use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
@@ -24,31 +24,41 @@ beforeEach(function () use ($filesystem) {
 
 test('a request can be mocked with a sequence', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
+        MockResponse::make(200, ['name' => 'Sam'], ['X-Foo' => 'Bar']),
         MockResponse::make(200, ['name' => 'Alex']),
         MockResponse::make(500, ['error' => 'Server Unavailable']),
     ]);
 
     $responseA = (new UserRequest)->send($mockClient);
 
-    expect($responseA)->toBeInstanceOf(SimulatedResponse::class);
+    expect($responseA)->toBeInstanceOf(Response::class);
     expect($responseA->isMocked())->toBeTrue();
+    expect($responseA->isSimulated())->toBeTrue();
+    expect($responseA->isCached())->toBeFalse();
     expect($responseA->json())->toEqual(['name' => 'Sam']);
     expect($responseA->status())->toEqual(200);
+    expect($responseA->getSimulatedResponsePayload())->toBeInstanceOf(MockResponse::class);
+    expect($responseA->headers()->all())->toEqual(['X-Foo' => ['Bar']]);
 
     $responseB = (new UserRequest)->send($mockClient);
 
-    expect($responseB)->toBeInstanceOf(SimulatedResponse::class);
+    expect($responseB)->toBeInstanceOf(Response::class);
     expect($responseB->isMocked())->toBeTrue();
+    expect($responseB->isSimulated())->toBeTrue();
+    expect($responseB->isCached())->toBeFalse();
     expect($responseB->json())->toEqual(['name' => 'Alex']);
     expect($responseB->status())->toEqual(200);
+    expect($responseB->getSimulatedResponsePayload())->toBeInstanceOf(MockResponse::class);
 
     $responseC = (new UserRequest)->send($mockClient);
 
-    expect($responseC)->toBeInstanceOf(SimulatedResponse::class);
+    expect($responseC)->toBeInstanceOf(Response::class);
     expect($responseC->isMocked())->toBeTrue();
+    expect($responseC->isSimulated())->toBeTrue();
+    expect($responseC->isCached())->toBeFalse();
     expect($responseC->json())->toEqual(['error' => 'Server Unavailable']);
     expect($responseC->status())->toEqual(500);
+    expect($responseC->getSimulatedResponsePayload())->toBeInstanceOf(MockResponse::class);
 
     $this->expectException(NoMockResponseFoundException::class);
 

@@ -13,9 +13,11 @@ trait HasCustomResponses
     /**
      * Specify a default response.
      *
+     * When an empty string, the response on the sender will be used.
+     *
      * @var string
      */
-    protected string $defaultResponse = '';
+    protected string $response = '';
 
     /**
      * Get the response class
@@ -52,6 +54,6 @@ trait HasCustomResponses
      */
     protected function resolveResponse(): string
     {
-        return $this->defaultResponse;
+        return $this->response;
     }
 }

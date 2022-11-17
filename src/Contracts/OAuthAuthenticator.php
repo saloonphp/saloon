@@ -2,7 +2,6 @@
 
 namespace Saloon\Contracts;
 
-use Carbon\CarbonInterface;
 use DateTimeImmutable;
 
 interface OAuthAuthenticator extends Authenticator

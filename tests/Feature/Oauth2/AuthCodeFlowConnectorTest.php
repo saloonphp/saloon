@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 
-use Carbon\CarbonImmutable;
-use Saloon\Helpers\Date;
 use Saloon\Helpers\Str;
+use Saloon\Helpers\Date;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;

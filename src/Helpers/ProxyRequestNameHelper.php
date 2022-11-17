@@ -3,7 +3,6 @@
 namespace Saloon\Helpers;
 
 use ReflectionClass;
-use Saloon\Helpers\Str;
 use Illuminate\Support\Collection;
 use Saloon\Exceptions\InvalidRequestKeyException;
 

@@ -3,6 +3,7 @@
 namespace Saloon\Contracts;
 
 use Exception;
+use Throwable;
 use SimpleXMLElement;
 use Saloon\Http\Request;
 use Saloon\Http\PendingRequest;
@@ -11,6 +12,7 @@ use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Exceptions\RequestException;
+use Saloon\Http\Faking\SimulatedResponsePayload;
 
 interface Response
 {
@@ -48,15 +50,6 @@ interface Response
      * @return ResponseInterface
      */
     public function getPsrResponse(): ResponseInterface;
-
-    /**
-     * Create a new response instance.
-     *
-     * @param PendingRequest $pendingSaloonRequest
-     * @param mixed $rawResponse
-     * @param Exception|null $requestException
-     */
-    public function __construct(PendingRequest $pendingSaloonRequest, mixed $rawResponse, Exception $requestException = null);
 
     /**
      * @return PendingRequest
@@ -165,9 +158,9 @@ interface Response
     /**
      * Create an exception if a server or client error occurred.
      *
-     * @return Exception|null
+     * @return Throwable|null
      */
-    public function toException(): ?Exception;
+    public function toException(): ?Throwable;
 
     /**
      * Throw an exception if a server or client error occurred.
@@ -185,22 +178,6 @@ interface Response
     public function __toString(): string;
 
     /**
-     * Set if the response is cached. Should only be used internally.
-     *
-     * @param bool $cached
-     * @return $this
-     */
-    public function setCached(bool $cached): static;
-
-    /**
-     * Set if the response is mocked. Should only be used internally.
-     *
-     * @param bool $mocked
-     * @return $this
-     */
-    public function setMocked(bool $mocked): static;
-
-    /**
      * Check if the response has been cached
      *
      * @return bool
@@ -215,11 +192,49 @@ interface Response
     public function isMocked(): bool;
 
     /**
+     * Check if a response has been simulated
+     *
+     * @return bool
+     */
+    public function isSimulated(): bool;
+
+    /**
+     * Set if a response has been mocked or not.
+     *
+     * @param bool $value
+     * @return mixed
+     */
+    public function setMocked(bool $value): static;
+
+    /**
+     * Set if a response has been cached or not.
+     *
+     * @param bool $value
+     * @return mixed
+     */
+    public function setCached(bool $value): static;
+
+    /**
+     * Set the simulated response payload if the response was simulated.
+     *
+     * @param SimulatedResponsePayload $simulatedResponsePayload
+     * @return mixed
+     */
+    public function setSimulatedResponsePayload(SimulatedResponsePayload $simulatedResponsePayload): static;
+
+    /**
+     * Get the simulated response payload if the response was simulated.
+     *
+     * @return simulatedResponsePayload|null
+     */
+    public function getSimulatedResponsePayload(): ?SimulatedResponsePayload;
+
+    /**
      * Get the original request exception
      *
-     * @return Exception|null
+     * @return Throwable|null
      */
-    public function getRequestException(): ?Exception;
+    public function getRequestException(): ?Throwable;
 
     /**
      * Get the raw response
@@ -243,20 +258,4 @@ interface Response
      * @throws \JsonException
      */
     public function close(): static;
-
-    /**
-     * Set the isCached property
-     *
-     * @param bool $isCached
-     * @return Response
-     */
-    public function setIsCached(bool $isCached): Response;
-
-    /**
-     * Set the isMocked property
-     *
-     * @param bool $isMocked
-     * @return Response
-     */
-    public function setIsMocked(bool $isMocked): Response;
 }

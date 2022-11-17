@@ -13,14 +13,14 @@ class UserWithTestHandlerRequest extends Request
     /**
      * Define the method that the request will use.
      *
-     * @var string|null
+     * @var string
      */
     protected string $method = 'GET';
 
     /**
      * The connector.
      *
-     * @var string|null
+     * @var string
      */
     protected string $connector = TestConnector::class;
 

@@ -3,10 +3,11 @@
 namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Http\Request;
-use Saloon\Traits\Plugins\HasJsonBody;
+use Saloon\Contracts\Body\WithBody;
+use Saloon\Traits\Body\HasJsonBody;
 use Saloon\Tests\Fixtures\Connectors\PostJsonConnector;
 
-class OverwrittenPostRequest extends Request
+class OverwrittenPostRequest extends Request implements WithBody
 {
     use HasJsonBody;
 

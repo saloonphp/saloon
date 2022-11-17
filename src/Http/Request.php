@@ -6,17 +6,19 @@ use Saloon\Traits\Bootable;
 use Saloon\Contracts\Sender;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\MockClient;
+use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Traits\Request\BuildsUrls;
 use Saloon\Traits\Request\HasConnector;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Exceptions\PendingRequestException;
 use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
-use Saloon\Exceptions\PendingRequestException;
 use Saloon\Exceptions\InvalidConnectorException;
-use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Exceptions\InvalidResponseClassException;
+use Saloon\Traits\RequestProperties\HasMergeOptions;
+use Saloon\Traits\RequestProperties\HasRequestProperties;
 
 abstract class Request
 {
@@ -24,7 +26,9 @@ abstract class Request
     use HasRequestProperties;
     use CastDtoFromResponse;
     use HasCustomResponses;
+    use HasMergeOptions;
     use HasMockClient;
+    use Conditionable;
     use HasConnector;
     use BuildsUrls;
     use Bootable;
@@ -77,18 +81,16 @@ abstract class Request
     }
 
     /**
-     * Send a request
+     * Send a request synchronously
      *
      * @param MockClient|null $mockClient
-     * @param bool $asynchronous
-     * @return Response|PromiseInterface
-     * @throws InvalidConnectorException
+     * @return Response
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
+     * @throws \Saloon\Exceptions\SaloonException
      */
-    public function send(MockClient $mockClient = null, bool $asynchronous = false): Response|PromiseInterface
+    public function send(MockClient $mockClient = null): Response
     {
-        return $this->connector()->send($this, $mockClient, $asynchronous);
+        return $this->connector()->send($this, $mockClient);
     }
 
     /**
@@ -96,13 +98,12 @@ abstract class Request
      *
      * @param MockClient|null $mockClient
      * @return PromiseInterface
-     * @throws InvalidConnectorException
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
+     * @throws \Saloon\Exceptions\SaloonException
      */
     public function sendAsync(MockClient $mockClient = null): PromiseInterface
     {
-        return $this->send($mockClient, true);
+        return $this->connector()->sendAsync($this, $mockClient);
     }
 
     /**

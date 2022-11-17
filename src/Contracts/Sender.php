@@ -3,7 +3,7 @@
 namespace Saloon\Contracts;
 
 use Saloon\Http\PendingRequest;
-use Saloon\Http\Responses\Response;
+use Saloon\Contracts\Response;
 use GuzzleHttp\Promise\PromiseInterface;
 
 interface Sender

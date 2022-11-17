@@ -2,8 +2,8 @@
 
 namespace Saloon\Repositories;
 
-use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 use Saloon\Helpers\Helpers;
+use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
 class ArrayStore implements ArrayStoreContract
 {

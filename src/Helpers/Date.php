@@ -1,9 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
-use DateInterval;
 use DateTime;
+use DateInterval;
 use DateTimeImmutable;
 
 class Date

@@ -4,7 +4,6 @@ namespace Saloon\Tests\Fixtures\Connectors;
 
 use DateTimeImmutable;
 use Saloon\Http\Connector;
-use Carbon\CarbonInterface;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Contracts\OAuthAuthenticator;
 use Saloon\Traits\OAuth2\AuthorizationCodeGrant;

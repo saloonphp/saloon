@@ -1,19 +1,18 @@
 <?php declare(strict_types=1);
 
-use Saloon\Http\Request;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Responses\UserData;
-use Saloon\Tests\Fixtures\Requests\MockRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Responses\UserResponse;
+use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
 
 test('pulling a response from the sequence will return the correct response', function () {
-    $responseA = MockResponse::make([], 200);
-    $responseB = MockResponse::make([], 201);
-    $responseC = MockResponse::make([], 500);
+    $responseA = MockResponse::make(200, []);
+    $responseB = MockResponse::make(201, []);
+    $responseC = MockResponse::make(500, []);
 
     $mockClient = new MockClient([$responseA, $responseB, $responseC]);
 
@@ -23,34 +22,21 @@ test('pulling a response from the sequence will return the correct response', fu
     expect($mockClient->isEmpty())->toBeTrue();
 });
 
-test('a mock response can be created from a request', function () {
-    $request = new MockRequest;
-    $response = MockResponse::fromRequest($request, 200);
-
-    expect($response->getHeaders())->toEqual(array_merge($request->getHeaders(), ['Content-Type' => 'application/json']));
-    expect($response->getConfig())->toEqual($request->getConfig());
-    expect($response->getStatus())->toEqual(200);
-});
-
 test('a mock response can have raw body data', function () {
-    $response = MockResponse::make('xml', 200, ['Content-Type' => 'application/json']);
+    $response = MockResponse::make(200, 'xml', ['Content-Type' => 'application/json']);
 
-    expect($response->getHeaders())->toEqual(['Content-Type' => 'application/json']);
-    expect($response->getConfig())->toEqual([]);
+    expect($response->getHeaders()->all())->toEqual(['Content-Type' => 'application/json']);
     expect($response->getStatus())->toEqual(200);
-    expect($response->getFormattedData())->toEqual('xml');
+    expect($response->getBody())->toBeInstanceOf(StringBodyRepository::class);
+    expect($response->getBody()->all())->toEqual('xml');
 });
 
 test('a response can have a method added to it', function () {
-    $mockClient = new MockClient([MockResponse::make([], 200)]);
+    $mockClient = new MockClient([MockResponse::make(200, [])]);
     $request = new UserRequest();
 
-    $request->addResponseInterceptor(function (Request $request, Response $response) {
-        $response::macro('yeehaw', function () {
-            return 'Yee-haw!';
-        });
-
-        return $response;
+    Response::macro('yeehaw', function () {
+        return 'Yee-haw!';
     });
 
     $response = $request->send($mockClient);
@@ -59,7 +45,7 @@ test('a response can have a method added to it', function () {
 });
 
 test('a response can be a custom response class', function () {
-    $mockClient = new MockClient([MockResponse::make(['foo' => 'bar'], 200)]);
+    $mockClient = new MockClient([MockResponse::make(200, ['foo' => 'bar'])]);
     $request = new UserRequestWithCustomResponse();
 
     $response = $request->send($mockClient);

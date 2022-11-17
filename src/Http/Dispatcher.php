@@ -1,15 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Saloon\Actions;
+namespace Saloon\Http;
 
-use Saloon\Contracts\Response;
-use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Http\Responses\SimulatedResponse;
+use Saloon\Contracts\Response;
 
-class SendRequest
+class Dispatcher
 {
     /**
      * Constructor
@@ -61,11 +59,14 @@ class SendRequest
         $simulatedResponsePayload = $pendingRequest->getSimulatedResponsePayload();
 
         // When the pending request instance has SimulatedResponsePayload it means
-        // we shouldn't send a real request. We can use the custom response
-        // SimulatedResponse to parse this payload ad convert it into
-        // a Response implementation.
+        // we shouldn't send a real request. We can convert the payload into
+        // a PSR-compatible ResponseInterface class which means we can use
+        // can also make use of custom responses.
 
-        $response = new SimulatedResponse($pendingRequest, $simulatedResponsePayload);
+        $responseClass = $pendingRequest->getResponseClass();
+
+        /** @var Response $response */
+        $response = new $responseClass($pendingRequest, $simulatedResponsePayload);
 
         // When the SimulatedResponsePayload is specifically a MockResponse then
         // we will record the response, and we'll set the "isMocked" property
@@ -73,8 +74,13 @@ class SendRequest
 
         if ($simulatedResponsePayload instanceof MockResponse) {
             $pendingRequest->getMockClient()?->recordResponse($response);
-            $response->setIsMocked(true);
+            $response->setMocked(true);
         }
+
+        // We'll also set the SimulatedResponsePayload on the response
+        // for people to access it if they need to.
+
+        $response->setSimulatedResponsePayload($simulatedResponsePayload);
 
         // When mocking asynchronous requests we need to wrap the response
         // in FulfilledPromise to act like a real response.

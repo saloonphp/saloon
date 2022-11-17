@@ -2,9 +2,9 @@
 
 namespace Saloon\Tests\Fixtures\Responses;
 
-use Saloon\Http\Responses\PsrResponse;
+use Saloon\Http\Responses\Response;
 
-class UserResponse extends PsrResponse
+class UserResponse extends Response
 {
     /**
      * @return \Sammyjo20\Saloon\Tests\Fixtures\Responses\UserData

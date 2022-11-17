@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Saloon\Http\Responses\PsrResponse;
+use Saloon\Http\Responses\Response;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 
@@ -9,7 +9,7 @@ test('a request can be made successfully', function () {
     $response = $request->send();
     $data = $response->json();
 
-    expect($response)->toBeInstanceOf(PsrResponse::class);
+    expect($response)->toBeInstanceOf(Response::class);
     expect($response->isMocked())->toBeFalse();
     expect($response->status())->toEqual(200);
 

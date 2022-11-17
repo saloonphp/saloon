@@ -59,7 +59,7 @@ test('the RequiresAuth trait will throw an exception if an authenticator is not 
     ]);
 
     $this->expectException(MissingAuthenticatorException::class);
-    $this->expectExceptionMessage('The "Sammyjo20\Saloon\Tests\Fixtures\Requests\RequiresAuthRequest" request requires authentication. Please provide an authenticator using the `withAuth` method or return a default authenticator in your connector/request.');
+    $this->expectExceptionMessage('The "Saloon\Tests\Fixtures\Requests\RequiresAuthRequest" request requires authentication. Please provide an authenticator using the `withAuth` method or return a default authenticator in your connector/request.');
 
     $request = new RequiresAuthRequest();
     $request->send($mockClient);
@@ -71,7 +71,7 @@ test('the RequiresTokenAuth trait will throw an exception if an authenticator is
     ]);
 
     $this->expectException(MissingAuthenticatorException::class);
-    $this->expectExceptionMessage('The "Sammyjo20\Saloon\Tests\Fixtures\Requests\RequiresTokenAuthRequest" request requires authentication. Please provide authentication using the `withTokenAuth` method or return a default authenticator in your connector/request.');
+    $this->expectExceptionMessage('The "Saloon\Tests\Fixtures\Requests\RequiresTokenAuthRequest" request requires authentication. Please provide authentication using the `withTokenAuth` method or return a default authenticator in your connector/request.');
 
     $request = new RequiresTokenAuthRequest();
     $request->send($mockClient);
@@ -83,7 +83,7 @@ test('the RequiresBasicAuth trait will throw an exception if an authenticator is
     ]);
 
     $this->expectException(MissingAuthenticatorException::class);
-    $this->expectExceptionMessage('The "Sammyjo20\Saloon\Tests\Fixtures\Requests\RequiresBasicAuthRequest" request requires authentication. Please provide authentication using the `withBasicAuth` method or return a default authenticator in your connector/request.');
+    $this->expectExceptionMessage('The "Saloon\Tests\Fixtures\Requests\RequiresBasicAuthRequest" request requires authentication. Please provide authentication using the `withBasicAuth` method or return a default authenticator in your connector/request.');
 
     $request = new RequiresBasicAuthRequest();
     $request->send($mockClient);
@@ -95,7 +95,7 @@ test('the RequiresDigestAuth trait will throw an exception if an authenticator i
     ]);
 
     $this->expectException(MissingAuthenticatorException::class);
-    $this->expectExceptionMessage('The "Sammyjo20\Saloon\Tests\Fixtures\Requests\RequiresDigestAuthRequest" request requires authentication. Please provide authentication using the `withDigestAuth` method or return a default authenticator in your connector/request.');
+    $this->expectExceptionMessage('The "Saloon\Tests\Fixtures\Requests\RequiresDigestAuthRequest" request requires authentication. Please provide authentication using the `withDigestAuth` method or return a default authenticator in your connector/request.');
 
     $request = new RequiresDigestAuthRequest();
     $request->send($mockClient);
@@ -103,20 +103,7 @@ test('the RequiresDigestAuth trait will throw an exception if an authenticator i
 
 test('you can use your own authenticators', function () {
     $request = new UserRequest();
-    $request->withAuth(new PizzaAuthenticator('Margherita', 'San Pellegrino'));
-
-    $pendingRequest = $request->createPendingRequest();
-
-    $headers = $pendingRequest->headers()->all();
-
-    expect($headers['X-Pizza'])->toEqual('Margherita');
-    expect($headers['X-Drink'])->toEqual('San Pellegrino');
-    expect($pendingRequest->config()->get('debug'))->toBeTrue();
-});
-
-test('you can use your own authenticators with the authenticate method', function () {
-    $request = new UserRequest();
-    $request->authenticate(new PizzaAuthenticator('Margherita', 'San Pellegrino'));
+    $request->authenticateWith(new PizzaAuthenticator('Margherita', 'San Pellegrino'));
 
     $pendingRequest = $request->createPendingRequest();
 
