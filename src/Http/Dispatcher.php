@@ -76,10 +76,13 @@ class Dispatcher
 
         if ($simulatedResponsePayload instanceof MockResponse) {
             $pendingRequest->getMockClient()?->recordResponse($response);
-
-            $response->setSimulatedResponsePayload($simulatedResponsePayload);
             $response->setMocked(true);
         }
+
+        // We'll also set the SimulatedResponsePayload on the response
+        // for people to access it if they need to.
+
+        $response->setSimulatedResponsePayload($simulatedResponsePayload);
 
         // When mocking asynchronous requests we need to wrap the response
         // in FulfilledPromise to act like a real response.
