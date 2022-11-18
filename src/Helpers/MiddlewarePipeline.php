@@ -3,7 +3,7 @@
 namespace Saloon\Helpers;
 
 use Saloon\Contracts\Response;
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 

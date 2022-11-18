@@ -2,7 +2,7 @@
 
 namespace Saloon\Http\Middleware;
 
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Authenticator;
 use Saloon\Contracts\RequestMiddleware;
 

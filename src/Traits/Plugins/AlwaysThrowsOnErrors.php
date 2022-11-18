@@ -3,7 +3,7 @@
 namespace Saloon\Traits\Plugins;
 
 use Saloon\Contracts\Response;
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\PendingRequest;
 
 trait AlwaysThrowsOnErrors
 {

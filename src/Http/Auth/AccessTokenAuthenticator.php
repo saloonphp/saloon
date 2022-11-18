@@ -3,7 +3,7 @@
 namespace Saloon\Http\Auth;
 
 use DateTimeImmutable;
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\OAuthAuthenticator;
 
 class AccessTokenAuthenticator implements OAuthAuthenticator

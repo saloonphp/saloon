@@ -2,7 +2,7 @@
 
 namespace Saloon\Traits\Body;
 
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\PendingRequest;
 
 trait HasXmlBody
 {

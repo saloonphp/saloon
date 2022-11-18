@@ -2,7 +2,7 @@
 
 namespace Saloon\Traits\Plugins;
 
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\PendingRequest;
 
 trait DisablesSSLVerification
 {

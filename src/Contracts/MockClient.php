@@ -2,9 +2,9 @@
 
 namespace Saloon\Contracts;
 
-use Saloon\Http\Request;
+use Saloon\Contracts\Request;
 use Saloon\Http\Faking\Fixture;
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Exceptions\InvalidMockResponseCaptureMethodException;

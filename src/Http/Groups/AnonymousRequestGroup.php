@@ -2,7 +2,7 @@
 
 namespace Saloon\Http\Groups;
 
-use Saloon\Http\Connector;
+use Saloon\Contracts\Connector;
 use Saloon\Helpers\RequestHelper;
 use Saloon\Exceptions\NestedRequestNotFoundException;
 

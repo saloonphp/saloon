@@ -2,8 +2,8 @@
 
 namespace Saloon\Traits\Auth;
 
-use Saloon\Http\Request;
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\Request;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Exceptions\MissingAuthenticatorException;
 
 trait RequiresDigestAuth

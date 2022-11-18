@@ -2,6 +2,7 @@
 
 namespace Saloon\Http;
 
+use Saloon\Contracts\Request as RequestContract;
 use Saloon\Traits\Bootable;
 use Saloon\Contracts\Sender;
 use Saloon\Contracts\Response;
@@ -19,7 +20,7 @@ use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 
-abstract class Request
+abstract class Request implements RequestContract
 {
     use AuthenticatesRequests;
     use HasRequestProperties;

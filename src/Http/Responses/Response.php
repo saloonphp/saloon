@@ -3,9 +3,9 @@
 namespace Saloon\Http\Responses;
 
 use Throwable;
-use Saloon\Http\Request;
+use Saloon\Contracts\Request;
 use Saloon\Traits\Macroable;
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;

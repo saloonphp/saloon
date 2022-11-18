@@ -3,11 +3,11 @@
 namespace Saloon\Http\Faking;
 
 use ReflectionClass;
-use Saloon\Http\Request;
-use Saloon\Http\Connector;
+use Saloon\Contracts\Request;
+use Saloon\Contracts\Connector;
 use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Response;
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Helpers\ReflectionHelper;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Saloon\Exceptions\InvalidConnectorException;

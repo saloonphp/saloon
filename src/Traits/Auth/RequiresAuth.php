@@ -2,7 +2,7 @@
 
 namespace Saloon\Traits\Auth;
 
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Authenticator;
 use Saloon\Exceptions\MissingAuthenticatorException;
 

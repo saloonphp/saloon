@@ -2,7 +2,7 @@
 
 namespace Saloon\Http\Auth;
 
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Authenticator;
 
 class QueryAuthenticator implements Authenticator

@@ -3,6 +3,7 @@
 namespace Saloon\Http;
 
 use ReflectionException;
+use Saloon\Contracts\PendingRequest as PendingRequestContract;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Sender;
@@ -24,9 +25,10 @@ use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Sammyjo20\SaloonLaravel\Http\Middleware\SaloonLaravelMiddleware;
+use Saloon\Laravel\Http\Middleware\SaloonLaravelMiddleware;
+use Saloon\Contracts\Request;
 
-class PendingRequest
+class PendingRequest implements PendingRequestContract
 {
     use AuthenticatesRequests;
     use HasRequestProperties;
@@ -380,7 +382,7 @@ class PendingRequest
      * @param SimulatedResponsePayload|null $simulatedResponsePayload
      * @return PendingRequest
      */
-    public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): PendingRequest
+    public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): static
     {
         $this->simulatedResponsePayload = $simulatedResponsePayload;
 

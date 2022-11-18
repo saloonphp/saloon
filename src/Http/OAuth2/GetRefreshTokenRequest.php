@@ -2,7 +2,7 @@
 
 namespace Saloon\Http\OAuth2;
 
-use Saloon\Http\Request;
+use Saloon\Contracts\Request;
 use Saloon\Contracts\Body\WithBody;
 use Saloon\Traits\Body\HasFormBody;
 use Saloon\Helpers\OAuth2\OAuthConfig;

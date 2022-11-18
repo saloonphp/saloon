@@ -2,7 +2,7 @@
 
 namespace Saloon\Contracts;
 
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
 interface RequestMiddleware
