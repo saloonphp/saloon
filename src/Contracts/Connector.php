@@ -2,7 +2,6 @@
 
 namespace Saloon\Contracts;
 
-use Saloon\Http\Pool;
 use ReflectionException;
 use Saloon\Exceptions\SaloonException;
 use GuzzleHttp\Promise\PromiseInterface;
