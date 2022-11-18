@@ -7,7 +7,7 @@ use Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
 
 class InvalidResponseConnector extends Connector
 {
-    protected ?string $response = InvalidResponseClass::class;
+    protected string $response = InvalidResponseClass::class;
 
     /**
      * Define the base url of the api.
