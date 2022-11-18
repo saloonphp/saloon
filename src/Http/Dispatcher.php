@@ -6,8 +6,9 @@ use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Contracts\Dispatcher as DispatcherContract;
 
-class Dispatcher
+class Dispatcher implements DispatcherContract
 {
     /**
      * Constructor

@@ -2,10 +2,10 @@
 
 namespace Saloon\Traits\Connector;
 
-use Saloon\Contracts\Pool as PoolContract;
-use Saloon\Exceptions\SaloonException;
-use Saloon\Exceptions\InvalidPoolItemException;
 use Saloon\Http\Pool;
+use Saloon\Exceptions\SaloonException;
+use Saloon\Contracts\Pool as PoolContract;
+use Saloon\Exceptions\InvalidPoolItemException;
 
 trait HasPool
 {

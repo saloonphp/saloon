@@ -2,11 +2,9 @@
 
 namespace Saloon\Traits\Connector;
 
-use ReflectionException;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\MockClient;
-use Saloon\Exceptions\SaloonException;
 use GuzzleHttp\Promise\PromiseInterface;
 
 trait SendsRequests
@@ -14,11 +12,9 @@ trait SendsRequests
     /**
      * Send a request
      *
-     * @param Request $request
-     * @param MockClient|null $mockClient
-     * @return Response
-     * @throws ReflectionException
-     * @throws \Saloon\Exceptions\SaloonException
+     * @param \Saloon\Contracts\Request $request
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return \Saloon\Contracts\Response
      */
     public function send(Request $request, MockClient $mockClient = null): Response
     {
@@ -30,11 +26,9 @@ trait SendsRequests
     /**
      * Send a request asynchronously
      *
-     * @param Request $request
-     * @param MockClient|null $mockClient
-     * @return PromiseInterface
-     * @throws ReflectionException
-     * @throws SaloonException
+     * @param \Saloon\Contracts\Request $request
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface
     {

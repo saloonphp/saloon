@@ -120,8 +120,9 @@ class PendingRequest implements PendingRequestContract
             ->mergeBody()
             ->bootConnectorAndRequest();
 
-        // Now we will register the default middleware, this always needs to come
-        // at the end of the user's defined middleware.
+        // Now we will register the default middleware. The user's defined
+        // middleware will come first, and then we will process the
+        // default middleware.
 
         $this->registerDefaultMiddleware();
 
@@ -256,7 +257,7 @@ class PendingRequest implements PendingRequestContract
 
         // Next we will check if we are in a Laravel environment and if we have the
         // Laravel middleware. If we do then Laravel can make changes to the
-        // request like add its MockClient.
+        // request like add its MockClient and record requests.
 
         if (Environment::detectsLaravel() && class_exists(FrameworkMiddleware::class)) {
             $middleware->onRequest(new FrameworkMiddleware);

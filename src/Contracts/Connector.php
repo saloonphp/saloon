@@ -2,12 +2,7 @@
 
 namespace Saloon\Contracts;
 
-use ReflectionException;
-use Saloon\Exceptions\SaloonException;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Exceptions\InvalidPoolItemException;
-use Saloon\Exceptions\InvalidConnectorException;
-use Saloon\Exceptions\InvalidResponseClassException;
 
 interface Connector
 {
@@ -133,9 +128,6 @@ interface Connector
      * Get the response class
      *
      * @return string
-     * @throws ReflectionException
-     * @throws InvalidConnectorException
-     * @throws InvalidResponseClassException
      */
     public function getResponseClass(): string;
 
@@ -183,9 +175,6 @@ interface Connector
      * @param callable|null $responseHandler
      * @param callable|null $exceptionHandler
      * @return Pool
-     * @throws \ReflectionException
-     * @throws InvalidPoolItemException
-     * @throws SaloonException
      */
     public function pool(iterable|callable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null): Pool;
 
@@ -207,7 +196,6 @@ interface Connector
      * Bootstrap and get the registered requests in the $requests array.
      *
      * @return array
-     * @throws \ReflectionException
      */
     public function getRegisteredRequests(): array;
 
@@ -217,8 +205,6 @@ interface Connector
      * @param Request $request
      * @param MockClient|null $mockClient
      * @return Response
-     * @throws ReflectionException
-     * @throws \Saloon\Exceptions\SaloonException
      */
     public function send(Request $request, MockClient $mockClient = null): Response;
 
@@ -228,8 +214,6 @@ interface Connector
      * @param Request $request
      * @param MockClient|null $mockClient
      * @return PromiseInterface
-     * @throws ReflectionException
-     * @throws SaloonException
      */
     public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface;
 }

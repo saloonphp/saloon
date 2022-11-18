@@ -4,8 +4,6 @@ namespace Saloon\Contracts;
 
 use Saloon\Http\Faking\Fixture;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Exceptions\NoMockResponseFoundException;
-use Saloon\Exceptions\InvalidMockResponseCaptureMethodException;
 
 interface MockClient
 {
@@ -14,7 +12,6 @@ interface MockClient
      *
      * @param array $responses
      * @return void
-     * @throws InvalidMockResponseCaptureMethodException
      */
     public function addResponses(array $responses): void;
 
@@ -24,7 +21,6 @@ interface MockClient
      * @param MockResponse|Fixture|callable $response
      * @param string|null $captureMethod
      * @return void
-     * @throws InvalidMockResponseCaptureMethodException
      */
     public function addResponse(MockResponse|Fixture|callable $response, ?string $captureMethod = null): void;
 
@@ -38,10 +34,8 @@ interface MockClient
     /**
      * Guess the next response based on the request.
      *
-     * @param PendingRequest $pendingRequest
-     * @return MockResponse|Fixture
-     * @throws NoMockResponseFoundException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture
      */
     public function guessNextResponse(PendingRequest $pendingRequest): MockResponse|Fixture;
 
@@ -86,7 +80,6 @@ interface MockClient
      *
      * @param string|callable $value
      * @return void
-     * @throws \ReflectionException|\Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function assertSent(string|callable $value): void;
 
@@ -95,7 +88,6 @@ interface MockClient
      *
      * @param string|callable $request
      * @return void
-     * @throws \ReflectionException|\Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function assertNotSent(string|callable $request): void;
 
@@ -105,7 +97,6 @@ interface MockClient
      * @param string $request
      * @param array $data
      * @return void
-     * @throws \ReflectionException|\Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function assertSentJson(string $request, array $data): void;
 
@@ -137,7 +128,6 @@ interface MockClient
      *
      * @param string $url
      * @return Response|null
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function findResponseByRequestUrl(string $url): ?Response;
 }

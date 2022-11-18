@@ -2,11 +2,7 @@
 
 namespace Saloon\Contracts;
 
-use ReflectionException;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Exceptions\PendingRequestException;
-use Saloon\Exceptions\InvalidConnectorException;
-use Saloon\Exceptions\InvalidResponseClassException;
 
 interface Request
 {
@@ -74,7 +70,6 @@ interface Request
      * Build up the full request URL.
      *
      * @return string
-     * @throws InvalidConnectorException
      */
     public function getRequestUrl(): string;
 
@@ -117,7 +112,6 @@ interface Request
      * Retrieve the loaded connector.
      *
      * @return Connector
-     * @throws InvalidConnectorException
      */
     public function connector(): Connector;
 
@@ -133,9 +127,6 @@ interface Request
      * Get the response class
      *
      * @return string
-     * @throws ReflectionException
-     * @throws InvalidConnectorException
-     * @throws InvalidResponseClassException
      */
     public function getResponseClass(): string;
 
@@ -180,10 +171,6 @@ interface Request
      *
      * @param MockClient|null $mockClient
      * @return PendingRequest
-     * @throws PendingRequestException
-     * @throws InvalidConnectorException
-     * @throws InvalidResponseClassException
-     * @throws \ReflectionException
      */
     public function createPendingRequest(MockClient $mockClient = null): PendingRequest;
 
@@ -207,8 +194,6 @@ interface Request
      *
      * @param MockClient|null $mockClient
      * @return PromiseInterface
-     * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\SaloonException
      */
     public function sendAsync(MockClient $mockClient = null): PromiseInterface;
 

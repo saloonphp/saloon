@@ -2,14 +2,10 @@
 
 namespace Saloon\Contracts;
 
-use ReflectionException;
 use Saloon\Enums\Method;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Body\BodyRepository;
-use Saloon\Exceptions\PendingRequestException;
-use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Http\Faking\SimulatedResponsePayload;
-use Saloon\Exceptions\InvalidResponseClassException;
 
 interface PendingRequest
 {
@@ -140,10 +136,6 @@ interface PendingRequest
      *
      * @param Request $request
      * @param MockClient|null $mockClient
-     * @throws PendingRequestException
-     * @throws ReflectionException
-     * @throws InvalidConnectorException
-     * @throws InvalidResponseClassException
      */
     public function __construct(Request $request, MockClient $mockClient = null);
 

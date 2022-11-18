@@ -9,7 +9,6 @@ use Illuminate\Support\Collection;
 use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Exceptions\RequestException;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
 interface Response
@@ -67,7 +66,6 @@ interface Response
      * @param string|null $key
      * @param mixed $default
      * @return mixed
-     * @throws \JsonException
      */
     public function json(string $key = null, mixed $default = null): mixed;
 
@@ -75,7 +73,6 @@ interface Response
      * Get the JSON decoded body of the response as an object.
      *
      * @return object
-     * @throws \JsonException
      */
     public function object(): object;
 
@@ -92,7 +89,6 @@ interface Response
      *
      * @param $key
      * @return Collection
-     * @throws \JsonException
      */
     public function collect($key = null): Collection;
 
@@ -164,7 +160,6 @@ interface Response
      * Throw an exception if a server or client error occurred.
      *
      * @return $this
-     * @throws RequestException
      */
     public function throw(): static;
 
@@ -253,7 +248,6 @@ interface Response
      * Close the stream and any underlying resources.
      *
      * @return $this
-     * @throws \JsonException
      */
     public function close(): static;
 }

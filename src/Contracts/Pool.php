@@ -1,11 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
 use Generator;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Exceptions\InvalidPoolItemException;
-use Saloon\Exceptions\SaloonException;
 
 interface Pool
 {
@@ -52,9 +50,6 @@ interface Pool
      * Send the pool and create a Promise
      *
      * @return PromiseInterface
-     * @throws InvalidPoolItemException
-     * @throws SaloonException
-     * @throws \ReflectionException
      */
     public function send(): PromiseInterface;
 }

@@ -6,7 +6,6 @@ use Saloon\Http\Faking\Fixture;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Contracts\RequestMiddleware;
-use Saloon\Exceptions\NoMockResponseFoundException;
 
 class DetermineMockResponse implements RequestMiddleware
 {
@@ -15,7 +14,6 @@ class DetermineMockResponse implements RequestMiddleware
      *
      * @param PendingRequest $pendingRequest
      * @return PendingRequest|MockResponse
-     * @throws NoMockResponseFoundException
      * @throws \JsonException
      * @throws \Saloon\Exceptions\FixtureMissingException
      */

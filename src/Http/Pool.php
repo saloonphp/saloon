@@ -4,9 +4,8 @@ namespace Saloon\Http;
 
 use Generator;
 use GuzzleHttp\Promise\EachPromise;
-use Saloon\Contracts\Pool as PoolContract;
-use Saloon\Exceptions\SaloonException;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Contracts\Pool as PoolContract;
 use Saloon\Exceptions\InvalidPoolItemException;
 
 class Pool implements PoolContract
@@ -51,14 +50,11 @@ class Pool implements PoolContract
     /**
      * Constructor
      *
-     * @param Connector $connector
+     * @param \Saloon\Http\Connector $connector
      * @param callable|iterable $requestPayload
      * @param int|callable $concurrency
      * @param callable|null $responseHandler
      * @param callable|null $exceptionHandler
-     * @throws InvalidPoolItemException
-     * @throws \ReflectionException
-     * @throws SaloonException
      */
     public function __construct(Connector $connector, callable|iterable $requestPayload = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null)
     {
@@ -142,10 +138,10 @@ class Pool implements PoolContract
     /**
      * Send the pool and create a Promise
      *
-     * @return PromiseInterface
-     * @throws InvalidPoolItemException
-     * @throws SaloonException
+     * @return \GuzzleHttp\Promise\PromiseInterface
      * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\InvalidPoolItemException
+     * @throws \Saloon\Exceptions\SaloonException
      */
     public function send(): PromiseInterface
     {

@@ -12,12 +12,9 @@ use Saloon\Traits\Request\BuildsUrls;
 use Saloon\Traits\Request\HasConnector;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Exceptions\PendingRequestException;
 use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Contracts\Request as RequestContract;
-use Saloon\Exceptions\InvalidConnectorException;
-use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 
 abstract class Request implements RequestContract
@@ -56,12 +53,12 @@ abstract class Request implements RequestContract
     /**
      * Create a pending request
      *
-     * @param MockClient|null $mockClient
-     * @return PendingRequest
-     * @throws PendingRequestException
-     * @throws InvalidConnectorException
-     * @throws InvalidResponseClassException
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return \Saloon\Http\PendingRequest
      * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\InvalidConnectorException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
+     * @throws \Saloon\Exceptions\PendingRequestException
      */
     public function createPendingRequest(MockClient $mockClient = null): PendingRequest
     {
@@ -71,8 +68,8 @@ abstract class Request implements RequestContract
     /**
      * Access the HTTP sender
      *
-     * @return Sender
-     * @throws InvalidConnectorException
+     * @return \Saloon\Contracts\Sender
+     * @throws \Saloon\Exceptions\InvalidConnectorException
      */
     public function sender(): Sender
     {
@@ -82,10 +79,9 @@ abstract class Request implements RequestContract
     /**
      * Send a request synchronously
      *
-     * @param MockClient|null $mockClient
-     * @return Response
-     * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\SaloonException
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return \Saloon\Contracts\Response
+     * @throws \Saloon\Exceptions\InvalidConnectorException
      */
     public function send(MockClient $mockClient = null): Response
     {
@@ -95,10 +91,9 @@ abstract class Request implements RequestContract
     /**
      * Send a request asynchronously
      *
-     * @param MockClient|null $mockClient
-     * @return PromiseInterface
-     * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\SaloonException
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws \Saloon\Exceptions\InvalidConnectorException
      */
     public function sendAsync(MockClient $mockClient = null): PromiseInterface
     {

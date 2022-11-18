@@ -8,18 +8,18 @@ use Saloon\Tests\Fixtures\Connectors\TestConnector;
 class UserRequest extends Request
 {
     /**
-     * Define the method that the request will use.
-     *
-     * @var string
-     */
-    protected string $method = 'GET';
-
-    /**
      * The connector.
      *
      * @var string
      */
     protected string $connector = TestConnector::class;
+
+    /**
+     * Define the method that the request will use.
+     *
+     * @var string
+     */
+    protected string $method = 'GET';
 
     /**
      * @param int|null $userId
