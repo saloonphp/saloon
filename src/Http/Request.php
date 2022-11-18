@@ -17,7 +17,6 @@ use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Exceptions\InvalidResponseClassException;
-use Saloon\Traits\RequestProperties\HasMergeOptions;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 
 abstract class Request
@@ -26,7 +25,6 @@ abstract class Request
     use HasRequestProperties;
     use CastDtoFromResponse;
     use HasCustomResponses;
-    use HasMergeOptions;
     use HasMockClient;
     use Conditionable;
     use HasConnector;

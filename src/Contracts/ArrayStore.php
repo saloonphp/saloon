@@ -28,10 +28,10 @@ interface ArrayStore
     public function get(string $key, mixed $default = null): mixed;
 
     /**
-     * Overwrite the entire repository.
+     * Overwrite the entire repository's contents.
      *
      * @param array $data
-     * @return \Sammyjo20\Saloon\Repositories\ArrayStore
+     * @return ArrayStore
      */
     public function set(array $data): static;
 
@@ -39,7 +39,7 @@ interface ArrayStore
      * Merge in other arrays.
      *
      * @param mixed ...$arrays
-     * @return \Sammyjo20\Saloon\Repositories\ArrayStore
+     * @return ArrayStore
      */
     public function merge(...$arrays): static;
 
@@ -48,7 +48,7 @@ interface ArrayStore
      *
      * @param string $key
      * @param mixed $value
-     * @return \Sammyjo20\Saloon\Repositories\ArrayStore
+     * @return ArrayStore
      */
     public function add(string $key, mixed $value): static;
 
@@ -58,7 +58,7 @@ interface ArrayStore
      * @param bool $condition
      * @param string $key
      * @param mixed $value
-     * @return \Sammyjo20\Saloon\Repositories\ArrayStore
+     * @return ArrayStore
      */
     public function addWhen(bool $condition, string $key, mixed $value): static;
 
@@ -66,7 +66,7 @@ interface ArrayStore
      * Remove an item from the store.
      *
      * @param string $key
-     * @return \Sammyjo20\Saloon\Repositories\ArrayStore
+     * @return ArrayStore
      */
     public function remove(string $key): static;
 
