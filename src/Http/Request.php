@@ -8,6 +8,7 @@ use Saloon\Contracts\Response;
 use Saloon\Contracts\MockClient;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
+use Saloon\Traits\Makeable;
 use Saloon\Traits\Request\BuildsUrls;
 use Saloon\Traits\Request\HasConnector;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -28,6 +29,7 @@ abstract class Request implements RequestContract
     use HasConnector;
     use BuildsUrls;
     use Bootable;
+    use Makeable;
 
     /**
      * Define the connector.
@@ -98,17 +100,6 @@ abstract class Request implements RequestContract
     public function sendAsync(MockClient $mockClient = null): PromiseInterface
     {
         return $this->connector()->sendAsync($this, $mockClient);
-    }
-
-    /**
-     * Instantiate a new class with the arguments.
-     *
-     * @param ...$arguments
-     * @return static
-     */
-    public static function make(...$arguments): static
-    {
-        return new static(...$arguments);
     }
 
     /**
