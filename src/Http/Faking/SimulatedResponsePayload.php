@@ -4,8 +4,8 @@ namespace Saloon\Http\Faking;
 
 use Closure;
 use Throwable;
-use Saloon\Http\PendingRequest;
 use Saloon\Repositories\ArrayStore;
+use Saloon\Contracts\PendingRequest;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;

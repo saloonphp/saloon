@@ -15,18 +15,17 @@ use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Exceptions\PendingRequestException;
 use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
+use Saloon\Contracts\Request as RequestContract;
 use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Exceptions\InvalidResponseClassException;
-use Saloon\Traits\RequestProperties\HasMergeOptions;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 
-abstract class Request
+abstract class Request implements RequestContract
 {
     use AuthenticatesRequests;
     use HasRequestProperties;
     use CastDtoFromResponse;
     use HasCustomResponses;
-    use HasMergeOptions;
     use HasMockClient;
     use Conditionable;
     use HasConnector;
@@ -41,7 +40,7 @@ abstract class Request
     protected string $connector = '';
 
     /**
-     * Define the method.
+     * Define the HTTP method.
      *
      * @var string
      */

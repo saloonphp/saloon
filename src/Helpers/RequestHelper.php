@@ -2,8 +2,8 @@
 
 namespace Saloon\Helpers;
 
-use Saloon\Http\Request;
-use Saloon\Http\Connector;
+use Saloon\Contracts\Request;
+use Saloon\Contracts\Connector;
 use Saloon\Exceptions\InvalidRequestException;
 
 class RequestHelper

@@ -15,7 +15,12 @@ class InvalidResponseClass extends Request
      */
     protected string $method = 'GET';
 
-    protected ?string $response = UserResponseNoExtendSaloonResponse::class;
+    /**
+     * Define the custom response
+     *
+     * @var string
+     */
+    protected string $response = UserResponseNoExtendSaloonResponse::class;
 
     /**
      * The connector.

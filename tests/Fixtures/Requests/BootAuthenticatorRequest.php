@@ -3,9 +3,9 @@
 namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Http\Request;
-use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Body\WithBody;
 use Saloon\Traits\Body\HasJsonBody;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class BootAuthenticatorRequest extends Request implements WithBody

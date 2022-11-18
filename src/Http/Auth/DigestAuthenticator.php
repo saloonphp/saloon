@@ -2,8 +2,8 @@
 
 namespace Saloon\Http\Auth;
 
-use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Authenticator;
+use Saloon\Contracts\PendingRequest;
 
 class DigestAuthenticator implements Authenticator
 {

@@ -3,7 +3,7 @@
 namespace Saloon\Http\Middleware;
 
 use Saloon\Http\Faking\Fixture;
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Contracts\RequestMiddleware;
 use Saloon\Exceptions\NoMockResponseFoundException;

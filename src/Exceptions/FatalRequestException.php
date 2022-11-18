@@ -3,7 +3,7 @@
 namespace Saloon\Exceptions;
 
 use Throwable;
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\PendingRequest;
 
 class FatalRequestException extends SaloonException
 {

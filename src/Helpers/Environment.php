@@ -14,7 +14,7 @@ class Environment
     public static function detectsLaravel(): bool
     {
         try {
-            return function_exists('resolve') && resolve('saloon') instanceof \Sammyjo20\SaloonLaravel\Saloon;
+            return function_exists('resolve') && resolve('saloon') instanceof \Saloon\Laravel\Saloon;
         } catch (Exception $ex) {
             return false;
         }

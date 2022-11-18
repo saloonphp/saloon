@@ -2,7 +2,7 @@
 
 namespace Saloon\Traits\Request;
 
-use Saloon\Http\Connector;
+use Saloon\Contracts\Connector;
 use Saloon\Exceptions\InvalidConnectorException;
 
 trait HasConnector

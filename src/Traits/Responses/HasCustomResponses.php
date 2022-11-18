@@ -3,7 +3,7 @@
 namespace Saloon\Traits\Responses;
 
 use ReflectionException;
-use Saloon\Http\Request;
+use Saloon\Contracts\Request;
 use Saloon\Helpers\ReflectionHelper;
 use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Exceptions\InvalidResponseClassException;

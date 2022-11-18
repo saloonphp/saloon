@@ -5,8 +5,6 @@ namespace Saloon\Contracts;
 use Exception;
 use Throwable;
 use SimpleXMLElement;
-use Saloon\Http\Request;
-use Saloon\Http\PendingRequest;
 use Illuminate\Support\Collection;
 use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;

@@ -4,11 +4,12 @@ namespace Saloon\Http;
 
 use Generator;
 use GuzzleHttp\Promise\EachPromise;
+use Saloon\Contracts\Pool as PoolContract;
 use Saloon\Exceptions\SaloonException;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\InvalidPoolItemException;
 
-class Pool
+class Pool implements PoolContract
 {
     /**
      * Requests inside the pool

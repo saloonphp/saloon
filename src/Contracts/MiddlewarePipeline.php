@@ -3,7 +3,6 @@
 namespace Saloon\Contracts;
 
 use Saloon\Helpers\Pipeline;
-use Saloon\Http\PendingRequest;
 
 interface MiddlewarePipeline
 {

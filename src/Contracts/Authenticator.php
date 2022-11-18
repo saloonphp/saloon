@@ -2,8 +2,6 @@
 
 namespace Saloon\Contracts;
 
-use Saloon\Http\PendingRequest;
-
 interface Authenticator
 {
     /**

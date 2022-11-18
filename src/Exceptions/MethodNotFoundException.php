@@ -2,7 +2,7 @@
 
 namespace Saloon\Exceptions;
 
-use Saloon\Http\Connector;
+use Saloon\Contracts\Connector;
 
 class MethodNotFoundException extends SaloonException
 {

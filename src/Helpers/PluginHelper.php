@@ -3,9 +3,9 @@
 namespace Saloon\Helpers;
 
 use ReflectionClass;
-use Saloon\Http\Request;
-use Saloon\Http\Connector;
-use Saloon\Http\PendingRequest;
+use Saloon\Contracts\Request;
+use Saloon\Contracts\Connector;
+use Saloon\Contracts\PendingRequest;
 
 class PluginHelper
 {

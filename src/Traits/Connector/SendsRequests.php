@@ -3,9 +3,9 @@
 namespace Saloon\Traits\Connector;
 
 use ReflectionException;
-use Saloon\Http\Request;
+use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
-use Saloon\Http\Faking\MockClient;
+use Saloon\Contracts\MockClient;
 use Saloon\Exceptions\SaloonException;
 use GuzzleHttp\Promise\PromiseInterface;
 

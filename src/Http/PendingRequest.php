@@ -6,7 +6,7 @@ use ReflectionException;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Sender;
-use Saloon\Data\MergeOptions;
+use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
 use Saloon\Helpers\Environment;
 use Saloon\Contracts\MockClient;
@@ -24,10 +24,11 @@ use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
 use Saloon\Exceptions\InvalidResponseClassException;
+use Saloon\Laravel\Http\Middleware\FrameworkMiddleware;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Sammyjo20\SaloonLaravel\Http\Middleware\SaloonLaravelMiddleware;
+use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
-class PendingRequest
+class PendingRequest implements PendingRequestContract
 {
     use AuthenticatesRequests;
     use HasRequestProperties;
@@ -84,15 +85,6 @@ class PendingRequest
     protected ?SimulatedResponsePayload $simulatedResponsePayload = null;
 
     /**
-     * Merge Options
-     *
-     * Used to determine what to merge from the connector.
-     *
-     * @var MergeOptions
-     */
-    protected MergeOptions $mergeOptions;
-
-    /**
      * Build up the request payload.
      *
      * @param Request $request
@@ -113,7 +105,6 @@ class PendingRequest
         $this->responseClass = $request->getResponseClass();
         $this->mockClient = $mockClient ?? ($request->getMockClient() ?? $connector->getMockClient());
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
-        $this->mergeOptions = $request->mergeOptions();
 
         // After we have defined each of our properties, we will run the various
         // methods that build up the PendingRequest. It's important that
@@ -174,16 +165,11 @@ class PendingRequest
     {
         $connector = $this->connector;
         $request = $this->request;
-        $mergeOptions = $this->mergeOptions;
 
-        // Firstly merge the connector options if the merge options
-        // allow us to do so.
-
-        if ($mergeOptions->includesConnectorHeaders()) {
-            $this->headers()->merge($connector->headers()->all());
-        }
-
-        $this->headers()->merge($request->headers()->all());
+        $this->headers()->merge(
+            $connector->headers()->all(),
+            $request->headers()->all()
+        );
 
         $this->queryParameters()->merge(
             $connector->queryParameters()->all(),
@@ -272,8 +258,8 @@ class PendingRequest
         // Laravel middleware. If we do then Laravel can make changes to the
         // request like add its MockClient.
 
-        if (Environment::detectsLaravel() && class_exists(SaloonLaravelMiddleware::class)) {
-            $middleware->onRequest(new SaloonLaravelMiddleware);
+        if (Environment::detectsLaravel() && class_exists(FrameworkMiddleware::class)) {
+            $middleware->onRequest(new FrameworkMiddleware);
         }
 
         // Next we will run the MockClient and determine if we should send a real
@@ -396,7 +382,7 @@ class PendingRequest
      * @param SimulatedResponsePayload|null $simulatedResponsePayload
      * @return PendingRequest
      */
-    public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): PendingRequest
+    public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): static
     {
         $this->simulatedResponsePayload = $simulatedResponsePayload;
 
