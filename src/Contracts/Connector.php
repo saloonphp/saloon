@@ -1,14 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use GuzzleHttp\Promise\PromiseInterface;
-use ReflectionException;
-use Saloon\Exceptions\InvalidConnectorException;
-use Saloon\Exceptions\InvalidPoolItemException;
-use Saloon\Exceptions\InvalidResponseClassException;
-use Saloon\Exceptions\SaloonException;
 use Saloon\Http\Pool;
+use ReflectionException;
+use Saloon\Exceptions\SaloonException;
+use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Exceptions\InvalidPoolItemException;
+use Saloon\Exceptions\InvalidConnectorException;
+use Saloon\Exceptions\InvalidResponseClassException;
 
 interface Connector
 {

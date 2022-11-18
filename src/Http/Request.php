@@ -2,7 +2,6 @@
 
 namespace Saloon\Http;
 
-use Saloon\Contracts\Request as RequestContract;
 use Saloon\Traits\Bootable;
 use Saloon\Contracts\Sender;
 use Saloon\Contracts\Response;
@@ -16,6 +15,7 @@ use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Exceptions\PendingRequestException;
 use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
+use Saloon\Contracts\Request as RequestContract;
 use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
@@ -40,7 +40,7 @@ abstract class Request implements RequestContract
     protected string $connector = '';
 
     /**
-     * Define the method.
+     * Define the HTTP method.
      *
      * @var string
      */

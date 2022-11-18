@@ -2,8 +2,8 @@
 
 namespace Saloon\Http;
 
-use Saloon\Contracts\Connector as ConnectorContract;
 use Saloon\Traits\Bootable;
+use Saloon\Contracts\Request;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Traits\Connector\HasPool;
@@ -15,9 +15,9 @@ use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Exceptions\InvalidRequestException;
 use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
+use Saloon\Contracts\Connector as ConnectorContract;
 use Saloon\Exceptions\ConnectorMethodNotFoundException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Saloon\Contracts\Request;
 
 abstract class Connector implements ConnectorContract
 {

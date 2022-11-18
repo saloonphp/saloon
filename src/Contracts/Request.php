@@ -1,12 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use GuzzleHttp\Promise\PromiseInterface;
 use ReflectionException;
+use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Exceptions\PendingRequestException;
 use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Exceptions\InvalidResponseClassException;
-use Saloon\Exceptions\PendingRequestException;
 
 interface Request
 {

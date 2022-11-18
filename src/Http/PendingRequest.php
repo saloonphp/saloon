@@ -3,10 +3,10 @@
 namespace Saloon\Http;
 
 use ReflectionException;
-use Saloon\Contracts\PendingRequest as PendingRequestContract;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Sender;
+use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
 use Saloon\Helpers\Environment;
 use Saloon\Contracts\MockClient;
@@ -24,9 +24,9 @@ use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
 use Saloon\Exceptions\InvalidResponseClassException;
+use Saloon\Laravel\Http\Middleware\FrameworkMiddleware;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Saloon\Laravel\Http\Middleware\SaloonLaravelMiddleware;
-use Saloon\Contracts\Request;
+use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
 class PendingRequest implements PendingRequestContract
 {
@@ -258,8 +258,8 @@ class PendingRequest implements PendingRequestContract
         // Laravel middleware. If we do then Laravel can make changes to the
         // request like add its MockClient.
 
-        if (Environment::detectsLaravel() && class_exists(SaloonLaravelMiddleware::class)) {
-            $middleware->onRequest(new SaloonLaravelMiddleware);
+        if (Environment::detectsLaravel() && class_exists(FrameworkMiddleware::class)) {
+            $middleware->onRequest(new FrameworkMiddleware);
         }
 
         // Next we will run the MockClient and determine if we should send a real

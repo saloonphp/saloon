@@ -3,10 +3,10 @@
 namespace Saloon\Http\Responses;
 
 use Throwable;
-use Saloon\Contracts\Request;
 use Saloon\Traits\Macroable;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Contracts\Request;
 use Saloon\Repositories\ArrayStore;
+use Saloon\Contracts\PendingRequest;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Traits\Responses\HasResponseHelpers;

@@ -4,9 +4,9 @@ namespace Saloon\Http\Faking;
 
 use ReflectionClass;
 use Saloon\Contracts\Request;
-use Saloon\Contracts\Connector;
 use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Response;
+use Saloon\Contracts\Connector;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Helpers\ReflectionHelper;
 use PHPUnit\Framework\Assert as PHPUnit;

@@ -1,16 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use GuzzleHttp\Promise\PromiseInterface;
 use ReflectionException;
-use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Enums\Method;
-use Saloon\Exceptions\InvalidConnectorException;
-use Saloon\Exceptions\InvalidResponseClassException;
+use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Exceptions\PendingRequestException;
+use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Http\Faking\SimulatedResponsePayload;
-use Saloon\Contracts\Request;
+use Saloon\Exceptions\InvalidResponseClassException;
 
 interface PendingRequest
 {
