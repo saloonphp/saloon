@@ -23,7 +23,7 @@ class Response implements ResponseContract
      *
      * @var PendingRequest
      */
-    protected PendingRequest $pendingSaloonRequest;
+    protected PendingRequest $pendingRequest;
 
     /**
      * The raw PSR response from the sender.
@@ -42,17 +42,17 @@ class Response implements ResponseContract
     /**
      * Create a new response instance.
      *
-     * @param PendingRequest $pendingSaloonRequest
+     * @param PendingRequest $pendingRequest
      * @param ResponseInterface|SimulatedResponsePayload $rawResponse
      * @param Throwable|null $requestException
      */
-    public function __construct(PendingRequest $pendingSaloonRequest, ResponseInterface|SimulatedResponsePayload $rawResponse, Throwable $requestException = null)
+    public function __construct(PendingRequest $pendingRequest, ResponseInterface|SimulatedResponsePayload $rawResponse, Throwable $requestException = null)
     {
         if ($rawResponse instanceof SimulatedResponsePayload) {
             $rawResponse = $rawResponse->getPsrResponse();
         }
 
-        $this->pendingSaloonRequest = $pendingSaloonRequest;
+        $this->pendingRequest = $pendingRequest;
         $this->rawResponse = $rawResponse;
         $this->requestException = $requestException;
     }
@@ -64,7 +64,7 @@ class Response implements ResponseContract
      */
     public function getPendingRequest(): PendingRequest
     {
-        return $this->pendingSaloonRequest;
+        return $this->pendingRequest;
     }
 
     /**
@@ -74,7 +74,7 @@ class Response implements ResponseContract
      */
     public function getRequest(): Request
     {
-        return $this->pendingSaloonRequest->getRequest();
+        return $this->pendingRequest->getRequest();
     }
 
     /**

@@ -139,7 +139,6 @@ class Pool implements PoolContract
      * Send the pool and create a Promise
      *
      * @return \GuzzleHttp\Promise\PromiseInterface
-     * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidPoolItemException
      * @throws \Saloon\Exceptions\SaloonException
      */

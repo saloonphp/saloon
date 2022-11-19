@@ -11,6 +11,7 @@ use Saloon\Traits\Connector\HasSender;
 use Saloon\Traits\Connector\SendsRequests;
 use Saloon\Traits\Connector\ProxiesRequests;
 use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Traits\Makeable;
 use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Contracts\Connector as ConnectorContract;
@@ -28,6 +29,7 @@ abstract class Connector implements ConnectorContract
     use Conditionable;
     use HasSender;
     use Bootable;
+    use Makeable;
     use HasPool;
 
     /**
@@ -46,17 +48,6 @@ abstract class Connector implements ConnectorContract
     public function request(Request $request): Request
     {
         return $request->setConnector($this);
-    }
-
-    /**
-     * Instantiate a new class with the arguments.
-     *
-     * @param mixed ...$arguments
-     * @return Connector
-     */
-    public static function make(...$arguments): static
-    {
-        return new static(...$arguments);
     }
 
     /**
