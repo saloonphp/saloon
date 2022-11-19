@@ -3,7 +3,7 @@
 namespace Saloon\Http\Faking;
 
 use Saloon\Helpers\Storage;
-use Saloon\Data\FixtureData;
+use Saloon\Data\RecordedResponse;
 use Saloon\Helpers\MockConfig;
 use Saloon\Exceptions\FixtureMissingException;
 use Saloon\Exceptions\DirectoryNotFoundException;
@@ -57,7 +57,7 @@ class Fixture
         $fixturePath = $this->getFixturePath();
 
         if ($storage->exists($fixturePath)) {
-            return FixtureData::fromFile($storage->get($fixturePath))->toMockResponse();
+            return RecordedResponse::fromFile($storage->get($fixturePath))->toMockResponse();
         }
 
         if (MockConfig::isThrowingOnMissingFixtures() === true) {
@@ -70,18 +70,15 @@ class Fixture
     /**
      * Store data as the fixture.
      *
-     * @param FixtureData $fixtureData
+     * @param \Saloon\Data\RecordedResponse $recordedResponse
      * @return $this
      * @throws \JsonException
-     * @throws \Sammyjo20\Saloon\Exceptions\UnableToCreateDirectoryException
-     * @throws \Sammyjo20\Saloon\Exceptions\UnableToCreateFileException
+     * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
+     * @throws \Saloon\Exceptions\UnableToCreateFileException
      */
-    public function store(FixtureData $fixtureData): static
+    public function store(RecordedResponse $recordedResponse): static
     {
-        $fixturePath = $this->getFixturePath();
-        $contents = $fixtureData->toFile();
-
-        $this->storage->put($fixturePath, $contents);
+        $this->storage->put($this->getFixturePath(), $recordedResponse->toFile());
 
         return $this;
     }

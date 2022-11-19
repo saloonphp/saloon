@@ -5,9 +5,9 @@ namespace Saloon\Data;
 use JsonSerializable;
 use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockResponse;
-use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Yaml\Yaml;
 
-class FixtureData implements JsonSerializable
+class RecordedResponse implements JsonSerializable
 {
     /**
      * Constructor
@@ -39,21 +39,6 @@ class FixtureData implements JsonSerializable
             statusCode: $fileData['statusCode'],
             headers: $fileData['headers'],
             data: $fileData['data']
-        );
-    }
-
-    /**
-     * Create an instance from a Guzzle response
-     *
-     * @param ResponseInterface $response
-     * @return static
-     */
-    public static function fromGuzzleResponse(ResponseInterface $response): static
-    {
-        return new static(
-            statusCode: $response->getStatusCode(),
-            headers: $response->getHeaders(),
-            data: (string)$response->getBody(),
         );
     }
 

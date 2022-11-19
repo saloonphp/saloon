@@ -2,7 +2,7 @@
 
 namespace Saloon\Tests\Unit;
 
-use Saloon\Data\FixtureData;
+use Saloon\Data\RecordedResponse;
 use Saloon\Http\Faking\MockResponse;
 
 test('you can create a fixture data object from a file string', function () {
@@ -16,7 +16,7 @@ test('you can create a fixture data object from a file string', function () {
         ],
     ];
 
-    $fixtureData = FixtureData::fromFile(json_encode($data));
+    $fixtureData = RecordedResponse::fromFile(json_encode($data));
 
     expect($fixtureData->statusCode)->toEqual($data['statusCode']);
     expect($fixtureData->headers)->toEqual($data['headers']);
@@ -34,7 +34,7 @@ test('you can create a mock response from fixture data', function () {
         ],
     ];
 
-    $fixtureData = FixtureData::fromFile(json_encode($data));
+    $fixtureData = RecordedResponse::fromFile(json_encode($data));
     $mockResponse = $fixtureData->toMockResponse();
 
     expect($mockResponse)->toEqual(new MockResponse($data['statusCode'], $data['data'], $data['headers']));
@@ -51,7 +51,7 @@ test('you can json serialize the fixture data or convert it into a file', functi
         ],
     ];
 
-    $fixtureData = FixtureData::fromFile(json_encode($data));
+    $fixtureData = RecordedResponse::fromFile(json_encode($data));
 
     $serialized = json_encode($fixtureData);
 
