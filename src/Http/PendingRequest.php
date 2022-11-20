@@ -19,14 +19,13 @@ use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Exceptions\PendingRequestException;
 use Saloon\Http\Middleware\AuthenticateRequest;
-use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
-use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Laravel\Http\Middleware\FrameworkMiddleware;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
+use Saloon\Contracts\Connector;
 
 class PendingRequest implements PendingRequestContract
 {
@@ -38,14 +37,14 @@ class PendingRequest implements PendingRequestContract
     /**
      * The request used by the instance.
      *
-     * @var Request
+     * @var \Saloon\Contracts\Request
      */
     protected Request $request;
 
     /**
      * The connector making the request.
      *
-     * @var Connector
+     * @var \Saloon\Contracts\Connector
      */
     protected Connector $connector;
 
@@ -59,7 +58,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * The method the request will use.
      *
-     * @var Method
+     * @var \Saloon\Enums\Method
      */
     protected Method $method;
 
@@ -73,7 +72,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * The body of the request.
      *
-     * @var BodyRepository|null
+     * @var \Saloon\Contracts\Body\BodyRepository|null
      */
     protected ?BodyRepository $body = null;
 
@@ -87,12 +86,10 @@ class PendingRequest implements PendingRequestContract
     /**
      * Build up the request payload.
      *
-     * @param Request $request
-     * @param MockClient|null $mockClient
-     * @throws PendingRequestException
-     * @throws ReflectionException
-     * @throws InvalidConnectorException
-     * @throws InvalidResponseClassException
+     * @param \Saloon\Contracts\Request $request
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\PendingRequestException
      */
     public function __construct(Request $request, MockClient $mockClient = null)
     {
@@ -136,7 +133,7 @@ class PendingRequest implements PendingRequestContract
      * Boot every plugin on the connector and request.
      *
      * @return $this
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     protected function bootPlugins(): static
     {
@@ -193,7 +190,7 @@ class PendingRequest implements PendingRequestContract
      * Merge the body together
      *
      * @return $this
-     * @throws PendingRequestException
+     * @throws \Saloon\Exceptions\PendingRequestException
      */
     protected function mergeBody(): static
     {
@@ -287,8 +284,8 @@ class PendingRequest implements PendingRequestContract
     /**
      * Execute the response pipeline.
      *
-     * @param Response $response
-     * @return Response
+     * @param \Saloon\Contracts\Response $response
+     * @return \Saloon\Contracts\Response
      */
     public function executeResponsePipeline(Response $response): Response
     {
@@ -300,7 +297,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Get the request.
      *
-     * @return Request
+     * @return \Saloon\Contracts\Request
      */
     public function getRequest(): Request
     {
@@ -310,7 +307,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Get the connector.
      *
-     * @return Connector
+     * @return \Saloon\Contracts\Connector
      */
     public function getConnector(): Connector
     {
@@ -330,7 +327,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Get the HTTP method used for the request
      *
-     * @return Method
+     * @return \Saloon\Enums\Method
      */
     public function getMethod(): Method
     {
@@ -350,7 +347,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Get the request sender.
      *
-     * @return Sender
+     * @return \Saloon\Contracts\Sender
      */
     public function getSender(): Sender
     {
@@ -360,7 +357,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Retrieve the body on the instance
      *
-     * @return BodyRepository|null
+     * @return \Saloon\Contracts\Body\BodyRepository|null
      */
     public function body(): ?BodyRepository
     {
@@ -370,7 +367,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Get the simulated response payload
      *
-     * @return SimulatedResponsePayload|null
+     * @return \Saloon\Http\Faking\SimulatedResponsePayload|null
      */
     public function getSimulatedResponsePayload(): ?SimulatedResponsePayload
     {
@@ -380,8 +377,8 @@ class PendingRequest implements PendingRequestContract
     /**
      * Set the simulated response payload
      *
-     * @param SimulatedResponsePayload|null $simulatedResponsePayload
-     * @return PendingRequest
+     * @param \Saloon\Http\Faking\SimulatedResponsePayload|null $simulatedResponsePayload
+     * @return $this
      */
     public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): static
     {
@@ -403,7 +400,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Send the PendingRequest
      *
-     * @return Response
+     * @return \Saloon\Contracts\Response
      */
     public function send(): Response
     {
@@ -413,7 +410,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Send the PendingRequest asynchronously
      *
-     * @return PromiseInterface
+     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function sendAsync(): PromiseInterface
     {

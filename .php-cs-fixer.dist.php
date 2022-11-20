@@ -38,4 +38,5 @@ return $config->setRules([
         'space_before' => 'none'
     ],
     'declare_strict_types' => true,
+    'blank_line_after_opening_tag' => true,
 ])->setFinder($finder);

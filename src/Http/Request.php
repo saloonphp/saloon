@@ -58,8 +58,6 @@ abstract class Request implements RequestContract
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @return \Saloon\Http\PendingRequest
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidConnectorException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\PendingRequestException
      */
     public function createPendingRequest(MockClient $mockClient = null): PendingRequest
