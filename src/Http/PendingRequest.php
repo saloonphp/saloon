@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use ReflectionException;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Sender;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
+use Saloon\Contracts\Connector;
 use Saloon\Helpers\Environment;
 use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
@@ -25,7 +27,6 @@ use Saloon\Repositories\Body\ArrayBodyRepository;
 use Saloon\Laravel\Http\Middleware\FrameworkMiddleware;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
-use Saloon\Contracts\Connector;
 
 class PendingRequest implements PendingRequestContract
 {

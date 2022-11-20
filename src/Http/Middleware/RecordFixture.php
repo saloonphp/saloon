@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Saloon\Http\Middleware;
 
 use Saloon\Contracts\Response;
-use Saloon\Helpers\ResponseRecorder;
 use Saloon\Http\Faking\Fixture;
+use Saloon\Helpers\ResponseRecorder;
 use Saloon\Contracts\ResponseMiddleware;
 
 class RecordFixture implements ResponseMiddleware

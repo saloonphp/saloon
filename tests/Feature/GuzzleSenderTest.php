@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\RequestInterface;

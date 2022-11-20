@@ -1,11 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Saloon\Data;
 
 use JsonSerializable;
 use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockResponse;
-use Symfony\Component\Yaml\Yaml;
 
 class RecordedResponse implements JsonSerializable
 {

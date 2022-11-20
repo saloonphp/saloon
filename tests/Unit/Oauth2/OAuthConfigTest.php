@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Exceptions\OAuthConfigValidationException;

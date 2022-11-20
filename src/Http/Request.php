@@ -1,14 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Saloon\Http;
 
 use Saloon\Traits\Bootable;
+use Saloon\Traits\Makeable;
 use Saloon\Contracts\Sender;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\MockClient;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
-use Saloon\Traits\Makeable;
 use Saloon\Traits\Request\BuildsUrls;
 use Saloon\Traits\Request\HasConnector;
 use GuzzleHttp\Promise\PromiseInterface;

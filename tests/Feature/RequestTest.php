@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use Saloon\Http\Responses\Response;
 use Saloon\Tests\Fixtures\Requests\UserRequest;

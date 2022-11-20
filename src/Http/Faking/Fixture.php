@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Saloon\Http\Faking;
 
 use Saloon\Helpers\Storage;
-use Saloon\Data\RecordedResponse;
 use Saloon\Helpers\MockConfig;
+use Saloon\Data\RecordedResponse;
 use Saloon\Exceptions\FixtureMissingException;
 use Saloon\Exceptions\DirectoryNotFoundException;
 
