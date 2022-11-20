@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
-use Saloon\Contracts\Body\BodyRepository as BodyRepositoryContract;
+use Saloon\Contracts\Body\BodyRepository;
 
-class StringBodyRepository implements BodyRepositoryContract
+class StringBodyRepository implements BodyRepository
 {
     /**
      * Repository Data

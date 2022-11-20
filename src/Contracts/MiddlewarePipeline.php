@@ -12,7 +12,7 @@ interface MiddlewarePipeline
      * Add a middleware before the request is sent
      *
      * @param callable $closure
-     * @return \Sammyjo20\Saloon\Helpers\MiddlewarePipeline
+     * @return $this
      */
     public function onRequest(callable $closure): static;
 
@@ -20,7 +20,7 @@ interface MiddlewarePipeline
      * Add a middleware after the request is sent
      *
      * @param callable $closure
-     * @return \Sammyjo20\Saloon\Helpers\MiddlewarePipeline
+     * @return $this
      */
     public function onResponse(callable $closure): static;
 
