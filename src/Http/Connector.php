@@ -35,13 +35,6 @@ abstract class Connector implements ConnectorContract
     use HasPool;
 
     /**
-     * Define the base URL of the API.
-     *
-     * @return string
-     */
-    abstract public function defineBaseUrl(): string;
-
-    /**
      * Prepare a new request
      *
      * @param \Saloon\Contracts\Request $request
