@@ -242,9 +242,9 @@ interface Response
      * Get a header from the response.
      *
      * @param string $header
-     * @return string|null
+     * @return string|array|null
      */
-    public function header(string $header): ?string;
+    public function header(string $header): string|array|null;
 
     /**
      * Close the stream and any underlying resources.

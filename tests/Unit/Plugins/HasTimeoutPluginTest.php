@@ -6,25 +6,24 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Managers\RequestManager;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Promise\FulfilledPromise;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\TimeoutRequest;
 use Saloon\Tests\Fixtures\Connectors\TimeoutConnector;
 
 test('a request is given a default timeout and connect timeout', function () {
-    $mockClient = new MockClient([new MockResponse()]);
-
     $request = UserRequest::make();
 
-    $request->addHandler('test', function (callable $handler) {
+    $request->sender()->addMiddleware(function (callable $handler) {
         return function (RequestInterface $request, array $options) use ($handler) {
-            expect($options['connect_timeout'])->toEqual(10.0);
-            expect($options['timeout'])->toEqual(30.0);
+            expect($options['connect_timeout'])->toEqual(10);
+            expect($options['timeout'])->toEqual(30);
 
-            return $handler($request, $options);
+            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
         };
-    });
+    }, 'test');
 
-    $request->send($mockClient);
+    $request->send();
 });
 
 test('a request can set a timeout and connect timeout', function () {

@@ -126,7 +126,11 @@ class Response implements ResponseContract
      */
     public function headers(): ArrayStore
     {
-        return new ArrayStore($this->rawResponse->getHeaders());
+        $headers = array_map(static function (array $header) {
+            return count($header) === 1 ? $header[0] : $header;
+        }, $this->rawResponse->getHeaders());
+
+        return new ArrayStore($headers);
     }
 
     /**
