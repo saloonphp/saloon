@@ -44,6 +44,12 @@ class URLHelper
         return $baseEndpoint . $endpoint;
     }
 
+    /**
+     * Check if the URL is a valid URL
+     *
+     * @param string $url
+     * @return bool
+     */
     public static function isValidUrl(string $url): bool
     {
         return ! empty(filter_var($url, FILTER_VALIDATE_URL));

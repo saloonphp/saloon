@@ -14,6 +14,7 @@ use Saloon\Tests\Fixtures\Requests\NoConnectorRequest;
 use Saloon\Tests\Fixtures\Connectors\ExtendedConnector;
 use Saloon\Tests\Fixtures\Connectors\TestProxyConnector;
 use Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
+use Saloon\Tests\Fixtures\Requests\CustomEndpointRequest;
 use Saloon\Tests\Fixtures\Requests\DefaultEndpointRequest;
 use Saloon\Tests\Fixtures\Requests\InvalidConnectorRequest;
 use Saloon\Tests\Fixtures\Requests\ExtendedConnectorRequest;
@@ -145,3 +146,20 @@ test('a method is proxied onto the connector if it does not exist on the request
     expect(method_exists($request, 'greeting'))->toBeFalse();
     expect($request->greeting())->toEqual('Howdy!');
 });
+
+test('you can join various URLs together', function ($baseUrl, $endpoint, $expected) {
+    $request = new CustomEndpointRequest();
+    $request->connector()->setBaseUrl($baseUrl);
+    $request->setEndpoint($endpoint);
+
+    expect($request->getRequestUrl())->toEqual($expected);
+})->with([
+    ['https://google.com', '/search', 'https://google.com/search'],
+    ['https://google.com', 'search', 'https://google.com/search'],
+    ['https://google.com/', '/search', 'https://google.com/search'],
+    ['https://google.com/', 'search', 'https://google.com/search'],
+    ['https://google.com//', '//search', 'https://google.com/search'],
+    ['', 'https://google.com/search', 'https://google.com/search'],
+    ['', 'google.com/search', '/google.com/search'],
+    ['https://google.com', 'https://api.google.com/search', 'https://api.google.com/search'],
+]);
