@@ -84,9 +84,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      */
     public function executeRequestPipeline(PendingRequest $pendingRequest): PendingRequest
     {
-        $this->requestPipeline->process($pendingRequest);
-
-        return $pendingRequest;
+        return $this->requestPipeline->process($pendingRequest);
     }
 
     /**
@@ -97,9 +95,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      */
     public function executeResponsePipeline(Response $response): Response
     {
-        $this->responsePipeline->process($response);
-
-        return $response;
+        return $this->responsePipeline->process($response);
     }
 
     /**

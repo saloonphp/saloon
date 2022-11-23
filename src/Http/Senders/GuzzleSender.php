@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Saloon\Http\Senders;
 
 use Exception;
-use GuzzleHttp\Utils;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use Saloon\Contracts\Sender;
@@ -68,29 +67,24 @@ class GuzzleSender implements Sender
      */
     protected function createGuzzleClient(): GuzzleClient
     {
-        $this->handlerStack = $this->createHandlerStack();
+        // We'll use HandlerStack::create as it will create a default
+        // handler stack with the default Guzzle middleware like
+        // http_errors, cookies etc.
+
+        $this->handlerStack = HandlerStack::create();
+
+        // Next we will define some Saloon defaults.
 
         $clientConfig = [
             'connect_timeout' => 10,
             'timeout' => 30,
-            'http_errors' => false,
+            'http_errors' => true,
             'handler' => $this->handlerStack,
         ];
 
+        // Something wrong with defining our own handler stack!
+
         return new GuzzleClient($clientConfig);
-    }
-
-    /**
-     * Create a blank handler stack.
-     *
-     * @return HandlerStack
-     */
-    protected function createHandlerStack(): HandlerStack
-    {
-        $stack = new HandlerStack();
-        $stack->setHandler(Utils::chooseHandler());
-
-        return $stack;
     }
 
     /**
