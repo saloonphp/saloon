@@ -80,11 +80,11 @@ test('if a pool has a request that cannot connect it will be caught in the handl
 
 test('you can use pool with a mock client added and it wont send real requests', function () {
     $mockResponses = [
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(200, ['name' => 'Charlotte']),
-        MockResponse::make(200, ['name' => 'Mantas']),
-        MockResponse::make(200, ['name' => 'Emily']),
-        MockResponse::make(500, ['name' => 'Error']),
+        MockResponse::make(['name' => 'Sam']),
+        MockResponse::make(['name' => 'Charlotte']),
+        MockResponse::make(['name' => 'Mantas']),
+        MockResponse::make(['name' => 'Emily']),
+        MockResponse::make(['name' => 'Error'], 500),
     ];
 
     $mockClient = new MockClient($mockResponses);

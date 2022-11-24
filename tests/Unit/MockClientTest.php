@@ -14,8 +14,8 @@ use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
 
 test('you can create sequence mocks', function () {
-    $responseA = MockResponse::make(200, ['name' => 'Sammyjo20']);
-    $responseB = MockResponse::make(200, ['name' => 'Alex']);
+    $responseA = MockResponse::make( ['name' => 'Sammyjo20']);
+    $responseB = MockResponse::make( ['name' => 'Alex']);
 
     $mockClient = new MockClient([$responseA, $responseB]);
 
@@ -25,8 +25,8 @@ test('you can create sequence mocks', function () {
 });
 
 test('you can create connector mocks', function () {
-    $responseA = MockResponse::make(200, ['name' => 'Sammyjo20']);
-    $responseB = MockResponse::make(200, ['name' => 'Alex']);
+    $responseA = MockResponse::make( ['name' => 'Sammyjo20']);
+    $responseB = MockResponse::make( ['name' => 'Alex']);
 
     $connectorARequest = new UserRequest;
     $connectorBRequest = new QueryParameterConnectorRequest;
@@ -42,8 +42,8 @@ test('you can create connector mocks', function () {
 });
 
 test('you can create request mocks', function () {
-    $responseA = MockResponse::make(200, ['name' => 'Sammyjo20']);
-    $responseB = MockResponse::make(200, ['name' => 'Alex']);
+    $responseA = MockResponse::make( ['name' => 'Sammyjo20']);
+    $responseB = MockResponse::make( ['name' => 'Alex']);
 
     $requestA = new UserRequest;
     $requestB = new QueryParameterConnectorRequest;
@@ -59,9 +59,9 @@ test('you can create request mocks', function () {
 });
 
 test('you can create url mocks', function () {
-    $responseA = MockResponse::make(200, ['name' => 'Sammyjo20']);
-    $responseB = MockResponse::make(200, ['name' => 'Alex']);
-    $responseC = MockResponse::make(200, ['name' => 'Sam Carré']);
+    $responseA = MockResponse::make( ['name' => 'Sammyjo20']);
+    $responseB = MockResponse::make( ['name' => 'Alex']);
+    $responseC = MockResponse::make( ['name' => 'Sam Carré']);
 
     $requestA = new UserRequest;
     $requestB = new ErrorRequest;
@@ -79,9 +79,9 @@ test('you can create url mocks', function () {
 });
 
 test('you can create wildcard url mocks', function () {
-    $responseA = MockResponse::make(200, ['name' => 'Sammyjo20']);
-    $responseB = MockResponse::make(200, ['name' => 'Alex']);
-    $responseC = MockResponse::make(200, ['name' => 'Sam Carré']);
+    $responseA = MockResponse::make( ['name' => 'Sammyjo20']);
+    $responseB = MockResponse::make( ['name' => 'Alex']);
+    $responseC = MockResponse::make( ['name' => 'Sam Carré']);
 
     $requestA = new UserRequest;
     $requestB = new ErrorRequest;
@@ -99,9 +99,9 @@ test('you can create wildcard url mocks', function () {
 });
 
 test('saloon throws an exception if it cant work out the url response', function () {
-    $responseA = MockResponse::make(200, ['name' => 'Sammyjo20']);
-    $responseB = MockResponse::make(200, ['name' => 'Alex']);
-    $responseC = MockResponse::make(200, ['name' => 'Sam Carré']);
+    $responseA = MockResponse::make( ['name' => 'Sammyjo20']);
+    $responseB = MockResponse::make( ['name' => 'Alex']);
+    $responseC = MockResponse::make( ['name' => 'Sam Carré']);
 
     $requestA = new UserRequest;
     $requestB = new ErrorRequest;
@@ -122,9 +122,9 @@ test('saloon throws an exception if it cant work out the url response', function
 
 test('you can get an array of the recorded requests', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(200, ['name' => 'Taylor']),
-        MockResponse::make(200, ['name' => 'Marcel']),
+        MockResponse::make( ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Taylor']),
+        MockResponse::make( ['name' => 'Marcel']),
     ]);
 
     $responseA = (new UserRequest())->send($mockClient);
@@ -142,9 +142,9 @@ test('you can get an array of the recorded requests', function () {
 
 test('you can get the last recorded request', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(200, ['name' => 'Taylor']),
-        MockResponse::make(200, ['name' => 'Marcel']),
+        MockResponse::make( ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Taylor']),
+        MockResponse::make( ['name' => 'Marcel']),
     ]);
 
     $responseA = (new UserRequest())->send($mockClient);
@@ -158,7 +158,7 @@ test('you can get the last recorded request', function () {
 
 test('if there are no recorded responses the getLastResponse will return null', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Sam']),
     ]);
 
     expect($mockClient)->getLastResponse()->toBeNull();
@@ -166,7 +166,7 @@ test('if there are no recorded responses the getLastResponse will return null', 
 
 test('if there are no recorded responses the getLastRequest will return null', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Sam']),
     ]);
 
     expect($mockClient)->getLastRequest()->toBeNull();
@@ -174,8 +174,8 @@ test('if there are no recorded responses the getLastRequest will return null', f
 
 test('if the response is not the last response it will use the loop to find it', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(500, ['error' => 'Server Error']),
+        MockResponse::make( ['name' => 'Sam']),
+        MockResponse::make( ['error' => 'Server Error'], 500),
     ]);
 
     $responseA = (new ErrorRequest())->send($mockClient);
@@ -194,8 +194,8 @@ test('if the response is not the last response it will use the loop to find it',
 
 test('it will find the response by url if it is not the last response', function () {
     $mockClient = new MockClient([
-        '/user' => MockResponse::make(200, ['name' => 'Sam']),
-        '/error' => MockResponse::make(500, ['error' => 'Server Error']),
+        '/user' => MockResponse::make( ['name' => 'Sam']),
+        '/error' => MockResponse::make(['error' => 'Server Error'], 500),
     ]);
 
     $responseA = (new ErrorRequest())->send($mockClient);
@@ -214,8 +214,8 @@ test('it will find the response by url if it is not the last response', function
 
 test('you can mock guzzle exceptions', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(200, ['name' => 'Patrick'])->throw(fn ($guzzleRequest) => new ConnectException('Unable to connect!')),
+        MockResponse::make( ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Patrick'])->throw(fn ($guzzleRequest) => new ConnectException('Unable to connect!')),
     ]);
 
     $okResponse = (new UserRequest())->send($mockClient);
@@ -230,7 +230,7 @@ test('you can mock guzzle exceptions', function () {
 
 test('you can mock normal exceptions', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Michael'])->throw(new Exception('Custom Exception!')),
+        MockResponse::make( ['name' => 'Michael'])->throw(new Exception('Custom Exception!')),
     ]);
 
     $this->expectException(Exception::class);

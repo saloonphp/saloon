@@ -44,7 +44,7 @@ test('the oauth config is validated when refreshing access tokens', function () 
 
 test('the old refresh token is carried over if a response does not include a new refresh token', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['access_token' => 'access-new', 'expires_in' => 3600]),
+        MockResponse::make( ['access_token' => 'access-new', 'expires_in' => 3600]),
     ]);
 
     $connector = new OAuth2Connector;
@@ -60,7 +60,7 @@ test('the old refresh token is carried over if a response does not include a new
 
 test('the old refresh token is carried over if a response does not include a new refresh token and the refresh is a string', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['access_token' => 'access-new', 'expires_in' => 3600]),
+        MockResponse::make( ['access_token' => 'access-new', 'expires_in' => 3600]),
     ]);
 
     $connector = new OAuth2Connector;

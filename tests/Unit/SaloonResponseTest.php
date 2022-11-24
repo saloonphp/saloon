@@ -109,7 +109,7 @@ test('the object method will return an object', function () {
 
 test('the collect method will return a collection', function () {
     $mockClient = new MockClient([
-        MockResponse::make(500, ['name' => 'Sam', 'work' => 'Codepotato']),
+        MockResponse::make( ['name' => 'Sam', 'work' => 'Codepotato'], 500),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
@@ -203,12 +203,16 @@ test('the xml method will return xml as an array', function () {
 
 test('the headers method returns an array store', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam', 'work' => 'Codepotato'], ['X-Greeting' => 'Howdy']),
+        MockResponse::make( ['name' => 'Sam', 'work' => 'Codepotato'], ['X-Greeting' => 'Howdy']),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
 
     dd($response->headers());
+})->skip('SAM TODO');
+
+test('headers with a single value will have just the string value but headers with multiple values will be an array', function () {
+    //
 })->skip('SAM TODO');
 
 test('the dom method will return a crawler instance', function () {

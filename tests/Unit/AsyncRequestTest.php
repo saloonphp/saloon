@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Response;
 use GuzzleHttp\Promise\Promise;
 use Saloon\Http\Faking\MockClient;
@@ -9,11 +10,13 @@ use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
+use Saloon\Tests\Fixtures\Exceptions\TestException;
+use Saloon\Tests\Fixtures\Exceptions\TestResponseException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('an asynchronous request will return a saloon response on a successful request', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
+        MockResponse::make(['name' => 'Sam']),
     ]);
 
     $request = new UserRequest;
@@ -30,15 +33,13 @@ test('an asynchronous request will return a saloon response on a successful requ
 
 test('an asynchronous request will throw a saloon exception on an unsuccessful request', function () {
     $mockClient = new MockClient([
-        MockResponse::make(500, ['error' => 'Server Error']),
+        MockResponse::make(['error' => 'Server Error'], 500),
     ]);
 
     $request = new UserRequest;
     $promise = $request->sendAsync($mockClient);
 
     expect($promise)->toBeInstanceOf(Promise::class);
-
-    // Todo: not working
 
     try {
         $promise->wait();
@@ -54,9 +55,9 @@ test('an asynchronous request will throw a saloon exception on an unsuccessful r
     }
 });
 
-test('an asynchronous request will return a connect exception if a connection error happens', function () {
+test('an asynchronous request will throw an exception if a connection error happens', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Patrick'])->throw(fn ($guzzleRequest) => new ConnectException('Unable to connect!', $guzzleRequest)),
+        MockResponse::make(['name' => 'Patrick'])->throw(fn(PendingRequest $pendingRequest) => new TestResponseException('Unable to connect!', $pendingRequest)),
     ]);
 
     $request = new UserRequest;
@@ -65,14 +66,15 @@ test('an asynchronous request will return a connect exception if a connection er
     try {
         $promise->wait();
     } catch (Exception $exception) {
-        expect($exception)->toBeInstanceOf(ConnectException::class);
+        expect($exception)->toBeInstanceOf(TestResponseException::class);
         expect($exception->getMessage())->toEqual('Unable to connect!');
+        expect($exception->getPendingRequest())->toBeInstanceOf(PendingRequest::class);
     }
 });
 
 test('if you chain an asynchronous request you can have a Response', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
+        MockResponse::make(['name' => 'Sam'], 200),
     ]);
 
     $request = new UserRequest;
@@ -89,48 +91,40 @@ test('if you chain an asynchronous request you can have a Response', function ()
 
 test('if you chain an erroneous asynchronous request the error can be caught in the rejection handler', function () {
     $mockClient = new MockClient([
-        MockResponse::make(500, ['error' => 'Server Error']),
+        MockResponse::make(['error' => 'Server Error'], 500),
     ]);
 
     $request = new UserRequest;
     $promise = $request->sendAsync($mockClient);
 
-    $promise->then(
+    $promise = $promise->then(
         null,
         function (RequestException $exception) {
             $response = $exception->getResponse();
 
             expect($response)->toBeInstanceOf(Response::class);
             expect($response->status())->toEqual(500);
-            expect($response->getGuzzleException())->toBeInstanceOf(RequestException::class);
+            expect($response->getRequestException())->toBe($exception);
         }
     );
 
-    try {
-        $promise->wait();
-    } catch (\Exception $ex) {
-        //
-    }
+    $promise->wait(false);
 });
 
 test('if a connection exception happens it will be provided in the rejection handler', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Patrick'])->throw(fn ($guzzleRequest) => new ConnectException('Unable to connect!', $guzzleRequest)),
+        MockResponse::make(['name' => 'Patrick'])->throw(fn(PendingRequest $pendingRequest) => new TestResponseException('Unable to connect!', $pendingRequest)),
     ]);
 
     $request = new UserRequest;
     $promise = $request->sendAsync($mockClient);
 
-    $promise->then(
+    $promise = $promise->then(
         null,
-        function (ConnectException $exception) {
+        function ($exception) {
             expect($exception->getMessage())->toEqual('Unable to connect!');
         }
     );
 
-    try {
-        $promise->wait();
-    } catch (\Exception $ex) {
-        //
-    }
+    $promise->wait();
 });

@@ -9,8 +9,8 @@ use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('you can provide a mock client on a connector and all requests will be mocked', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(200, ['name' => 'Mantas']),
+        MockResponse::make( ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Mantas']),
     ]);
 
     $connector = new TestConnector;
@@ -25,7 +25,7 @@ test('you can provide a mock client on a connector and all requests will be mock
 
 test('you can provide a mock client on a request and all requests will be mocked', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Sam']),
     ]);
 
     $request = new UserRequest;
@@ -38,11 +38,11 @@ test('you can provide a mock client on a request and all requests will be mocked
 
 test('request mock clients are always prioritied', function () {
     $mockClientA = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Sam']),
     ]);
 
     $mockClientB = new MockClient([
-        MockResponse::make(200, ['name' => 'Mantas']),
+        MockResponse::make( ['name' => 'Mantas']),
     ]);
 
     $connector = new TestConnector;

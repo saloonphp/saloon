@@ -12,9 +12,9 @@ use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 it('accepts an array for requests', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(200, ['name' => 'Charlotte']),
-        MockResponse::make(200, ['name' => 'Mantas']),
+        MockResponse::make( ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Charlotte']),
+        MockResponse::make( ['name' => 'Mantas']),
     ]);
 
     $connector = new TestConnector;
@@ -44,9 +44,9 @@ it('accepts an array for requests', function () {
 
 it('accepts an array for aliased requests', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(200, ['name' => 'Charlotte']),
-        MockResponse::make(200, ['name' => 'Mantas']),
+        MockResponse::make( ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Charlotte']),
+        MockResponse::make( ['name' => 'Mantas']),
     ]);
 
     $connector = new TestConnector;
@@ -77,9 +77,9 @@ it('accepts an array for aliased requests', function () {
 
 it('accepts a generator for requests', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(200, ['name' => 'Charlotte']),
-        MockResponse::make(200, ['name' => 'Mantas']),
+        MockResponse::make( ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Charlotte']),
+        MockResponse::make( ['name' => 'Mantas']),
     ]);
 
     $connector = new TestConnector;
@@ -115,9 +115,9 @@ it('accepts a generator for requests', function () {
 
 it('accepts a generator for aliased requests', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(200, ['name' => 'Charlotte']),
-        MockResponse::make(200, ['name' => 'Mantas']),
+        MockResponse::make( ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Charlotte']),
+        MockResponse::make( ['name' => 'Mantas']),
     ]);
 
     $connector = new TestConnector;
@@ -154,9 +154,9 @@ it('accepts a generator for aliased requests', function () {
 
 it('accepts a callback that returns an array for requests', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(200, ['name' => 'Charlotte']),
-        MockResponse::make(200, ['name' => 'Mantas']),
+        MockResponse::make( ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Charlotte']),
+        MockResponse::make( ['name' => 'Mantas']),
     ]);
 
     $connector = new TestConnector;
@@ -195,9 +195,9 @@ it('accepts a callback that returns an array for requests', function () {
 
 it('accepts a callback that returns an array for aliased requests', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(200, ['name' => 'Charlotte']),
-        MockResponse::make(200, ['name' => 'Mantas']),
+        MockResponse::make( ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Charlotte']),
+        MockResponse::make( ['name' => 'Mantas']),
     ]);
 
     $connector = new TestConnector;
@@ -237,9 +237,9 @@ it('accepts a callback that returns an array for aliased requests', function () 
 
 it('accepts a callback that returns a generator for requests', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(200, ['name' => 'Charlotte']),
-        MockResponse::make(200, ['name' => 'Mantas']),
+        MockResponse::make( ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Charlotte']),
+        MockResponse::make( ['name' => 'Mantas']),
     ]);
 
     $connector = new TestConnector;
@@ -275,9 +275,9 @@ it('accepts a callback that returns a generator for requests', function () {
 
 it('accepts a callback that returns a generator for aliased requests', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(200, ['name' => 'Charlotte']),
-        MockResponse::make(200, ['name' => 'Mantas']),
+        MockResponse::make( ['name' => 'Sam']),
+        MockResponse::make( ['name' => 'Charlotte']),
+        MockResponse::make( ['name' => 'Mantas']),
     ]);
 
     $connector = new TestConnector;

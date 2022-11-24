@@ -26,9 +26,9 @@ beforeEach(function () use ($filesystem) {
 
 test('a request can be mocked with a sequence', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam'], ['X-Foo' => 'Bar']),
-        MockResponse::make(200, ['name' => 'Alex']),
-        MockResponse::make(500, ['error' => 'Server Unavailable']),
+        MockResponse::make(['name' => 'Sam'], 200, ['X-Foo' => 'Bar']),
+        MockResponse::make(['name' => 'Alex']),
+        MockResponse::make(['error' => 'Server Unavailable'], 500),
     ]);
 
     $responseA = (new UserRequest)->send($mockClient);
@@ -40,7 +40,7 @@ test('a request can be mocked with a sequence', function () {
     expect($responseA->json())->toEqual(['name' => 'Sam']);
     expect($responseA->status())->toEqual(200);
     expect($responseA->getSimulatedResponsePayload())->toBeInstanceOf(MockResponse::class);
-    expect($responseA->headers()->all())->toEqual(['X-Foo' => ['Bar']]);
+    expect($responseA->headers()->all())->toEqual(['X-Foo' => 'Bar']);
 
     $responseB = (new UserRequest)->send($mockClient);
 
@@ -68,8 +68,8 @@ test('a request can be mocked with a sequence', function () {
 });
 
 test('a request can be mocked with a connector defined', function () {
-    $responseA = MockResponse::make(200, ['name' => 'Sammyjo20']);
-    $responseB = MockResponse::make(200, ['name' => 'Alex']);
+    $responseA = MockResponse::make( ['name' => 'Sammyjo20']);
+    $responseB = MockResponse::make( ['name' => 'Alex']);
 
     $connectorARequest = new UserRequest;
     $connectorBRequest = new QueryParameterConnectorRequest;
@@ -93,8 +93,8 @@ test('a request can be mocked with a connector defined', function () {
 });
 
 test('a request can be mocked with a request defined', function () {
-    $responseA = MockResponse::make(200, ['name' => 'Sammyjo20']);
-    $responseB = MockResponse::make(200, ['name' => 'Alex']);
+    $responseA = MockResponse::make( ['name' => 'Sammyjo20']);
+    $responseB = MockResponse::make( ['name' => 'Alex']);
 
     $requestA = new UserRequest;
     $requestB = new QueryParameterConnectorRequest;
@@ -118,9 +118,9 @@ test('a request can be mocked with a request defined', function () {
 });
 
 test('a request can be mocked with a url defined', function () {
-    $responseA = MockResponse::make(200, ['name' => 'Sammyjo20']);
-    $responseB = MockResponse::make(200, ['name' => 'Alex']);
-    $responseC = MockResponse::make(500, ['error' => 'Server Broken']);
+    $responseA = MockResponse::make( ['name' => 'Sammyjo20']);
+    $responseB = MockResponse::make( ['name' => 'Alex']);
+    $responseC = MockResponse::make(['error' => 'Server Broken'], 500);
 
     $requestA = new UserRequest;
     $requestB = new ErrorRequest;
@@ -152,9 +152,9 @@ test('a request can be mocked with a url defined', function () {
 });
 
 test('you can create wildcard url mocks', function () {
-    $responseA = MockResponse::make(200, ['name' => 'Sammyjo20']);
-    $responseB = MockResponse::make(200, ['name' => 'Alex']);
-    $responseC = MockResponse::make(500, ['error' => 'Server Broken']);
+    $responseA = MockResponse::make( ['name' => 'Sammyjo20']);
+    $responseB = MockResponse::make( ['name' => 'Alex']);
+    $responseC = MockResponse::make(['error' => 'Server Broken'], 500);
 
     $requestA = new UserRequest;
     $requestB = new ErrorRequest;
@@ -188,7 +188,7 @@ test('you can create wildcard url mocks', function () {
 test('you can use a closure for the mock response', function () {
     $sequenceMock = new MockClient([
         function (PendingRequest $pendingRequest): MockResponse {
-            return new MockResponse(200, ['request' => $pendingRequest->getRequest()->getRequestUrl()]);
+            return new MockResponse(['request' => $pendingRequest->getRequest()->getRequestUrl()]);
         },
     ]);
 
@@ -201,7 +201,7 @@ test('you can use a closure for the mock response', function () {
 
     $connectorMock = new MockClient([
         TestConnector::class => function (PendingRequest $pendingRequest): MockResponse {
-            return new MockResponse(200, ['request' => $pendingRequest->getRequest()->getRequestUrl()]);
+            return new MockResponse( ['request' => $pendingRequest->getRequest()->getRequestUrl()]);
         },
     ]);
 
@@ -214,7 +214,7 @@ test('you can use a closure for the mock response', function () {
 
     $requestMock = new MockClient([
         UserRequest::class => function (PendingRequest $pendingRequest): MockResponse {
-            return new MockResponse(200, ['request' => $pendingRequest->getRequest()->getRequestUrl()]);
+            return new MockResponse( ['request' => $pendingRequest->getRequest()->getRequestUrl()]);
         },
     ]);
 
@@ -227,7 +227,7 @@ test('you can use a closure for the mock response', function () {
 
     $urlMock = new MockClient([
         'tests.saloon.dev/*' => function (PendingRequest $pendingRequest): MockResponse {
-            return new MockResponse(200, ['request' => $pendingRequest->getRequest()->getRequestUrl()]);
+            return new MockResponse( ['request' => $pendingRequest->getRequest()->getRequestUrl()]);
         },
     ]);
 

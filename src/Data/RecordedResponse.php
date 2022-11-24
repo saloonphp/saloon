@@ -76,7 +76,7 @@ class RecordedResponse implements JsonSerializable
      */
     public function toMockResponse(): MockResponse
     {
-        return new MockResponse($this->statusCode, $this->data, $this->headers);
+        return new MockResponse($this->data, $this->statusCode, $this->headers);
     }
 
     /**

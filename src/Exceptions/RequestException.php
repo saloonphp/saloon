@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Exceptions;
 
 use Throwable;
-use Saloon\Http\Responses\Response;
+use Saloon\Contracts\Response;
 
 class RequestException extends SaloonException
 {
@@ -14,7 +14,7 @@ class RequestException extends SaloonException
      *
      * @var Response
      */
-    protected Response $saloonResponse;
+    protected Response $response;
 
     /**
      * Create the RequestException
@@ -26,7 +26,7 @@ class RequestException extends SaloonException
      */
     public function __construct(Response $response, $message = '', $code = 0, Throwable $previous = null)
     {
-        $this->saloonResponse = $response;
+        $this->response = $response;
 
         parent::__construct($message, $code, $previous);
     }
@@ -38,6 +38,6 @@ class RequestException extends SaloonException
      */
     public function getResponse(): Response
     {
-        return $this->saloonResponse;
+        return $this->response;
     }
 }

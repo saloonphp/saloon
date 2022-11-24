@@ -48,14 +48,14 @@ class SimulatedResponsePayload
     /**
      * Create a new mock response
      *
-     * @param int $status
      * @param array|string $body
+     * @param int $status
      * @param array $headers
      */
-    public function __construct(int $status = 200, array|string $body = [], array $headers = [])
+    public function __construct(array|string $body = [], int $status = 200, array $headers = [])
     {
-        $this->status = $status;
         $this->body = is_array($body) ? new JsonBodyRepository($body) : new StringBodyRepository($body);
+        $this->status = $status;
         $this->headers = new ArrayStore($headers);
     }
 
@@ -67,9 +67,9 @@ class SimulatedResponsePayload
      * @param array $headers
      * @return static
      */
-    public static function make(int $status = 200, mixed $body = [], array $headers = []): static
+    public static function make(mixed $body = [], int $status = 200, array $headers = []): static
     {
-        return new static($status, $body, $headers);
+        return new static($body, $status, $headers);
     }
 
     /**
