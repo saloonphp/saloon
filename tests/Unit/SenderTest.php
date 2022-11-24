@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Saloon\Http\Senders\GuzzleSender;
+use Saloon\Tests\Fixtures\Connectors\ArraySenderDefaultMethodConnector;
 use Saloon\Tests\Fixtures\Senders\ArraySender;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
@@ -19,8 +20,24 @@ test('the default sender on all connectors is the guzzle sender', function () {
     expect($connector->sender())->toBe($sender);
 });
 
-test('you can overwrite the sender on a connector', function () {
+test('you can overwrite the sender on a connector using the property', function () {
     $connector = new ArraySenderConnector();
+    $sender = $connector->sender();
+
+    expect($sender)->toBeInstanceOf(ArraySender::class);
+    expect($connector->sender())->toBe($sender);
+
+    // Test using the connector with the custom sender
+
+    $request = new UserRequest();
+    $response = $connector->send($request);
+
+    expect($response->headers()->all())->toEqual(['X-Fake' => true]);
+    expect($response->body())->toEqual('Default');
+});
+
+test('you can overwrite the sender on a connector using the defaultSender method', function () {
+    $connector = new ArraySenderDefaultMethodConnector();
     $sender = $connector->sender();
 
     expect($sender)->toBeInstanceOf(ArraySender::class);

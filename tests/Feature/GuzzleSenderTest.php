@@ -42,6 +42,7 @@ test('the guzzle sender will send all headers, query parameters and config', fun
     $request->config()->add('timeout', 120);
     $request->config()->add('debug', true);
     $request->queryParameters()->add('shanty', 'yes');
+    $request->queryParameters()->add('sing', 'yes');
     $request->headers()->add('X-Bound-For', 'South-Australia');
     $request->headers()->add('X-Fancy', ['keyOne' => 'valOne', 'keyTwo' => 'valTwo']);
 
@@ -51,7 +52,7 @@ test('the guzzle sender will send all headers, query parameters and config', fun
         return function (RequestInterface $request, array $options) use ($handler) {
             expect($options['timeout'])->toEqual(120);
             expect($options['debug'])->toBeTrue();
-            expect($request->getUri()->getQuery())->toEqual('shanty=yes');
+            expect($request->getUri()->getQuery())->toEqual('shanty=yes&sing=yes');
             expect($request->getHeaderLine('X-Bound-For'))->toEqual('South-Australia');
             expect($request->getHeaderLine('X-Fancy'))->toEqual('valOne, valTwo');
 
