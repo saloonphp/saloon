@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use GuzzleHttp\Promise\RejectedPromise;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Response;
 use GuzzleHttp\Promise\Promise;
@@ -39,7 +40,7 @@ test('an asynchronous request will throw a saloon exception on an unsuccessful r
     $request = new UserRequest;
     $promise = $request->sendAsync($mockClient);
 
-    expect($promise)->toBeInstanceOf(Promise::class);
+    expect($promise)->toBeInstanceOf(RejectedPromise::class);
 
     try {
         $promise->wait();
@@ -51,7 +52,7 @@ test('an asynchronous request will throw a saloon exception on an unsuccessful r
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->json())->toEqual(['error' => 'Server Error']);
         expect($response->status())->toEqual(500);
-        expect($response->getGuzzleException())->toBeInstanceOf(RequestException::class);
+        expect($response->toException())->toEqual($exception);
     }
 });
 
