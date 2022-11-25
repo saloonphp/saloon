@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Saloon\Managers\RequestManager;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;

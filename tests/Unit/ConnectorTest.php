@@ -53,7 +53,7 @@ test('you can send a request through the connector', function () {
 
 test('you can send an asynchronous request through the connector', function () {
     $mockClient = new MockClient([
-        new MockResponse( ['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
+        new MockResponse(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
     ]);
 
     $connector = new TestConnector();

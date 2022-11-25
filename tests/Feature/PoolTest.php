@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Saloon\Exceptions\RequestException;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Exceptions\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
 use Saloon\Exceptions\FatalRequestException;

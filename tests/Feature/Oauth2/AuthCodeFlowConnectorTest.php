@@ -135,7 +135,7 @@ test('you can request the original response instead of the authenticator on the 
 
 test('you can get the user from an oauth connector', function () {
     $mockClient = new MockClient([
-        MockResponse::make( ['user' => 'Sam']),
+        MockResponse::make(['user' => 'Sam']),
     ]);
 
     $connector = new OAuth2Connector;
@@ -157,7 +157,7 @@ test('you can get the user from an oauth connector', function () {
 
 test('you can customize the oauth authenticator', function () {
     $mockClient = new MockClient([
-        MockResponse::make( ['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
+        MockResponse::make(['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
     ]);
 
     $customConnector = new CustomResponseOAuth2Connector('Howdy!');

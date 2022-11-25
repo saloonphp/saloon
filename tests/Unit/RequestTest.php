@@ -12,7 +12,6 @@ use Saloon\Tests\Fixtures\Responses\CustomResponse;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Tests\Fixtures\Requests\NoConnectorRequest;
 use Saloon\Tests\Fixtures\Connectors\ExtendedConnector;
-use Saloon\Tests\Fixtures\Connectors\TestProxyConnector;
 use Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
 use Saloon\Tests\Fixtures\Requests\CustomEndpointRequest;
 use Saloon\Tests\Fixtures\Requests\DefaultEndpointRequest;

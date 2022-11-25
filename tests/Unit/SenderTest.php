@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use Saloon\Http\Senders\GuzzleSender;
-use Saloon\Tests\Fixtures\Connectors\ArraySenderDefaultMethodConnector;
 use Saloon\Tests\Fixtures\Senders\ArraySender;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Connectors\ArraySenderConnector;
+use Saloon\Tests\Fixtures\Connectors\ArraySenderDefaultMethodConnector;
 
 test('the default sender on all connectors is the guzzle sender', function () {
     $connector = new TestConnector();

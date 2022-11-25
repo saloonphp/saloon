@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Psr7\Response;
+use Saloon\Http\PendingRequest;
 use Illuminate\Support\Collection;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\RequestException;
-use Saloon\Http\PendingRequest;
 use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
@@ -110,7 +110,7 @@ test('the object method will return an object', function () {
 
 test('the collect method will return a collection', function () {
     $mockClient = new MockClient([
-        MockResponse::make( ['name' => 'Sam', 'work' => 'Codepotato'], 500),
+        MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 500),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
@@ -203,7 +203,7 @@ test('the xml method will return xml as an array', function () {
 
 test('the headers method returns an array store', function () {
     $mockClient = new MockClient([
-        MockResponse::make( ['name' => 'Sam', 'work' => 'Codepotato'], ['X-Greeting' => 'Howdy']),
+        MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], ['X-Greeting' => 'Howdy']),
     ]);
 
     $response = (new UserRequest())->send($mockClient);

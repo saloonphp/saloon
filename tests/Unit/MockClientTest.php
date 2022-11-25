@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use GuzzleHttp\Exception\ConnectException;
-use Saloon\Tests\Fixtures\Exceptions\TestResponseException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Exceptions\TestResponseException;
 use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
@@ -216,7 +215,7 @@ test('it will find the response by url if it is not the last response', function
 test('you can mock exceptions with a closure', function () {
     $mockClient = new MockClient([
         MockResponse::make(['name' => 'Sam']),
-        MockResponse::make(['name' => 'Patrick'])->throw(fn($pendingRequest) => new TestResponseException('Unable to connect!', $pendingRequest)),
+        MockResponse::make(['name' => 'Patrick'])->throw(fn ($pendingRequest) => new TestResponseException('Unable to connect!', $pendingRequest)),
     ]);
 
     $okResponse = (new UserRequest())->send($mockClient);

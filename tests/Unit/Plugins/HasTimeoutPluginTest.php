@@ -3,8 +3,6 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Psr7\Response;
-use Saloon\Http\Faking\MockClient;
-use Saloon\Managers\RequestManager;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -40,7 +38,7 @@ test('a request can set a timeout and connect timeout', function () {
 test('a connector is given a default timeout and connect timeout', function () {
     $request = (new UserRequest)->setConnector(new TimeoutConnector);
 
-    $request->sender()->addMiddleware( function (callable $handler) {
+    $request->sender()->addMiddleware(function (callable $handler) {
         return function (RequestInterface $request, array $options) use ($handler) {
             expect($options['connect_timeout'])->toEqual(10.0);
             expect($options['timeout'])->toEqual(5.0);

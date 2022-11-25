@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Saloon\Repositories\ArrayStore;
 use Saloon\Helpers\MiddlewarePipeline;
-use Saloon\Repositories\BodyRepository;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\DefaultPropertiesRequest;
 

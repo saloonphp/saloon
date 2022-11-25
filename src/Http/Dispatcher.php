@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use GuzzleHttp\Promise\Promise;
-use GuzzleHttp\Promise\RejectedPromise;
 use Saloon\Contracts\Response;
-use Saloon\Exceptions\DispatcherException;
 use Saloon\Http\Faking\MockResponse;
+use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Contracts\Dispatcher as DispatcherContract;
 use Saloon\Http\Faking\SimulatedResponsePayload;
+use Saloon\Contracts\Dispatcher as DispatcherContract;
 
 class Dispatcher implements DispatcherContract
 {
@@ -52,7 +50,7 @@ class Dispatcher implements DispatcherContract
             return $pendingRequest->executeResponsePipeline($response);
         }
 
-        return $response->then(fn(Response $response) => $pendingRequest->executeResponsePipeline($response));
+        return $response->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
     }
 
     /**

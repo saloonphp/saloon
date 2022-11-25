@@ -2,18 +2,15 @@
 
 declare(strict_types=1);
 
-use GuzzleHttp\Promise\RejectedPromise;
-use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Response;
-use GuzzleHttp\Promise\Promise;
 use Saloon\Http\Faking\MockClient;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
+use GuzzleHttp\Promise\RejectedPromise;
 use Saloon\Exceptions\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Exception\ConnectException;
-use Saloon\Tests\Fixtures\Exceptions\TestException;
-use Saloon\Tests\Fixtures\Exceptions\TestResponseException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Exceptions\TestResponseException;
 
 test('an asynchronous request will return a saloon response on a successful request', function () {
     $mockClient = new MockClient([
@@ -58,7 +55,7 @@ test('an asynchronous request will throw a saloon exception on an unsuccessful r
 
 test('an asynchronous request will throw an exception if a connection error happens', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Patrick'])->throw(fn(PendingRequest $pendingRequest) => new TestResponseException('Unable to connect!', $pendingRequest)),
+        MockResponse::make(['name' => 'Patrick'])->throw(fn (PendingRequest $pendingRequest) => new TestResponseException('Unable to connect!', $pendingRequest)),
     ]);
 
     $request = new UserRequest;
@@ -114,7 +111,7 @@ test('if you chain an erroneous asynchronous request the error can be caught in 
 
 test('if a connection exception happens it will be provided in the rejection handler', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Patrick'])->throw(fn(PendingRequest $pendingRequest) => new TestResponseException('Unable to connect!', $pendingRequest)),
+        MockResponse::make(['name' => 'Patrick'])->throw(fn (PendingRequest $pendingRequest) => new TestResponseException('Unable to connect!', $pendingRequest)),
     ]);
 
     $request = new UserRequest;
