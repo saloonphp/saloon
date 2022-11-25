@@ -58,7 +58,7 @@ test('default state is generated automatically with every authorization url if s
 
 test('you can request a token from a connector', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600]),
+        MockResponse::make(['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600], 200),
     ]);
 
     $connector = new OAuth2Connector;
@@ -75,7 +75,7 @@ test('you can request a token from a connector', function () {
 
 test('you can request the original response instead of the authenticator on the create tokens method', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600]),
+        MockResponse::make(['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600]),
     ]);
 
     $connector = new OAuth2Connector;
@@ -99,7 +99,7 @@ test('it will throw an exception if state is invalid', function () {
 
 test('you can refresh a token from a connector', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
+        MockResponse::make(['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
     ]);
 
     $connector = new OAuth2Connector;
@@ -118,7 +118,7 @@ test('you can refresh a token from a connector', function () {
 
 test('you can request the original response instead of the authenticator on the refresh tokens method', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
+        MockResponse::make(['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
     ]);
 
     $connector = new OAuth2Connector;
@@ -135,7 +135,7 @@ test('you can request the original response instead of the authenticator on the 
 
 test('you can get the user from an oauth connector', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['user' => 'Sam']),
+        MockResponse::make(['user' => 'Sam']),
     ]);
 
     $connector = new OAuth2Connector;
@@ -157,7 +157,7 @@ test('you can get the user from an oauth connector', function () {
 
 test('you can customize the oauth authenticator', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
+        MockResponse::make(['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
     ]);
 
     $customConnector = new CustomResponseOAuth2Connector('Howdy!');

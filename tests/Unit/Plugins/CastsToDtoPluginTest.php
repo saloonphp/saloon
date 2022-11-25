@@ -12,7 +12,7 @@ use Saloon\Tests\Fixtures\Connectors\DtoConnector;
 
 test('it can cast to a dto that is defined on the request', function () {
     $mockClient = new MockClient([
-        new MockResponse(200, ['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
+        new MockResponse(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
     ]);
 
     $response = DTORequest::make()->send($mockClient);
@@ -28,7 +28,7 @@ test('it can cast to a dto that is defined on the request', function () {
 
 test('it can cast to a dto that is defined on a connector', function () {
     $mockClient = new MockClient([
-        new MockResponse(200, ['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
+        new MockResponse(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
     ]);
 
     $response = UserRequest::make()->setConnector(new DtoConnector())->send($mockClient);
@@ -40,7 +40,7 @@ test('it can cast to a dto that is defined on a connector', function () {
 
 test('the request dto will be returned as a higher priority than the connector dto', function () {
     $mockClient = new MockClient([
-        new MockResponse(200, ['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
+        new MockResponse(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']),
     ]);
 
     $response = DTORequest::make()->setConnector(new DtoConnector())->send($mockClient);

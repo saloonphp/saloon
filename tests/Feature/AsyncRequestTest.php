@@ -46,7 +46,7 @@ test('an asynchronous request can handle an exception properly', function () {
 
 test('an asynchronous response will still be passed through response middleware', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['name' => 'Sam']),
+        MockResponse::make(['name' => 'Sam']),
     ]);
 
     $request = new UserRequest();
@@ -71,7 +71,7 @@ test('an asynchronous response will still be passed through response middleware'
 
 test('an asynchronous request will return a custom response', function () {
     $mockClient = new MockClient([
-        MockResponse::make(200, ['foo' => 'bar']),
+        MockResponse::make(['foo' => 'bar']),
     ]);
 
     $request = new UserRequestWithCustomResponse();

@@ -6,8 +6,10 @@ namespace Saloon\Http;
 
 use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockResponse;
+use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Contracts\Dispatcher as DispatcherContract;
 
 class Dispatcher implements DispatcherContract
@@ -60,6 +62,7 @@ class Dispatcher implements DispatcherContract
     {
         $pendingRequest = $this->pendingRequest;
         $simulatedResponsePayload = $pendingRequest->getSimulatedResponsePayload();
+        $exception = $simulatedResponsePayload?->getException($pendingRequest);
 
         // When the pending request instance has SimulatedResponsePayload it means
         // we shouldn't send a real request. We can convert the payload into
@@ -69,7 +72,7 @@ class Dispatcher implements DispatcherContract
         $responseClass = $pendingRequest->getResponseClass();
 
         /** @var Response $response */
-        $response = new $responseClass($pendingRequest, $simulatedResponsePayload);
+        $response = new $responseClass($pendingRequest, $simulatedResponsePayload, $exception);
 
         // When the SimulatedResponsePayload is specifically a MockResponse then
         // we will record the response, and we'll set the "isMocked" property
@@ -89,7 +92,9 @@ class Dispatcher implements DispatcherContract
         // in FulfilledPromise to act like a real response.
 
         if ($this->asynchronous === true) {
-            $response = new FulfilledPromise($response);
+            $exception ??= $response->toException();
+
+            return isset($exception) ? new RejectedPromise($exception) : new FulfilledPromise($response);
         }
 
         return $response;

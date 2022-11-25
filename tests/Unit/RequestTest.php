@@ -12,7 +12,6 @@ use Saloon\Tests\Fixtures\Responses\CustomResponse;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Tests\Fixtures\Requests\NoConnectorRequest;
 use Saloon\Tests\Fixtures\Connectors\ExtendedConnector;
-use Saloon\Tests\Fixtures\Connectors\TestProxyConnector;
 use Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
 use Saloon\Tests\Fixtures\Requests\CustomEndpointRequest;
 use Saloon\Tests\Fixtures\Requests\DefaultEndpointRequest;
@@ -28,18 +27,19 @@ test('if you dont pass in a mock client to the saloon request it will not be in 
     $request = new UserRequest();
     $pendingRequest = $request->createPendingRequest();
 
-    expect($pendingRequest->isMocking())->toBeFalse();
+    expect($pendingRequest->hasMockClient())->toBeFalse();
 });
 
 test('you can pass a mock client to the saloon request and it will be in mock mode', function () {
     $request = new UserRequest();
-    $mockClient = new MockClient([MockResponse::make([], 200)]);
+    $mockClient = new MockClient([MockResponse::make([])]);
 
     $request->withMockClient($mockClient);
 
     $pendingRequest = $request->createPendingRequest();
 
-    expect($pendingRequest->isMocking())->toBeTrue();
+    expect($pendingRequest->hasMockClient())->toBeTrue();
+    expect($pendingRequest->getMockClient())->toBe($mockClient);
 });
 
 test('you cant send a request with a mock client without any responses', function () {
@@ -56,7 +56,7 @@ test('saloon throws an exception if if no connector is specified', function () {
 
     $this->expectException(InvalidConnectorException::class);
 
-    expect($noConnectorRequest->getConnector());
+    expect($noConnectorRequest->connector());
 });
 
 test('saloon throws an exception if the connector is invalid', function () {
@@ -64,21 +64,22 @@ test('saloon throws an exception if the connector is invalid', function () {
 
     $this->expectException(InvalidConnectorException::class);
 
-    expect($invalidConnectorRequest->getConnector());
+    expect($invalidConnectorRequest->connector());
 });
 
 test('saloon throws an exception if the connector is not a connector class', function () {
     $invalidConnectorClassRequest = new InvalidConnectorClassRequest;
 
-    $this->expectException(InvalidConnectorException::class);
+    $this->expectException(TypeError::class);
+    $this->expectDeprecationMessage('Return value must be of type Saloon\Contracts\Connector, Saloon\Tests\Fixtures\Requests\UserRequest returned');
 
-    expect($invalidConnectorClassRequest->getConnector());
+    expect($invalidConnectorClassRequest->connector());
 });
 
 test('saloon works even if you have an extended connector', function () {
     $request = new ExtendedConnectorRequest;
 
-    expect($request->getConnector())->toBeInstanceOf(ExtendedConnector::class);
+    expect($request->connector())->toBeInstanceOf(ExtendedConnector::class);
 });
 
 test('saloon works with a custom response class in connector', function () {
@@ -137,14 +138,6 @@ test('a request class can be instantiated using the make method', function () {
     expect($requestB)->toBeInstanceOf(UserRequest::class);
     expect($requestB)->userId->toEqual(1);
     expect($requestB)->groupId->toEqual(2);
-});
-
-test('a method is proxied onto the connector if it does not exist on the request', function () {
-    $connector = new TestProxyConnector;
-    $request = $connector->request(new UserRequest);
-
-    expect(method_exists($request, 'greeting'))->toBeFalse();
-    expect($request->greeting())->toEqual('Howdy!');
 });
 
 test('you can join various URLs together', function ($baseUrl, $endpoint, $expected) {

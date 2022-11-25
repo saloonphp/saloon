@@ -33,7 +33,7 @@ class QueryParameterRequest extends Request
         return '/user';
     }
 
-    public function defaultQuery(): array
+    protected function defaultQueryParameters(): array
     {
         return [
             'per_page' => 100,

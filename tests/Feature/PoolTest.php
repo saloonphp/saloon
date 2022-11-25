@@ -6,6 +6,7 @@ use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Exceptions\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
 use Saloon\Exceptions\FatalRequestException;
@@ -17,7 +18,8 @@ use Saloon\Tests\Fixtures\Connectors\InvalidConnectionConnector;
 
 test('you can create a pool on a connector', function () {
     $connector = new TestConnector;
-    $count = 0;
+    $successCount = 0;
+    $errorCount = 0;
 
     $pool = $connector->pool([
         new UserRequest,
@@ -25,11 +27,12 @@ test('you can create a pool on a connector', function () {
         new UserRequest,
         new UserRequest,
         new UserRequest,
+        new ErrorRequest,
     ]);
 
-    $pool->setConcurrency(5);
+    $pool->setConcurrency(6);
 
-    $pool->withResponseHandler(function (ResponseContract $response) use (&$count) {
+    $pool->withResponseHandler(function (ResponseContract $response) use (&$successCount) {
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->json())->toEqual([
             'name' => 'Sammyjo20',
@@ -37,7 +40,15 @@ test('you can create a pool on a connector', function () {
             'twitter' => '@carre_sam',
         ]);
 
-        $count++;
+        $successCount++;
+    });
+
+    $pool->withExceptionHandler(function (RequestException $exception) use (&$errorCount) {
+        $response = $exception->getResponse();
+
+        expect($response)->toBeInstanceOf(Response::class);
+
+        $errorCount++;
     });
 
     $promise = $pool->send();
@@ -46,7 +57,8 @@ test('you can create a pool on a connector', function () {
 
     $promise->wait();
 
-    expect($count)->toEqual(5);
+    expect($successCount)->toEqual(5);
+    expect($errorCount)->toEqual(1);
 });
 
 test('if a pool has a request that cannot connect it will be caught in the handleException callback', function () {
@@ -80,18 +92,19 @@ test('if a pool has a request that cannot connect it will be caught in the handl
 
 test('you can use pool with a mock client added and it wont send real requests', function () {
     $mockResponses = [
-        MockResponse::make(200, ['name' => 'Sam']),
-        MockResponse::make(200, ['name' => 'Charlotte']),
-        MockResponse::make(200, ['name' => 'Mantas']),
-        MockResponse::make(200, ['name' => 'Emily']),
-        MockResponse::make(500, ['name' => 'Error']),
+        MockResponse::make(['name' => 'Sam']),
+        MockResponse::make(['name' => 'Charlotte']),
+        MockResponse::make(['name' => 'Mantas']),
+        MockResponse::make(['name' => 'Emily']),
+        MockResponse::make(['name' => 'Error'], 500),
     ];
 
     $mockClient = new MockClient($mockResponses);
 
     $connector = new TestConnector;
     $connector->withMockClient($mockClient);
-    $count = 0;
+    $successCount = 0;
+    $errorCount = 0;
 
     $pool = $connector->pool([
         new UserRequest,
@@ -103,16 +116,26 @@ test('you can use pool with a mock client added and it wont send real requests',
 
     $pool->setConcurrency(6);
 
-    $pool->withResponseHandler(function (ResponseContract $response) use (&$count, $mockResponses) {
+    $pool->withResponseHandler(function (ResponseContract $response) use (&$successCount, $mockResponses) {
         expect($response)->toBeInstanceOf(Response::class);
-        expect($response->json())->toEqual($mockResponses[$count]->getBody()->all());
+        expect($response->json())->toEqual($mockResponses[$successCount]->getBody()->all());
 
-        $count++;
+        $successCount++;
+    });
+
+    $pool->withExceptionHandler(function (RequestException $exception) use (&$errorCount) {
+        $response = $exception->getResponse();
+
+        expect($response)->toBeInstanceOf(Response::class);
+        expect($response->json())->toEqual(['name' => 'Error']);
+
+        $errorCount++;
     });
 
     $promise = $pool->send();
 
     $promise->wait();
 
-    expect($count)->toEqual(5);
+    expect($successCount)->toEqual(4);
+    expect($errorCount)->toEqual(1);
 });
