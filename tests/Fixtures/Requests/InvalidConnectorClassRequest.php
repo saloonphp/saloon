@@ -20,7 +20,7 @@ class InvalidConnectorClassRequest extends Request
      *
      * @var string
      */
-    protected string $connector = Request::class;
+    protected string $connector = UserRequest::class;
 
     /**
      * Define the endpoint for the request.

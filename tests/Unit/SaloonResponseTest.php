@@ -7,20 +7,21 @@ use Illuminate\Support\Collection;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\RequestException;
+use Saloon\Http\PendingRequest;
 use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
-test('you can get the original request options', function () {
+test('you can get the original pending request', function () {
     $mockClient = new MockClient([
         MockResponse::make(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
 
-    $options = $response->getRequestOptions();
+    $pendingRequest = $response->getPendingRequest();
 
-    expect($options)->toBeArray();
-    expect($options['headers'])->toEqual(['Accept' => 'application/json']);
+    expect($pendingRequest)->toBeInstanceOf(PendingRequest::class);
+    expect($pendingRequest->getRequest())->toBeInstanceOf(UserRequest::class);
 });
 
 test('you can get the original request', function () {
@@ -31,7 +32,7 @@ test('you can get the original request', function () {
     $request = new UserRequest;
     $response = $request->send($mockClient);
 
-    expect($response->getOriginalRequest())->toBe($request);
+    expect($response->getRequest())->toBe($request);
 });
 
 test('it will throw an exception when you use the throw method', function () {
@@ -124,14 +125,13 @@ test('the collect method will return a collection', function () {
     expect($response->collect('age'))->toBeEmpty();
 });
 
-test('the toGuzzleResponse and toPsrResponse methods will return a guzzle response', function () {
+test('the toPsrResponse method will return a guzzle response', function () {
     $mockClient = new MockClient([
         MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 500),
     ]);
 
     $response = (new UserRequest())->send($mockClient);
 
-    expect($response)->toGuzzleResponse()->toBeInstanceOf(Response::class);
     expect($response)->getPsrResponse()->toBeInstanceOf(Response::class);
 });
 
@@ -219,7 +219,7 @@ test('the dom method will return a crawler instance', function () {
     $dom = '<p>Howdy <i>Partner</i></p>';
 
     $mockClient = new MockClient([
-        new MockResponse(200, $dom),
+        new MockResponse($dom),
     ]);
 
     $response = (new UserRequest())->send($mockClient);

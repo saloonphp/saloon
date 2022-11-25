@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use GuzzleHttp\Psr7\Response;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Managers\RequestManager;
 use Saloon\Http\Faking\MockResponse;
@@ -27,36 +28,33 @@ test('a request is given a default timeout and connect timeout', function () {
 });
 
 test('a request can set a timeout and connect timeout', function () {
-    $requestManager = new RequestManager(new TimeoutRequest);
-    $requestManager->hydrate();
+    $requestManager = new TimeoutRequest;
+    $pendingRequest = $requestManager->createPendingRequest();
 
-    $config = $requestManager->getConfig();
+    $config = $pendingRequest->config()->all();
 
     expect($config)->toHaveKey('connect_timeout', 1);
     expect($config)->toHaveKey('timeout', 2);
 });
 
 test('a connector is given a default timeout and connect timeout', function () {
-    $mockClient = new MockClient([new MockResponse()]);
-
     $request = (new UserRequest)->setConnector(new TimeoutConnector);
 
-    $request->addHandler('test', function (callable $handler) {
+    $request->sender()->addMiddleware( function (callable $handler) {
         return function (RequestInterface $request, array $options) use ($handler) {
             expect($options['connect_timeout'])->toEqual(10.0);
             expect($options['timeout'])->toEqual(5.0);
 
-            return $handler($request, $options);
+            return new FulfilledPromise(new Response);
         };
     });
 
-    $requestManager = $request->getRequestManager();
-    $requestManager->hydrate();
+    $pendingRequest = $request->createPendingRequest();
 
-    $config = $requestManager->getConfig();
+    $config = $pendingRequest->config()->all();
 
     expect($config)->toHaveKey('connect_timeout', 10);
     expect($config)->toHaveKey('timeout', 5);
 
-    $request->send($mockClient);
+    $request->send();
 });

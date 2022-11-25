@@ -92,7 +92,7 @@ trait HasResponseHelpers
      */
     public function xml(...$arguments): SimpleXMLElement|bool
     {
-        if (! $this->decodedXml) {
+        if (! isset($this->decodedXml)) {
             $this->decodedXml = $this->body();
         }
 
@@ -245,7 +245,7 @@ trait HasResponseHelpers
      * Throw an exception if a server or client error occurred.
      *
      * @return $this
-     * @throws RequestException
+     * @throws \Throwable
      */
     public function throw(): static
     {
