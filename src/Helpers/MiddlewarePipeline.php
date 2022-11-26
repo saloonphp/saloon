@@ -38,9 +38,10 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      * Add a middleware before the request is sent
      *
      * @param callable $closure
+     * @param bool $prepend
      * @return $this
      */
-    public function onRequest(callable $closure): static
+    public function onRequest(callable $closure, bool $prepend = false): static
     {
         $this->requestPipeline = $this->requestPipeline->pipe(function (PendingRequest $pendingRequest) use ($closure) {
             $result = $closure($pendingRequest);
@@ -54,7 +55,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
             }
 
             return $pendingRequest;
-        });
+        }, $prepend);
 
         return $this;
     }
@@ -63,15 +64,16 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      * Add a middleware after the request is sent
      *
      * @param callable $closure
+     * @param bool $prepend
      * @return $this
      */
-    public function onResponse(callable $closure): static
+    public function onResponse(callable $closure, bool $prepend = false): static
     {
         $this->responsePipeline = $this->responsePipeline->pipe(function (Response $response) use ($closure) {
             $result = $closure($response);
 
             return $result instanceof Response ? $result : $response;
-        });
+        }, $prepend);
 
         return $this;
     }

@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
+use Saloon\Exceptions\RequestException;
 use Saloon\Http\PendingRequest;
 use League\Flysystem\Filesystem;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Tests\Fixtures\Requests\AlwaysThrowRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
@@ -480,4 +482,22 @@ test('a fixture can be used within a closure mock', function () use ($filesystem
     ]);
 });
 
-// Add asynchronous tests...
+test('when using the AlwaysThrowRequest trait the response recorder will still record the response', function () {
+    $mockClient = new MockClient([
+        AlwaysThrowRequest::class => MockResponse::fixture('error'),
+    ]);
+
+    $exception = null;
+
+    try {
+        AlwaysThrowRequest::make()->send($mockClient);
+    } catch (Exception $exception) {
+        //
+    }
+
+    expect($exception)->toBeInstanceOf(RequestException::class);
+
+    $fixture = MockResponse::fixture('error')->getMockResponse();
+
+    expect($fixture)->toBeInstanceOf(MockResponse::class);
+});

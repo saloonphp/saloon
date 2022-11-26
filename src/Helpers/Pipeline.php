@@ -17,11 +17,16 @@ class Pipeline
      * Add a pipe to the pipeline.
      *
      * @param callable $pipe
+     * @param bool $prepend
      * @return $this
      */
-    public function pipe(callable $pipe): static
+    public function pipe(callable $pipe, bool $prepend = false): static
     {
-        $this->pipes[] = $pipe;
+        if ($prepend === true) {
+            array_unshift($this->pipes, $pipe);
+        } else {
+            $this->pipes[] = $pipe;
+        }
 
         return $this;
     }
