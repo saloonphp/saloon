@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Repositories;
 
 use Saloon\Helpers\Helpers;
-use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 use Saloon\Traits\Conditionable;
+use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
 class ArrayStore implements ArrayStoreContract
 {

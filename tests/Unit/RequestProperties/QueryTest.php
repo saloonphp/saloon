@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use Saloon\Repositories\ArrayStore;
-use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
-use Saloon\Tests\Fixtures\Requests\HeaderRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterRequest;
+use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 
 test('default query parameters are merged in from a request', function () {
     $request = new QueryParameterRequest();

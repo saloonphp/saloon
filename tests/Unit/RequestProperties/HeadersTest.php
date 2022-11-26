@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use Saloon\Repositories\ArrayStore;
-use Saloon\Tests\Fixtures\Connectors\HeaderConnector;
 use Saloon\Tests\Fixtures\Requests\HeaderRequest;
+use Saloon\Tests\Fixtures\Connectors\HeaderConnector;
 
 test('default headers are merged in from a request', function () {
     $request = new HeaderRequest();
