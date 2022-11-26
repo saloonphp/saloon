@@ -41,8 +41,8 @@ test('the guzzle sender will send all headers, query parameters and config', fun
 
     $request->config()->add('timeout', 120);
     $request->config()->add('debug', true);
-    $request->queryParameters()->add('shanty', 'yes');
-    $request->queryParameters()->add('sing', 'yes');
+    $request->query()->add('shanty', 'yes');
+    $request->query()->add('sing', 'yes');
     $request->headers()->add('X-Bound-For', 'South-Australia');
     $request->headers()->add('X-Fancy', ['keyOne' => 'valOne', 'keyTwo' => 'valTwo']);
 

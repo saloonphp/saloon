@@ -12,14 +12,14 @@ class QueryParameterRequest extends Request
     /**
      * Define the method that the request will use.
      *
-     * @var string|null
+     * @var string
      */
     protected string $method = 'GET';
 
     /**
      * The connector.
      *
-     * @var string|null
+     * @var string
      */
     protected string $connector = TestConnector::class;
 
@@ -33,7 +33,7 @@ class QueryParameterRequest extends Request
         return '/user';
     }
 
-    protected function defaultQueryParameters(): array
+    protected function defaultQuery(): array
     {
         return [
             'per_page' => 100,

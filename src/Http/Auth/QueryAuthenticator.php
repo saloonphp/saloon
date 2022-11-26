@@ -30,6 +30,6 @@ class QueryAuthenticator implements Authenticator
      */
     public function set(PendingRequest $pendingRequest): void
     {
-        $pendingRequest->queryParameters()->add($this->parameter, $this->value);
+        $pendingRequest->query()->add($this->parameter, $this->value);
     }
 }

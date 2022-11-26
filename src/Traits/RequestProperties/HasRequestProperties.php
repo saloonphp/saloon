@@ -7,7 +7,7 @@ namespace Saloon\Traits\RequestProperties;
 trait HasRequestProperties
 {
     use HasHeaders;
-    use HasQueryParameters;
+    use HasQuery;
     use HasConfig;
     use HasMiddleware;
 }

@@ -164,8 +164,8 @@ class GuzzleSender implements Sender
             $requestOptions[RequestOptions::HEADERS] = $pendingRequest->headers()->all();
         }
 
-        if ($pendingRequest->queryParameters()->isNotEmpty()) {
-            $requestOptions[RequestOptions::QUERY] = $pendingRequest->queryParameters()->all();
+        if ($pendingRequest->query()->isNotEmpty()) {
+            $requestOptions[RequestOptions::QUERY] = $pendingRequest->query()->all();
         }
 
         foreach ($pendingRequest->config()->all() as $configVariable => $value) {

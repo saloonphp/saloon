@@ -7,23 +7,23 @@ namespace Saloon\Traits\RequestProperties;
 use Saloon\Repositories\ArrayStore;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
-trait HasQueryParameters
+trait HasQuery
 {
     /**
      * Request Query Parameters
      *
      * @var ArrayStoreContract
      */
-    protected ArrayStoreContract $queryParameters;
+    protected ArrayStoreContract $query;
 
     /**
      * Access the query parameters
      *
      * @return ArrayStoreContract
      */
-    public function queryParameters(): ArrayStoreContract
+    public function query(): ArrayStoreContract
     {
-        return $this->queryParameters ??= new ArrayStore($this->defaultQueryParameters());
+        return $this->query ??= new ArrayStore($this->defaultQuery());
     }
 
     /**
@@ -31,7 +31,7 @@ trait HasQueryParameters
      *
      * @return array
      */
-    protected function defaultQueryParameters(): array
+    protected function defaultQuery(): array
     {
         return [];
     }

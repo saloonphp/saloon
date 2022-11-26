@@ -16,7 +16,7 @@ class QueryParameterConnector extends Connector
         return apiUrl();
     }
 
-    protected function defaultQueryParameters(): array
+    protected function defaultQuery(): array
     {
         return [
             'sort' => 'first_name',

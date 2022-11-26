@@ -42,7 +42,7 @@ test('you can add a token to a query parameter', function () {
     $request = UserRequest::make()->withQueryAuth('token', 'Sammyjo20');
 
     $pendingRequest = $request->createPendingRequest();
-    $query = $pendingRequest->queryParameters()->all();
+    $query = $pendingRequest->query()->all();
 
     expect($query)->toHaveKey('token', 'Sammyjo20');
 });

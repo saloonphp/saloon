@@ -5,23 +5,23 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Http\Request;
-use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
+use Saloon\Tests\Fixtures\Connectors\HeaderConnector;
 
-class OverwrittenQueryParameterConnectorRequest extends Request
+class ConfigRequest extends Request
 {
     /**
      * Define the method that the request will use.
      *
-     * @var string|null
+     * @var string
      */
     protected string $method = 'GET';
 
     /**
      * The connector.
      *
-     * @var string|null
+     * @var string
      */
-    protected string $connector = QueryParameterConnector::class;
+    protected string $connector = HeaderConnector::class;
 
     /**
      * Define the endpoint for the request.
@@ -33,10 +33,10 @@ class OverwrittenQueryParameterConnectorRequest extends Request
         return '/user';
     }
 
-    protected function defaultQuery(): array
+    public function defaultConfig(): array
     {
         return [
-            'sort' => 'date_of_birth',
+            'debug' => false,
         ];
     }
 }

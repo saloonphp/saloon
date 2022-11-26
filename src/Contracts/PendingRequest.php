@@ -131,7 +131,7 @@ interface PendingRequest
      *
      * @return ArrayStore
      */
-    public function queryParameters(): ArrayStore;
+    public function query(): ArrayStore;
 
     /**
      * Build up the request payload.

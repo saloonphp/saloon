@@ -170,9 +170,9 @@ class PendingRequest implements PendingRequestContract
             $request->headers()->all()
         );
 
-        $this->queryParameters()->merge(
-            $connector->queryParameters()->all(),
-            $request->queryParameters()->all()
+        $this->query()->merge(
+            $connector->query()->all(),
+            $request->query()->all()
         );
 
         $this->config()->merge(

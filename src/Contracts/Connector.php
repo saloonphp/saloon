@@ -185,7 +185,7 @@ interface Connector
      *
      * @return ArrayStore
      */
-    public function queryParameters(): ArrayStore;
+    public function query(): ArrayStore;
 
     /**
      * Manage the request sender.
