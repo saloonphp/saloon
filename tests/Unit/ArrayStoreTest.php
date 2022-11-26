@@ -27,10 +27,11 @@ test('you can add an item', function () {
 
 test('you can conditionally add items to the array store', function () {
     $store = new ArrayStore();
-    $store->when(true, fn () => 'name', fn () => 'Gareth');
-    $store->when(false, fn () => 'name', fn () => 'Sam');
-    $store->when(true, fn () => 'sidekick', fn () => 'Mantas');
-    $store->when(false, fn () => 'sidekick', fn () => 'Teo');
+
+    $store->when(true, fn (ArrayStore $store) => $store->add('name', 'Gareth'));
+    $store->when(false, fn (ArrayStore $store) => $store->add('name', 'Sam'));
+    $store->when(true, fn (ArrayStore $store) => $store->add('sidekick', 'Mantas'));
+    $store->when(false, fn (ArrayStore $store) => $store->add('sidekick', 'Teo'));
 
     expect($store->all())->toEqual(['name' => 'Gareth', 'sidekick' => 'Mantas']);
 });
