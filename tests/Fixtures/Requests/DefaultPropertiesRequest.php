@@ -40,7 +40,7 @@ class DefaultPropertiesRequest extends Request
         ];
     }
 
-    protected function defaultquery(): array
+    protected function defaultQuery(): array
     {
         return [
             'format' => 'json',
