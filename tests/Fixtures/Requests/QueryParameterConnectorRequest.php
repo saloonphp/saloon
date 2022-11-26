@@ -33,7 +33,7 @@ class QueryParameterConnectorRequest extends Request
         return '/user';
     }
 
-    protected function defaultQueryParameters(): array
+    protected function defaultquery(): array
     {
         return [
             'include' => 'user',

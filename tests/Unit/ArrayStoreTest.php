@@ -25,12 +25,12 @@ test('you can add an item', function () {
     expect($store->all())->toEqual(['name' => 'Sam']);
 });
 
-test('you can add an item based on condition', function () {
+test('you can conditionally add items to the array store', function () {
     $store = new ArrayStore();
-    $store->addWhen(true, 'name', 'Gareth');
-    $store->addWhen(false, 'name', 'Sam');
-    $store->addWhen(true, 'sidekick', fn () => 'Mantas');
-    $store->addWhen(false, 'sidekick', fn () => 'Teo');
+    $store->when(true, fn() => 'name', fn() => 'Gareth');
+    $store->when(false, fn() => 'name', fn() => 'Sam');
+    $store->when(true, fn() => 'sidekick', fn() => 'Mantas');
+    $store->when(false, fn() => 'sidekick', fn() => 'Teo');
 
     expect($store->all())->toEqual(['name' => 'Gareth', 'sidekick' => 'Mantas']);
 });

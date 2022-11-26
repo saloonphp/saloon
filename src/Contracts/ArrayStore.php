@@ -55,16 +55,6 @@ interface ArrayStore
     public function add(string $key, mixed $value): static;
 
     /**
-     * Add an item to the repository when a condition is true.
-     *
-     * @param bool $condition
-     * @param string $key
-     * @param mixed $value
-     * @return ArrayStore
-     */
-    public function addWhen(bool $condition, string $key, mixed $value): static;
-
-    /**
      * Remove an item from the store.
      *
      * @param string $key

@@ -33,7 +33,7 @@ class OverwrittenQueryParameterConnectorRequest extends Request
         return '/user';
     }
 
-    protected function defaultQueryParameters(): array
+    protected function defaultquery(): array
     {
         return [
             'sort' => 'date_of_birth',

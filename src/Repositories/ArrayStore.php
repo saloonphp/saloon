@@ -6,9 +6,12 @@ namespace Saloon\Repositories;
 
 use Saloon\Helpers\Helpers;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
+use Saloon\Traits\Conditionable;
 
 class ArrayStore implements ArrayStoreContract
 {
+    use Conditionable;
+
     /**
      * The repository's store
      *
@@ -84,23 +87,6 @@ class ArrayStore implements ArrayStoreContract
     public function add(string $key, mixed $value): static
     {
         $this->data[$key] = Helpers::value($value);
-
-        return $this;
-    }
-
-    /**
-     * Add an item to the repository when a condition is true.
-     *
-     * @param bool $condition
-     * @param string $key
-     * @param mixed $value
-     * @return $this
-     */
-    public function addWhen(bool $condition, string $key, mixed $value): static
-    {
-        if ($condition === true) {
-            return $this->add($key, $value);
-        }
 
         return $this;
     }

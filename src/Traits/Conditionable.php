@@ -21,11 +21,13 @@ trait Conditionable
         $value = Helpers::value($value, $this);
 
         if ($value) {
-            return $callback($this, $value) ?? $this;
+            $callback($this, $value) ?? $this;
+
+            return $this;
         }
 
         if ($default) {
-            return $default($this, $value) ?? $this;
+            $default($this, $value) ?? $this;
         }
 
         return $this;
