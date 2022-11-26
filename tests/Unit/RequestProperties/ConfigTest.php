@@ -3,11 +3,8 @@
 declare(strict_types=1);
 
 use Saloon\Repositories\ArrayStore;
-use Saloon\Tests\Fixtures\Connectors\ConfigConnector;
 use Saloon\Tests\Fixtures\Requests\ConfigRequest;
-use Saloon\Tests\Fixtures\Requests\QueryParameterRequest;
-use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
-use Saloon\Tests\Fixtures\Requests\ReplaceConfigRequest;
+use Saloon\Tests\Fixtures\Connectors\ConfigConnector;
 
 test('default config is merged in from a request', function () {
     $request = new ConfigRequest();
@@ -37,7 +34,7 @@ test('config can be managed on a request', function () {
         'timeout' => 60,
         'name' => 'Sam',
         'connect_timeout' => 200,
-        'debug' => false
+        'debug' => false,
     ]);
 
     expect($config->get('timeout'))->toEqual(60);
@@ -71,7 +68,7 @@ test('config can be managed on a connector', function () {
         'timeout' => 60,
         'name' => 'Sam',
         'connect_timeout' => 200,
-        'debug' => false
+        'debug' => false,
     ]);
 
     expect($config->get('timeout'))->toEqual(60);
