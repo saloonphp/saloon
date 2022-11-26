@@ -12,17 +12,19 @@ interface MiddlewarePipeline
      * Add a middleware before the request is sent
      *
      * @param callable $closure
+     * @param bool $prepend
      * @return $this
      */
-    public function onRequest(callable $closure): static;
+    public function onRequest(callable $closure, bool $prepend = false): static;
 
     /**
      * Add a middleware after the request is sent
      *
      * @param callable $closure
+     * @param bool $prepend
      * @return $this
      */
-    public function onResponse(callable $closure): static;
+    public function onResponse(callable $closure, bool $prepend = false): static;
 
     /**
      * Process the request pipeline.
