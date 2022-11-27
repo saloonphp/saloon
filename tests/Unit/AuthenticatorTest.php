@@ -105,7 +105,7 @@ test('the RequiresDigestAuth trait will throw an exception if an authenticator i
 
 test('you can use your own authenticators', function () {
     $request = new UserRequest();
-    $request->authenticateWith(new PizzaAuthenticator('Margherita', 'San Pellegrino'));
+    $request->authenticate(new PizzaAuthenticator('Margherita', 'San Pellegrino'));
 
     $pendingRequest = $request->createPendingRequest();
 

@@ -24,7 +24,7 @@ interface PendingRequest
      * @param Authenticator $authenticator
      * @return \Saloon\Http\PendingRequest
      */
-    public function authenticateWith(Authenticator $authenticator): static;
+    public function authenticate(Authenticator $authenticator): static;
 
     /**
      * Authenticate the request with an Authorization header.

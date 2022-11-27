@@ -21,7 +21,7 @@ interface Request
      * @param \Saloon\Contracts\Authenticator $authenticator
      * @return $this
      */
-    public function authenticateWith(Authenticator $authenticator): static;
+    public function authenticate(Authenticator $authenticator): static;
 
     /**
      * Authenticate the request with an Authorization header.

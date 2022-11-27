@@ -201,7 +201,7 @@ trait AuthorizationCodeGrant
     public function getUser(OAuthAuthenticator $oauthAuthenticator): Response
     {
         return $this->send(
-            GetUserRequest::make($this->oauthConfig())->authenticateWith($oauthAuthenticator)
+            GetUserRequest::make($this->oauthConfig())->authenticate($oauthAuthenticator)
         );
     }
 

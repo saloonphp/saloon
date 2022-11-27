@@ -45,7 +45,7 @@ trait AuthenticatesRequests
      * @param Authenticator $authenticator
      * @return $this
      */
-    public function authenticateWith(Authenticator $authenticator): static
+    public function authenticate(Authenticator $authenticator): static
     {
         $this->authenticator = $authenticator;
 
@@ -61,7 +61,7 @@ trait AuthenticatesRequests
      */
     public function withTokenAuth(string $token, string $prefix = 'Bearer'): static
     {
-        return $this->authenticateWith(new TokenAuthenticator($token, $prefix));
+        return $this->authenticate(new TokenAuthenticator($token, $prefix));
     }
 
     /**
@@ -73,7 +73,7 @@ trait AuthenticatesRequests
      */
     public function withBasicAuth(string $username, string $password): static
     {
-        return $this->authenticateWith(new BasicAuthenticator($username, $password));
+        return $this->authenticate(new BasicAuthenticator($username, $password));
     }
 
     /**
@@ -86,7 +86,7 @@ trait AuthenticatesRequests
      */
     public function withDigestAuth(string $username, string $password, string $digest): static
     {
-        return $this->authenticateWith(new DigestAuthenticator($username, $password, $digest));
+        return $this->authenticate(new DigestAuthenticator($username, $password, $digest));
     }
 
     /**
@@ -98,6 +98,6 @@ trait AuthenticatesRequests
      */
     public function withQueryAuth(string $parameter, string $value): static
     {
-        return $this->authenticateWith(new QueryAuthenticator($parameter, $value));
+        return $this->authenticate(new QueryAuthenticator($parameter, $value));
     }
 }
