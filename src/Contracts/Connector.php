@@ -11,15 +11,15 @@ interface Connector
     /**
      * Retrieve the authenticator.
      *
-     * @return Authenticator|null
+     * @return \Saloon\Contracts\Authenticator|null
      */
     public function getAuthenticator(): ?Authenticator;
 
     /**
      * Authenticate the request with an authenticator.
      *
-     * @param Authenticator $authenticator
-     * @return \Saloon\Http\Connector
+     * @param \Saloon\Contracts\Authenticator $authenticator
+     * @return $this
      */
     public function authenticateWith(Authenticator $authenticator): static;
 
@@ -28,7 +28,7 @@ interface Connector
      *
      * @param string $token
      * @param string $prefix
-     * @return \Saloon\Http\Connector
+     * @return $this
      */
     public function withTokenAuth(string $token, string $prefix = 'Bearer'): static;
 
@@ -37,7 +37,7 @@ interface Connector
      *
      * @param string $username
      * @param string $password
-     * @return \Saloon\Http\Connector
+     * @return $this
      */
     public function withBasicAuth(string $username, string $password): static;
 
@@ -47,7 +47,7 @@ interface Connector
      * @param string $username
      * @param string $password
      * @param string $digest
-     * @return \Saloon\Http\Connector
+     * @return $this
      */
     public function withDigestAuth(string $username, string $password, string $digest): static;
 
@@ -56,14 +56,14 @@ interface Connector
      *
      * @param string $parameter
      * @param string $value
-     * @return \Saloon\Http\Connector
+     * @return $this
      */
     public function withQueryAuth(string $parameter, string $value): static;
 
     /**
-     * Handle the boot lifecycle hook
+     * \Handle the boot lifecycle hook
      *
-     * @param PendingRequest $pendingRequest
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return void
      */
     public function boot(PendingRequest $pendingRequest): void;
@@ -71,7 +71,7 @@ interface Connector
     /**
      * Cast the response to a DTO.
      *
-     * @param Response $response
+     * @param \Saloon\Contracts\Response $response
      * @return mixed
      */
     public function createDtoFromResponse(Response $response): mixed;
@@ -82,7 +82,7 @@ interface Connector
      * @param mixed $value
      * @param callable $callback
      * @param callable|null $default
-     * @return \Saloon\Http\Connector
+     * @return $this
      */
     public function when(mixed $value, callable $callback, callable $default = null): static;
 
@@ -91,8 +91,8 @@ interface Connector
      *
      * @param mixed $value
      * @param callable $callback
-     * @param mixed $default
-     * @return \Saloon\Http\Connector
+     * @param callable|null $default
+     * @return $this
      */
     public function unless(mixed $value, callable $callback, callable $default = null): static;
 
@@ -106,23 +106,23 @@ interface Connector
     /**
      * Prepare a new request by providing it the current instance of the connector.
      *
-     * @param Request $request
-     * @return Request
+     * @param \Saloon\Contracts\Request $request
+     * @return \Saloon\Contracts\Request
      */
     public function request(Request $request): Request;
 
     /**
      * Instantiate a new class with the arguments.
      *
-     * @param mixed ...$arguments
-     * @return \Saloon\Http\Connector
+     * @param ...$arguments
+     * @return $this
      */
     public static function make(...$arguments): static;
 
     /**
      * Access the config
      *
-     * @return ArrayStore
+     * @return \Saloon\Contracts\ArrayStore
      */
     public function config(): ArrayStore;
 
@@ -136,29 +136,29 @@ interface Connector
     /**
      * Access the headers
      *
-     * @return ArrayStore
+     * @return \Saloon\Contracts\ArrayStore
      */
     public function headers(): ArrayStore;
 
     /**
      * Access the middleware pipeline
      *
-     * @return MiddlewarePipeline
+     * @return \Saloon\Contracts\MiddlewarePipeline
      */
     public function middleware(): MiddlewarePipeline;
 
     /**
      * Specify a mock client.
      *
-     * @param MockClient $mockClient
-     * @return \Saloon\Http\Connector
+     * @param \Saloon\Contracts\MockClient $mockClient
+     * @return $this
      */
     public function withMockClient(MockClient $mockClient): static;
 
     /**
      * Get the mock client.
      *
-     * @return MockClient|null
+     * @return \Saloon\Contracts\MockClient|null
      */
     public function getMockClient(): ?MockClient;
 
@@ -176,21 +176,21 @@ interface Connector
      * @param int|callable $concurrency
      * @param callable|null $responseHandler
      * @param callable|null $exceptionHandler
-     * @return Pool
+     * @return \Saloon\Contracts\Pool
      */
     public function pool(iterable|callable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null): Pool;
 
     /**
      * Access the query parameters
      *
-     * @return ArrayStore
+     * @return \Saloon\Contracts\ArrayStore
      */
     public function query(): ArrayStore;
 
     /**
      * Manage the request sender.
      *
-     * @return Sender
+     * @return \Saloon\Contracts\Sender
      */
     public function sender(): Sender;
 
@@ -204,18 +204,18 @@ interface Connector
     /**
      * Send a request
      *
-     * @param Request $request
-     * @param MockClient|null $mockClient
-     * @return Response
+     * @param \Saloon\Contracts\Request $request
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return \Saloon\Contracts\Response
      */
     public function send(Request $request, MockClient $mockClient = null): Response;
 
     /**
      * Send a request asynchronously
      *
-     * @param Request $request
-     * @param MockClient|null $mockClient
-     * @return PromiseInterface
+     * @param \Saloon\Contracts\Request $request
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface;
 }

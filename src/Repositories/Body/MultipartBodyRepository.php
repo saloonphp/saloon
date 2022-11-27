@@ -16,6 +16,6 @@ class MultipartBodyRepository extends ArrayBodyRepository
      */
     public function __toString(): string
     {
-        throw new UnableToCastToStringException('Casting the MultipartBodyRepository as a string is currently not supported.');
+        throw new UnableToCastToStringException('Casting the MultipartBodyRepository as a string is not supported.');
     }
 }
