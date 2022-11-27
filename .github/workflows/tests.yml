@@ -11,6 +11,9 @@ on:
   release:
     types: [ released ]
 
+permissions:
+  contents: read
+
 jobs:
   tests:
     runs-on: ${{ matrix.os }}
