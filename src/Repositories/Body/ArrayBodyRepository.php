@@ -116,6 +116,6 @@ class ArrayBodyRepository implements ArrayBodyRepositoryContract
      */
     public function __toString(): string
     {
-        throw new UnableToCastToStringException('Casting the ArrayBodyRepository as a string is currently not supported.');
+        throw new UnableToCastToStringException('Casting the ArrayBodyRepository as a string is not supported.');
     }
 }

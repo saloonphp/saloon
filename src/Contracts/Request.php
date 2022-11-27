@@ -11,14 +11,14 @@ interface Request
     /**
      * Retrieve the authenticator.
      *
-     * @return Authenticator|null
+     * @return \Saloon\Contracts\Authenticator|null
      */
     public function getAuthenticator(): ?Authenticator;
 
     /**
      * Authenticate the request with an authenticator.
      *
-     * @param Authenticator $authenticator
+     * @param \Saloon\Contracts\Authenticator $authenticator
      * @return $this
      */
     public function authenticateWith(Authenticator $authenticator): static;
@@ -63,7 +63,7 @@ interface Request
     /**
      * Handle the boot lifecycle hook
      *
-     * @param PendingRequest $pendingRequest
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return void
      */
     public function boot(PendingRequest $pendingRequest): void;
@@ -78,7 +78,7 @@ interface Request
     /**
      * Cast the response to a DTO.
      *
-     * @param Response $response
+     * @param \Saloon\Contracts\Response $response
      * @return mixed
      */
     public function createDtoFromResponse(Response $response): mixed;
@@ -106,21 +106,21 @@ interface Request
     /**
      * Access the config
      *
-     * @return ArrayStore
+     * @return \Saloon\Contracts\ArrayStore
      */
     public function config(): ArrayStore;
 
     /**
      * Retrieve the loaded connector.
      *
-     * @return Connector
+     * @return \Saloon\Contracts\Connector
      */
     public function connector(): Connector;
 
     /**
      * Set the loaded connector at runtime.
      *
-     * @param Connector $connector
+     * @param \Saloon\Contracts\Connector $connector
      * @return $this
      */
     public function setConnector(Connector $connector): static;
@@ -135,21 +135,21 @@ interface Request
     /**
      * Access the headers
      *
-     * @return ArrayStore
+     * @return \Saloon\Contracts\ArrayStore
      */
     public function headers(): ArrayStore;
 
     /**
      * Access the middleware pipeline
      *
-     * @return MiddlewarePipeline
+     * @return \Saloon\Contracts\MiddlewarePipeline
      */
     public function middleware(): MiddlewarePipeline;
 
     /**
      * Specify a mock client.
      *
-     * @param MockClient $mockClient
+     * @param \Saloon\Contracts\MockClient $mockClient
      * @return $this
      */
     public function withMockClient(MockClient $mockClient): static;
@@ -157,7 +157,7 @@ interface Request
     /**
      * Get the mock client.
      *
-     * @return MockClient|null
+     * @return \Saloon\Contracts\MockClient|null
      */
     public function getMockClient(): ?MockClient;
 
@@ -171,8 +171,8 @@ interface Request
     /**
      * Create a pending request
      *
-     * @param MockClient|null $mockClient
-     * @return PendingRequest
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return \Saloon\Contracts\PendingRequest
      */
     public function createPendingRequest(MockClient $mockClient = null): PendingRequest;
 
@@ -194,8 +194,8 @@ interface Request
     /**
      * Send a request asynchronously
      *
-     * @param MockClient|null $mockClient
-     * @return PromiseInterface
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function sendAsync(MockClient $mockClient = null): PromiseInterface;
 

@@ -18,7 +18,6 @@ trait HasXmlBody
      */
     public function bootHasXmlBody(PendingRequest $pendingRequest): void
     {
-        $pendingRequest->headers()->add('Accept', 'application/xml');
         $pendingRequest->headers()->add('Content-Type', 'application/xml');
     }
 }
