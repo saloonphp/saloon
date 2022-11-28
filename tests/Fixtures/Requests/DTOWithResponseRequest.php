@@ -7,8 +7,8 @@ namespace Saloon\Tests\Fixtures\Requests;
 use Saloon\Http\Request;
 use Saloon\Contracts\Response;
 use Saloon\Tests\Fixtures\Data\User;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Data\UserWithResponse;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class DTOWithResponseRequest extends Request
 {
