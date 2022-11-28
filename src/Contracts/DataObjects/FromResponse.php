@@ -6,7 +6,7 @@ namespace Saloon\Contracts\DataObjects;
 
 use Saloon\Contracts\Response;
 
-interface FromSaloonResponse
+interface FromResponse
 {
     /**
      * Create a new instance from a Saloon response.
@@ -14,5 +14,5 @@ interface FromSaloonResponse
      * @param \Saloon\Contracts\Response $response
      * @return static
      */
-    public static function fromSaloonResponse(Response $response): static;
+    public static function fromResponse(Response $response): static;
 }

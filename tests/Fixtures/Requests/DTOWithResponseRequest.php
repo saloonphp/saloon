@@ -49,6 +49,6 @@ class DTOWithResponseRequest extends Request
      */
     public function createDtoFromResponse(Response $response): object
     {
-        return UserWithResponse::fromSaloon($response);
+        return UserWithResponse::fromResponse($response);
     }
 }

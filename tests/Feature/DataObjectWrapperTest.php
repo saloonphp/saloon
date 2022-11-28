@@ -67,7 +67,7 @@ test('if you use the responseDataObject property to specify a dto but dont imple
     $response = $request->send($mockClient);
 
     $this->expectException(DataObjectException::class);
-    $this->expectDeprecationMessage('When using the `responseDataObject` property the class must implement the Saloon\Contracts\DataObjects\FromSaloonResponse interface.');
+    $this->expectDeprecationMessage('When using the `responseDataObject` property the class must implement the Saloon\Contracts\DataObjects\FromResponse interface.');
 
     $response->dto();
 });

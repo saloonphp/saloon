@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Request;
 
+use Saloon\Contracts\DataObjects\FromResponse;
 use Saloon\Contracts\Response;
 use Saloon\Exceptions\DataObjectException;
-use Saloon\Contracts\DataObjects\FromSaloonResponse;
 
 trait CastDtoFromResponse
 {
@@ -32,10 +32,10 @@ trait CastDtoFromResponse
             return null;
         }
 
-        if (! in_array(FromSaloonResponse::class, class_implements($dataObject), true)) {
-            throw new DataObjectException(sprintf('When using the `responseDataObject` property the class must implement the %s interface.', FromSaloonResponse::class));
+        if (! in_array(FromResponse::class, class_implements($dataObject), true)) {
+            throw new DataObjectException(sprintf('When using the `responseDataObject` property the class must implement the %s interface.', FromResponse::class));
         }
 
-        return $dataObject::fromSaloonResponse($response);
+        return $dataObject::fromResponse($response);
     }
 }
