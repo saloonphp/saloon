@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Contracts;
+namespace Saloon\Contracts\DataObjects;
+
+use Saloon\Contracts\Response;
 
 interface WithResponse
 {

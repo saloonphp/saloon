@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Data;
 
+use Saloon\Contracts\DataObjects\FromSaloonResponse;
+use Saloon\Contracts\DataObjects\WithResponse;
 use Saloon\Contracts\Response;
-use Saloon\Contracts\WithResponse;
 use Saloon\Traits\Responses\HasResponse;
 
-class UserWithResponse implements WithResponse
+class UserWithResponse implements FromSaloonResponse, WithResponse
 {
     use HasResponse;
 
@@ -29,7 +30,7 @@ class UserWithResponse implements WithResponse
      * @param Response $response
      * @return static
      */
-    public static function fromSaloon(Response $response): self
+    public static function fromSaloonResponse(Response $response): static
     {
         $data = $response->json();
 
