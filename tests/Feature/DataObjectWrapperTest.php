@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use Saloon\Contracts\DataObjects\WithResponse;
-use Saloon\Exceptions\DataObjectException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Data\User;
+use Saloon\Exceptions\DataObjectException;
+use Saloon\Contracts\DataObjects\WithResponse;
+use Saloon\Tests\Fixtures\Requests\DTORequest;
 use Saloon\Tests\Fixtures\Data\UserWithResponse;
 use Saloon\Tests\Fixtures\Requests\DTOPropertyRequest;
-use Saloon\Tests\Fixtures\Requests\DTORequest;
 use Saloon\Tests\Fixtures\Requests\DTOWithResponseRequest;
 use Saloon\Tests\Fixtures\Requests\InvalidDTOPropertyRequest;
 

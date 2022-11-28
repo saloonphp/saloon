@@ -8,7 +8,6 @@ use Saloon\Http\Request;
 use Saloon\Contracts\Response;
 use Saloon\Tests\Fixtures\Data\User;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Tests\Fixtures\Data\UserWithResponse;
 
 class InvalidDTOPropertyRequest extends Request
 {

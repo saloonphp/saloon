@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Request;
 
-use Saloon\Contracts\DataObjects\FromSaloonResponse;
 use Saloon\Contracts\Response;
 use Saloon\Exceptions\DataObjectException;
+use Saloon\Contracts\DataObjects\FromSaloonResponse;
 
 trait CastDtoFromResponse
 {
