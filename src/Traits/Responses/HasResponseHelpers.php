@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
+use Saloon\Contracts\WithResponse;
 use Throwable;
 use SimpleXMLElement;
 use Illuminate\Support\Arr;
@@ -102,6 +103,9 @@ trait HasResponseHelpers
     /**
      * Get the JSON decoded body of the response as a collection.
      *
+     * Requires Laravel Collections (composer require illuminate/collections)
+     * @see https://github.com/illuminate/collections
+     *
      * @param $key
      * @return Collection
      * @throws \JsonException
@@ -115,7 +119,6 @@ trait HasResponseHelpers
      * Cast the response to a DTO.
      *
      * @return mixed
-     * @throws InvalidConnectorException
      */
     public function dto(): mixed
     {
@@ -125,7 +128,13 @@ trait HasResponseHelpers
 
         $request = $this->getRequest();
 
-        return $request->createDtoFromResponse($this) ?? $request->connector()->createDtoFromResponse($this);
+        $dataObject = $request->createDtoFromResponse($this) ?? $request->connector()->createDtoFromResponse($this);
+
+        if ($dataObject instanceof WithResponse) {
+            $dataObject->setResponse($this);
+        }
+
+        return $dataObject;
     }
 
     /**
