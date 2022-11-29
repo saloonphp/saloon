@@ -14,9 +14,11 @@ trait SendsRequests
     /**
      * Send a request
      *
-     * @param \Saloon\Contracts\Request $request
+     * @template TRequest of \Saloon\Contracts\Request
+     *
+     * @param TRequest $request
      * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \Saloon\Contracts\Response
+     * @return \Saloon\Contracts\Response<TRequest>
      */
     public function send(Request $request, MockClient $mockClient = null): Response
     {

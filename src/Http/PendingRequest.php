@@ -28,6 +28,11 @@ use Saloon\Laravel\Http\Middleware\FrameworkMiddleware;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
+/**
+ * @template TRequest of \Saloon\Contracts\Request
+ *
+ * @implements \Saloon\Contracts\PendingRequest<TRequest>
+ */
 class PendingRequest implements PendingRequestContract
 {
     use AuthenticatesRequests;
@@ -38,7 +43,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * The request used by the instance.
      *
-     * @var \Saloon\Contracts\Request
+     * @var TRequest
      */
     protected Request $request;
 
@@ -87,7 +92,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Build up the request payload.
      *
-     * @param \Saloon\Contracts\Request $request
+     * @param TRequest $request
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\PendingRequestException
@@ -298,7 +303,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Get the request.
      *
-     * @return \Saloon\Contracts\Request
+     * @return TRequest
      */
     public function getRequest(): Request
     {
@@ -401,7 +406,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Send the PendingRequest
      *
-     * @return \Saloon\Contracts\Response
+     * @return \Saloon\Contracts\Response<TRequest>
      */
     public function send(): Response
     {

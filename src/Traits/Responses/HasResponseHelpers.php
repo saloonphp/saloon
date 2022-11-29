@@ -13,6 +13,9 @@ use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
+/**
+ * @template TRequest of \Saloon\Contracts\Request
+ */
 trait HasResponseHelpers
 {
     use HasSimulationMethods;

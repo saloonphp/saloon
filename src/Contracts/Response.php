@@ -13,6 +13,9 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
+/**
+ * @template TRequest of \Saloon\Contracts\Request
+ */
 interface Response
 {
     /**
@@ -58,7 +61,7 @@ interface Response
     /**
      * Get the original request
      *
-     * @return Request
+     * @return TRequest
      */
     public function getRequest(): Request;
 

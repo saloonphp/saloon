@@ -15,6 +15,12 @@ use Saloon\Traits\Responses\HasResponseHelpers;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Contracts\Response as ResponseContract;
 
+/**
+ * @template TRequest of \Saloon\Contracts\Request
+ *
+ * @implements \Saloon\Contracts\Response<TRequest>
+ * @uses \Saloon\Traits\Responses\HasResponseHelpers<TRequest>
+ */
 class Response implements ResponseContract
 {
     use Macroable;
@@ -72,7 +78,7 @@ class Response implements ResponseContract
     /**
      * Get the original request that created the response.
      *
-     * @return Request
+     * @return TRequest
      */
     public function getRequest(): Request
     {

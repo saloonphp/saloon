@@ -9,6 +9,9 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
+/**
+ * @template TRequest of \Saloon\Contracts\Request
+ */
 interface PendingRequest
 {
     /**
@@ -136,7 +139,7 @@ interface PendingRequest
     /**
      * Build up the request payload.
      *
-     * @param Request $request
+     * @param TRequest $request
      * @param MockClient|null $mockClient
      */
     public function __construct(Request $request, MockClient $mockClient = null);
@@ -152,7 +155,7 @@ interface PendingRequest
     /**
      * Get the request.
      *
-     * @return Request
+     * @return TRequest
      */
     public function getRequest(): Request;
 
@@ -223,7 +226,7 @@ interface PendingRequest
     /**
      * Send the PendingRequest
      *
-     * @return Response
+     * @return Response<TRequest>
      */
     public function send(): Response;
 

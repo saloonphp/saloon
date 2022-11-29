@@ -58,7 +58,7 @@ abstract class Request implements RequestContract
      * Create a pending request
      *
      * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \Saloon\Http\PendingRequest
+     * @return \Saloon\Http\PendingRequest<static>
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\PendingRequestException
      */

@@ -172,7 +172,7 @@ interface Request
      * Create a pending request
      *
      * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \Saloon\Contracts\PendingRequest
+     * @return \Saloon\Contracts\PendingRequest<static>
      */
     public function createPendingRequest(MockClient $mockClient = null): PendingRequest;
 
