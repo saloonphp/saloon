@@ -30,4 +30,21 @@ abstract class Request implements RequestContract
     use Conditionable;
     use Bootable;
     use Makeable;
+
+    /**
+     * Define the HTTP method.
+     *
+     * @var string
+     */
+    protected string $method = '';
+
+    /**
+     * Get the method of the request.
+     *
+     * @return string
+     */
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
 }

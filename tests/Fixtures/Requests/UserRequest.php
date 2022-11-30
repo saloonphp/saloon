@@ -10,14 +10,11 @@ use Saloon\Tests\Fixtures\Connectors\TestConnector;
 class UserRequest extends Request
 {
     /**
-     * Resolve the method for the request
+     * Define the HTTP method.
      *
-     * @return string
+     * @var string
      */
-    public function resolveMethod(): string
-    {
-        return 'GET';
-    }
+    protected string $method = 'GET';
 
     /**
      * Define the endpoint for the request.

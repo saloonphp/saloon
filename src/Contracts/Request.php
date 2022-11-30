@@ -9,11 +9,11 @@ use GuzzleHttp\Promise\PromiseInterface;
 interface Request
 {
     /**
-     * Resolve the method for the request
+     * Get the HTTP method
      *
      * @return string
      */
-    public function resolveMethod(): string;
+    public function getMethod(): string;
 
     /**
      * Define the endpoint for the request.
