@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Data;
 
-use Saloon\Contracts\DataObjects\WithResponse;
 use Saloon\Contracts\Response;
 use Saloon\Traits\Responses\HasResponse;
+use Saloon\Contracts\DataObjects\WithResponse;
 
 class UserWithResponse implements WithResponse
 {
