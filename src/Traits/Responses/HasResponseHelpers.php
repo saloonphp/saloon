@@ -10,7 +10,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Saloon\Exceptions\RequestException;
 use Symfony\Component\DomCrawler\Crawler;
-use Saloon\Exceptions\InvalidConnectorException;
+use Saloon\Contracts\DataObjects\WithResponse;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
 trait HasResponseHelpers
@@ -102,6 +102,9 @@ trait HasResponseHelpers
     /**
      * Get the JSON decoded body of the response as a collection.
      *
+     * Requires Laravel Collections (composer require illuminate/collections)
+     * @see https://github.com/illuminate/collections
+     *
      * @param $key
      * @return Collection
      * @throws \JsonException
@@ -115,7 +118,6 @@ trait HasResponseHelpers
      * Cast the response to a DTO.
      *
      * @return mixed
-     * @throws InvalidConnectorException
      */
     public function dto(): mixed
     {
@@ -125,7 +127,13 @@ trait HasResponseHelpers
 
         $request = $this->getRequest();
 
-        return $request->createDtoFromResponse($this) ?? $request->connector()->createDtoFromResponse($this);
+        $dataObject = $request->createDtoFromResponse($this) ?? $request->connector()->createDtoFromResponse($this);
+
+        if ($dataObject instanceof WithResponse) {
+            $dataObject->setResponse($this);
+        }
+
+        return $dataObject;
     }
 
     /**
