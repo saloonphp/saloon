@@ -6,7 +6,6 @@ namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Responses\UserResponse;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class UserRequestWithCustomResponse extends Request
 {

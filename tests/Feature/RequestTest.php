@@ -5,11 +5,10 @@ declare(strict_types=1);
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Responses\Response;
 use Saloon\Http\Senders\GuzzleSender;
-use Saloon\Tests\Fixtures\Requests\HasConnectorUserRequest;
-use Saloon\Tests\Fixtures\Requests\SoloUserRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Requests\HasConnectorUserRequest;
 
 test('a request can be made successfully', function () {
     $connector = new TestConnector();

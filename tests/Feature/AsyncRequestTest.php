@@ -7,11 +7,11 @@ use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Responses\UserData;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Responses\UserResponse;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
 
 test('an asynchronous request can be made successfully', function () {

@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Http\Request;
-use Saloon\Http\SoloRequest;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Traits\Request\HasConnector;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class HasConnectorUserRequest extends Request
 {
