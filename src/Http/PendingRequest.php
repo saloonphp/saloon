@@ -94,7 +94,7 @@ class PendingRequest implements PendingRequestContract
      * @param \Saloon\Contracts\Request $request
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidConnectorException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\PendingRequestException
      */
     public function __construct(Connector $connector, Request $request, MockClient $mockClient = null)

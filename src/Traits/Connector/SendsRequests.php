@@ -20,6 +20,7 @@ trait SendsRequests
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @return \Saloon\Contracts\Response
      * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\PendingRequestException
      */
     public function send(Request $request, MockClient $mockClient = null): Response
@@ -34,6 +35,7 @@ trait SendsRequests
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @return \GuzzleHttp\Promise\PromiseInterface
      * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\PendingRequestException
      */
     public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface
@@ -48,6 +50,7 @@ trait SendsRequests
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @return \Saloon\Contracts\PendingRequest
      * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\PendingRequestException
      */
     public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequestContract
