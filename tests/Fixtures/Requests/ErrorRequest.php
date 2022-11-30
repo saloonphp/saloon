@@ -18,18 +18,11 @@ class ErrorRequest extends Request
     protected string $method = 'GET';
 
     /**
-     * The connector.
-     *
-     * @var string
-     */
-    protected string $connector = TestConnector::class;
-
-    /**
      * Define the endpoint for the request.
      *
      * @return string
      */
-    public function defineEndpoint(): string
+    public function resolveEndpoint(): string
     {
         return '/error';
     }

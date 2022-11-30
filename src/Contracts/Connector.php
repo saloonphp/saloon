@@ -187,13 +187,6 @@ interface Connector
     public function sender(): Sender;
 
     /**
-     * Bootstrap and get the registered requests in the $requests array.
-     *
-     * @return array
-     */
-    public function getRegisteredRequests(): array;
-
-    /**
      * Send a request
      *
      * @param \Saloon\Contracts\Request $request
