@@ -145,7 +145,7 @@ interface Connector
      * @param \Saloon\Contracts\MockClient $mockClient
      * @return $this
      */
-    public function withMockClient(MockClient $mockClient): static;
+    public function setMockClient(MockClient $mockClient): static;
 
     /**
      * Get the mock client.

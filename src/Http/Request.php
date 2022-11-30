@@ -6,14 +6,8 @@ namespace Saloon\Http;
 
 use Saloon\Traits\Bootable;
 use Saloon\Traits\Makeable;
-use Saloon\Contracts\Sender;
-use Saloon\Contracts\Response;
-use Saloon\Contracts\MockClient;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
-use Saloon\Traits\Request\BuildsUrls;
-use Saloon\Traits\Request\HasConnector;
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;

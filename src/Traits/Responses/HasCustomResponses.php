@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
-use ReflectionException;
-use Saloon\Contracts\Request;
-use Saloon\Helpers\ReflectionHelper;
-use Saloon\Exceptions\InvalidConnectorException;
-use Saloon\Exceptions\InvalidResponseClassException;
-
 trait HasCustomResponses
 {
     /**

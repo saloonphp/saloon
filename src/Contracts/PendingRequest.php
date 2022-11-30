@@ -110,7 +110,7 @@ interface PendingRequest
      * @param MockClient $mockClient
      * @return \Saloon\Http\PendingRequest
      */
-    public function withMockClient(MockClient $mockClient): static;
+    public function setMockClient(MockClient $mockClient): static;
 
     /**
      * Get the mock client.

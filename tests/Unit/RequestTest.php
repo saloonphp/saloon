@@ -34,7 +34,7 @@ test('you can pass a mock client to the saloon request and it will be in mock mo
     $request = new UserRequest();
     $mockClient = new MockClient([MockResponse::make([])]);
 
-    $request->withMockClient($mockClient);
+    $request->setMockClient($mockClient);
 
     $pendingRequest = $request->createPendingRequest();
 

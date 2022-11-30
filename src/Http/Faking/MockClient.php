@@ -154,7 +154,7 @@ class MockClient implements MockClientContract
             return $this->mockResponseValue($this->requestResponses[$requestClass], $pendingRequest);
         }
 
-        $connectorClass = get_class($request->connector());
+        $connectorClass = get_class($pendingRequest->getConnector());
 
         if (array_key_exists($connectorClass, $this->connectorResponses)) {
             return $this->mockResponseValue($this->connectorResponses[$connectorClass], $pendingRequest);

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Connector;
 
-use Saloon\Contracts\PendingRequest as PendingRequestContract;
-use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\MockClient;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
 trait SendsRequests
 {

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use GuzzleHttp\Promise\PromiseInterface;
-
 interface Request
 {
     /**
@@ -144,7 +142,7 @@ interface Request
      * @param \Saloon\Contracts\MockClient $mockClient
      * @return $this
      */
-    public function withMockClient(MockClient $mockClient): static;
+    public function setMockClient(MockClient $mockClient): static;
 
     /**
      * Get the mock client.

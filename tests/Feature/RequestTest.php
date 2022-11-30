@@ -3,15 +3,13 @@
 declare(strict_types=1);
 
 use Saloon\Http\Responses\Response;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('a request can be made successfully', function () {
     $connector = new TestConnector();
-    $request = new UserRequest;
-
-    $response = $connector->send($request);
+    $response = $connector->send(new UserRequest);
 
     $data = $response->json();
 

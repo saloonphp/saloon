@@ -49,7 +49,7 @@ test('the old refresh token is carried over if a response does not include a new
 
     $connector = new OAuth2Connector;
 
-    $connector->withMockClient($mockClient);
+    $connector->setMockClient($mockClient);
 
     $authenticator = new AccessTokenAuthenticator('access', 'refresh-old', Date::now()->addSeconds(3600)->toDateTime());
 
@@ -65,7 +65,7 @@ test('the old refresh token is carried over if a response does not include a new
 
     $connector = new OAuth2Connector;
 
-    $connector->withMockClient($mockClient);
+    $connector->setMockClient($mockClient);
 
     $newAuthenticator = $connector->refreshAccessToken('refresh-old');
 
