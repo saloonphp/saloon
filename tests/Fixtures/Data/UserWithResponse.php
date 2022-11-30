@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Data;
 
-use Saloon\Contracts\DataObjects\FromResponse;
 use Saloon\Contracts\DataObjects\WithResponse;
 use Saloon\Contracts\Response;
 use Saloon\Traits\Responses\HasResponse;
 
-class UserWithResponse implements FromResponse, WithResponse
+class UserWithResponse implements WithResponse
 {
     use HasResponse;
 
