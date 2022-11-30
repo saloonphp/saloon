@@ -9,6 +9,20 @@ use GuzzleHttp\Promise\PromiseInterface;
 interface Request
 {
     /**
+     * Resolve the method for the request
+     *
+     * @return string
+     */
+    public function resolveMethod(): string;
+
+    /**
+     * Define the endpoint for the request.
+     *
+     * @return string
+     */
+    public function resolveEndpoint(): string;
+
+    /**
      * Retrieve the authenticator.
      *
      * @return \Saloon\Contracts\Authenticator|null
@@ -69,13 +83,6 @@ interface Request
     public function boot(PendingRequest $pendingRequest): void;
 
     /**
-     * Build up the full request URL.
-     *
-     * @return string
-     */
-    public function getRequestUrl(): string;
-
-    /**
      * Cast the response to a DTO.
      *
      * @param \Saloon\Contracts\Response $response
@@ -111,26 +118,11 @@ interface Request
     public function config(): ArrayStore;
 
     /**
-     * Retrieve the loaded connector.
-     *
-     * @return \Saloon\Contracts\Connector
-     */
-    public function connector(): Connector;
-
-    /**
-     * Set the loaded connector at runtime.
-     *
-     * @param \Saloon\Contracts\Connector $connector
-     * @return $this
-     */
-    public function setConnector(Connector $connector): static;
-
-    /**
      * Get the response class
      *
      * @return string
      */
-    public function getResponseClass(): string;
+    public function resolveResponseClass(): string;
 
     /**
      * Access the headers
@@ -169,48 +161,10 @@ interface Request
     public function hasMockClient(): bool;
 
     /**
-     * Create a pending request
-     *
-     * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \Saloon\Contracts\PendingRequest
-     */
-    public function createPendingRequest(MockClient $mockClient = null): PendingRequest;
-
-    /**
-     * Access the HTTP sender
-     *
-     * @return \Saloon\Contracts\Sender
-     */
-    public function sender(): Sender;
-
-    /**
-     * Send a request synchronously
-     *
-     * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \Saloon\Contracts\Response
-     */
-    public function send(MockClient $mockClient = null): Response;
-
-    /**
-     * Send a request asynchronously
-     *
-     * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function sendAsync(MockClient $mockClient = null): PromiseInterface;
-
-    /**
      * Instantiate a new class with the arguments.
      *
      * @param ...$arguments
      * @return static
      */
     public static function make(...$arguments): static;
-
-    /**
-     * Get the method of the request.
-     *
-     * @return string
-     */
-    public function getMethod(): string;
 }

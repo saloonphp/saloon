@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Http;
 
 use Saloon\Enums\Method;
+use Saloon\Exceptions\InvalidConnectorException;
+use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Sender;
 use Saloon\Contracts\Request;
@@ -13,6 +15,8 @@ use Saloon\Contracts\Connector;
 use Saloon\Helpers\Environment;
 use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
+use Saloon\Helpers\ReflectionHelper;
+use Saloon\Helpers\URLHelper;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\WithBody;
@@ -87,20 +91,20 @@ class PendingRequest implements PendingRequestContract
     /**
      * Build up the request payload.
      *
+     * @param \Saloon\Contracts\Connector $connector
      * @param \Saloon\Contracts\Request $request
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\InvalidConnectorException
      * @throws \Saloon\Exceptions\PendingRequestException
      */
-    public function __construct(Request $request, MockClient $mockClient = null)
+    public function __construct(Connector $connector, Request $request, MockClient $mockClient = null)
     {
-        $connector = $request->connector();
-
         $this->request = $request;
         $this->connector = $connector;
-        $this->url = $request->getRequestUrl();
-        $this->method = Method::upperFrom($request->getMethod());
-        $this->responseClass = $request->getResponseClass();
+        $this->url = $this->resolveRequestUrl();
+        $this->method = Method::upperFrom($request->resolveMethod());
+        $this->responseClass = $this->resolveResponseClass();
         $this->mockClient = $mockClient ?? ($request->getMockClient() ?? $connector->getMockClient());
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
 
@@ -399,6 +403,43 @@ class PendingRequest implements PendingRequestContract
     }
 
     /**
+     * Build up the full request URL.
+     *
+     * @return string
+     */
+    protected function resolveRequestUrl(): string
+    {
+        return URLHelper::join($this->connector->resolveBaseUrl(), $this->request->resolveEndpoint());
+    }
+
+    /**
+     * Get the response class
+     *
+     * @return string
+     * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
+     */
+    protected function resolveResponseClass(): string
+    {
+        $baseResponse = $this->connector->sender()->getResponseClass();
+        $response = $this->request->resolveResponseClass();
+
+        if (empty($response)) {
+            $response = $this instanceof Request ? $this->connector->resolveResponseClass() : $baseResponse;
+        }
+
+        if (! class_exists($response)) {
+            throw new InvalidResponseClassException;
+        }
+
+        if (! ReflectionHelper::isSubclassOf($response, $baseResponse)) {
+            throw new InvalidResponseClassException(sprintf('The custom response must extend the "%s" class.', $baseResponse));
+        }
+
+        return $response;
+    }
+
+    /**
      * Send the PendingRequest
      *
      * @return \Saloon\Contracts\Response
@@ -416,5 +457,16 @@ class PendingRequest implements PendingRequestContract
     public function sendAsync(): PromiseInterface
     {
         return (new Dispatcher($this, true))->execute();
+    }
+
+    /**
+     * Create a data object from the response
+     *
+     * @param \Saloon\Contracts\Response $response
+     * @return mixed
+     */
+    public function createDtoFromResponse(Response $response): mixed
+    {
+        return $this->request->createDtoFromResponse($response) ?? $this->connector->createDtoFromResponse($response);
     }
 }

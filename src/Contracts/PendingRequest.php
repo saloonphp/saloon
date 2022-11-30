@@ -136,10 +136,11 @@ interface PendingRequest
     /**
      * Build up the request payload.
      *
+     * @param \Saloon\Contracts\Connector $connector
      * @param Request $request
      * @param MockClient|null $mockClient
      */
-    public function __construct(Request $request, MockClient $mockClient = null);
+    public function __construct(Connector $connector, Request $request, MockClient $mockClient = null);
 
     /**
      * Execute the response pipeline.
@@ -233,4 +234,12 @@ interface PendingRequest
      * @return PromiseInterface
      */
     public function sendAsync(): PromiseInterface;
+
+    /**
+     * Create a data object from the response
+     *
+     * @param \Saloon\Contracts\Response $response
+     * @return mixed
+     */
+    public function createDtoFromResponse(Response $response): mixed;
 }

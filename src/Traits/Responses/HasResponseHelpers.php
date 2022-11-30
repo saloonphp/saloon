@@ -125,9 +125,7 @@ trait HasResponseHelpers
             return null;
         }
 
-        $request = $this->getRequest();
-
-        $dataObject = $request->createDtoFromResponse($this) ?? $request->connector()->createDtoFromResponse($this);
+        $dataObject = $this->pendingRequest->createDtoFromResponse($this);
 
         if ($dataObject instanceof WithResponse) {
             $dataObject->setResponse($this);

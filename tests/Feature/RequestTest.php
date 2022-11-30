@@ -3,12 +3,16 @@
 declare(strict_types=1);
 
 use Saloon\Http\Responses\Response;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 
 test('a request can be made successfully', function () {
-    $request = new UserRequest();
-    $response = $request->send();
+    $connector = new TestConnector();
+    $request = new UserRequest;
+
+    $response = $connector->send($request);
+
     $data = $response->json();
 
     expect($response)->toBeInstanceOf(Response::class);

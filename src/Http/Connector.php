@@ -14,6 +14,7 @@ use Saloon\Traits\Connector\HasSender;
 use Saloon\Traits\Connector\SendsRequests;
 use Saloon\Traits\Connector\ProxiesRequests;
 use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Traits\Request\BuildsUrls;
 use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Contracts\Connector as ConnectorContract;
@@ -29,21 +30,11 @@ abstract class Connector implements ConnectorContract
     use HasMockClient;
     use SendsRequests;
     use Conditionable;
+    use BuildsUrls;
     use HasSender;
     use Bootable;
     use Makeable;
     use HasPool;
-
-    /**
-     * Prepare a new request
-     *
-     * @param \Saloon\Contracts\Request $request
-     * @return \Saloon\Contracts\Request
-     */
-    public function request(Request $request): Request
-    {
-        return $request->setConnector($this);
-    }
 
     /**
      * Dynamically proxy other methods to try and call a requests.

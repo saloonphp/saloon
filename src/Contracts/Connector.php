@@ -101,15 +101,7 @@ interface Connector
      *
      * @return string
      */
-    public function defineBaseUrl(): string;
-
-    /**
-     * Prepare a new request by providing it the current instance of the connector.
-     *
-     * @param \Saloon\Contracts\Request $request
-     * @return \Saloon\Contracts\Request
-     */
-    public function request(Request $request): Request;
+    public function resolveBaseUrl(): string;
 
     /**
      * Instantiate a new class with the arguments.
@@ -131,7 +123,7 @@ interface Connector
      *
      * @return string
      */
-    public function getResponseClass(): string;
+    public function resolveResponseClass(): string;
 
     /**
      * Access the headers
@@ -218,4 +210,13 @@ interface Connector
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface;
+
+    /**
+     * Create a new PendingRequest
+     *
+     * @param \Saloon\Contracts\Request $request
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return \Saloon\Contracts\PendingRequest
+     */
+    public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequest;
 }

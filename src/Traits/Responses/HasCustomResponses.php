@@ -22,39 +22,11 @@ trait HasCustomResponses
     protected string $response = '';
 
     /**
-     * Get the response class
-     *
-     * @return string
-     * @throws ReflectionException
-     * @throws InvalidConnectorException
-     * @throws InvalidResponseClassException
-     */
-    public function getResponseClass(): string
-    {
-        $baseResponse = $this->sender()->getResponseClass();
-        $response = $this->resolveResponse();
-
-        if (empty($response)) {
-            $response = $this instanceof Request ? $this->connector()->getResponseClass() : $baseResponse;
-        }
-
-        if (! class_exists($response)) {
-            throw new InvalidResponseClassException;
-        }
-
-        if (! ReflectionHelper::isSubclassOf($response, $baseResponse)) {
-            throw new InvalidResponseClassException(sprintf('The custom response must extend the "%s" class.', $baseResponse));
-        }
-
-        return $response;
-    }
-
-    /**
      * Resolve the custom response class
      *
      * @return string
      */
-    protected function resolveResponse(): string
+    public function resolveResponseClass(): string
     {
         return $this->response;
     }
