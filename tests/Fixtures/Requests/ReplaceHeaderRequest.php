@@ -31,7 +31,7 @@ class ReplaceHeaderRequest extends Request
      *
      * @return string
      */
-    public function defineEndpoint(): string
+    public function resolveEndpoint(): string
     {
         return '/user';
     }

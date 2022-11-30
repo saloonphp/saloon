@@ -32,7 +32,7 @@ class PostConnectorDataBlankRequest extends Request implements WithBody
      *
      * @return string
      */
-    public function defineEndpoint(): string
+    public function resolveEndpoint(): string
     {
         return '/user';
     }

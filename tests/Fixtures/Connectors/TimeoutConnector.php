@@ -22,7 +22,7 @@ class TimeoutConnector extends Connector
      *
      * @return string
      */
-    public function defineBaseUrl(): string
+    public function resolveBaseUrl(): string
     {
         return apiUrl();
     }

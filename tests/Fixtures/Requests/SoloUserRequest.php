@@ -5,22 +5,16 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Http\Request;
+use Saloon\Http\SoloRequest;
 
-class NoConnectorRequest extends Request
+class SoloUserRequest extends SoloRequest
 {
     /**
-     * Define the method that the request will use.
+     * Define the HTTP method.
      *
      * @var string
      */
     protected string $method = 'GET';
-
-    /**
-     * The connector.
-     *
-     * @var string
-     */
-    protected string $connector = '';
 
     /**
      * Define the endpoint for the request.
@@ -29,6 +23,6 @@ class NoConnectorRequest extends Request
      */
     public function resolveEndpoint(): string
     {
-        return '/user';
+        return 'https://tests.saloon.dev/api/user';
     }
 }

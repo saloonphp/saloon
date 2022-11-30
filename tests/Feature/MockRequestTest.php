@@ -33,7 +33,10 @@ test('a request can be mocked with a sequence', function () {
         MockResponse::make(['error' => 'Server Unavailable'], 500),
     ]);
 
-    $responseA = (new UserRequest)->send($mockClient);
+    $connector = new TestConnector;
+    $connector->withMockClient($mockClient);
+
+    $responseA = $connector->send(new UserRequest);
 
     expect($responseA)->toBeInstanceOf(Response::class);
     expect($responseA->isMocked())->toBeTrue();
@@ -44,7 +47,7 @@ test('a request can be mocked with a sequence', function () {
     expect($responseA->getSimulatedResponsePayload())->toBeInstanceOf(MockResponse::class);
     expect($responseA->headers()->all())->toEqual(['X-Foo' => 'Bar']);
 
-    $responseB = (new UserRequest)->send($mockClient);
+    $responseB = $connector->send(new UserRequest);
 
     expect($responseB)->toBeInstanceOf(Response::class);
     expect($responseB->isMocked())->toBeTrue();
@@ -54,7 +57,7 @@ test('a request can be mocked with a sequence', function () {
     expect($responseB->status())->toEqual(200);
     expect($responseB->getSimulatedResponsePayload())->toBeInstanceOf(MockResponse::class);
 
-    $responseC = (new UserRequest)->send($mockClient);
+    $responseC = $connector->send(new UserRequest);
 
     expect($responseC)->toBeInstanceOf(Response::class);
     expect($responseC->isMocked())->toBeTrue();
@@ -66,7 +69,7 @@ test('a request can be mocked with a sequence', function () {
 
     $this->expectException(NoMockResponseFoundException::class);
 
-    (new UserRequest)->send($mockClient);
+    $connector->send(new UserRequest);
 });
 
 test('a request can be mocked with a connector defined', function () {

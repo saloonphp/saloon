@@ -14,7 +14,7 @@ class PostJsonConnector extends Connector implements WithBody
     use AcceptsJson;
     use HasJsonBody;
 
-    public function defineBaseUrl(): string
+    public function resolveBaseUrl(): string
     {
         return apiUrl();
     }

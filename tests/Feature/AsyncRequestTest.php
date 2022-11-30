@@ -7,6 +7,7 @@ use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Responses\UserData;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
@@ -14,8 +15,7 @@ use Saloon\Tests\Fixtures\Responses\UserResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
 
 test('an asynchronous request can be made successfully', function () {
-    $request = new UserRequest();
-    $promise = $request->sendAsync();
+    $promise = TestConnector::make()->sendAsync(new UserRequest);
 
     expect($promise)->toBeInstanceOf(PromiseInterface::class);
 
@@ -36,8 +36,7 @@ test('an asynchronous request can be made successfully', function () {
 });
 
 test('an asynchronous request can handle an exception properly', function () {
-    $request = new ErrorRequest();
-    $promise = $request->sendAsync();
+    $promise = TestConnector::make()->sendAsync(new ErrorRequest);
 
     $this->expectException(RequestException::class);
 
@@ -63,7 +62,9 @@ test('an asynchronous response will still be passed through response middleware'
         $response->setValue(true);
     });
 
-    $promise = $request->sendAsync($mockClient);
+    $connector = new TestConnector;
+
+    $promise = $connector->sendAsync($request, $mockClient);
     $response = $promise->wait();
 
     expect($response->getValue())->toBeTrue();
@@ -74,9 +75,10 @@ test('an asynchronous request will return a custom response', function () {
         MockResponse::make(['foo' => 'bar']),
     ]);
 
+    $connector = new TestConnector;
     $request = new UserRequestWithCustomResponse();
 
-    $promise = $request->sendAsync($mockClient);
+    $promise = $connector->sendAsync($request, $mockClient);
 
     $response = $promise->wait();
 
