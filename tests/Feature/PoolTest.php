@@ -102,7 +102,7 @@ test('you can use pool with a mock client added and it wont send real requests',
     $mockClient = new MockClient($mockResponses);
 
     $connector = new TestConnector;
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
     $successCount = 0;
     $errorCount = 0;
 

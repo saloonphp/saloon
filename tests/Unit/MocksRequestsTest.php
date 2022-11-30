@@ -14,7 +14,7 @@ test('you can provide a mock client on a connector and all requests will be mock
     ]);
 
     $connector = new TestConnector;
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
 
     $responseA = $connector->request(new UserRequest)->send();
     $responseB = $connector->request(new UserRequest)->send();
@@ -29,7 +29,7 @@ test('you can provide a mock client on a request and all requests will be mocked
     ]);
 
     $request = new UserRequest;
-    $request->setMockClient($mockClient);
+    $request->withMockClient($mockClient);
 
     $response = $request->send();
 
@@ -46,10 +46,10 @@ test('request mock clients are always prioritied', function () {
     ]);
 
     $connector = new TestConnector;
-    $connector->setMockClient($mockClientA);
+    $connector->withMockClient($mockClientA);
 
     $request = new UserRequest;
-    $request->setMockClient($mockClientB);
+    $request->withMockClient($mockClientB);
 
     $response = $request->send();
 

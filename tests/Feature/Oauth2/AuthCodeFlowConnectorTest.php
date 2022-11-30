@@ -63,7 +63,7 @@ test('you can request a token from a connector', function () {
 
     $connector = new OAuth2Connector;
 
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
 
     $authenticator = $connector->getAccessToken('code');
 
@@ -80,7 +80,7 @@ test('you can request the original response instead of the authenticator on the 
 
     $connector = new OAuth2Connector;
 
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
 
     $response = $connector->getAccessToken('code', null, null, true);
 
@@ -104,7 +104,7 @@ test('you can refresh a token from a connector', function () {
 
     $connector = new OAuth2Connector;
 
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
 
     $authenticator = new AccessTokenAuthenticator('access', 'refresh', Date::now()->addSeconds(3600)->toDateTime());
 
@@ -123,7 +123,7 @@ test('you can request the original response instead of the authenticator on the 
 
     $connector = new OAuth2Connector;
 
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
 
     $authenticator = new AccessTokenAuthenticator('access', 'refresh', Date::now()->addSeconds(3600)->toDateTime());
 
@@ -139,7 +139,7 @@ test('you can get the user from an oauth connector', function () {
     ]);
 
     $connector = new OAuth2Connector;
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
 
     $accessToken = new AccessTokenAuthenticator('access', 'refresh', Date::now()->addSeconds(3600)->toDateTime());
 
@@ -161,7 +161,7 @@ test('you can customize the oauth authenticator', function () {
     ]);
 
     $customConnector = new CustomResponseOAuth2Connector('Howdy!');
-    $customConnector->setMockClient($mockClient);
+    $customConnector->withMockClient($mockClient);
 
     $authenticator = $customConnector->getAccessToken('code');
 

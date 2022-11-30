@@ -18,7 +18,7 @@ it('accepts an array for requests', function () {
     ]);
 
     $connector = new TestConnector;
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
     $count = 0;
 
     $requests = [
@@ -50,7 +50,7 @@ it('accepts an array for aliased requests', function () {
     ]);
 
     $connector = new TestConnector;
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
     $count = 0;
 
     $requests = [
@@ -83,7 +83,7 @@ it('accepts a generator for requests', function () {
     ]);
 
     $connector = new TestConnector;
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
     $count = 0;
 
     $requests = collect([]);
@@ -121,7 +121,7 @@ it('accepts a generator for aliased requests', function () {
     ]);
 
     $connector = new TestConnector;
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
     $count = 0;
 
     $requests = collect();
@@ -160,7 +160,7 @@ it('accepts a callback that returns an array for requests', function () {
     ]);
 
     $connector = new TestConnector;
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
     $count = 0;
 
     $requests = collect();
@@ -201,7 +201,7 @@ it('accepts a callback that returns an array for aliased requests', function () 
     ]);
 
     $connector = new TestConnector;
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
     $count = 0;
 
     $requests = collect();
@@ -243,7 +243,7 @@ it('accepts a callback that returns a generator for requests', function () {
     ]);
 
     $connector = new TestConnector;
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
     $count = 0;
 
     $requests = collect();
@@ -281,7 +281,7 @@ it('accepts a callback that returns a generator for aliased requests', function 
     ]);
 
     $connector = new TestConnector;
-    $connector->setMockClient($mockClient);
+    $connector->withMockClient($mockClient);
     $count = 0;
 
     $requests = collect();

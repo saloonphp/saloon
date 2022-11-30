@@ -21,7 +21,7 @@ trait HasMockClient
      * @param MockClient $mockClient
      * @return $this
      */
-    public function setMockClient(MockClient $mockClient): static
+    public function withMockClient(MockClient $mockClient): static
     {
         $this->mockClient = $mockClient;
 
