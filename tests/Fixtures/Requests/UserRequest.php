@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Http\Request;
+use Saloon\Http\SoloRequest;
 
-class UserRequest extends Request
+class UserRequest extends SoloRequest
 {
     /**
      * Define the HTTP method.
@@ -22,6 +23,6 @@ class UserRequest extends Request
      */
     public function resolveEndpoint(): string
     {
-        return '/user';
+        return 'https://tests.saloon.dev/api/user';
     }
 }
