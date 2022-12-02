@@ -12,7 +12,6 @@ use Saloon\Contracts\Connector;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Helpers\ReflectionHelper;
 use PHPUnit\Framework\Assert as PHPUnit;
-use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Contracts\MockClient as MockClientContract;
 use Saloon\Exceptions\InvalidMockResponseCaptureMethodException;

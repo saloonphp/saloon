@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterRequest;
+use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorBlankRequest;
 use Saloon\Tests\Fixtures\Requests\OverwrittenQueryParameterConnectorRequest;

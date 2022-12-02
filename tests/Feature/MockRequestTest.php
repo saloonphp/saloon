@@ -8,7 +8,6 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\RequestException;
-use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
@@ -17,6 +16,7 @@ use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\AlwaysThrowRequest;
 use Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
 use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
+use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
 use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
 

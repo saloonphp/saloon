@@ -4,23 +4,16 @@ declare(strict_types=1);
 
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Tests\Fixtures\Connectors\CustomBaseUrlConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
-use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Tests\Fixtures\Responses\UserResponse;
 use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Tests\Fixtures\Responses\CustomResponse;
 use Saloon\Exceptions\InvalidResponseClassException;
-use Saloon\Tests\Fixtures\Requests\NoConnectorRequest;
-use Saloon\Tests\Fixtures\Connectors\ExtendedConnector;
 use Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
 use Saloon\Tests\Fixtures\Requests\CustomEndpointRequest;
 use Saloon\Tests\Fixtures\Requests\DefaultEndpointRequest;
-use Saloon\Tests\Fixtures\Requests\InvalidConnectorRequest;
-use Saloon\Tests\Fixtures\Requests\ExtendedConnectorRequest;
+use Saloon\Tests\Fixtures\Connectors\CustomBaseUrlConnector;
 use Saloon\Tests\Fixtures\Connectors\CustomResponseConnector;
-use Saloon\Tests\Fixtures\Connectors\InvalidResponseConnector;
-use Saloon\Tests\Fixtures\Requests\InvalidConnectorClassRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
 use Saloon\Tests\Fixtures\Requests\CustomResponseConnectorRequest;
 

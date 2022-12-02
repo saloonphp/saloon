@@ -6,9 +6,9 @@ use Saloon\Http\Request;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('assertSent works with a request', function () {
     $mockClient = new MockClient([

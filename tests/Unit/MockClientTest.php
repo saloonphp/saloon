@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Exceptions\TestResponseException;
 use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
+use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
 use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
 

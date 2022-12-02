@@ -6,9 +6,9 @@ use GuzzleHttp\Psr7\Response;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\TimeoutRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Connectors\TimeoutConnector;
 
 test('a request is given a default timeout and connect timeout', function () {
