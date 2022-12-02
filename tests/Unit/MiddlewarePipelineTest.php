@@ -21,7 +21,7 @@ test('you can add a request pipe to the middleware', function () {
             $request->headers()->add('X-Pipe-Two', 'Howdy');
         });
 
-    $pendingRequest = (new UserRequest)->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest(new UserRequest);
     $pendingRequest = $pipeline->executeRequestPipeline($pendingRequest);
 
     expect($pendingRequest->headers()->get('X-Pipe-One'))->toEqual('Yee-Haw');
@@ -31,7 +31,7 @@ test('you can add a request pipe to the middleware', function () {
 test('if a request pipe returns a pending request, we will use that in the next step', function () {
     $pipeline = new MiddlewarePipeline;
 
-    $errorRequest = (new ErrorRequest())->createPendingRequest();
+    $errorRequest = connector()->createPendingRequest(new ErrorRequest);
 
     $pipeline
         ->onRequest(function (PendingRequest $request) use ($errorRequest) {
@@ -40,7 +40,7 @@ test('if a request pipe returns a pending request, we will use that in the next 
             return $errorRequest;
         });
 
-    $pendingRequest = (new UserRequest)->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest(new UserRequest);
     $pendingRequest = $pipeline->executeRequestPipeline($pendingRequest);
 
     expect($pendingRequest)->toBe($errorRequest);
@@ -67,7 +67,7 @@ test('you can add a response pipe to the middleware', function () {
             $count++;
         });
 
-    $response = (new UserRequest)->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
     $response = $pipeline->executeResponsePipeline($response);
 
     expect($response)->toBeInstanceOf(Response::class);
@@ -82,14 +82,14 @@ test('if a response pipe returns a response, we will use that in the next step',
 
     $pipeline = new MiddlewarePipeline;
 
-    $errorResponse = (new ErrorRequest())->send($mockClient);
+    $errorResponse = connector()->send(new ErrorRequest, $mockClient);
 
     $pipeline
         ->onResponse(function (Response $response) use ($errorResponse) {
             return $errorResponse;
         });
 
-    $response = (new UserRequest)->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
     $response = $pipeline->executeResponsePipeline($response);
 
     expect($response)->toBe($errorResponse);
@@ -131,7 +131,7 @@ test('a request pipeline is run in order of pipes', function () {
             $names[] = 'Taylor';
         });
 
-    $pendingRequest = (new UserRequest)->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest(new UserRequest);
 
     $pipeline->executeRequestPipeline($pendingRequest);
 
@@ -150,7 +150,7 @@ test('a request pipe can be added to the top of the pipeline', function () {
             $names[] = 'Taylor';
         }, true);
 
-    $pendingRequest = (new UserRequest)->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest(new UserRequest);
 
     $pipeline->executeRequestPipeline($pendingRequest);
 
@@ -174,7 +174,7 @@ test('a response pipe is run in order of the pipes', function () {
             $names[] = 'Taylor';
         });
 
-    $response = (new UserRequest)->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
 
     $pipeline->executeResponsePipeline($response);
 
@@ -198,7 +198,7 @@ test('a response pipe can be added to the top of the pipeline', function () {
             $names[] = 'Taylor';
         }, true);
 
-    $response = (new UserRequest)->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
 
     $pipeline->executeResponsePipeline($response);
 

@@ -18,7 +18,7 @@ test('an asynchronous request will return a saloon response on a successful requ
     ]);
 
     $request = new UserRequest;
-    $promise = $request->sendAsync($mockClient);
+    $promise = connector()->sendAsync($request, $mockClient);
 
     expect($promise)->toBeInstanceOf(PromiseInterface::class);
 
@@ -35,7 +35,7 @@ test('an asynchronous request will throw a saloon exception on an unsuccessful r
     ]);
 
     $request = new UserRequest;
-    $promise = $request->sendAsync($mockClient);
+    $promise = connector()->sendAsync($request, $mockClient);
 
     expect($promise)->toBeInstanceOf(RejectedPromise::class);
 
@@ -59,7 +59,7 @@ test('an asynchronous request will throw an exception if a connection error happ
     ]);
 
     $request = new UserRequest;
-    $promise = $request->sendAsync($mockClient);
+    $promise = connector()->sendAsync($request, $mockClient);
 
     try {
         $promise->wait();
@@ -76,7 +76,7 @@ test('if you chain an asynchronous request you can have a Response', function ()
     ]);
 
     $request = new UserRequest;
-    $promise = $request->sendAsync($mockClient);
+    $promise = connector()->sendAsync($request, $mockClient);
 
     $promise->then(
         function (Response $response) {
@@ -93,7 +93,7 @@ test('if you chain an erroneous asynchronous request the error can be caught in 
     ]);
 
     $request = new UserRequest;
-    $promise = $request->sendAsync($mockClient);
+    $promise = connector()->sendAsync($request, $mockClient);
 
     $promise = $promise->then(
         null,
@@ -115,7 +115,7 @@ test('if a connection exception happens it will be provided in the rejection han
     ]);
 
     $request = new UserRequest;
-    $promise = $request->sendAsync($mockClient);
+    $promise = connector()->sendAsync($request, $mockClient);
 
     $promise = $promise->then(
         null,

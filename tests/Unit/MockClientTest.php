@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Exceptions\NoMockResponseFoundException;
@@ -28,6 +29,9 @@ test('you can create connector mocks', function () {
     $responseA = MockResponse::make(['name' => 'Sammyjo20']);
     $responseB = MockResponse::make(['name' => 'Alex']);
 
+    $connectorA = new TestConnector;
+    $connectorB = new QueryParameterConnector;
+
     $connectorARequest = new UserRequest;
     $connectorBRequest = new QueryParameterConnectorRequest;
 
@@ -36,14 +40,17 @@ test('you can create connector mocks', function () {
         QueryParameterConnector::class => $responseB,
     ]);
 
-    expect($mockClient->guessNextResponse($connectorARequest->createPendingRequest()))->toEqual($responseA);
-    expect($mockClient->guessNextResponse($connectorBRequest->createPendingRequest()))->toEqual($responseB);
+    expect($mockClient->guessNextResponse($connectorA->createPendingRequest($connectorARequest)))->toEqual($responseA);
+    expect($mockClient->guessNextResponse($connectorB->createPendingRequest($connectorBRequest)))->toEqual($responseB);
     expect($mockClient->isEmpty())->toBeFalse();
 });
 
 test('you can create request mocks', function () {
     $responseA = MockResponse::make(['name' => 'Sammyjo20']);
     $responseB = MockResponse::make(['name' => 'Alex']);
+
+    $connectorA = new TestConnector;
+    $connectorB = new QueryParameterConnector;
 
     $requestA = new UserRequest;
     $requestB = new QueryParameterConnectorRequest;
@@ -53,8 +60,8 @@ test('you can create request mocks', function () {
         QueryParameterConnectorRequest::class => $responseB,
     ]);
 
-    expect($mockClient->guessNextResponse($requestA->createPendingRequest()))->toEqual($responseA);
-    expect($mockClient->guessNextResponse($requestB->createPendingRequest()))->toEqual($responseB);
+    expect($mockClient->guessNextResponse($connectorA->createPendingRequest($requestA)))->toEqual($responseA);
+    expect($mockClient->guessNextResponse($connectorB->createPendingRequest($requestB)))->toEqual($responseB);
     expect($mockClient->isEmpty())->toBeFalse();
 });
 
@@ -62,6 +69,9 @@ test('you can create url mocks', function () {
     $responseA = MockResponse::make(['name' => 'Sammyjo20']);
     $responseB = MockResponse::make(['name' => 'Alex']);
     $responseC = MockResponse::make(['name' => 'Sam Carré']);
+
+    $connectorA = new TestConnector;
+    $connectorB = new DifferentServiceConnector;
 
     $requestA = new UserRequest;
     $requestB = new ErrorRequest;
@@ -73,15 +83,18 @@ test('you can create url mocks', function () {
         'google.com/*' => $responseC, // Test Different Route,
     ]);
 
-    expect($mockClient->guessNextResponse($requestA->createPendingRequest()))->toEqual($responseA);
-    expect($mockClient->guessNextResponse($requestB->createPendingRequest()))->toEqual($responseB);
-    expect($mockClient->guessNextResponse($requestC->createPendingRequest()))->toEqual($responseC);
+    expect($mockClient->guessNextResponse($connectorA->createPendingRequest($requestA)))->toEqual($responseA);
+    expect($mockClient->guessNextResponse($connectorA->createPendingRequest($requestB)))->toEqual($responseB);
+    expect($mockClient->guessNextResponse($connectorB->createPendingRequest($requestC)))->toEqual($responseC);
 });
 
 test('you can create wildcard url mocks', function () {
     $responseA = MockResponse::make(['name' => 'Sammyjo20']);
     $responseB = MockResponse::make(['name' => 'Alex']);
     $responseC = MockResponse::make(['name' => 'Sam Carré']);
+
+    $connectorA = new TestConnector;
+    $connectorB = new DifferentServiceConnector;
 
     $requestA = new UserRequest;
     $requestB = new ErrorRequest;
@@ -93,15 +106,18 @@ test('you can create wildcard url mocks', function () {
         '*' => $responseC,
     ]);
 
-    expect($mockClient->guessNextResponse($requestA->createPendingRequest()))->toEqual($responseA);
-    expect($mockClient->guessNextResponse($requestB->createPendingRequest()))->toEqual($responseB);
-    expect($mockClient->guessNextResponse($requestC->createPendingRequest()))->toEqual($responseC);
+    expect($mockClient->guessNextResponse($connectorA->createPendingRequest($requestA)))->toEqual($responseA);
+    expect($mockClient->guessNextResponse($connectorA->createPendingRequest($requestB)))->toEqual($responseB);
+    expect($mockClient->guessNextResponse($connectorB->createPendingRequest($requestC)))->toEqual($responseC);
 });
 
 test('saloon throws an exception if it cant work out the url response', function () {
     $responseA = MockResponse::make(['name' => 'Sammyjo20']);
     $responseB = MockResponse::make(['name' => 'Alex']);
     $responseC = MockResponse::make(['name' => 'Sam Carré']);
+
+    $connectorA = new TestConnector;
+    $connectorB = new DifferentServiceConnector;
 
     $requestA = new UserRequest;
     $requestB = new ErrorRequest;
@@ -112,12 +128,12 @@ test('saloon throws an exception if it cant work out the url response', function
         'tests.saloon.dev/*' => $responseB, // Test Wildcard Routes
     ]);
 
-    expect($mockClient->guessNextResponse($requestA->createPendingRequest()))->toEqual($responseA);
-    expect($mockClient->guessNextResponse($requestB->createPendingRequest()))->toEqual($responseB);
+    expect($mockClient->guessNextResponse($connectorA->createPendingRequest($requestA)))->toEqual($responseA);
+    expect($mockClient->guessNextResponse($connectorA->createPendingRequest($requestB)))->toEqual($responseB);
 
     $this->expectException(NoMockResponseFoundException::class);
 
-    expect($mockClient->guessNextResponse($requestC->createPendingRequest()))->toEqual($responseC);
+    expect($mockClient->guessNextResponse($connectorB->createPendingRequest($requestC)))->toEqual($responseC);
 });
 
 test('you can get an array of the recorded requests', function () {
@@ -127,9 +143,11 @@ test('you can get an array of the recorded requests', function () {
         MockResponse::make(['name' => 'Marcel']),
     ]);
 
-    $responseA = (new UserRequest())->send($mockClient);
-    $responseB = (new UserRequest())->send($mockClient);
-    $responseC = (new UserRequest())->send($mockClient);
+    $connector = new TestConnector;
+
+    $responseA = $connector->send(new UserRequest, $mockClient);
+    $responseB = $connector->send(new UserRequest, $mockClient);
+    $responseC = $connector->send(new UserRequest, $mockClient);
 
     $responses = $mockClient->getRecordedResponses();
 
@@ -147,9 +165,11 @@ test('you can get the last recorded request', function () {
         MockResponse::make(['name' => 'Marcel']),
     ]);
 
-    $responseA = (new UserRequest())->send($mockClient);
-    $responseB = (new UserRequest())->send($mockClient);
-    $responseC = (new UserRequest())->send($mockClient);
+    $connector = new TestConnector;
+
+    $responseA = $connector->send(new UserRequest, $mockClient);
+    $responseB = $connector->send(new UserRequest, $mockClient);
+    $responseC = $connector->send(new UserRequest, $mockClient);
 
     $lastResponse = $mockClient->getLastResponse();
 
@@ -178,8 +198,8 @@ test('if the response is not the last response it will use the loop to find it',
         MockResponse::make(['error' => 'Server Error'], 500),
     ]);
 
-    $responseA = (new ErrorRequest())->send($mockClient);
-    $responseB = (new UserRequest())->send($mockClient);
+    $responseA = connector()->send(new ErrorRequest, $mockClient);
+    $responseB = connector()->send(new UserRequest, $mockClient);
 
     expect($mockClient)->getLastResponse()->toBe($responseB);
 
@@ -198,8 +218,8 @@ test('it will find the response by url if it is not the last response', function
         '/error' => MockResponse::make(['error' => 'Server Error'], 500),
     ]);
 
-    $responseA = (new ErrorRequest())->send($mockClient);
-    $responseB = (new UserRequest())->send($mockClient);
+    $responseA = connector()->send(new ErrorRequest, $mockClient);
+    $responseB = connector()->send(new UserRequest, $mockClient);
 
     expect($mockClient)->getLastResponse()->toBe($responseB);
 
@@ -218,21 +238,16 @@ test('you can mock exceptions with a closure', function () {
         MockResponse::make(['name' => 'Patrick'])->throw(fn ($pendingRequest) => new TestResponseException('Unable to connect!', $pendingRequest)),
     ]);
 
-    $okResponse = (new UserRequest())->send($mockClient);
+    $okResponse = connector()->send(new UserRequest, $mockClient);
 
     expect($okResponse->json())->toEqual(['name' => 'Sam']);
-
-    // TODO: We need to try and standardise creating the request exception in the dispatcher
-    // rather than in the response because this won't throw exceptions, although there is
-    // a RequestException
 
     $this->expectException(TestResponseException::class);
     $this->expectExceptionMessage('Unable to connect!');
 
-    $response = (new UserRequest())->send($mockClient);
-
+    $response = connector()->send(new UserRequest, $mockClient);
     $response->throw();
-})->skip('SAM TODO');
+});
 
 test('you can mock normal exceptions', function () {
     $mockClient = new MockClient([
@@ -242,5 +257,6 @@ test('you can mock normal exceptions', function () {
     $this->expectException(Exception::class);
     $this->expectExceptionMessage('Custom Exception!');
 
-    (new UserRequest())->send($mockClient);
-})->skip('SAM TODO');
+    $response = connector()->send(new UserRequest, $mockClient);
+    $response->throw();
+});

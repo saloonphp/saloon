@@ -15,8 +15,7 @@ test('if a dto does not implement the WithResponse interface and HasResponse tra
         new MockResponse(['name' => 'Sammyjo20', 'actual_name' => 'Sam', 'twitter' => '@carre_sam']),
     ]);
 
-    $request = new DTORequest();
-    $response = $request->send($mockClient);
+    $response = connector()->send(new DTORequest, $mockClient);
     $dto = $response->dto();
 
     expect($dto)->toBeInstanceOf(User::class);
@@ -29,7 +28,7 @@ test('if a dto implements the WithResponse interface and HasResponse trait Saloo
     ]);
 
     $request = new DTOWithResponseRequest();
-    $response = $request->send($mockClient);
+    $response = connector()->send($request, $mockClient);
 
     /** @var UserWithResponse $dto */
     $dto = $response->dto();
