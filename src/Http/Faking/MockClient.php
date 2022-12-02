@@ -12,7 +12,6 @@ use Saloon\Contracts\Connector;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Helpers\ReflectionHelper;
 use PHPUnit\Framework\Assert as PHPUnit;
-use Saloon\Exceptions\InvalidConnectorException;
 use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Contracts\MockClient as MockClientContract;
 use Saloon\Exceptions\InvalidMockResponseCaptureMethodException;
@@ -154,13 +153,13 @@ class MockClient implements MockClientContract
             return $this->mockResponseValue($this->requestResponses[$requestClass], $pendingRequest);
         }
 
-        $connectorClass = get_class($request->connector());
+        $connectorClass = get_class($pendingRequest->getConnector());
 
         if (array_key_exists($connectorClass, $this->connectorResponses)) {
             return $this->mockResponseValue($this->connectorResponses[$connectorClass], $pendingRequest);
         }
 
-        $guessedResponse = $this->guessResponseFromUrl($request);
+        $guessedResponse = $this->guessResponseFromUrl($pendingRequest);
 
         if (! is_null($guessedResponse)) {
             return $this->mockResponseValue($guessedResponse, $pendingRequest);
@@ -176,14 +175,13 @@ class MockClient implements MockClientContract
     /**
      * Guess the response from the URL.
      *
-     * @param Request $request
-     * @return MockResponse|Fixture|callable|null
-     * @throws InvalidConnectorException
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable|null
      */
-    private function guessResponseFromUrl(Request $request): MockResponse|Fixture|callable|null
+    private function guessResponseFromUrl(PendingRequest $pendingRequest): MockResponse|Fixture|callable|null
     {
         foreach ($this->urlResponses as $url => $response) {
-            if (! URLHelper::matches($url, $request->getRequestUrl())) {
+            if (! URLHelper::matches($url, $pendingRequest->getUrl())) {
                 continue;
             }
 
@@ -232,6 +230,16 @@ class MockClient implements MockClientContract
     public function getLastRequest(): ?Request
     {
         return $this->getLastResponse()?->getRequest();
+    }
+
+    /**
+     * Get the last request that the mock manager sent.
+     *
+     * @return Request|null
+     */
+    public function getLastPendingRequest(): ?PendingRequest
+    {
+        return $this->getLastResponse()?->getPendingRequest();
     }
 
     /**
@@ -396,16 +404,16 @@ class MockClient implements MockClientContract
             return null;
         }
 
-        $lastRequest = $this->getLastRequest();
+        $lastPendingRequest = $this->getLastPendingRequest();
 
-        if ($lastRequest instanceof Request && URLHelper::matches($url, $lastRequest->getRequestUrl())) {
+        if ($lastPendingRequest instanceof PendingRequest && URLHelper::matches($url, $lastPendingRequest->getUrl())) {
             return $this->getLastResponse();
         }
 
         foreach ($this->getRecordedResponses() as $response) {
-            $request = $response->getRequest();
+            $pendingRequest = $response->getPendingRequest();
 
-            if (URLHelper::matches($url, $request->getRequestUrl())) {
+            if (URLHelper::matches($url, $pendingRequest->getUrl())) {
                 return $response;
             }
         }

@@ -30,7 +30,7 @@ class DTORequest extends Request
      *
      * @return string
      */
-    protected function defineEndpoint(): string
+    public function resolveEndpoint(): string
     {
         return '/user';
     }

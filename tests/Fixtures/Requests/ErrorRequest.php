@@ -6,7 +6,6 @@ namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class ErrorRequest extends Request
 {
@@ -18,18 +17,11 @@ class ErrorRequest extends Request
     protected string $method = 'GET';
 
     /**
-     * The connector.
-     *
-     * @var string
-     */
-    protected string $connector = TestConnector::class;
-
-    /**
      * Define the endpoint for the request.
      *
      * @return string
      */
-    public function defineEndpoint(): string
+    public function resolveEndpoint(): string
     {
         return '/error';
     }

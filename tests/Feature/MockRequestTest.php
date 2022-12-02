@@ -16,6 +16,7 @@ use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\AlwaysThrowRequest;
 use Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
 use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
+use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
 use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
 
@@ -33,7 +34,10 @@ test('a request can be mocked with a sequence', function () {
         MockResponse::make(['error' => 'Server Unavailable'], 500),
     ]);
 
-    $responseA = (new UserRequest)->send($mockClient);
+    $connector = new TestConnector;
+    $connector->withMockClient($mockClient);
+
+    $responseA = $connector->send(new UserRequest);
 
     expect($responseA)->toBeInstanceOf(Response::class);
     expect($responseA->isMocked())->toBeTrue();
@@ -44,7 +48,7 @@ test('a request can be mocked with a sequence', function () {
     expect($responseA->getSimulatedResponsePayload())->toBeInstanceOf(MockResponse::class);
     expect($responseA->headers()->all())->toEqual(['X-Foo' => 'Bar']);
 
-    $responseB = (new UserRequest)->send($mockClient);
+    $responseB = $connector->send(new UserRequest);
 
     expect($responseB)->toBeInstanceOf(Response::class);
     expect($responseB->isMocked())->toBeTrue();
@@ -54,7 +58,7 @@ test('a request can be mocked with a sequence', function () {
     expect($responseB->status())->toEqual(200);
     expect($responseB->getSimulatedResponsePayload())->toBeInstanceOf(MockResponse::class);
 
-    $responseC = (new UserRequest)->send($mockClient);
+    $responseC = $connector->send(new UserRequest);
 
     expect($responseC)->toBeInstanceOf(Response::class);
     expect($responseC->isMocked())->toBeTrue();
@@ -66,12 +70,15 @@ test('a request can be mocked with a sequence', function () {
 
     $this->expectException(NoMockResponseFoundException::class);
 
-    (new UserRequest)->send($mockClient);
+    $connector->send(new UserRequest);
 });
 
 test('a request can be mocked with a connector defined', function () {
     $responseA = MockResponse::make(['name' => 'Sammyjo20']);
     $responseB = MockResponse::make(['name' => 'Alex']);
+
+    $connectorA = new TestConnector;
+    $connectorB = new QueryParameterConnector;
 
     $connectorARequest = new UserRequest;
     $connectorBRequest = new QueryParameterConnectorRequest;
@@ -81,13 +88,13 @@ test('a request can be mocked with a connector defined', function () {
         QueryParameterConnector::class => $responseB,
     ]);
 
-    $responseA = $connectorARequest->send($mockClient);
+    $responseA = $connectorA->send($connectorARequest, $mockClient);
 
     expect($responseA->isMocked())->toBeTrue();
     expect($responseA->json())->toEqual(['name' => 'Sammyjo20']);
     expect($responseA->status())->toEqual(200);
 
-    $responseB = $connectorBRequest->send($mockClient);
+    $responseB = $connectorB->send($connectorBRequest, $mockClient);
 
     expect($responseB->isMocked())->toBeTrue();
     expect($responseB->json())->toEqual(['name' => 'Alex']);
@@ -98,6 +105,9 @@ test('a request can be mocked with a request defined', function () {
     $responseA = MockResponse::make(['name' => 'Sammyjo20']);
     $responseB = MockResponse::make(['name' => 'Alex']);
 
+    $connectorA = new TestConnector;
+    $connectorB = new QueryParameterConnector;
+
     $requestA = new UserRequest;
     $requestB = new QueryParameterConnectorRequest;
 
@@ -106,13 +116,13 @@ test('a request can be mocked with a request defined', function () {
         QueryParameterConnectorRequest::class => $responseB,
     ]);
 
-    $responseA = $requestA->send($mockClient);
+    $responseA = $connectorA->send($requestA, $mockClient);
 
     expect($responseA->isMocked())->toBeTrue();
     expect($responseA->json())->toEqual(['name' => 'Sammyjo20']);
     expect($responseA->status())->toEqual(200);
 
-    $responseB = $requestB->send($mockClient);
+    $responseB = $connectorB->send($requestB, $mockClient);
 
     expect($responseB->isMocked())->toBeTrue();
     expect($responseB->json())->toEqual(['name' => 'Alex']);
@@ -124,6 +134,9 @@ test('a request can be mocked with a url defined', function () {
     $responseB = MockResponse::make(['name' => 'Alex']);
     $responseC = MockResponse::make(['error' => 'Server Broken'], 500);
 
+    $connectorA = new TestConnector;
+    $connectorB = new DifferentServiceConnector;
+
     $requestA = new UserRequest;
     $requestB = new ErrorRequest;
     $requestC = new DifferentServiceUserRequest;
@@ -134,19 +147,19 @@ test('a request can be mocked with a url defined', function () {
         'google.com/*' => $responseC, // Test Different Route,
     ]);
 
-    $responseA = $requestA->send($mockClient);
+    $responseA = $connectorA->send($requestA, $mockClient);
 
     expect($responseA->isMocked())->toBeTrue();
     expect($responseA->json())->toEqual(['name' => 'Sammyjo20']);
     expect($responseA->status())->toEqual(200);
 
-    $responseB = $requestB->send($mockClient);
+    $responseB = $connectorA->send($requestB, $mockClient);
 
     expect($responseB->isMocked())->toBeTrue();
     expect($responseB->json())->toEqual(['name' => 'Alex']);
     expect($responseB->status())->toEqual(200);
 
-    $responseC = $requestC->send($mockClient);
+    $responseC = $connectorB->send($requestC, $mockClient);
 
     expect($responseC->isMocked())->toBeTrue();
     expect($responseC->json())->toEqual(['error' => 'Server Broken']);
@@ -158,6 +171,9 @@ test('you can create wildcard url mocks', function () {
     $responseB = MockResponse::make(['name' => 'Alex']);
     $responseC = MockResponse::make(['error' => 'Server Broken'], 500);
 
+    $connectorA = new TestConnector;
+    $connectorB = new DifferentServiceConnector;
+
     $requestA = new UserRequest;
     $requestB = new ErrorRequest;
     $requestC = new DifferentServiceUserRequest;
@@ -168,19 +184,19 @@ test('you can create wildcard url mocks', function () {
         '*' => $responseC,
     ]);
 
-    $responseA = $requestA->send($mockClient);
+    $responseA = $connectorA->send($requestA, $mockClient);
 
     expect($responseA->isMocked())->toBeTrue();
     expect($responseA->json())->toEqual(['name' => 'Sammyjo20']);
     expect($responseA->status())->toEqual(200);
 
-    $responseB = $requestB->send($mockClient);
+    $responseB = $connectorA->send($requestB, $mockClient);
 
     expect($responseB->isMocked())->toBeTrue();
     expect($responseB->json())->toEqual(['name' => 'Alex']);
     expect($responseB->status())->toEqual(200);
 
-    $responseC = $requestC->send($mockClient);
+    $responseC = $connectorB->send($requestC, $mockClient);
 
     expect($responseC->isMocked())->toBeTrue();
     expect($responseC->json())->toEqual(['error' => 'Server Broken']);
@@ -190,11 +206,11 @@ test('you can create wildcard url mocks', function () {
 test('you can use a closure for the mock response', function () {
     $sequenceMock = new MockClient([
         function (PendingRequest $pendingRequest): MockResponse {
-            return new MockResponse(['request' => $pendingRequest->getRequest()->getRequestUrl()]);
+            return new MockResponse(['request' => $pendingRequest->getUrl()]);
         },
     ]);
 
-    $sequenceResponse = UserRequest::make()->send($sequenceMock);
+    $sequenceResponse = connector()->send(new UserRequest, $sequenceMock);
 
     expect($sequenceResponse->isMocked())->toBeTrue();
     expect($sequenceResponse->json())->toEqual(['request' => 'https://tests.saloon.dev/api/user']);
@@ -203,11 +219,11 @@ test('you can use a closure for the mock response', function () {
 
     $connectorMock = new MockClient([
         TestConnector::class => function (PendingRequest $pendingRequest): MockResponse {
-            return new MockResponse(['request' => $pendingRequest->getRequest()->getRequestUrl()]);
+            return new MockResponse(['request' => $pendingRequest->getUrl()]);
         },
     ]);
 
-    $connectorResponse = UserRequest::make()->send($connectorMock);
+    $connectorResponse = connector()->send(new UserRequest, $connectorMock);
 
     expect($connectorResponse->isMocked())->toBeTrue();
     expect($connectorResponse->json())->toEqual(['request' => 'https://tests.saloon.dev/api/user']);
@@ -216,11 +232,11 @@ test('you can use a closure for the mock response', function () {
 
     $requestMock = new MockClient([
         UserRequest::class => function (PendingRequest $pendingRequest): MockResponse {
-            return new MockResponse(['request' => $pendingRequest->getRequest()->getRequestUrl()]);
+            return new MockResponse(['request' => $pendingRequest->getUrl()]);
         },
     ]);
 
-    $requestResponse = UserRequest::make()->send($requestMock);
+    $requestResponse = connector()->send(new UserRequest, $requestMock);
 
     expect($requestResponse->isMocked())->toBeTrue();
     expect($requestResponse->json())->toEqual(['request' => 'https://tests.saloon.dev/api/user']);
@@ -229,11 +245,11 @@ test('you can use a closure for the mock response', function () {
 
     $urlMock = new MockClient([
         'tests.saloon.dev/*' => function (PendingRequest $pendingRequest): MockResponse {
-            return new MockResponse(['request' => $pendingRequest->getRequest()->getRequestUrl()]);
+            return new MockResponse(['request' => $pendingRequest->getUrl()]);
         },
     ]);
 
-    $urlResponse = UserRequest::make()->send($urlMock);
+    $urlResponse = connector()->send(new UserRequest, $urlMock);
 
     expect($urlResponse->isMocked())->toBeTrue();
     expect($urlResponse->json())->toEqual(['request' => 'https://tests.saloon.dev/api/user']);
@@ -244,7 +260,7 @@ test('you can use a callable class as the mock response', function () {
         UserRequest::class => new CallableMockResponse,
     ]);
 
-    $sequenceResponse = UserRequest::make()->send($mockClient);
+    $sequenceResponse = connector()->send(new UserRequest, $mockClient);
 
     expect($sequenceResponse->isMocked())->toBeTrue();
     expect($sequenceResponse->json())->toEqual(['request_class' => UserRequest::class]);
@@ -256,7 +272,7 @@ test('a fixture can be used with a mock sequence', function () {
         MockResponse::fixture('user'),
     ]);
 
-    $responseA = UserRequest::make()->send($mockClient);
+    $responseA = connector()->send(new UserRequest, $mockClient);
 
     expect($responseA->isMocked())->toBeFalse();
     expect($responseA->status())->toEqual(200);
@@ -266,7 +282,7 @@ test('a fixture can be used with a mock sequence', function () {
         'twitter' => '@carre_sam',
     ]);
 
-    $responseB = UserRequest::make()->send($mockClient);
+    $responseB = connector()->send(new UserRequest, $mockClient);
 
     expect($responseB->isMocked())->toBeTrue();
     expect($responseB->status())->toEqual(200);
@@ -282,7 +298,7 @@ test('a fixture can be used with a connector mock', function () {
         TestConnector::class => MockResponse::fixture('connector'),
     ]);
 
-    $responseA = UserRequest::make()->send($mockClient);
+    $responseA = connector()->send(new UserRequest, $mockClient);
 
     expect($responseA->isMocked())->toBeFalse();
     expect($responseA->status())->toEqual(200);
@@ -292,7 +308,7 @@ test('a fixture can be used with a connector mock', function () {
         'twitter' => '@carre_sam',
     ]);
 
-    $responseB = UserRequest::make()->send($mockClient);
+    $responseB = connector()->send(new UserRequest, $mockClient);
 
     expect($responseB->isMocked())->toBeTrue();
     expect($responseB->status())->toEqual(200);
@@ -304,7 +320,7 @@ test('a fixture can be used with a connector mock', function () {
 
     // Even though it's a different request, it should use the same fixture
 
-    $responseC = ErrorRequest::make()->send($mockClient);
+    $responseC = connector()->send(new ErrorRequest, $mockClient);
 
     expect($responseC->isMocked())->toBeTrue();
     expect($responseC->status())->toEqual(200);
@@ -322,7 +338,7 @@ test('a fixture can be used with a request mock', function () use ($filesystem) 
 
     expect($filesystem->fileExists('user.json'))->toBeFalse();
 
-    $responseA = UserRequest::make()->send($mockClient);
+    $responseA = connector()->send(new UserRequest, $mockClient);
 
     expect($responseA->isMocked())->toBeFalse();
     expect($responseA->status())->toEqual(200);
@@ -334,7 +350,7 @@ test('a fixture can be used with a request mock', function () use ($filesystem) 
 
     expect($filesystem->fileExists('user.json'))->toBeTrue();
 
-    $responseB = UserRequest::make()->send($mockClient);
+    $responseB = connector()->send(new UserRequest, $mockClient);
 
     expect($responseB->isMocked())->toBeTrue();
     expect($responseB->status())->toEqual(200);
@@ -354,7 +370,7 @@ test('a fixture can be used with a url mock', function () use ($filesystem) {
     expect($filesystem->fileExists('user.json'))->toBeFalse();
     expect($filesystem->fileExists('other.json'))->toBeFalse();
 
-    $responseA = UserRequest::make()->send($mockClient);
+    $responseA = connector()->send(new UserRequest, $mockClient);
 
     expect($filesystem->fileExists('user.json'))->toBeTrue();
     expect($filesystem->fileExists('other.json'))->toBeFalse();
@@ -367,7 +383,7 @@ test('a fixture can be used with a url mock', function () use ($filesystem) {
         'twitter' => '@carre_sam',
     ]);
 
-    $responseB = ErrorRequest::make()->send($mockClient);
+    $responseB = connector()->send(new ErrorRequest, $mockClient);
 
     expect($filesystem->fileExists('user.json'))->toBeTrue();
     expect($filesystem->fileExists('other.json'))->toBeTrue();
@@ -380,7 +396,7 @@ test('a fixture can be used with a url mock', function () use ($filesystem) {
 
     // This should use the first mock
 
-    $responseC = UserRequest::make()->send($mockClient);
+    $responseC = connector()->send(new UserRequest, $mockClient);
 
     expect($responseC->isMocked())->toBeTrue();
     expect($responseC->status())->toEqual(200);
@@ -392,7 +408,7 @@ test('a fixture can be used with a url mock', function () use ($filesystem) {
 
     // Another error request should use the "other" mock
 
-    $responseD = ErrorRequest::make()->send($mockClient);
+    $responseD = connector()->send(new ErrorRequest, $mockClient);
 
     expect($responseD->isMocked())->toBeTrue();
     expect($responseD->status())->toEqual(500);
@@ -406,7 +422,7 @@ test('a fixture can be used with a wildcard url mock', function () {
         '*' => MockResponse::fixture('user'), // Test Exact Route
     ]);
 
-    $responseA = UserRequest::make()->send($mockClient);
+    $responseA = connector()->send(new UserRequest, $mockClient);
 
     expect($responseA->isMocked())->toBeFalse();
     expect($responseA->status())->toEqual(200);
@@ -416,7 +432,7 @@ test('a fixture can be used with a wildcard url mock', function () {
         'twitter' => '@carre_sam',
     ]);
 
-    $responseB = ErrorRequest::make()->send($mockClient);
+    $responseB = connector()->send(new ErrorRequest, $mockClient);
 
     expect($responseB->isMocked())->toBeTrue();
     expect($responseB->status())->toEqual(200);
@@ -441,7 +457,7 @@ test('a fixture can be used within a closure mock', function () use ($filesystem
     expect($filesystem->fileExists('user.json'))->toBeFalse();
     expect($filesystem->fileExists('other.json'))->toBeFalse();
 
-    $responseA = UserRequest::make()->send($mockClient);
+    $responseA = connector()->send(new UserRequest, $mockClient);
 
     expect($responseA->isMocked())->toBeFalse();
     expect($responseA->status())->toEqual(200);
@@ -451,7 +467,7 @@ test('a fixture can be used within a closure mock', function () use ($filesystem
         'twitter' => '@carre_sam',
     ]);
 
-    $responseB = UserRequest::make()->send($mockClient);
+    $responseB = connector()->send(new UserRequest, $mockClient);
 
     expect($responseB->isMocked())->toBeTrue();
     expect($responseB->status())->toEqual(200);
@@ -463,7 +479,7 @@ test('a fixture can be used within a closure mock', function () use ($filesystem
 
     // Now we'll test a different route
 
-    $responseC = ErrorRequest::make()->send($mockClient);
+    $responseC = connector()->send(new ErrorRequest, $mockClient);
 
     expect($responseC->isMocked())->toBeFalse();
     expect($responseC->status())->toEqual(500);
@@ -473,7 +489,7 @@ test('a fixture can be used within a closure mock', function () use ($filesystem
 
     // Another error request should use the "other" mock
 
-    $responseD = ErrorRequest::make()->send($mockClient);
+    $responseD = connector()->send(new ErrorRequest, $mockClient);
 
     expect($responseD->isMocked())->toBeTrue();
     expect($responseD->status())->toEqual(500);
@@ -490,7 +506,7 @@ test('when using the AlwaysThrowRequest trait the response recorder will still r
     $exception = null;
 
     try {
-        AlwaysThrowRequest::make()->send($mockClient);
+        connector()->send(new AlwaysThrowRequest, $mockClient);
     } catch (Exception $exception) {
         //
     }

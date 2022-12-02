@@ -4,23 +4,26 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Request;
 
+use Saloon\Contracts\Sender;
+use Saloon\Contracts\Response;
 use Saloon\Contracts\Connector;
-use Saloon\Exceptions\InvalidConnectorException;
+use Saloon\Http\PendingRequest;
+use Saloon\Contracts\MockClient;
+use GuzzleHttp\Promise\PromiseInterface;
 
 trait HasConnector
 {
     /**
      * The loaded connector used in requests.
      *
-     * @var Connector|null
+     * @var \Saloon\Contracts\Connector|null
      */
     private ?Connector $loadedConnector = null;
 
     /**
-     * Retrieve the loaded connector.
+     *  Retrieve the loaded connector.
      *
-     * @return Connector
-     * @throws InvalidConnectorException
+     * @return \Saloon\Contracts\Connector
      */
     public function connector(): Connector
     {
@@ -44,14 +47,52 @@ trait HasConnector
      * Create a new connector instance.
      *
      * @return Connector
-     * @throws InvalidConnectorException
      */
     protected function resolveConnector(): Connector
     {
-        if (empty($this->connector) || ! class_exists($this->connector)) {
-            throw new InvalidConnectorException;
-        }
-
         return new $this->connector;
+    }
+
+    /**
+     * Access the HTTP sender
+     *
+     * @return \Saloon\Contracts\Sender
+     */
+    public function sender(): Sender
+    {
+        return $this->connector()->sender();
+    }
+
+    /**
+     * Create a pending request
+     *
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return \Saloon\Http\PendingRequest
+     */
+    public function createPendingRequest(MockClient $mockClient = null): PendingRequest
+    {
+        return $this->connector()->createPendingRequest($this, $mockClient);
+    }
+
+    /**
+     * Send a request synchronously
+     *
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return \Saloon\Contracts\Response
+     */
+    public function send(MockClient $mockClient = null): Response
+    {
+        return $this->connector()->send($this, $mockClient);
+    }
+
+    /**
+     * Send a request asynchronously
+     *
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function sendAsync(MockClient $mockClient = null): PromiseInterface
+    {
+        return $this->connector()->sendAsync($this, $mockClient);
     }
 }

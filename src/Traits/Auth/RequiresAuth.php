@@ -34,6 +34,6 @@ trait RequiresAuth
      */
     protected function getRequiresAuthMessage(PendingRequest $pendingRequest): string
     {
-        return sprintf('The "%s" request requires authentication. Please provide an authenticator using the `withAuth` method or return a default authenticator in your connector/request.', $pendingRequest->getRequest()::class);
+        return sprintf('The "%s" request requires authentication.', $pendingRequest->getRequest()::class);
     }
 }

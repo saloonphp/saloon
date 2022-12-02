@@ -5,23 +5,26 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Http\Request;
+use Saloon\Traits\Request\HasConnector;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class TrailingSlashRequest extends Request
+class HasConnectorUserRequest extends Request
 {
-    /**
-     * Define the method that the request will use.
-     *
-     * @var string|null
-     */
-    protected string $method = 'GET';
+    use HasConnector;
 
     /**
-     * The connector.
+     * Define connector
      *
-     * @var string|null
+     * @var string
      */
     protected string $connector = TestConnector::class;
+
+    /**
+     * Define the HTTP method.
+     *
+     * @var string
+     */
+    protected string $method = 'GET';
 
     /**
      * Define the endpoint for the request.
@@ -30,6 +33,6 @@ class TrailingSlashRequest extends Request
      */
     public function resolveEndpoint(): string
     {
-        return '/';
+        return '/user';
     }
 }

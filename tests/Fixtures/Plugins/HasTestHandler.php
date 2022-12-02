@@ -21,7 +21,9 @@ trait HasTestHandler
      */
     public function bootHasTestHandler(PendingRequest $pendingRequest)
     {
-        $this->sender()->addMiddleware(function (callable $handler) {
+        $connector = $pendingRequest->getConnector();
+
+        $connector->sender()->addMiddleware(function (callable $handler) {
             return function (RequestInterface $request, array $options) use ($handler) {
                 $promise = $handler($request, $options);
 

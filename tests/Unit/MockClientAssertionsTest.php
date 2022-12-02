@@ -8,13 +8,14 @@ use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('assertSent works with a request', function () {
     $mockClient = new MockClient([
         UserRequest::class => MockResponse::make(['name' => 'Sam']),
     ]);
 
-    (new UserRequest())->send($mockClient);
+    connector()->send(new UserRequest, $mockClient);
 
     $mockClient->assertSent(UserRequest::class);
 });
@@ -26,7 +27,7 @@ test('assertSent works with a closure', function () {
     ]);
 
     $originalRequest = new UserRequest();
-    $originalResponse = $originalRequest->send($mockClient);
+    $originalResponse = connector()->send($originalRequest, $mockClient);
 
     $mockClient->assertSent(function ($request, $response) use ($originalRequest, $originalResponse) {
         expect($request)->toBeInstanceOf(Request::class);
@@ -39,7 +40,7 @@ test('assertSent works with a closure', function () {
     });
 
     $newRequest = new ErrorRequest();
-    $newResponse = $newRequest->send($mockClient);
+    $newResponse = connector()->send($newRequest, $mockClient);
 
     $mockClient->assertSent(function ($request, $response) use ($newRequest, $newResponse) {
         expect($request)->toBeInstanceOf(Request::class);
@@ -57,7 +58,7 @@ test('assertSent works with a url', function () {
         UserRequest::class => MockResponse::make(['name' => 'Sam']),
     ]);
 
-    (new UserRequest())->send($mockClient);
+    connector()->send(new UserRequest, $mockClient);
 
     $mockClient->assertSent('saloon.dev/*');
     $mockClient->assertSent('/user');
@@ -70,7 +71,7 @@ test('assertNotSent works with a request', function () {
         ErrorRequest::class => MockResponse::make(['error' => 'Server Error'], 500),
     ]);
 
-    (new ErrorRequest())->send($mockClient);
+    connector()->send(new ErrorRequest, $mockClient);
 
     $mockClient->assertNotSent(UserRequest::class);
 });
@@ -82,7 +83,7 @@ test('assertNotSent works with a closure', function () {
     ]);
 
     $originalRequest = new ErrorRequest();
-    $originalResponse = $originalRequest->send($mockClient);
+    $originalResponse = connector()->send($originalRequest, $mockClient);
 
     $mockClient->assertNotSent(function ($request) {
         return $request instanceof UserRequest;
@@ -94,7 +95,7 @@ test('assertNotSent works with a url', function () {
         UserRequest::class => MockResponse::make(['name' => 'Sam']),
     ]);
 
-    (new UserRequest())->send($mockClient);
+    connector()->send(new UserRequest, $mockClient);
 
     $mockClient->assertNotSent('google.com/*');
     $mockClient->assertNotSent('/error');
@@ -105,7 +106,7 @@ test('assertSentJson works properly', function () {
         UserRequest::class => MockResponse::make(['name' => 'Sam']),
     ]);
 
-    (new UserRequest())->send($mockClient);
+    connector()->send(new UserRequest, $mockClient);
 
     $mockClient->assertSentJson(UserRequest::class, [
         'name' => 'Sam',
@@ -119,9 +120,11 @@ test('assertSentJson works with multiple requests in history', function () {
         MockResponse::make(['name' => 'Marcel']),
     ]);
 
-    (new UserRequest())->send($mockClient);
-    (new UserRequest())->send($mockClient);
-    (new UserRequest())->send($mockClient);
+    $connector = new TestConnector;
+
+    $connector->send(new UserRequest, $mockClient);
+    $connector->send(new UserRequest, $mockClient);
+    $connector->send(new UserRequest, $mockClient);
 
     $mockClient->assertSentJson(UserRequest::class, [
         'name' => 'Sam',
@@ -151,9 +154,11 @@ test('assertSentCount works properly', function () {
         MockResponse::make(['name' => 'Marcel']),
     ]);
 
-    (new UserRequest())->send($mockClient);
-    (new UserRequest())->send($mockClient);
-    (new UserRequest())->send($mockClient);
+    $connector = new TestConnector;
+
+    $connector->send(new UserRequest, $mockClient);
+    $connector->send(new UserRequest, $mockClient);
+    $connector->send(new UserRequest, $mockClient);
 
     $mockClient->assertSentCount(3);
 });
@@ -165,9 +170,11 @@ test('assertSent with a closure works with more than one request in the history'
         MockResponse::make(['name' => 'Marcel'], 204),
     ]);
 
-    (new UserRequest())->send($mockClient);
-    (new UserRequest())->send($mockClient);
-    (new UserRequest())->send($mockClient);
+    $connector = new TestConnector;
+
+    $connector->send(new UserRequest, $mockClient);
+    $connector->send(new UserRequest, $mockClient);
+    $connector->send(new UserRequest, $mockClient);
 
     $mockClient->assertSent(function ($request, $response) {
         return $response->json() === ['name' => 'Sam'] && $response->status() === 200;

@@ -26,6 +26,7 @@ declare(strict_types=1);
 |
 */
 
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 expect()->extend('toBeOne', function () {
     return $this->toBe(1);
@@ -45,4 +46,9 @@ expect()->extend('toBeOne', function () {
 function apiUrl()
 {
     return 'https://tests.saloon.dev/api';
+}
+
+function connector(): TestConnector
+{
+    return new TestConnector;
 }

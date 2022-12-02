@@ -8,6 +8,7 @@ use Saloon\Enums\Method;
 use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Sender;
 use Saloon\Contracts\Request;
+use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\Connector;
 use Saloon\Helpers\Environment;
@@ -16,6 +17,7 @@ use Saloon\Helpers\PluginHelper;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\WithBody;
+use Saloon\Helpers\ReflectionHelper;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Traits\Auth\AuthenticatesRequests;
@@ -24,6 +26,7 @@ use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
+use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Laravel\Http\Middleware\FrameworkMiddleware;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
@@ -87,20 +90,20 @@ class PendingRequest implements PendingRequestContract
     /**
      * Build up the request payload.
      *
+     * @param \Saloon\Contracts\Connector $connector
      * @param \Saloon\Contracts\Request $request
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\PendingRequestException
      */
-    public function __construct(Request $request, MockClient $mockClient = null)
+    public function __construct(Connector $connector, Request $request, MockClient $mockClient = null)
     {
-        $connector = $request->connector();
-
         $this->request = $request;
         $this->connector = $connector;
-        $this->url = $request->getRequestUrl();
+        $this->url = $this->resolveRequestUrl();
         $this->method = Method::upperFrom($request->getMethod());
-        $this->responseClass = $request->getResponseClass();
+        $this->responseClass = $this->resolveResponseClass();
         $this->mockClient = $mockClient ?? ($request->getMockClient() ?? $connector->getMockClient());
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
 
@@ -399,6 +402,47 @@ class PendingRequest implements PendingRequestContract
     }
 
     /**
+     * Build up the full request URL.
+     *
+     * @return string
+     */
+    protected function resolveRequestUrl(): string
+    {
+        return URLHelper::join($this->connector->resolveBaseUrl(), $this->request->resolveEndpoint());
+    }
+
+    /**
+     * Get the response class
+     *
+     * @return string
+     * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
+     */
+    protected function resolveResponseClass(): string
+    {
+        $baseResponse = $this->connector->sender()->getResponseClass();
+        $response = $this->request->resolveResponseClass();
+
+        if (empty($response)) {
+            $response = $this->connector->resolveResponseClass();
+        }
+
+        if (empty($response)) {
+            $response = $baseResponse;
+        }
+
+        if (! class_exists($response)) {
+            throw new InvalidResponseClassException;
+        }
+
+        if (! ReflectionHelper::isSubclassOf($response, $baseResponse)) {
+            throw new InvalidResponseClassException(sprintf('The custom response must extend the "%s" class.', $baseResponse));
+        }
+
+        return $response;
+    }
+
+    /**
      * Send the PendingRequest
      *
      * @return \Saloon\Contracts\Response
@@ -416,5 +460,16 @@ class PendingRequest implements PendingRequestContract
     public function sendAsync(): PromiseInterface
     {
         return (new Dispatcher($this, true))->execute();
+    }
+
+    /**
+     * Create a data object from the response
+     *
+     * @param \Saloon\Contracts\Response $response
+     * @return mixed
+     */
+    public function createDtoFromResponse(Response $response): mixed
+    {
+        return $this->request->createDtoFromResponse($response) ?? $this->connector->createDtoFromResponse($response);
     }
 }

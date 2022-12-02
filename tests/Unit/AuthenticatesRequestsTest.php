@@ -8,7 +8,7 @@ test('you can add basic auth to a request', function () {
     $request = new UserRequest;
     $request->withBasicAuth('Sammyjo20', 'Cowboy1');
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest($request);
     $config = $pendingRequest->config()->all();
 
     expect($config['auth'])->toBeArray();
@@ -20,7 +20,7 @@ test('you can add digest auth to a request', function () {
     $request = new UserRequest;
     $request->withDigestAuth('Sammyjo20', 'Cowboy1', 'Howdy');
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest($request);
     $config = $pendingRequest->config()->all();
 
     expect($config['auth'])->toBeArray();
@@ -32,7 +32,7 @@ test('you can add digest auth to a request', function () {
 test('you can attach an authorization token to a request', function () {
     $request = UserRequest::make()->withTokenAuth('Sammyjo20');
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest($request);
     $headers = $pendingRequest->headers()->all();
 
     expect($headers)->toHaveKey('Authorization', 'Bearer Sammyjo20');
@@ -41,7 +41,7 @@ test('you can attach an authorization token to a request', function () {
 test('you can add a token to a query parameter', function () {
     $request = UserRequest::make()->withQueryAuth('token', 'Sammyjo20');
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest($request);
     $query = $pendingRequest->query()->all();
 
     expect($query)->toHaveKey('token', 'Sammyjo20');

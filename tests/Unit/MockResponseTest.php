@@ -41,7 +41,7 @@ test('a response can have a method added to it', function () {
         return 'Yee-haw!';
     });
 
-    $response = $request->send($mockClient);
+    $response = connector()->send($request, $mockClient);
 
     expect($response->yeehaw())->toEqual('Yee-haw!');
 });
@@ -50,7 +50,7 @@ test('a response can be a custom response class', function () {
     $mockClient = new MockClient([MockResponse::make(['foo' => 'bar'])]);
     $request = new UserRequestWithCustomResponse();
 
-    $response = $request->send($mockClient);
+    $response = connector()->send($request, $mockClient);
 
     expect($response)->toBeInstanceOf(UserResponse::class);
     expect($response)->customCastMethod()->toBeInstanceOf(UserData::class);

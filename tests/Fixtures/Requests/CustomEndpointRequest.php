@@ -24,11 +24,18 @@ class CustomEndpointRequest extends Request
     protected string $endpoint = '';
 
     /**
+     * Method
+     *
+     * @var string
+     */
+    protected string $method = 'GET';
+
+    /**
      * Define the endpoint for the request.
      *
      * @return string
      */
-    protected function defineEndpoint(): string
+    public function resolveEndpoint(): string
     {
         return $this->endpoint;
     }

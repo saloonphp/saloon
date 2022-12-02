@@ -16,8 +16,8 @@ test('you can provide a mock client on a connector and all requests will be mock
     $connector = new TestConnector;
     $connector->withMockClient($mockClient);
 
-    $responseA = $connector->request(new UserRequest)->send();
-    $responseB = $connector->request(new UserRequest)->send();
+    $responseA = $connector->send(new UserRequest);
+    $responseB = $connector->send(new UserRequest);
 
     expect($responseA->isMocked())->toBeTrue();
     expect($responseB->isMocked())->toBeTrue();
@@ -31,7 +31,7 @@ test('you can provide a mock client on a request and all requests will be mocked
     $request = new UserRequest;
     $request->withMockClient($mockClient);
 
-    $response = $request->send();
+    $response = connector()->send($request);
 
     expect($response->isMocked())->toBeTrue();
 });
@@ -51,7 +51,7 @@ test('request mock clients are always prioritied', function () {
     $request = new UserRequest;
     $request->withMockClient($mockClientB);
 
-    $response = $request->send();
+    $response = $connector->send($request);
 
     expect($response->isMocked())->toBeTrue();
     expect($response->json())->toEqual(['name' => 'Mantas']);

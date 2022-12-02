@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterRequest;
+use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorBlankRequest;
 use Saloon\Tests\Fixtures\Requests\OverwrittenQueryParameterConnectorRequest;
@@ -13,7 +14,7 @@ test('a request with query params added sends the query params', function () {
 
     $request->query()->add('sort', '-created_at');
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest($request);
 
     $query = $pendingRequest->query()->all();
 
@@ -28,7 +29,7 @@ test('if setQuery is used, all other default query params wont be included', fun
         'sort' => 'nickname',
     ]);
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest($request);
     $query = $pendingRequest->query()->all();
 
     expect($query)->toEqual(['sort' => 'nickname']);
@@ -37,7 +38,7 @@ test('if setQuery is used, all other default query params wont be included', fun
 test('a connector can have query that is set', function () {
     $request = new QueryParameterConnectorRequest();
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = (new QueryParameterConnector)->createPendingRequest($request);
     $query = $pendingRequest->query()->all();
 
     expect($query)->toHaveKey('sort', 'first_name'); // Added by connector
@@ -47,7 +48,7 @@ test('a connector can have query that is set', function () {
 test('a request query parameter can overwrite a connectors parameter', function () {
     $request = new OverwrittenQueryParameterConnectorRequest();
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest($request);
     $query = $pendingRequest->query()->all();
 
     expect($query)->toEqual(['sort' => 'date_of_birth']);
@@ -58,7 +59,7 @@ test('manually overwriting query parameter in runtime can overwrite connector pa
 
     $request->query()->add('sort', 'custom_field');
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest($request);
     $query = $pendingRequest->query()->all();
 
     expect($query)->toEqual(['sort' => 'custom_field']);
@@ -69,7 +70,7 @@ test('manually overwriting query parameter in runtime can overwrite request para
 
     $request->query()->add('per_page', 500);
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest($request);
     $query = $pendingRequest->query()->all();
 
     expect($query)->toEqual(['per_page' => 500]);
@@ -78,7 +79,7 @@ test('manually overwriting query parameter in runtime can overwrite request para
 test('when not sending query parameters, the query option is not set', function () {
     $request = new UserRequest();
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest($request);
     $query = $pendingRequest->query()->all();
 
     expect($query)->toBeEmpty();

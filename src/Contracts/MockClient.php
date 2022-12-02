@@ -71,6 +71,13 @@ interface MockClient
     public function getLastRequest(): ?Request;
 
     /**
+     * Get the last request that the mock manager sent.
+     *
+     * @return \Saloon\Contracts\PendingRequest|null
+     */
+    public function getLastPendingRequest(): ?PendingRequest;
+
+    /**
      * Get the last response that the mock manager sent.
      *
      * @return Response|null

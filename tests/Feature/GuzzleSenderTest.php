@@ -13,10 +13,11 @@ use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('the guzzle sender will send to the right url using the correct method', function () {
+    $connector = new TestConnector;
     $request = new UserRequest;
-    $sender = $request->connector()->sender();
+    $sender = $connector->sender();
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = $connector->createPendingRequest($request);
 
     $sender->addMiddleware(function (callable $handler) use ($pendingRequest) {
         return function (RequestInterface $request, array $options) use ($handler, $pendingRequest) {
@@ -33,10 +34,11 @@ test('the guzzle sender will send to the right url using the correct method', fu
         };
     });
 
-    $request->send();
+    $connector->send($request);
 });
 
 test('the guzzle sender will send all headers, query parameters and config', function () {
+    $connector = connector();
     $request = new UserRequest;
 
     $request->config()->add('timeout', 120);
@@ -46,7 +48,7 @@ test('the guzzle sender will send all headers, query parameters and config', fun
     $request->headers()->add('X-Bound-For', 'South-Australia');
     $request->headers()->add('X-Fancy', ['keyOne' => 'valOne', 'keyTwo' => 'valTwo']);
 
-    $sender = $request->connector()->sender();
+    $sender = $connector->sender();
 
     $sender->addMiddleware(function (callable $handler) {
         return function (RequestInterface $request, array $options) use ($handler) {
@@ -62,7 +64,7 @@ test('the guzzle sender will send all headers, query parameters and config', fun
         };
     });
 
-    $request->send();
+    $connector->send($request);
 });
 
 test('the guzzle sender has the default handler stack configured by default', function () {

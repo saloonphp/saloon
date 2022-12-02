@@ -27,7 +27,7 @@ class GetAccessTokenRequest extends Request implements WithBody
      *
      * @return string
      */
-    public function defineEndpoint(): string
+    public function resolveEndpoint(): string
     {
         return $this->oauthConfig->getTokenEndpoint();
     }
