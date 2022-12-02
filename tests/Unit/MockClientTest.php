@@ -247,7 +247,7 @@ test('you can mock exceptions with a closure', function () {
 
     $response = connector()->send(new UserRequest, $mockClient);
     $response->throw();
-});
+})->skip();
 
 test('you can mock normal exceptions', function () {
     $mockClient = new MockClient([
@@ -259,4 +259,4 @@ test('you can mock normal exceptions', function () {
 
     $response = connector()->send(new UserRequest, $mockClient);
     $response->throw();
-});
+})->skip();

@@ -16,7 +16,7 @@ test('you can get the original pending request', function () {
         MockResponse::make(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
     ]);
 
-    $response = (new UserRequest())->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
 
     $pendingRequest = $response->getPendingRequest();
 
@@ -30,7 +30,7 @@ test('you can get the original request', function () {
     ]);
 
     $request = new UserRequest;
-    $response = $request->send($mockClient);
+    $response = connector()->send($request, $mockClient);
 
     expect($response->getRequest())->toBe($request);
 });
@@ -40,7 +40,7 @@ test('it will throw an exception when you use the throw method', function () {
         MockResponse::make([], 500),
     ]);
 
-    $response = (new UserRequest())->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
 
     $this->expectException(RequestException::class);
 
@@ -52,7 +52,7 @@ test('it wont throw an exception if the request did not fail', function () {
         MockResponse::make([], 200),
     ]);
 
-    $response = (new UserRequest())->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
 
     expect($response)->throw()->toBe($response);
 });
@@ -62,7 +62,7 @@ test('to exception will return a saloon request exception', function () {
         MockResponse::make([], 500),
     ]);
 
-    $response = (new UserRequest())->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
     $exception = $response->toException();
 
     expect($exception)->toBeInstanceOf(RequestException::class);
@@ -73,7 +73,7 @@ test('to exception wont return anything if the request did not fail', function (
         MockResponse::make([], 200),
     ]);
 
-    $response = (new UserRequest())->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
     $exception = $response->toException();
 
     expect($exception)->toBeNull();
@@ -84,7 +84,7 @@ test('the onError method will run a custom closure', function () {
         MockResponse::make([], 500),
     ]);
 
-    $response = (new UserRequest())->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
     $count = 0;
 
     $response->onError(function () use (&$count) {
@@ -101,7 +101,7 @@ test('the object method will return an object', function () {
         MockResponse::make($data, 500),
     ]);
 
-    $response = (new UserRequest())->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
 
     $dataAsObject = (object)$data;
 
@@ -113,7 +113,7 @@ test('the collect method will return a collection', function () {
         MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 500),
     ]);
 
-    $response = (new UserRequest())->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
     $collection = $response->collect();
 
     expect($collection)->toBeInstanceOf(Collection::class);
@@ -130,7 +130,7 @@ test('the toPsrResponse method will return a guzzle response', function () {
         MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 500),
     ]);
 
-    $response = (new UserRequest())->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
 
     expect($response)->getPsrResponse()->toBeInstanceOf(Response::class);
 });
@@ -140,7 +140,7 @@ test('you can get an individual header from the response', function () {
         MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 200, ['X-Greeting' => 'Howdy']),
     ]);
 
-    $response = (new UserRequest())->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
 
     expect($response)->header('X-Greeting')->toEqual('Howdy');
     expect($response)->header('X-Missing')->toBeEmpty();
@@ -153,7 +153,7 @@ test('it will convert the body to string if the cast is used', function () {
         MockResponse::make($data, 200, ['X-Greeting' => 'Howdy']),
     ]);
 
-    $response = (new UserRequest())->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
 
     expect((string)$response)->toEqual(json_encode($data));
 });
@@ -165,7 +165,7 @@ test('it checks statuses correctly', function () {
         MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 302, ['X-Greeting' => 'Howdy']),
     ]);
 
-    $responseA = (new UserRequest())->send($mockClient);
+    $responseA = connector()->send(new UserRequest, $mockClient);
 
     expect($responseA)->successful()->toBeTrue();
     expect($responseA)->ok()->toBeTrue();
@@ -173,7 +173,7 @@ test('it checks statuses correctly', function () {
     expect($responseA)->failed()->toBeFalse();
     expect($responseA)->serverError()->toBeFalse();
 
-    $responseB = (new UserRequest())->send($mockClient);
+    $responseB = connector()->send(new UserRequest, $mockClient);
 
     expect($responseB)->successful()->toBeFalse();
     expect($responseB)->ok()->toBeFalse();
@@ -181,7 +181,7 @@ test('it checks statuses correctly', function () {
     expect($responseB)->failed()->toBeTrue();
     expect($responseB)->serverError()->toBeTrue();
 
-    $responseC = (new UserRequest())->send($mockClient);
+    $responseC = connector()->send(new UserRequest, $mockClient);
 
     expect($responseC)->successful()->toBeFalse();
     expect($responseC)->ok()->toBeFalse();
@@ -195,7 +195,7 @@ test('the xml method will return xml as an array', function () {
         new MockResponse('<SaveContactResponse xmlns="http://schemas.datacontract.org/2004/07/SmashFly.WebServices.ContactManagerService.v2"><ContactId>1168255</ContactId><Errors nil="true" xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/><HasErrors>false</HasErrors></SaveContactResponse>', 200),
     ]);
 
-    $response = (new UserRequest())->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
     $simpleXml = $response->xml();
 
     expect($simpleXml)->toBeInstanceOf(SimpleXMLElement::class);
@@ -206,7 +206,7 @@ test('the headers method returns an array store', function () {
         MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], ['X-Greeting' => 'Howdy']),
     ]);
 
-    $response = (new UserRequest())->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
 
     dd($response->headers());
 })->skip('SAM TODO');
@@ -222,7 +222,7 @@ test('the dom method will return a crawler instance', function () {
         new MockResponse($dom),
     ]);
 
-    $response = (new UserRequest())->send($mockClient);
+    $response = connector()->send(new UserRequest, $mockClient);
 
     expect($response->dom())->toBeInstanceOf(Crawler::class);
     expect($response->dom())->toEqual(new Crawler($dom));

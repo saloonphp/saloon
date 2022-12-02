@@ -61,15 +61,3 @@ test('it will throw an exception if the sender does not implement the sender int
 
     $connector->sender();
 });
-
-test('you can access the sender from the request', function () {
-    $request = new UserRequest;
-
-    $sender = $request->sender();
-
-    expect($sender)->toBeInstanceOf(GuzzleSender::class);
-
-    // Test the same instance is re-used
-
-    expect($request->sender())->toBe($sender);
-});
