@@ -36,5 +36,5 @@ test('you can throw an exception if the fixture does not exist', function () {
         MockResponse::fixture('example'),
     ]);
 
-    UserRequest::make()->send($mockClient);
+    connector()->send(new UserRequest, $mockClient);
 })->throws(FixtureMissingException::class, 'The fixture "example.json" could not be found in storage.');

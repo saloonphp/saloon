@@ -424,7 +424,11 @@ class PendingRequest implements PendingRequestContract
         $response = $this->request->resolveResponseClass();
 
         if (empty($response)) {
-            $response = $this instanceof Request ? $this->connector->resolveResponseClass() : $baseResponse;
+            $response = $this->connector->resolveResponseClass();
+        }
+
+        if (empty($response)) {
+            $response = $baseResponse;
         }
 
         if (! class_exists($response)) {

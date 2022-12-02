@@ -8,7 +8,7 @@ use Saloon\Tests\Fixtures\Requests\UserRequestWithBootPlugin;
 test('a plugin boot method has access to the request', function () {
     $request = new UserRequestWithBootPlugin(1, 2);
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest($request);
     $headers = $pendingRequest->headers()->all();
 
     expect($headers)->toHaveKey('X-Plugin-User-Id', 1);
@@ -18,7 +18,7 @@ test('a plugin boot method has access to the request', function () {
 test('sub-request does not need to use plugins', function () {
     $request = new SubRequest(1, 2);
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = connector()->createPendingRequest($request);
     $headers = $pendingRequest->headers()->all();
 
     expect($headers)->toHaveKey('X-Plugin-User-Id', 1);

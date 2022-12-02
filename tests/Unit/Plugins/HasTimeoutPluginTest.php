@@ -6,14 +6,16 @@ use GuzzleHttp\Psr7\Response;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\TimeoutRequest;
 use Saloon\Tests\Fixtures\Connectors\TimeoutConnector;
 
 test('a request is given a default timeout and connect timeout', function () {
+    $connector = new TestConnector;
     $request = UserRequest::make();
 
-    $request->sender()->addMiddleware(function (callable $handler) {
+    $connector->sender()->addMiddleware(function (callable $handler) {
         return function (RequestInterface $request, array $options) use ($handler) {
             expect($options['connect_timeout'])->toEqual(10);
             expect($options['timeout'])->toEqual(30);
@@ -22,12 +24,12 @@ test('a request is given a default timeout and connect timeout', function () {
         };
     }, 'test');
 
-    $request->send();
+    $connector->send($request);
 });
 
 test('a request can set a timeout and connect timeout', function () {
-    $requestManager = new TimeoutRequest;
-    $pendingRequest = $requestManager->createPendingRequest();
+    $request = new TimeoutRequest;
+    $pendingRequest = connector()->createPendingRequest($request);
 
     $config = $pendingRequest->config()->all();
 
@@ -36,9 +38,9 @@ test('a request can set a timeout and connect timeout', function () {
 });
 
 test('a connector is given a default timeout and connect timeout', function () {
-    $request = (new UserRequest)->setConnector(new TimeoutConnector);
+    $connector = new TimeoutConnector;
 
-    $request->sender()->addMiddleware(function (callable $handler) {
+    $connector->sender()->addMiddleware(function (callable $handler) {
         return function (RequestInterface $request, array $options) use ($handler) {
             expect($options['connect_timeout'])->toEqual(10.0);
             expect($options['timeout'])->toEqual(5.0);
@@ -47,12 +49,12 @@ test('a connector is given a default timeout and connect timeout', function () {
         };
     });
 
-    $pendingRequest = $request->createPendingRequest();
+    $pendingRequest = $connector->createPendingRequest(new UserRequest);
 
     $config = $pendingRequest->config()->all();
 
     expect($config)->toHaveKey('connect_timeout', 10);
     expect($config)->toHaveKey('timeout', 5);
 
-    $request->send();
+    $connector->send(new UserRequest);
 });

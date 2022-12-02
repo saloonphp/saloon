@@ -24,4 +24,13 @@ class UserRequest extends Request
     {
         return '/user';
     }
+
+    /**
+     * @param int|null $userId
+     * @param int|null $groupId
+     */
+    public function __construct(public ?int $userId = null, public ?int $groupId = null)
+    {
+        //
+    }
 }
