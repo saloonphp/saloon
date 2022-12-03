@@ -6,7 +6,7 @@ namespace Saloon\Traits\Responses;
 
 use Throwable;
 use SimpleXMLElement;
-use Illuminate\Support\Arr;
+use Saloon\Helpers\Arr;
 use Illuminate\Support\Collection;
 use Saloon\Exceptions\RequestException;
 use Symfony\Component\DomCrawler\Crawler;
