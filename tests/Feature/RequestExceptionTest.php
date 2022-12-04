@@ -7,15 +7,15 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Exception\ServerException;
 use Saloon\Exceptions\Request\RequestException;
-use Saloon\Tests\Fixtures\Connectors\BadResponseConnector;
-use Saloon\Tests\Fixtures\Connectors\CustomExceptionConnector;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Tests\Fixtures\Exceptions\ConnectorRequestException;
-use Saloon\Tests\Fixtures\Exceptions\CustomRequestException;
-use Saloon\Tests\Fixtures\Requests\BadResponseRequest;
-use Saloon\Tests\Fixtures\Requests\CustomExceptionUserRequest;
-use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Requests\BadResponseRequest;
+use Saloon\Tests\Fixtures\Connectors\BadResponseConnector;
+use Saloon\Tests\Fixtures\Exceptions\CustomRequestException;
+use Saloon\Tests\Fixtures\Connectors\CustomExceptionConnector;
+use Saloon\Tests\Fixtures\Requests\CustomExceptionUserRequest;
+use Saloon\Tests\Fixtures\Exceptions\ConnectorRequestException;
 
 test('you can use the to exception method to get the default RequestException exception with GuzzleSender', function () {
     $response = TestConnector::make()->send(new ErrorRequest);

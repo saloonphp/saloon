@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Contracts\Response;
-use Saloon\Http\Connector;
-use Saloon\Tests\Fixtures\Exceptions\ConnectorRequestException;
-use Saloon\Traits\Plugins\AcceptsJson;
 use Throwable;
+use Saloon\Http\Connector;
+use Saloon\Contracts\Response;
+use Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\Tests\Fixtures\Exceptions\ConnectorRequestException;
 
 class CustomExceptionConnector extends Connector
 {

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Contracts\Response;
-use Saloon\Http\Request;
-use Saloon\Tests\Fixtures\Exceptions\CustomRequestException;
 use Throwable;
+use Saloon\Http\Request;
+use Saloon\Contracts\Response;
+use Saloon\Tests\Fixtures\Exceptions\CustomRequestException;
 
 class CustomExceptionUserRequest extends Request
 {
