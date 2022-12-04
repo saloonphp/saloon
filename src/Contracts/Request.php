@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
+use Saloon\Contracts\ArrayStore as ArrayStoreContract;
+
 interface Request
 {
     /**
@@ -128,6 +130,13 @@ interface Request
      * @return \Saloon\Contracts\ArrayStore
      */
     public function headers(): ArrayStore;
+
+    /**
+     * Access the query parameters
+     *
+     * @return ArrayStoreContract
+     */
+    public function query(): ArrayStoreContract;
 
     /**
      * Access the middleware pipeline
