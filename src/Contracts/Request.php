@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 use Throwable;
+use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
 interface Request
 {

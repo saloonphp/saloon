@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Saloon\Http;
 
 use Saloon\Traits\Bootable;
-use Saloon\Traits\HandlesExceptions;
 use Saloon\Traits\Makeable;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
+use Saloon\Traits\HandlesExceptions;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;

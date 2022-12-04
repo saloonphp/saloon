@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use GuzzleHttp\Promise\PromiseInterface;
 use Throwable;
+use GuzzleHttp\Promise\PromiseInterface;
 
 interface Connector
 {

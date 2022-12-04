@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use Saloon\Http\Responses\Response;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\Request\RequestException;
-use Saloon\Http\Responses\Response;
-use Saloon\Tests\Fixtures\Requests\SoloErrorRequest;
 use Saloon\Tests\Fixtures\Requests\SoloUserRequest;
+use Saloon\Tests\Fixtures\Requests\SoloErrorRequest;
 
 test('a solo request can be sent synchronously', function () {
     $request = new SoloUserRequest;

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Saloon\Http;
 
 use Saloon\Traits\Bootable;
-use Saloon\Traits\HandlesExceptions;
 use Saloon\Traits\Makeable;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Traits\Connector\HasPool;
+use Saloon\Traits\HandlesExceptions;
 use Saloon\Traits\Request\BuildsUrls;
 use Saloon\Traits\Connector\HasSender;
 use Saloon\Traits\Connector\SendsRequests;

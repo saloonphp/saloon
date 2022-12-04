@@ -1,13 +1,15 @@
 <?php
 
-use GuzzleHttp\Exception\ServerException;
+declare(strict_types=1);
+
 use Saloon\Contracts\Response;
-use Saloon\Exceptions\Request\RequestException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use GuzzleHttp\Exception\ServerException;
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('you can use the to exception method to get the default RequestException exception with GuzzleSender', function () {
     $response = TestConnector::make()->send(new ErrorRequest);
@@ -61,7 +63,7 @@ test('it throws exceptions properly with promises with GuzzleSender', function (
 
     try {
         $promise->wait();
-    }  catch (Throwable $exception) {
+    } catch (Throwable $exception) {
         expect($correctInstance)->toBeTrue();
         expect($exception)->toBeInstanceOf(RequestException::class);
         expect($exception->getResponse())->toBeInstanceOf(Response::class);
@@ -79,7 +81,7 @@ test('it throws exceptions properly with promises', function () {
 
     try {
         $promise->wait();
-    }  catch (Throwable $exception) {
+    } catch (Throwable $exception) {
         expect($exception)->toBeInstanceOf(RequestException::class);
         expect($exception->getResponse())->toBeInstanceOf(Response::class);
         expect($exception->getMessage())->toEqual($exception->getResponse()->body());

@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Http\Senders;
 
+use Throwable;
+use Saloon\Contracts\Sender;
+use Saloon\Http\Responses\Response;
+use Saloon\Contracts\PendingRequest;
+use Saloon\Http\Faking\MockResponse;
+use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Promise\RejectedPromise;
-use Saloon\Contracts\PendingRequest;
-use Saloon\Contracts\Sender;
 use Saloon\Contracts\Response as ResponseContract;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\Responses\Response;
-use Throwable;
 
 class SimulatedSender implements Sender
 {
