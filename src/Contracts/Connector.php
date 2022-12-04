@@ -215,7 +215,8 @@ interface Connector
     public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequest;
 
     /**
-     * Determine if the request has failed
+     * Determine if we should throw an exception if the `$response->throw()` is used
+     * or when AlwaysThrowOnErrors is used.
      *
      * @param \Saloon\Contracts\Response $response
      * @return bool
@@ -223,7 +224,7 @@ interface Connector
     public function shouldThrowRequestException(Response $response): bool;
 
     /**
-     * Handle the request exception.
+     * Get the request exception.
      *
      * @param \Saloon\Contracts\Response $response
      * @param \Throwable|null $senderException

@@ -231,7 +231,7 @@ trait HasResponseHelpers
      */
     public function toException(): ?Throwable
     {
-        if ($this->successful()) {
+        if (! $this->failed()) {
             return null;
         }
 
