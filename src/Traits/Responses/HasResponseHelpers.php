@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
-use Throwable;
-use SimpleXMLElement;
-use Saloon\Helpers\Arr;
 use Illuminate\Support\Collection;
-use Saloon\Exceptions\RequestException;
-use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Contracts\DataObjects\WithResponse;
+use Saloon\Exceptions\Request\RequestException;
+use Saloon\Helpers\Arr;
 use Saloon\Http\Faking\SimulatedResponsePayload;
+use SimpleXMLElement;
+use Symfony\Component\DomCrawler\Crawler;
+use Throwable;
 
 trait HasResponseHelpers
 {
@@ -184,7 +184,9 @@ trait HasResponseHelpers
      */
     public function failed(): bool
     {
-        return $this->serverError() || $this->clientError();
+        $pendingRequest = $this->getPendingRequest();
+
+        return $pendingRequest->getRequest()->shouldThrowRequestException($this) || $pendingRequest->getConnector()->shouldThrowRequestException($this);
     }
 
     /**
@@ -244,7 +246,21 @@ trait HasResponseHelpers
      */
     protected function createException(string $body): Throwable
     {
-        return new RequestException($this, $body, 0, $this->getRequestException());
+        $pendingRequest = $this->getPendingRequest();
+        $senderException = $this->getSenderException();
+
+        // We'll first check if the user has defined their own exception handlers.
+        // We'll prioritise the request over the connector.
+
+        $exception = $pendingRequest->getRequest()->getRequestException($this, $senderException) ?? $pendingRequest->getConnector()->getRequestException($this, $senderException);
+
+        if ($exception instanceof Throwable) {
+            return $exception;
+        }
+
+        // Otherwise, we'll throw our own request.
+
+        return new RequestException($this, $body, 0, $this->getSenderException());
     }
 
     /**

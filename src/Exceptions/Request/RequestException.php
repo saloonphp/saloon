@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Exceptions;
+namespace Saloon\Exceptions\Request;
 
-use Throwable;
 use Saloon\Contracts\Response;
+use Saloon\Exceptions\SaloonException;
+use Throwable;
 
 class RequestException extends SaloonException
 {
@@ -19,12 +20,12 @@ class RequestException extends SaloonException
     /**
      * Create the RequestException
      *
-     * @param Response $response
+     * @param \Saloon\Contracts\Response $response
      * @param $message
      * @param $code
-     * @param Throwable|null $previous
+     * @param \Throwable|null $previous
      */
-    public function __construct(Response $response, $message = '', $code = 0, Throwable $previous = null)
+    public function __construct(Response $response, $message = '', $code = 0, ?Throwable $previous = null)
     {
         $this->response = $response;
 

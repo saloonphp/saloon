@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use Saloon\Contracts\Response;
-use Saloon\Http\Faking\MockClient;
-use Saloon\Contracts\PendingRequest;
-use Saloon\Http\Faking\MockResponse;
-use GuzzleHttp\Promise\RejectedPromise;
-use Saloon\Exceptions\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Tests\Fixtures\Requests\UserRequest;
+use GuzzleHttp\Promise\RejectedPromise;
+use Saloon\Contracts\PendingRequest;
+use Saloon\Contracts\Response;
+use Saloon\Exceptions\Request\RequestException;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Exceptions\TestResponseException;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('an asynchronous request will return a saloon response on a successful request', function () {
     $mockClient = new MockClient([

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Contracts;
 
 use GuzzleHttp\Promise\PromiseInterface;
+use Throwable;
 
 interface Connector
 {
@@ -212,4 +213,21 @@ interface Connector
      * @return \Saloon\Contracts\PendingRequest
      */
     public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequest;
+
+    /**
+     * Determine if the request has failed
+     *
+     * @param \Saloon\Contracts\Response $response
+     * @return bool
+     */
+    public function shouldThrowRequestException(Response $response): bool;
+
+    /**
+     * Handle the request exception.
+     *
+     * @param \Saloon\Contracts\Response $response
+     * @param \Throwable|null $senderException
+     * @return \Throwable|null
+     */
+    public function getRequestException(Response $response, ?Throwable $senderException): ?Throwable;
 }

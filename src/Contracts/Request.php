@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Contracts;
 
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
+use Throwable;
 
 interface Request
 {
@@ -174,4 +175,21 @@ interface Request
      * @return static
      */
     public static function make(...$arguments): static;
+
+    /**
+     * Determine if the request has failed
+     *
+     * @param \Saloon\Contracts\Response $response
+     * @return bool
+     */
+    public function shouldThrowRequestException(Response $response): bool;
+
+    /**
+     * Handle the request exception.
+     *
+     * @param \Saloon\Contracts\Response $response
+     * @param \Throwable|null $senderException
+     * @return \Throwable|null
+     */
+    public function getRequestException(Response $response, ?Throwable $senderException): ?Throwable;
 }

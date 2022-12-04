@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Http;
 
 use Saloon\Traits\Bootable;
+use Saloon\Traits\HandlesExceptions;
 use Saloon\Traits\Makeable;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
@@ -20,6 +21,7 @@ abstract class Request implements RequestContract
     use HasRequestProperties;
     use CastDtoFromResponse;
     use HasCustomResponses;
+    use HandlesExceptions;
     use HasMockClient;
     use Conditionable;
     use Bootable;

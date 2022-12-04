@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Psr7\Response;
-use Saloon\Http\PendingRequest;
 use Illuminate\Support\Collection;
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Exceptions\RequestException;
-use Symfony\Component\DomCrawler\Crawler;
+use Saloon\Http\PendingRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Symfony\Component\DomCrawler\Crawler;
 
 test('you can get the original pending request', function () {
     $mockClient = new MockClient([

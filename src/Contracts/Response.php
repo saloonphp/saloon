@@ -225,11 +225,11 @@ interface Response
     public function getSimulatedResponsePayload(): ?SimulatedResponsePayload;
 
     /**
-     * Get the original request exception
+     * Get the original sender exception
      *
      * @return Throwable|null
      */
-    public function getRequestException(): ?Throwable;
+    public function getSenderException(): ?Throwable;
 
     /**
      * Get the raw response

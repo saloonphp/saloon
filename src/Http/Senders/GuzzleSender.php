@@ -5,24 +5,24 @@ declare(strict_types=1);
 namespace Saloon\Http\Senders;
 
 use Exception;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
-use Saloon\Contracts\Sender;
-use GuzzleHttp\RequestOptions;
-use Saloon\Http\Responses\Response;
-use Saloon\Contracts\PendingRequest;
 use GuzzleHttp\Client as GuzzleClient;
-use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
-use Saloon\Exceptions\FatalRequestException;
-use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\TransferException;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\RequestOptions;
+use Psr\Http\Message\ResponseInterface;
+use Saloon\Contracts\PendingRequest;
+use Saloon\Contracts\Response as ResponseContract;
+use Saloon\Contracts\Sender;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Http\Responses\Response;
 use Saloon\Repositories\Body\FormBodyRepository;
 use Saloon\Repositories\Body\JsonBodyRepository;
-use Saloon\Contracts\Response as ResponseContract;
-use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Repositories\Body\MultipartBodyRepository;
+use Saloon\Repositories\Body\StringBodyRepository;
 
 class GuzzleSender implements Sender
 {
@@ -90,10 +90,11 @@ class GuzzleSender implements Sender
     /**
      * Send a request
      *
-     * @param PendingRequest $pendingRequest
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @param bool $asynchronous
-     * @return ResponseContract|PromiseInterface
-     * @throws GuzzleException
+     * @return \Saloon\Contracts\Response|\GuzzleHttp\Promise\PromiseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Saloon\Exceptions\Request\FatalRequestException
      */
     public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): ResponseContract|PromiseInterface
     {
@@ -105,9 +106,10 @@ class GuzzleSender implements Sender
     /**
      * Send a synchronous request.
      *
-     * @param PendingRequest $pendingRequest
-     * @return ResponseContract
-     * @throws GuzzleException
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return \Saloon\Contracts\Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Saloon\Exceptions\Request\FatalRequestException
      */
     protected function sendSynchronousRequest(PendingRequest $pendingRequest): ResponseContract
     {
@@ -116,7 +118,17 @@ class GuzzleSender implements Sender
 
         try {
             $guzzleResponse = $this->client->send($guzzleRequest, $guzzleRequestOptions);
-        } catch (BadResponseException $exception) {
+        } catch (TransferException $exception) {
+            // When the exception wasn't a RequestException, we'll throw a fatal
+            // exception as this is likely a ConnectException, but it will
+            // catch any new ones Guzzle release.
+
+            if (! $exception instanceof RequestException) {
+                throw new FatalRequestException($exception, $pendingRequest);
+            }
+
+            // Otherwise, we'll create a response.
+
             return $this->createResponse($pendingRequest, $exception->getResponse(), $exception);
         }
 
@@ -221,16 +233,22 @@ class GuzzleSender implements Sender
 
                     return $this->createResponse($pendingRequest, $guzzleResponse);
                 },
-                function (GuzzleException $guzzleException) use ($pendingRequest) {
-                    // If the exception was a connect exception, we should return that in the
-                    // promise instead rather than trying to convert it into a
-                    // Response, since there was no response.
+                function (TransferException $guzzleException) use ($pendingRequest) {
+                    // When the exception wasn't a RequestException, we'll throw a fatal
+                    // exception as this is likely a ConnectException, but it will
+                    // catch any new ones Guzzle release.
 
                     if (! $guzzleException instanceof RequestException) {
                         throw new FatalRequestException($guzzleException, $pendingRequest);
                     }
 
+                    // Otherwise we'll create a response to convert into an exception.
+                    // This will run the exception through the exception handlers
+                    // which allows the user to handle their own exceptions.
+
                     $response = $this->createResponse($pendingRequest, $guzzleException->getResponse(), $guzzleException);
+
+                    // Throw the exception our way
 
                     throw $response->toException();
                 }

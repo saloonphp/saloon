@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Saloon\Exceptions\RequestException;
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\AlwaysThrowRequest;
 
 test('it always throws an error if the plugin has been added', function () {

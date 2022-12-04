@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Responses\Response;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Exceptions\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Tests\Fixtures\Responses\UserData;
-use Saloon\Tests\Fixtures\Requests\UserRequest;
-use Saloon\Tests\Fixtures\Requests\ErrorRequest;
-use Saloon\Tests\Fixtures\Responses\UserResponse;
+use Saloon\Exceptions\Request\RequestException;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\Responses\Response;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
+use Saloon\Tests\Fixtures\Responses\UserData;
+use Saloon\Tests\Fixtures\Responses\UserResponse;
 
 test('an asynchronous request can be made successfully', function () {
     $promise = TestConnector::make()->sendAsync(new UserRequest);

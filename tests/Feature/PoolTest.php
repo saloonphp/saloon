@@ -2,19 +2,18 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\PendingRequest;
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Responses\Response;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Exceptions\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Exception\ConnectException;
-use Saloon\Exceptions\FatalRequestException;
-use Saloon\Tests\Fixtures\Requests\UserRequest;
-use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Contracts\Response as ResponseContract;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Exceptions\Request\RequestException;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingRequest;
+use Saloon\Http\Responses\Response;
 use Saloon\Tests\Fixtures\Connectors\InvalidConnectionConnector;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('you can create a pool on a connector', function () {
     $connector = new TestConnector;
@@ -77,7 +76,7 @@ test('if a pool has a request that cannot connect it will be caught in the handl
 
     $pool->withExceptionHandler(function (FatalRequestException $ex) use (&$count) {
         expect($ex)->toBeInstanceOf(FatalRequestException::class);
-        expect($ex->getPrevious())->toBeInstanceOf(ConnectException::class);
+        expect($ex->getPrevious())->toBeInstanceOf(FatalRequestException::class);
         expect($ex->getPendingRequest())->toBeInstanceOf(PendingRequest::class);
 
         $count++;

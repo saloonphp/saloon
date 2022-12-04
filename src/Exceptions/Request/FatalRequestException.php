@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Exceptions;
+namespace Saloon\Exceptions\Request;
 
-use Throwable;
 use Saloon\Contracts\PendingRequest;
+use Saloon\Exceptions\SaloonException;
+use Throwable;
 
 class FatalRequestException extends SaloonException
 {
@@ -27,16 +28,6 @@ class FatalRequestException extends SaloonException
         parent::__construct($originalException->getMessage(), $originalException->getCode(), $originalException);
 
         $this->pendingSaloonRequest = $pendingRequest;
-    }
-
-    /**
-     * Get the original exception.
-     *
-     * @return Throwable
-     */
-    public function getOriginalException(): Throwable
-    {
-        return $this->getPrevious();
     }
 
     /**
