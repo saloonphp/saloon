@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
+use Saloon\Exceptions\Request\ClientException;
+use Saloon\Exceptions\Request\ServerException;
+use Saloon\Helpers\StatusCodeHelper;
 use Throwable;
 use SimpleXMLElement;
 use Saloon\Helpers\Arr;
@@ -235,16 +238,15 @@ trait HasResponseHelpers
             return null;
         }
 
-        return $this->createException($this->body());
+        return $this->createException();
     }
 
     /**
      * Create the request exception
      *
-     * @param string $body
-     * @return Throwable
+     * @return \Throwable
      */
-    protected function createException(string $body): Throwable
+    protected function createException(): Throwable
     {
         $pendingRequest = $this->getPendingRequest();
         $senderException = $this->getSenderException();
@@ -260,7 +262,21 @@ trait HasResponseHelpers
 
         // Otherwise, we'll throw our own request.
 
-        return new RequestException($this, $body, 0, $this->getSenderException());
+        $exceptionClass = StatusCodeHelper::getResponseException($this->status());
+
+        // When we cannot find the custom response exception we will use
+        // either a server exception or a client exception.
+
+        if (is_null($exceptionClass)) {
+            $exceptionClass = match (true) {
+                $this->serverError() => ServerException::class,
+                $this->clientError() => ClientException::class,
+            };
+        }
+
+        // Create the exception
+
+        return new $exceptionClass($this, null, 0, $this->getSenderException());
     }
 
     /**

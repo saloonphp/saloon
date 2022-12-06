@@ -24,6 +24,8 @@ test('you can use the to exception method to get the default RequestException ex
 
     $exception = $response->toException();
 
+    dd($exception);
+
     expect($exception)->toBeInstanceOf(RequestException::class);
     expect($exception->getMessage())->toEqual($response->body());
     expect($exception->getPrevious())->toBeInstanceOf(ServerException::class);
