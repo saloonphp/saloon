@@ -43,7 +43,7 @@ class RequestException extends SaloonException
             $rawBody = $response->body();
             $exceptionBodyMessage = mb_strlen($rawBody) > $this->maxBodyLength ? mb_substr($rawBody, 0, $this->maxBodyLength) : $rawBody;
 
-            $message = sprintf('%s (%s) - %s', $statusCodeMessage, $status, $exceptionBodyMessage);
+            $message = sprintf('%s (%s) Response: %s', $statusCodeMessage, $status, $exceptionBodyMessage);
         }
 
         parent::__construct($message, $code, $previous);

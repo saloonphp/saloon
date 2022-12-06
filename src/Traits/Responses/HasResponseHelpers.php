@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
+use Saloon\Exceptions\Request\RequestException;
 use Throwable;
 use SimpleXMLElement;
 use Saloon\Helpers\Arr;
@@ -270,6 +271,7 @@ trait HasResponseHelpers
             $exceptionClass = match (true) {
                 $this->serverError() => ServerException::class,
                 $this->clientError() => ClientException::class,
+                default => RequestException::class,
             };
         }
 

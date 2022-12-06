@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 use Saloon\Contracts\Response;
+use Saloon\Exceptions\Request\ClientException;
+use Saloon\Exceptions\Request\InternalServerErrorException;
+use Saloon\Exceptions\Request\ServerException as SaloonServerException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Exception\ServerException;
@@ -24,10 +27,9 @@ test('you can use the to exception method to get the default RequestException ex
 
     $exception = $response->toException();
 
-    dd($exception);
-
-    expect($exception)->toBeInstanceOf(RequestException::class);
-    expect($exception->getMessage())->toEqual($response->body());
+    expect($exception)->toBeInstanceOf(InternalServerErrorException::class);
+    expect($exception)->toBeInstanceOf(SaloonServerException::class);
+    expect($exception->getMessage())->toEqual('Internal Server Error (500) - ' . $response->body());
     expect($exception->getPrevious())->toBeInstanceOf(ServerException::class);
 
     $this->expectExceptionObject($exception);
@@ -46,8 +48,9 @@ test('you can use the to exception method to get the default RequestException ex
 
     $exception = $response->toException();
 
-    expect($exception)->toBeInstanceOf(RequestException::class);
-    expect($exception->getMessage())->toEqual($response->body());
+    expect($exception)->toBeInstanceOf(InternalServerErrorException::class);
+    expect($exception)->toBeInstanceOf(SaloonServerException::class);
+    expect($exception->getMessage())->toEqual('Internal Server Error (500) - ' . $response->body());
 
     // Previous is null with the SimulatedSender
 
@@ -75,14 +78,14 @@ test('it throws exceptions properly with promises with GuzzleSender', function (
         expect($correctInstance)->toBeTrue();
         expect($exception)->toBeInstanceOf(RequestException::class);
         expect($exception->getResponse())->toBeInstanceOf(Response::class);
-        expect($exception->getMessage())->toEqual($exception->getResponse()->body());
+        expect($exception->getMessage())->toEqual('Internal Server Error (500) - ' . $exception->getResponse()->body());
         expect($exception->getPrevious())->toBeInstanceOf(ServerException::class);
     }
 });
 
 test('it throws exceptions properly with promises', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['message' => 'Server Error'], 500),
+        MockResponse::make(['message' => 'Bad Request'], 422),
     ]);
 
     $promise = TestConnector::make()->sendAsync(new ErrorRequest, $mockClient);
@@ -90,16 +93,14 @@ test('it throws exceptions properly with promises', function () {
     try {
         $promise->wait();
     } catch (Throwable $exception) {
-        expect($exception)->toBeInstanceOf(RequestException::class);
+        dd($exception);
+
+        expect($exception)->toBeInstanceOf(ClientException::class);
         expect($exception->getResponse())->toBeInstanceOf(Response::class);
-        expect($exception->getMessage())->toEqual($exception->getResponse()->body());
+        expect($exception->getMessage())->toEqual('Unprocessable Entity (422) - ' . $exception->getResponse()->body());
         expect($exception->getPrevious())->toBeNull();
     }
 });
-
-test('it throws different exceptions based for common status codes', function () {
-    //
-})->skip('To look at after review');
 
 test('you can customise the exception handler on a connector', function () {
     $mockClient = new MockClient([
@@ -154,7 +155,7 @@ test('you can customise if saloon should throw an exception on a connector', fun
 
     expect($exceptionB)->toBeInstanceOf(RequestException::class);
     expect($exceptionB->getResponse())->toBeInstanceOf(Response::class);
-    expect($exceptionB->getMessage())->toEqual($exceptionB->getResponse()->body());
+    expect($exceptionB->getMessage())->toEqual('OK (200) - ' . $exceptionB->getResponse()->body());
     expect($exceptionB->getPrevious())->toBeNull();
 });
 
@@ -175,7 +176,7 @@ test('you can customise if saloon should throw an exception on a request', funct
 
     expect($exceptionB)->toBeInstanceOf(RequestException::class);
     expect($exceptionB->getResponse())->toBeInstanceOf(Response::class);
-    expect($exceptionB->getMessage())->toEqual($exceptionB->getResponse()->body());
+    expect($exceptionB->getMessage())->toEqual('OK (200) - ' . $exceptionB->getResponse()->body());
     expect($exceptionB->getPrevious())->toBeNull();
 });
 
@@ -197,7 +198,7 @@ test('when both the connector and request have custom logic to determine differe
 
     expect($exceptionB)->toBeInstanceOf(RequestException::class);
     expect($exceptionB->getResponse())->toBeInstanceOf(Response::class);
-    expect($exceptionB->getMessage())->toEqual($exceptionB->getResponse()->body());
+    expect($exceptionB->getMessage())->toEqual('OK (200) - ' . $exceptionB->getResponse()->body());
     expect($exceptionB->getPrevious())->toBeNull();
 
     $responseC = BadResponseConnector::make()->send(new BadResponseRequest, $mockClient);
@@ -206,6 +207,10 @@ test('when both the connector and request have custom logic to determine differe
 
     expect($exceptionC)->toBeInstanceOf(RequestException::class);
     expect($exceptionC->getResponse())->toBeInstanceOf(Response::class);
-    expect($exceptionC->getMessage())->toEqual($exceptionC->getResponse()->body());
+    expect($exceptionC->getMessage())->toEqual('OK (200) - ' . $exceptionC->getResponse()->body());
     expect($exceptionC->getPrevious())->toBeNull();
 });
+
+test('it throws different exceptions based for common status codes', function () {
+    //
+})->skip('To look at after review');
