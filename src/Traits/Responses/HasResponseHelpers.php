@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
-use Saloon\Exceptions\Request\RequestException;
 use Throwable;
 use SimpleXMLElement;
 use Saloon\Helpers\Arr;
@@ -14,6 +13,7 @@ use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Contracts\DataObjects\WithResponse;
 use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\ServerException;
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
 trait HasResponseHelpers
