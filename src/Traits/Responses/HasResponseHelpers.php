@@ -275,7 +275,7 @@ trait HasResponseHelpers
 
         // Create the exception
 
-        return new $exceptionClass($this, null, 0, $this->getSenderException());
+        return new $exceptionClass($this, null, 0, $senderException);
     }
 
     /**
