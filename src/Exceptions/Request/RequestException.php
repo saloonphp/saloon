@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Exceptions\Request;
 
-use Saloon\Helpers\StatusCodeHelper;
 use Throwable;
 use Saloon\Contracts\Response;
+use Saloon\Helpers\StatusCodeHelper;
 use Saloon\Exceptions\SaloonException;
 
 class RequestException extends SaloonException
@@ -41,7 +41,7 @@ class RequestException extends SaloonException
             $status = $this->getStatus();
             $statusCodeMessage = $this->getStatusMessage() ?? 'Unknown Status';
             $rawBody = $response->body();
-            $exceptionBodyMessage = strlen($rawBody) > $this->maxBodyLength ? substr($rawBody, 0, $this->maxBodyLength) : $rawBody;
+            $exceptionBodyMessage = mb_strlen($rawBody) > $this->maxBodyLength ? mb_substr($rawBody, 0, $this->maxBodyLength) : $rawBody;
 
             $message = sprintf('%s (%s) - %s', $statusCodeMessage, $status, $exceptionBodyMessage);
         }
