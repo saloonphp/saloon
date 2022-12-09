@@ -208,7 +208,3 @@ test('when both the connector and request have custom logic to determine differe
     expect($exceptionC->getMessage())->toEqual('OK (200) Response: ' . $exceptionC->getResponse()->body());
     expect($exceptionC->getPrevious())->toBeNull();
 });
-
-test('it throws different exceptions based for common status codes', function () {
-    //
-})->skip('To look at after review');
