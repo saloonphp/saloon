@@ -2,16 +2,25 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Helpers\StatusCodeHelper;
-use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\Request\ClientException;
-use Saloon\Exceptions\Request\ServerException;
 use Saloon\Exceptions\Request\RequestException;
-use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Exceptions\Request\ServerException;
+use Saloon\Exceptions\Request\Statuses\ForbiddenException;
+use Saloon\Exceptions\Request\Statuses\GatewayTimeoutException;
+use Saloon\Exceptions\Request\Statuses\InternalServerErrorException;
+use Saloon\Exceptions\Request\Statuses\MethodNotAllowedException;
+use Saloon\Exceptions\Request\Statuses\NotFoundException;
+use Saloon\Exceptions\Request\Statuses\RequestTimeOutException;
+use Saloon\Exceptions\Request\Statuses\ServiceUnavailableException;
+use Saloon\Exceptions\Request\Statuses\TooManyRequestsException;
+use Saloon\Exceptions\Request\Statuses\UnauthorizedException;
+use Saloon\Exceptions\Request\Statuses\UnprocessableEntityException;
+use Saloon\Helpers\StatusCodeHelper;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Exceptions\Request\InternalServerErrorException;
 use Saloon\Tests\Fixtures\Requests\AlwaysHasFailureRequest;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('the response will return different exceptions based on status', function (int $status, string $expectedException) {
     $mockClient = new MockClient([
@@ -22,14 +31,22 @@ test('the response will return different exceptions based on status', function (
     $exception = $response->toException();
 
     $message = sprintf('%s (%s) Response: %s', StatusCodeHelper::getMessage($status), $status, $response->body());
-
+    
     expect($exception)->toBeInstanceOf($expectedException);
     expect($exception->getMessage())->toEqual($message);
 })->with([
+    [401, UnauthorizedException::class],
+    [403, ForbiddenException::class],
+    [404, NotFoundException::class],
+    [405, MethodNotAllowedException::class],
+    [408, RequestTimeOutException::class],
+    [422, UnprocessableEntityException::class],
+    [429, TooManyRequestsException::class],
     [500, InternalServerErrorException::class],
-    [504, ServerException::class],
-    [422, ClientException::class],
-    [401, ClientException::class],
+    [503, ServiceUnavailableException::class],
+    [504, GatewayTimeoutException::class],
+    [418, ClientException::class],
+    [402, ClientException::class],
 ]);
 
 test('when the failed method is customised the response will return ok request exceptions', function (int $status, string $expectedException) {
