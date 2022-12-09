@@ -2,25 +2,24 @@
 
 declare(strict_types=1);
 
+use Saloon\Http\Faking\MockClient;
+use Saloon\Helpers\StatusCodeHelper;
+use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\RequestException;
-use Saloon\Exceptions\Request\ServerException;
-use Saloon\Exceptions\Request\Statuses\ForbiddenException;
-use Saloon\Exceptions\Request\Statuses\GatewayTimeoutException;
-use Saloon\Exceptions\Request\Statuses\InternalServerErrorException;
-use Saloon\Exceptions\Request\Statuses\MethodNotAllowedException;
-use Saloon\Exceptions\Request\Statuses\NotFoundException;
-use Saloon\Exceptions\Request\Statuses\RequestTimeOutException;
-use Saloon\Exceptions\Request\Statuses\ServiceUnavailableException;
-use Saloon\Exceptions\Request\Statuses\TooManyRequestsException;
-use Saloon\Exceptions\Request\Statuses\UnauthorizedException;
-use Saloon\Exceptions\Request\Statuses\UnprocessableEntityException;
-use Saloon\Helpers\StatusCodeHelper;
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Tests\Fixtures\Requests\AlwaysHasFailureRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Exceptions\Request\Statuses\NotFoundException;
+use Saloon\Exceptions\Request\Statuses\ForbiddenException;
+use Saloon\Tests\Fixtures\Requests\AlwaysHasFailureRequest;
+use Saloon\Exceptions\Request\Statuses\UnauthorizedException;
+use Saloon\Exceptions\Request\Statuses\GatewayTimeoutException;
+use Saloon\Exceptions\Request\Statuses\RequestTimeOutException;
+use Saloon\Exceptions\Request\Statuses\TooManyRequestsException;
+use Saloon\Exceptions\Request\Statuses\MethodNotAllowedException;
+use Saloon\Exceptions\Request\Statuses\ServiceUnavailableException;
+use Saloon\Exceptions\Request\Statuses\InternalServerErrorException;
+use Saloon\Exceptions\Request\Statuses\UnprocessableEntityException;
 
 test('the response will return different exceptions based on status', function (int $status, string $expectedException) {
     $mockClient = new MockClient([
