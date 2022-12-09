@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
+use Saloon\Exceptions\Request\RequestException;
+use Saloon\Helpers\RequestExceptionHelper;
 use Throwable;
 use SimpleXMLElement;
 use Saloon\Helpers\Arr;
@@ -13,7 +15,6 @@ use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Contracts\DataObjects\WithResponse;
 use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\ServerException;
-use Saloon\Exceptions\Request\RequestException;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
 trait HasResponseHelpers
@@ -262,22 +263,7 @@ trait HasResponseHelpers
 
         // Otherwise, we'll throw our own request.
 
-        $exceptionClass = StatusCodeHelper::getResponseException($this->status());
-
-        // When we cannot find the custom response exception we will use
-        // either a server exception or a client exception.
-
-        if (is_null($exceptionClass)) {
-            $exceptionClass = match (true) {
-                $this->serverError() => ServerException::class,
-                $this->clientError() => ClientException::class,
-                default => RequestException::class,
-            };
-        }
-
-        // Create the exception
-
-        return new $exceptionClass($this, null, 0, $senderException);
+        return RequestExceptionHelper::create($this, $senderException);
     }
 
     /**

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
-use Saloon\Exceptions\Request\InternalServerErrorException;
-
 class StatusCodeHelper
 {
     /**
@@ -85,19 +83,5 @@ class StatusCodeHelper
     public static function getMessage(int $code): ?string
     {
         return static::$statusCodeMessages[$code] ?? null;
-    }
-
-    /**
-     * Get the exception for a given status code
-     *
-     * @param int $code
-     * @return string|null
-     */
-    public static function getResponseException(int $code): ?string
-    {
-        return match ($code) {
-            500 => InternalServerErrorException::class,
-            default => null,
-        };
     }
 }
