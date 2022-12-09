@@ -7,8 +7,8 @@ use Saloon\Http\PendingRequest;
 use Illuminate\Support\Collection;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Exceptions\RequestException;
 use Symfony\Component\DomCrawler\Crawler;
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('you can get the original pending request', function () {

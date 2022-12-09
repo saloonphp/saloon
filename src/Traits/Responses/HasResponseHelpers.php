@@ -8,8 +8,8 @@ use Throwable;
 use SimpleXMLElement;
 use Saloon\Helpers\Arr;
 use Illuminate\Support\Collection;
-use Saloon\Exceptions\RequestException;
 use Symfony\Component\DomCrawler\Crawler;
+use Saloon\Helpers\RequestExceptionHelper;
 use Saloon\Contracts\DataObjects\WithResponse;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
@@ -184,7 +184,9 @@ trait HasResponseHelpers
      */
     public function failed(): bool
     {
-        return $this->serverError() || $this->clientError();
+        $pendingRequest = $this->getPendingRequest();
+
+        return $pendingRequest->getRequest()->shouldThrowRequestException($this) || $pendingRequest->getConnector()->shouldThrowRequestException($this);
     }
 
     /**
@@ -229,22 +231,35 @@ trait HasResponseHelpers
      */
     public function toException(): ?Throwable
     {
-        if ($this->successful()) {
+        if (! $this->failed()) {
             return null;
         }
 
-        return $this->createException($this->body());
+        return $this->createException();
     }
 
     /**
      * Create the request exception
      *
-     * @param string $body
-     * @return Throwable
+     * @return \Throwable
      */
-    protected function createException(string $body): Throwable
+    protected function createException(): Throwable
     {
-        return new RequestException($this, $body, 0, $this->getRequestException());
+        $pendingRequest = $this->getPendingRequest();
+        $senderException = $this->getSenderException();
+
+        // We'll first check if the user has defined their own exception handlers.
+        // We'll prioritise the request over the connector.
+
+        $exception = $pendingRequest->getRequest()->getRequestException($this, $senderException) ?? $pendingRequest->getConnector()->getRequestException($this, $senderException);
+
+        if ($exception instanceof Throwable) {
+            return $exception;
+        }
+
+        // Otherwise, we'll throw our own request.
+
+        return RequestExceptionHelper::create($this, $senderException);
     }
 
     /**

@@ -35,20 +35,20 @@ class Response implements ResponseContract
     protected ResponseInterface $rawResponse;
 
     /**
-     * The original request exception
+     * The original sender exception
      *
      * @var Throwable|null
      */
-    protected ?Throwable $requestException = null;
+    protected ?Throwable $senderException = null;
 
     /**
      * Create a new response instance.
      *
      * @param PendingRequest $pendingRequest
      * @param ResponseInterface|SimulatedResponsePayload $rawResponse
-     * @param Throwable|null $requestException
+     * @param Throwable|null $senderException
      */
-    public function __construct(PendingRequest $pendingRequest, ResponseInterface|SimulatedResponsePayload $rawResponse, Throwable $requestException = null)
+    public function __construct(PendingRequest $pendingRequest, ResponseInterface|SimulatedResponsePayload $rawResponse, Throwable $senderException = null)
     {
         if ($rawResponse instanceof SimulatedResponsePayload) {
             $rawResponse = $rawResponse->getPsrResponse();
@@ -56,7 +56,7 @@ class Response implements ResponseContract
 
         $this->pendingRequest = $pendingRequest;
         $this->rawResponse = $rawResponse;
-        $this->requestException = $requestException;
+        $this->senderException = $senderException;
     }
 
     /**
@@ -77,16 +77,6 @@ class Response implements ResponseContract
     public function getRequest(): Request
     {
         return $this->pendingRequest->getRequest();
-    }
-
-    /**
-     * Get the request exception
-     *
-     * @return Throwable|null
-     */
-    public function getRequestException(): ?Throwable
-    {
-        return $this->requestException;
     }
 
     /**
@@ -151,5 +141,15 @@ class Response implements ResponseContract
     public function getPsrResponse(): ResponseInterface
     {
         return $this->rawResponse;
+    }
+
+    /**
+     * Get the original sender exception
+     *
+     * @return Throwable|null
+     */
+    public function getSenderException(): ?Throwable
+    {
+        return $this->senderException;
     }
 }

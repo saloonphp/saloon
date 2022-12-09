@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use Saloon\Contracts\Sender;
 use Saloon\Contracts\Response;
-use Saloon\Http\Faking\MockResponse;
-use GuzzleHttp\Promise\RejectedPromise;
-use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Http\Senders\SimulatedSender;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Contracts\Dispatcher as DispatcherContract;
 
@@ -39,7 +38,7 @@ class Dispatcher implements DispatcherContract
         // to create the SimulatedResponse and return that. Otherwise, we
         // will send a real request to the sender.
 
-        $response = $pendingRequest->hasSimulatedResponsePayload() ? $this->createSimulatedResponse() : $this->createResponse();
+        $response = $this->getSender()->sendRequest($pendingRequest, $this->asynchronous);
 
         // Next we will need to run the response pipeline. If the response
         // is a Response we can run it directly, but if it is
@@ -54,65 +53,14 @@ class Dispatcher implements DispatcherContract
     }
 
     /**
-     * Process a simulated response
+     * Get the sender
      *
-     * @return Response|PromiseInterface
+     * @return \Saloon\Contracts\Sender
      */
-    protected function createSimulatedResponse(): Response|PromiseInterface
+    protected function getSender(): Sender
     {
         $pendingRequest = $this->pendingRequest;
-        $simulatedResponsePayload = $pendingRequest->getSimulatedResponsePayload();
-        $exception = $simulatedResponsePayload?->getException($pendingRequest);
 
-        // When the pending request instance has SimulatedResponsePayload it means
-        // we shouldn't send a real request. We can convert the payload into
-        // a PSR-compatible ResponseInterface class which means we can use
-        // can also make use of custom responses.
-
-        $responseClass = $pendingRequest->getResponseClass();
-
-        /** @var Response $response */
-        $response = new $responseClass($pendingRequest, $simulatedResponsePayload, $exception);
-
-        // When the SimulatedResponsePayload is specifically a MockResponse then
-        // we will record the response, and we'll set the "isMocked" property
-        // on the response.
-
-        if ($simulatedResponsePayload instanceof MockResponse) {
-            $pendingRequest->getMockClient()?->recordResponse($response);
-            $response->setMocked(true);
-        }
-
-        // We'll also set the SimulatedResponsePayload on the response
-        // for people to access it if they need to.
-
-        $response->setSimulatedResponsePayload($simulatedResponsePayload);
-
-        // When mocking asynchronous requests we need to wrap the response
-        // in FulfilledPromise to act like a real response.
-
-        if ($this->asynchronous === true) {
-            $exception ??= $response->toException();
-
-            return isset($exception) ? new RejectedPromise($exception) : new FulfilledPromise($response);
-        }
-
-        return $response;
-    }
-
-    /**
-     * Send the request and create a response
-     *
-     * @return Response|PromiseInterface
-     */
-    protected function createResponse(): Response|PromiseInterface
-    {
-        // The PendingRequest will get the sender from the connector
-        // for example the GuzzleSender, and it will instantiate it if
-        // it does not exist already. Then it will run sendRequest.
-
-        $pendingRequest = $this->pendingRequest;
-
-        return $pendingRequest->getSender()->sendRequest($pendingRequest, $this->asynchronous);
+        return $pendingRequest->hasSimulatedResponsePayload() ? new SimulatedSender : $pendingRequest->getSender();
     }
 }

@@ -7,8 +7,8 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\RejectedPromise;
-use Saloon\Exceptions\RequestException;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Exceptions\TestResponseException;
 

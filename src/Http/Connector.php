@@ -9,6 +9,7 @@ use Saloon\Traits\Makeable;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Traits\Connector\HasPool;
+use Saloon\Traits\HandlesExceptions;
 use Saloon\Traits\Request\BuildsUrls;
 use Saloon\Traits\Connector\HasSender;
 use Saloon\Traits\Connector\SendsRequests;
@@ -24,6 +25,7 @@ abstract class Connector implements ConnectorContract
     use HasRequestProperties;
     use CastDtoFromResponse;
     use HasCustomResponses;
+    use HandlesExceptions;
     use HasMockClient;
     use SendsRequests;
     use Conditionable;

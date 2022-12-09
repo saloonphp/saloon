@@ -8,6 +8,7 @@ use Saloon\Traits\Bootable;
 use Saloon\Traits\Makeable;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
+use Saloon\Traits\HandlesExceptions;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
@@ -20,6 +21,7 @@ abstract class Request implements RequestContract
     use HasRequestProperties;
     use CastDtoFromResponse;
     use HasCustomResponses;
+    use HandlesExceptions;
     use HasMockClient;
     use Conditionable;
     use Bootable;
