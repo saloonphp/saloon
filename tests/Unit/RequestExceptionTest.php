@@ -1,19 +1,21 @@
 <?php
 
-use Saloon\Exceptions\Request\ClientException;
-use Saloon\Exceptions\Request\InternalServerErrorException;
-use Saloon\Exceptions\Request\RequestException;
-use Saloon\Exceptions\Request\ServerException;
-use Saloon\Helpers\StatusCodeHelper;
+declare(strict_types=1);
+
 use Saloon\Http\Faking\MockClient;
+use Saloon\Helpers\StatusCodeHelper;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Tests\Fixtures\Requests\AlwaysHasFailureRequest;
+use Saloon\Exceptions\Request\ClientException;
+use Saloon\Exceptions\Request\ServerException;
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Exceptions\Request\InternalServerErrorException;
+use Saloon\Tests\Fixtures\Requests\AlwaysHasFailureRequest;
 
 test('the response will return different exceptions based on status', function (int $status, string $expectedException) {
     $mockClient = new MockClient([
-        MockResponse::make(['message' => 'Oh yee-naw!'], $status)
+        MockResponse::make(['message' => 'Oh yee-naw!'], $status),
     ]);
 
     $response = TestConnector::make()->send(new UserRequest, $mockClient);
@@ -32,7 +34,7 @@ test('the response will return different exceptions based on status', function (
 
 test('when the failed method is customised the response will return ok request exceptions', function (int $status, string $expectedException) {
     $mockClient = new MockClient([
-        MockResponse::make(['message' => 'Oh yee-naw!'], $status)
+        MockResponse::make(['message' => 'Oh yee-naw!'], $status),
     ]);
 
     $response = TestConnector::make()->send(new AlwaysHasFailureRequest, $mockClient);
@@ -48,4 +50,3 @@ test('when the failed method is customised the response will return ok request e
     [201, RequestException::class],
     [100, RequestException::class],
 ]);
-

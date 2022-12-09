@@ -4,17 +4,13 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
-use Saloon\Exceptions\Request\RequestException;
-use Saloon\Helpers\RequestExceptionHelper;
 use Throwable;
 use SimpleXMLElement;
 use Saloon\Helpers\Arr;
 use Illuminate\Support\Collection;
-use Saloon\Helpers\StatusCodeHelper;
 use Symfony\Component\DomCrawler\Crawler;
+use Saloon\Helpers\RequestExceptionHelper;
 use Saloon\Contracts\DataObjects\WithResponse;
-use Saloon\Exceptions\Request\ClientException;
-use Saloon\Exceptions\Request\ServerException;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 
 trait HasResponseHelpers
