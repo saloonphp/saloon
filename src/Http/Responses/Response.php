@@ -11,8 +11,8 @@ use Saloon\Repositories\ArrayStore;
 use Saloon\Contracts\PendingRequest;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
+use Saloon\Contracts\SimulatedResponsePayload;
 use Saloon\Traits\Responses\HasResponseHelpers;
-use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Contracts\Response as ResponseContract;
 
 class Response implements ResponseContract

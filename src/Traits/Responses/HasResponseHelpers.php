@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Helpers\RequestExceptionHelper;
 use Saloon\Contracts\DataObjects\WithResponse;
-use Saloon\Http\Faking\SimulatedResponsePayload;
+use Saloon\Contracts\SimulatedResponsePayload;
 
 trait HasResponseHelpers
 {

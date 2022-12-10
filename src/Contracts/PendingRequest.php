@@ -7,7 +7,6 @@ namespace Saloon\Contracts;
 use Saloon\Enums\Method;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Body\BodyRepository;
-use Saloon\Http\Faking\SimulatedResponsePayload;
 
 interface PendingRequest
 {

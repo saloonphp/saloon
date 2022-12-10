@@ -8,7 +8,6 @@ use Saloon\Contracts\Sender;
 use Saloon\Contracts\Response;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Http\Senders\SimulatedSender;
-use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Contracts\Dispatcher as DispatcherContract;
 
 class Dispatcher implements DispatcherContract

@@ -14,8 +14,9 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Saloon\Repositories\Body\JsonBodyRepository;
 use Saloon\Exceptions\DirectoryNotFoundException;
 use Saloon\Repositories\Body\StringBodyRepository;
+use Saloon\Contracts\SimulatedResponsePayload as SimulatedResponsePayloadContract;
 
-class SimulatedResponsePayload
+class SimulatedResponsePayload implements SimulatedResponsePayloadContract
 {
     /**
      * HTTP Status Code

@@ -21,9 +21,9 @@ use Saloon\Helpers\ReflectionHelper;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Contracts\SimulatedResponsePayload;
 use Saloon\Exceptions\PendingRequestException;
 use Saloon\Http\Middleware\AuthenticateRequest;
-use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
 use Saloon\Exceptions\InvalidResponseClassException;
@@ -371,7 +371,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Get the simulated response payload
      *
-     * @return \Saloon\Http\Faking\SimulatedResponsePayload|null
+     * @return \Saloon\Contracts\SimulatedResponsePayload|null
      */
     public function getSimulatedResponsePayload(): ?SimulatedResponsePayload
     {
@@ -381,7 +381,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Set the simulated response payload
      *
-     * @param \Saloon\Http\Faking\SimulatedResponsePayload|null $simulatedResponsePayload
+     * @param \Saloon\Contracts\SimulatedResponsePayload|null $simulatedResponsePayload
      * @return $this
      */
     public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): static

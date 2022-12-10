@@ -6,7 +6,7 @@ namespace Saloon\Helpers;
 
 use Saloon\Contracts\Response;
 use Saloon\Contracts\PendingRequest;
-use Saloon\Http\Faking\SimulatedResponsePayload;
+use Saloon\Contracts\SimulatedResponsePayload;
 use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
 class MiddlewarePipeline implements MiddlewarePipelineContract

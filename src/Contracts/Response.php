@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use Exception;
 use Throwable;
 use SimpleXMLElement;
 use Illuminate\Support\Collection;
 use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Http\Faking\SimulatedResponsePayload;
 
 interface Response
 {

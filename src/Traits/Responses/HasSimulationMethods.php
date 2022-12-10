@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
-use Saloon\Http\Faking\SimulatedResponsePayload;
+use Saloon\Contracts\SimulatedResponsePayload;
 
 trait HasSimulationMethods
 {
