@@ -11,6 +11,9 @@ on:
   release:
     types: [ released ]
 
+permissions:
+  contents: write
+
 jobs:
   php-cs-fixer:
     runs-on: ubuntu-latest
@@ -24,8 +27,8 @@ jobs:
       - name: Run PHP CS Fixer
         uses: docker://oskarstark/php-cs-fixer-ga
         with:
-          args: --config=.php-cs-fixer.dist.php
+          args: --config=.php-cs-fixer.dist.php --allow-risky=yes
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Apply Code Style Fixes
+          commit_message: 🪄 Code Style Fixes
