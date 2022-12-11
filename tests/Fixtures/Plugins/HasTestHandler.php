@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Plugins;
 
-use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Http\Connector;
 use Saloon\Http\PendingRequest;

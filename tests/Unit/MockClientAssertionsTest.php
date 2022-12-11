@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Responses\Response;

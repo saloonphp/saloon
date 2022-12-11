@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Collections;
 
-use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Http\Groups\RequestGroup;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
