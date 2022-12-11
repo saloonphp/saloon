@@ -52,13 +52,15 @@ test('it will create a file with nested folders', function () {
     $filesystem->deleteDirectory('/');
     $filesystem->createDirectory('/');
 
-    $storage = new Storage('tests/Fixtures/Saloon');
+    $path = 'some' . DIRECTORY_SEPARATOR . 'other' . DIRECTORY_SEPARATOR . 'directories' . DIRECTORY_SEPARATOR . 'example.txt';
 
-    expect($storage->exists('some/other/directories/example.txt'))->toBeFalse();
+    $storage = new Storage('tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'Saloon');
 
-    $storage->put('some/other/directories/example.txt', 'Hello World');
+    expect($storage->exists($path))->toBeFalse();
 
-    expect($storage->exists('some/other/directories/example.txt'))->toBeTrue();
+    $storage->put($path, 'Hello World');
 
-    expect($storage->get('some/other/directories/example.txt'))->toEqual('Hello World');
+    expect($storage->exists($path))->toBeTrue();
+
+    expect($storage->get($path))->toEqual('Hello World');
 });
