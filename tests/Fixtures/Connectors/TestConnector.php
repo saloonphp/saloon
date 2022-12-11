@@ -11,6 +11,8 @@ class TestConnector extends Connector
 {
     use AcceptsJson;
 
+    public bool $unique = false;
+
     /**
      * Define the base url of the api.
      *
