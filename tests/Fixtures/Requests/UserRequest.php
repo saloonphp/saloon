@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Requests;
 
+use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
 class UserRequest extends Request
@@ -11,9 +12,9 @@ class UserRequest extends Request
     /**
      * Define the HTTP method.
      *
-     * @var string
+     * @var Method
      */
-    protected string $method = 'GET';
+    protected Method $method = Method::GET;
 
     /**
      * Define the endpoint for the request.

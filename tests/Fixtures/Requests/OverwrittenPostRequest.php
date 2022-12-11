@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Requests;
 
+use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Contracts\Body\WithBody;
 use Saloon\Traits\Body\HasJsonBody;
@@ -18,7 +19,7 @@ class OverwrittenPostRequest extends Request implements WithBody
      *
      * @var string|null
      */
-    protected string $method = 'POST';
+    protected Method $method = Method::POST;
 
     /**
      * The connector.

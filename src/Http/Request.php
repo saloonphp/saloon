@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use Saloon\Enums\Method;
 use Saloon\Traits\Bootable;
 use Saloon\Traits\Makeable;
 use Saloon\Traits\Conditionable;
@@ -30,16 +31,16 @@ abstract class Request implements RequestContract
     /**
      * Define the HTTP method.
      *
-     * @var string
+     * @var Method
      */
-    protected string $method = '';
+    protected Method $method;
 
     /**
      * Get the method of the request.
      *
-     * @return string
+     * @return Method
      */
-    public function getMethod(): string
+    public function getMethod(): Method
     {
         return $this->method;
     }

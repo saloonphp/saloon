@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Requests;
 
+use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Connectors\HeaderConnector;
 
@@ -14,7 +15,7 @@ class ConfigRequest extends Request
      *
      * @var string
      */
-    protected string $method = 'GET';
+    protected Method $method = Method::GET;
 
     /**
      * The connector.

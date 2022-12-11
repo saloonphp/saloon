@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
+use Saloon\Enums\Method;
 use Throwable;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
@@ -12,9 +13,9 @@ interface Request
     /**
      * Get the HTTP method
      *
-     * @return string
+     * @return Method
      */
-    public function getMethod(): string;
+    public function getMethod(): Method;
 
     /**
      * Define the endpoint for the request.

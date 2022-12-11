@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Requests;
 
+use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Responses\UserResponseNoExtendSaloonResponse;
@@ -15,7 +16,7 @@ class InvalidResponseClass extends Request
      *
      * @var string
      */
-    protected string $method = 'GET';
+    protected Method $method = Method::GET;
 
     /**
      * Define the custom response

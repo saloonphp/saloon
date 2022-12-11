@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Requests;
 
+use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Plugins\WithBootTestPlugin;
@@ -17,7 +18,7 @@ class UserRequestWithBootPlugin extends Request
      *
      * @var string|null
      */
-    protected string $method = 'GET';
+    protected Method $method = Method::GET;
 
     /**
      * The connector.
