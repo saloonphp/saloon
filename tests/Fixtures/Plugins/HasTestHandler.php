@@ -9,15 +9,14 @@ use Saloon\Http\Connector;
 use Saloon\Http\PendingRequest;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Exceptions\InvalidConnectorException;
 
 trait HasTestHandler
 {
     /**
      * Boot a test handler that adds a simple header to the response.
      *
+     * @param \Saloon\Http\PendingRequest $pendingRequest
      * @return void
-     * @throws InvalidConnectorException
      */
     public function bootHasTestHandler(PendingRequest $pendingRequest)
     {

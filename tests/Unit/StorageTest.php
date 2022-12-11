@@ -55,7 +55,7 @@ test('it will create a file with nested folders', function () {
     $filesystem->createDirectory('/');
 
     $path = 'some' . DIRECTORY_SEPARATOR . 'other' . DIRECTORY_SEPARATOR . 'directories' . DIRECTORY_SEPARATOR . 'example.txt';
-    
+
     $storage = new Storage('tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'Saloon');
 
     expect($storage->exists($path))->toBeFalse();
