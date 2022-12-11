@@ -9,6 +9,11 @@ use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
 class NoTrailingSlashRequest extends SaloonRequest
 {
     /**
+     * @var bool
+     */
+    public bool $addTrailingSlashAfterBaseUrl = false;
+
+    /**
      * Define the method that the request will use.
      *
      * @var string|null
