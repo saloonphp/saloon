@@ -102,7 +102,7 @@ class PendingRequest implements PendingRequestContract
         $this->request = $request;
         $this->connector = $connector;
         $this->url = $this->resolveRequestUrl();
-        $this->method = Method::upperFrom($request->getMethod());
+        $this->method = $request->getMethod();
         $this->responseClass = $this->resolveResponseClass();
         $this->mockClient = $mockClient ?? ($request->getMockClient() ?? $connector->getMockClient());
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();

@@ -12,9 +12,9 @@ class ErrorRequest extends Request
     /**
      * Define the method that the request will use.
      *
-     * @var string
+     * @var Method
      */
-    protected string $method = 'GET';
+    protected Method $method = Method::GET;
 
     /**
      * Define the endpoint for the request.
