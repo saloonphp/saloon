@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Traits\Body;
 
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Body\WithBody;
 use Saloon\Exceptions\BodyException;
-use Saloon\Http\PendingRequest;
 
 trait ChecksForWithBody
 {

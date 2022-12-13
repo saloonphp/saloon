@@ -1,21 +1,20 @@
 <?php
 
-use Saloon\Contracts\Body\WithBody;
+declare(strict_types=1);
+
 use Saloon\Enums\Method;
-use Saloon\Exceptions\BodyException;
-use Saloon\Helpers\Helpers;
-use Saloon\Http\Connector;
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Request;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Tests\Fixtures\Requests\UserRequest;
-use Saloon\Traits\Body\ChecksForWithBody;
+use Saloon\Http\Connector;
+use Saloon\Helpers\Helpers;
 use Saloon\Traits\Body\HasBody;
+use Saloon\Traits\Body\HasXmlBody;
 use Saloon\Traits\Body\HasFormBody;
 use Saloon\Traits\Body\HasJsonBody;
+use Saloon\Exceptions\BodyException;
 use Saloon\Traits\Body\HasMultipartBody;
-use Saloon\Traits\Body\HasXmlBody;
+use Saloon\Traits\Body\ChecksForWithBody;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('each of the body traits has the ChecksForWithBody trait added', function (string $trait) {
     $uses = Helpers::classUsesRecursive($trait);
