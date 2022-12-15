@@ -184,9 +184,7 @@ trait HasResponseHelpers
      */
     public function failed(): bool
     {
-        $pendingRequest = $this->getPendingRequest();
-
-        return $pendingRequest->getRequest()->shouldThrowRequestException($this) || $pendingRequest->getConnector()->shouldThrowRequestException($this);
+        return $this->serverError() || $this->clientError();
     }
 
     /**
@@ -225,13 +223,25 @@ trait HasResponseHelpers
     }
 
     /**
+     * Determine if the response should throw a request exception.
+     *
+     * @return bool
+     */
+    public function shouldThrowRequestException(): bool
+    {
+        $pendingRequest = $this->getPendingRequest();
+
+        return $pendingRequest->getRequest()->shouldThrowRequestException($this) || $pendingRequest->getConnector()->shouldThrowRequestException($this);
+    }
+
+    /**
      * Create an exception if a server or client error occurred.
      *
      * @return Throwable|null
      */
     public function toException(): ?Throwable
     {
-        if (! $this->failed()) {
+        if (! $this->shouldThrowRequestException()) {
             return null;
         }
 
@@ -270,7 +280,7 @@ trait HasResponseHelpers
      */
     public function throw(): static
     {
-        if ($this->failed()) {
+        if ($this->shouldThrowRequestException()) {
             throw $this->toException();
         }
 
@@ -292,7 +302,6 @@ trait HasResponseHelpers
      * Close the stream and any underlying resources.
      *
      * @return $this
-     * @throws \JsonException
      */
     public function close(): static
     {

@@ -128,6 +128,13 @@ interface Response
     public function failed(): bool;
 
     /**
+     * Determine if the response should throw a request exception
+     *
+     * @return bool
+     */
+    public function shouldThrowRequestException(): bool;
+
+    /**
      * Determine if the response indicates a client error occurred.
      *
      * @return bool
