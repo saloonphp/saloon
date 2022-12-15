@@ -9,6 +9,8 @@ use Saloon\Repositories\Body\JsonBodyRepository;
 
 trait HasJsonBody
 {
+    use ChecksForWithBody;
+
     /**
      * Body Repository
      *
