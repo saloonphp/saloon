@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Exceptions\Request;
 
+use Saloon\Contracts\PendingRequest;
 use Throwable;
 use Saloon\Contracts\Response;
 use Saloon\Helpers\StatusCodeHelper;
@@ -57,6 +58,16 @@ class RequestException extends SaloonException
     public function getResponse(): Response
     {
         return $this->response;
+    }
+
+    /**
+     * Get the pending request.
+     *
+     * @return \Saloon\Contracts\PendingRequest
+     */
+    public function getPendingRequest(): PendingRequest
+    {
+        return $this->getResponse()->getPendingRequest();
     }
 
     /**

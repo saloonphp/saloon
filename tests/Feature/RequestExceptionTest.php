@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
@@ -152,6 +153,7 @@ test('you can customise if saloon should throw an exception on a connector', fun
     $exceptionB = $responseB->toException();
 
     expect($exceptionB)->toBeInstanceOf(RequestException::class);
+    expect($exceptionB->getPendingRequest())->toBeInstanceOf(PendingRequest::class);
     expect($exceptionB->getResponse())->toBeInstanceOf(Response::class);
     expect($exceptionB->getMessage())->toEqual('OK (200) Response: ' . $exceptionB->getResponse()->body());
     expect($exceptionB->getPrevious())->toBeNull();
@@ -173,6 +175,7 @@ test('you can customise if saloon should throw an exception on a request', funct
     $exceptionB = $responseB->toException();
 
     expect($exceptionB)->toBeInstanceOf(RequestException::class);
+    expect($exceptionB->getPendingRequest())->toBeInstanceOf(PendingRequest::class);
     expect($exceptionB->getResponse())->toBeInstanceOf(Response::class);
     expect($exceptionB->getMessage())->toEqual('OK (200) Response: ' . $exceptionB->getResponse()->body());
     expect($exceptionB->getPrevious())->toBeNull();
@@ -195,6 +198,7 @@ test('when both the connector and request have custom logic to determine differe
     $exceptionB = $responseB->toException();
 
     expect($exceptionB)->toBeInstanceOf(RequestException::class);
+    expect($exceptionB->getPendingRequest())->toBeInstanceOf(PendingRequest::class);
     expect($exceptionB->getResponse())->toBeInstanceOf(Response::class);
     expect($exceptionB->getMessage())->toEqual('OK (200) Response: ' . $exceptionB->getResponse()->body());
     expect($exceptionB->getPrevious())->toBeNull();
