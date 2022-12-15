@@ -17,7 +17,7 @@ trait HandlesExceptions
      */
     public function shouldThrowRequestException(Response $response): bool
     {
-        return $response->serverError() || $response->clientError();
+        return $response->failed();
     }
 
     /**

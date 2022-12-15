@@ -144,11 +144,11 @@ test('you can customise if saloon should throw an exception on a connector', fun
 
     $responseA = BadResponseConnector::make()->send(new UserRequest, $mockClient);
 
-    expect($responseA->failed())->toBeFalse();
+    expect($responseA->shouldThrowRequestException())->toBeFalse();
     expect($responseA->toException())->toBeNull();
 
     $responseB = BadResponseConnector::make()->send(new UserRequest, $mockClient);
-    expect($responseB->failed())->toBeTrue();
+    expect($responseB->shouldThrowRequestException())->toBeTrue();
     $exceptionB = $responseB->toException();
 
     expect($exceptionB)->toBeInstanceOf(RequestException::class);
@@ -165,11 +165,11 @@ test('you can customise if saloon should throw an exception on a request', funct
 
     $responseA = TestConnector::make()->send(new BadResponseRequest, $mockClient);
 
-    expect($responseA->failed())->toBeFalse();
+    expect($responseA->shouldThrowRequestException())->toBeFalse();
     expect($responseA->toException())->toBeNull();
 
     $responseB = TestConnector::make()->send(new BadResponseRequest, $mockClient);
-    expect($responseB->failed())->toBeTrue();
+    expect($responseB->shouldThrowRequestException())->toBeTrue();
     $exceptionB = $responseB->toException();
 
     expect($exceptionB)->toBeInstanceOf(RequestException::class);
@@ -187,11 +187,11 @@ test('when both the connector and request have custom logic to determine differe
 
     $responseA = BadResponseConnector::make()->send(new BadResponseRequest, $mockClient);
 
-    expect($responseA->failed())->toBeFalse();
+    expect($responseA->shouldThrowRequestException())->toBeFalse();
     expect($responseA->toException())->toBeNull();
 
     $responseB = BadResponseConnector::make()->send(new BadResponseRequest, $mockClient);
-    expect($responseB->failed())->toBeTrue();
+    expect($responseB->shouldThrowRequestException())->toBeTrue();
     $exceptionB = $responseB->toException();
 
     expect($exceptionB)->toBeInstanceOf(RequestException::class);
@@ -200,7 +200,7 @@ test('when both the connector and request have custom logic to determine differe
     expect($exceptionB->getPrevious())->toBeNull();
 
     $responseC = BadResponseConnector::make()->send(new BadResponseRequest, $mockClient);
-    expect($responseC->failed())->toBeTrue();
+    expect($responseC->shouldThrowRequestException())->toBeTrue();
     $exceptionC = $responseC->toException();
 
     expect($exceptionC)->toBeInstanceOf(RequestException::class);
