@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Saloon\Repositories\Body;
 
 use Saloon\Contracts\Body\BodyRepository;
+use Saloon\Traits\Conditionable;
 
 class StringBodyRepository implements BodyRepository
 {
+    use Conditionable;
+
     /**
      * Repository Data
      *
@@ -20,7 +23,7 @@ class StringBodyRepository implements BodyRepository
      *
      * @param array $value
      */
-    public function __construct(mixed $value)
+    public function __construct(mixed $value = null)
     {
         $this->set($value);
     }
