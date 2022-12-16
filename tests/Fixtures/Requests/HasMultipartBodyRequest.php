@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Contracts\Body\WithBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use Saloon\Traits\Body\HasJsonBody;
+use Saloon\Contracts\Body\WithBody;
 use Saloon\Traits\Body\HasMultipartBody;
 
 class HasMultipartBodyRequest extends Request implements WithBody
@@ -41,8 +40,8 @@ class HasMultipartBodyRequest extends Request implements WithBody
         return [
             [
                 'name' => 'nickname',
-                'contents' => 'Sam'
-            ]
+                'contents' => 'Sam',
+            ],
         ];
     }
 }

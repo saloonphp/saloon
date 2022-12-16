@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
+use Saloon\Traits\Conditionable;
 use Saloon\Exceptions\UnableToCastToStringException;
 use Saloon\Contracts\Body\ArrayBodyRepository as ArrayBodyRepositoryContract;
-use Saloon\Traits\Conditionable;
 
 class ArrayBodyRepository implements ArrayBodyRepositoryContract
 {

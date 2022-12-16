@@ -1,10 +1,12 @@
 <?php
 
-use Saloon\Exceptions\UnableToCastToStringException;
+declare(strict_types=1);
+
 use Saloon\Repositories\Body\FormBodyRepository;
 use Saloon\Repositories\Body\JsonBodyRepository;
-use Saloon\Repositories\Body\MultipartBodyRepository;
 use Saloon\Repositories\Body\StringBodyRepository;
+use Saloon\Exceptions\UnableToCastToStringException;
+use Saloon\Repositories\Body\MultipartBodyRepository;
 
 test('the JsonBodyRepository can be encoded into JSON', function () {
     $body = new JsonBodyRepository([

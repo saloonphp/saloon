@@ -1,11 +1,8 @@
 <?php
 
-use Saloon\Enums\Method;
-use Saloon\Http\Request;
+declare(strict_types=1);
+
 use Saloon\Repositories\Body\ArrayBodyRepository;
-use Saloon\Repositories\Body\JsonBodyRepository;
-use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
-use Saloon\Traits\Body\HasJsonBody;
 
 test('the store is empty by default', function () {
     $body = new ArrayBodyRepository();
@@ -16,12 +13,12 @@ test('the store is empty by default', function () {
 test('the store can have an array provided', function () {
     $body = new ArrayBodyRepository([
         'name' => 'Sam',
-        'sidekick' => 'Mantas'
+        'sidekick' => 'Mantas',
     ]);
 
     expect($body->all())->toEqual([
         'name' => 'Sam',
-        'sidekick' => 'Mantas'
+        'sidekick' => 'Mantas',
     ]);
 });
 
@@ -44,10 +41,10 @@ test('you can add an item', function () {
 test('you can conditionally add items to the array store', function () {
     $body = new ArrayBodyRepository();
 
-    $body->when(true, fn(ArrayBodyRepository $body) => $body->add('name', 'Gareth'));
-    $body->when(false, fn(ArrayBodyRepository $body) => $body->add('name', 'Sam'));
-    $body->when(true, fn(ArrayBodyRepository $body) => $body->add('sidekick', 'Mantas'));
-    $body->when(false, fn(ArrayBodyRepository $body) => $body->add('sidekick', 'Teo'));
+    $body->when(true, fn (ArrayBodyRepository $body) => $body->add('name', 'Gareth'));
+    $body->when(false, fn (ArrayBodyRepository $body) => $body->add('name', 'Sam'));
+    $body->when(true, fn (ArrayBodyRepository $body) => $body->add('sidekick', 'Mantas'));
+    $body->when(false, fn (ArrayBodyRepository $body) => $body->add('sidekick', 'Teo'));
 
     expect($body->all())->toEqual(['name' => 'Gareth', 'sidekick' => 'Mantas']);
 });

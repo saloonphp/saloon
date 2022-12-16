@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
-use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Traits\Conditionable;
+use Saloon\Contracts\Body\BodyRepository;
 
 class StringBodyRepository implements BodyRepository
 {

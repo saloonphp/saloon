@@ -1,6 +1,7 @@
 <?php
 
-use Saloon\Repositories\Body\ArrayBodyRepository;
+declare(strict_types=1);
+
 use Saloon\Repositories\Body\StringBodyRepository;
 
 test('the store is empty by default', function () {
@@ -27,8 +28,8 @@ test('you can set it', function () {
 test('you can conditionally set on the store', function () {
     $body = new StringBodyRepository();
 
-    $body->when(true, fn(StringBodyRepository $body) => $body->set('Gareth'));
-    $body->when(false, fn(StringBodyRepository $body) => $body->set( 'Sam'));
+    $body->when(true, fn (StringBodyRepository $body) => $body->set('Gareth'));
+    $body->when(false, fn (StringBodyRepository $body) => $body->set('Sam'));
 
     expect($body->all())->toEqual('Gareth');
 });
@@ -39,7 +40,7 @@ test('you can check if the store is empty or not', function () {
     expect($body->isEmpty())->toBeTrue();
     expect($body->isNotEmpty())->toBeFalse();
 
-    $body->set( 'Sam');
+    $body->set('Sam');
 
     expect($body->isEmpty())->toBeFalse();
     expect($body->isNotEmpty())->toBeTrue();

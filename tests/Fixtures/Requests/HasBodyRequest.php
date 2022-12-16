@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Contracts\Body\WithBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Traits\Body\HasBody;
-use Saloon\Traits\Body\HasJsonBody;
+use Saloon\Contracts\Body\WithBody;
 
-class HasBodyRequest extends Request  implements WithBody
+class HasBodyRequest extends Request implements WithBody
 {
     use HasBody;
 

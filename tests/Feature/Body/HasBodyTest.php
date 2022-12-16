@@ -1,12 +1,12 @@
 <?php
 
-use GuzzleHttp\Promise\FulfilledPromise;
-use Psr\Http\Message\RequestInterface;
+declare(strict_types=1);
+
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Promise\FulfilledPromise;
 use Saloon\Tests\Fixtures\Requests\HasBodyRequest;
-use Saloon\Tests\Fixtures\Requests\HasFormBodyRequest;
-use Saloon\Tests\Fixtures\Requests\HasXmlBodyRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('the default body is loaded', function () {
     $request = new HasBodyRequest();
