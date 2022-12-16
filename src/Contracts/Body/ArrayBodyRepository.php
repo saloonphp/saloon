@@ -38,4 +38,12 @@ interface ArrayBodyRepository extends BodyRepository
      * @return $this
      */
     public function add(string $key, mixed $value): static;
+
+    /**
+     * Remove an item from the repository.
+     *
+     * @param string $key
+     * @return $this
+     */
+    public function remove(string $key): static;
 }

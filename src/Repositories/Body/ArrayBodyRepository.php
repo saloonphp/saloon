@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
+use Saloon\Traits\Conditionable;
 use Saloon\Exceptions\UnableToCastToStringException;
 use Saloon\Contracts\Body\ArrayBodyRepository as ArrayBodyRepositoryContract;
 
 class ArrayBodyRepository implements ArrayBodyRepositoryContract
 {
+    use Conditionable;
+
     /**
      * Repository Data
      *
@@ -21,7 +24,7 @@ class ArrayBodyRepository implements ArrayBodyRepositoryContract
      *
      * @param array $value
      */
-    public function __construct(mixed $value)
+    public function __construct(mixed $value = [])
     {
         $this->set($value);
     }
@@ -61,6 +64,19 @@ class ArrayBodyRepository implements ArrayBodyRepositoryContract
     public function add(string $key, mixed $value): static
     {
         $this->data[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Remove an item from the repository.
+     *
+     * @param string $key
+     * @return self
+     */
+    public function remove(string $key): static
+    {
+        unset($this->data[$key]);
 
         return $this;
     }

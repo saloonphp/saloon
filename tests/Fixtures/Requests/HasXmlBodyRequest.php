@@ -6,12 +6,12 @@ namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use Saloon\Traits\Body\HasBody;
+use Saloon\Traits\Body\HasXmlBody;
 use Saloon\Contracts\Body\WithBody;
 
-class HasBodyRequest extends Request implements WithBody
+class HasXmlBodyRequest extends Request implements WithBody
 {
-    use HasBody;
+    use HasXmlBody;
 
     /**
      * Define the method that the request will use.
@@ -30,8 +30,13 @@ class HasBodyRequest extends Request implements WithBody
         return '/user';
     }
 
-    protected function defaultBody(): ?string
+    /**
+     * Default Body
+     *
+     * @return string
+     */
+    protected function defaultBody(): string
     {
-        return 'name: Sam';
+        return '<p>Howdy</p>';
     }
 }
