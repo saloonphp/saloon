@@ -41,7 +41,7 @@ test('when a body trait is added to a request without WithBody it will throw an 
     };
 
     $this->expectException(BodyException::class);
-    $this->expectExceptionMessage('You have added a body trait without adding the `Saloon\Contracts\Body\WithBody` interface to your request/connector.');
+    $this->expectExceptionMessage('You have added a body trait without adding the `Saloon\Contracts\Body\HasBody` interface to your request/connector.');
 
     TestConnector::make()->send($request);
 });
@@ -57,7 +57,7 @@ test('when a body trait is added to a connector without WithBody it will throw a
     };
 
     $this->expectException(BodyException::class);
-    $this->expectExceptionMessage('You have added a body trait without adding the `Saloon\Contracts\Body\WithBody` interface to your request/connector.');
+    $this->expectExceptionMessage('You have added a body trait without adding the `Saloon\Contracts\Body\HasBody` interface to your request/connector.');
 
     $connector->send(new UserRequest);
 });
