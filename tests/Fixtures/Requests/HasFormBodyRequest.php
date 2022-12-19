@@ -6,10 +6,10 @@ namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use Saloon\Contracts\Body\WithBody;
+use Saloon\Contracts\Body\HasBody;
 use Saloon\Traits\Body\HasFormBody;
 
-class HasFormBodyRequest extends Request implements WithBody
+class HasFormBodyRequest extends Request implements HasBody
 {
     use HasFormBody;
 

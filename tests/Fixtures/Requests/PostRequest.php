@@ -6,11 +6,11 @@ namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use Saloon\Contracts\Body\WithBody;
+use Saloon\Contracts\Body\HasBody;
 use Saloon\Traits\Body\HasJsonBody;
 use Saloon\Tests\Fixtures\Connectors\PostJsonConnector;
 
-class PostRequest extends Request implements WithBody
+class PostRequest extends Request implements HasBody
 {
     use HasJsonBody;
 

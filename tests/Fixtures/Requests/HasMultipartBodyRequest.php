@@ -7,10 +7,10 @@ namespace Saloon\Tests\Fixtures\Requests;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Data\MultipartValue;
-use Saloon\Contracts\Body\WithBody;
+use Saloon\Contracts\Body\HasBody;
 use Saloon\Traits\Body\HasMultipartBody;
 
-class HasMultipartBodyRequest extends Request implements WithBody
+class HasMultipartBodyRequest extends Request implements HasBody
 {
     use HasMultipartBody;
 
