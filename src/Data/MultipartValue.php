@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Data;
 
+use InvalidArgumentException;
+use Psr\Http\Message\StreamInterface;
 use Saloon\Contracts\Arrayable;
 
 class MultipartValue implements Arrayable
@@ -12,17 +14,20 @@ class MultipartValue implements Arrayable
      * Constructor
      *
      * @param string $name
-     * @param mixed $value
+     * @param \Psr\Http\Message\StreamInterface|resource|string|integer $value
      * @param string|null $filename
      * @param array $headers
      */
     public function __construct(
-        public string $name,
-        public mixed $value,
+        public string  $name,
+        public mixed   $value,
         public ?string $filename = null,
-        public array $headers = []
-    ) {
-        //
+        public array   $headers = []
+    )
+    {
+        if (! $this->value instanceof StreamInterface && ! is_resource($value) && ! is_string($value) && ! is_numeric($value)) {
+            throw new InvalidArgumentException(sprintf('The value property must be either a %s, resource, string or numeric.', StreamInterface::class));
+        }
     }
 
     /**
