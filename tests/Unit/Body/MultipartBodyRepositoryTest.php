@@ -44,11 +44,11 @@ test('you can set it', function () {
     $body = new MultipartBodyRepository();
 
     $body->set([
-        new MultipartValue('username', 'Sammyjo20')
+        new MultipartValue('username', 'Sammyjo20'),
     ]);
 
     expect($body->all())->toEqual([
-        'username' => new MultipartValue('username', 'Sammyjo20')
+        'username' => new MultipartValue('username', 'Sammyjo20'),
     ]);
 });
 
@@ -58,7 +58,7 @@ test('you can add an item', function () {
     $body->add('name', 'Sam', 'welcome.txt', ['a' => 'b']);
 
     expect($body->all())->toEqual([
-        'name' => new MultipartValue('name', 'Sam', 'welcome.txt', ['a' => 'b'])
+        'name' => new MultipartValue('name', 'Sam', 'welcome.txt', ['a' => 'b']),
     ]);
 
     // Test it being overwritten
@@ -66,17 +66,17 @@ test('you can add an item', function () {
     $body->add('name', 'Charlotte', 'welcome.txt', ['a' => 'b']);
 
     expect($body->all())->toEqual([
-        'name' => new MultipartValue('name', 'Charlotte', 'welcome.txt', ['a' => 'b'])
+        'name' => new MultipartValue('name', 'Charlotte', 'welcome.txt', ['a' => 'b']),
     ]);
 });
 
 test('you can conditionally add items to the array store', function () {
     $body = new MultipartBodyRepository();
 
-    $body->when(true, fn(MultipartBodyRepository $body) => $body->add('name', 'Gareth'));
-    $body->when(false, fn(MultipartBodyRepository $body) => $body->add('name', 'Sam'));
-    $body->when(true, fn(MultipartBodyRepository $body) => $body->add('sidekick', 'Mantas'));
-    $body->when(false, fn(MultipartBodyRepository $body) => $body->add('sidekick', 'Teo'));
+    $body->when(true, fn (MultipartBodyRepository $body) => $body->add('name', 'Gareth'));
+    $body->when(false, fn (MultipartBodyRepository $body) => $body->add('name', 'Sam'));
+    $body->when(true, fn (MultipartBodyRepository $body) => $body->add('sidekick', 'Mantas'));
+    $body->when(false, fn (MultipartBodyRepository $body) => $body->add('sidekick', 'Teo'));
 
     expect($body->all())->toEqual([
         'name' => new MultipartValue('name', 'Gareth'),

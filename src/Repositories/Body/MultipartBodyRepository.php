@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
+use Saloon\Helpers\Arr;
 use InvalidArgumentException;
 use Saloon\Contracts\Arrayable;
-use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Data\MultipartValue;
-use Saloon\Exceptions\UnableToCastToStringException;
-use Saloon\Helpers\Arr;
 use Saloon\Traits\Conditionable;
+use Saloon\Contracts\Body\BodyRepository;
+use Saloon\Exceptions\UnableToCastToStringException;
 
 class MultipartBodyRepository implements BodyRepository, Arrayable
 {

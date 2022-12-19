@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Repositories\Body;
 
 use InvalidArgumentException;
-use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Traits\Conditionable;
+use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Exceptions\UnableToCastToStringException;
 
 class ArrayBodyRepository implements BodyRepository

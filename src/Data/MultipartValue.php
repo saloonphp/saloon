@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Data;
 
 use Saloon\Contracts\Arrayable;
@@ -19,8 +21,7 @@ class MultipartValue implements Arrayable
         public mixed $value,
         public ?string $filename = null,
         public array $headers = []
-    )
-    {
+    ) {
         //
     }
 

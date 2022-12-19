@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Data\MultipartValue;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
+use Saloon\Data\MultipartValue;
 use Saloon\Contracts\Body\WithBody;
 use Saloon\Traits\Body\HasMultipartBody;
 
