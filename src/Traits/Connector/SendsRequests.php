@@ -25,6 +25,8 @@ trait SendsRequests
      */
     public function send(Request $request, MockClient $mockClient = null): Response
     {
+        // 🚀 ... 🪐  ... 💫
+
         return $this->createPendingRequest($request, $mockClient)->send();
     }
 
@@ -40,6 +42,8 @@ trait SendsRequests
      */
     public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface
     {
+        // 🚀 ... 🪐  ... 💫
+
         return $this->createPendingRequest($request, $mockClient)->sendAsync();
     }
 

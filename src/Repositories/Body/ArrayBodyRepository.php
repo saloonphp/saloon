@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
+use InvalidArgumentException;
+use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Traits\Conditionable;
 use Saloon\Exceptions\UnableToCastToStringException;
-use Saloon\Contracts\Body\ArrayBodyRepository as ArrayBodyRepositoryContract;
 
-class ArrayBodyRepository implements ArrayBodyRepositoryContract
+class ArrayBodyRepository implements BodyRepository
 {
     use Conditionable;
 
@@ -30,15 +31,20 @@ class ArrayBodyRepository implements ArrayBodyRepositoryContract
     }
 
     /**
-     * Get a specific key of the array
+     * Set a value inside the repository
      *
-     * @param string $key
-     * @param mixed|null $default
-     * @return mixed
+     * @param array $value
+     * @return $this
      */
-    public function get(string $key, mixed $default = null): mixed
+    public function set(mixed $value): static
     {
-        return $this->data[$key] ?? $default;
+        if (! is_array($value)) {
+            throw new InvalidArgumentException('The value must be an array');
+        }
+
+        $this->data = $value;
+
+        return $this;
     }
 
     /**
@@ -57,39 +63,40 @@ class ArrayBodyRepository implements ArrayBodyRepositoryContract
     /**
      * Add an element to the repository.
      *
-     * @param string $key
-     * @param mixed $value
+     * @param string|int|null $key
+     * @param mixed|null $value
      * @return $this
      */
-    public function add(string $key, mixed $value): static
+    public function add(string|int|null $key = null, mixed $value = null): static
     {
-        $this->data[$key] = $value;
+        isset($key)
+            ? $this->data[$key] = $value
+            : $this->data[] = $value;
 
         return $this;
+    }
+
+    /**
+     * Get a specific key of the array
+     *
+     * @param string|int $key
+     * @param mixed|null $default
+     * @return mixed
+     */
+    public function get(string|int $key, mixed $default = null): mixed
+    {
+        return $this->data[$key] ?? $default;
     }
 
     /**
      * Remove an item from the repository.
      *
-     * @param string $key
+     * @param string|int $key
      * @return self
      */
-    public function remove(string $key): static
+    public function remove(string|int $key): static
     {
         unset($this->data[$key]);
-
-        return $this;
-    }
-
-    /**
-     * Set a value inside the repository
-     *
-     * @param array $value
-     * @return $this
-     */
-    public function set(mixed $value): static
-    {
-        $this->data = $value;
 
         return $this;
     }

@@ -99,12 +99,12 @@ class PendingRequest implements PendingRequestContract
      */
     public function __construct(Connector $connector, Request $request, MockClient $mockClient = null)
     {
-        $this->request = $request;
         $this->connector = $connector;
+        $this->request = $request;
         $this->url = $this->resolveRequestUrl();
         $this->method = $request->getMethod();
         $this->responseClass = $this->resolveResponseClass();
-        $this->mockClient = $mockClient ?? ($request->getMockClient() ?? $connector->getMockClient());
+        $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient();
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
 
         // After we have defined each of our properties, we will run the various

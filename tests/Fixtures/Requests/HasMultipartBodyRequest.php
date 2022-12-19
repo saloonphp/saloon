@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Requests;
 
+use Saloon\Data\MultipartValue;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Contracts\Body\WithBody;
@@ -38,10 +39,7 @@ class HasMultipartBodyRequest extends Request implements WithBody
     protected function defaultBody(): array
     {
         return [
-            [
-                'name' => 'nickname',
-                'contents' => 'Sam',
-            ],
+            new MultipartValue('nickname', 'Sam', 'user.txt', ['X-Saloon' => 'Yee-haw!']),
         ];
     }
 }
