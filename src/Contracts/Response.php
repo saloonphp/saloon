@@ -21,7 +21,7 @@ interface Response
      * @param \Throwable|null $senderException
      * @return $this
      */
-    public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, Throwable $senderException = null): static;
+    public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, ?Throwable $senderException = null): static;
 
     /**
      * Get the body of the response as string.

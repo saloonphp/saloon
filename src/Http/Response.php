@@ -156,7 +156,7 @@ class Response implements ResponseContract
      * @param \Throwable|null $senderException
      * @return $this
      */
-    public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, Throwable $senderException = null): static
+    public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, ?Throwable $senderException = null): static
     {
         return new static($psrResponse, $pendingRequest, $senderException);
     }
