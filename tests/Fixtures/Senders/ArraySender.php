@@ -31,8 +31,9 @@ class ArraySender implements Sender
      */
     public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): Response|PromiseInterface
     {
+        /** @var class-string<\Saloon\Contracts\Response> $responseClass */
         $responseClass = $pendingRequest->getResponseClass();
 
-        return new $responseClass($pendingRequest, new GuzzleResponse(200, ['X-Fake' => true], 'Default'));
+        return $responseClass::fromPsrResponse(new GuzzleResponse(200, ['X-Fake' => true], 'Default'), $pendingRequest);
     }
 }

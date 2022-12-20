@@ -41,9 +41,9 @@ class SimulatedSender implements Sender
         /** @var class-string<\Saloon\Contracts\Response> $responseClass */
         $responseClass = $pendingRequest->getResponseClass();
 
-        $response = $responseClass::create(
-            pendingRequest: $pendingRequest,
+        $response = $responseClass::fromPsrResponse(
             psrResponse: $simulatedResponsePayload->getPsrResponse(),
+            pendingRequest: $pendingRequest,
             senderException: $exception
         );
 

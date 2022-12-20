@@ -20,18 +20,18 @@ class Response implements ResponseContract
     use HasResponseHelpers;
 
     /**
-     * The request options we attached to the request.
-     *
-     * @var PendingRequest
-     */
-    protected PendingRequest $pendingRequest;
-
-    /**
      * The PSR response from the sender.
      *
      * @var ResponseInterface|mixed
      */
     protected ResponseInterface $psrResponse;
+
+    /**
+     * The pending request that has all the request properties
+     *
+     * @var PendingRequest
+     */
+    protected PendingRequest $pendingRequest;
 
     /**
      * The original sender exception
@@ -47,10 +47,10 @@ class Response implements ResponseContract
      * @param ResponseInterface $psrResponse
      * @param Throwable|null $senderException
      */
-    public function __construct(PendingRequest $pendingRequest, ResponseInterface $psrResponse, Throwable $senderException = null)
+    public function __construct(ResponseInterface $psrResponse, PendingRequest $pendingRequest, Throwable $senderException = null)
     {
-        $this->pendingRequest = $pendingRequest;
         $this->psrResponse = $psrResponse;
+        $this->pendingRequest = $pendingRequest;
         $this->senderException = $senderException;
     }
 
@@ -156,8 +156,8 @@ class Response implements ResponseContract
      * @param \Throwable|null $senderException
      * @return $this
      */
-    public static function create(PendingRequest $pendingRequest, ResponseInterface $psrResponse, Throwable $senderException = null): static
+    public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, Throwable $senderException = null): static
     {
-        return new static($pendingRequest, $psrResponse, $senderException);
+        return new static($psrResponse, $pendingRequest, $senderException);
     }
 }

@@ -202,7 +202,7 @@ class GuzzleSender implements Sender
         /** @var class-string<\Saloon\Contracts\Response> $responseClass */
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
-        return $responseClass::create($pendingSaloonRequest, $guzzleResponse, $exception);
+        return $responseClass::fromPsrResponse($guzzleResponse, $pendingSaloonRequest, $exception);
     }
 
     /**
