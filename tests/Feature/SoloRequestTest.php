@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Responses\Response;
+use Saloon\Http\Response;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\SoloUserRequest;

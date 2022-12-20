@@ -9,7 +9,6 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use Saloon\Contracts\Sender;
 use GuzzleHttp\RequestOptions;
-use Saloon\Http\Responses\Response;
 use Saloon\Contracts\PendingRequest;
 use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\ResponseInterface;
@@ -47,16 +46,6 @@ class GuzzleSender implements Sender
     public function __construct()
     {
         $this->client = $this->createGuzzleClient();
-    }
-
-    /**
-     * Get the sender's response class
-     *
-     * @return string
-     */
-    public function getResponseClass(): string
-    {
-        return Response::class;
     }
 
     /**
@@ -210,9 +199,10 @@ class GuzzleSender implements Sender
      */
     protected function createResponse(PendingRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse, Exception $exception = null): ResponseContract
     {
+        /** @var class-string<\Saloon\Contracts\Response> $responseClass */
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
-        return new $responseClass($pendingSaloonRequest, $guzzleResponse, $exception);
+        return $responseClass::create($pendingSaloonRequest, $guzzleResponse, $exception);
     }
 
     /**

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Exceptions;
 
+use Saloon\Contracts\Response;
+
 class InvalidResponseClassException extends SaloonException
 {
     /**
@@ -13,6 +15,6 @@ class InvalidResponseClassException extends SaloonException
      */
     public function __construct(string $message = null)
     {
-        parent::__construct($message ?? 'The provided response must implement the Response contract.');
+        parent::__construct($message ?? sprintf('The provided response must exist and implement the %s contract.', Response::class));
     }
 }

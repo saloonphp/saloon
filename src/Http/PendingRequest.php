@@ -9,7 +9,6 @@ use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Sender;
 use Saloon\Contracts\Request;
 use Saloon\Helpers\URLHelper;
-use Saloon\Contracts\Response;
 use Saloon\Contracts\Connector;
 use Saloon\Helpers\Environment;
 use Saloon\Contracts\MockClient;
@@ -26,6 +25,7 @@ use Saloon\Exceptions\PendingRequestException;
 use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
+use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Laravel\Http\Middleware\FrameworkMiddleware;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
@@ -291,7 +291,7 @@ class PendingRequest implements PendingRequestContract
      * @param \Saloon\Contracts\Response $response
      * @return \Saloon\Contracts\Response
      */
-    public function executeResponsePipeline(Response $response): Response
+    public function executeResponsePipeline(ResponseContract $response): ResponseContract
     {
         $this->middleware()->executeResponsePipeline($response);
 
@@ -420,23 +420,10 @@ class PendingRequest implements PendingRequestContract
      */
     protected function resolveResponseClass(): string
     {
-        $baseResponse = $this->connector->sender()->getResponseClass();
-        $response = $this->request->resolveResponseClass();
+        $response = $this->request->resolveResponseClass() ?? $this->connector->resolveResponseClass() ?? Response::class;
 
-        if (empty($response)) {
-            $response = $this->connector->resolveResponseClass();
-        }
-
-        if (empty($response)) {
-            $response = $baseResponse;
-        }
-
-        if (! class_exists($response)) {
+        if (! class_exists($response) || ! ReflectionHelper::isSubclassOf($response, ResponseContract::class)) {
             throw new InvalidResponseClassException;
-        }
-
-        if (! ReflectionHelper::isSubclassOf($response, $baseResponse)) {
-            throw new InvalidResponseClassException(sprintf('The custom response must extend the "%s" class.', $baseResponse));
         }
 
         return $response;
@@ -468,7 +455,7 @@ class PendingRequest implements PendingRequestContract
      * @param \Saloon\Contracts\Response $response
      * @return mixed
      */
-    public function createDtoFromResponse(Response $response): mixed
+    public function createDtoFromResponse(ResponseContract $response): mixed
     {
         return $this->request->createDtoFromResponse($response) ?? $this->connector->createDtoFromResponse($response);
     }

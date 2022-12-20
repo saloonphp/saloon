@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Http\Responses;
+namespace Saloon\Http;
 
 use Throwable;
 use Saloon\Traits\Macroable;
@@ -11,7 +11,6 @@ use Saloon\Repositories\ArrayStore;
 use Saloon\Contracts\PendingRequest;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Saloon\Contracts\SimulatedResponsePayload;
 use Saloon\Traits\Responses\HasResponseHelpers;
 use Saloon\Contracts\Response as ResponseContract;
 
@@ -28,11 +27,11 @@ class Response implements ResponseContract
     protected PendingRequest $pendingRequest;
 
     /**
-     * The raw PSR response from the sender.
+     * The PSR response from the sender.
      *
      * @var ResponseInterface|mixed
      */
-    protected ResponseInterface $rawResponse;
+    protected ResponseInterface $psrResponse;
 
     /**
      * The original sender exception
@@ -45,17 +44,13 @@ class Response implements ResponseContract
      * Create a new response instance.
      *
      * @param PendingRequest $pendingRequest
-     * @param ResponseInterface|SimulatedResponsePayload $rawResponse
+     * @param ResponseInterface $psrResponse
      * @param Throwable|null $senderException
      */
-    public function __construct(PendingRequest $pendingRequest, ResponseInterface|SimulatedResponsePayload $rawResponse, Throwable $senderException = null)
+    public function __construct(PendingRequest $pendingRequest, ResponseInterface $psrResponse, Throwable $senderException = null)
     {
-        if ($rawResponse instanceof SimulatedResponsePayload) {
-            $rawResponse = $rawResponse->getPsrResponse();
-        }
-
         $this->pendingRequest = $pendingRequest;
-        $this->rawResponse = $rawResponse;
+        $this->psrResponse = $psrResponse;
         $this->senderException = $senderException;
     }
 
@@ -86,7 +81,7 @@ class Response implements ResponseContract
      */
     public function getRawResponse(): mixed
     {
-        return $this->rawResponse;
+        return $this->psrResponse;
     }
 
     /**
@@ -106,7 +101,7 @@ class Response implements ResponseContract
      */
     public function stream(): StreamInterface
     {
-        return $this->rawResponse->getBody();
+        return $this->psrResponse->getBody();
     }
 
     /**
@@ -118,7 +113,7 @@ class Response implements ResponseContract
     {
         $headers = array_map(static function (array $header) {
             return count($header) === 1 ? $header[0] : $header;
-        }, $this->rawResponse->getHeaders());
+        }, $this->psrResponse->getHeaders());
 
         return new ArrayStore($headers);
     }
@@ -130,7 +125,7 @@ class Response implements ResponseContract
      */
     public function status(): int
     {
-        return $this->rawResponse->getStatusCode();
+        return $this->psrResponse->getStatusCode();
     }
 
     /**
@@ -140,7 +135,7 @@ class Response implements ResponseContract
      */
     public function getPsrResponse(): ResponseInterface
     {
-        return $this->rawResponse;
+        return $this->psrResponse;
     }
 
     /**
@@ -151,5 +146,18 @@ class Response implements ResponseContract
     public function getSenderException(): ?Throwable
     {
         return $this->senderException;
+    }
+
+    /**
+     * Create an instance of the response
+     *
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @param \Psr\Http\Message\ResponseInterface $psrResponse
+     * @param \Throwable|null $senderException
+     * @return $this
+     */
+    public static function create(PendingRequest $pendingRequest, ResponseInterface $psrResponse, Throwable $senderException = null): static
+    {
+        return new static($pendingRequest, $psrResponse, $senderException);
     }
 }

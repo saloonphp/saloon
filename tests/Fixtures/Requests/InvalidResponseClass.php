@@ -23,7 +23,7 @@ class InvalidResponseClass extends Request
      *
      * @var string
      */
-    protected string $response = UserResponseNoExtendSaloonResponse::class;
+    protected ?string $response = UserResponseNoExtendSaloonResponse::class;
 
     /**
      * The connector.

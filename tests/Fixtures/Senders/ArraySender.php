@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Senders;
 
+use Saloon\Http\Response;
 use Saloon\Contracts\Sender;
-use Saloon\Http\Responses\Response;
 use Saloon\Contracts\PendingRequest;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;

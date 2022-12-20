@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Saloon\Http\Request;
+use Saloon\Http\Response;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;

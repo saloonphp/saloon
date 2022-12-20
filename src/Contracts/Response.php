@@ -14,6 +14,16 @@ use Psr\Http\Message\ResponseInterface;
 interface Response
 {
     /**
+     * Create an instance of the response
+     *
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @param \Psr\Http\Message\ResponseInterface $psrResponse
+     * @param \Throwable|null $senderException
+     * @return $this
+     */
+    public static function create(PendingRequest $pendingRequest, ResponseInterface $psrResponse, Throwable $senderException = null): static;
+
+    /**
      * Get the body of the response as string.
      *
      * @return string

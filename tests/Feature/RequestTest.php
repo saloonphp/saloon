@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use Saloon\Http\Response;
 use Saloon\Http\PendingRequest;
-use Saloon\Http\Responses\Response;
 use Saloon\Http\Senders\GuzzleSender;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
