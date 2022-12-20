@@ -34,17 +34,18 @@ class SimulatedSender implements Sender
             throw new SenderException('Simulated response payload must be present on the pending request instance');
         }
 
-        $exception = $simulatedResponsePayload->getException($pendingRequest);
+        // Let's create our response!
 
-        // When the pending request instance has SimulatedResponsePayload it means
-        // we shouldn't send a real request. We can convert the payload into
-        // a PSR-compatible ResponseInterface class which means we can use
-        // can also make use of custom responses.
+        $exception = $simulatedResponsePayload->getException($pendingRequest);
 
         /** @var class-string<\Saloon\Contracts\Response> $responseClass */
         $responseClass = $pendingRequest->getResponseClass();
 
-        $response = $responseClass::create($pendingRequest, $simulatedResponsePayload->getPsrResponse(), $exception);
+        $response = $responseClass::create(
+            pendingRequest: $pendingRequest,
+            psrResponse: $simulatedResponsePayload->getPsrResponse(),
+            senderException: $exception
+        );
 
         // When the SimulatedResponsePayload is specifically a MockResponse then
         // we will record the response, and we'll set the "isMocked" property
@@ -67,7 +68,8 @@ class SimulatedSender implements Sender
         }
 
         // When mocking asynchronous requests we need to wrap the response
-        // in FulfilledPromise to act like a real response.
+        // in FulfilledPromise or RejectedPromise depending on if the
+        // response has an exception.
 
         $exception ??= $response->toException();
 
