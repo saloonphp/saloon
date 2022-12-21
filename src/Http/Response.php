@@ -55,6 +55,19 @@ class Response implements ResponseContract
     }
 
     /**
+     * Create a new response instance
+     *
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @param \Psr\Http\Message\ResponseInterface $psrResponse
+     * @param \Throwable|null $senderException
+     * @return $this
+     */
+    public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, ?Throwable $senderException = null): static
+    {
+        return new static($psrResponse, $pendingRequest, $senderException);
+    }
+
+    /**
      * Get the pending request that created the response.
      *
      * @return PendingRequest
@@ -146,18 +159,5 @@ class Response implements ResponseContract
     public function getSenderException(): ?Throwable
     {
         return $this->senderException;
-    }
-
-    /**
-     * Create an instance of the response
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @param \Psr\Http\Message\ResponseInterface $psrResponse
-     * @param \Throwable|null $senderException
-     * @return $this
-     */
-    public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, ?Throwable $senderException = null): static
-    {
-        return new static($psrResponse, $pendingRequest, $senderException);
     }
 }

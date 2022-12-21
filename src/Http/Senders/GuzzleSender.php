@@ -179,11 +179,11 @@ class GuzzleSender implements Sender
         }
 
         match (true) {
-            $body instanceof JsonBodyRepository => $requestOptions['json'] = $body->all(),
-            $body instanceof MultipartBodyRepository => $requestOptions['multipart'] = $body->all(),
-            $body instanceof FormBodyRepository => $requestOptions['form_params'] = $body->all(),
-            $body instanceof StringBodyRepository => $requestOptions['body'] = $body->all(),
-            default => $requestOptions['body'] = (string)$body,
+            $body instanceof JsonBodyRepository => $requestOptions[RequestOptions::JSON] = $body->all(),
+            $body instanceof MultipartBodyRepository => $requestOptions[RequestOptions::MULTIPART] = $body->all(),
+            $body instanceof FormBodyRepository => $requestOptions[RequestOptions::FORM_PARAMS] = $body->all(),
+            $body instanceof StringBodyRepository => $requestOptions[RequestOptions::BODY] = $body->all(),
+            default => $requestOptions[RequestOptions::BODY] = (string)$body,
         };
 
         return $requestOptions;

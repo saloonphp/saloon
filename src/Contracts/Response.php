@@ -14,7 +14,7 @@ use Psr\Http\Message\ResponseInterface;
 interface Response
 {
     /**
-     * Create an instance of the response
+     * Create an instance of the response from a PSR response
      *
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @param \Psr\Http\Message\ResponseInterface $psrResponse
@@ -22,6 +22,20 @@ interface Response
      * @return $this
      */
     public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, ?Throwable $senderException = null): static;
+
+    /**
+     * Create a PSR response from the raw response.
+     *
+     * @return ResponseInterface
+     */
+    public function getPsrResponse(): ResponseInterface;
+
+    /**
+     * Get the underlying PendingRequest that created the response
+     *
+     * @return PendingRequest
+     */
+    public function getPendingRequest(): PendingRequest;
 
     /**
      * Get the body of the response as string.
@@ -38,6 +52,13 @@ interface Response
     public function stream(): StreamInterface;
 
     /**
+     * Close the stream and any underlying resources.
+     *
+     * @return $this
+     */
+    public function close(): static;
+
+    /**
      * Get the headers from the response.
      *
      * @return ArrayStore
@@ -45,23 +66,19 @@ interface Response
     public function headers(): ArrayStore;
 
     /**
+     * Get a header from the response.
+     *
+     * @param string $header
+     * @return string|array|null
+     */
+    public function header(string $header): string|array|null;
+
+    /**
      * Get the status code of the response.
      *
      * @return int
      */
     public function status(): int;
-
-    /**
-     * Create a PSR response from the raw response.
-     *
-     * @return ResponseInterface
-     */
-    public function getPsrResponse(): ResponseInterface;
-
-    /**
-     * @return PendingRequest
-     */
-    public function getPendingRequest(): PendingRequest;
 
     /**
      * Get the original request
@@ -181,13 +198,6 @@ interface Response
     public function throw(): static;
 
     /**
-     * Get the body of the response.
-     *
-     * @return string
-     */
-    public function __toString(): string;
-
-    /**
      * Check if the response has been cached
      *
      * @return bool
@@ -254,17 +264,9 @@ interface Response
     public function getRawResponse(): mixed;
 
     /**
-     * Get a header from the response.
+     * Get the body of the response.
      *
-     * @param string $header
-     * @return string|array|null
+     * @return string
      */
-    public function header(string $header): string|array|null;
-
-    /**
-     * Close the stream and any underlying resources.
-     *
-     * @return $this
-     */
-    public function close(): static;
+    public function __toString(): string;
 }
