@@ -8,7 +8,7 @@ use Saloon\Repositories\Body\StringBodyRepository;
 
 trait HasBody
 {
-    use ChecksForWithBody;
+    use ChecksForHasBody;
 
     /**
      * Body Repository

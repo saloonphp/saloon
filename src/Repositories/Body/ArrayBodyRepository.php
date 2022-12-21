@@ -79,12 +79,16 @@ class ArrayBodyRepository implements BodyRepository
     /**
      * Get a specific key of the array
      *
-     * @param string|int $key
+     * @param string|int|null $key
      * @param mixed|null $default
      * @return mixed
      */
-    public function get(string|int $key, mixed $default = null): mixed
+    public function get(string|int|null $key = null, mixed $default = null): mixed
     {
+        if (is_null($key)) {
+            return $this->all();
+        }
+
         return $this->data[$key] ?? $default;
     }
 

@@ -12,14 +12,14 @@ use Saloon\Traits\Body\HasFormBody;
 use Saloon\Traits\Body\HasJsonBody;
 use Saloon\Exceptions\BodyException;
 use Saloon\Traits\Body\HasMultipartBody;
-use Saloon\Traits\Body\ChecksForWithBody;
+use Saloon\Traits\Body\ChecksForHasBody;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('each of the body traits has the ChecksForWithBody trait added', function (string $trait) {
     $uses = Helpers::classUsesRecursive($trait);
 
-    expect($uses)->toHaveKey(ChecksForWithBody::class, ChecksForWithBody::class);
+    expect($uses)->toHaveKey(ChecksForHasBody::class, ChecksForHasBody::class);
 })->with([
     HasBody::class,
     HasFormBody::class,

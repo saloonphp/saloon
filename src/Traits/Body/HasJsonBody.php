@@ -9,7 +9,7 @@ use Saloon\Repositories\Body\JsonBodyRepository;
 
 trait HasJsonBody
 {
-    use ChecksForWithBody;
+    use ChecksForHasBody;
 
     /**
      * Body Repository

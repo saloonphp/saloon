@@ -8,7 +8,7 @@ use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Exceptions\BodyException;
 
-trait ChecksForWithBody
+trait ChecksForHasBody
 {
     /**
      * Check if the request or connector has the WithBody class.
@@ -17,7 +17,7 @@ trait ChecksForWithBody
      * @return void
      * @throws \Saloon\Exceptions\BodyException
      */
-    public function bootChecksForWithBody(PendingRequest $pendingRequest): void
+    public function bootChecksForHasBody(PendingRequest $pendingRequest): void
     {
         if ($pendingRequest->getRequest() instanceof HasBody || $pendingRequest->getConnector() instanceof HasBody) {
             return;
