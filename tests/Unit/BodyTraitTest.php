@@ -11,8 +11,8 @@ use Saloon\Traits\Body\HasXmlBody;
 use Saloon\Traits\Body\HasFormBody;
 use Saloon\Traits\Body\HasJsonBody;
 use Saloon\Exceptions\BodyException;
-use Saloon\Traits\Body\HasMultipartBody;
 use Saloon\Traits\Body\ChecksForHasBody;
+use Saloon\Traits\Body\HasMultipartBody;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
