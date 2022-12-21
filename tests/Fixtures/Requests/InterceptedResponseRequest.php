@@ -6,7 +6,7 @@ namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use Saloon\Http\Responses\Response;
+use Saloon\Http\Response;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class InterceptedResponseRequest extends Request

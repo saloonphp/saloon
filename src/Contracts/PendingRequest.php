@@ -180,7 +180,7 @@ interface PendingRequest
     /**
      * Get the response class used for the request
      *
-     * @return string
+     * @return mixed
      */
     public function getResponseClass(): string;
 

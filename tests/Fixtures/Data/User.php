@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Data;
 
-use Saloon\Http\Responses\Response;
+use Saloon\Http\Response;
 
 class User
 {

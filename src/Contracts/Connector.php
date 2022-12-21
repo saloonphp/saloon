@@ -122,9 +122,9 @@ interface Connector
     /**
      * Get the response class
      *
-     * @return string
+     * @return string|null
      */
-    public function resolveResponseClass(): string;
+    public function resolveResponseClass(): ?string;
 
     /**
      * Access the headers
