@@ -23,6 +23,6 @@ trait ChecksForWithBody
             return;
         }
 
-        throw new BodyException(sprintf('You have added a body trait without adding the `%s` interface to your request/connector.', HasBody::class));
+        throw new BodyException(sprintf('You have added a body trait, without adding the `%s` interface to your request or connector.', HasBody::class));
     }
 }
