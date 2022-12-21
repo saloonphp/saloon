@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Saloon\Data\MultipartValue;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -12,10 +13,7 @@ test('the default body is loaded', function () {
     $request = new HasMultipartBodyRequest();
 
     expect($request->body()->all())->toEqual([
-        [
-            'name' => 'nickname',
-            'contents' => 'Sam',
-        ],
+        'nickname' => new MultipartValue('nickname', 'Sam', 'user.txt', ['X-Saloon' => 'Yee-haw!']),
     ]);
 });
 
@@ -26,7 +24,8 @@ test('the guzzle sender properly sends it', function () {
     $connector->sender()->addMiddleware(function (callable $handler) use ($request) {
         return function (RequestInterface $guzzleRequest, array $options) use ($request) {
             expect((string)$guzzleRequest->getBody())->toContain(
-                'Content-Disposition: form-data; name="nickname"',
+                'X-Saloon: Yee-haw!',
+                'Content-Disposition: form-data; name="nickname"; filename="user.txt"',
                 'Content-Length: 3',
                 'Sam',
             );

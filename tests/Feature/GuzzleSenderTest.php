@@ -96,18 +96,3 @@ test('the guzzle sender has default options configured', function () {
 
     expect($freshClient->getConfig())->toEqual($client->getConfig());
 });
-
-test('the guzzle sender will send the correct body for the HasBody trait', function () {
-})->skip('TODO');
-
-test('the guzzle sender will send the correct body for the HasXmlBody trait', function () {
-})->skip('TODO');
-
-test('the guzzle sender will send the correct body for the HasJsonBody trait', function () {
-})->skip('TODO');
-
-test('the guzzle sender will send the correct body for the HasMultipartBody trait', function () {
-})->skip('TODO');
-
-test('the guzzle sender will send the correct body for the HasFormBody trait', function () {
-})->skip('TODO');

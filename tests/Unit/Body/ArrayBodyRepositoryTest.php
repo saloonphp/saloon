@@ -23,6 +23,13 @@ test('the store can have an array provided', function () {
 });
 
 test('you can set it', function () {
+    $this->expectException(InvalidArgumentException::class);
+    $this->expectDeprecationMessage('The value must be an array');
+
+    new ArrayBodyRepository('Sam');
+});
+
+test('it will throw an exception if you set a non-array', function () {
     $body = new ArrayBodyRepository();
 
     $body->set(['name' => 'Sam']);
@@ -36,6 +43,22 @@ test('you can add an item', function () {
     $body->add('name', 'Sam');
 
     expect($body->all())->toEqual(['name' => 'Sam']);
+});
+
+test('you can add an item with an integer key', function () {
+    $body = new ArrayBodyRepository();
+
+    $body->add(1, 'Sam');
+
+    expect($body->all())->toEqual([1 => 'Sam']);
+});
+
+test('you can add an item without a key', function () {
+    $body = new ArrayBodyRepository();
+
+    $body->add(null, 'Sam');
+
+    expect($body->all())->toEqual(['Sam']);
 });
 
 test('you can conditionally add items to the array store', function () {
@@ -58,12 +81,29 @@ test('you can delete an item', function () {
     expect($body->all())->toEqual([]);
 });
 
+test('you can delete an item with an integer key', function () {
+    $body = new ArrayBodyRepository();
+
+    $body->add(1, 'Sam');
+    $body->remove(1);
+
+    expect($body->all())->toEqual([]);
+});
+
 test('you can get an item', function () {
     $body = new ArrayBodyRepository();
 
     $body->add('name', 'Sam');
 
     expect($body->get('name'))->toEqual('Sam');
+});
+
+test('you can get an item with an integer key', function () {
+    $body = new ArrayBodyRepository();
+
+    $body->add(2, 'Sam');
+
+    expect($body->get(2))->toEqual('Sam');
 });
 
 test('you can get all items', function () {

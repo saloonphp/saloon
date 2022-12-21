@@ -11,15 +11,15 @@ use Saloon\Traits\Body\HasXmlBody;
 use Saloon\Traits\Body\HasFormBody;
 use Saloon\Traits\Body\HasJsonBody;
 use Saloon\Exceptions\BodyException;
+use Saloon\Traits\Body\ChecksForHasBody;
 use Saloon\Traits\Body\HasMultipartBody;
-use Saloon\Traits\Body\ChecksForWithBody;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('each of the body traits has the ChecksForWithBody trait added', function (string $trait) {
     $uses = Helpers::classUsesRecursive($trait);
 
-    expect($uses)->toHaveKey(ChecksForWithBody::class, ChecksForWithBody::class);
+    expect($uses)->toHaveKey(ChecksForHasBody::class, ChecksForHasBody::class);
 })->with([
     HasBody::class,
     HasFormBody::class,
@@ -41,7 +41,7 @@ test('when a body trait is added to a request without WithBody it will throw an 
     };
 
     $this->expectException(BodyException::class);
-    $this->expectExceptionMessage('You have added a body trait without adding the `Saloon\Contracts\Body\WithBody` interface to your request/connector.');
+    $this->expectExceptionMessage('You have added a body trait without implementing `Saloon\Contracts\Body\HasBody` on your request or connector.');
 
     TestConnector::make()->send($request);
 });
@@ -57,7 +57,7 @@ test('when a body trait is added to a connector without WithBody it will throw a
     };
 
     $this->expectException(BodyException::class);
-    $this->expectExceptionMessage('You have added a body trait without adding the `Saloon\Contracts\Body\WithBody` interface to your request/connector.');
+    $this->expectExceptionMessage('You have added a body trait without implementing `Saloon\Contracts\Body\HasBody` on your request or connector.');
 
     $connector->send(new UserRequest);
 });

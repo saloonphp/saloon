@@ -6,11 +6,11 @@ namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
+use Saloon\Contracts\Body\HasBody;
 use Saloon\Traits\Body\HasXmlBody;
-use Saloon\Contracts\Body\WithBody;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-class HasXMLRequest extends Request implements WithBody
+class HasXMLRequest extends Request implements HasBody
 {
     use HasXmlBody;
 

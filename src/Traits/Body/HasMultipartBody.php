@@ -8,7 +8,7 @@ use Saloon\Repositories\Body\MultipartBodyRepository;
 
 trait HasMultipartBody
 {
-    use ChecksForWithBody;
+    use ChecksForHasBody;
 
     /**
      * Body Repository

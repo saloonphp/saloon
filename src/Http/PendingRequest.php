@@ -15,7 +15,7 @@ use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
-use Saloon\Contracts\Body\WithBody;
+use Saloon\Contracts\Body\HasBody;
 use Saloon\Helpers\ReflectionHelper;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Body\BodyRepository;
@@ -99,12 +99,12 @@ class PendingRequest implements PendingRequestContract
      */
     public function __construct(Connector $connector, Request $request, MockClient $mockClient = null)
     {
-        $this->request = $request;
         $this->connector = $connector;
+        $this->request = $request;
         $this->url = $this->resolveRequestUrl();
         $this->method = $request->getMethod();
         $this->responseClass = $this->resolveResponseClass();
-        $this->mockClient = $mockClient ?? ($request->getMockClient() ?? $connector->getMockClient());
+        $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient();
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
 
         // After we have defined each of our properties, we will run the various
@@ -201,8 +201,8 @@ class PendingRequest implements PendingRequestContract
         $connector = $this->connector;
         $request = $this->request;
 
-        $connectorBody = $connector instanceof WithBody ? $connector->body() : null;
-        $requestBody = $request instanceof WithBody ? $request->body() : null;
+        $connectorBody = $connector instanceof HasBody ? $connector->body() : null;
+        $requestBody = $request instanceof HasBody ? $request->body() : null;
 
         if (is_null($connectorBody) && is_null($requestBody)) {
             return $this;

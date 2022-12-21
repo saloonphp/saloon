@@ -71,4 +71,26 @@ class Arr
 
         return $array;
     }
+
+    /**
+     * Map an array with keys
+     *
+     * @param array $items
+     * @param callable $callback
+     * @return array
+     */
+    public static function mapWithKeys(array $items, callable $callback): array
+    {
+        $result = [];
+
+        foreach ($items as $key => $value) {
+            $assoc = $callback($value, $key);
+
+            foreach ($assoc as $mapKey => $mapValue) {
+                $result[$mapKey] = $mapValue;
+            }
+        }
+
+        return $result;
+    }
 }

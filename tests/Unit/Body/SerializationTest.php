@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Saloon\Data\MultipartValue;
 use Saloon\Repositories\Body\FormBodyRepository;
 use Saloon\Repositories\Body\JsonBodyRepository;
 use Saloon\Repositories\Body\StringBodyRepository;
@@ -34,8 +35,8 @@ test('the StringBodyRepository can be encoded into a string', function () {
 
 test('the MultipartBodyRepository throws an exception if attempted to be encoded', function () {
     $body = new MultipartBodyRepository([
-        'name' => 'Sam',
-        'sidekick' => 'Mantas',
+        new MultipartValue('name', 'Sam'),
+        new MultipartValue('sidekick', 'Mantas'),
     ]);
 
     $this->expectException(UnableToCastToStringException::class);
