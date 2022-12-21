@@ -22,7 +22,7 @@ class UserRequestWithCustomResponse extends Request
      *
      * @var string
      */
-    protected string $response = UserResponse::class;
+    protected ?string $response = UserResponse::class;
 
     /**
      * Define the endpoint for the request.

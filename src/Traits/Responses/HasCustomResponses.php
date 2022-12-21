@@ -11,16 +11,16 @@ trait HasCustomResponses
      *
      * When an empty string, the response on the sender will be used.
      *
-     * @var string
+     * @var string|null
      */
-    protected string $response = '';
+    protected ?string $response = null;
 
     /**
      * Resolve the custom response class
      *
-     * @return string
+     * @return string|null
      */
-    public function resolveResponseClass(): string
+    public function resolveResponseClass(): ?string
     {
         return $this->response;
     }

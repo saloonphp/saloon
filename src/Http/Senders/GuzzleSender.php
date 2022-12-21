@@ -9,7 +9,6 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use Saloon\Contracts\Sender;
 use GuzzleHttp\RequestOptions;
-use Saloon\Http\Responses\Response;
 use Saloon\Contracts\PendingRequest;
 use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\ResponseInterface;
@@ -47,16 +46,6 @@ class GuzzleSender implements Sender
     public function __construct()
     {
         $this->client = $this->createGuzzleClient();
-    }
-
-    /**
-     * Get the sender's response class
-     *
-     * @return string
-     */
-    public function getResponseClass(): string
-    {
-        return Response::class;
     }
 
     /**
@@ -190,11 +179,11 @@ class GuzzleSender implements Sender
         }
 
         match (true) {
-            $body instanceof JsonBodyRepository => $requestOptions['json'] = $body->all(),
-            $body instanceof MultipartBodyRepository => $requestOptions['multipart'] = $body->toArray(),
-            $body instanceof FormBodyRepository => $requestOptions['form_params'] = $body->all(),
-            $body instanceof StringBodyRepository => $requestOptions['body'] = $body->all(),
-            default => $requestOptions['body'] = (string)$body,
+            $body instanceof JsonBodyRepository => $requestOptions[RequestOptions::JSON] = $body->all(),
+            $body instanceof MultipartBodyRepository => $requestOptions[RequestOptions::MULTIPART] = $body->toArray(),
+            $body instanceof FormBodyRepository => $requestOptions[RequestOptions::FORM_PARAMS] = $body->all(),
+            $body instanceof StringBodyRepository => $requestOptions[RequestOptions::BODY] = $body->all(),
+            default => $requestOptions[RequestOptions::BODY] = (string)$body,
         };
 
         return $requestOptions;
@@ -210,9 +199,10 @@ class GuzzleSender implements Sender
      */
     protected function createResponse(PendingRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse, Exception $exception = null): ResponseContract
     {
+        /** @var class-string<\Saloon\Contracts\Response> $responseClass */
         $responseClass = $pendingSaloonRequest->getResponseClass();
 
-        return new $responseClass($pendingSaloonRequest, $guzzleResponse, $exception);
+        return $responseClass::fromPsrResponse($guzzleResponse, $pendingSaloonRequest, $exception);
     }
 
     /**
