@@ -62,13 +62,10 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
      */
     public function merge(array ...$arrays): static
     {
-        $value = [];
-
-        foreach ($arrays as $array) {
-            $value[] = $this->parseMultipartArray($array);
-        }
-
-        $this->data->merge(...$value);
+        $this->data->merge(...array_map(
+            $this->parseMultipartArray(...),
+            $arrays,
+        ));
 
         return $this;
     }
