@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Body;
 
+use Saloon\Contracts\PendingRequest;
 use Saloon\Repositories\Body\FormBodyRepository;
 
 trait HasFormBody
@@ -16,6 +17,17 @@ trait HasFormBody
      * @var FormBodyRepository
      */
     protected FormBodyRepository $body;
+
+    /**
+     * Boot the HasFormBody trait
+     *
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return void
+     */
+    public function bootHasFormBody(PendingRequest $pendingRequest): void
+    {
+        $pendingRequest->headers()->add('Content-Type', 'application/x-www-form-urlencoded');
+    }
 
     /**
      * Retrieve the data repository

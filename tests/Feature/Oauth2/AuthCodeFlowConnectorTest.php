@@ -152,6 +152,7 @@ test('you can get the user from an oauth connector', function () {
     expect($pendingRequest->headers()->all())->toEqual([
         'Accept' => 'application/json',
         'Authorization' => 'Bearer access',
+        'Content-Type' => 'application/x-www-form-urlencoded',
     ]);
 });
 

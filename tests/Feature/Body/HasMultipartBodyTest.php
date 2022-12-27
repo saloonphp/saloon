@@ -23,6 +23,7 @@ test('the guzzle sender properly sends it', function () {
 
     $connector->sender()->addMiddleware(function (callable $handler) use ($request) {
         return function (RequestInterface $guzzleRequest, array $options) use ($request) {
+            expect($guzzleRequest->getHeader('Content-Type')[0])->toContain('multipart/form-data; boundary=');
             expect((string)$guzzleRequest->getBody())->toContain(
                 'X-Saloon: Yee-haw!',
                 'Content-Disposition: form-data; name="nickname"; filename="user.txt"',
