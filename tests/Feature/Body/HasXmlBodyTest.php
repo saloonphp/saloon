@@ -28,6 +28,7 @@ test('the guzzle sender properly sends it', function () {
 
     $connector->sender()->addMiddleware(function (callable $handler) use ($request) {
         return function (RequestInterface $guzzleRequest, array $options) use ($request) {
+            expect($guzzleRequest->getHeader('Content-Type'))->toEqual(['application/xml']);
             expect((string)$guzzleRequest->getBody())->toEqual((string)$request->body());
 
             return new FulfilledPromise(MockResponse::make()->getPsrResponse());
