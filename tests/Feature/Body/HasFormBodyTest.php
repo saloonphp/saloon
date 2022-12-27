@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
-use Saloon\Http\PendingRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasFormBodyRequest;
 
