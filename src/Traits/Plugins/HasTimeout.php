@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Plugins;
 
+use Saloon\Enums\Timeout;
 use Saloon\Contracts\PendingRequest;
 
 trait HasTimeout
@@ -29,7 +30,7 @@ trait HasTimeout
      */
     public function getConnectTimeout(): float
     {
-        return property_exists($this, 'connectTimeout') ? $this->connectTimeout : 10;
+        return property_exists($this, 'connectTimeout') ? $this->connectTimeout : Timeout::CONNECT->value;
     }
 
     /**
@@ -39,6 +40,6 @@ trait HasTimeout
      */
     public function getRequestTimeout(): float
     {
-        return property_exists($this, 'requestTimeout') ? $this->requestTimeout : 30;
+        return property_exists($this, 'requestTimeout') ? $this->requestTimeout : Timeout::REQUEST->value;
     }
 }
