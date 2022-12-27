@@ -7,13 +7,6 @@ namespace Saloon\Contracts;
 interface ArrayStore
 {
     /**
-     * Constructor
-     *
-     * @param array $data
-     */
-    public function __construct(array $data = []);
-
-    /**
      * Retrieve all the items.
      *
      * @return array

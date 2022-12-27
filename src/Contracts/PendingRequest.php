@@ -133,15 +133,6 @@ interface PendingRequest
     public function query(): ArrayStore;
 
     /**
-     * Build up the request payload.
-     *
-     * @param \Saloon\Contracts\Connector $connector
-     * @param Request $request
-     * @param MockClient|null $mockClient
-     */
-    public function __construct(Connector $connector, Request $request, MockClient $mockClient = null);
-
-    /**
      * Execute the response pipeline.
      *
      * @param Response $response

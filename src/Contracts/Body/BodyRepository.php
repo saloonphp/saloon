@@ -9,13 +9,6 @@ use Stringable;
 interface BodyRepository extends Stringable
 {
     /**
-     * Constructor
-     *
-     * @param mixed $value
-     */
-    public function __construct(mixed $value);
-
-    /**
      * Set a value inside the repository
      *
      * @param mixed $value

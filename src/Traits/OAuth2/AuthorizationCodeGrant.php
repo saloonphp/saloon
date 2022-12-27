@@ -6,8 +6,8 @@ namespace Saloon\Traits\OAuth2;
 
 use DateTimeImmutable;
 use Saloon\Helpers\Date;
-use Saloon\Http\Response;
 use Saloon\Helpers\URLHelper;
+use Saloon\Contracts\Response;
 use Saloon\Helpers\StateHelper;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Http\OAuth2\GetUserRequest;
@@ -57,10 +57,10 @@ trait AuthorizationCodeGrant
      * Get the Authorization URL.
      *
      * @param array $scopes
-     * @param string $scopeSeparator
      * @param string|null $state
+     * @param string $scopeSeparator
      * @return string
-     * @throws \Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException
+     * @throws \Saloon\Exceptions\OAuthConfigValidationException
      */
     public function getAuthorizationUrl(array $scopes = [], string $state = null, string $scopeSeparator = ' '): string
     {
@@ -99,13 +99,12 @@ trait AuthorizationCodeGrant
      * @param string|null $state
      * @param string|null $expectedState
      * @param bool $returnResponse
-     * @return OAuthAuthenticator|Response
-     * @throws InvalidStateException
-     * @throws \JsonException
+     * @return \Saloon\Contracts\OAuthAuthenticator|\Saloon\Contracts\Response
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonRequestException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
+     * @throws \Saloon\Exceptions\InvalidStateException
+     * @throws \Saloon\Exceptions\OAuthConfigValidationException
+     * @throws \Saloon\Exceptions\PendingRequestException
      */
     public function getAccessToken(string $code, string $state = null, string $expectedState = null, bool $returnResponse = false): OAuthAuthenticator|Response
     {
@@ -129,14 +128,13 @@ trait AuthorizationCodeGrant
     /**
      * Refresh the access token.
      *
-     * @param OAuthAuthenticator|string $refreshToken
+     * @param \Saloon\Contracts\OAuthAuthenticator|string $refreshToken
      * @param bool $returnResponse
-     * @return OAuthAuthenticator|Response
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return \Saloon\Contracts\OAuthAuthenticator|\Saloon\Contracts\Response
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\OAuthConfigValidationException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonRequestException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
+     * @throws \Saloon\Exceptions\OAuthConfigValidationException
+     * @throws \Saloon\Exceptions\PendingRequestException
      */
     public function refreshAccessToken(OAuthAuthenticator|string $refreshToken, bool $returnResponse = false): OAuthAuthenticator|Response
     {
@@ -160,10 +158,9 @@ trait AuthorizationCodeGrant
     /**
      * Create the OAuthAuthenticator from a response.
      *
-     * @param Response $response
+     * @param \Saloon\Contracts\Response $response
      * @param string|null $fallbackRefreshToken
-     * @return OAuthAuthenticator
-     * @throws \JsonException
+     * @return \Saloon\Contracts\OAuthAuthenticator
      */
     protected function createOAuthAuthenticatorFromResponse(Response $response, string $fallbackRefreshToken = null): OAuthAuthenticator
     {
@@ -190,13 +187,13 @@ trait AuthorizationCodeGrant
     }
 
     /**
-     * Get the authenticated user.s
+     * Get the authenticated user.
      *
-     * @param OAuthAuthenticator $oauthAuthenticator
-     * @return Response
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @param \Saloon\Contracts\OAuthAuthenticator $oauthAuthenticator
+     * @return \Saloon\Contracts\Response
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
+     * @throws \Saloon\Exceptions\PendingRequestException
      */
     public function getUser(OAuthAuthenticator $oauthAuthenticator): Response
     {
