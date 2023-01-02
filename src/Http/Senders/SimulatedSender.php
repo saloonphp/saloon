@@ -35,12 +35,13 @@ class SimulatedSender implements Sender
             throw new SenderException('Simulated response payload must be present on the pending request instance');
         }
 
-        // Check if the SimulatedResponsePayload throws an exception
+        // Check if the SimulatedResponsePayload throws an exception. If the request is
+        // asynchronous, then we should allow the promise handler to deal with the exception.
 
         $exception = $simulatedResponsePayload->getException($pendingRequest);
 
-        if ($exception instanceof Throwable) {
-            $asynchronous === true ? new RejectedPromise($exception) : throw $exception;
+        if ($exception instanceof Throwable && $asynchronous === false) {
+            throw $exception;
         }
 
         // Let's create our response!
