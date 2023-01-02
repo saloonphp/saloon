@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Utils;
 use Saloon\Http\Senders\GuzzleSender;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -95,4 +96,15 @@ test('the guzzle sender has default options configured', function () {
     ]);
 
     expect($freshClient->getConfig())->toEqual($client->getConfig());
+});
+
+test('you can set a custom handler stack on the guzzle sender', function () {
+    $connector = new TestConnector;
+    $sender = $connector->sender();
+
+    $handlerStack = new HandlerStack(Utils::chooseHandler());
+
+    $sender->setHandlerStack($handlerStack);
+
+    expect($sender->getHandlerStack())->toBe($handlerStack);
 });

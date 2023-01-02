@@ -158,7 +158,7 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
      */
     public function getException(PendingRequest $pendingRequest): ?Throwable
     {
-        if (is_null($this->responseException)) {
+        if (! $this->throwsException()) {
             return null;
         }
 

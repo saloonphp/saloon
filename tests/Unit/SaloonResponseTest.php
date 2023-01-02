@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Psr7\Response;
+use Saloon\Contracts\ArrayStore;
 use Saloon\Http\PendingRequest;
 use Illuminate\Support\Collection;
 use Saloon\Http\Faking\MockClient;
@@ -203,17 +204,27 @@ test('the xml method will return xml as an array', function () {
 
 test('the headers method returns an array store', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], ['X-Greeting' => 'Howdy']),
+        MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 200, ['X-Greeting' => 'Howdy']),
     ]);
 
     $response = connector()->send(new UserRequest, $mockClient);
 
-    dd($response->headers());
-})->skip('SAM TODO');
+    expect($response->headers())->toBeInstanceOf(ArrayStore::class);
+});
 
 test('headers with a single value will have just the string value but headers with multiple values will be an array', function () {
-    //
-})->skip('SAM TODO');
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 200, ['X-Greeting' => 'Howdy', 'X-Farewell' => ['Goodbye', 'Sam']]),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+
+    expect($response->headers()->get('X-Greeting'))->toEqual('Howdy');
+    expect($response->headers()->get('X-Farewell'))->toEqual(['Goodbye', 'Sam']);
+
+    expect($response->header('X-Greeting'))->toEqual('Howdy');
+    expect($response->header('X-Farewell'))->toEqual(['Goodbye', 'Sam']);
+});
 
 test('the dom method will return a crawler instance', function () {
     $dom = '<p>Howdy <i>Partner</i></p>';
