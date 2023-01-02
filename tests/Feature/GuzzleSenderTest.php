@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use GuzzleHttp\Utils;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Utils;
 use Saloon\Http\Senders\GuzzleSender;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
