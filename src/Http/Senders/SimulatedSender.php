@@ -21,10 +21,11 @@ class SimulatedSender implements Sender
     /**
      * Send the request.
      *
-     * @param PendingRequest $pendingRequest
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @param bool $asynchronous
-     * @return Response|PromiseInterface
+     * @return \Saloon\Contracts\Response|\GuzzleHttp\Promise\PromiseInterface
      * @throws \Saloon\Exceptions\SenderException
+     * @throws \Throwable
      */
     public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): ResponseContract|PromiseInterface
     {
@@ -34,9 +35,16 @@ class SimulatedSender implements Sender
             throw new SenderException('Simulated response payload must be present on the pending request instance');
         }
 
-        // Let's create our response!
+        // Check if the SimulatedResponsePayload throws an exception. If the request is
+        // asynchronous, then we should allow the promise handler to deal with the exception.
 
         $exception = $simulatedResponsePayload->getException($pendingRequest);
+
+        if ($exception instanceof Throwable && $asynchronous === false) {
+            throw $exception;
+        }
+
+        // Let's create our response!
 
         /** @var class-string<\Saloon\Contracts\Response> $responseClass */
         $responseClass = $pendingRequest->getResponseClass();
