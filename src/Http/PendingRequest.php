@@ -434,7 +434,7 @@ class PendingRequest implements PendingRequestContract
      *
      * @return \Saloon\Contracts\Response
      */
-    public function send(): Response
+    public function send(): ResponseContract
     {
         return (new Dispatcher($this))->execute();
     }
