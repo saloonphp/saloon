@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Saloon\Http\Senders;
 
 use Throwable;
-use Saloon\Http\Response;
 use Saloon\Contracts\Sender;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\MockResponse;

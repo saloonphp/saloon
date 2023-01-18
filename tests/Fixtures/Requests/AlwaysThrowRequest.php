@@ -6,12 +6,12 @@ namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use Saloon\Traits\Plugins\AlwaysThrowsOnErrors;
+use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class AlwaysThrowRequest extends Request
 {
-    use AlwaysThrowsOnErrors;
+    use AlwaysThrowOnErrors;
 
     /**
      * Define the method that the request will use.

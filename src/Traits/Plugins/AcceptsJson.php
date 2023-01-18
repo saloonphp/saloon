@@ -9,6 +9,8 @@ use Saloon\Contracts\PendingRequest;
 trait AcceptsJson
 {
     /**
+     * Boot AcceptsJson Plugin
+     *
      * @param PendingRequest $pendingRequest
      * @return void
      */

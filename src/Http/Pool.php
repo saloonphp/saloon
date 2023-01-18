@@ -53,15 +53,15 @@ class Pool implements PoolContract
      * Constructor
      *
      * @param \Saloon\Http\Connector $connector
-     * @param callable|iterable $requestPayload
+     * @param callable|iterable $requests
      * @param int|callable $concurrency
      * @param callable|null $responseHandler
      * @param callable|null $exceptionHandler
      */
-    public function __construct(Connector $connector, callable|iterable $requestPayload = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null)
+    public function __construct(Connector $connector, callable|iterable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null)
     {
         $this->connector = $connector;
-        $this->setRequests($requestPayload);
+        $this->setRequests($requests);
         $this->concurrency = $concurrency;
         $this->responseHandler = $responseHandler;
         $this->exceptionHandler = $exceptionHandler;

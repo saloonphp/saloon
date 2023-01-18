@@ -7,15 +7,15 @@ namespace Saloon\Traits\Plugins;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\PendingRequest;
 
-trait AlwaysThrowsOnErrors
+trait AlwaysThrowOnErrors
 {
     /**
-     * Always throw if there is something wrong with the request.
+     * Boot AlwaysThrowOnErrors Plugin
      *
      * @param PendingRequest $pendingRequest
      * @return void
      */
-    public static function bootAlwaysThrowsOnErrors(PendingRequest $pendingRequest): void
+    public static function bootAlwaysThrowOnErrors(PendingRequest $pendingRequest): void
     {
         $pendingRequest->middleware()->onResponse(fn (Response $response) => $response->throw());
     }
