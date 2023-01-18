@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Traits\Connector;
 
 use Saloon\Http\Pool;
-use Saloon\Exceptions\SaloonException;
 use Saloon\Contracts\Pool as PoolContract;
-use Saloon\Exceptions\InvalidPoolItemException;
 
 trait HasPool
 {
@@ -18,10 +16,7 @@ trait HasPool
      * @param int|callable $concurrency
      * @param callable|null $responseHandler
      * @param callable|null $exceptionHandler
-     * @return Pool
-     * @throws \ReflectionException
-     * @throws InvalidPoolItemException
-     * @throws SaloonException
+     * @return \Saloon\Contracts\Pool
      */
     public function pool(iterable|callable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null): PoolContract
     {

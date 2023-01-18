@@ -10,6 +10,7 @@ class StateHelper
      * Generate a random string for the state.
      *
      * @return string
+     * @throws \Exception
      */
     public static function createRandomState(): string
     {
