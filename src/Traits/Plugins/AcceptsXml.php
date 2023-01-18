@@ -9,7 +9,7 @@ use Saloon\Contracts\PendingRequest;
 trait AcceptsXml
 {
     /**
-     * Boot the AcceptsXml trait.
+     * Boot AcceptsXml Plugin
      *
      * @param PendingRequest $pendingRequest
      * @return void
