@@ -7,7 +7,7 @@ namespace Saloon\Contracts;
 interface ResponseMiddleware
 {
     /**
-     * Register a request middleware
+     * Register a response middleware
      *
      * @param Response $response
      * @return Response|void
