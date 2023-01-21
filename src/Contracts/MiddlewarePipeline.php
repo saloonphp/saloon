@@ -11,20 +11,20 @@ interface MiddlewarePipeline
     /**
      * Add a middleware before the request is sent
      *
-     * @param callable $closure
+     * @param callable $callable
      * @param bool $prepend
      * @return $this
      */
-    public function onRequest(callable $closure, bool $prepend = false): static;
+    public function onRequest(callable $callable, bool $prepend = false): static;
 
     /**
      * Add a middleware after the request is sent
      *
-     * @param callable $closure
+     * @param callable $callable
      * @param bool $prepend
      * @return $this
      */
-    public function onResponse(callable $closure, bool $prepend = false): static;
+    public function onResponse(callable $callable, bool $prepend = false): static;
 
     /**
      * Process the request pipeline.
