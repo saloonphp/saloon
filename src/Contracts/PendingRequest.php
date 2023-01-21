@@ -232,4 +232,19 @@ interface PendingRequest
      * @return mixed
      */
     public function createDtoFromResponse(Response $response): mixed;
+
+    /**
+     * Set if the request is going to be sent asynchronously
+     *
+     * @param bool $asynchronous
+     * @return $this
+     */
+    public function setAsynchronous(bool $asynchronous): static;
+
+    /**
+     * Check if the request is asynchronous
+     *
+     * @return bool
+     */
+    public function isAsynchronous(): bool;
 }

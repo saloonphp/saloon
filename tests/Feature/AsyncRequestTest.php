@@ -25,6 +25,7 @@ test('an asynchronous request can be made successfully', function () {
 
     $data = $response->json();
 
+    expect($response->getPendingRequest()->isAsynchronous())->toBeTrue();
     expect($response->isMocked())->toBeFalse();
     expect($response->status())->toEqual(200);
 

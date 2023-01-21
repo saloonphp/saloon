@@ -25,6 +25,10 @@ class DetermineMockResponse implements RequestMiddleware
             return $pendingRequest;
         }
 
+        if ($pendingRequest->hasSimulatedResponsePayload()) {
+            return $pendingRequest;
+        }
+
         $mockClient = $pendingRequest->getMockClient();
 
         // When we guess the next response from the MockClient it will

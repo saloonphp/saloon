@@ -16,6 +16,7 @@ test('a request can be made successfully', function () {
 
     $data = $response->json();
 
+    expect($response->getPendingRequest()->isAsynchronous())->toBeFalse();
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->isMocked())->toBeFalse();
     expect($response->status())->toEqual(200);

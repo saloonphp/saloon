@@ -16,9 +16,8 @@ class Dispatcher implements DispatcherContract
      * Constructor
      *
      * @param PendingRequest $pendingRequest
-     * @param bool $asynchronous
      */
-    public function __construct(protected PendingRequest $pendingRequest, protected bool $asynchronous = false)
+    public function __construct(protected PendingRequest $pendingRequest)
     {
         //
     }
@@ -37,7 +36,7 @@ class Dispatcher implements DispatcherContract
         // to create the SimulatedResponse and return that. Otherwise, we
         // will send a real request to the sender.
 
-        $response = $this->getSender()->sendRequest($pendingRequest, $this->asynchronous);
+        $response = $this->getSender()->sendRequest($pendingRequest, $pendingRequest->isAsynchronous());
 
         // Next we will need to run the response pipeline. If the response
         // is a Response we can run it directly, but if it is
