@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Http\Faking\SimulatedResponsePayload;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('if a simulated response payload was provided before mock response it will take priority', function () {
     $mockClient = new MockClient([
