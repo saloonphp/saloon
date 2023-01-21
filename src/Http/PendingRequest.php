@@ -88,6 +88,13 @@ class PendingRequest implements PendingRequestContract
     protected ?SimulatedResponsePayload $simulatedResponsePayload = null;
 
     /**
+     * Determine if the pending request is asynchronous
+     *
+     * @var bool
+     */
+    protected bool $asynchronous = false;
+
+    /**
      * Build up the request payload.
      *
      * @param \Saloon\Contracts\Connector $connector
@@ -436,6 +443,8 @@ class PendingRequest implements PendingRequestContract
      */
     public function send(): ResponseContract
     {
+        $this->setAsynchronous(false);
+
         return (new Dispatcher($this))->execute();
     }
 
@@ -446,7 +455,9 @@ class PendingRequest implements PendingRequestContract
      */
     public function sendAsync(): PromiseInterface
     {
-        return (new Dispatcher($this, true))->execute();
+        $this->setAsynchronous(true);
+
+        return (new Dispatcher($this))->execute();
     }
 
     /**
@@ -458,5 +469,28 @@ class PendingRequest implements PendingRequestContract
     public function createDtoFromResponse(ResponseContract $response): mixed
     {
         return $this->request->createDtoFromResponse($response) ?? $this->connector->createDtoFromResponse($response);
+    }
+
+    /**
+     * Set if the request is going to be sent asynchronously
+     *
+     * @param bool $asynchronous
+     * @return PendingRequestContract
+     */
+    public function setAsynchronous(bool $asynchronous): static
+    {
+        $this->asynchronous = $asynchronous;
+
+        return $this;
+    }
+
+    /**
+     * Check if the request is asynchronous
+     *
+     * @return bool
+     */
+    public function isAsynchronous(): bool
+    {
+        return $this->asynchronous;
     }
 }
