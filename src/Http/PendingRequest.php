@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use Saloon\Defaults;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Sender;
@@ -113,6 +114,10 @@ class PendingRequest implements PendingRequestContract
         $this->responseClass = $this->resolveResponseClass();
         $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient();
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
+
+        // Merge in default middleware
+
+        $this->middleware()->merge(Defaults::middleware());
 
         // After we have defined each of our properties, we will run the various
         // methods that build up the PendingRequest. It's important that
