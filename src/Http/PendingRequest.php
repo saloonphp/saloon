@@ -263,13 +263,13 @@ class PendingRequest implements PendingRequestContract
         // We're going to register the internal middleware that should be run before
         // a request is sent. This order should remain exactly the same.
 
-        $middleware->onRequest(new AuthenticateRequest);
+        $middleware->onRequest(new AuthenticateRequest, false, 'authenticateRequest');
 
         // Next we will run the MockClient and determine if we should send a real
         // request or not. Keep DetermineMockResponse at the bottom so other
         // middleware can set the MockClient before we run the MockResponse.
 
-        $middleware->onRequest(new DetermineMockResponse);
+        $middleware->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
 
         return $this;
     }

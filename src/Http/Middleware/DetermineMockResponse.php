@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Middleware;
 
+use Saloon\Enums\DefaultMiddleware;
 use Saloon\Http\Faking\Fixture;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
@@ -51,7 +52,7 @@ class DetermineMockResponse implements RequestMiddleware
         // middleware on the response to record the response.
 
         if (is_null($mockResponse) && $mockObject instanceof Fixture) {
-            $pendingRequest->middleware()->onResponse(new RecordFixture($mockObject), true);
+            $pendingRequest->middleware()->onResponse(new RecordFixture($mockObject), true, DefaultMiddleware::RECORD_FIXTURE->value);
         }
 
         return $pendingRequest;

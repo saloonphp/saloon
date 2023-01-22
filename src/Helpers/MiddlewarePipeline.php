@@ -39,9 +39,11 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      *
      * @param callable $callable
      * @param bool $prepend
+     * @param string|null $name
      * @return $this
+     * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
-    public function onRequest(callable $callable, bool $prepend = false): static
+    public function onRequest(callable $callable, bool $prepend = false, ?string $name = null): static
     {
         $this->requestPipeline = $this->requestPipeline->pipe(function (PendingRequest $pendingRequest) use ($callable) {
             $result = $callable($pendingRequest);
@@ -55,7 +57,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
             }
 
             return $pendingRequest;
-        }, $prepend);
+        }, $prepend, $name);
 
         return $this;
     }
@@ -65,15 +67,17 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      *
      * @param callable $callable
      * @param bool $prepend
+     * @param string|null $name
      * @return $this
+     * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
-    public function onResponse(callable $callable, bool $prepend = false): static
+    public function onResponse(callable $callable, bool $prepend = false, ?string $name = null): static
     {
         $this->responsePipeline = $this->responsePipeline->pipe(function (Response $response) use ($callable) {
             $result = $callable($response);
 
             return $result instanceof Response ? $result : $response;
-        }, $prepend);
+        }, $prepend, $name);
 
         return $this;
     }
