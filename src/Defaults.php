@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon;
 
-use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 use Saloon\Helpers\MiddlewarePipeline;
+use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
 final class Defaults
 {
