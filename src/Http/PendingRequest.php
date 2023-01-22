@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use Saloon\Config;
 use Saloon\Defaults;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Helpers;
@@ -11,7 +12,6 @@ use Saloon\Contracts\Sender;
 use Saloon\Contracts\Request;
 use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Connector;
-use Saloon\Helpers\Environment;
 use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
 use Saloon\Traits\Conditionable;
@@ -28,7 +28,6 @@ use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
 use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Exceptions\InvalidResponseClassException;
-use Saloon\Laravel\Http\Middleware\FrameworkMiddleware;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
@@ -114,10 +113,6 @@ class PendingRequest implements PendingRequestContract
         $this->responseClass = $this->resolveResponseClass();
         $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient();
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
-
-        // Merge in default middleware
-
-        $this->middleware()->merge(Defaults::middleware());
 
         // After we have defined each of our properties, we will run the various
         // methods that build up the PendingRequest. It's important that
@@ -261,20 +256,15 @@ class PendingRequest implements PendingRequestContract
      */
     protected function registerDefaultMiddleware(): static
     {
-        $middleware = $this->middleware();
+        // We'll merge in any global middleware here. These should run after
+        // the user's middleware.
+
+        $middleware = $this->middleware()->merge(Config::middleware());
 
         // We're going to register the internal middleware that should be run before
         // a request is sent. This order should remain exactly the same.
 
         $middleware->onRequest(new AuthenticateRequest);
-
-        // Next we will check if we are in a Laravel environment and if we have the
-        // Laravel middleware. If we do then Laravel can make changes to the
-        // request like add its MockClient and record requests.
-
-        if (Environment::detectsLaravel() && class_exists(FrameworkMiddleware::class)) {
-            $middleware->onRequest(new FrameworkMiddleware);
-        }
 
         // Next we will run the MockClient and determine if we should send a real
         // request or not. Keep DetermineMockResponse at the bottom so other

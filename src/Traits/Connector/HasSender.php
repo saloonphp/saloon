@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Connector;
 
+use Saloon\Config;
 use Saloon\Contracts\Sender;
 use Saloon\Helpers\SenderHelper;
 
@@ -41,7 +42,7 @@ trait HasSender
     protected function defaultSender(): Sender
     {
         if (empty($this->defaultSender)) {
-            return SenderHelper::defaultSender();
+            return Config::getDefaultSender();
         }
 
         return new $this->defaultSender;
