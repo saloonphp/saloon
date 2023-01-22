@@ -6,7 +6,6 @@ namespace Saloon\Traits\Connector;
 
 use Saloon\Config;
 use Saloon\Contracts\Sender;
-use Saloon\Helpers\SenderHelper;
 
 trait HasSender
 {

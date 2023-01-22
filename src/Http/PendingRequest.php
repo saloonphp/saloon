@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Saloon\Http;
 
 use Saloon\Config;
-use Saloon\Defaults;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Sender;

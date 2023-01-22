@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon;
 
-use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 use Saloon\Contracts\Sender;
-use Saloon\Helpers\MiddlewarePipeline;
 use Saloon\Http\Senders\GuzzleSender;
+use Saloon\Helpers\MiddlewarePipeline;
+use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
 final class Config
 {
