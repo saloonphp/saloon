@@ -9,6 +9,7 @@ use Saloon\Http\Faking\MockResponse;
 use Saloon\Helpers\MiddlewarePipeline;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Exceptions\DuplicatePipeNameException;
 
 test('you can add a request pipe to the middleware', function () {
     $pipeline = new MiddlewarePipeline;
@@ -26,6 +27,80 @@ test('you can add a request pipe to the middleware', function () {
 
     expect($pendingRequest->headers()->get('X-Pipe-One'))->toEqual('Yee-Haw');
     expect($pendingRequest->headers()->get('X-Pipe-Two'))->toEqual('Howdy');
+});
+
+test('you can add a named request pipe to the middleware', function () {
+    $pipeline = new MiddlewarePipeline;
+
+    $pipeline
+        ->onRequest(function (PendingRequest $request) {
+            $request->headers()->add('X-Pipe-One', 'Yee-Haw');
+        }, false, 'YeeHawPipe');
+
+    $pendingRequest = connector()->createPendingRequest(new UserRequest);
+    $pendingRequest = $pipeline->executeRequestPipeline($pendingRequest);
+
+    expect($pendingRequest->headers()->get('X-Pipe-One'))->toEqual('Yee-Haw');
+});
+
+test('the named request pipe must be unique', function () {
+    $pipeline = new MiddlewarePipeline;
+
+    $pipeline
+        ->onRequest(
+            callable: function (PendingRequest $request) {
+                $request->headers()->add('X-Pipe-One', 'Yee-Haw');
+            },
+            prepend: false,
+            name: 'YeeHawPipe'
+        );
+
+    $this->expectException(DuplicatePipeNameException::class);
+    $this->expectExceptionMessage('The "YeeHawPipe" pipe already exists on the pipeline');
+
+    $pipeline
+        ->onRequest(
+            callable: function (PendingRequest $request) {
+                $request->headers()->add('X-Pipe-One', 'Yee-Haw');
+            },
+            prepend: false,
+            name: 'YeeHawPipe'
+        );
+});
+
+test('you can add a named response pipe to the middleware', function () {
+    $pipeline = new MiddlewarePipeline;
+
+    $count = 0;
+
+    $pipeline
+        ->onResponse(function (Response $response) use (&$count) {
+            $count++;
+        }, false, 'ResponsePipe');
+
+    $pendingRequest = connector()->createPendingRequest(new UserRequest);
+    $response = Response::fromPsrResponse(MockResponse::make()->getPsrResponse(), $pendingRequest);
+
+    $pipeline->executeResponsePipeline($response);
+
+    expect($count)->toBe(1);
+});
+
+test('the named response pipe must be unique', function () {
+    $pipeline = new MiddlewarePipeline;
+
+    $pipeline
+        ->onResponse(function (Response $response) {
+            //
+        }, false, 'ResponsePipe');
+
+    $this->expectException(DuplicatePipeNameException::class);
+    $this->expectExceptionMessage('The "ResponsePipe" pipe already exists on the pipeline');
+
+    $pipeline
+        ->onResponse(function (Response $response) {
+            //
+        }, false, 'ResponsePipe');
 });
 
 test('if a request pipe returns a pending request, we will use that in the next step', function () {
