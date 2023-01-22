@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Saloon\Exceptions\DuplicatePipeNameException;
 use Saloon\Http\Response;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
@@ -10,6 +9,7 @@ use Saloon\Http\Faking\MockResponse;
 use Saloon\Helpers\MiddlewarePipeline;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Exceptions\DuplicatePipeNameException;
 
 test('you can add a request pipe to the middleware', function () {
     $pipeline = new MiddlewarePipeline;
