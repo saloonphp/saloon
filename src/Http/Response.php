@@ -88,16 +88,6 @@ class Response implements ResponseContract
     }
 
     /**
-     * Get the raw response
-     *
-     * @return mixed
-     */
-    public function getRawResponse(): mixed
-    {
-        return $this->psrResponse;
-    }
-
-    /**
      * Get the body of the response as string.
      *
      * @return string

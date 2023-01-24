@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
-class MockConfig
+final class MockConfig
 {
     /**
      * Default fixture path

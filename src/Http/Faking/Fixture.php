@@ -8,7 +8,6 @@ use Saloon\Helpers\Storage;
 use Saloon\Helpers\MockConfig;
 use Saloon\Data\RecordedResponse;
 use Saloon\Exceptions\FixtureMissingException;
-use Saloon\Exceptions\DirectoryNotFoundException;
 
 class Fixture
 {
@@ -37,13 +36,14 @@ class Fixture
      * Constructor
      *
      * @param string $name
-     * @param Storage|null $storage
-     * @throws DirectoryNotFoundException
+     * @param \Saloon\Helpers\Storage|null $storage
+     * @throws \Saloon\Exceptions\DirectoryNotFoundException
+     * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      */
     public function __construct(string $name, Storage $storage = null)
     {
         $this->name = $name;
-        $this->storage = $storage ?? new Storage(MockConfig::getFixturePath());
+        $this->storage = $storage ?? new Storage(MockConfig::getFixturePath(), true);
     }
 
     /**
