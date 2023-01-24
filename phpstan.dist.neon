@@ -1,0 +1,17 @@
+#############################################################################################
+# Don't edit this config file directly.                                                     #
+# For temporary, or local overrides, create a file named 'phpstan.neon' alongside this one. #
+#############################################################################################
+
+parameters:
+  # Add one of the editorUrl's in your phpstan.neon file for direct editor/IDE links in the terminal.
+  #editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
+  #editorUrl: 'vscode://file/%%file%%:%%line%%'
+
+  level: max
+
+  paths:
+  - src
+
+  ignoreErrors:
+  - "#^Unsafe usage of new static\\(\\)\\.$#"
