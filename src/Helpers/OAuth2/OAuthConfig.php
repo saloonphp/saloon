@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers\OAuth2;
 
+use Saloon\Contracts\Makeable as MakeableContract;
 use Saloon\Exceptions\OAuthConfigValidationException;
+use Saloon\Traits\Makeable;
 
-class OAuthConfig
+/**
+ * @method static static make()
+ */
+class OAuthConfig implements MakeableContract
 {
+    use Makeable;
+
     /**
      * The Client ID
      *
@@ -56,16 +63,6 @@ class OAuthConfig
      * @var array
      */
     protected array $defaultScopes = [];
-
-    /**
-     * Create a new instance of the class.
-     *
-     * @return static
-     */
-    public static function make(): static
-    {
-        return new static;
-    }
 
     /**
      * Get the Client ID
