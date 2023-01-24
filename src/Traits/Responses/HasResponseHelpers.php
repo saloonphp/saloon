@@ -87,10 +87,10 @@ trait HasResponseHelpers
     /**
      * Convert the XML response into a SimpleXMLElement.
      *
-     * @param ...$arguments
+     * @param mixed ...$arguments
      * @return \SimpleXMLElement|bool
      */
-    public function xml(...$arguments): SimpleXMLElement|bool
+    public function xml(mixed ...$arguments): SimpleXMLElement|bool
     {
         if (! isset($this->decodedXml)) {
             $this->decodedXml = $this->body();

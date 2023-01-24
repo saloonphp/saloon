@@ -33,10 +33,10 @@ interface ArrayStore
     /**
      * Merge in other arrays.
      *
-     * @param mixed ...$arrays
+     * @param array ...$arrays
      * @return $this
      */
-    public function merge(...$arrays): static;
+    public function merge(array ...$arrays): static;
 
     /**
      * Add an item to the repository.
