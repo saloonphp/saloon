@@ -95,6 +95,12 @@ class Pipeline implements PipelineContract
      */
     protected function pipeExists(string $name): bool
     {
-        return ! empty(array_filter($this->pipes, static fn (Pipe $pipe) => $pipe->name === $name));
+        foreach ($this->pipes as $pipe) {
+            if ($pipe->name === $name) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
