@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Http;
 
 use Saloon\Contracts\Sender;
-use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Response;
+use Saloon\Contracts\PendingRequest;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Http\Senders\SimulatedSender;
 use Saloon\Contracts\Dispatcher as DispatcherContract;

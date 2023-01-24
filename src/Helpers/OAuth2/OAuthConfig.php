@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers\OAuth2;
 
+use Saloon\Traits\Makeable;
 use Saloon\Contracts\Makeable as MakeableContract;
 use Saloon\Exceptions\OAuthConfigValidationException;
-use Saloon\Traits\Makeable;
 
 /**
  * @method static static make()

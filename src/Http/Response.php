@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 use Throwable;
 use Saloon\Traits\Macroable;
 use Saloon\Contracts\Request;
@@ -14,6 +13,7 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Traits\Responses\HasResponseHelpers;
 use Saloon\Contracts\Response as ResponseContract;
+use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
 class Response implements ResponseContract
 {

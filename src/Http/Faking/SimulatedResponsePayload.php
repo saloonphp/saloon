@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Saloon\Http\Faking;
 
 use Closure;
-use Saloon\Contracts\ArrayStore as ArrayStoreContract;
-use Saloon\Traits\Makeable;
 use Throwable;
+use Saloon\Traits\Makeable;
 use Saloon\Repositories\ArrayStore;
 use Saloon\Contracts\PendingRequest;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Saloon\Repositories\Body\JsonBodyRepository;
-use Saloon\Exceptions\DirectoryNotFoundException;
 use Saloon\Repositories\Body\StringBodyRepository;
+use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 use Saloon\Contracts\SimulatedResponsePayload as SimulatedResponsePayloadContract;
 
 class SimulatedResponsePayload implements SimulatedResponsePayloadContract

@@ -6,9 +6,9 @@ namespace Saloon\Http;
 
 use Closure;
 use Generator;
+use Saloon\Contracts\Connector;
 use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Contracts\Connector;
 use Saloon\Contracts\Pool as PoolContract;
 use Saloon\Exceptions\InvalidPoolItemException;
 

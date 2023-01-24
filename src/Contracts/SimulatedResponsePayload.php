@@ -9,7 +9,6 @@ use Throwable;
 use Saloon\Http\Faking\Fixture;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Contracts\Body\BodyRepository;
-use Saloon\Exceptions\DirectoryNotFoundException;
 
 /**
  * @method static static make(mixed $body = [], int $status = 200, array $headers = []) Create a new mock response
