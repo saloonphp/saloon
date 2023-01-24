@@ -21,12 +21,14 @@ class Storage
      * Constructor
      *
      * @param string $baseDirectory
-     * @throws DirectoryNotFoundException
+     * @param bool $createMissingBaseDirectory
+     * @throws \Saloon\Exceptions\DirectoryNotFoundException
+     * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      */
-    public function __construct(string $baseDirectory)
+    public function __construct(string $baseDirectory, bool $createMissingBaseDirectory = false)
     {
         if (! is_dir($baseDirectory)) {
-            throw new DirectoryNotFoundException($baseDirectory);
+            $createMissingBaseDirectory ? $this->createDirectory($baseDirectory) : throw new DirectoryNotFoundException($baseDirectory);
         }
 
         $this->baseDirectory = $baseDirectory;
@@ -104,11 +106,7 @@ class Storage
         $directoryWithoutFilename = implode(DIRECTORY_SEPARATOR, explode(DIRECTORY_SEPARATOR, $fullPath, -1));
 
         if (empty($directoryWithoutFilename) === false && is_dir($directoryWithoutFilename) === false) {
-            $createdDirectory = mkdir($directoryWithoutFilename, 0777, true);
-
-            if ($createdDirectory === false && is_dir($directoryWithoutFilename) === false) {
-                throw new UnableToCreateDirectoryException($directoryWithoutFilename);
-            }
+            $this->createDirectory($directoryWithoutFilename);
         }
 
         $createdFile = file_put_contents($fullPath, $contents);
@@ -118,5 +116,23 @@ class Storage
         }
 
         return $this;
+    }
+
+    /**
+     * Create a directory
+     *
+     * @param string $directory
+     * @return bool
+     * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
+     */
+    public function createDirectory(string $directory): bool
+    {
+        $createdDirectory = mkdir($directory, 0777, true);
+
+        if ($createdDirectory === false && is_dir($directory) === false) {
+            throw new UnableToCreateDirectoryException($directory);
+        }
+
+        return true;
     }
 }

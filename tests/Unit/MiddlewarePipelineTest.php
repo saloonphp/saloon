@@ -183,7 +183,7 @@ test('you can merge a middleware pipeline together', closure: function () {
         })
         ->onResponse(function (Response $response) {
             return $response->throw();
-        });
+        }, false, 'response');
 
     expect($pipelineB->getRequestPipeline()->getPipes())->toBeEmpty();
     expect($pipelineB->getResponsePipeline()->getPipes())->toBeEmpty();
@@ -192,6 +192,8 @@ test('you can merge a middleware pipeline together', closure: function () {
 
     expect($pipelineB->getRequestPipeline()->getPipes())->toHaveCount(2);
     expect($pipelineB->getResponsePipeline()->getPipes())->toHaveCount(1);
+    expect($pipelineA->getRequestPipeline()->getPipes())->toEqual($pipelineB->getRequestPipeline()->getPipes());
+    expect($pipelineA->getResponsePipeline()->getPipes())->toEqual($pipelineB->getResponsePipeline()->getPipes());
 });
 
 test('a request pipeline is run in order of pipes', function () {
