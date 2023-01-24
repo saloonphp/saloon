@@ -21,7 +21,7 @@ class Storage
      * Constructor
      *
      * @param string $baseDirectory
-     * @throws DirectoryNotFoundException
+     * @throws \Saloon\Exceptions\DirectoryNotFoundException
      */
     public function __construct(string $baseDirectory)
     {
@@ -94,8 +94,8 @@ class Storage
      * @param string $path
      * @param string $contents
      * @return $this
-     * @throws UnableToCreateDirectoryException
-     * @throws UnableToCreateFileException
+     * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
+     * @throws \Saloon\Exceptions\UnableToCreateFileException
      */
     public function put(string $path, string $contents): static
     {

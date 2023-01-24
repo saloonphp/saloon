@@ -15,7 +15,7 @@ trait RequiresAuth
      *
      * @param \Saloon\Contracts\PendingRequest $pendingSaloonRequest
      * @return void
-     * @throws MissingAuthenticatorException
+     * @throws \Saloon\Exceptions\MissingAuthenticatorException
      */
     public function bootRequiresAuth(PendingRequest $pendingSaloonRequest): void
     {

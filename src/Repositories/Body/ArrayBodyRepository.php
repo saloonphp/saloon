@@ -139,7 +139,7 @@ class ArrayBodyRepository implements BodyRepository
      * Convert to a string
      *
      * @return string
-     * @throws UnableToCastToStringException
+     * @throws \Saloon\Exceptions\UnableToCastToStringException
      */
     public function __toString(): string
     {

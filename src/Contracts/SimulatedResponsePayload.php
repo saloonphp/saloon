@@ -21,7 +21,7 @@ interface SimulatedResponsePayload extends Makeable
      *
      * @param string $name
      * @return \Saloon\Http\Faking\Fixture
-     * @throws DirectoryNotFoundException
+     * @throws \Saloon\Exceptions\DirectoryNotFoundException
      */
     public static function fixture(string $name): Fixture;
 

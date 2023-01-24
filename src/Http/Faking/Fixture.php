@@ -38,7 +38,7 @@ class Fixture
      *
      * @param string $name
      * @param \Saloon\Helpers\Storage|null $storage
-     * @throws DirectoryNotFoundException
+     * @throws \Saloon\Exceptions\DirectoryNotFoundException
      */
     public function __construct(string $name, Storage $storage = null)
     {
@@ -50,7 +50,7 @@ class Fixture
      * Attempt to get the mock response from the fixture.
      *
      * @return \Saloon\Http\Faking\MockResponse|null
-     * @throws FixtureMissingException
+     * @throws \Saloon\Exceptions\FixtureMissingException
      * @throws \JsonException
      */
     public function getMockResponse(): ?MockResponse

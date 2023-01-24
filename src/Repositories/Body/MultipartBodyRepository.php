@@ -158,7 +158,7 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
      * Convert to string
      *
      * @return string
-     * @throws UnableToCastToStringException
+     * @throws \Saloon\Exceptions\UnableToCastToStringException
      */
     public function __toString(): string
     {

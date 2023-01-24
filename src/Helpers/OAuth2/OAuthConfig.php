@@ -229,7 +229,7 @@ class OAuthConfig implements MakeableContract
      * Validate the OAuth2 config.
      *
      * @return bool
-     * @throws OAuthConfigValidationException
+     * @throws \Saloon\Exceptions\OAuthConfigValidationException
      */
     public function validate(): bool
     {

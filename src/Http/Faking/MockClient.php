@@ -57,7 +57,7 @@ class MockClient implements MockClientContract
      * Constructor
      *
      * @param array $mockData
-     * @throws InvalidMockResponseCaptureMethodException
+     * @throws \Saloon\Exceptions\InvalidMockResponseCaptureMethodException
      */
     public function __construct(array $mockData = [])
     {
@@ -69,7 +69,7 @@ class MockClient implements MockClientContract
      *
      * @param array $responses
      * @return void
-     * @throws InvalidMockResponseCaptureMethodException
+     * @throws \Saloon\Exceptions\InvalidMockResponseCaptureMethodException
      */
     public function addResponses(array $responses): void
     {
@@ -88,7 +88,7 @@ class MockClient implements MockClientContract
      * @param \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable $response
      * @param string|null $captureMethod
      * @return void
-     * @throws InvalidMockResponseCaptureMethodException
+     * @throws \Saloon\Exceptions\InvalidMockResponseCaptureMethodException
      */
     public function addResponse(MockResponse|Fixture|callable $response, ?string $captureMethod = null): void
     {
@@ -141,7 +141,7 @@ class MockClient implements MockClientContract
      *
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture
-     * @throws NoMockResponseFoundException
+     * @throws \Saloon\Exceptions\NoMockResponseFoundException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function guessNextResponse(PendingRequest $pendingRequest): MockResponse|Fixture
