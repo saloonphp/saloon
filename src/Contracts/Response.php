@@ -7,7 +7,6 @@ namespace Saloon\Contracts;
 use Throwable;
 use SimpleXMLElement;
 use Illuminate\Support\Collection;
-use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 

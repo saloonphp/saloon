@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use Throwable;
 use GuzzleHttp\Promise\PromiseInterface;
 
 interface Connector extends Authenticatable, CanThrowRequestExceptions, Conditionable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams, Makeable

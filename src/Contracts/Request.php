@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use Throwable;
 use Saloon\Enums\Method;
-use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
 interface Request extends Authenticatable, CanThrowRequestExceptions, Conditionable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams, Makeable
 {
