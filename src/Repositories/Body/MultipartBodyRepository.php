@@ -28,7 +28,7 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
      *
      * @param array<\Saloon\Data\MultipartValue> $value
      */
-    public function __construct(mixed $value = [])
+    public function __construct(array $value = [])
     {
         $this->data = new ArrayBodyRepository;
 
