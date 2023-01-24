@@ -12,7 +12,7 @@ interface Pipeline
      * @param callable $callable
      * @param bool $prepend
      * @param string|null $name
-     * @return \Saloon\Helpers\Pipeline
+     * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
     public function pipe(callable $callable, bool $prepend = false, ?string $name = null): static;

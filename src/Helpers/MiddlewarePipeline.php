@@ -110,6 +110,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      *
      * @param \Saloon\Contracts\MiddlewarePipeline $middlewarePipeline
      * @return $this
+     * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
     public function merge(MiddlewarePipelineContract $middlewarePipeline): static
     {
@@ -132,9 +133,9 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Get the request pipeline
      *
-     * @return \Saloon\Helpers\Pipeline
+     * @return \Saloon\Contracts\Pipeline
      */
-    public function getRequestPipeline(): Pipeline
+    public function getRequestPipeline(): PipelineContract
     {
         return $this->requestPipeline;
     }
@@ -142,9 +143,9 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Get the response pipeline
      *
-     * @return \Saloon\Helpers\Pipeline
+     * @return \Saloon\Contracts\Pipeline
      */
-    public function getResponsePipeline(): Pipeline
+    public function getResponsePipeline(): PipelineContract
     {
         return $this->responsePipeline;
     }

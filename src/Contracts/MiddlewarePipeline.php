@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use Saloon\Helpers\Pipeline;
-
 interface MiddlewarePipeline
 {
     /**
@@ -55,14 +53,14 @@ interface MiddlewarePipeline
     /**
      * Get the request pipeline
      *
-     * @return \Saloon\Helpers\Pipeline
+     * @return \Saloon\Contracts\Pipeline
      */
     public function getRequestPipeline(): Pipeline;
 
     /**
      * Get the response pipeline
      *
-     * @return \Saloon\Helpers\Pipeline
+     * @return \Saloon\Contracts\Pipeline
      */
     public function getResponsePipeline(): Pipeline;
 }
