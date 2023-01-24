@@ -196,6 +196,19 @@ test('you can merge a middleware pipeline together', closure: function () {
     expect($pipelineA->getResponsePipeline()->getPipes())->toEqual($pipelineB->getResponsePipeline()->getPipes());
 });
 
+test('when merging a middleware pipeline together if two pipelines exist with the same pipe it throws an exception', function () {
+    $pipelineA = new MiddlewarePipeline;
+    $pipelineB = new MiddlewarePipeline;
+
+    $pipelineA->onRequest(fn () => null, false, 'howdy');
+    $pipelineB->onRequest(fn () => null, false, 'howdy');
+
+    $this->expectException(DuplicatePipeNameException::class);
+    $this->expectExceptionMessage('The "howdy" pipe already exists on the pipeline');
+
+    $pipelineA->merge($pipelineB);
+});
+
 test('a request pipeline is run in order of pipes', function () {
     $pipeline = new MiddlewarePipeline;
     $names = [];

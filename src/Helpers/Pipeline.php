@@ -59,12 +59,20 @@ class Pipeline implements PipelineContract
     /**
      * Set the pipes on the pipeline.
      *
-     * @param array<\Saloon\Data\Pipe> $pipes
+     * @param array $pipes
      * @return $this
+     * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
     public function setPipes(array $pipes): static
     {
-        $this->pipes = $pipes;
+        $this->pipes = [];
+
+        // Loop through each of the pipes and manually add each pipe
+        // so we can check if the name already exists.
+
+        foreach ($pipes as $pipe) {
+            $this->pipe($pipe->callable, false, $pipe->name);
+        }
 
         return $this;
     }
