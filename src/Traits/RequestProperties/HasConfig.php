@@ -12,14 +12,14 @@ trait HasConfig
     /**
      * Request Config
      *
-     * @var ArrayStoreContract
+     * @var \Saloon\Contracts\ArrayStore
      */
     protected ArrayStoreContract $config;
 
     /**
      * Access the config
      *
-     * @return ArrayStoreContract
+     * @return \Saloon\Contracts\ArrayStore
      */
     public function config(): ArrayStoreContract
     {

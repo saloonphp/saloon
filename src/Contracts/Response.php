@@ -26,14 +26,14 @@ interface Response extends HasHeaders
     /**
      * Create a PSR response from the raw response.
      *
-     * @return ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function getPsrResponse(): ResponseInterface;
 
     /**
      * Get the underlying PendingRequest that created the response
      *
-     * @return PendingRequest
+     * @return \Saloon\Contracts\PendingRequest
      */
     public function getPendingRequest(): PendingRequest;
 
@@ -47,7 +47,7 @@ interface Response extends HasHeaders
     /**
      * Get the body as a stream. Don't forget to close the stream after using ->close().
      *
-     * @return StreamInterface
+     * @return \Psr\Http\Message\StreamInterface
      */
     public function stream(): StreamInterface;
 
@@ -76,7 +76,7 @@ interface Response extends HasHeaders
     /**
      * Get the original request
      *
-     * @return Request
+     * @return \Saloon\Contracts\Request
      */
     public function getRequest(): Request;
 
@@ -100,7 +100,7 @@ interface Response extends HasHeaders
      * Convert the XML response into a SimpleXMLElement.
      *
      * @param mixed ...$arguments
-     * @return SimpleXMLElement|bool
+     * @return \SimpleXMLElement|bool
      */
     public function xml(mixed ...$arguments): SimpleXMLElement|bool;
 
@@ -108,7 +108,7 @@ interface Response extends HasHeaders
      * Get the JSON decoded body of the response as a collection.
      *
      * @param array-key|null $key
-     * @return Collection
+     * @return \Illuminate\Support\Collection
      */
     public function collect(string|int|null $key = null): Collection;
 
@@ -179,7 +179,7 @@ interface Response extends HasHeaders
     /**
      * Create an exception if a server or client error occurred.
      *
-     * @return Throwable|null
+     * @return \Throwable|null
      */
     public function toException(): ?Throwable;
 
@@ -215,7 +215,7 @@ interface Response extends HasHeaders
      * Set if a response has been mocked or not.
      *
      * @param bool $value
-     * @return mixed
+     * @return $this
      */
     public function setMocked(bool $value): static;
 
@@ -223,29 +223,29 @@ interface Response extends HasHeaders
      * Set if a response has been cached or not.
      *
      * @param bool $value
-     * @return mixed
+     * @return $this
      */
     public function setCached(bool $value): static;
 
     /**
      * Set the simulated response payload if the response was simulated.
      *
-     * @param SimulatedResponsePayload $simulatedResponsePayload
-     * @return mixed
+     * @param \Saloon\Contracts\SimulatedResponsePayload $simulatedResponsePayload
+     * @return $this
      */
     public function setSimulatedResponsePayload(SimulatedResponsePayload $simulatedResponsePayload): static;
 
     /**
      * Get the simulated response payload if the response was simulated.
      *
-     * @return SimulatedResponsePayload|null
+     * @return \Saloon\Contracts\SimulatedResponsePayload|null
      */
     public function getSimulatedResponsePayload(): ?SimulatedResponsePayload;
 
     /**
      * Get the original sender exception
      *
-     * @return Throwable|null
+     * @return \Throwable|null
      */
     public function getSenderException(): ?Throwable;
 

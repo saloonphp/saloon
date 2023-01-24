@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Http\Faking;
 
 use Closure;
+use Saloon\Contracts\ArrayStore as ArrayStoreContract;
+use Saloon\Traits\Makeable;
 use Throwable;
 use Saloon\Repositories\ArrayStore;
 use Saloon\Contracts\PendingRequest;
@@ -16,8 +18,13 @@ use Saloon\Exceptions\DirectoryNotFoundException;
 use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Contracts\SimulatedResponsePayload as SimulatedResponsePayloadContract;
 
+/**
+ * @method static static make(mixed $body = [], int $status = 200, array $headers = []) Create a new mock response
+ */
 class SimulatedResponsePayload implements SimulatedResponsePayloadContract
 {
+    use Makeable;
+
     /**
      * HTTP Status Code
      *
@@ -28,21 +35,21 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
     /**
      * Headers
      *
-     * @var ArrayStore
+     * @var \Saloon\Contracts\ArrayStore
      */
-    protected ArrayStore $headers;
+    protected ArrayStoreContract $headers;
 
     /**
      * Request Body
      *
-     * @var BodyRepository
+     * @var \Saloon\Contracts\Body\BodyRepository
      */
     protected BodyRepository $body;
 
     /**
      * Exception Closure
      *
-     * @var Closure|null
+     * @var \Closure|null
      */
     protected ?Closure $responseException = null;
 
@@ -61,23 +68,10 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
     }
 
     /**
-     * Create a new mock response
-     *
-     * @param mixed $body
-     * @param int $status
-     * @param array $headers
-     * @return static
-     */
-    public static function make(mixed $body = [], int $status = 200, array $headers = []): static
-    {
-        return new static($body, $status, $headers);
-    }
-
-    /**
      * Create a new mock response from a fixture
      *
      * @param string $name
-     * @return Fixture
+     * @return \Saloon\Http\Faking\Fixture
      * @throws DirectoryNotFoundException
      */
     public static function fixture(string $name): Fixture
@@ -98,9 +92,9 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
     /**
      * Get the headers
      *
-     * @return ArrayStore
+     * @return \Saloon\Contracts\ArrayStore
      */
-    public function getHeaders(): ArrayStore
+    public function getHeaders(): ArrayStoreContract
     {
         return $this->headers;
     }
@@ -108,7 +102,7 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
     /**
      * Get the response body
      *
-     * @return BodyRepository
+     * @return \Saloon\Contracts\Body\BodyRepository
      */
     public function getBody(): BodyRepository
     {
@@ -128,7 +122,7 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
     /**
      * Throw an exception on the request.
      *
-     * @param Closure|Throwable $value
+     * @param \Closure|\Throwable $value
      * @return $this
      */
     public function throw(Closure|Throwable $value): static
@@ -153,8 +147,8 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
     /**
      * Invoke the exception.
      *
-     * @param PendingRequest $pendingRequest
-     * @return Throwable|null
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return \Throwable|null
      */
     public function getException(PendingRequest $pendingRequest): ?Throwable
     {
@@ -168,7 +162,7 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
     /**
      * Get the response as a ResponseInterface
      *
-     * @return ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function getPsrResponse(): ResponseInterface
     {

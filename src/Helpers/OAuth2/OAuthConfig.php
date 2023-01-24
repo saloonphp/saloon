@@ -81,7 +81,7 @@ class OAuthConfig
      * Set the Client ID
      *
      * @param string $clientId
-     * @return OAuthConfig
+     * @return $this
      */
     public function setClientId(string $clientId): static
     {
@@ -104,7 +104,7 @@ class OAuthConfig
      * Set the Client Secret
      *
      * @param string $clientSecret
-     * @return OAuthConfig
+     * @return $this
      */
     public function setClientSecret(string $clientSecret): static
     {
@@ -127,7 +127,7 @@ class OAuthConfig
      * Set the Redirect URI
      *
      * @param string $redirectUri
-     * @return OAuthConfig
+     * @return $this
      */
     public function setRedirectUri(string $redirectUri): static
     {
@@ -150,7 +150,7 @@ class OAuthConfig
      * Set the authorization endpoint.
      *
      * @param string $authorizeEndpoint
-     * @return OAuthConfig
+     * @return $this
      */
     public function setAuthorizeEndpoint(string $authorizeEndpoint): static
     {
@@ -173,7 +173,7 @@ class OAuthConfig
      * Set the token endpoint.
      *
      * @param string $tokenEndpoint
-     * @return OAuthConfig
+     * @return $this
      */
     public function setTokenEndpoint(string $tokenEndpoint): static
     {
@@ -196,7 +196,7 @@ class OAuthConfig
      * Set the user endpoint.
      *
      * @param string $userEndpoint
-     * @return OAuthConfig
+     * @return $this
      */
     public function setUserEndpoint(string $userEndpoint): static
     {
@@ -219,7 +219,7 @@ class OAuthConfig
      * Set the default scopes.
      *
      * @param array $defaultScopes
-     * @return OAuthConfig
+     * @return $this
      */
     public function setDefaultScopes(array $defaultScopes): static
     {

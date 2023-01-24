@@ -14,8 +14,8 @@ class DetermineMockResponse implements RequestMiddleware
     /**
      * Guess a mock response
      *
-     * @param PendingRequest $pendingRequest
-     * @return PendingRequest|MockResponse
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return \Saloon\Contracts\PendingRequest|MockResponse
      * @throws \JsonException
      * @throws \Saloon\Exceptions\FixtureMissingException
      */

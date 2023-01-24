@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Request;
 
+use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Sender;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\Connector;
-use Saloon\Http\PendingRequest;
 use Saloon\Contracts\MockClient;
 use GuzzleHttp\Promise\PromiseInterface;
 
@@ -33,7 +33,7 @@ trait HasConnector
     /**
      * Set the loaded connector at runtime.
      *
-     * @param Connector $connector
+     * @param \Saloon\Contracts\Connector $connector
      * @return $this
      */
     public function setConnector(Connector $connector): static
@@ -46,7 +46,7 @@ trait HasConnector
     /**
      * Create a new connector instance.
      *
-     * @return Connector
+     * @return \Saloon\Contracts\Connector
      */
     protected function resolveConnector(): Connector
     {
@@ -67,7 +67,7 @@ trait HasConnector
      * Create a pending request
      *
      * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \Saloon\Http\PendingRequest
+     * @return \Saloon\Contracts\PendingRequest
      */
     public function createPendingRequest(MockClient $mockClient = null): PendingRequest
     {

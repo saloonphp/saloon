@@ -102,9 +102,9 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
     /**
      * Get a specific key of the array
      *
-     * @param string|int $key
+     * @param array-key $key
      * @param mixed|null $default
-     * @return MultipartValue
+     * @return \Saloon\Data\MultipartValue
      */
     public function get(string|int $key, mixed $default = null): MultipartValue
     {
@@ -115,7 +115,7 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
      * Remove an item from the repository.
      *
      * @param string $key
-     * @return self
+     * @return $this
      */
     public function remove(string $key): static
     {

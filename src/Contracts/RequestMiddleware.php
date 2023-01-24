@@ -9,8 +9,8 @@ interface RequestMiddleware
     /**
      * Register a request middleware
      *
-     * @param PendingRequest $pendingRequest
-     * @return PendingRequest|SimulatedResponsePayload|void
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return \Saloon\Contracts\PendingRequest|SimulatedResponsePayload|void
      */
     public function __invoke(PendingRequest $pendingRequest);
 }

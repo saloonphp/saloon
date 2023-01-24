@@ -85,7 +85,7 @@ class MockClient implements MockClientContract
     /**
      * Add a mock response to the client
      *
-     * @param MockResponse|Fixture|callable $response
+     * @param \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable $response
      * @param string|null $captureMethod
      * @return void
      * @throws InvalidMockResponseCaptureMethodException
@@ -139,8 +139,8 @@ class MockClient implements MockClientContract
     /**
      * Guess the next response based on the request.
      *
-     * @param PendingRequest $pendingRequest
-     * @return MockResponse|Fixture
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture
      * @throws NoMockResponseFoundException
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
@@ -204,7 +204,7 @@ class MockClient implements MockClientContract
     /**
      * Record a response.
      *
-     * @param Response $response
+     * @param \Saloon\Contracts\Response $response
      * @return void
      */
     public function recordResponse(Response $response): void
@@ -225,7 +225,7 @@ class MockClient implements MockClientContract
     /**
      * Get the last request that the mock manager sent.
      *
-     * @return Request|null
+     * @return \Saloon\Contracts\Request|null
      */
     public function getLastRequest(): ?Request
     {
@@ -235,7 +235,7 @@ class MockClient implements MockClientContract
     /**
      * Get the last request that the mock manager sent.
      *
-     * @return Request|null
+     * @return \Saloon\Contracts\Request|null
      */
     public function getLastPendingRequest(): ?PendingRequest
     {
@@ -245,7 +245,7 @@ class MockClient implements MockClientContract
     /**
      * Get the last response that the mock manager sent.
      *
-     * @return Response|null
+     * @return \Saloon\Contracts\Response|null
      */
     public function getLastResponse(): ?Response
     {
@@ -368,7 +368,7 @@ class MockClient implements MockClientContract
      * Assert a given request was sent.
      *
      * @param string $request
-     * @return Response|null
+     * @return \Saloon\Contracts\Response|null
      */
     public function findResponseByRequest(string $request): ?Response
     {
@@ -395,7 +395,7 @@ class MockClient implements MockClientContract
      * Find a request that matches a given url pattern
      *
      * @param string $url
-     * @return Response|null
+     * @return \Saloon\Contracts\Response|null
      * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function findResponseByRequestUrl(string $url): ?Response
@@ -475,9 +475,9 @@ class MockClient implements MockClientContract
     /**
      * Get the mock value.
      *
-     * @param MockResponse|Fixture|callable $mockable
-     * @param PendingRequest $pendingRequest
-     * @return MockResponse|Fixture
+     * @param \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable $mockable
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture
      */
     private function mockResponseValue(MockResponse|Fixture|callable $mockable, PendingRequest $pendingRequest): MockResponse|Fixture
     {

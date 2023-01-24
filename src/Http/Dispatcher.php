@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Http;
 
 use Saloon\Contracts\Sender;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Response;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Http\Senders\SimulatedSender;
@@ -15,7 +16,7 @@ class Dispatcher implements DispatcherContract
     /**
      * Constructor
      *
-     * @param PendingRequest $pendingRequest
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      */
     public function __construct(protected PendingRequest $pendingRequest)
     {
@@ -25,7 +26,7 @@ class Dispatcher implements DispatcherContract
     /**
      * Execute the action
      *
-     * @return Response|PromiseInterface
+     * @return \Saloon\Contracts\Response|PromiseInterface
      */
     public function execute(): Response|PromiseInterface
     {

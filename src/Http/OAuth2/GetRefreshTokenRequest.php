@@ -19,7 +19,7 @@ class GetRefreshTokenRequest extends Request implements HasBody
     /**
      * Define the method that the request will use.
      *
-     * @var Method
+     * @var \Saloon\Enums\Method
      */
     protected Method $method = Method::POST;
 
@@ -36,7 +36,7 @@ class GetRefreshTokenRequest extends Request implements HasBody
     /**
      * Requires the authorization code and OAuth 2 config.
      *
-     * @param OAuthConfig $oauthConfig
+     * @param \Saloon\Helpers\OAuth2\OAuthConfig $oauthConfig
      * @param string $refreshToken
      */
     public function __construct(protected OAuthConfig $oauthConfig, protected string $refreshToken)

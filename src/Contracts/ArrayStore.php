@@ -26,7 +26,7 @@ interface ArrayStore
      * Overwrite the entire repository's contents.
      *
      * @param array $data
-     * @return ArrayStore
+     * @return $this
      */
     public function set(array $data): static;
 
@@ -34,7 +34,7 @@ interface ArrayStore
      * Merge in other arrays.
      *
      * @param mixed ...$arrays
-     * @return ArrayStore
+     * @return $this
      */
     public function merge(...$arrays): static;
 
@@ -43,7 +43,7 @@ interface ArrayStore
      *
      * @param string $key
      * @param mixed $value
-     * @return ArrayStore
+     * @return $this
      */
     public function add(string $key, mixed $value): static;
 
@@ -51,7 +51,7 @@ interface ArrayStore
      * Remove an item from the store.
      *
      * @param string $key
-     * @return ArrayStore
+     * @return $this
      */
     public function remove(string $key): static;
 

@@ -13,22 +13,22 @@ interface PendingRequest extends Authenticatable, Conditionable, HasConfig, HasH
     /**
      * Execute the response pipeline.
      *
-     * @param Response $response
-     * @return Response
+     * @param \Saloon\Contracts\Response $response
+     * @return \Saloon\Contracts\Response
      */
     public function executeResponsePipeline(Response $response): Response;
 
     /**
      * Get the request.
      *
-     * @return Request
+     * @return \Saloon\Contracts\Request
      */
     public function getRequest(): Request;
 
     /**
      * Get the connector.
      *
-     * @return Connector
+     * @return \Saloon\Contracts\Connector
      */
     public function getConnector(): Connector;
 
@@ -42,42 +42,42 @@ interface PendingRequest extends Authenticatable, Conditionable, HasConfig, HasH
     /**
      * Get the HTTP method used for the request
      *
-     * @return Method
+     * @return \Saloon\Enums\Method
      */
     public function getMethod(): Method;
 
     /**
      * Get the response class used for the request
      *
-     * @return mixed
+     * @return class-string<\Saloon\Contracts\Response>
      */
     public function getResponseClass(): string;
 
     /**
      * Get the request sender.
      *
-     * @return Sender
+     * @return \Saloon\Contracts\Sender
      */
     public function getSender(): Sender;
 
     /**
      * Retrieve the body on the instance
      *
-     * @return BodyRepository|null
+     * @return \Saloon\Contracts\Body\BodyRepository|null
      */
     public function body(): ?BodyRepository;
 
     /**
      * Get the simulated response payload
      *
-     * @return SimulatedResponsePayload|null
+     * @return \Saloon\Contracts\SimulatedResponsePayload|null
      */
     public function getSimulatedResponsePayload(): ?SimulatedResponsePayload;
 
     /**
      * Set the simulated response payload
      *
-     * @param SimulatedResponsePayload|null $simulatedResponsePayload
+     * @param \Saloon\Contracts\SimulatedResponsePayload|null $simulatedResponsePayload
      * @return $this
      */
     public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): static;
@@ -92,14 +92,14 @@ interface PendingRequest extends Authenticatable, Conditionable, HasConfig, HasH
     /**
      * Send the PendingRequest
      *
-     * @return Response
+     * @return \Saloon\Contracts\Response
      */
     public function send(): Response;
 
     /**
      * Send the PendingRequest asynchronously
      *
-     * @return PromiseInterface
+     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function sendAsync(): PromiseInterface;
 

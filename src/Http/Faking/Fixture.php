@@ -29,7 +29,7 @@ class Fixture
     /**
      * The storage helper
      *
-     * @var Storage
+     * @var \Saloon\Helpers\Storage
      */
     protected Storage $storage;
 
@@ -37,7 +37,7 @@ class Fixture
      * Constructor
      *
      * @param string $name
-     * @param Storage|null $storage
+     * @param \Saloon\Helpers\Storage|null $storage
      * @throws DirectoryNotFoundException
      */
     public function __construct(string $name, Storage $storage = null)
@@ -49,7 +49,7 @@ class Fixture
     /**
      * Attempt to get the mock response from the fixture.
      *
-     * @return MockResponse|null
+     * @return \Saloon\Http\Faking\MockResponse|null
      * @throws FixtureMissingException
      * @throws \JsonException
      */

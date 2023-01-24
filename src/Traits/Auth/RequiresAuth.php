@@ -13,7 +13,7 @@ trait RequiresAuth
     /**
      * Throw an exception if an authenticator is not on the request while it is booting.
      *
-     * @param PendingRequest $pendingSaloonRequest
+     * @param \Saloon\Contracts\PendingRequest $pendingSaloonRequest
      * @return void
      * @throws MissingAuthenticatorException
      */
@@ -29,7 +29,7 @@ trait RequiresAuth
     /**
      * Default message.
      *
-     * @param PendingRequest $pendingRequest
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return string
      */
     protected function getRequiresAuthMessage(PendingRequest $pendingRequest): string

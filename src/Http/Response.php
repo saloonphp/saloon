@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 use Throwable;
 use Saloon\Traits\Macroable;
 use Saloon\Contracts\Request;
@@ -22,30 +23,30 @@ class Response implements ResponseContract
     /**
      * The PSR response from the sender.
      *
-     * @var ResponseInterface
+     * @var \Psr\Http\Message\ResponseInterface
      */
     protected ResponseInterface $psrResponse;
 
     /**
      * The pending request that has all the request properties
      *
-     * @var PendingRequest
+     * @var \Saloon\Contracts\PendingRequest
      */
     protected PendingRequest $pendingRequest;
 
     /**
      * The original sender exception
      *
-     * @var Throwable|null
+     * @var \Throwable|null
      */
     protected ?Throwable $senderException = null;
 
     /**
      * Create a new response instance.
      *
-     * @param PendingRequest $pendingRequest
-     * @param ResponseInterface $psrResponse
-     * @param Throwable|null $senderException
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @param \Psr\Http\Message\ResponseInterface $psrResponse
+     * @param \Throwable|null $senderException
      */
     public function __construct(ResponseInterface $psrResponse, PendingRequest $pendingRequest, Throwable $senderException = null)
     {
@@ -60,7 +61,7 @@ class Response implements ResponseContract
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @param \Psr\Http\Message\ResponseInterface $psrResponse
      * @param \Throwable|null $senderException
-     * @return $this
+     * @return static
      */
     public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, ?Throwable $senderException = null): static
     {
@@ -70,7 +71,7 @@ class Response implements ResponseContract
     /**
      * Get the pending request that created the response.
      *
-     * @return PendingRequest
+     * @return \Saloon\Contracts\PendingRequest
      */
     public function getPendingRequest(): PendingRequest
     {
@@ -80,7 +81,7 @@ class Response implements ResponseContract
     /**
      * Get the original request that created the response.
      *
-     * @return Request
+     * @return \Saloon\Contracts\Request
      */
     public function getRequest(): Request
     {
@@ -90,7 +91,7 @@ class Response implements ResponseContract
     /**
      * Create a PSR response from the raw response.
      *
-     * @return ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function getPsrResponse(): ResponseInterface
     {
@@ -110,7 +111,7 @@ class Response implements ResponseContract
     /**
      * Get the body as a stream. Don't forget to close the stream after using ->close().
      *
-     * @return StreamInterface
+     * @return \Psr\Http\Message\StreamInterface
      */
     public function stream(): StreamInterface
     {
@@ -120,9 +121,9 @@ class Response implements ResponseContract
     /**
      * Get the headers from the response.
      *
-     * @return ArrayStore
+     * @return \Saloon\Contracts\ArrayStore
      */
-    public function headers(): ArrayStore
+    public function headers(): ArrayStoreContract
     {
         $headers = array_map(static function (array $header) {
             return count($header) === 1 ? $header[0] : $header;
@@ -144,7 +145,7 @@ class Response implements ResponseContract
     /**
      * Get the original sender exception
      *
-     * @return Throwable|null
+     * @return \Throwable|null
      */
     public function getSenderException(): ?Throwable
     {

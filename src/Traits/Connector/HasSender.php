@@ -19,14 +19,14 @@ trait HasSender
     /**
      * The request sender.
      *
-     * @var Sender
+     * @var \Saloon\Contracts\Sender
      */
     protected Sender $sender;
 
     /**
      * Manage the request sender.
      *
-     * @return Sender
+     * @return \Saloon\Contracts\Sender
      */
     public function sender(): Sender
     {
@@ -36,7 +36,7 @@ trait HasSender
     /**
      * Define the default request sender.
      *
-     * @return Sender
+     * @return \Saloon\Contracts\Sender
      */
     protected function defaultSender(): Sender
     {

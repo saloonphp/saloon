@@ -15,7 +15,7 @@ abstract class SoloRequest extends Request
     /**
      * Create a new connector instance.
      *
-     * @return Connector
+     * @return \Saloon\Contracts\Connector
      */
     protected function resolveConnector(): Connector
     {

@@ -13,7 +13,7 @@ interface Request extends Authenticatable, CanThrowRequestExceptions, Conditiona
     /**
      * Get the HTTP method
      *
-     * @return Method
+     * @return \Saloon\Enums\Method
      */
     public function getMethod(): Method;
 

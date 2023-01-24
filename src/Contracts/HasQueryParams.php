@@ -9,7 +9,7 @@ interface HasQueryParams
     /**
      * Access the query parameters
      *
-     * @return ArrayStore
+     * @return \Saloon\Contracts\ArrayStore
      */
     public function query(): ArrayStore;
 }

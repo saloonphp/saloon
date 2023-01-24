@@ -23,7 +23,7 @@ class TokenAuthenticator implements Authenticator
     /**
      * Apply the authentication to the request.
      *
-     * @param PendingRequest $pendingRequest
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return void
      */
     public function set(PendingRequest $pendingRequest): void

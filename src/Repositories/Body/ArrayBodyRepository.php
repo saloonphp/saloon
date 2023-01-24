@@ -63,7 +63,7 @@ class ArrayBodyRepository implements BodyRepository
     /**
      * Add an element to the repository.
      *
-     * @param string|int|null $key
+     * @param array-key|null $key
      * @param mixed|null $value
      * @return $this
      */
@@ -79,7 +79,7 @@ class ArrayBodyRepository implements BodyRepository
     /**
      * Get a specific key of the array
      *
-     * @param string|int|null $key
+     * @param array-key|null $key
      * @param mixed|null $default
      * @return mixed
      */
@@ -95,8 +95,8 @@ class ArrayBodyRepository implements BodyRepository
     /**
      * Remove an item from the repository.
      *
-     * @param string|int $key
-     * @return self
+     * @param array-key $key
+     * @return $this
      */
     public function remove(string|int $key): static
     {

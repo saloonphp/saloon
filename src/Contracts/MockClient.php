@@ -20,7 +20,7 @@ interface MockClient
     /**
      * Add a mock response to the client
      *
-     * @param MockResponse|Fixture|callable $response
+     * @param \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable $response
      * @param string|null $captureMethod
      * @return void
      */
@@ -51,7 +51,7 @@ interface MockClient
     /**
      * Record a response.
      *
-     * @param Response $response
+     * @param \Saloon\Contracts\Response $response
      * @return void
      */
     public function recordResponse(Response $response): void;
@@ -66,7 +66,7 @@ interface MockClient
     /**
      * Get the last request that the mock manager sent.
      *
-     * @return Request|null
+     * @return \Saloon\Contracts\Request|null
      */
     public function getLastRequest(): ?Request;
 
@@ -80,7 +80,7 @@ interface MockClient
     /**
      * Get the last response that the mock manager sent.
      *
-     * @return Response|null
+     * @return \Saloon\Contracts\Response|null
      */
     public function getLastResponse(): ?Response;
 
@@ -128,7 +128,7 @@ interface MockClient
      * Assert a given request was sent.
      *
      * @param string $request
-     * @return Response|null
+     * @return \Saloon\Contracts\Response|null
      */
     public function findResponseByRequest(string $request): ?Response;
 
@@ -136,7 +136,7 @@ interface MockClient
      * Find a request that matches a given url pattern
      *
      * @param string $url
-     * @return Response|null
+     * @return \Saloon\Contracts\Response|null
      */
     public function findResponseByRequestUrl(string $url): ?Response;
 }

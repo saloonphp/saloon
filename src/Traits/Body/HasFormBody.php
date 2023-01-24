@@ -14,7 +14,7 @@ trait HasFormBody
     /**
      * Body Repository
      *
-     * @var FormBodyRepository
+     * @var \Saloon\Repositories\Body\FormBodyRepository
      */
     protected FormBodyRepository $body;
 
@@ -32,7 +32,7 @@ trait HasFormBody
     /**
      * Retrieve the data repository
      *
-     * @return FormBodyRepository
+     * @return \Saloon\Repositories\Body\FormBodyRepository
      */
     public function body(): FormBodyRepository
     {

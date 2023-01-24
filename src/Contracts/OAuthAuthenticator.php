@@ -19,7 +19,7 @@ interface OAuthAuthenticator extends Authenticator
     public function getRefreshToken(): string;
 
     /**
-     * @return DateTimeImmutable
+     * @return \DateTimeImmutable
      */
     public function getExpiresAt(): DateTimeImmutable;
 

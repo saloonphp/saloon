@@ -13,7 +13,7 @@ class Date
     /**
      * Constructor
      *
-     * @param DateTime $dateTime
+     * @param \DateTime $dateTime
      */
     public function __construct(protected DateTime $dateTime)
     {
@@ -63,7 +63,7 @@ class Date
     /**
      * Get the datetime instance
      *
-     * @return DateTimeImmutable
+     * @return \DateTimeImmutable
      */
     public function toDateTime(): DateTimeImmutable
     {

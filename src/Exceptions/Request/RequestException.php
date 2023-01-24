@@ -15,7 +15,7 @@ class RequestException extends SaloonException
     /**
      * The Saloon Response
      *
-     * @var Response
+     * @var \Saloon\Contracts\Response
      */
     protected Response $response;
 
@@ -31,10 +31,10 @@ class RequestException extends SaloonException
      *
      * @param \Saloon\Contracts\Response $response
      * @param string|null $message
-     * @param $code
+     * @param int $code
      * @param \Throwable|null $previous
      */
-    public function __construct(Response $response, ?string $message = null, $code = 0, ?Throwable $previous = null)
+    public function __construct(Response $response, ?string $message = null, int $code = 0, ?Throwable $previous = null)
     {
         $this->response = $response;
 
@@ -53,7 +53,7 @@ class RequestException extends SaloonException
     /**
      * Get the Saloon Response Class.
      *
-     * @return Response
+     * @return \Saloon\Contracts\Response
      */
     public function getResponse(): Response
     {

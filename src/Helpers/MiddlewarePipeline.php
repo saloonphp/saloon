@@ -14,14 +14,14 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Request Pipeline
      *
-     * @var Pipeline
+     * @var \Saloon\Helpers\Pipeline
      */
     protected Pipeline $requestPipeline;
 
     /**
      * Response Pipeline
      *
-     * @var Pipeline
+     * @var \Saloon\Helpers\Pipeline
      */
     protected Pipeline $responsePipeline;
 
@@ -85,8 +85,8 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Process the request pipeline.
      *
-     * @param PendingRequest $pendingRequest
-     * @return PendingRequest
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return \Saloon\Contracts\PendingRequest
      */
     public function executeRequestPipeline(PendingRequest $pendingRequest): PendingRequest
     {
@@ -96,8 +96,8 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Process the response pipeline.
      *
-     * @param Response $response
-     * @return Response
+     * @param \Saloon\Contracts\Response $response
+     * @return \Saloon\Contracts\Response
      */
     public function executeResponsePipeline(Response $response): Response
     {
@@ -107,7 +107,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Merge in another middleware pipeline.
      *
-     * @param MiddlewarePipeline $middlewarePipeline
+     * @param \Saloon\Contracts\MiddlewarePipeline $middlewarePipeline
      * @return $this
      */
     public function merge(MiddlewarePipelineContract $middlewarePipeline): static
@@ -131,7 +131,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Get the request pipeline
      *
-     * @return Pipeline
+     * @return \Saloon\Helpers\Pipeline
      */
     public function getRequestPipeline(): Pipeline
     {
@@ -141,7 +141,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Get the response pipeline
      *
-     * @return Pipeline
+     * @return \Saloon\Helpers\Pipeline
      */
     public function getResponsePipeline(): Pipeline
     {

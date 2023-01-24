@@ -13,7 +13,7 @@ interface Pool
      * Specify a callback to happen for each successful request
      *
      * @param callable $callable
-     * @return \Saloon\Http\Pool
+     * @return $this
      */
     public function withResponseHandler(callable $callable): static;
 
@@ -21,7 +21,7 @@ interface Pool
      * Specify a callback to happen for each failed request
      *
      * @param callable $callable
-     * @return \Saloon\Http\Pool
+     * @return $this
      */
     public function withExceptionHandler(callable $callable): static;
 
@@ -29,29 +29,29 @@ interface Pool
      * Set the amount of concurrent requests that should be sent
      *
      * @param int|callable $concurrency
-     * @return \Saloon\Http\Pool
+     * @return $this
      */
-    public function setConcurrency(int|callable $concurrency): \Saloon\Http\Pool;
+    public function setConcurrency(int|callable $concurrency): static;
 
     /**
      * Set the requests
      *
-     * @param callable|iterable $requests
-     * @return \Saloon\Http\Pool
+     * @param iterable|callable $requests
+     * @return $this
      */
-    public function setRequests(callable|iterable $requests): \Saloon\Http\Pool;
+    public function setRequests(iterable|callable $requests): static;
 
     /**
      * Get the request generator
      *
-     * @return Generator
+     * @return \Generator
      */
     public function getRequests(): Generator;
 
     /**
      * Send the pool and create a Promise
      *
-     * @return PromiseInterface
+     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function send(): PromiseInterface;
 }

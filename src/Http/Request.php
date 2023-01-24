@@ -31,14 +31,14 @@ abstract class Request implements RequestContract
     /**
      * Define the HTTP method.
      *
-     * @var Method
+     * @var \Saloon\Enums\Method
      */
     protected Method $method;
 
     /**
      * Get the method of the request.
      *
-     * @return Method
+     * @return \Saloon\Enums\Method
      */
     public function getMethod(): Method
     {

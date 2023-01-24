@@ -13,14 +13,14 @@ trait HasBody
     /**
      * Body Repository
      *
-     * @var StringBodyRepository
+     * @var \Saloon\Repositories\Body\StringBodyRepository
      */
     protected StringBodyRepository $body;
 
     /**
      * Retrieve the data repository
      *
-     * @return StringBodyRepository
+     * @return \Saloon\Repositories\Body\StringBodyRepository
      */
     public function body(): StringBodyRepository
     {

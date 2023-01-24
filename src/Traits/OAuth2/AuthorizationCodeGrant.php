@@ -22,7 +22,7 @@ trait AuthorizationCodeGrant
     /**
      * The OAuth2 Config
      *
-     * @var OAuthConfig
+     * @var \Saloon\Helpers\OAuth2\OAuthConfig
      */
     protected OAuthConfig $oauthConfig;
 
@@ -36,7 +36,7 @@ trait AuthorizationCodeGrant
     /**
      * Manage the OAuth2 config
      *
-     * @return OAuthConfig
+     * @return \Saloon\Helpers\OAuth2\OAuthConfig
      */
     public function oauthConfig(): OAuthConfig
     {
@@ -46,7 +46,7 @@ trait AuthorizationCodeGrant
     /**
      * Define the default Oauth 2 Config.
      *
-     * @return OAuthConfig
+     * @return \Saloon\Helpers\OAuth2\OAuthConfig
      */
     protected function defaultOauthConfig(): OAuthConfig
     {
@@ -178,8 +178,8 @@ trait AuthorizationCodeGrant
      *
      * @param string $accessToken
      * @param string $refreshToken
-     * @param DateTimeImmutable $expiresAt
-     * @return OAuthAuthenticator
+     * @param \DateTimeImmutable $expiresAt
+     * @return \Saloon\Contracts\OAuthAuthenticator
      */
     protected function createOAuthAuthenticator(string $accessToken, string $refreshToken, DateTimeImmutable $expiresAt): OAuthAuthenticator
     {

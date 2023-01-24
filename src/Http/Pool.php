@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use Closure;
 use Generator;
 use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Contracts\Connector;
 use Saloon\Contracts\Pool as PoolContract;
 use Saloon\Exceptions\InvalidPoolItemException;
 
@@ -15,28 +17,28 @@ class Pool implements PoolContract
     /**
      * Requests inside the pool
      *
-     * @var Generator
+     * @var \Generator
      */
     protected Generator $requests;
 
     /**
      * Handle Response Callback
      *
-     * @var callable
+     * @var \Closure|null
      */
-    protected mixed $responseHandler = null;
+    protected ?Closure $responseHandler = null;
 
     /**
      * Handle Exception Callback
      *
-     * @var callable
+     * @var \Closure|null
      */
-    protected mixed $exceptionHandler = null;
+    protected ?Closure $exceptionHandler = null;
 
     /**
      * Connector
      *
-     * @var Connector
+     * @var \Saloon\Contracts\Connector
      */
     protected Connector $connector;
 
@@ -45,20 +47,20 @@ class Pool implements PoolContract
      *
      * How many requests will be sent at once.
      *
-     * @var int|callable
+     * @var \Closure|int
      */
-    protected mixed $concurrency;
+    protected \Closure|int $concurrency;
 
     /**
      * Constructor
      *
      * @param \Saloon\Http\Connector $connector
-     * @param callable|iterable $requests
+     * @param iterable|callable $requests
      * @param int|callable $concurrency
      * @param callable|null $responseHandler
      * @param callable|null $exceptionHandler
      */
-    public function __construct(Connector $connector, callable|iterable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null)
+    public function __construct(Connector $connector, iterable|callable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null)
     {
         $this->connector = $connector;
         $this->setRequests($requests);
@@ -97,9 +99,9 @@ class Pool implements PoolContract
      * Set the amount of concurrent requests that should be sent
      *
      * @param int|callable $concurrency
-     * @return Pool
+     * @return $this
      */
-    public function setConcurrency(int|callable $concurrency): Pool
+    public function setConcurrency(int|callable $concurrency): static
     {
         $this->concurrency = $concurrency;
 
@@ -109,10 +111,10 @@ class Pool implements PoolContract
     /**
      * Set the requests
      *
-     * @param callable|iterable $requests
+     * @param iterable|callable $requests
      * @return $this
      */
-    public function setRequests(callable|iterable $requests): Pool
+    public function setRequests(iterable|callable $requests): static
     {
         if (is_callable($requests)) {
             $requests = $requests($this->connector);
@@ -130,7 +132,7 @@ class Pool implements PoolContract
     /**
      * Get the request generator
      *
-     * @return Generator
+     * @return \Generator
      */
     public function getRequests(): Generator
     {
