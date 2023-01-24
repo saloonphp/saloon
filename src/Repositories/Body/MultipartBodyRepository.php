@@ -26,7 +26,7 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
     /**
      * Constructor
      *
-     * @param array<MultipartValue> $value
+     * @param array<\Saloon\Data\MultipartValue> $value
      */
     public function __construct(mixed $value = [])
     {
@@ -38,7 +38,7 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
     /**
      * Set a value inside the repository
      *
-     * @param array<MultipartValue> $value
+     * @param array<\Saloon\Data\MultipartValue> $value
      * @return $this
      */
     public function set(mixed $value): static
@@ -57,7 +57,7 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
     /**
      * Merge another array into the repository
      *
-     * @param array<MultipartValue> ...$arrays
+     * @param array<\Saloon\Data\MultipartValue> ...$arrays
      * @return $this
      */
     public function merge(array ...$arrays): static
@@ -127,7 +127,7 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
     /**
      * Retrieve all in the repository
      *
-     * @return array<MultipartValue>
+     * @return array<\Saloon\Data\MultipartValue>
      */
     public function all(): array
     {
@@ -181,7 +181,7 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
      * Parse a multipart array
      *
      * @param array $value
-     * @return array<MultipartValue>
+     * @return array<\Saloon\Data\MultipartValue>
      */
     protected function parseMultipartArray(array $value): array
     {
