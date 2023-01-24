@@ -22,7 +22,7 @@ class Response implements ResponseContract
     /**
      * The PSR response from the sender.
      *
-     * @var ResponseInterface|mixed
+     * @var ResponseInterface
      */
     protected ResponseInterface $psrResponse;
 
@@ -88,11 +88,11 @@ class Response implements ResponseContract
     }
 
     /**
-     * Get the raw response
+     * Create a PSR response from the raw response.
      *
-     * @return mixed
+     * @return ResponseInterface
      */
-    public function getRawResponse(): mixed
+    public function getPsrResponse(): ResponseInterface
     {
         return $this->psrResponse;
     }
@@ -139,16 +139,6 @@ class Response implements ResponseContract
     public function status(): int
     {
         return $this->psrResponse->getStatusCode();
-    }
-
-    /**
-     * Create a PSR response from the raw response.
-     *
-     * @return ResponseInterface
-     */
-    public function getPsrResponse(): ResponseInterface
-    {
-        return $this->psrResponse;
     }
 
     /**
