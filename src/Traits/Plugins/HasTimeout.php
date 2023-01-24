@@ -12,7 +12,7 @@ trait HasTimeout
     /**
      * Boot HasTimeout plugin.
      *
-     * @param PendingRequest $pendingRequest
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return void
      */
     public function bootHasTimeout(PendingRequest $pendingRequest): void

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use Saloon\Helpers\Pipeline;
-
 interface MiddlewarePipeline
 {
     /**
@@ -31,23 +29,23 @@ interface MiddlewarePipeline
     /**
      * Process the request pipeline.
      *
-     * @param PendingRequest $pendingRequest
-     * @return PendingRequest
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return \Saloon\Contracts\PendingRequest
      */
     public function executeRequestPipeline(PendingRequest $pendingRequest): PendingRequest;
 
     /**
      * Process the response pipeline.
      *
-     * @param Response $response
-     * @return Response
+     * @param \Saloon\Contracts\Response $response
+     * @return \Saloon\Contracts\Response
      */
     public function executeResponsePipeline(Response $response): Response;
 
     /**
      * Merge in another middleware pipeline.
      *
-     * @param MiddlewarePipeline $middlewarePipeline
+     * @param \Saloon\Contracts\MiddlewarePipeline $middlewarePipeline
      * @return $this
      */
     public function merge(self $middlewarePipeline): static;
@@ -55,14 +53,14 @@ interface MiddlewarePipeline
     /**
      * Get the request pipeline
      *
-     * @return Pipeline
+     * @return \Saloon\Contracts\Pipeline
      */
     public function getRequestPipeline(): Pipeline;
 
     /**
      * Get the response pipeline
      *
-     * @return Pipeline
+     * @return \Saloon\Contracts\Pipeline
      */
     public function getResponsePipeline(): Pipeline;
 }

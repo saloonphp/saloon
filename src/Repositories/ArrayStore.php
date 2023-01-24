@@ -67,10 +67,10 @@ class ArrayStore implements ArrayStoreContract
     /**
      * Merge in other arrays.
      *
-     * @param mixed ...$arrays
+     * @param array ...$arrays
      * @return $this
      */
-    public function merge(...$arrays): static
+    public function merge(array ...$arrays): static
     {
         $this->data = array_merge($this->data, ...$arrays);
 

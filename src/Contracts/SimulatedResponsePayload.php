@@ -7,19 +7,21 @@ namespace Saloon\Contracts;
 use Closure;
 use Throwable;
 use Saloon\Http\Faking\Fixture;
-use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Exceptions\DirectoryNotFoundException;
 
-interface SimulatedResponsePayload
+/**
+ * @method static static make(mixed $body = [], int $status = 200, array $headers = []) Create a new mock response
+ */
+interface SimulatedResponsePayload extends Makeable
 {
     /**
      * Create a new mock response from a fixture
      *
      * @param string $name
-     * @return Fixture
-     * @throws DirectoryNotFoundException
+     * @return \Saloon\Http\Faking\Fixture
+     * @throws \Saloon\Exceptions\DirectoryNotFoundException
      */
     public static function fixture(string $name): Fixture;
 
@@ -33,14 +35,14 @@ interface SimulatedResponsePayload
     /**
      * Get the headers
      *
-     * @return ArrayStore
+     * @return \Saloon\Contracts\ArrayStore
      */
     public function getHeaders(): ArrayStore;
 
     /**
      * Get the response body
      *
-     * @return BodyRepository
+     * @return \Saloon\Contracts\Body\BodyRepository
      */
     public function getBody(): BodyRepository;
 
@@ -54,8 +56,8 @@ interface SimulatedResponsePayload
     /**
      * Throw an exception on the request.
      *
-     * @param Closure|Throwable $value
-     * @return \Saloon\Contracts\SimulatedResponsePayload
+     * @param \Closure|\Throwable $value
+     * @return $this
      */
     public function throw(Closure|Throwable $value): static;
 
@@ -69,15 +71,15 @@ interface SimulatedResponsePayload
     /**
      * Invoke the exception.
      *
-     * @param PendingRequest $pendingRequest
-     * @return Throwable|null
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return \Throwable|null
      */
     public function getException(PendingRequest $pendingRequest): ?Throwable;
 
     /**
      * Get the response as a ResponseInterface
      *
-     * @return ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function getPsrResponse(): ResponseInterface;
 }

@@ -9,8 +9,8 @@ interface ResponseMiddleware
     /**
      * Register a response middleware
      *
-     * @param Response $response
-     * @return Response|void
+     * @param \Saloon\Contracts\Response $response
+     * @return \Saloon\Contracts\Response|void
      */
     public function __invoke(Response $response);
 }

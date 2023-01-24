@@ -23,7 +23,7 @@ class Arr
      * Determine if the given key exists in the provided array.
      *
      * @param array $array
-     * @param string|int|float $key
+     * @param array-key|float $key
      * @return bool
      */
     public static function exists(array $array, string|int|float $key): bool
@@ -39,7 +39,7 @@ class Arr
      * Get an item from an array using "dot" notation.
      *
      * @param array $array
-     * @param string|int|null $key
+     * @param array-key|null $key
      * @param mixed|null $default
      * @return mixed
      */

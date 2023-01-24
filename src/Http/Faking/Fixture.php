@@ -28,7 +28,7 @@ class Fixture
     /**
      * The storage helper
      *
-     * @var Storage
+     * @var \Saloon\Helpers\Storage
      */
     protected Storage $storage;
 
@@ -49,8 +49,8 @@ class Fixture
     /**
      * Attempt to get the mock response from the fixture.
      *
-     * @return MockResponse|null
-     * @throws FixtureMissingException
+     * @return \Saloon\Http\Faking\MockResponse|null
+     * @throws \Saloon\Exceptions\FixtureMissingException
      * @throws \JsonException
      */
     public function getMockResponse(): ?MockResponse

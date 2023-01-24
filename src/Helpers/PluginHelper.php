@@ -14,8 +14,8 @@ class PluginHelper
     /**
      * Boot a given plugin/trait
      *
-     * @param PendingRequest $pendingRequest
-     * @param Connector|Request $resource
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @param \Saloon\Contracts\Connector|Request $resource
      * @param string $trait
      * @return void
      * @throws \ReflectionException

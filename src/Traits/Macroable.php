@@ -41,7 +41,7 @@ trait Macroable
         return isset(static::$macros[$name]);
     }
 
-    public static function __callStatic($method, $parameters)
+    public static function __callStatic(string $method, array $parameters): mixed
     {
         if (! static::hasMacro($method)) {
             throw new BadMethodCallException("Method {$method} does not exist.");
@@ -56,7 +56,7 @@ trait Macroable
         return call_user_func_array($macro, $parameters);
     }
 
-    public function __call($method, $parameters)
+    public function __call(string $method, array $parameters): mixed
     {
         if (! static::hasMacro($method)) {
             throw new BadMethodCallException("Method {$method} does not exist.");

@@ -66,7 +66,7 @@ class Helpers
      * @param mixed ...$args
      * @return mixed
      */
-    public static function value(mixed $value, ...$args): mixed
+    public static function value(mixed $value, mixed ...$args): mixed
     {
         return $value instanceof Closure ? $value(...$args) : $value;
     }

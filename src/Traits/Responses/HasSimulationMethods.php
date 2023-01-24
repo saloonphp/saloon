@@ -67,7 +67,7 @@ trait HasSimulationMethods
     /**
      * Set the simulated response payload if the response was simulated.
      *
-     * @param SimulatedResponsePayload $simulatedResponsePayload
+     * @param \Saloon\Contracts\SimulatedResponsePayload $simulatedResponsePayload
      * @return mixed
      */
     public function setSimulatedResponsePayload(SimulatedResponsePayload $simulatedResponsePayload): static
@@ -80,7 +80,7 @@ trait HasSimulationMethods
     /**
      * Get the simulated response payload if the response was simulated.
      *
-     * @return SimulatedResponsePayload|null
+     * @return \Saloon\Contracts\SimulatedResponsePayload|null
      */
     public function getSimulatedResponsePayload(): ?SimulatedResponsePayload
     {

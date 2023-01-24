@@ -13,14 +13,14 @@ trait HasMultipartBody
     /**
      * Body Repository
      *
-     * @var MultipartBodyRepository
+     * @var \Saloon\Repositories\Body\MultipartBodyRepository
      */
     protected MultipartBodyRepository $body;
 
     /**
      * Retrieve the data repository
      *
-     * @return MultipartBodyRepository
+     * @return \Saloon\Repositories\Body\MultipartBodyRepository
      */
     public function body(): MultipartBodyRepository
     {

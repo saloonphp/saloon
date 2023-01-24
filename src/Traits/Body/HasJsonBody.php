@@ -14,14 +14,14 @@ trait HasJsonBody
     /**
      * Body Repository
      *
-     * @var JsonBodyRepository
+     * @var \Saloon\Repositories\Body\JsonBodyRepository
      */
     protected JsonBodyRepository $body;
 
     /**
      * Boot the plugin
      *
-     * @param PendingRequest $pendingRequest
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return void
      */
     public function bootHasJsonBody(PendingRequest $pendingRequest): void
@@ -32,7 +32,7 @@ trait HasJsonBody
     /**
      * Retrieve the data repository
      *
-     * @return JsonBodyRepository
+     * @return \Saloon\Repositories\Body\JsonBodyRepository
      */
     public function body(): JsonBodyRepository
     {

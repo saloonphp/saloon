@@ -11,9 +11,9 @@ interface Sender
     /**
      * Send the request.
      *
-     * @param PendingRequest $pendingRequest
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @param bool $asynchronous
-     * @return Response|PromiseInterface
+     * @return \Saloon\Contracts\Response|PromiseInterface
      */
     public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): Response|PromiseInterface;
 }

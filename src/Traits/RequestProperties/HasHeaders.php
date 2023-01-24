@@ -12,14 +12,14 @@ trait HasHeaders
     /**
      * Request Headers
      *
-     * @var ArrayStoreContract
+     * @var \Saloon\Contracts\ArrayStore
      */
     protected ArrayStoreContract $headers;
 
     /**
      * Access the headers
      *
-     * @return ArrayStoreContract
+     * @return \Saloon\Contracts\ArrayStore
      */
     public function headers(): ArrayStoreContract
     {

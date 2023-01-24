@@ -12,14 +12,14 @@ trait HasQuery
     /**
      * Request Query Parameters
      *
-     * @var ArrayStoreContract
+     * @var \Saloon\Contracts\ArrayStore
      */
     protected ArrayStoreContract $query;
 
     /**
      * Access the query parameters
      *
-     * @return ArrayStoreContract
+     * @return \Saloon\Contracts\ArrayStore
      */
     public function query(): ArrayStoreContract
     {

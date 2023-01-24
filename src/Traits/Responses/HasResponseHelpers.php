@@ -48,7 +48,7 @@ trait HasResponseHelpers
     /**
      * The simulated response payload if the response was simulated.
      *
-     * @var SimulatedResponsePayload|null
+     * @var \Saloon\Contracts\SimulatedResponsePayload|null
      */
     protected ?SimulatedResponsePayload $simulatedResponsePayload = null;
 
@@ -87,10 +87,10 @@ trait HasResponseHelpers
     /**
      * Convert the XML response into a SimpleXMLElement.
      *
-     * @param ...$arguments
-     * @return SimpleXMLElement|bool
+     * @param mixed ...$arguments
+     * @return \SimpleXMLElement|bool
      */
-    public function xml(...$arguments): SimpleXMLElement|bool
+    public function xml(mixed ...$arguments): SimpleXMLElement|bool
     {
         if (! isset($this->decodedXml)) {
             $this->decodedXml = $this->body();
@@ -105,11 +105,11 @@ trait HasResponseHelpers
      * Requires Laravel Collections (composer require illuminate/collections)
      * @see https://github.com/illuminate/collections
      *
-     * @param $key
-     * @return Collection
+     * @param array-key|null $key
+     * @return \Illuminate\Support\Collection
      * @throws \JsonException
      */
-    public function collect($key = null): Collection
+    public function collect(string|int|null $key = null): Collection
     {
         return Collection::make($this->json($key));
     }
@@ -140,7 +140,7 @@ trait HasResponseHelpers
      * Requires Symfony Crawler (composer require symfony/dom-crawler)
      * @see https://symfony.com/doc/current/components/dom_crawler.html
      *
-     * @return Crawler
+     * @return \Symfony\Component\DomCrawler\Crawler
      */
     public function dom(): Crawler
     {
@@ -237,7 +237,7 @@ trait HasResponseHelpers
     /**
      * Create an exception if a server or client error occurred.
      *
-     * @return Throwable|null
+     * @return \Throwable|null
      */
     public function toException(): ?Throwable
     {

@@ -82,7 +82,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * The simulated response.
      *
-     * @var SimulatedResponsePayload|null
+     * @var \Saloon\Contracts\SimulatedResponsePayload|null
      */
     protected ?SimulatedResponsePayload $simulatedResponsePayload = null;
 
@@ -469,7 +469,7 @@ class PendingRequest implements PendingRequestContract
      * Set if the request is going to be sent asynchronously
      *
      * @param bool $asynchronous
-     * @return PendingRequestContract
+     * @return $this
      */
     public function setAsynchronous(bool $asynchronous): static
     {

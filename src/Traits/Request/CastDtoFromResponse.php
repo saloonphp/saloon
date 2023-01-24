@@ -11,7 +11,7 @@ trait CastDtoFromResponse
     /**
      * Cast the response to a DTO.
      *
-     * @param Response $response
+     * @param \Saloon\Contracts\Response $response
      * @return mixed
      */
     public function createDtoFromResponse(Response $response): mixed

@@ -46,7 +46,7 @@ class RecordedResponse implements JsonSerializable
     /**
      * Create an instance from a Response
      *
-     * @param Response $response
+     * @param \Saloon\Contracts\Response $response
      * @return static
      */
     public static function fromResponse(Response $response): static
@@ -72,7 +72,7 @@ class RecordedResponse implements JsonSerializable
     /**
      * Create a mock response from the fixture
      *
-     * @return MockResponse
+     * @return \Saloon\Http\Faking\MockResponse
      */
     public function toMockResponse(): MockResponse
     {

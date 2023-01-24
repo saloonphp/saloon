@@ -13,7 +13,7 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
     /**
      * @param string $accessToken
      * @param string $refreshToken
-     * @param DateTimeImmutable $expiresAt
+     * @param \DateTimeImmutable $expiresAt
      */
     public function __construct(
         public string $accessToken,
@@ -26,7 +26,7 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
     /**
      * Apply the authentication to the request.
      *
-     * @param PendingRequest $pendingRequest
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return void
      */
     public function set(PendingRequest $pendingRequest): void
@@ -92,7 +92,7 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
     }
 
     /**
-     * @return DateTimeImmutable
+     * @return \DateTimeImmutable
      */
     public function getExpiresAt(): DateTimeImmutable
     {

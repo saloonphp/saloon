@@ -21,9 +21,9 @@ class StringBodyRepository implements BodyRepository
     /**
      * Constructor
      *
-     * @param array $value
+     * @param string|null $value
      */
-    public function __construct(mixed $value = null)
+    public function __construct(string|null $value = null)
     {
         $this->set($value);
     }

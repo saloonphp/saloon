@@ -19,7 +19,7 @@ class GetAccessTokenRequest extends Request implements HasBody
     /**
      * Define the method that the request will use.
      *
-     * @var Method
+     * @var \Saloon\Enums\Method
      */
     protected Method $method = Method::POST;
 
@@ -37,7 +37,7 @@ class GetAccessTokenRequest extends Request implements HasBody
      * Requires the authorization code and OAuth 2 config.
      *
      * @param string $code
-     * @param OAuthConfig $oauthConfig
+     * @param \Saloon\Helpers\OAuth2\OAuthConfig $oauthConfig
      */
     public function __construct(protected string $code, protected OAuthConfig $oauthConfig)
     {

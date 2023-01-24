@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Traits;
+namespace Saloon\Contracts;
 
-trait Makeable
+interface Makeable
 {
     /**
      * Instantiate a new class with the arguments.
@@ -12,8 +12,5 @@ trait Makeable
      * @param mixed ...$arguments
      * @return static
      */
-    public static function make(mixed ...$arguments): static
-    {
-        return new static(...$arguments);
-    }
+    public static function make(mixed ...$arguments): static;
 }

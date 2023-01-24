@@ -7,11 +7,10 @@ namespace Saloon\Contracts;
 use Throwable;
 use SimpleXMLElement;
 use Illuminate\Support\Collection;
-use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 
-interface Response
+interface Response extends HasHeaders
 {
     /**
      * Create an instance of the response from a PSR response
@@ -26,14 +25,14 @@ interface Response
     /**
      * Create a PSR response from the raw response.
      *
-     * @return ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function getPsrResponse(): ResponseInterface;
 
     /**
      * Get the underlying PendingRequest that created the response
      *
-     * @return PendingRequest
+     * @return \Saloon\Contracts\PendingRequest
      */
     public function getPendingRequest(): PendingRequest;
 
@@ -47,7 +46,7 @@ interface Response
     /**
      * Get the body as a stream. Don't forget to close the stream after using ->close().
      *
-     * @return StreamInterface
+     * @return \Psr\Http\Message\StreamInterface
      */
     public function stream(): StreamInterface;
 
@@ -57,13 +56,6 @@ interface Response
      * @return $this
      */
     public function close(): static;
-
-    /**
-     * Get the headers from the response.
-     *
-     * @return ArrayStore
-     */
-    public function headers(): ArrayStore;
 
     /**
      * Get a header from the response.
@@ -83,7 +75,7 @@ interface Response
     /**
      * Get the original request
      *
-     * @return Request
+     * @return \Saloon\Contracts\Request
      */
     public function getRequest(): Request;
 
@@ -106,18 +98,18 @@ interface Response
     /**
      * Convert the XML response into a SimpleXMLElement.
      *
-     * @param ...$arguments
-     * @return SimpleXMLElement|bool
+     * @param mixed ...$arguments
+     * @return \SimpleXMLElement|bool
      */
-    public function xml(...$arguments): SimpleXMLElement|bool;
+    public function xml(mixed ...$arguments): SimpleXMLElement|bool;
 
     /**
      * Get the JSON decoded body of the response as a collection.
      *
-     * @param $key
-     * @return Collection
+     * @param array-key|null $key
+     * @return \Illuminate\Support\Collection
      */
-    public function collect($key = null): Collection;
+    public function collect(string|int|null $key = null): Collection;
 
     /**
      * Cast the response to a DTO.
@@ -186,7 +178,7 @@ interface Response
     /**
      * Create an exception if a server or client error occurred.
      *
-     * @return Throwable|null
+     * @return \Throwable|null
      */
     public function toException(): ?Throwable;
 
@@ -222,7 +214,7 @@ interface Response
      * Set if a response has been mocked or not.
      *
      * @param bool $value
-     * @return mixed
+     * @return $this
      */
     public function setMocked(bool $value): static;
 
@@ -230,29 +222,29 @@ interface Response
      * Set if a response has been cached or not.
      *
      * @param bool $value
-     * @return mixed
+     * @return $this
      */
     public function setCached(bool $value): static;
 
     /**
      * Set the simulated response payload if the response was simulated.
      *
-     * @param SimulatedResponsePayload $simulatedResponsePayload
-     * @return mixed
+     * @param \Saloon\Contracts\SimulatedResponsePayload $simulatedResponsePayload
+     * @return $this
      */
     public function setSimulatedResponsePayload(SimulatedResponsePayload $simulatedResponsePayload): static;
 
     /**
      * Get the simulated response payload if the response was simulated.
      *
-     * @return simulatedResponsePayload|null
+     * @return \Saloon\Contracts\SimulatedResponsePayload|null
      */
     public function getSimulatedResponsePayload(): ?SimulatedResponsePayload;
 
     /**
      * Get the original sender exception
      *
-     * @return Throwable|null
+     * @return \Throwable|null
      */
     public function getSenderException(): ?Throwable;
 

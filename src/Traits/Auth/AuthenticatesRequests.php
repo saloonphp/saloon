@@ -15,14 +15,14 @@ trait AuthenticatesRequests
     /**
      * The authenticator used in requests.
      *
-     * @var Authenticator|null
+     * @var \Saloon\Contracts\Authenticator|null
      */
     protected ?Authenticator $authenticator = null;
 
     /**
      * Default authenticator used.
      *
-     * @return Authenticator|null
+     * @return \Saloon\Contracts\Authenticator|null
      */
     protected function defaultAuth(): ?Authenticator
     {
@@ -32,7 +32,7 @@ trait AuthenticatesRequests
     /**
      * Retrieve the authenticator.
      *
-     * @return Authenticator|null
+     * @return \Saloon\Contracts\Authenticator|null
      */
     public function getAuthenticator(): ?Authenticator
     {
@@ -42,7 +42,7 @@ trait AuthenticatesRequests
     /**
      * Authenticate the request with an authenticator.
      *
-     * @param Authenticator $authenticator
+     * @param \Saloon\Contracts\Authenticator $authenticator
      * @return $this
      */
     public function authenticate(Authenticator $authenticator): static
