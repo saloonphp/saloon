@@ -11,7 +11,7 @@ use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 
-interface Response
+interface Response extends HasHeaders
 {
     /**
      * Create an instance of the response from a PSR response
@@ -59,13 +59,6 @@ interface Response
     public function close(): static;
 
     /**
-     * Get the headers from the response.
-     *
-     * @return ArrayStore
-     */
-    public function headers(): ArrayStore;
-
-    /**
      * Get a header from the response.
      *
      * @param string $header
@@ -106,18 +99,18 @@ interface Response
     /**
      * Convert the XML response into a SimpleXMLElement.
      *
-     * @param ...$arguments
+     * @param mixed ...$arguments
      * @return SimpleXMLElement|bool
      */
-    public function xml(...$arguments): SimpleXMLElement|bool;
+    public function xml(mixed ...$arguments): SimpleXMLElement|bool;
 
     /**
      * Get the JSON decoded body of the response as a collection.
      *
-     * @param $key
+     * @param array-key|null $key
      * @return Collection
      */
-    public function collect($key = null): Collection;
+    public function collect(string|int|null $key = null): Collection;
 
     /**
      * Cast the response to a DTO.
@@ -245,7 +238,7 @@ interface Response
     /**
      * Get the simulated response payload if the response was simulated.
      *
-     * @return simulatedResponsePayload|null
+     * @return SimulatedResponsePayload|null
      */
     public function getSimulatedResponsePayload(): ?SimulatedResponsePayload;
 
