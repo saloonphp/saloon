@@ -7,6 +7,7 @@ namespace Saloon\Helpers;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\SimulatedResponsePayload;
+use Saloon\Contracts\Pipeline as PipelineContract;
 use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
 class MiddlewarePipeline implements MiddlewarePipelineContract
@@ -14,24 +15,24 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Request Pipeline
      *
-     * @var \Saloon\Helpers\Pipeline
+     * @var \Saloon\Contracts\Pipeline
      */
-    protected Pipeline $requestPipeline;
+    protected PipelineContract $requestPipeline;
 
     /**
      * Response Pipeline
      *
-     * @var \Saloon\Helpers\Pipeline
+     * @var \Saloon\Contracts\Pipeline
      */
-    protected Pipeline $responsePipeline;
+    protected PipelineContract $responsePipeline;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->requestPipeline = new Pipeline();
-        $this->responsePipeline = new Pipeline();
+        $this->requestPipeline = new Pipeline;
+        $this->responsePipeline = new Pipeline;
     }
 
     /**

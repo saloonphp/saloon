@@ -183,7 +183,7 @@ test('you can merge a middleware pipeline together', closure: function () {
         })
         ->onResponse(function (Response $response) {
             return $response->throw();
-        });
+        }, false, 'response');
 
     expect($pipelineB->getRequestPipeline()->getPipes())->toBeEmpty();
     expect($pipelineB->getResponsePipeline()->getPipes())->toBeEmpty();
@@ -192,6 +192,21 @@ test('you can merge a middleware pipeline together', closure: function () {
 
     expect($pipelineB->getRequestPipeline()->getPipes())->toHaveCount(2);
     expect($pipelineB->getResponsePipeline()->getPipes())->toHaveCount(1);
+    expect($pipelineA->getRequestPipeline()->getPipes())->toEqual($pipelineB->getRequestPipeline()->getPipes());
+    expect($pipelineA->getResponsePipeline()->getPipes())->toEqual($pipelineB->getResponsePipeline()->getPipes());
+});
+
+test('when merging a middleware pipeline together if two pipelines exist with the same pipe it throws an exception', function () {
+    $pipelineA = new MiddlewarePipeline;
+    $pipelineB = new MiddlewarePipeline;
+
+    $pipelineA->onRequest(fn () => null, false, 'howdy');
+    $pipelineB->onRequest(fn () => null, false, 'howdy');
+
+    $this->expectException(DuplicatePipeNameException::class);
+    $this->expectExceptionMessage('The "howdy" pipe already exists on the pipeline');
+
+    $pipelineA->merge($pipelineB);
 });
 
 test('a request pipeline is run in order of pipes', function () {
