@@ -257,13 +257,6 @@ interface Response
     public function getSenderException(): ?Throwable;
 
     /**
-     * Get the raw response
-     *
-     * @return mixed
-     */
-    public function getRawResponse(): mixed;
-
-    /**
      * Get the body of the response.
      *
      * @return string

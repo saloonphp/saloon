@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
-use Saloon\Contracts\Pipeline as PipelineContract;
 use Saloon\Data\Pipe;
 use Saloon\Exceptions\DuplicatePipeNameException;
+use Saloon\Contracts\Pipeline as PipelineContract;
 
 class Pipeline implements PipelineContract
 {
@@ -87,6 +87,6 @@ class Pipeline implements PipelineContract
      */
     protected function pipeExists(string $name): bool
     {
-        return ! empty(array_filter($this->pipes, static fn(Pipe $pipe) => $pipe->name === $name));
+        return ! empty(array_filter($this->pipes, static fn (Pipe $pipe) => $pipe->name === $name));
     }
 }

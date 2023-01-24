@@ -8,7 +8,6 @@ use Saloon\Helpers\Storage;
 use Saloon\Helpers\MockConfig;
 use Saloon\Data\RecordedResponse;
 use Saloon\Exceptions\FixtureMissingException;
-use Saloon\Exceptions\DirectoryNotFoundException;
 
 class Fixture
 {
