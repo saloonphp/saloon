@@ -18,9 +18,6 @@ use Saloon\Exceptions\DirectoryNotFoundException;
 use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Contracts\SimulatedResponsePayload as SimulatedResponsePayloadContract;
 
-/**
- * @method static static make(mixed $body = [], int $status = 200, array $headers = []) Create a new mock response
- */
 class SimulatedResponsePayload implements SimulatedResponsePayloadContract
 {
     use Makeable;
