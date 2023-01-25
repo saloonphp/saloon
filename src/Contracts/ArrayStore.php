@@ -9,7 +9,7 @@ interface ArrayStore
     /**
      * Retrieve all the items.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function all(): array;
 
@@ -25,7 +25,7 @@ interface ArrayStore
     /**
      * Overwrite the entire repository's contents.
      *
-     * @param array $data
+     * @param array<string, mixed> $data
      * @return $this
      */
     public function set(array $data): static;
@@ -33,7 +33,7 @@ interface ArrayStore
     /**
      * Merge in other arrays.
      *
-     * @param array ...$arrays
+     * @param array<string, mixed> ...$arrays
      * @return $this
      */
     public function merge(array ...$arrays): static;

@@ -16,14 +16,14 @@ class ArrayBodyRepository implements BodyRepository
     /**
      * Repository Data
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected array $data = [];
 
     /**
      * Constructor
      *
-     * @param array $value
+     * @param array<string, mixed> $value
      */
     public function __construct(mixed $value = [])
     {
@@ -33,7 +33,7 @@ class ArrayBodyRepository implements BodyRepository
     /**
      * Set a value inside the repository
      *
-     * @param array $value
+     * @param array<string, mixed> $value
      * @return $this
      */
     public function set(mixed $value): static
@@ -50,7 +50,7 @@ class ArrayBodyRepository implements BodyRepository
     /**
      * Merge another array into the repository
      *
-     * @param array ...$arrays
+     * @param array<string, mixed> ...$arrays
      * @return $this
      */
     public function merge(array ...$arrays): static
@@ -81,7 +81,7 @@ class ArrayBodyRepository implements BodyRepository
      *
      * @param array-key|null $key
      * @param mixed|null $default
-     * @return mixed
+     * @return ($key is null ? array<string, mixed> : mixed)
      */
     public function get(string|int|null $key = null, mixed $default = null): mixed
     {
@@ -108,7 +108,7 @@ class ArrayBodyRepository implements BodyRepository
     /**
      * Retrieve all in the repository
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function all(): array
     {
@@ -119,6 +119,8 @@ class ArrayBodyRepository implements BodyRepository
      * Determine if the repository is empty
      *
      * @return bool
+     *
+     * @phpstan-assert-if-false non-empty-array $this->data
      */
     public function isEmpty(): bool
     {
@@ -129,6 +131,8 @@ class ArrayBodyRepository implements BodyRepository
      * Determine if the repository is not empty
      *
      * @return bool
+     *
+     * @phpstan-assert-if-true non-empty-array $this->data
      */
     public function isNotEmpty(): bool
     {

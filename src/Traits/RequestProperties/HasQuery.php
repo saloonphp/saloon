@@ -29,7 +29,7 @@ trait HasQuery
     /**
      * Default Query Parameters
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function defaultQuery(): array
     {

@@ -29,7 +29,7 @@ trait HasHeaders
     /**
      * Default Request Headers
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function defaultHeaders(): array
     {

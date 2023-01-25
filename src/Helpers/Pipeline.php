@@ -59,7 +59,7 @@ class Pipeline implements PipelineContract
     /**
      * Set the pipes on the pipeline.
      *
-     * @param array $pipes
+     * @param array<\Saloon\Data\Pipe> $pipes
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
@@ -100,7 +100,7 @@ class Pipeline implements PipelineContract
                 return true;
             }
         }
-        
+
         return false;
     }
 }

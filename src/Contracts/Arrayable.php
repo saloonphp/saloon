@@ -9,7 +9,7 @@ interface Arrayable
     /**
      * Convert the instance to an array
      *
-     * @return array
+     * @return array<array-key, mixed>
      */
     public function toArray(): array;
 }

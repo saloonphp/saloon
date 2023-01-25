@@ -42,7 +42,7 @@ trait HasFormBody
     /**
      * Default body
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function defaultBody(): array
     {

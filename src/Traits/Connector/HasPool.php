@@ -12,7 +12,7 @@ trait HasPool
     /**
      * Create a request pool
      *
-     * @param iterable|callable $requests
+     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>|callable $requests
      * @param int|callable $concurrency
      * @param callable|null $responseHandler
      * @param callable|null $exceptionHandler

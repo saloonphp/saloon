@@ -47,7 +47,12 @@ class GetRefreshTokenRequest extends Request implements HasBody
     /**
      * Register the default data.
      *
-     * @return array
+     * @return array{
+     *     grant_type: string,
+     *     refresh_token: string,
+     *     client_id: string,
+     *     client_secret: string,
+     * }
      */
     public function defaultBody(): array
     {

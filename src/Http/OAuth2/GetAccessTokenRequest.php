@@ -47,7 +47,13 @@ class GetAccessTokenRequest extends Request implements HasBody
     /**
      * Register the default data.
      *
-     * @return array
+     * @return array{
+     *     grant_type: string,
+     *     code: string,
+     *     client_id: string,
+     *     client_secret: string,
+     *     redirect_uri: string,
+     * }
      */
     public function defaultBody(): array
     {

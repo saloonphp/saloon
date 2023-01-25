@@ -76,7 +76,7 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
      * @param string $name
      * @param \Psr\Http\Message\StreamInterface|resource|string $contents
      * @param string|null $filename
-     * @param array $headers
+     * @param array<string, mixed> $headers
      * @return $this
      */
     public function add(string $name, mixed $contents, string $filename = null, array $headers = []): static
@@ -170,7 +170,12 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
      *
      * Converts all the multipart value objects into arrays.
      *
-     * @return array
+     * @return array<array{
+     *     name: string,
+     *     contents: mixed,
+     *     filename: string|null,
+     *     headers: array<string, mixed>,
+     * }>
      */
     public function toArray(): array
     {
@@ -180,12 +185,12 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
     /**
      * Parse a multipart array
      *
-     * @param array $value
+     * @param array<string, mixed> $value
      * @return array<\Saloon\Data\MultipartValue>
      */
     protected function parseMultipartArray(array $value): array
     {
-        $multipartValues = array_filter($value, static fn (mixed $item) => $item instanceof MultipartValue);
+        $multipartValues = array_filter($value, static fn (mixed $item): bool => $item instanceof MultipartValue);
 
         if (count($value) !== count($multipartValues)) {
             throw new InvalidArgumentException(sprintf('The value array must only contain %s objects.', MultipartValue::class));

@@ -60,7 +60,7 @@ class OAuthConfig implements MakeableContract
     /**
      * The default scopes that will be applied to every authorization URL.
      *
-     * @var array
+     * @var array<string>
      */
     protected array $defaultScopes = [];
 
@@ -205,7 +205,7 @@ class OAuthConfig implements MakeableContract
     /**
      * Get the default scopes.
      *
-     * @return array
+     * @return array<string>
      */
     public function getDefaultScopes(): array
     {
@@ -215,7 +215,7 @@ class OAuthConfig implements MakeableContract
     /**
      * Set the default scopes.
      *
-     * @param array $defaultScopes
+     * @param array<string> $defaultScopes
      * @return $this
      */
     public function setDefaultScopes(array $defaultScopes): static

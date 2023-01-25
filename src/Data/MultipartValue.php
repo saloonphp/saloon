@@ -16,7 +16,7 @@ class MultipartValue implements Arrayable
      * @param string $name
      * @param \Psr\Http\Message\StreamInterface|resource|string|int $value
      * @param string|null $filename
-     * @param array $headers
+     * @param array<string, mixed> $headers
      */
     public function __construct(
         public string  $name,
@@ -32,7 +32,12 @@ class MultipartValue implements Arrayable
     /**
      * Convert the instance to an array
      *
-     * @return array
+     * @return array{
+     *     name: string,
+     *     contents: mixed,
+     *     filename: string|null,
+     *     headers: array<string, mixed>,
+     * }
      */
     public function toArray(): array
     {
