@@ -42,7 +42,7 @@ trait HasSimulationMethods
      * Set if a response has been cached or not.
      *
      * @param bool $value
-     * @return mixed
+     * @return $this
      */
     public function setCached(bool $value): static
     {
@@ -55,7 +55,7 @@ trait HasSimulationMethods
      * Set if a response has been mocked or not.
      *
      * @param bool $value
-     * @return mixed
+     * @return $this
      */
     public function setMocked(bool $value): static
     {
@@ -68,7 +68,7 @@ trait HasSimulationMethods
      * Set the simulated response payload if the response was simulated.
      *
      * @param \Saloon\Contracts\SimulatedResponsePayload $simulatedResponsePayload
-     * @return mixed
+     * @return $this
      */
     public function setSimulatedResponsePayload(SimulatedResponsePayload $simulatedResponsePayload): static
     {
