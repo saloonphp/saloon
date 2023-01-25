@@ -27,8 +27,8 @@ test('the store will throw an exception if set value is not an array', function 
     $this->expectException(InvalidArgumentException::class);
     $this->expectDeprecationMessage('The value must be an array');
 
-    $repository = new MultipartBodyRepository([]);
-    $repository->set('123');
+    $body = new MultipartBodyRepository();
+    $body->set('123');
 });
 
 test('the store will throw an exception if the array does not contain multipart values', function () {
