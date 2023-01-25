@@ -52,9 +52,9 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
     /**
      * Create a new mock response
      *
-     * @param array|string $body
+     * @param array<string, mixed>|string $body
      * @param int $status
-     * @param array $headers
+     * @param array<string, mixed> $headers
      */
     public function __construct(array|string $body = [], int $status = 200, array $headers = [])
     {

@@ -154,7 +154,7 @@ class GuzzleSender implements Sender
      * Build up all the request options
      *
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return array
+     * @return array<RequestOptions::*, mixed>
      */
     protected function createRequestOptions(PendingRequest $pendingRequest): array
     {

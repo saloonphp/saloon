@@ -29,7 +29,7 @@ trait HasConfig
     /**
      * Default Config
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function defaultConfig(): array
     {

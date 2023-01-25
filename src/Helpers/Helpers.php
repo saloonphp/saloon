@@ -11,8 +11,8 @@ class Helpers
     /**
      * Returns all traits used by a class, its parent classes and trait of their traits.
      *
-     * @param object|string $class
-     * @return array
+     * @param object|class-string $class
+     * @return array<class-string, class-string>
      */
     public static function classUsesRecursive(object|string $class): array
     {
@@ -32,8 +32,8 @@ class Helpers
     /**
      * Returns all traits used by a trait and its traits.
      *
-     * @param string $trait
-     * @return array
+     * @param class-string $trait
+     * @return array<class-string, class-string>
      */
     public static function traitUsesRecursive(string $trait): array
     {
@@ -49,7 +49,7 @@ class Helpers
     /**
      * Get the class "basename" of the given object / class.
      *
-     * @param object|string $class
+     * @param object|class-string $class
      * @return string
      */
     public static function classBasename(object|string $class): string

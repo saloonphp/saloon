@@ -56,7 +56,7 @@ trait AuthorizationCodeGrant
     /**
      * Get the Authorization URL.
      *
-     * @param array $scopes
+     * @param array<string> $scopes
      * @param string|null $state
      * @param string $scopeSeparator
      * @return string

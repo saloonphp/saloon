@@ -13,6 +13,8 @@ class Arr
      *
      * @param mixed $value
      * @return bool
+     *
+     * @phpstan-assert-if-true array|ArrayAccess $value
      */
     public static function accessible(mixed $value): bool
     {
@@ -22,7 +24,7 @@ class Arr
     /**
      * Determine if the given key exists in the provided array.
      *
-     * @param array $array
+     * @param array<array-key, mixed> $array
      * @param array-key|float $key
      * @return bool
      */
@@ -38,10 +40,10 @@ class Arr
     /**
      * Get an item from an array using "dot" notation.
      *
-     * @param array $array
+     * @param array<array-key, mixed> $array
      * @param array-key|null $key
      * @param mixed|null $default
-     * @return mixed
+     * @return ($key is null ? array<array-key, mixed> : mixed)
      */
     public static function get(array $array, string|int|null $key, mixed $default = null): mixed
     {
@@ -75,9 +77,14 @@ class Arr
     /**
      * Map an array with keys
      *
-     * @param array $items
-     * @param callable $callback
-     * @return array
+     * @template TKey of array-key
+     * @template TValue
+     * @template TReturnKey of array-key
+     * @template TReturnValue
+     *
+     * @param array<TKey, TValue> $items
+     * @param callable(TValue, TKey): array<TReturnKey, TReturnValue> $callback
+     * @return array<TReturnKey, TReturnValue>
      */
     public static function mapWithKeys(array $items, callable $callback): array
     {

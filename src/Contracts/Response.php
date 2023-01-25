@@ -61,7 +61,7 @@ interface Response extends HasHeaders
      * Get a header from the response.
      *
      * @param string $header
-     * @return string|array|null
+     * @return string|array<array-key, mixed>|null
      */
     public function header(string $header): string|array|null;
 
@@ -82,11 +82,11 @@ interface Response extends HasHeaders
     /**
      * Get the JSON decoded body of the response as an array or scalar value.
      *
-     * @param string|null $key
-     * @param mixed $default
-     * @return mixed
+     * @param array-key|null $key
+     * @param mixed|null $default
+     * @return ($key is null ? array<array-key, mixed> : mixed)
      */
-    public function json(string $key = null, mixed $default = null): mixed;
+    public function json(string|int|null $key = null, mixed $default = null): mixed;
 
     /**
      * Get the JSON decoded body of the response as an object.
@@ -107,7 +107,7 @@ interface Response extends HasHeaders
      * Get the JSON decoded body of the response as a collection.
      *
      * @param array-key|null $key
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection<array-key, mixed>
      */
     public function collect(string|int|null $key = null): Collection;
 

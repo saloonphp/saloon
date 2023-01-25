@@ -23,18 +23,19 @@ test('the store can have an array provided', function () {
 });
 
 test('you can set it', function () {
-    $this->expectException(InvalidArgumentException::class);
-    $this->expectDeprecationMessage('The value must be an array');
-
-    new ArrayBodyRepository('Sam');
-});
-
-test('it will throw an exception if you set a non-array', function () {
     $body = new ArrayBodyRepository();
 
     $body->set(['name' => 'Sam']);
 
     expect($body->all())->toEqual(['name' => 'Sam']);
+});
+
+test('it will throw an exception if you set a non-array', function () {
+    $this->expectException(InvalidArgumentException::class);
+    $this->expectDeprecationMessage('The value must be an array');
+
+    $body = new ArrayBodyRepository();
+    $body->set('Sam');
 });
 
 test('you can add an item', function () {

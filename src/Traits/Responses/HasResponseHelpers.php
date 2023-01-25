@@ -20,7 +20,7 @@ trait HasResponseHelpers
     /**
      * The decoded JSON response.
      *
-     * @var array
+     * @var array<array-key, mixed>
      */
     protected array $decodedJson;
 
@@ -55,12 +55,12 @@ trait HasResponseHelpers
     /**
      * Get the JSON decoded body of the response as an array or scalar value.
      *
-     * @param string|null $key
-     * @param mixed $default
-     * @return mixed
+     * @param array-key|null $key
+     * @param mixed|null $default
+     * @return ($key is null ? array<array-key, mixed> : mixed)
      * @throws \JsonException
      */
-    public function json(string $key = null, mixed $default = null): mixed
+    public function json(string|int|null $key = null, mixed $default = null): mixed
     {
         if (! isset($this->decodedJson)) {
             $this->decodedJson = json_decode($this->body(), true, 512, JSON_THROW_ON_ERROR);
@@ -106,12 +106,22 @@ trait HasResponseHelpers
      * @see https://github.com/illuminate/collections
      *
      * @param array-key|null $key
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection<array-key, mixed>
      * @throws \JsonException
      */
     public function collect(string|int|null $key = null): Collection
     {
-        return Collection::make($this->json($key));
+        $data = $this->json($key);
+
+        if (is_null($data)) {
+            return Collection::empty();
+        }
+
+        if (is_array($data)) {
+            return Collection::make($data);
+        }
+
+        return Collection::make([$data]);
     }
 
     /**
@@ -291,7 +301,7 @@ trait HasResponseHelpers
      * Get a header from the response.
      *
      * @param string $header
-     * @return string|array|null
+     * @return string|array<array-key, mixed>|null
      */
     public function header(string $header): string|array|null
     {

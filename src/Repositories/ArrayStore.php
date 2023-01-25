@@ -15,14 +15,14 @@ class ArrayStore implements ArrayStoreContract
     /**
      * The repository's store
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected array $data = [];
 
     /**
      * Constructor
      *
-     * @param array $data
+     * @param array<string, mixed> $data
      */
     public function __construct(array $data = [])
     {
@@ -32,7 +32,7 @@ class ArrayStore implements ArrayStoreContract
     /**
      * Retrieve all the items.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function all(): array
     {
@@ -54,7 +54,7 @@ class ArrayStore implements ArrayStoreContract
     /**
      * Overwrite the entire repository.
      *
-     * @param array $data
+     * @param array<string, mixed> $data
      * @return $this
      */
     public function set(array $data): static
@@ -67,7 +67,7 @@ class ArrayStore implements ArrayStoreContract
     /**
      * Merge in other arrays.
      *
-     * @param array ...$arrays
+     * @param array<string, mixed> ...$arrays
      * @return $this
      */
     public function merge(array ...$arrays): static
@@ -108,6 +108,8 @@ class ArrayStore implements ArrayStoreContract
      * Determine if the store is empty
      *
      * @return bool
+     *
+     * @phpstan-assert-if-false non-empty-array $this->data
      */
     public function isEmpty(): bool
     {
@@ -118,6 +120,8 @@ class ArrayStore implements ArrayStoreContract
      * Determine if the store is not empty
      *
      * @return bool
+     *
+     * @phpstan-assert-if-true non-empty-array $this->data
      */
     public function isNotEmpty(): bool
     {

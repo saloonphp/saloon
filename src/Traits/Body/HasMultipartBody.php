@@ -30,7 +30,7 @@ trait HasMultipartBody
     /**
      * Default body
      *
-     * @return array
+     * @return array<\Saloon\Data\MultipartValue>
      */
     protected function defaultBody(): array
     {

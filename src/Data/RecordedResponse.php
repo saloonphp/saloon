@@ -14,7 +14,7 @@ class RecordedResponse implements JsonSerializable
      * Constructor
      *
      * @param int $statusCode
-     * @param array $headers
+     * @param array<string, mixed> $headers
      * @param mixed $data
      */
     public function __construct(
@@ -34,6 +34,13 @@ class RecordedResponse implements JsonSerializable
      */
     public static function fromFile(string $contents): static
     {
+        /**
+         * @param array{
+         *     statusCode: int,
+         *     headers: array<string, mixed>,
+         *     data: mixed,
+         * } $fileData
+         */
         $fileData = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
 
         return new static(
@@ -82,7 +89,11 @@ class RecordedResponse implements JsonSerializable
     /**
      * Define the JSON object if this class is converted into JSON
      *
-     * @return array
+     * @return array{
+     *     statusCode: int,
+     *     headers: array<string, mixed>,
+     *     data: mixed,
+     * }
      */
     public function jsonSerialize(): array
     {

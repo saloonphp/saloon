@@ -9,7 +9,7 @@ class Str
     /**
      * Determine if a given string matches a given pattern.
      *
-     * @param string|iterable $pattern
+     * @param string|iterable<string> $pattern
      * @param string $value
      * @return bool
      */
@@ -62,7 +62,7 @@ class Str
      * Determine if a given string ends with a given substring.
      *
      * @param string $haystack
-     * @param string|iterable $needles
+     * @param string|iterable<string> $needles
      * @return bool
      */
     public static function endsWith(string $haystack, string|iterable $needles): bool
