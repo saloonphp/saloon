@@ -55,12 +55,12 @@ trait HasResponseHelpers
     /**
      * Get the JSON decoded body of the response as an array or scalar value.
      *
-     * @param string|null $key
+     * @param array-key|null $key
      * @param mixed|null $default
      * @return ($key is null ? array<array-key, mixed> : mixed)
      * @throws \JsonException
      */
-    public function json(string|null $key = null, mixed $default = null): mixed
+    public function json(string|int|null $key = null, mixed $default = null): mixed
     {
         if (! isset($this->decodedJson)) {
             $this->decodedJson = json_decode($this->body(), true, 512, JSON_THROW_ON_ERROR);
