@@ -25,7 +25,7 @@ class ArrayBodyRepository implements BodyRepository
      *
      * @param array<string, mixed> $value
      */
-    public function __construct(mixed $value = [])
+    public function __construct(array $value = [])
     {
         $this->set($value);
     }
