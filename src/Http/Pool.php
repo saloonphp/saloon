@@ -17,9 +17,9 @@ class Pool implements PoolContract
     /**
      * Requests inside the pool
      *
-     * @var \Generator<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>
+     * @var iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>
      */
-    protected Generator $requests;
+    protected iterable $requests;
 
     /**
      * Handle Response Callback
@@ -132,9 +132,9 @@ class Pool implements PoolContract
     /**
      * Get the request generator
      *
-     * @return \Generator<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>
+     * @return iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>
      */
-    public function getRequests(): Generator
+    public function getRequests(): iterable
     {
         return $this->requests;
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use Generator;
 use GuzzleHttp\Promise\PromiseInterface;
 
 interface Pool
@@ -44,9 +43,9 @@ interface Pool
     /**
      * Get the request generator
      *
-     * @return \Generator<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>
+     * @return iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>
      */
-    public function getRequests(): Generator;
+    public function getRequests(): iterable;
 
     /**
      * Send the pool and create a Promise
