@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Saloon;
+namespace Saloon\Helpers;
 
 use Saloon\Contracts\Sender;
 use Saloon\Http\Senders\GuzzleSender;
-use Saloon\Helpers\MiddlewarePipeline;
 use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
 final class Config

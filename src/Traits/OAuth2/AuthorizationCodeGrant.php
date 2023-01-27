@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Saloon\Traits\OAuth2;
 
 use DateTimeImmutable;
+use Saloon\Helpers\Str;
 use Saloon\Helpers\Date;
 use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Response;
-use Saloon\Helpers\StateHelper;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Http\OAuth2\GetUserRequest;
 use Saloon\Contracts\OAuthAuthenticator;
@@ -72,7 +72,7 @@ trait AuthorizationCodeGrant
         $redirectUri = $config->getRedirectUri();
         $defaultScopes = $config->getDefaultScopes();
 
-        $this->state = $state ?? StateHelper::createRandomState();
+        $this->state = $state ?? Str::random(32);
 
         $queryParameters = [
             'response_type' => 'code',

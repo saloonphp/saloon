@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use Saloon\Config;
 use Saloon\Enums\Method;
+use Saloon\Helpers\Config;
 use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Sender;
 use Saloon\Contracts\Request;
