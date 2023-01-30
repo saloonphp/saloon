@@ -9,6 +9,14 @@ use Throwable;
 interface CanThrowRequestExceptions
 {
     /**
+     * Determine if the request has failed.
+     *
+     * @param \Saloon\Contracts\Response $response
+     * @return bool|null
+     */
+    public function hasRequestFailed(Response $response): ?bool;
+
+    /**
      * Determine if we should throw an exception if the `$response->throw()` ({@see \Saloon\Contracts\Response::throw()})
      * is used, or when AlwaysThrowOnErrors is used.
      *

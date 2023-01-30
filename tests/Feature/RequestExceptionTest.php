@@ -9,6 +9,8 @@ use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Exception\ServerException;
 use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\RequestException;
+use Saloon\Tests\Fixtures\Connectors\CustomFailHandlerConnector;
+use Saloon\Tests\Fixtures\Requests\CustomFailHandlerRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
@@ -211,4 +213,34 @@ test('when both the connector and request have custom logic to determine differe
     expect($exceptionC->getResponse())->toBeInstanceOf(Response::class);
     expect($exceptionC->getMessage())->toEqual('OK (200) Response: ' . $exceptionC->getResponse()->body());
     expect($exceptionC->getPrevious())->toBeNull();
+});
+
+test('you can customise if saloon determines if a request has failed on a connector', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['message' => 'Success']),
+        MockResponse::make(['message' => 'Error: Invalid Cowboy Hat']),
+    ]);
+
+    $responseA = CustomFailHandlerConnector::make()->send(new UserRequest, $mockClient);
+
+    expect($responseA->failed())->toBeFalse();
+
+    $responseB = CustomFailHandlerConnector::make()->send(new UserRequest, $mockClient);
+
+    expect($responseB->failed())->toBeTrue();
+});
+
+test('you can customise if saloon determines if a request has failed on a request', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['message' => 'Success']),
+        MockResponse::make(['message' => 'Yee-naw: Horse Not Found']),
+    ]);
+
+    $responseA = TestConnector::make()->send(new CustomFailHandlerRequest, $mockClient);
+
+    expect($responseA->failed())->toBeFalse();
+
+    $responseB = TestConnector::make()->send(new CustomFailHandlerRequest, $mockClient);
+
+    expect($responseB->failed())->toBeTrue();
 });

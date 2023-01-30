@@ -131,10 +131,6 @@ trait HasResponseHelpers
      */
     public function dto(): mixed
     {
-        if ($this->failed()) {
-            return null;
-        }
-
         $dataObject = $this->pendingRequest->createDtoFromResponse($this);
 
         if ($dataObject instanceof WithResponse) {
@@ -142,6 +138,21 @@ trait HasResponseHelpers
         }
 
         return $dataObject;
+    }
+
+    /**
+     * Convert the response into a DTO or throw a LogicException if the response failed
+     *
+     * @throws \LogicException
+     * @return mixed
+     */
+    public function dtoOrFail(): mixed
+    {
+        if ($this->failed()) {
+            throw new \LogicException('Unable to create data transfer object as the response has failed.', 0, $this->toException());
+        }
+
+        return $this->dto();
     }
 
     /**
@@ -194,6 +205,14 @@ trait HasResponseHelpers
      */
     public function failed(): bool
     {
+        $pendingRequest = $this->getPendingRequest();
+
+        $hasRequestFailed = $pendingRequest->getRequest()->hasRequestFailed($this) || $pendingRequest->getConnector()->hasRequestFailed($this);
+
+        if ($hasRequestFailed === true) {
+            return true;
+        }
+
         return $this->serverError() || $this->clientError();
     }
 

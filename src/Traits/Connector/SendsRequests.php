@@ -31,6 +31,26 @@ trait SendsRequests
     }
 
     /**
+     * Send a synchronous request with retries
+     *
+     * @param \Saloon\Contracts\Request $request
+     * @param int $attempts
+     * @param int $interval
+     * @param callable|null $handleRetry
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return mixed
+     */
+    public function sendWithRetry(Request $request, int $attempts, int $interval = 0, callable $handleRetry = null, MockClient $mockClient = null): Response
+    {
+        // Todo:
+        // - ShouldRetry should accept two arguments: Response and PendingRequest
+        // - This will allow user to customise the PendingRequest
+        // - Check if someone has changed it to async before the pending request is sent because that'll end badly
+        // - Wait between attempts
+        // - Perhaps use while with sleep (while ! $response->failed() || $currentAttempts <= $attempts
+    }
+
+    /**
      * Send a request asynchronously
      *
      * @param \Saloon\Contracts\Request $request

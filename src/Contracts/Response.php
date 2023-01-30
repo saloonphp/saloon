@@ -112,11 +112,19 @@ interface Response extends HasHeaders
     public function collect(string|int|null $key = null): Collection;
 
     /**
-     * Cast the response to a DTO.
+     * Convert the response into a DTO
      *
      * @return mixed
      */
     public function dto(): mixed;
+
+    /**
+     * Convert the response into a DTO or throw a LogicException if the response failed
+     *
+     * @throws \LogicException
+     * @return mixed
+     */
+    public function dtoOrFail(): mixed;
 
     /**
      * Determine if the request was successful.
