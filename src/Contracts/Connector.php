@@ -66,16 +66,16 @@ interface Connector extends Authenticatable, CanThrowRequestExceptions, Conditio
     public function send(Request $request, MockClient $mockClient = null): Response;
 
     /**
-     * Send a synchronous request with retries
+     * Send a synchronous request and retry if it fails
      *
      * @param \Saloon\Contracts\Request $request
-     * @param int $attempts
+     * @param int $maxAttempts
      * @param int $interval
      * @param callable|null $handleRetry
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @return mixed
      */
-    public function sendWithRetry(Request $request, int $attempts, int $interval = 0, callable $handleRetry = null, MockClient $mockClient = null): Response;
+    public function sendAndRetry(Request $request, int $maxAttempts, int $interval = 0, callable $handleRetry = null, MockClient $mockClient = null): Response;
 
     /**
      * Send a request asynchronously

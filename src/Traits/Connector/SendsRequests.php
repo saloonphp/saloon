@@ -6,6 +6,8 @@ namespace Saloon\Traits\Connector;
 
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\MockClient;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -31,23 +33,71 @@ trait SendsRequests
     }
 
     /**
-     * Send a synchronous request with retries
+     * Send a synchronous request and retry if it fails
      *
      * @param \Saloon\Contracts\Request $request
-     * @param int $attempts
+     * @param int $maxAttempts
      * @param int $interval
      * @param callable|null $handleRetry
      * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return mixed
+     * @return \Saloon\Contracts\Response
+     * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
+     * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws \Saloon\Exceptions\Request\FatalRequestException
+     * @throws \Saloon\Exceptions\Request\RequestException
      */
-    public function sendWithRetry(Request $request, int $attempts, int $interval = 0, callable $handleRetry = null, MockClient $mockClient = null): Response
+    public function sendAndRetry(Request $request, int $maxAttempts, int $interval = 0, callable $handleRetry = null, MockClient $mockClient = null): Response
     {
-        // Todo:
-        // - ShouldRetry should accept two arguments: Response and PendingRequest
-        // - This will allow user to customise the PendingRequest
-        // - Check if someone has changed it to async before the pending request is sent because that'll end badly
-        // - Wait between attempts
-        // - Perhaps use while with sleep (while ! $response->failed() || $currentAttempts <= $attempts
+        $currentAttempt = 0;
+        $pendingRequest = $this->createPendingRequest($request, $mockClient);
+
+        do {
+            $currentAttempt++;
+
+            // When the current attempt is greater than one, we will pause to wait
+            // for the interval.
+
+            if ($currentAttempt > 1) {
+                usleep($interval * 1000);
+            }
+
+            try {
+                // We'll attempt to send the PendingRequest. We'll also use the throw
+                // method which will throw an exception if the request has failed.
+
+                return $pendingRequest->send()->throw();
+            } catch (FatalRequestException|RequestException $exception) {
+
+                // We won't create another pending request if our current attempt is
+                // the max attempts we can make
+
+                if ($currentAttempt === $maxAttempts) {
+                    throw $exception;
+                }
+
+                $pendingRequest = $this->createPendingRequest($request, $mockClient);
+
+                // When either the FatalRequestException happens or the RequestException
+                // happens, we should catch it and check if we should retry. If someone
+                // has provided a callable into $handleRetry, we'll wait for the result
+                // of the callable to retry.
+
+                if (is_null($handleRetry) || $handleRetry($exception, $pendingRequest)) {
+                    continue;
+                }
+
+                // If we should not retry, we need to return the last response. If the
+                // exception was a RequestException, we should return the response,
+                // otherwise we'll throw the exception.
+
+                return $exception instanceof RequestException ? $exception->getResponse(): throw $exception;
+            }
+        } while ($currentAttempt < $maxAttempts);
+
+        // If we couldn't make any successful requests, we will throw the last exception.
+
+        throw $exception;
     }
 
     /**
