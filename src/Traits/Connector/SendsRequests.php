@@ -39,6 +39,7 @@ trait SendsRequests
      * @param int $maxAttempts
      * @param int $interval
      * @param callable|null $handleRetry
+     * @param bool $throw
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @return \Saloon\Contracts\Response
      * @throws \ReflectionException
@@ -47,7 +48,7 @@ trait SendsRequests
      * @throws \Saloon\Exceptions\Request\FatalRequestException
      * @throws \Saloon\Exceptions\Request\RequestException
      */
-    public function sendAndRetry(Request $request, int $maxAttempts, int $interval = 0, callable $handleRetry = null, MockClient $mockClient = null): Response
+    public function sendAndRetry(Request $request, int $maxAttempts, int $interval = 0, callable $handleRetry = null, bool $throw = true, MockClient $mockClient = null): Response
     {
         $currentAttempt = 0;
         $pendingRequest = $this->createPendingRequest($request, $mockClient);
@@ -73,7 +74,7 @@ trait SendsRequests
                 // the max attempts we can make
 
                 if ($currentAttempt === $maxAttempts) {
-                    throw $exception;
+                    return $exception instanceof RequestException && $throw === false ? $exception->getResponse() : throw $exception;
                 }
 
                 $pendingRequest = $this->createPendingRequest($request, $mockClient);
@@ -83,7 +84,7 @@ trait SendsRequests
                 // has provided a callable into $handleRetry, we'll wait for the result
                 // of the callable to retry.
 
-                if (is_null($handleRetry) || $handleRetry($exception, $pendingRequest)) {
+                if (is_null($handleRetry) || $handleRetry($exception, $pendingRequest) === true) {
                     continue;
                 }
 
@@ -91,7 +92,7 @@ trait SendsRequests
                 // exception was a RequestException, we should return the response,
                 // otherwise we'll throw the exception.
 
-                return $exception instanceof RequestException ? $exception->getResponse(): throw $exception;
+                return $exception instanceof RequestException && $throw === false ? $exception->getResponse() : throw $exception;
             }
         } while ($currentAttempt < $maxAttempts);
 
