@@ -1,6 +1,6 @@
 {
     "name": "sammyjo20/saloon",
-    "description": "A PHP package for interacting with third-party APIs or building SDKs in a beautiful, reusable way. Cowboy hats included.",
+    "description": "Build beautiful API integrations and SDKs with Saloon",
     "license": "MIT",
     "type": "library",
     "keywords": [
