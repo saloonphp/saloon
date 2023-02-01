@@ -1,13 +1,13 @@
-![1752](https://user-images.githubusercontent.com/29132017/149842636-e9964b27-7ace-4af9-a6db-23c325505295.jpg)
+<p align="center"><img src="/art/header.png" alt="saloon's branding hero"></p>
 
 <div align="center">
 
-# 🚪 Saloon 🚪
+# Saloon – Your Lone Star of your API integrations
 
-A Laravel / PHP package that helps you build beautiful API integrations and SDKs.
+A Laravel/PHP package that helps you build beautiful API integrations and SDKs 🤠
 
 ![Build Status](https://github.com/sammyjo20/saloon/actions/workflows/tests.yml/badge.svg)
-    
+
 [Click here to read the documentation](https://docs.saloon.dev)
 
 </div>
@@ -46,7 +46,7 @@ $data = $response->json();
 
 ## Why Saloon?
 
-Building API integrations can be time consuming. After you have found an API client to use, you’re faced with lots of configuration to remember and it’s hard to repeat requests without copying and pasting, and then when you introduce patterns like OAuth2 everything gets complicated. You’ll often find yourself writing the same boilerplate code over and over again. 
+Building API integrations can be time consuming. After you have found an API client to use, you’re faced with lots of configuration to remember and it’s hard to repeat requests without copying and pasting, and then when you introduce patterns like OAuth2 everything gets complicated. You’ll often find yourself writing the same boilerplate code over and over again.
 
 We’ve standardised the way we talk to APIs with PSR-7 and PSR-18 but we haven’t got a standard structure to build API integrations.
 
@@ -60,9 +60,12 @@ Please see [here](https://github.com/Sammyjo20/Saloon/blob/main/.github/CONTRIBU
 
 Please see [here](https://github.com/Sammyjo20/Saloon/blob/main/.github/SECURITY.md) for our security policy.
 
-## Banner Image Credit
+## Credits
 
-- Freepik.com
+- [Sam Carré](https://github.com/Sammyjo20)
+- [All Contributors](../../contributors)
+
+And a special thanks to [Caneco](https://twitter.com/caneco) for the logo ✨
 
 ## Support This Project
 
