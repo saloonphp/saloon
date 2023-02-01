@@ -33,4 +33,3 @@ class CustomFailHandlerConnector extends Connector
         return str_contains($response->body(), 'Error:');
     }
 }
-

@@ -6,11 +6,11 @@ namespace Saloon\Traits\Connector;
 
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
-use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Exceptions\Request\RequestException;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\MockClient;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Exceptions\Request\RequestException;
+use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
 trait SendsRequests
@@ -69,7 +69,6 @@ trait SendsRequests
 
                 return $pendingRequest->send()->throw();
             } catch (FatalRequestException|RequestException $exception) {
-
                 // We won't create another pending request if our current attempt is
                 // the max attempts we can make
 
