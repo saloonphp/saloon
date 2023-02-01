@@ -33,7 +33,8 @@
         "pestphp/pest": "^1.21",
         "phpstan/phpstan": "^1.9",
         "spatie/ray": "^1.33",
-        "symfony/dom-crawler": "^6.0"
+        "symfony/dom-crawler": "^6.0",
+        "symfony/stopwatch": "^6.2"
     },
     "suggest": {
         "illuminate/collections": "Required for the response collect() method.",

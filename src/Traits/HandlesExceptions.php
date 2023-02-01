@@ -10,6 +10,17 @@ use Saloon\Contracts\Response;
 trait HandlesExceptions
 {
     /**
+     * Determine if the request has failed.
+     *
+     * @param \Saloon\Contracts\Response $response
+     * @return bool|null
+     */
+    public function hasRequestFailed(Response $response): ?bool
+    {
+        return null;
+    }
+
+    /**
      * Determine if the request has failed
      *
      * @param \Saloon\Contracts\Response $response

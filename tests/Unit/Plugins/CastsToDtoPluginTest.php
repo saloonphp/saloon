@@ -56,3 +56,16 @@ test('the request dto will be returned as a higher priority than the connector d
     expect($dto)->actualName->toEqual($json['actual_name']);
     expect($dto)->twitter->toEqual($json['twitter']);
 });
+
+test('you can use the dtoOrFail method to throw an exception if the response has failed', function () {
+    $mockClient = new MockClient([
+        new MockResponse(['message' => 'Server Error'], 500),
+    ]);
+
+    $response = connector()->send(new DTORequest, $mockClient);
+
+    $this->expectException(LogicException::class);
+    $this->expectExceptionMessage('Unable to create data transfer object as the response has failed.');
+
+    $response->dtoOrFail();
+});
