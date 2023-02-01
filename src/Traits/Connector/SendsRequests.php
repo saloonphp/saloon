@@ -94,10 +94,6 @@ trait SendsRequests
                 return $exception instanceof RequestException && $throw === false ? $exception->getResponse() : throw $exception;
             }
         } while ($currentAttempt < $maxAttempts);
-
-        // If we couldn't make any successful requests, we will throw the last exception.
-
-        throw $exception;
     }
 
     /**
