@@ -16,14 +16,33 @@ use BadMethodCallException;
  */
 trait Macroable
 {
+    /**
+     * Macros stored
+     *
+     * @var array<object|callable>
+     */
     protected static array $macros = [];
 
-    public static function macro(string $name, object | callable $macro): void
+    /**
+     * Create a macro
+     *
+     * @param string $name
+     * @param object|callable $macro
+     * @return void
+     */
+    public static function macro(string $name, object|callable $macro): void
     {
         static::$macros[$name] = $macro;
     }
 
-    public static function mixin(object | string $mixin): void
+    /**
+     * Add a mixin
+     *
+     * @param object|string $mixin
+     * @return void
+     * @throws \ReflectionException
+     */
+    public static function mixin(object|string $mixin): void
     {
         $methods = (new ReflectionClass($mixin))->getMethods(
             ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED
@@ -36,11 +55,24 @@ trait Macroable
         }
     }
 
+    /**
+     * Check if we have a macro
+     *
+     * @param string $name
+     * @return bool
+     */
     public static function hasMacro(string $name): bool
     {
         return isset(static::$macros[$name]);
     }
 
+    /**
+     * Handle a static call
+     *
+     * @param string $method
+     * @param array<string, mixed> $parameters
+     * @return mixed
+     */
     public static function __callStatic(string $method, array $parameters): mixed
     {
         if (! static::hasMacro($method)) {
@@ -56,6 +88,13 @@ trait Macroable
         return call_user_func_array($macro, $parameters);
     }
 
+    /**
+     * Handle a method call
+     *
+     * @param string $method
+     * @param array<string, mixed> $parameters
+     * @return mixed
+     */
     public function __call(string $method, array $parameters): mixed
     {
         if (! static::hasMacro($method)) {
