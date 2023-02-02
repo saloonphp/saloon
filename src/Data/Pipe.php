@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Data;
 
+use Closure;
+
 class Pipe
 {
+    readonly public Closure $callable;
+
     /**
      * Constructor
      *
@@ -13,9 +17,9 @@ class Pipe
      * @param string|null $name
      */
     public function __construct(
-        readonly public mixed $callable,
+        callable $callable,
         readonly public ?string $name = null,
     ) {
-        //
+        $this->callable = $callable(...);
     }
 }
