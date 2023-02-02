@@ -6,6 +6,8 @@ namespace Saloon\Helpers;
 
 use ArrayAccess;
 
+use function is_string;
+
 class Arr
 {
     /**
@@ -24,17 +26,19 @@ class Arr
     /**
      * Determine if the given key exists in the provided array.
      *
-     * @param array<array-key, mixed> $array
+     * @param array<array-key, mixed>|ArrayAccess<array-key, mixed> $array
      * @param array-key|float $key
      * @return bool
      */
-    public static function exists(array $array, string|int|float $key): bool
+    public static function exists(array|ArrayAccess $array, string|int|float $key): bool
     {
         if (is_float($key)) {
             $key = (string)$key;
         }
 
-        return array_key_exists($key, $array);
+        return $array instanceof ArrayAccess
+            ? $array->offsetExists($key)
+            : array_key_exists($key, $array);
     }
 
     /**
@@ -59,7 +63,7 @@ class Arr
             return $array[$key];
         }
 
-        if (! str_contains($key, '.')) {
+        if (! is_string($key) || ! str_contains($key, '.')) {
             return $array[$key] ?? Helpers::value($default);
         }
 

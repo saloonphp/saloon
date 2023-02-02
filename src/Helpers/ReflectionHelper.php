@@ -11,7 +11,7 @@ class ReflectionHelper
     /**
      * Check if a class is a subclass of another.
      *
-     * @param string $class
+     * @param class-string $class
      * @param string $subclass
      * @return bool
      * @throws \ReflectionException
