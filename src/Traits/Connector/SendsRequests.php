@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Connector;
 
+use LogicException;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
 use Saloon\Http\PendingRequest;
@@ -53,7 +54,7 @@ trait SendsRequests
         $currentAttempt = 0;
         $pendingRequest = $this->createPendingRequest($request, $mockClient);
 
-        do {
+        while ($currentAttempt < $maxAttempts) {
             $currentAttempt++;
 
             // When the current attempt is greater than one, we will pause to wait
@@ -93,7 +94,9 @@ trait SendsRequests
 
                 return $exception instanceof RequestException && $throw === false ? $exception->getResponse() : throw $exception;
             }
-        } while ($currentAttempt < $maxAttempts);
+        }
+
+        throw new LogicException('Maximum number of attempts has been reached.');
     }
 
     /**
