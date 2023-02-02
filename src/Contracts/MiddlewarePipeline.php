@@ -9,9 +9,9 @@ interface MiddlewarePipeline
     /**
      * Add a middleware before the request is sent
      *
-     * @template TRequest of \Saloon\Contracts\PendingRequest|\Saloon\Contracts\SimulatedResponsePayload
+     * @template TRequest of \Saloon\Contracts\PendingRequest
      *
-     * @param callable(TRequest): (TRequest|void) $callable
+     * @param callable(TRequest): (TRequest|\Saloon\Contracts\SimulatedResponsePayload|void) $callable
      * @param bool $prepend
      * @param string|null $name
      * @return $this

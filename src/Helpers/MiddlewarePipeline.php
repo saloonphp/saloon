@@ -38,9 +38,9 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Add a middleware before the request is sent
      *
-     * @template TRequest of \Saloon\Contracts\PendingRequest|\Saloon\Contracts\SimulatedResponsePayload
+     * @template TRequest of \Saloon\Contracts\PendingRequest
      *
-     * @param callable(TRequest): (TRequest|void) $callable
+     * @param callable(TRequest): (TRequest|\Saloon\Contracts\SimulatedResponsePayload|void) $callable
      * @param bool $prepend
      * @param string|null $name
      * @return $this
@@ -48,7 +48,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      */
     public function onRequest(callable $callable, bool $prepend = false, ?string $name = null): static
     {
-        $this->requestPipeline = $this->requestPipeline->pipe(function (PendingRequest $pendingRequest) use ($callable) {
+        $this->requestPipeline = $this->requestPipeline->pipe(function (PendingRequest $pendingRequest) use ($callable): PendingRequest {
             $result = $callable($pendingRequest);
 
             if ($result instanceof PendingRequest) {
@@ -78,7 +78,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      */
     public function onResponse(callable $callable, bool $prepend = false, ?string $name = null): static
     {
-        $this->responsePipeline = $this->responsePipeline->pipe(function (Response $response) use ($callable) {
+        $this->responsePipeline = $this->responsePipeline->pipe(function (Response $response) use ($callable): Response {
             $result = $callable($response);
 
             return $result instanceof Response ? $result : $response;
