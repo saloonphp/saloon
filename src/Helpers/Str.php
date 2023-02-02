@@ -83,7 +83,7 @@ class Str
     /**
      * Generate a more truly "random" alpha-numeric string.
      *
-     * @param int $length
+     * @param int<1, max> $length
      * @return string
      * @throws \Exception
      */
@@ -92,6 +92,7 @@ class Str
         $string = '';
 
         while (($len = mb_strlen($string)) < $length) {
+            /** @var int<1, max> $size */
             $size = $length - $len;
 
             $bytes = random_bytes($size);
