@@ -104,7 +104,7 @@ interface MockClient
      * Assert JSON data was sent
      *
      * @param string $request
-     * @param array<mixed, mixed> $data
+     * @param array<array-key, mixed> $data
      * @return void
      */
     public function assertSentJson(string $request, array $data): void;
