@@ -12,6 +12,9 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Pool as PoolContract;
 use Saloon\Exceptions\InvalidPoolItemException;
 
+use function is_callable;
+use function is_null;
+
 class Pool implements PoolContract
 {
     /**
@@ -24,14 +27,14 @@ class Pool implements PoolContract
     /**
      * Handle Response Callback
      *
-     * @var \Closure|null
+     * @var (\Closure(\Saloon\Contracts\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): void)|null
      */
     protected ?Closure $responseHandler = null;
 
     /**
      * Handle Exception Callback
      *
-     * @var \Closure|null
+     * @var (\Closure(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): void)|null
      */
     protected ?Closure $exceptionHandler = null;
 
@@ -47,37 +50,43 @@ class Pool implements PoolContract
      *
      * How many requests will be sent at once.
      *
-     * @var \Closure|int
+     * @var int|\Closure(int $pendingRequests): int
      */
-    protected Closure|int $concurrency;
+    protected int|Closure $concurrency;
 
     /**
      * Constructor
      *
      * @param \Saloon\Http\Connector $connector
-     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>|callable $requests
-     * @param int|callable $concurrency
-     * @param callable|null $responseHandler
-     * @param callable|null $exceptionHandler
+     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>|callable(\Saloon\Contracts\Connector): iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request> $requests
+     * @param int|callable(int $pendingRequests): (int) $concurrency
+     * @param callable(\Saloon\Contracts\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
+     * @param callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $exceptionHandler
      */
     public function __construct(Connector $connector, iterable|callable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null)
     {
         $this->connector = $connector;
         $this->setRequests($requests);
-        $this->concurrency = $concurrency;
-        $this->responseHandler = $responseHandler;
-        $this->exceptionHandler = $exceptionHandler;
+        $this->setConcurrency($concurrency);
+
+        if (! is_null($responseHandler)) {
+            $this->withResponseHandler($responseHandler);
+        }
+
+        if (! is_null($exceptionHandler)) {
+            $this->withExceptionHandler($exceptionHandler);
+        }
     }
 
     /**
      * Specify a callback to happen for each successful request
      *
-     * @param callable $callable
+     * @param callable(\Saloon\Contracts\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void) $callable
      * @return $this
      */
     public function withResponseHandler(callable $callable): static
     {
-        $this->responseHandler = $callable;
+        $this->responseHandler = $callable(...);
 
         return $this;
     }
@@ -85,12 +94,12 @@ class Pool implements PoolContract
     /**
      * Specify a callback to happen for each failed request
      *
-     * @param callable $callable
+     * @param callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void) $callable
      * @return $this
      */
     public function withExceptionHandler(callable $callable): static
     {
-        $this->exceptionHandler = $callable;
+        $this->exceptionHandler = $callable(...);
 
         return $this;
     }
@@ -98,12 +107,12 @@ class Pool implements PoolContract
     /**
      * Set the amount of concurrent requests that should be sent
      *
-     * @param int|callable $concurrency
+     * @param int|callable(int $pendingRequests): (int) $concurrency
      * @return $this
      */
     public function setConcurrency(int|callable $concurrency): static
     {
-        $this->concurrency = $concurrency;
+        $this->concurrency = is_callable($concurrency) ? $concurrency(...) : $concurrency;
 
         return $this;
     }
@@ -111,7 +120,7 @@ class Pool implements PoolContract
     /**
      * Set the requests
      *
-     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>|callable $requests
+     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>|callable(\Saloon\Contracts\Connector): iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request> $requests
      * @return $this
      */
     public function setRequests(iterable|callable $requests): static

@@ -178,7 +178,7 @@ interface Response extends HasHeaders
     /**
      * Execute the given callback if there was a server or client error.
      *
-     * @param callable $callback
+     * @param callable($this): (void) $callback
      * @return $this
      */
     public function onError(callable $callback): static;

@@ -83,7 +83,7 @@ class Arr
      * @template TReturnValue
      *
      * @param array<TKey, TValue> $items
-     * @param callable(TValue, TKey): array<TReturnKey, TReturnValue> $callback
+     * @param callable(TValue, TKey): (array<TReturnKey, TReturnValue>) $callback
      * @return array<TReturnKey, TReturnValue>
      */
     public static function mapWithKeys(array $items, callable $callback): array
