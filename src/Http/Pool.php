@@ -12,9 +12,6 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Pool as PoolContract;
 use Saloon\Exceptions\InvalidPoolItemException;
 
-use function is_callable;
-use function is_null;
-
 class Pool implements PoolContract
 {
     /**
