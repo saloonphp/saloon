@@ -12,7 +12,7 @@ interface MockClient
     /**
      * Store the mock responses in the correct places.
      *
-     * @param array $responses
+     * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $responses
      * @return void
      */
     public function addResponses(array $responses): void;
@@ -59,7 +59,7 @@ interface MockClient
     /**
      * Get all the recorded responses
      *
-     * @return array
+     * @return array<\Saloon\Contracts\Response>
      */
     public function getRecordedResponses(): array;
 
