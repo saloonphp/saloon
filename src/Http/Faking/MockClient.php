@@ -21,42 +21,42 @@ class MockClient implements MockClientContract
     /**
      * Collection of all the responses that will be sequenced.
      *
-     * @var array
+     * @var array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable>
      */
     protected array $sequenceResponses = [];
 
     /**
      * Collection of responses used only when a connector is called.
      *
-     * @var array
+     * @var array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable>
      */
     protected array $connectorResponses = [];
 
     /**
      * Collection of responses used only when a request is called.
      *
-     * @var array
+     * @var array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable>
      */
     protected array $requestResponses = [];
 
     /**
      * Collection of responses that will run when the request is matched.
      *
-     * @var array
+     * @var array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable>
      */
     protected array $urlResponses = [];
 
     /**
      * Collection of all the recorded responses.
      *
-     * @var array
+     * @var array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable>
      */
     protected array $recordedResponses = [];
 
     /**
      * Constructor
      *
-     * @param array $mockData
+     * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $mockData
      * @throws \Saloon\Exceptions\InvalidMockResponseCaptureMethodException
      */
     public function __construct(array $mockData = [])
@@ -67,7 +67,7 @@ class MockClient implements MockClientContract
     /**
      * Store the mock responses in the correct places.
      *
-     * @param array $responses
+     * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $responses
      * @return void
      * @throws \Saloon\Exceptions\InvalidMockResponseCaptureMethodException
      */
@@ -142,7 +142,6 @@ class MockClient implements MockClientContract
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture
      * @throws \Saloon\Exceptions\NoMockResponseFoundException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function guessNextResponse(PendingRequest $pendingRequest): MockResponse|Fixture
     {
@@ -215,7 +214,7 @@ class MockClient implements MockClientContract
     /**
      * Get all the recorded responses
      *
-     * @return array
+     * @return array<\Saloon\Contracts\Response>
      */
     public function getRecordedResponses(): array
     {
@@ -235,7 +234,7 @@ class MockClient implements MockClientContract
     /**
      * Get the last request that the mock manager sent.
      *
-     * @return \Saloon\Contracts\Request|null
+     * @return \Saloon\Contracts\PendingRequest|null
      */
     public function getLastPendingRequest(): ?PendingRequest
     {
@@ -265,7 +264,7 @@ class MockClient implements MockClientContract
      *
      * @param string|callable $value
      * @return void
-     * @throws \ReflectionException|\Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     * @throws \ReflectionException
      */
     public function assertSent(string|callable $value): void
     {
@@ -279,7 +278,7 @@ class MockClient implements MockClientContract
      *
      * @param string|callable $request
      * @return void
-     * @throws \ReflectionException|\Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     * @throws \ReflectionException
      */
     public function assertNotSent(string|callable $request): void
     {
@@ -292,9 +291,9 @@ class MockClient implements MockClientContract
      * Assert JSON data was sent
      *
      * @param string $request
-     * @param array $data
+     * @param array<string, mixed> $data
      * @return void
-     * @throws \ReflectionException|\Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
+     * @throws \ReflectionException
      */
     public function assertSentJson(string $request, array $data): void
     {
@@ -330,7 +329,6 @@ class MockClient implements MockClientContract
      * @param string|callable $request
      * @return bool
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     protected function checkRequestWasSent(string|callable $request): bool
     {
@@ -357,7 +355,6 @@ class MockClient implements MockClientContract
      * @param string|callable $request
      * @return bool
      * @throws \ReflectionException
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     protected function checkRequestWasNotSent(string|callable $request): bool
     {
@@ -396,7 +393,6 @@ class MockClient implements MockClientContract
      *
      * @param string $url
      * @return \Saloon\Contracts\Response|null
-     * @throws \Sammyjo20\Saloon\Exceptions\SaloonInvalidConnectorException
      */
     public function findResponseByRequestUrl(string $url): ?Response
     {
