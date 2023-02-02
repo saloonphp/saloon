@@ -9,7 +9,7 @@ class Pipe
     /**
      * Constructor
      *
-     * @param callable $callable
+     * @param callable(mixed $payload): (mixed) $callable
      * @param string|null $name
      */
     public function __construct(

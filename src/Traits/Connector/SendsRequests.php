@@ -38,7 +38,7 @@ trait SendsRequests
      * @param \Saloon\Contracts\Request $request
      * @param int $maxAttempts
      * @param int $interval
-     * @param callable|null $handleRetry
+     * @param callable(\Throwable, \Saloon\Contracts\PendingRequest): (bool)|null $handleRetry
      * @param bool $throw
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @return \Saloon\Contracts\Response

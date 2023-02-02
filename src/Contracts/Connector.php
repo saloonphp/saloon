@@ -41,10 +41,10 @@ interface Connector extends Authenticatable, CanThrowRequestExceptions, Conditio
     /**
      * Create a request pool
      *
-     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>|callable $requests
-     * @param int|callable $concurrency
-     * @param callable|null $responseHandler
-     * @param callable|null $exceptionHandler
+     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>|callable(\Saloon\Contracts\Connector): iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request> $requests
+     * @param int|callable(int $pendingRequests): int $concurrency
+     * @param callable(\Saloon\Contracts\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
+     * @param callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $exceptionHandler
      * @return \Saloon\Contracts\Pool
      */
     public function pool(iterable|callable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null): Pool;
@@ -71,10 +71,10 @@ interface Connector extends Authenticatable, CanThrowRequestExceptions, Conditio
      * @param \Saloon\Contracts\Request $request
      * @param int $maxAttempts
      * @param int $interval
-     * @param callable|null $handleRetry
+     * @param callable(\Throwable, \Saloon\Contracts\PendingRequest): (bool)|null $handleRetry
      * @param bool $throw
      * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return mixed
+     * @return \Saloon\Contracts\Response
      */
     public function sendAndRetry(Request $request, int $maxAttempts, int $interval = 0, callable $handleRetry = null, bool $throw = false, MockClient $mockClient = null): Response;
 

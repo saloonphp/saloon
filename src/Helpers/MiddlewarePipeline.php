@@ -38,7 +38,9 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Add a middleware before the request is sent
      *
-     * @param callable $callable
+     * @template TRequest of \Saloon\Contracts\PendingRequest|\Saloon\Contracts\SimulatedResponsePayload
+     *
+     * @param callable(TRequest): (TRequest|void) $callable
      * @param bool $prepend
      * @param string|null $name
      * @return $this
@@ -66,7 +68,9 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Add a middleware after the request is sent
      *
-     * @param callable $callable
+     * @template TResponse of \Saloon\Contracts\Response
+     *
+     * @param callable(TResponse): (TResponse|void) $callable
      * @param bool $prepend
      * @param string|null $name
      * @return $this
