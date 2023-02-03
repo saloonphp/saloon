@@ -26,16 +26,6 @@ parameters:
 			path: src/Helpers/Date.php
 
 		-
-			message: "#^Parameter \\#1 \\$ of callable callable\\(TRequest of Saloon\\\\Contracts\\\\PendingRequest\\)\\: Saloon\\\\Contracts\\\\SimulatedResponsePayload\\|\\(TRequest of Saloon\\\\Contracts\\\\PendingRequest\\)\\|void expects TRequest of Saloon\\\\Contracts\\\\PendingRequest, Saloon\\\\Contracts\\\\PendingRequest given\\.$#"
-			count: 1
-			path: src/Helpers/MiddlewarePipeline.php
-
-		-
-			message: "#^Parameter \\#1 \\$ of callable callable\\(TResponse of Saloon\\\\Contracts\\\\Response\\)\\: \\(TResponse of Saloon\\\\Contracts\\\\Response\\)\\|void expects TResponse of Saloon\\\\Contracts\\\\Response, Saloon\\\\Contracts\\\\Response given\\.$#"
-			count: 1
-			path: src/Helpers/MiddlewarePipeline.php
-
-		-
 			message: "#^Method Saloon\\\\Http\\\\Connector\\:\\:defaultSender\\(\\) should return Saloon\\\\Contracts\\\\Sender but returns object\\.$#"
 			count: 1
 			path: src/Http/Connector.php
