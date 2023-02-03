@@ -18,7 +18,6 @@ interface MiddlewarePipeline
 
     /**
      * Add a middleware after the request is sent
-     * @template TResponse of \Saloon\Contracts\Response
      *
      * @param callable(\Saloon\Contracts\Response): (\Saloon\Contracts\Response|void) $callable
      * @param bool $prepend
