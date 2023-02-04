@@ -84,6 +84,11 @@ interface RequestPaginator extends Countable, Iterator
     public function entries(): iterable;
 
     /**
+     * @return int|null
+     */
+    public function limit(): ?int;
+
+    /**
      * @return int Total pages the requested resource has, given the payload, query parameters, etc, that are sent.
      *
      * @TODO: Make naming more abstract and versatile.
@@ -148,6 +153,13 @@ interface RequestPaginator extends Countable, Iterator
      */
     #[ReturnTypeWillChange]
     public function lastPage(): string|int;
+
+    /**
+     * @return iterable<array-key, mixed>
+     *
+     * @TODO entry data type
+     */
+    public function entries(): iterable;
 
     /**
      * The iteration methods are defined in the order PHP executes them.
