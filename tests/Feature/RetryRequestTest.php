@@ -254,3 +254,12 @@ test('retry against a live endpoint to test GuzzleSender', function () {
     expect($requestCount)->toEqual(5);
     expect($response->body())->toEqual('Success!');
 });
+
+test('it throws an exception if you do not provide any attempts', function () {
+    $connector = new TestConnector;
+
+    $this->expectException(LogicException::class);
+    $this->expectExceptionMessage('Maximum number of attempts has been reached.');
+
+    $connector->sendAndRetry(new UserRequest, 0);
+});

@@ -64,6 +64,9 @@
         ],
         "test": [
             "./vendor/bin/pest"
+        ],
+        "pstan": [
+            "./vendor/bin/phpstan analyse"
         ]
     }
 }
