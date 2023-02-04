@@ -11,6 +11,11 @@ interface SerialisableRequestPaginator extends JsonSerializable
     /**
      * @return array<string, mixed>
      */
+    function jsonSerialize(): array;
+
+    /**
+     * @return array<string, mixed>
+     */
     public function __serialize(): array;
 
     /**

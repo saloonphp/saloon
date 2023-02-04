@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Paginators;
 
-use Closure;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\Request;
@@ -26,39 +25,176 @@ use Saloon\Contracts\Response;
  */
 class OffsetRequestPaginator extends RequestPaginator
 {
-    protected readonly int $originalOffset;
-
     /**
-     * @var  \Closure(\Saloon\Contracts\Response): bool;
+     * @var int
      */
-    protected readonly Closure $hasNextPage;
+    protected readonly int $originalOffset;
 
     /**
      * @param \Saloon\Contracts\Connector $connector
      * @param \Saloon\Contracts\Request $originalRequest
-     * @param int<0, max>|null $limit
-     * @param callable(\Saloon\Contracts\Response): bool $hasNextPage
+     * @param int<0, max> $limit
      * @param int<0, max> $offset
      */
     public function __construct(
         Connector $connector,
         Request $originalRequest,
-        ?int $limit,
-        callable $hasNextPage,
+        int $limit,
         protected int $offset = 0,
     ) {
         parent::__construct($connector, $originalRequest, $limit);
 
         $this->originalOffset = $offset;
-        $this->hasNextPage = $hasNextPage(...);
     }
 
     /**
      * @return int
      */
-    public function page(): int
+    public function limit(): int
+    {
+        return parent::limit();
+    }
+
+    /**
+     * @return int
+     */
+    public function totalPages(): int
+    {
+        // Make sure we have a response.
+        if (is_null($this->lastResponse)) {
+            $this->current();
+        }
+
+        return (int) ceil($this->totalEntries() / $this->limit());
+    }
+
+    /**
+     * @return int
+     */
+    public function totalEntries(): int
+    {
+        // Make sure we have a response.
+        if (is_null($this->lastResponse)) {
+            $this->current();
+        }
+
+        return $this->lastResponse->json('total');
+    }
+
+    /**
+     * @return int
+     */
+    public function firstPage(): int
+    {
+        // TODO: Or should we use something from the response?
+        return 1;
+    }
+
+    /**
+     * @return int
+     */
+    public function firstOffset(): int
+    {
+        // TODO: Or should we use something from the response?
+        return 0;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function previousPage(): ?int
+    {
+        $page = $this->currentPage();
+
+        return $page > $this->firstPage()
+            ? $page - 1
+            : null;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function previousOffset(): ?int
+    {
+        $previousOffset = $this->currentOffset() - $this->limit();
+
+        return $previousOffset > $this->firstOffset()
+            ? $previousOffset
+            : null;
+    }
+
+    /**
+     * @return int
+     */
+    public function currentPage(): int
+    {
+        return (int) ceil($this->totalEntries() / $this->totalPages());
+    }
+
+    /**
+     * @return int
+     */
+    public function currentOffset(): int
     {
         return $this->offset;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function nextPage(): ?int
+    {
+        $page = $this->currentPage();
+
+        return $page < $this->lastPage()
+            ? $page + 1
+            : null;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function nextOffset(): ?int
+    {
+        $nextOffset = $this->currentOffset() + $this->limit();
+
+        return $nextOffset < $this->lastOffset()
+            ? $nextOffset
+            : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasNextOffset(): bool
+    {
+        return ! is_null($this->nextOffset());
+    }
+
+    /**
+     * @return int
+     */
+    public function lastPage(): int
+    {
+        return (int) floor($this->totalEntries() / $this->totalPages());
+    }
+
+    /**
+     * @return int
+     */
+    public function lastOffset(): int
+    {
+        return $this->totalEntries() - $this->limit();
+    }
+
+    /**
+     * @return iterable<int, array<string, mixed>>
+     *
+     * @TODO entry data type
+     */
+    public function entries(): iterable
+    {
+        return $this->lastResponse->json('data');
     }
 
     /**
@@ -68,6 +204,7 @@ class OffsetRequestPaginator extends RequestPaginator
     {
         parent::rewind();
 
+        // TODO: Rewind completely, or rewind to originalOffset?
         $this->offset = 0;
     }
 
@@ -83,7 +220,7 @@ class OffsetRequestPaginator extends RequestPaginator
             return true;
         }
 
-        return ($this->hasNextPage)($this->lastResponse);
+        return $this->hasNextOffset();
     }
 
     /**
@@ -93,8 +230,8 @@ class OffsetRequestPaginator extends RequestPaginator
     {
         $request = clone $this->originalRequest;
         $request->query()->merge([
-            'limit', $this->limit,
-            'offset', $this->offset,
+            'limit', $this->limit(),
+            'offset', $this->currentOffset(),
         ]);
 
         // TODO: async
@@ -107,7 +244,7 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function key(): int
     {
-        return $this->offset;
+        return $this->currentOffset();
     }
 
     /**
@@ -158,8 +295,8 @@ class OffsetRequestPaginator extends RequestPaginator
     {
         return [
             ...parent::__serialize(),
-            'original_page' => $this->originalOffset,
-            'page' => $this->offset,
+            'original_offset' => $this->originalOffset,
+            'offset' => $this->offset,
         ];
     }
 

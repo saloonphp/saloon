@@ -33,9 +33,22 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
     protected bool $async = false;
 
     /**
+     * Whether or not the Paginator will continue where it left off in a previous loop, or not.
+     * While iterators, by nature, starts over, request paginators should continue.
+     * Otherwise it'll re-send earlier requests. So make it default not to, unless explicitly told to so.
+     *
+     * @var bool
+     *
+     * @see \Saloon\Contracts\RequestPaginator::continueOnNewLoop()
+     *
+     * @TODO Come up with a better name for this method.
+     */
+    protected bool $continueOnNewLoop = true;
+
+    /**
      * @var TResponse|null
      */
-    protected Response|null $lastResponse = null;
+    protected ?Response $lastResponse = null;
 
     /**
      * @param \Saloon\Contracts\Connector $connector
@@ -45,7 +58,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
     public function __construct(
         protected readonly Connector $connector,
         protected readonly Request $originalRequest,
-        protected readonly int|null $limit,
+        protected readonly ?int $limit,
     ) {}
 
     /**
@@ -56,8 +69,8 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      */
     public function pool(
         callable|int $concurrency = 5,
-        callable|null $responseHandler = null,
-        callable|null $exceptionHandler = null,
+        ?callable $responseHandler = null,
+        ?callable $exceptionHandler = null,
     ): Pool {
         // The purpose of a pool is to concurrently send requests.
         // So 'force' set async.
@@ -92,11 +105,39 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
     }
 
     /**
+     * @param bool $continueOnNewLoop
+     *
+     * @return $this
+     */
+    public function continueOnNewLoop(bool $continueOnNewLoop = true): static
+    {
+        $this->continueOnNewLoop = $continueOnNewLoop;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function shouldContinueOnNewLoop(): bool
+    {
+        return $this->continueOnNewLoop;
+    }
+
+    /**
      * @return int|null
      */
     public function limit(): ?int
     {
         return $this->limit;
+    }
+
+    /**
+     * @return int
+     */
+    public function count(): int
+    {
+        return $this->totalPages();
     }
 
     /**
@@ -112,6 +153,10 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      */
     public function rewind(): void
     {
+        if ($this->shouldContinueOnNewLoop()) {
+            return;
+        }
+
         // Nullify the last response, so we don't accidentally check if there are more pages, even though we're starting over.
         $this->lastResponse = null;
     }
@@ -121,6 +166,22 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
+     *     continue_on_new_loop: bool,
+     * }
+     *
+     * @see \Saloon\Http\Paginators\RequestPaginator::__serialize()
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->__serialize();
+    }
+
+    /**
+     * @return array{
+     *     connector: \Saloon\Contracts\Connector,
+     *     original_request: \Saloon\Contracts\Request,
+     *     limit: int|null,
+     *     continue_on_new_loop: bool,
      * }
      */
     public function __serialize(): array
@@ -131,6 +192,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
             'connector' => $this->connector,
             'original_request' => $this->originalRequest,
             'limit' => $this->limit,
+            'continue_on_new_loop' => $this->continueOnNewLoop,
         ];
     }
 
@@ -139,6 +201,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
+     *     continue_on_new_loop: bool,
      * } $data
      *
      * @return void
@@ -148,5 +211,6 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
         $this->connector = $data['connector'];
         $this->originalRequest = $data['original_request'];
         $this->limit = $data['limit'];
+        $this->continueOnNewLoop = $data['continue_on_new_loop'];
     }
 }

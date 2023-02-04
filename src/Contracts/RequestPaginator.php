@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use GuzzleHttp\Promise\Promise;
+use Countable;
 use GuzzleHttp\Promise\PromiseInterface;
 use Iterator;
 
@@ -14,7 +14,7 @@ use Iterator;
  *
  * @extends \Iterator<TResponse|\GuzzleHttp\Promise\PromiseInterface>
  */
-interface RequestPaginator extends Iterator
+interface RequestPaginator extends Countable, Iterator
 {
     /**
      * @param callable(int $pendingRequests): (int)|int $concurrency
@@ -23,8 +23,8 @@ interface RequestPaginator extends Iterator
      */
     public function pool(
         callable|int $concurrency = 5,
-        callable|null $responseHandler = null,
-        callable|null $exceptionHandler = null,
+        ?callable $responseHandler = null,
+        ?callable $exceptionHandler = null,
     ): Pool;
 
     /**
@@ -64,6 +64,11 @@ interface RequestPaginator extends Iterator
     public function shouldContinueOnNewLoop(): bool;
 
     /**
+     * @return int|null
+     */
+    public function limit(): ?int;
+
+    /**
      * @return int Total pages the requested resource has, given the payload, query parameters, etc, that are sent.
      */
     public function totalPages(): int;
@@ -87,6 +92,13 @@ interface RequestPaginator extends Iterator
      * @return int Total entries this requested resource has, regardless of amount of queries done or that will be made.
      */
     public function totalEntries(): int;
+
+    /**
+     * @return iterable<array-key, mixed>
+     *
+     * @TODO entry data type
+     */
+    public function entries(): iterable;
 
     /**
      * The iteration methods are defined in the order PHP executes them.

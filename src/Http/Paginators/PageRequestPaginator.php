@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Paginators;
 
-use Closure;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\Request;
@@ -26,39 +25,123 @@ use Saloon\Contracts\Response;
  */
 class PageRequestPaginator extends RequestPaginator
 {
-    protected readonly int $originalPage;
-
     /**
-     * @var  \Closure(\Saloon\Contracts\Response): bool;
+     * @var int
      */
-    protected readonly Closure $hasNextPage;
+    protected readonly int $originalPage;
 
     /**
      * @param \Saloon\Contracts\Connector $connector
      * @param \Saloon\Contracts\Request $originalRequest
      * @param int<0, max>|null $limit
-     * @param callable(\Saloon\Contracts\Response): bool $hasNextPage
      * @param int<0, max> $page
      */
     public function __construct(
         Connector $connector,
         Request $originalRequest,
         ?int $limit,
-        callable $hasNextPage,
         protected int $page = 1,
     ) {
         parent::__construct($connector, $originalRequest, $limit);
 
         $this->originalPage = $page;
-        $this->hasNextPage = $hasNextPage(...);
     }
 
     /**
      * @return int
      */
-    public function page(): int
+    public function totalPages(): int
+    {
+        // Make sure we have a response.
+        if (is_null($this->lastResponse)) {
+            $this->current();
+        }
+
+        return $this->lastResponse->json('last_page');
+    }
+
+    /**
+     * @return int
+     */
+    public function totalEntries(): int
+    {
+        // Make sure we have a response.
+        if (is_null($this->lastResponse)) {
+            $this->current();
+        }
+
+        return $this->lastResponse->json('total');
+    }
+
+    /**
+     * @return int
+     */
+    public function firstPage(): int
+    {
+        // TODO: Or should we use something from the response?
+        return 1;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function previousPage(): ?int
+    {
+        return $this->currentPage() > $this->firstPage()
+            ? $this->currentPage() - 1
+            : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPreviousPage(): bool
+    {
+        return ! is_null($this->previousPage());
+    }
+
+    /**
+     * @return int
+     */
+    public function currentPage(): int
     {
         return $this->page;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function nextPage(): ?int
+    {
+        return $this->currentPage() < $this->totalPages()
+            ? $this->currentPage() + 1
+            : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasNextPage(): bool
+    {
+        return ! is_null($this->nextPage());
+    }
+
+    /**
+     * @return int
+     */
+    public function lastPage(): int
+    {
+        return $this->lastResponse->json('last_page');
+    }
+
+    /**
+     * @return iterable<int, array<string, mixed>>
+     *
+     * @TODO entry data type
+     */
+    public function entries(): iterable
+    {
+        return $this->lastResponse->json('data');
     }
 
     /**
@@ -68,6 +151,7 @@ class PageRequestPaginator extends RequestPaginator
     {
         parent::rewind();
 
+        // TODO: Rewind completely, or rewind to originalPage?
         $this->page = 1;
     }
 
@@ -79,11 +163,11 @@ class PageRequestPaginator extends RequestPaginator
         // If we haven't sent a request yet, and therefore don't have any response, the iterator is still valid.
         // It's only ever invalid when we have sent a request, retrieved the response, and have no more pages after that.
         // Otherwise PHP would immediately terminate  the iteration, without sending a request.
-        if (\is_null($this->lastResponse)) {
+        if (is_null($this->lastResponse)) {
             return true;
         }
 
-        return ($this->hasNextPage)($this->lastResponse);
+        return $this->hasNextPage();
     }
 
     /**
@@ -92,10 +176,12 @@ class PageRequestPaginator extends RequestPaginator
     public function current(): Response|PromiseInterface
     {
         $request = clone $this->originalRequest;
-        $request->query()->merge([
-            'limit', $this->limit,
-            'page', $this->page,
-        ]);
+
+        if (! is_null($this->limit())) {
+            $request->query()->add('limit', $this->limit());
+        }
+
+        $request->query()->add('page', $this->currentPage());
 
         // TODO: async
 
@@ -107,7 +193,7 @@ class PageRequestPaginator extends RequestPaginator
      */
     public function key(): int
     {
-        return $this->page;
+        return $this->currentPage();
     }
 
     /**
@@ -134,8 +220,9 @@ class PageRequestPaginator extends RequestPaginator
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
+     *     continue_on_new_loop: bool,
      *     original_page: int,
-     *     page: int,
+     *     current_page: int,
      * }
      *
      * @see \Saloon\Http\Paginators\PageRequestPaginator::__serialize()
@@ -151,7 +238,8 @@ class PageRequestPaginator extends RequestPaginator
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
      *     original_page: int,
-     *     page: int,
+     *     continue_on_new_loop: bool,
+     *     current_page: int,
      * }
      */
     public function __serialize(): array
@@ -159,7 +247,7 @@ class PageRequestPaginator extends RequestPaginator
         return [
             ...parent::__serialize(),
             'original_page' => $this->originalPage,
-            'page' => $this->page,
+            'current_page' => $this->page,
         ];
     }
 
@@ -168,7 +256,8 @@ class PageRequestPaginator extends RequestPaginator
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
-     *     page: int,
+     *     continue_on_new_loop: bool,
+     *     current_page: int,
      * } $data
      *
      * @return void
@@ -178,6 +267,6 @@ class PageRequestPaginator extends RequestPaginator
         parent::__unserialize($data);
 
         $this->originalPage = $data['original_page'];
-        $this->page = $data['page'];
+        $this->page = $data['current_page'];
     }
 }
