@@ -24,14 +24,14 @@ class Pool implements PoolContract
     /**
      * Handle Response Callback
      *
-     * @var (\Closure(\Saloon\Contracts\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): void)|null
+     * @var \Closure(\Saloon\Contracts\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null
      */
     protected ?Closure $responseHandler = null;
 
     /**
      * Handle Exception Callback
      *
-     * @var (\Closure(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): void)|null
+     * @var \Closure(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null
      */
     protected ?Closure $exceptionHandler = null;
 
