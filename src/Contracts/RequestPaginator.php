@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
+use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Promise\PromiseInterface;
 use Iterator;
 
 /**
- * @extends \Iterator<\Saloon\Contracts\Request>
+ * @template TRequest of \Saloon\Contracts\Request
+ * @template TResponse of \Saloon\Contracts\Response
+ *
+ * @extends \Iterator<TResponse|\GuzzleHttp\Promise\PromiseInterface>
  */
 interface RequestPaginator extends Iterator
 {
     /**
      * @param  (callable(int $pendingRequests): int)|int $concurrency
-     * @param  (callable(\Saloon\Contracts\Response $response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): void)|null $responseHandler
+     * @param  (callable(TResponse $response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): void)|null $responseHandler
      * @param  (callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): void)|null $exceptionHandler
      */
     public function pool(
@@ -21,6 +26,13 @@ interface RequestPaginator extends Iterator
         callable|null $responseHandler = null,
         callable|null $exceptionHandler = null,
     ): Pool;
+
+    /**
+     * @return $this
+     */
+    public function async(bool $async = true): static;
+
+    public function isAsync(): bool;
 
     /**
      * The iteration methods are defined in the order PHP executes them.
@@ -46,14 +58,14 @@ interface RequestPaginator extends Iterator
     public function valid(): bool;
 
     /**
-     * @return \Saloon\Contracts\Response
+     * @return ($this->async is true ? \GuzzleHttp\Promise\PromiseInterface : \Saloon\Contracts\Response)
      */
-    public function current(): Response;
+    public function current(): Response|PromiseInterface;
 
     /**
-     * @return int
+     * @return string|int
      */
-    public function key(): int;
+    public function key(): string|int;
 
     /**
      * @return void
