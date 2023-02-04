@@ -17,9 +17,9 @@ use Iterator;
 interface RequestPaginator extends Iterator
 {
     /**
-     * @param  (callable(int $pendingRequests): int)|int $concurrency
-     * @param  (callable(TResponse $response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): void)|null $responseHandler
-     * @param  (callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): void)|null $exceptionHandler
+     * @param callable(int $pendingRequests): (int)|int $concurrency
+     * @param callable(TResponse $response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
+     * @param callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $exceptionHandler
      */
     public function pool(
         callable|int $concurrency = 5,
@@ -32,7 +32,61 @@ interface RequestPaginator extends Iterator
      */
     public function async(bool $async = true): static;
 
+    /**
+     * @return bool
+     */
     public function isAsync(): bool;
+
+    /**
+     * Makes the Paginator continue where it left off in an earlier loop, instead of rewinding/'resetting' when used in a new loop.
+     *
+     * Iterables are, by nature, rewinding ('resetting') whenever you use it in a new loop.
+     * I.e., if you go through 2 iterations in a loop, then break out of it, and iterate again in a new loop, it'll be rewound to the first element.
+     * This makes sure that the rewinding step is skipped.
+     *
+     * @param bool $continueOnNewLoop
+     *
+     * @return $this
+     *
+     * @TODO Come up with a better name for this method.
+     */
+    public function continueOnNewLoop(bool $continueOnNewLoop = true): static;
+
+    /**
+     * Returns whether or not the Paginator will continue where it left off in a previous loop, or not.
+     *
+     * @return bool
+     *
+     * @see \Saloon\Contracts\RequestPaginator::continueOnNewLoop()
+     *
+     * @TODO Come up with a better name for this method.
+     */
+    public function shouldContinueOnNewLoop(): bool;
+
+    /**
+     * @return int Total pages the requested resource has, given the payload, query parameters, etc, that are sent.
+     */
+    public function totalPages(): int;
+
+    /**
+     * @return int|null Previous page number, or null if there is no previous page.
+     */
+    public function previousPage(): ?int;
+
+    /**
+     * @return int Current page number.
+     */
+    public function currentPage(): int;
+
+    /**
+     * @return int|null Next page number, or null if there is no next page.
+     */
+    public function nextPage(): ?int;
+
+    /**
+     * @return int Total entries this requested resource has, regardless of amount of queries done or that will be made.
+     */
+    public function totalEntries(): int;
 
     /**
      * The iteration methods are defined in the order PHP executes them.
@@ -59,6 +113,8 @@ interface RequestPaginator extends Iterator
 
     /**
      * @return ($this->async is true ? \GuzzleHttp\Promise\PromiseInterface : \Saloon\Contracts\Response)
+     *
+     * @TODO: Check if `$this->async` is actually valid, or if we need to reassess how to properly type this.
      */
     public function current(): Response|PromiseInterface;
 
@@ -77,6 +133,38 @@ interface RequestPaginator extends Iterator
      * Note that this method is *not* part of PHP's {@see \Iterator}, and will not work in loops, unless manually called.
      *
      * @return void
+     *
+     * @example Examples on usage, since it can't be used in traditional ways.
+     * <code>
+     * $connector = new MyApiConnector;
+     * $iterator = $connector->paginate(GetMyResourcesRequest::make());
+     *
+     * for (; $iterator->valid(); $iterator->previous()) {
+     *     // $index = $iterator->key();
+     *     // $response = $iterator->current();
+     *     // ...
+     * }
+     *
+     * while ($iterator->valid()) {
+     *     // $index = $iterator->key();
+     *     // $response = $iterator->current();
+     *     // ...
+     *     // $iterator->next();
+     * }
+     * </code>
+     *
+     * You can also, for whatever reason, use it to re-do a request.
+     * <code>
+     * $connector = new MyApiConnector;
+     * $iterator = $connector->paginate(GetMyResourcesRequest::make());
+     *
+     * foreach ($iterator as $response) {
+     *     // $index = $iterator->key();
+     *     // $response = $iterator->current();
+     *     // ...
+     *     // $iterator->previous();
+     * }
+     * </code>
      */
     public function previous(): void;
 }
