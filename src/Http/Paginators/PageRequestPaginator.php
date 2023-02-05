@@ -17,6 +17,9 @@ use Saloon\Contracts\Request;
 
 class PageRequestPaginator extends RequestPaginator
 {
+    /**
+     * @var string 
+     */
     protected string $pageName = 'page';
 
     /**
@@ -41,6 +44,11 @@ class PageRequestPaginator extends RequestPaginator
         $this->originalPage = $page;
     }
 
+    /**
+     * @param string $pageName
+     *
+     * @return $this
+     */
     public function withPageName(string $pageName): static
     {
         $this->pageName = $pageName;

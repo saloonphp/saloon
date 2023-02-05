@@ -47,6 +47,11 @@ class OffsetRequestPaginator extends RequestPaginator
         $this->originalOffset = $offset;
     }
 
+    /**
+     * @param string $offsetName
+     *
+     * @return $this
+     */
     public function withOffsetName(string $offsetName): static
     {
         $this->offsetName = $offsetName;
