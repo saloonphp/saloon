@@ -23,6 +23,11 @@ use Saloon\Contracts\SerialisableRequestPaginator;
 abstract class RequestPaginator implements RequestPaginatorContract, SerialisableRequestPaginator
 {
     /**
+     * @var string
+     */
+    protected string $limitName = 'limit';
+
+    /**
      * @var bool
      */
     protected bool $async = false;
@@ -88,6 +93,13 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
             $responseHandler,
             $exceptionHandler,
         );
+    }
+
+    public function withLimitName(string $limitName): static
+    {
+        $this->limitName = $limitName;
+
+        return $this;
     }
 
     /**
@@ -249,6 +261,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      * @return array{
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
+     *     limit_name: string,
      *     limit: int|null,
      *     rewinding_enabled: bool,
      * }
@@ -264,6 +277,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      * @return array{
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
+     *     limit_name: string,
      *     limit: int|null,
      *     rewinding_enabled: bool,
      * }
@@ -275,6 +289,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
         return [
             'connector' => $this->connector,
             'original_request' => $this->originalRequest,
+            'limit_name' => $this->limitName,
             'limit' => $this->limit,
             'rewinding_enabled' => $this->rewindingEnabled,
         ];
@@ -284,6 +299,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      * @param array{
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
+     *     limit_name: string,
      *     limit: int|null,
      *     rewinding_enabled: bool,
      * } $data
@@ -294,6 +310,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
     {
         $this->connector = $data['connector'];
         $this->originalRequest = $data['original_request'];
+        $this->limitName = $data['limit_name'];
         $this->limit = $data['limit'];
         $this->rewindingEnabled = $data['rewinding_enabled'];
     }

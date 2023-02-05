@@ -17,6 +17,8 @@ use Saloon\Contracts\Request;
 
 class PageRequestPaginator extends RequestPaginator
 {
+    protected string $pageName = 'page';
+
     /**
      * @var int
      */
@@ -37,6 +39,13 @@ class PageRequestPaginator extends RequestPaginator
         parent::__construct($connector, $originalRequest, $limit);
 
         $this->originalPage = $page;
+    }
+
+    public function withPageName(string $pageName): static
+    {
+        $this->pageName = $pageName;
+
+        return $this;
     }
 
     /**
@@ -128,10 +137,10 @@ class PageRequestPaginator extends RequestPaginator
     protected function applyPaging(Request $request): void
     {
         if (! is_null($this->limit())) {
-            $request->query()->add('limit', $this->limit());
+            $request->query()->add($this->limitName, $this->limit());
         }
 
-        $request->query()->add('page', $this->currentPage());
+        $request->query()->add($this->pageName, $this->currentPage());
     }
 
     /**

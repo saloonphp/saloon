@@ -21,6 +21,11 @@ use Saloon\Contracts\Request;
 class OffsetRequestPaginator extends RequestPaginator
 {
     /**
+     * @var string
+     */
+    protected string $offsetName = 'offset';
+
+    /**
      * @var int
      */
     protected readonly int $originalOffset;
@@ -40,6 +45,13 @@ class OffsetRequestPaginator extends RequestPaginator
         parent::__construct($connector, $originalRequest, $limit);
 
         $this->originalOffset = $offset;
+    }
+
+    public function withOffsetName(string $offsetName): static
+    {
+        $this->offsetName = $offsetName;
+
+        return $this;
     }
 
     /**
@@ -206,8 +218,8 @@ class OffsetRequestPaginator extends RequestPaginator
     protected function applyPaging(Request $request): void
     {
         $request->query()->merge([
-            'limit', $this->limit(),
-            'offset', $this->currentOffset(),
+            $this->limitName, $this->limit(),
+            $this->offsetName, $this->currentOffset(),
         ]);
     }
 
