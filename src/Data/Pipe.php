@@ -8,7 +8,7 @@ use Closure;
 
 class Pipe
 {
-    readonly public Closure $callable;
+    public readonly Closure $callable;
 
     /**
      * Constructor
