@@ -7,6 +7,7 @@ namespace Saloon\Contracts;
 use Countable;
 use GuzzleHttp\Promise\PromiseInterface;
 use Iterator;
+use ReturnTypeWillChange;
 
 /**
  * @template TRequest of \Saloon\Contracts\Request
@@ -44,49 +45,31 @@ interface RequestPaginator extends Countable, Iterator
      * I.e., if you go through 2 iterations in a loop, then break out of it, and iterate again in a new loop, it'll be rewound to the first element.
      * This makes sure that the rewinding step is skipped.
      *
-     * @param bool $continueOnNewLoop
+     * @param bool $ignoreRewinding
      *
      * @return $this
      *
      * @TODO Come up with a better name for this method.
      */
-    public function continueOnNewLoop(bool $continueOnNewLoop = true): static;
+    public function ignoreRewinding(bool $ignoreRewinding = true): static;
 
     /**
      * Returns whether or not the Paginator will continue where it left off in a previous loop, or not.
      *
      * @return bool
      *
-     * @see \Saloon\Contracts\RequestPaginator::continueOnNewLoop()
+     * @see \Saloon\Contracts\RequestPaginator::ignoreRewinding()
      *
      * @TODO Come up with a better name for this method.
      */
-    public function shouldContinueOnNewLoop(): bool;
+    public function shouldRewind(): bool;
 
     /**
      * @return int|null
+     *
+     * @TODO: Does all type of paging actually have limit, or should this be extracted somewhere else?
      */
     public function limit(): ?int;
-
-    /**
-     * @return int Total pages the requested resource has, given the payload, query parameters, etc, that are sent.
-     */
-    public function totalPages(): int;
-
-    /**
-     * @return int|null Previous page number, or null if there is no previous page.
-     */
-    public function previousPage(): ?int;
-
-    /**
-     * @return int Current page number.
-     */
-    public function currentPage(): int;
-
-    /**
-     * @return int|null Next page number, or null if there is no next page.
-     */
-    public function nextPage(): ?int;
 
     /**
      * @return int Total entries this requested resource has, regardless of amount of queries done or that will be made.
@@ -99,6 +82,72 @@ interface RequestPaginator extends Countable, Iterator
      * @TODO entry data type
      */
     public function entries(): iterable;
+
+    /**
+     * @return int Total pages the requested resource has, given the payload, query parameters, etc, that are sent.
+     *
+     * @TODO: Make naming more abstract and versatile.
+     *        F.e., page, offset
+     */
+    public function totalPages(): int;
+
+    /**
+     * @return string|int
+     *
+     * @TODO: Make naming more abstract and versatile.
+     *        F.e., page, offset
+     */
+    #[ReturnTypeWillChange]
+    public function firstPage(): string|int;
+
+    /**
+     * @return int|null Previous page number, or null if there is no previous page.
+     *
+     * @TODO: Make naming more abstract and versatile.
+     *        F.e., page, offset
+     */
+    public function previousPage(): ?int;
+
+    /**
+     * @return bool
+     *
+     * @TODO: Make naming more abstract and versatile.
+     *        F.e., page, offset
+     */
+    public function hasPreviousPage(): bool;
+
+    /**
+     * @return int Current page number.
+     *
+     * @TODO: Make naming more abstract and versatile.
+     *        F.e., page, offset
+     */
+    public function currentPage(): int;
+
+    /**
+     * @return int|null Next page number, or null if there is no next page.
+     *
+     * @TODO: Make naming more abstract and versatile.
+     *        F.e., page, offset
+     */
+    public function nextPage(): ?int;
+
+    /**
+     * @return bool
+     *
+     * @TODO: Make naming more abstract and versatile.
+     *        F.e., page, offset
+     */
+    public function hasNextPage(): bool;
+
+    /**
+     * @return string|int
+     *
+     * @TODO: Make naming more abstract and versatile.
+     *        F.e., page, offset
+     */
+    #[ReturnTypeWillChange]
+    public function lastPage(): string|int;
 
     /**
      * The iteration methods are defined in the order PHP executes them.

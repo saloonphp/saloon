@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Paginators;
 
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\Request;
-use Saloon\Contracts\Response;
 
 // TODO 1: Look into serialising the Connector and original Request,
 //           to ensure that we can rebuild the paginator state without storing the entire multiverse.
@@ -50,27 +48,37 @@ class PageRequestPaginator extends RequestPaginator
     /**
      * @return int
      */
-    public function totalPages(): int
+    public function totalEntries(): int
     {
         // Make sure we have a response.
-        if (is_null($this->lastResponse)) {
+        if (is_null($this->currentResponse)) {
             $this->current();
         }
 
-        return $this->lastResponse->json('last_page');
+        return $this->currentResponse->json('total');
+    }
+
+    /**
+     * @return iterable<int, array<string, mixed>>
+     *
+     * @TODO entry data type
+     */
+    public function entries(): iterable
+    {
+        return $this->currentResponse->json('data');
     }
 
     /**
      * @return int
      */
-    public function totalEntries(): int
+    public function totalPages(): int
     {
         // Make sure we have a response.
-        if (is_null($this->lastResponse)) {
+        if (is_null($this->currentResponse)) {
             $this->current();
         }
 
-        return $this->lastResponse->json('total');
+        return $this->lastPage();
     }
 
     /**
@@ -93,14 +101,6 @@ class PageRequestPaginator extends RequestPaginator
     }
 
     /**
-     * @return bool
-     */
-    public function hasPreviousPage(): bool
-    {
-        return ! is_null($this->previousPage());
-    }
-
-    /**
      * @return int
      */
     public function currentPage(): int
@@ -119,29 +119,20 @@ class PageRequestPaginator extends RequestPaginator
     }
 
     /**
-     * @return bool
-     */
-    public function hasNextPage(): bool
-    {
-        return ! is_null($this->nextPage());
-    }
-
-    /**
      * @return int
      */
     public function lastPage(): int
     {
-        return $this->lastResponse->json('last_page');
+        return $this->currentResponse->json('last_page');
     }
 
-    /**
-     * @return iterable<int, array<string, mixed>>
-     *
-     * @TODO entry data type
-     */
-    public function entries(): iterable
+    protected function applyPaging(Request $request): void
     {
-        return $this->lastResponse->json('data');
+        if (! is_null($this->limit())) {
+            $request->query()->add('limit', $this->limit());
+        }
+
+        $request->query()->add('page', $this->currentPage());
     }
 
     /**
@@ -149,43 +140,14 @@ class PageRequestPaginator extends RequestPaginator
      */
     public function rewind(): void
     {
+        if (! $this->shouldRewind()) {
+            return;
+        }
+
         parent::rewind();
 
         // TODO: Rewind completely, or rewind to originalPage?
         $this->page = 1;
-    }
-
-    /**
-     * @return bool
-     */
-    public function valid(): bool
-    {
-        // If we haven't sent a request yet, and therefore don't have any response, the iterator is still valid.
-        // It's only ever invalid when we have sent a request, retrieved the response, and have no more pages after that.
-        // Otherwise PHP would immediately terminate  the iteration, without sending a request.
-        if (is_null($this->lastResponse)) {
-            return true;
-        }
-
-        return $this->hasNextPage();
-    }
-
-    /**
-     * @return ($this->async is true ? \GuzzleHttp\Promise\PromiseInterface : TResponse)
-     */
-    public function current(): Response|PromiseInterface
-    {
-        $request = clone $this->originalRequest;
-
-        if (! is_null($this->limit())) {
-            $request->query()->add('limit', $this->limit());
-        }
-
-        $request->query()->add('page', $this->currentPage());
-
-        // TODO: async
-
-        return $this->lastResponse = $this->connector->send($request);
     }
 
     /**
@@ -220,7 +182,7 @@ class PageRequestPaginator extends RequestPaginator
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
-     *     continue_on_new_loop: bool,
+     *     should_rewind: bool,
      *     original_page: int,
      *     current_page: int,
      * }
@@ -237,8 +199,8 @@ class PageRequestPaginator extends RequestPaginator
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
+     *     should_rewind: bool,
      *     original_page: int,
-     *     continue_on_new_loop: bool,
      *     current_page: int,
      * }
      */
@@ -256,7 +218,8 @@ class PageRequestPaginator extends RequestPaginator
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
-     *     continue_on_new_loop: bool,
+     *     should_rewind: bool,
+     *     original_page: int,
      *     current_page: int,
      * } $data
      *

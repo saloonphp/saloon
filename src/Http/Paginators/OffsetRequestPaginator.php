@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Paginators;
 
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\Request;
-use Saloon\Contracts\Response;
 
 // TODO 1: Look into serialising the Connector and original Request,
 //           to ensure that we can rebuild the paginator state without storing the entire multiverse.
@@ -22,6 +20,8 @@ use Saloon\Contracts\Response;
  * @template TResponse of \Saloon\Contracts\Response
  *
  * @extends RequestPaginator<TRequest, TResponse>
+ *
+ * @method int limit()
  */
 class OffsetRequestPaginator extends RequestPaginator
 {
@@ -50,9 +50,24 @@ class OffsetRequestPaginator extends RequestPaginator
     /**
      * @return int
      */
-    public function limit(): int
+    public function totalEntries(): int
     {
-        return parent::limit();
+        // Make sure we have a response.
+        if (is_null($this->currentResponse)) {
+            $this->current();
+        }
+
+        return $this->currentResponse->json('total');
+    }
+
+    /**
+     * @return iterable<int, array<string, mixed>>
+     *
+     * @TODO entry data type
+     */
+    public function entries(): iterable
+    {
+        return $this->currentResponse->json('data');
     }
 
     /**
@@ -61,24 +76,11 @@ class OffsetRequestPaginator extends RequestPaginator
     public function totalPages(): int
     {
         // Make sure we have a response.
-        if (is_null($this->lastResponse)) {
+        if (is_null($this->currentResponse)) {
             $this->current();
         }
 
-        return (int) ceil($this->totalEntries() / $this->limit());
-    }
-
-    /**
-     * @return int
-     */
-    public function totalEntries(): int
-    {
-        // Make sure we have a response.
-        if (is_null($this->lastResponse)) {
-            $this->current();
-        }
-
-        return $this->lastResponse->json('total');
+        return $this->lastPage();
     }
 
     /**
@@ -121,6 +123,14 @@ class OffsetRequestPaginator extends RequestPaginator
         return $previousOffset > $this->firstOffset()
             ? $previousOffset
             : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPreviousOffset(): bool
+    {
+        return ! is_null($this->previousOffset());
     }
 
     /**
@@ -187,14 +197,12 @@ class OffsetRequestPaginator extends RequestPaginator
         return $this->totalEntries() - $this->limit();
     }
 
-    /**
-     * @return iterable<int, array<string, mixed>>
-     *
-     * @TODO entry data type
-     */
-    public function entries(): iterable
+    protected function applyPaging(Request $request): void
     {
-        return $this->lastResponse->json('data');
+        $request->query()->merge([
+            'limit', $this->limit(),
+            'offset', $this->currentOffset(),
+        ]);
     }
 
     /**
@@ -202,41 +210,14 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function rewind(): void
     {
+        if (! $this->shouldRewind()) {
+            return;
+        }
+
         parent::rewind();
 
         // TODO: Rewind completely, or rewind to originalOffset?
         $this->offset = 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function valid(): bool
-    {
-        // If we haven't sent a request yet, and therefore don't have any response, the iterator is still valid.
-        // It's only ever invalid when we have sent a request, retrieved the response, and have no more pages after that.
-        // Otherwise PHP would immediately terminate  the iteration, without sending a request.
-        if (\is_null($this->lastResponse)) {
-            return true;
-        }
-
-        return $this->hasNextOffset();
-    }
-
-    /**
-     * @return ($this->async is true ? \GuzzleHttp\Promise\PromiseInterface : TResponse)
-     */
-    public function current(): Response|PromiseInterface
-    {
-        $request = clone $this->originalRequest;
-        $request->query()->merge([
-            'limit', $this->limit(),
-            'offset', $this->currentOffset(),
-        ]);
-
-        // TODO: async
-
-        return $this->lastResponse = $this->connector->send($request);
     }
 
     /**
@@ -252,7 +233,7 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function next(): void
     {
-        $this->offset += $this->limit;
+        $this->offset += $this->limit();
     }
 
     /**
@@ -263,7 +244,7 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function previous(): void
     {
-        $this->offset -= $this->limit;
+        $this->offset -= $this->limit();
     }
 
     /**
@@ -271,8 +252,9 @@ class OffsetRequestPaginator extends RequestPaginator
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
+     *     should_rewind: bool,
      *     original_offset: int,
-     *     offset: int,
+     *     current_offset: int,
      * }
      *
      * @see \Saloon\Http\Paginators\PageRequestPaginator::__serialize()
@@ -287,8 +269,9 @@ class OffsetRequestPaginator extends RequestPaginator
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
+     *     should_rewind: bool,
      *     original_offset: int,
-     *     offset: int,
+     *     current_offset: int,
      * }
      */
     public function __serialize(): array
@@ -296,7 +279,7 @@ class OffsetRequestPaginator extends RequestPaginator
         return [
             ...parent::__serialize(),
             'original_offset' => $this->originalOffset,
-            'offset' => $this->offset,
+            'current_offset' => $this->offset,
         ];
     }
 
@@ -305,8 +288,9 @@ class OffsetRequestPaginator extends RequestPaginator
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
+     *     should_rewind: bool,
      *     original_offset: int,
-     *     offset: int,
+     *     current_offset: int,
      * } $data
      *
      * @return void
