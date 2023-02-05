@@ -237,17 +237,6 @@ class OffsetRequestPaginator extends RequestPaginator
     }
 
     /**
-     * Go to the previous 'page'/offset.
-     * Note that this method is *not* part of PHP's {@see \Iterator}, and will not work in loops, unless manually called.
-     *
-     * @return void
-     */
-    public function previous(): void
-    {
-        $this->offset -= $this->limit();
-    }
-
-    /**
      * @return array{
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,

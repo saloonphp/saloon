@@ -188,44 +188,4 @@ interface RequestPaginator extends Countable, Iterator
      * @return void
      */
     public function next(): void;
-
-    /**
-     * Go to the previous page.
-     * Note that this method is *not* part of PHP's {@see \Iterator}, and will not work in loops, unless manually called.
-     *
-     * @return void
-     *
-     * @example Examples on usage, since it can't be used in traditional ways.
-     * <code>
-     * $connector = new MyApiConnector;
-     * $iterator = $connector->paginate(GetMyResourcesRequest::make());
-     *
-     * for (; $iterator->valid(); $iterator->previous()) {
-     *     // $index = $iterator->key();
-     *     // $response = $iterator->current();
-     *     // ...
-     * }
-     *
-     * while ($iterator->valid()) {
-     *     // $index = $iterator->key();
-     *     // $response = $iterator->current();
-     *     // ...
-     *     // $iterator->next();
-     * }
-     * </code>
-     *
-     * You can also, for whatever reason, use it to re-do a request.
-     * <code>
-     * $connector = new MyApiConnector;
-     * $iterator = $connector->paginate(GetMyResourcesRequest::make());
-     *
-     * foreach ($iterator as $response) {
-     *     // $index = $iterator->key();
-     *     // $response = $iterator->current();
-     *     // ...
-     *     // $iterator->previous();
-     * }
-     * </code>
-     */
-    public function previous(): void;
 }

@@ -167,17 +167,6 @@ class PageRequestPaginator extends RequestPaginator
     }
 
     /**
-     * Go to the previous page.
-     * Note that this method is *not* part of PHP's {@see \Iterator}, and will not work in loops, unless manually called.
-     *
-     * @return void
-     */
-    public function previous(): void
-    {
-        $this->page--;
-    }
-
-    /**
      * @return array{
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
