@@ -68,7 +68,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * The class used for responses.
      *
-     * @var string
+     * @var class-string<\Saloon\Contracts\Response>
      */
     protected string $responseClass;
 
@@ -342,7 +342,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Get the response class used for the request
      *
-     * @return string
+     * @return class-string<\Saloon\Contracts\Response>
      */
     public function getResponseClass(): string
     {
@@ -415,7 +415,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Get the response class
      *
-     * @return string
+     * @return class-string<\Saloon\Contracts\Response>
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidResponseClassException
      */

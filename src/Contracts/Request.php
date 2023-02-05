@@ -41,7 +41,7 @@ interface Request extends Authenticatable, CanThrowRequestExceptions, Conditiona
     /**
      * Get the response class
      *
-     * @return string|null
+     * @return class-string<\Saloon\Contracts\Response>|null
      */
     public function resolveResponseClass(): ?string;
 }
