@@ -25,7 +25,7 @@ test('the store can have an array of multipart values provided', function () {
 
 test('the store will throw an exception if set value is not an array', function () {
     $this->expectException(InvalidArgumentException::class);
-    $this->expectDeprecationMessage('The value must be an array');
+    $this->expectExceptionMessage('The value must be an array');
 
     $body = new MultipartBodyRepository();
     $body->set('123');
@@ -33,7 +33,7 @@ test('the store will throw an exception if set value is not an array', function 
 
 test('the store will throw an exception if the array does not contain multipart values', function () {
     $this->expectException(InvalidArgumentException::class);
-    $this->expectDeprecationMessage('The value array must only contain Saloon\Data\MultipartValue objects');
+    $this->expectExceptionMessage('The value array must only contain Saloon\Data\MultipartValue objects');
 
     new MultipartBodyRepository([
         'name' => 'Sam',
@@ -155,7 +155,7 @@ test('it will throw an exception if the merged items are not MultipartValue obje
     $body = new MultipartBodyRepository();
 
     $this->expectException(InvalidArgumentException::class);
-    $this->expectDeprecationMessage('The value array must only contain Saloon\Data\MultipartValue objects');
+    $this->expectExceptionMessage('The value array must only contain Saloon\Data\MultipartValue objects');
 
     $body->merge([new MultipartValue('sidekick', 'Gareth')], ['superhero' => 'Black Widow']);
 });
