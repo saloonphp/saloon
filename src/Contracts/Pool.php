@@ -35,7 +35,7 @@ interface Pool
     /**
      * Set the requests
      *
-     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>|callable(\Saloon\Contracts\Connector): iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request> $requests
+     * @param iterable<array-key, \GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>|callable(\Saloon\Contracts\Connector): (iterable<array-key, \GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>) $requests
      * @return $this
      */
     public function setRequests(iterable|callable $requests): static;
@@ -43,7 +43,7 @@ interface Pool
     /**
      * Get the request generator
      *
-     * @return iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>
+     * @return iterable<array-key, \GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>
      */
     public function getRequests(): iterable;
 

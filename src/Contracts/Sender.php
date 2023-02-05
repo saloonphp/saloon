@@ -13,7 +13,7 @@ interface Sender
      *
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @param bool $asynchronous
-     * @return \Saloon\Contracts\Response|PromiseInterface
+     * @return ($asynchronous is true ? \Saloon\Contracts\Response|PromiseInterface : \Saloon\Contracts\Response)
      */
     public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): Response|PromiseInterface;
 }

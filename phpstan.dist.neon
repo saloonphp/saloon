@@ -11,11 +11,10 @@ parameters:
   #editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
   #editorUrl: 'vscode://file/%%file%%:%%line%%'
 
-  level: 6
+  level: 7
 
   paths:
   - src
 
   ignoreErrors:
   - "#^Unsafe usage of new static\\(\\)\\.$#"
-  - "#^Parameter \\#2 \\$ of callable callable\\(\\$this\\(.*\\), TValue\\): void expects TValue, array\\|float\\|int\\|string\\|false\\|null given\\.$#"
