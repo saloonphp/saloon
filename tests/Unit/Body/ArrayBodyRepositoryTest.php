@@ -32,7 +32,7 @@ test('you can set it', function () {
 
 test('it will throw an exception if you set a non-array', function () {
     $this->expectException(InvalidArgumentException::class);
-    $this->expectDeprecationMessage('The value must be an array');
+    $this->expectExceptionMessage('The value must be an array');
 
     $body = new ArrayBodyRepository();
     $body->set('Sam');
