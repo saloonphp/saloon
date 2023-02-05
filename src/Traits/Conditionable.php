@@ -13,7 +13,7 @@ trait Conditionable
      *
      * @template TValue
      *
-     * @param TValue $value
+     * @param \Closure(): (TValue)|TValue $value
      * @param callable($this, TValue): (void) $callback
      * @param callable($this, TValue): (void)|null $default
      * @return $this
@@ -40,7 +40,7 @@ trait Conditionable
      *
      * @template TValue
      *
-     * @param TValue $value
+     * @param \Closure(): (TValue)|TValue $value
      * @param callable($this, TValue): (void) $callback
      * @param callable($this, TValue): (void)|null $default
      * @return $this
