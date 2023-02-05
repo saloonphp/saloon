@@ -157,9 +157,11 @@ interface RequestPaginator extends Countable, Iterator
     /**
      * @return iterable<array-key, mixed>
      *
-     * @TODO entry data type
+     * @TODO: Make naming more abstract and versatile.
+     *        F.e., page, offset
      */
-    public function entries(): iterable;
+    #[ReturnTypeWillChange]
+    public function lastPage(): string|int;
 
     /**
      * The iteration methods are defined in the order PHP executes them.
