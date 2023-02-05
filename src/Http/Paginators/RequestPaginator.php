@@ -20,12 +20,6 @@ use Saloon\Contracts\SerialisableRequestPaginator;
 //         Maybe a callback that receives a copy of the original Request, as well as the latest Response (which has the corresponding latest Request and PendingRequest),
 //           and have that callback set the next 'page' on the new Request?
 
-/**
- * @template TRequest of \Saloon\Contracts\Request
- * @template TResponse of \Saloon\Contracts\Response
- *
- * @implements RequestPaginatorContract<TRequest, TResponse>
- */
 abstract class RequestPaginator implements RequestPaginatorContract, SerialisableRequestPaginator
 {
     /**
@@ -42,20 +36,20 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      *
      * @var bool
      *
-     * @see \Saloon\Contracts\RequestPaginator::ignoreRewinding()
+     * @see \Saloon\Contracts\RequestPaginator::enableRewinding()
      *
      * @TODO Come up with a better name for this method.
      */
-    protected bool $shouldRewind = false;
+    protected bool $rewindingEnabled = false;
 
     /**
-     * @var TResponse|null
+     * @var \Saloon\Contracts\Response|null
      */
     protected ?Response $currentResponse = null;
 
     /**
      * @param \Saloon\Contracts\Connector $connector
-     * @param TRequest $originalRequest
+     * @param \Saloon\Contracts\Request $originalRequest
      * @param int|null $limit
      */
     public function __construct(
@@ -75,7 +69,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
 
     /**
      * @param callable(int $pendingRequests): (int)|int $concurrency
-     * @param callable(TResponse $response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
+     * @param callable(\Saloon\Contracts\Response $response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
      * @param callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $exceptionHandler
      * @return \Saloon\Contracts\Pool
      */
@@ -117,13 +111,21 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
     }
 
     /**
-     * @param bool $ignoreRewinding
+     * @return bool
+     */
+    public function rewindingEnabled(): bool
+    {
+        return $this->rewindingEnabled;
+    }
+
+    /**
+     * @param bool $enableRewinding
      *
      * @return $this
      */
-    public function ignoreRewinding(bool $ignoreRewinding = true): static
+    public function enableRewinding(bool $enableRewinding = true): static
     {
-        $this->shouldRewind = ! $ignoreRewinding;
+        $this->rewindingEnabled = $enableRewinding;
 
         return $this;
     }
@@ -133,7 +135,8 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      */
     public function shouldRewind(): bool
     {
-        return $this->shouldRewind;
+        return $this->rewindingEnabled()
+            || $this->isLastPage();
     }
 
     /**
@@ -162,6 +165,14 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
 
     /**
      * @return bool
+     */
+    public function isFirstPage(): bool
+    {
+        return $this->currentPage() === $this->firstPage();
+    }
+
+    /**
+     * @return bool
      *
      * @TODO: Make naming more abstract and versatile.
      *        F.e., page, offset
@@ -180,6 +191,14 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
     public function hasNextPage(): bool
     {
         return ! is_null($this->nextPage());
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLastPage(): bool
+    {
+        return $this->currentPage() === $this->lastPage();
     }
 
     /**
@@ -211,7 +230,9 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
     }
 
     /**
-     * @return ($this->async is true ? \GuzzleHttp\Promise\PromiseInterface : TResponse)
+     * @return \Saloon\Contracts\Response|\GuzzleHttp\Promise\PromiseInterface
+     *
+     * @TODO: Proper return type hint, for tools to resolve when either one is returned (async or not).
      */
     public function current(): Response|PromiseInterface
     {
@@ -229,7 +250,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
-     *     should_rewind: bool,
+     *     rewinding_enabled: bool,
      * }
      *
      * @see \Saloon\Http\Paginators\RequestPaginator::__serialize()
@@ -244,7 +265,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
-     *     should_rewind: bool,
+     *     rewinding_enabled: bool,
      * }
      */
     public function __serialize(): array
@@ -255,7 +276,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
             'connector' => $this->connector,
             'original_request' => $this->originalRequest,
             'limit' => $this->limit,
-            'should_rewind' => $this->shouldRewind,
+            'rewinding_enabled' => $this->rewindingEnabled,
         ];
     }
 
@@ -264,7 +285,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
-     *     should_rewind: bool,
+     *     rewinding_enabled: bool,
      * } $data
      *
      * @return void
@@ -274,6 +295,6 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
         $this->connector = $data['connector'];
         $this->originalRequest = $data['original_request'];
         $this->limit = $data['limit'];
-        $this->shouldRewind = $data['should_rewind'];
+        $this->rewindingEnabled = $data['rewinding_enabled'];
     }
 }

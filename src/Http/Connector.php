@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Saloon\Http;
 
 use Saloon\Traits\Bootable;
-use Saloon\Traits\Connector\HasRequestPaginator;
 use Saloon\Traits\Makeable;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
@@ -33,5 +32,4 @@ abstract class Connector implements ConnectorContract
     use Bootable;
     use Makeable;
     use HasPool;
-    use HasRequestPaginator;
 }

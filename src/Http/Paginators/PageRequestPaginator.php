@@ -15,12 +15,6 @@ use Saloon\Contracts\Request;
 //         Maybe a callback that receives a copy of the original Request, as well as the latest Response (which has the corresponding latest Request and PendingRequest),
 //           and have that callback set the next 'page' on the new Request?
 
-/**
- * @template TRequest of \Saloon\Contracts\Request
- * @template TResponse of \Saloon\Contracts\Response
- *
- * @extends RequestPaginator<TRequest, TResponse>
- */
 class PageRequestPaginator extends RequestPaginator
 {
     /**
@@ -31,8 +25,8 @@ class PageRequestPaginator extends RequestPaginator
     /**
      * @param \Saloon\Contracts\Connector $connector
      * @param \Saloon\Contracts\Request $originalRequest
-     * @param int<0, max>|null $limit
-     * @param int<0, max> $page
+     * @param int|null $limit
+     * @param int $page
      */
     public function __construct(
         Connector $connector,
@@ -126,6 +120,11 @@ class PageRequestPaginator extends RequestPaginator
         return $this->currentResponse->json('last_page');
     }
 
+    /**
+     * @param \Saloon\Contracts\Request $request
+     *
+     * @return void
+     */
     protected function applyPaging(Request $request): void
     {
         if (! is_null($this->limit())) {
@@ -171,7 +170,7 @@ class PageRequestPaginator extends RequestPaginator
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
-     *     should_rewind: bool,
+     *     rewinding_enabled: bool,
      *     original_page: int,
      *     current_page: int,
      * }
@@ -188,7 +187,7 @@ class PageRequestPaginator extends RequestPaginator
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
-     *     should_rewind: bool,
+     *     rewinding_enabled: bool,
      *     original_page: int,
      *     current_page: int,
      * }
@@ -207,7 +206,7 @@ class PageRequestPaginator extends RequestPaginator
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int|null,
-     *     should_rewind: bool,
+     *     rewinding_enabled: bool,
      *     original_page: int,
      *     current_page: int,
      * } $data

@@ -16,11 +16,6 @@ use Saloon\Contracts\Request;
 //           and have that callback set the next 'page' on the new Request?
 
 /**
- * @template TRequest of \Saloon\Contracts\Request
- * @template TResponse of \Saloon\Contracts\Response
- *
- * @extends RequestPaginator<TRequest, TResponse>
- *
  * @method int limit()
  */
 class OffsetRequestPaginator extends RequestPaginator
@@ -33,8 +28,8 @@ class OffsetRequestPaginator extends RequestPaginator
     /**
      * @param \Saloon\Contracts\Connector $connector
      * @param \Saloon\Contracts\Request $originalRequest
-     * @param int<0, max> $limit
-     * @param int<0, max> $offset
+     * @param int $limit
+     * @param int $offset
      */
     public function __construct(
         Connector $connector,
@@ -118,6 +113,7 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function previousOffset(): ?int
     {
+        /** @phpstan-var int $previousOffset */
         $previousOffset = $this->currentOffset() - $this->limit();
 
         return $previousOffset > $this->firstOffset()
@@ -138,6 +134,7 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function currentPage(): int
     {
+        /** @phpstan-var int */
         return (int) ceil($this->totalEntries() / $this->totalPages());
     }
 
@@ -154,6 +151,7 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function nextPage(): ?int
     {
+        /** @phpstan-var int $page */
         $page = $this->currentPage();
 
         return $page < $this->lastPage()
@@ -166,6 +164,7 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function nextOffset(): ?int
     {
+        /** @phpstan-var int  $nextOffset */
         $nextOffset = $this->currentOffset() + $this->limit();
 
         return $nextOffset < $this->lastOffset()
@@ -186,6 +185,7 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function lastPage(): int
     {
+        /** @phpstan-var int */
         return (int) floor($this->totalEntries() / $this->totalPages());
     }
 
@@ -194,9 +194,15 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function lastOffset(): int
     {
+        /** @phpstan-var int */
         return $this->totalEntries() - $this->limit();
     }
 
+    /**
+     * @param \Saloon\Contracts\Request $request
+     *
+     * @return void
+     */
     protected function applyPaging(Request $request): void
     {
         $request->query()->merge([
@@ -241,7 +247,7 @@ class OffsetRequestPaginator extends RequestPaginator
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int,
-     *     should_rewind: bool,
+     *     rewinding_enabled: bool,
      *     original_offset: int,
      *     current_offset: int,
      * }
@@ -258,7 +264,7 @@ class OffsetRequestPaginator extends RequestPaginator
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int,
-     *     should_rewind: bool,
+     *     rewinding_enabled: bool,
      *     original_offset: int,
      *     current_offset: int,
      * }
@@ -277,7 +283,7 @@ class OffsetRequestPaginator extends RequestPaginator
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
      *     limit: int,
-     *     should_rewind: bool,
+     *     rewinding_enabled: bool,
      *     original_offset: int,
      *     current_offset: int,
      * } $data

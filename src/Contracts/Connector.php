@@ -52,14 +52,6 @@ interface Connector extends Authenticatable, CanThrowRequestExceptions, Conditio
     public function pool(iterable|callable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null): Pool;
 
     /**
-     * @param \Saloon\Contracts\Request $request
-     * @param mixed ...$additionalArguments
-     *
-     * @return \Saloon\Contracts\RequestPaginator
-     */
-    public function paginate(Request $request, mixed ...$additionalArguments): RequestPaginator;
-
-    /**
      * Manage the request sender.
      *
      * @return \Saloon\Contracts\Sender

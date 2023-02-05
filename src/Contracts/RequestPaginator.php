@@ -10,16 +10,13 @@ use Iterator;
 use ReturnTypeWillChange;
 
 /**
- * @template TRequest of \Saloon\Contracts\Request
- * @template TResponse of \Saloon\Contracts\Response
- *
- * @extends \Iterator<TResponse|\GuzzleHttp\Promise\PromiseInterface>
+ * @extends  \Iterator<array-key, \Saloon\Contracts\Response|\GuzzleHttp\Promise\PromiseInterface>
  */
 interface RequestPaginator extends Countable, Iterator
 {
     /**
      * @param callable(int $pendingRequests): (int)|int $concurrency
-     * @param callable(TResponse $response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
+     * @param callable(Response $response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
      * @param callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $exceptionHandler
      */
     public function pool(
@@ -39,37 +36,35 @@ interface RequestPaginator extends Countable, Iterator
     public function isAsync(): bool;
 
     /**
+     * @return bool
+     */
+    public function rewindingEnabled(): bool;
+
+    /**
      * Makes the Paginator continue where it left off in an earlier loop, instead of rewinding/'resetting' when used in a new loop.
      *
      * Iterables are, by nature, rewinding ('resetting') whenever you use it in a new loop.
      * I.e., if you go through 2 iterations in a loop, then break out of it, and iterate again in a new loop, it'll be rewound to the first element.
      * This makes sure that the rewinding step is skipped.
      *
-     * @param bool $ignoreRewinding
+     * @param bool $enableRewinding
      *
      * @return $this
      *
      * @TODO Come up with a better name for this method.
      */
-    public function ignoreRewinding(bool $ignoreRewinding = true): static;
+    public function enableRewinding(bool $enableRewinding = true): static;
 
     /**
      * Returns whether or not the Paginator will continue where it left off in a previous loop, or not.
      *
      * @return bool
      *
-     * @see \Saloon\Contracts\RequestPaginator::ignoreRewinding()
+     * @see \Saloon\Contracts\RequestPaginator::enableRewinding()
      *
      * @TODO Come up with a better name for this method.
      */
     public function shouldRewind(): bool;
-
-    /**
-     * @return int|null
-     *
-     * @TODO: Does all type of paging actually have limit, or should this be extracted somewhere else?
-     */
-    public function limit(): ?int;
 
     /**
      * @return int Total entries this requested resource has, regardless of amount of queries done or that will be made.
@@ -106,12 +101,18 @@ interface RequestPaginator extends Countable, Iterator
     public function firstPage(): string|int;
 
     /**
-     * @return int|null Previous page number, or null if there is no previous page.
+     * @return bool
+     */
+    public function isFirstPage(): bool;
+
+    /**
+     * @return string|int|null Previous page number, or null if there is no previous page.
      *
      * @TODO: Make naming more abstract and versatile.
      *        F.e., page, offset
      */
-    public function previousPage(): ?int;
+    #[ReturnTypeWillChange]
+    public function previousPage(): string|int|null;
 
     /**
      * @return bool
@@ -122,20 +123,22 @@ interface RequestPaginator extends Countable, Iterator
     public function hasPreviousPage(): bool;
 
     /**
-     * @return int Current page number.
+     * @return string|int Current page number.
      *
      * @TODO: Make naming more abstract and versatile.
      *        F.e., page, offset
      */
-    public function currentPage(): int;
+    #[ReturnTypeWillChange]
+    public function currentPage(): string|int;
 
     /**
-     * @return int|null Next page number, or null if there is no next page.
+     * @return string|int|null Next page number, or null if there is no next page.
      *
      * @TODO: Make naming more abstract and versatile.
      *        F.e., page, offset
      */
-    public function nextPage(): ?int;
+    #[ReturnTypeWillChange]
+    public function nextPage(): string|int|null;
 
     /**
      * @return bool
@@ -155,13 +158,9 @@ interface RequestPaginator extends Countable, Iterator
     public function lastPage(): string|int;
 
     /**
-     * @return iterable<array-key, mixed>
-     *
-     * @TODO: Make naming more abstract and versatile.
-     *        F.e., page, offset
+     * @return bool
      */
-    #[ReturnTypeWillChange]
-    public function lastPage(): string|int;
+    public function isLastPage(): bool;
 
     /**
      * The iteration methods are defined in the order PHP executes them.
@@ -187,15 +186,16 @@ interface RequestPaginator extends Countable, Iterator
     public function valid(): bool;
 
     /**
-     * @return ($this->async is true ? \GuzzleHttp\Promise\PromiseInterface : \Saloon\Contracts\Response)
+     * @return \Saloon\Contracts\Response|\GuzzleHttp\Promise\PromiseInterface
      *
-     * @TODO: Check if `$this->async` is actually valid, or if we need to reassess how to properly type this.
+     * @TODO: Proper return type hint, for tools to resolve when either one is returned (async or not).
      */
     public function current(): Response|PromiseInterface;
 
     /**
      * @return string|int
      */
+    #[ReturnTypeWillChange]
     public function key(): string|int;
 
     /**
