@@ -12,8 +12,6 @@ use Saloon\Contracts\RequestPaginator as RequestPaginatorContract;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\SerialisableRequestPaginator;
 
-use function is_null;
-
 // TODO 1: Look into serialising the Connector and original Request,
 //           to ensure that we can rebuild the paginator state without storing the entire multiverse.
 // TODO 2: Make it easier to extend the RequestPaginator. Preferably via callbacks, so we ideally don't even need separate classes.

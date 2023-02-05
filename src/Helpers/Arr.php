@@ -6,8 +6,6 @@ namespace Saloon\Helpers;
 
 use ArrayAccess;
 
-use function is_string;
-
 class Arr
 {
     /**

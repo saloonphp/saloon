@@ -10,8 +10,6 @@ use Saloon\Contracts\Response;
 use Saloon\Contracts\ResponsePaginator as ResponsePaginatorContract;
 use Saloon\Contracts\SerialisableResponsePaginator;
 
-use function count;
-
 /**
  * @template TValue
  *
