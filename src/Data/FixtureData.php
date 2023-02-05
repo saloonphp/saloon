@@ -16,10 +16,11 @@ class FixtureData implements JsonSerializable
      * @param mixed $data
      */
     public function __construct(
-        public int $statusCode,
+        public int   $statusCode,
         public array $headers = [],
         public mixed $data = null,
-    ) {
+    )
+    {
         //
     }
 
@@ -34,10 +35,16 @@ class FixtureData implements JsonSerializable
     {
         $fileData = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
 
+        $data = $fileData['data'];
+
+        if (isset($fileData['encoder']) && $fileData['encoder'] === 'base64') {
+            $data = base64_decode($data);
+        }
+
         return new static(
             statusCode: $fileData['statusCode'],
             headers: $fileData['headers'],
-            data: $fileData['data']
+            data: $data
         );
     }
 
@@ -84,10 +91,13 @@ class FixtureData implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
+        // Todo: work out base64_encode on arrays
+
         return [
             'statusCode' => $this->statusCode,
             'headers' => $this->headers,
-            'data' => $this->data,
+            'data' => base64_encode($this->data),
+            'encoder' => 'base64',
         ];
     }
 }

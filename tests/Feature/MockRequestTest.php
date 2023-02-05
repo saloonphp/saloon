@@ -6,6 +6,7 @@ use Sammyjo20\Saloon\Http\MockResponse;
 use Sammyjo20\Saloon\Clients\MockClient;
 use Sammyjo20\Saloon\Http\SaloonRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
+use Sammyjo20\Saloon\Tests\Fixtures\Requests\FileDownloadRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\UserRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Sammyjo20\Saloon\Tests\Fixtures\Connectors\TestConnector;
@@ -463,4 +464,20 @@ test('a fixture can be used within a closure mock', function () use ($filesystem
     expect($responseD->json())->toEqual([
         'message' => 'Fake Error',
     ]);
+});
+
+test('a fixture can record the file data from a request that returns a file download', function () {
+    $mockClient = new MockClient([
+        FileDownloadRequest::class => MockResponse::fixture('file'),
+    ]);
+
+    $requestA = new FileDownloadRequest;
+    $responseA = $requestA->send($mockClient);
+
+    expect($responseA->body())->toEqual(file_get_contents('tests/Fixtures/Files/test.pdf'));
+
+    $requestB = new FileDownloadRequest;
+    $responseB = $requestB->send($mockClient);
+
+    expect($responseB->body())->toEqual(file_get_contents('tests/Fixtures/Files/test.pdf'));
 });
