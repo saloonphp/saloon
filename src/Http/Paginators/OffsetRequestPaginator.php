@@ -240,7 +240,7 @@ class OffsetRequestPaginator extends RequestPaginator
      * @return array{
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
-     *     limit: int|null,
+     *     limit: int,
      *     should_rewind: bool,
      *     original_offset: int,
      *     current_offset: int,
@@ -257,7 +257,7 @@ class OffsetRequestPaginator extends RequestPaginator
      * @return array{
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
-     *     limit: int|null,
+     *     limit: int,
      *     should_rewind: bool,
      *     original_offset: int,
      *     current_offset: int,
@@ -276,7 +276,7 @@ class OffsetRequestPaginator extends RequestPaginator
      * @param array{
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
-     *     limit: int|null,
+     *     limit: int,
      *     should_rewind: bool,
      *     original_offset: int,
      *     current_offset: int,
@@ -289,6 +289,6 @@ class OffsetRequestPaginator extends RequestPaginator
         parent::__unserialize($data);
 
         $this->originalOffset = $data['original_offset'];
-        $this->offset = $data['offset'];
+        $this->offset = $data['current_offset'];
     }
 }

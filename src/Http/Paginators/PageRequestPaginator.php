@@ -105,7 +105,7 @@ class PageRequestPaginator extends RequestPaginator
      */
     public function currentPage(): int
     {
-        return $this->currentPage();
+        return $this->page;
     }
 
     /**

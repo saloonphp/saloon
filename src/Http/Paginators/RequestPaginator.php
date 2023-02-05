@@ -205,7 +205,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
         // If we haven't sent a request yet, and therefore don't have any response, the iterator is still valid.
         // It's only ever invalid when we have sent a request, retrieved the response, and have no more pages after that.
         // Otherwise PHP would immediately terminate  the iteration, without sending a request.
-        if (\is_null($this->currentResponse)) {
+        if (is_null($this->currentResponse)) {
             return true;
         }
 
