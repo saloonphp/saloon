@@ -31,7 +31,7 @@ class Pool implements PoolContract
     /**
      * Handle Exception Callback
      *
-     * @var \Closure(mixed, array-key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null
+     * @var \Closure(mixed, array-key, \GuzzleHttp\Promise\PromiseInterface): (void)|null
      */
     protected ?Closure $exceptionHandler = null;
 
