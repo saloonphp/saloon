@@ -24,14 +24,14 @@ class Pool implements PoolContract
     /**
      * Handle Response Callback
      *
-     * @var \Closure(\Saloon\Contracts\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null
+     * @var \Closure(\Saloon\Contracts\Response, array-key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null
      */
     protected ?Closure $responseHandler = null;
 
     /**
      * Handle Exception Callback
      *
-     * @var \Closure(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null
+     * @var \Closure(mixed, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null
      */
     protected ?Closure $exceptionHandler = null;
 
@@ -47,7 +47,7 @@ class Pool implements PoolContract
      *
      * How many requests will be sent at once.
      *
-     * @var int|\Closure(int $pendingRequests): int
+     * @var int|\Closure(int): int
      */
     protected int|Closure $concurrency;
 
