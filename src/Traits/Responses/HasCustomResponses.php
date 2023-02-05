@@ -9,19 +9,21 @@ trait HasCustomResponses
     /**
      * Specify a default response.
      *
-     * When an empty string, the response on the sender will be used.
+     * When null or an empty string, the response on the sender will be used.
      *
-     * @var string|null
+     * @var class-string<\Saloon\Contracts\Response>|null
      */
     protected ?string $response = null;
 
     /**
      * Resolve the custom response class
      *
-     * @return string|null
+     * @return class-string<\Saloon\Contracts\Response>|null
      */
     public function resolveResponseClass(): ?string
     {
-        return $this->response;
+        return empty($this->response)
+            ? null
+            : $this->response;
     }
 }

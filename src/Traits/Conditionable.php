@@ -13,9 +13,9 @@ trait Conditionable
      *
      * @template TValue
      *
-     * @param TValue $value
-     * @param callable($this, TValue): void $callback
-     * @param (callable($this, TValue): void)|null $default
+     * @param \Closure(): (TValue)|TValue $value
+     * @param callable($this, TValue): (void) $callback
+     * @param callable($this, TValue): (void)|null $default
      * @return $this
      */
     public function when(mixed $value, callable $callback, callable|null $default = null): static
@@ -40,9 +40,9 @@ trait Conditionable
      *
      * @template TValue
      *
-     * @param TValue $value
-     * @param callable($this, TValue): void $callback
-     * @param (callable($this, TValue): void)|null $default
+     * @param \Closure(): (TValue)|TValue $value
+     * @param callable($this, TValue): (void) $callback
+     * @param callable($this, TValue): (void)|null $default
      * @return $this
      */
     public function unless(mixed $value, callable $callback, callable|null $default = null): static

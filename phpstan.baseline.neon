@@ -1,0 +1,101 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#1 \\$interval of method DateTime\\:\\:add\\(\\) expects DateInterval, DateInterval\\|false given\\.$#"
+			count: 1
+			path: src/Helpers/Date.php
+
+		-
+			message: "#^Parameter \\#1 \\$interval of method DateTime\\:\\:sub\\(\\) expects DateInterval, DateInterval\\|false given\\.$#"
+			count: 1
+			path: src/Helpers/Date.php
+
+		-
+			message: "#^Method Saloon\\\\Http\\\\Connector\\:\\:defaultSender\\(\\) should return Saloon\\\\Contracts\\\\Sender but returns object\\.$#"
+			count: 1
+			path: src/Http/Connector.php
+
+		-
+			message: "#^Parameter \\#2 \\$ of callable callable\\(\\$this\\(Saloon\\\\Http\\\\Connector\\), TValue\\)\\: void expects TValue, array\\|float\\|int\\|string\\|false\\|null given\\.$#"
+			count: 2
+			path: src/Http/Connector.php
+
+		-
+			message: "#^Parameter \\#1 \\$contents of static method Saloon\\\\Data\\\\RecordedResponse\\:\\:fromFile\\(\\) expects string, bool\\|string given\\.$#"
+			count: 1
+			path: src/Http/Faking/Fixture.php
+
+		-
+			message: "#^Method Saloon\\\\Http\\\\Faking\\\\MockClient\\:\\:getLastResponse\\(\\) should return Saloon\\\\Contracts\\\\Response\\|null but returns \\(callable\\)\\|Saloon\\\\Http\\\\Faking\\\\Fixture\\|Saloon\\\\Http\\\\Faking\\\\MockResponse\\.$#"
+			count: 1
+			path: src/Http/Faking/MockClient.php
+
+		-
+			message: "#^Method Saloon\\\\Http\\\\Faking\\\\MockClient\\:\\:getRecordedResponses\\(\\) should return array\\<Saloon\\\\Contracts\\\\Response\\> but returns array\\<\\(callable\\)\\|Saloon\\\\Http\\\\Faking\\\\Fixture\\|Saloon\\\\Http\\\\Faking\\\\MockResponse\\>\\.$#"
+			count: 1
+			path: src/Http/Faking/MockClient.php
+
+		-
+			message: "#^Property Saloon\\\\Http\\\\Faking\\\\MockClient\\:\\:\\$recordedResponses \\(array\\<\\(callable\\(\\)\\: mixed\\)\\|Saloon\\\\Http\\\\Faking\\\\Fixture\\|Saloon\\\\Http\\\\Faking\\\\MockResponse\\>\\) does not accept non\\-empty\\-array\\<\\(callable\\(\\)\\: mixed\\)\\|Saloon\\\\Contracts\\\\Response\\|Saloon\\\\Http\\\\Faking\\\\Fixture\\|Saloon\\\\Http\\\\Faking\\\\MockResponse\\>\\.$#"
+			count: 1
+			path: src/Http/Faking/MockClient.php
+
+		-
+			message: "#^Method Saloon\\\\Http\\\\PendingRequest\\:\\:send\\(\\) should return Saloon\\\\Contracts\\\\Response but returns GuzzleHttp\\\\Promise\\\\PromiseInterface\\|Saloon\\\\Contracts\\\\Response\\.$#"
+			count: 1
+			path: src/Http/PendingRequest.php
+
+		-
+			message: "#^Method Saloon\\\\Http\\\\PendingRequest\\:\\:sendAsync\\(\\) should return GuzzleHttp\\\\Promise\\\\PromiseInterface but returns GuzzleHttp\\\\Promise\\\\PromiseInterface\\|Saloon\\\\Contracts\\\\Response\\.$#"
+			count: 1
+			path: src/Http/PendingRequest.php
+
+		-
+			message: "#^Parameter \\#2 \\$ of callable callable\\(\\$this\\(Saloon\\\\Http\\\\PendingRequest\\), TValue\\)\\: void expects TValue, array\\|float\\|int\\|string\\|false\\|null given\\.$#"
+			count: 2
+			path: src/Http/PendingRequest.php
+
+		-
+			message: "#^Parameter \\#2 \\$ of callable callable\\(\\$this\\(Saloon\\\\Http\\\\Request\\), TValue\\)\\: void expects TValue, array\\|float\\|int\\|string\\|false\\|null given\\.$#"
+			count: 2
+			path: src/Http/Request.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\)\\: mixed, \\(callable\\(\\)\\: mixed\\)\\|object given\\.$#"
+			count: 2
+			path: src/Http/Response.php
+
+		-
+			message: "#^Parameter \\#1 \\$object of method ReflectionMethod\\:\\:invoke\\(\\) expects object\\|null, object\\|string given\\.$#"
+			count: 1
+			path: src/Http/Response.php
+
+		-
+			message: "#^Parameter \\#1 \\$objectOrClass of class ReflectionClass constructor expects class\\-string\\<T of object\\>\\|T of object, object\\|string given\\.$#"
+			count: 1
+			path: src/Http/Response.php
+
+		-
+			message: "#^Method Saloon\\\\Http\\\\Senders\\\\GuzzleSender\\:\\:createRequestOptions\\(\\) should return array\\<'allow_redirects'\\|'auth'\\|'body'\\|'cert'\\|'connect_timeout'\\|'cookies'\\|'debug'\\|'decode_content'\\|'delay'\\|'expect'\\|'force_ip_resolve'\\|'form_params'\\|'headers'\\|'http_errors'\\|'idn_conversion'\\|'json'\\|'multipart'\\|'on_headers'\\|'on_stats'\\|'progress'\\|'proxy'\\|'query'\\|'read_timeout'\\|'sink'\\|'ssl_key'\\|'stream'\\|'synchronous'\\|'timeout'\\|'verify'\\|'version', mixed\\> but returns array\\<string, mixed\\>\\.$#"
+			count: 2
+			path: src/Http/Senders/GuzzleSender.php
+
+		-
+			message: "#^Parameter \\#2 \\$ of callable callable\\(\\$this\\(Saloon\\\\Repositories\\\\ArrayStore\\), TValue\\)\\: void expects TValue, array\\|float\\|int\\|string\\|false\\|null given\\.$#"
+			count: 2
+			path: src/Repositories/ArrayStore.php
+
+		-
+			message: "#^Parameter \\#2 \\$ of callable callable\\(\\$this\\(Saloon\\\\Repositories\\\\Body\\\\ArrayBodyRepository\\), TValue\\)\\: void expects TValue, array\\|float\\|int\\|string\\|false\\|null given\\.$#"
+			count: 2
+			path: src/Repositories/Body/ArrayBodyRepository.php
+
+		-
+			message: "#^Parameter \\#2 \\$ of callable callable\\(\\$this\\(Saloon\\\\Repositories\\\\Body\\\\MultipartBodyRepository\\), TValue\\)\\: void expects TValue, array\\|float\\|int\\|string\\|false\\|null given\\.$#"
+			count: 2
+			path: src/Repositories/Body/MultipartBodyRepository.php
+
+		-
+			message: "#^Parameter \\#2 \\$ of callable callable\\(\\$this\\(Saloon\\\\Repositories\\\\Body\\\\StringBodyRepository\\), TValue\\)\\: void expects TValue, array\\|float\\|int\\|string\\|false\\|null given\\.$#"
+			count: 2
+			path: src/Repositories/Body/StringBodyRepository.php

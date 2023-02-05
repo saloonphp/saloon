@@ -9,7 +9,7 @@ interface MiddlewarePipeline
     /**
      * Add a middleware before the request is sent
      *
-     * @param callable $callable
+     * @param callable(\Saloon\Contracts\PendingRequest): (\Saloon\Contracts\PendingRequest|\Saloon\Contracts\SimulatedResponsePayload|void) $callable
      * @param bool $prepend
      * @param string|null $name
      * @return $this
@@ -19,7 +19,7 @@ interface MiddlewarePipeline
     /**
      * Add a middleware after the request is sent
      *
-     * @param callable $callable
+     * @param callable(\Saloon\Contracts\Response): (\Saloon\Contracts\Response|void) $callable
      * @param bool $prepend
      * @param string|null $name
      * @return $this

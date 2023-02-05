@@ -3,12 +3,15 @@
 # For temporary, or local overrides, create a file named 'phpstan.neon' alongside this one. #
 #############################################################################################
 
+includes:
+- phpstan.baseline.neon
+
 parameters:
   # Add one of the editorUrl's in your phpstan.neon file for direct editor/IDE links in the terminal.
   #editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
   #editorUrl: 'vscode://file/%%file%%:%%line%%'
 
-  level: 6
+  level: 7
 
   paths:
   - src

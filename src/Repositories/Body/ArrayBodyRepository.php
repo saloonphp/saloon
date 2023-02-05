@@ -16,14 +16,14 @@ class ArrayBodyRepository implements BodyRepository
     /**
      * Repository Data
      *
-     * @var array<string, mixed>
+     * @var array<array-key, mixed>
      */
     protected array $data = [];
 
     /**
      * Constructor
      *
-     * @param array<string, mixed> $value
+     * @param array<array-key, mixed> $value
      */
     public function __construct(array $value = [])
     {
@@ -33,7 +33,7 @@ class ArrayBodyRepository implements BodyRepository
     /**
      * Set a value inside the repository
      *
-     * @param array<string, mixed> $value
+     * @param array<array-key, mixed> $value
      * @return $this
      */
     public function set(mixed $value): static
@@ -50,7 +50,7 @@ class ArrayBodyRepository implements BodyRepository
     /**
      * Merge another array into the repository
      *
-     * @param array<string, mixed> ...$arrays
+     * @param array<array-key, mixed> ...$arrays
      * @return $this
      */
     public function merge(array ...$arrays): static
@@ -81,7 +81,7 @@ class ArrayBodyRepository implements BodyRepository
      *
      * @param array-key|null $key
      * @param mixed|null $default
-     * @return ($key is null ? array<string, mixed> : mixed)
+     * @return ($key is null ? array<array-key, mixed> : mixed)
      */
     public function get(string|int|null $key = null, mixed $default = null): mixed
     {
@@ -108,7 +108,7 @@ class ArrayBodyRepository implements BodyRepository
     /**
      * Retrieve all in the repository
      *
-     * @return array<string, mixed>
+     * @return array<array-key, mixed>
      */
     public function all(): array
     {

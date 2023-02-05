@@ -11,7 +11,7 @@ interface Pool
     /**
      * Specify a callback to happen for each successful request
      *
-     * @param callable $callable
+     * @param callable(\Saloon\Contracts\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void) $callable
      * @return $this
      */
     public function withResponseHandler(callable $callable): static;
@@ -19,7 +19,7 @@ interface Pool
     /**
      * Specify a callback to happen for each failed request
      *
-     * @param callable $callable
+     * @param callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void) $callable
      * @return $this
      */
     public function withExceptionHandler(callable $callable): static;
@@ -27,7 +27,7 @@ interface Pool
     /**
      * Set the amount of concurrent requests that should be sent
      *
-     * @param int|callable $concurrency
+     * @param int|callable(int $pendingRequests): (int) $concurrency
      * @return $this
      */
     public function setConcurrency(int|callable $concurrency): static;
@@ -35,7 +35,7 @@ interface Pool
     /**
      * Set the requests
      *
-     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>|callable $requests
+     * @param iterable<array-key, \GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>|callable(\Saloon\Contracts\Connector): (iterable<array-key, \GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>) $requests
      * @return $this
      */
     public function setRequests(iterable|callable $requests): static;
@@ -43,7 +43,7 @@ interface Pool
     /**
      * Get the request generator
      *
-     * @return iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>
+     * @return iterable<array-key, \GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>
      */
     public function getRequests(): iterable;
 

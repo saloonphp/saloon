@@ -37,6 +37,7 @@ class Helpers
      */
     public static function traitUsesRecursive(string $trait): array
     {
+        /** @var array<class-string, class-string> $traits */
         $traits = class_uses($trait) ?: [];
 
         foreach ($traits as $trait) {

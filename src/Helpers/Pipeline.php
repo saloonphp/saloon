@@ -20,7 +20,7 @@ class Pipeline implements PipelineContract
     /**
      * Add a pipe to the pipeline
      *
-     * @param callable $callable
+     * @param callable(mixed $payload): (mixed) $callable
      * @param bool $prepend
      * @param string|null $name
      * @return $this
