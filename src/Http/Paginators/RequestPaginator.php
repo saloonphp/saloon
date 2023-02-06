@@ -11,21 +11,14 @@ use Saloon\Contracts\Request;
 use Saloon\Contracts\RequestPaginator as RequestPaginatorContract;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\SerialisableRequestPaginator;
+use Saloon\Traits\Request\HasPagination;
 
 // TODO 1: Look into serialising the Connector and original Request,
 //           to ensure that we can rebuild the paginator state without storing the entire multiverse.
-// TODO 2: Make it easier to extend the RequestPaginator. Preferably via callbacks, so we ideally don't even need separate classes.
-// TODO 3: Because both page-based and offset-based pagination just bumps the 'paging' number,
-//           would it make sense to do all pagination in _the_ RequestPaginator, but allow to specify the counter somehow?
-//         Maybe a callback that receives a copy of the original Request, as well as the latest Response (which has the corresponding latest Request and PendingRequest),
-//           and have that callback set the next 'page' on the new Request?
 
 abstract class RequestPaginator implements RequestPaginatorContract, SerialisableRequestPaginator
 {
-    /**
-     * @var string
-     */
-    protected string $limitName = 'limit';
+    use HasPagination;
 
     /**
      * @var bool
@@ -60,8 +53,10 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
     public function __construct(
         protected readonly Connector $connector,
         protected readonly Request $originalRequest,
-        protected ?int $limit = null,
-    ) {}
+        ?int $limit = null,
+    ) {
+        $this->limit = $limit;
+    }
 
     /**
      * Apply paging information, like setting the Request query parameter 'page', or 'offset', etc.
@@ -93,26 +88,6 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
             $responseHandler,
             $exceptionHandler,
         );
-    }
-
-    /**
-     * @param string $limitName
-     *
-     * @return $this
-     */
-    public function usingLimitName(string $limitName): static
-    {
-        $this->limitName = $limitName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function limitName(): string
-    {
-        return $this->limitName;
     }
 
     /**
@@ -178,14 +153,6 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
     public function currentResponse(): ?Response
     {
         return $this->currentResponse;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function limit(): ?int
-    {
-        return $this->limit;
     }
 
     /**
@@ -297,8 +264,6 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      */
     public function __serialize(): array
     {
-        // TODO: figure out how to serialise the 'has next page' resolver/callback.
-
         return [
             'connector' => $this->connector,
             'original_request' => $this->originalRequest,

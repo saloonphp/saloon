@@ -6,21 +6,14 @@ namespace Saloon\Http\Paginators;
 
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\Request;
+use Saloon\Traits\Request\HasPagedPagination;
 
 // TODO 1: Look into serialising the Connector and original Request,
 //           to ensure that we can rebuild the paginator state without storing the entire multiverse.
-// TODO 2: Make it easier to extend the RequestPaginator. Preferably via callbacks, so we ideally don't even need separate classes.
-// TODO 3: Because both page-based and offset-based pagination just bumps the 'paging' number,
-//           would it make sense to do all pagination in _the_ RequestPaginator, but allow to specify the counter somehow?
-//         Maybe a callback that receives a copy of the original Request, as well as the latest Response (which has the corresponding latest Request and PendingRequest),
-//           and have that callback set the next 'page' on the new Request?
 
 class PageRequestPaginator extends RequestPaginator
 {
-    /**
-     * @var string
-     */
-    protected string $pageName = 'page';
+    use HasPagedPagination;
 
     /**
      * @var int
@@ -36,32 +29,12 @@ class PageRequestPaginator extends RequestPaginator
     public function __construct(
         Connector $connector,
         Request $originalRequest,
-        ?int $limit,
-        protected int $page = 1,
+        ?int $limit = null,
+        int $page = 1,
     ) {
         parent::__construct($connector, $originalRequest, $limit);
 
-        $this->originalPage = $page;
-    }
-
-    /**
-     * @param string $pageName
-     *
-     * @return $this
-     */
-    public function usingPageName(string $pageName): static
-    {
-        $this->pageName = $pageName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function pageName(): string
-    {
-        return $this->pageName;
+        $this->currentPage = $this->originalPage = $page;
     }
 
     /**
@@ -105,7 +78,6 @@ class PageRequestPaginator extends RequestPaginator
      */
     public function firstPage(): int
     {
-        // TODO: Or should we use something from the response?
         return 1;
     }
 
@@ -115,14 +87,6 @@ class PageRequestPaginator extends RequestPaginator
     public function previousPage(): ?int
     {
         return $this->currentPage() > $this->firstPage() ? $this->currentPage() - 1 : null;
-    }
-
-    /**
-     * @return int
-     */
-    public function currentPage(): int
-    {
-        return $this->page;
     }
 
     /**
@@ -166,8 +130,9 @@ class PageRequestPaginator extends RequestPaginator
 
         parent::rewind();
 
-        // TODO: Rewind completely, or rewind to originalPage?
-        $this->page = 1;
+        // Rewind to the original page, instead of strictly the first page.
+        // Otherwise it could be an 'unexpected' behaviour, if we don't start over from where we started.
+        $this->currentPage = $this->originalPage;
     }
 
     /**
@@ -183,7 +148,7 @@ class PageRequestPaginator extends RequestPaginator
      */
     public function next(): void
     {
-        $this->page++;
+        $this->currentPage++;
     }
 
     /**
@@ -223,7 +188,7 @@ class PageRequestPaginator extends RequestPaginator
             ...parent::__serialize(),
             'page_name' => $this->pageName,
             'original_page' => $this->originalPage,
-            'current_page' => $this->page,
+            'current_page' => $this->currentPage,
         ];
     }
 
@@ -247,6 +212,6 @@ class PageRequestPaginator extends RequestPaginator
 
         $this->pageName = $data['page_name'];
         $this->originalPage = $data['original_page'];
-        $this->page = $data['current_page'];
+        $this->currentPage = $data['current_page'];
     }
 }

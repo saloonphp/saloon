@@ -6,24 +6,14 @@ namespace Saloon\Http\Paginators;
 
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\Request;
+use Saloon\Traits\Request\HasOffsetPagination;
 
 // TODO 1: Look into serialising the Connector and original Request,
 //           to ensure that we can rebuild the paginator state without storing the entire multiverse.
-// TODO 2: Make it easier to extend the RequestPaginator. Preferably via callbacks, so we ideally don't even need separate classes.
-// TODO 3: Because both page-based and offset-based pagination just bumps the 'paging' number,
-//           would it make sense to do all pagination in _the_ RequestPaginator, but allow to specify the counter somehow?
-//         Maybe a callback that receives a copy of the original Request, as well as the latest Response (which has the corresponding latest Request and PendingRequest),
-//           and have that callback set the next 'page' on the new Request?
 
-/**
- * @method int limit()
- */
 class OffsetRequestPaginator extends RequestPaginator
 {
-    /**
-     * @var string
-     */
-    protected string $offsetName = 'offset';
+    use HasOffsetPagination;
 
     /**
      * @var int
@@ -40,31 +30,11 @@ class OffsetRequestPaginator extends RequestPaginator
         Connector $connector,
         Request $originalRequest,
         int $limit,
-        protected int $offset = 0,
+        int $offset = 0,
     ) {
         parent::__construct($connector, $originalRequest, $limit);
 
-        $this->originalOffset = $offset;
-    }
-
-    /**
-     * @param string $offsetName
-     *
-     * @return $this
-     */
-    public function usingOffsetName(string $offsetName): static
-    {
-        $this->offsetName = $offsetName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function offsetName(): string
-    {
-        return $this->offsetName;
+        $this->currentOffset = $this->originalOffset = $offset;
     }
 
     /**
@@ -108,7 +78,6 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function firstPage(): int
     {
-        // TODO: Or should we use something from the response?
         return 1;
     }
 
@@ -117,7 +86,6 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function firstOffset(): int
     {
-        // TODO: Or should we use something from the response?
         return 0;
     }
 
@@ -126,9 +94,7 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function previousPage(): ?int
     {
-        $page = $this->currentPage();
-
-        return $page > $this->firstPage() ? $page - 1  : null;
+        return $this->currentPage() > $this->firstPage() ? $this->currentPage() - 1  : null;
     }
 
     /**
@@ -158,21 +124,11 @@ class OffsetRequestPaginator extends RequestPaginator
     }
 
     /**
-     * @return int
-     */
-    public function currentOffset(): int
-    {
-        return $this->offset;
-    }
-
-    /**
      * @return int|null
      */
     public function nextPage(): ?int
     {
-        $page = $this->currentPage();
-
-        return $page < $this->lastPage() ? $page + 1 : null;
+        return $this->currentPage() < $this->lastPage() ? $this->currentPage() + 1 : null;
     }
 
     /**
@@ -217,8 +173,8 @@ class OffsetRequestPaginator extends RequestPaginator
     protected function applyPaging(Request $request): void
     {
         $request->query()->merge([
-            $this->limitName, $this->limit(),
-            $this->offsetName, $this->currentOffset(),
+            $this->limitName() => $this->limit(),
+            $this->offsetName() => $this->currentOffset(),
         ]);
     }
 
@@ -233,8 +189,9 @@ class OffsetRequestPaginator extends RequestPaginator
 
         parent::rewind();
 
-        // TODO: Rewind completely, or rewind to originalOffset?
-        $this->offset = 0;
+        // Rewind to the original offset, instead of strictly the first offset.
+        // Otherwise it could be an 'unexpected' behaviour, if we don't start over from where we started.
+        $this->currentOffset = $this->originalOffset;
     }
 
     /**
@@ -250,7 +207,7 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function next(): void
     {
-        $this->offset += $this->limit();
+        $this->currentOffset += $this->limit();
     }
 
     /**
@@ -290,7 +247,7 @@ class OffsetRequestPaginator extends RequestPaginator
             ...parent::__serialize(),
             'offset_name' => $this->offsetName,
             'original_offset' => $this->originalOffset,
-            'current_offset' => $this->offset,
+            'current_offset' => $this->currentOffset,
         ];
     }
 
@@ -314,6 +271,6 @@ class OffsetRequestPaginator extends RequestPaginator
 
         $this->offsetName = $data['offset_name'];
         $this->originalOffset = $data['original_offset'];
-        $this->offset = $data['current_offset'];
+        $this->currentOffset = $data['current_offset'];
     }
 }
