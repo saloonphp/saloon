@@ -53,10 +53,8 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
     public function __construct(
         protected readonly Connector $connector,
         protected readonly Request $originalRequest,
-        ?int $limit = null,
-    ) {
-        $this->limit = $limit;
-    }
+        protected readonly ?int $limit = null,
+    ) {}
 
     /**
      * Apply paging information, like setting the Request query parameter 'page', or 'offset', etc.
