@@ -18,7 +18,7 @@ class RecordedResponse implements JsonSerializable
      * @param mixed $data
      */
     public function __construct(
-        public int $statusCode,
+        public int   $statusCode,
         public array $headers = [],
         public mixed $data = null,
     ) {
@@ -43,10 +43,16 @@ class RecordedResponse implements JsonSerializable
          */
         $fileData = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
 
+        $data = $fileData['data'];
+
+        if (isset($fileData['encoding']) && $fileData['encoding'] === 'base64') {
+            $data = base64_decode($data);
+        }
+
         return new static(
             statusCode: $fileData['statusCode'],
             headers: $fileData['headers'],
-            data: $fileData['data']
+            data: $data
         );
     }
 
@@ -97,10 +103,17 @@ class RecordedResponse implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        return [
+        $response = [
             'statusCode' => $this->statusCode,
             'headers' => $this->headers,
             'data' => $this->data,
         ];
+
+        if (mb_check_encoding($response['data'], 'UTF-8') === false) {
+            $response['data'] = base64_encode($response['data']);
+            $response['encoding'] = 'base64';
+        }
+
+        return $response;
     }
 }

@@ -15,6 +15,7 @@ use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\AlwaysThrowRequest;
 use Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
+use Saloon\Tests\Fixtures\Requests\FileDownloadRequest;
 use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
 use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
@@ -516,4 +517,20 @@ test('when using the AlwaysThrowRequest trait the response recorder will still r
     $fixture = MockResponse::fixture('error')->getMockResponse();
 
     expect($fixture)->toBeInstanceOf(MockResponse::class);
+});
+
+test('a fixture can record the file data from a request that returns a file download', function () {
+    $mockClient = new MockClient([
+        FileDownloadRequest::class => MockResponse::fixture('file'),
+    ]);
+
+    $requestA = new FileDownloadRequest;
+    $responseA = connector()->send($requestA, $mockClient);
+
+    expect($responseA->body())->toEqual(file_get_contents('tests/Fixtures/Files/test.pdf'));
+
+    $requestB = new FileDownloadRequest;
+    $responseB = connector()->send($requestB, $mockClient);
+
+    expect($responseB->body())->toEqual(file_get_contents('tests/Fixtures/Files/test.pdf'));
 });
