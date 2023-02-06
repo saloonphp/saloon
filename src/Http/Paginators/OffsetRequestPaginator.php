@@ -175,9 +175,7 @@ class OffsetRequestPaginator extends RequestPaginator
         /** @phpstan-var int $page */
         $page = $this->currentPage();
 
-        return $page < $this->lastPage()
-            ? $page + 1
-            : null;
+        return $page < $this->lastPage() ? $page + 1 : null;
     }
 
     /**
