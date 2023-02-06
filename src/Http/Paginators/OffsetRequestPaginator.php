@@ -136,7 +136,6 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function previousOffset(): ?int
     {
-        /** @phpstan-var int $previousOffset */
         $previousOffset = $this->currentOffset() - $this->limit();
 
         return $previousOffset > $this->firstOffset() ? $previousOffset : null;
@@ -155,7 +154,6 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function currentPage(): int
     {
-        /** @phpstan-var int */
         return (int) ceil($this->totalEntries() / $this->totalPages());
     }
 
@@ -172,7 +170,6 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function nextPage(): ?int
     {
-        /** @phpstan-var int $page */
         $page = $this->currentPage();
 
         return $page < $this->lastPage() ? $page + 1 : null;
@@ -183,7 +180,6 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function nextOffset(): ?int
     {
-        /** @phpstan-var int  $nextOffset */
         $nextOffset = $this->currentOffset() + $this->limit();
 
         return $nextOffset < $this->lastOffset() ? $nextOffset : null;
@@ -202,7 +198,6 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function lastPage(): int
     {
-        /** @phpstan-var int */
         return (int) floor($this->totalEntries() / $this->totalPages());
     }
 
@@ -211,7 +206,6 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function lastOffset(): int
     {
-        /** @phpstan-var int */
         return $this->totalEntries() - $this->limit();
     }
 
