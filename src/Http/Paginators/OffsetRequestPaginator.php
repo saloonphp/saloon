@@ -128,9 +128,7 @@ class OffsetRequestPaginator extends RequestPaginator
     {
         $page = $this->currentPage();
 
-        return $page > $this->firstPage()
-            ? $page - 1
-            : null;
+        return $page > $this->firstPage() ? $page - 1  : null;
     }
 
     /**
