@@ -19,8 +19,7 @@ class FixtureData implements JsonSerializable
         public int   $statusCode,
         public array $headers = [],
         public mixed $data = null,
-    )
-    {
+    ) {
         //
     }
 
