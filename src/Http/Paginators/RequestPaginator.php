@@ -100,11 +100,19 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      *
      * @return $this
      */
-    public function withLimitName(string $limitName): static
+    public function usingLimitName(string $limitName): static
     {
         $this->limitName = $limitName;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function limitName(): string
+    {
+        return $this->limitName;
     }
 
     /**

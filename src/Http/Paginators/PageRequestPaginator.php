@@ -18,7 +18,7 @@ use Saloon\Contracts\Request;
 class PageRequestPaginator extends RequestPaginator
 {
     /**
-     * @var string 
+     * @var string
      */
     protected string $pageName = 'page';
 
@@ -49,11 +49,19 @@ class PageRequestPaginator extends RequestPaginator
      *
      * @return $this
      */
-    public function withPageName(string $pageName): static
+    public function usingPageName(string $pageName): static
     {
         $this->pageName = $pageName;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function pageName(): string
+    {
+        return $this->pageName;
     }
 
     /**
@@ -186,8 +194,10 @@ class PageRequestPaginator extends RequestPaginator
      * @return array{
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
+     *     limit_name: string,
      *     limit: int|null,
      *     rewinding_enabled: bool,
+     *     page_name: string,
      *     original_page: int,
      *     current_page: int,
      * }
@@ -203,8 +213,10 @@ class PageRequestPaginator extends RequestPaginator
      * @return array{
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
+     *     limit_name: string,
      *     limit: int|null,
      *     rewinding_enabled: bool,
+     *     page_name: string,
      *     original_page: int,
      *     current_page: int,
      * }
@@ -213,6 +225,7 @@ class PageRequestPaginator extends RequestPaginator
     {
         return [
             ...parent::__serialize(),
+            'page_name' => $this->pageName,
             'original_page' => $this->originalPage,
             'current_page' => $this->page,
         ];
@@ -222,8 +235,10 @@ class PageRequestPaginator extends RequestPaginator
      * @param array{
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
+     *     limit_name: string,
      *     limit: int|null,
      *     rewinding_enabled: bool,
+     *     page_name: string,
      *     original_page: int,
      *     current_page: int,
      * } $data
@@ -234,6 +249,7 @@ class PageRequestPaginator extends RequestPaginator
     {
         parent::__unserialize($data);
 
+        $this->pageName = $data['page_name'];
         $this->originalPage = $data['original_page'];
         $this->page = $data['current_page'];
     }

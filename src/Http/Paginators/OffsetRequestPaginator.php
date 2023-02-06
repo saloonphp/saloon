@@ -52,11 +52,19 @@ class OffsetRequestPaginator extends RequestPaginator
      *
      * @return $this
      */
-    public function withOffsetName(string $offsetName): static
+    public function usingOffsetName(string $offsetName): static
     {
         $this->offsetName = $offsetName;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function offsetName(): string
+    {
+        return $this->offsetName;
     }
 
     /**
@@ -263,8 +271,10 @@ class OffsetRequestPaginator extends RequestPaginator
      * @return array{
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
+     *     limit_name: string,
      *     limit: int,
      *     rewinding_enabled: bool,
+     *     offset_name: string,
      *     original_offset: int,
      *     current_offset: int,
      * }
@@ -280,8 +290,10 @@ class OffsetRequestPaginator extends RequestPaginator
      * @return array{
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
+     *     limit_name: string,
      *     limit: int,
      *     rewinding_enabled: bool,
+     *     offset_name: string,
      *     original_offset: int,
      *     current_offset: int,
      * }
@@ -290,6 +302,7 @@ class OffsetRequestPaginator extends RequestPaginator
     {
         return [
             ...parent::__serialize(),
+            'offset_name' => $this->offsetName,
             'original_offset' => $this->originalOffset,
             'current_offset' => $this->offset,
         ];
@@ -299,8 +312,10 @@ class OffsetRequestPaginator extends RequestPaginator
      * @param array{
      *     connector: \Saloon\Contracts\Connector,
      *     original_request: \Saloon\Contracts\Request,
+     *     limit_name: string,
      *     limit: int,
      *     rewinding_enabled: bool,
+     *     offset_name: string,
      *     original_offset: int,
      *     current_offset: int,
      * } $data
@@ -311,6 +326,7 @@ class OffsetRequestPaginator extends RequestPaginator
     {
         parent::__unserialize($data);
 
+        $this->offsetName = $data['offset_name'];
         $this->originalOffset = $data['original_offset'];
         $this->offset = $data['current_offset'];
     }
