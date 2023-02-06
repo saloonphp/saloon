@@ -50,3 +50,21 @@ test('you can change the global default sender used', function () {
 
     expect($response->getPendingRequest()->getSender())->toBeInstanceOf(GuzzleSender::class);
 });
+
+test('you can change how the global default sender is resolved', function () {
+    $sender = TestConnector::make()->sender();
+
+    expect($sender)->toBeInstanceOf(GuzzleSender::class);
+
+    Config::resolveSenderWith(static fn () => new ArraySender);
+
+    $sender = TestConnector::make()->sender();
+
+    expect($sender)->toBeInstanceOf(ArraySender::class);
+
+    Config::resolveSenderWith(null);
+
+    $sender = TestConnector::make()->sender();
+
+    expect($sender)->toBeInstanceOf(GuzzleSender::class);
+});
