@@ -139,9 +139,7 @@ class OffsetRequestPaginator extends RequestPaginator
         /** @phpstan-var int $previousOffset */
         $previousOffset = $this->currentOffset() - $this->limit();
 
-        return $previousOffset > $this->firstOffset()
-            ? $previousOffset
-            : null;
+        return $previousOffset > $this->firstOffset() ? $previousOffset : null;
     }
 
     /**
