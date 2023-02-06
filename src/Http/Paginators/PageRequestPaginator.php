@@ -132,9 +132,7 @@ class PageRequestPaginator extends RequestPaginator
      */
     public function nextPage(): ?int
     {
-        return $this->currentPage() < $this->totalPages()
-            ? $this->currentPage() + 1
-            : null;
+        return $this->currentPage() < $this->totalPages() ? $this->currentPage() + 1 : null;
     }
 
     /**
