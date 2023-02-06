@@ -37,7 +37,7 @@ class FixtureData implements JsonSerializable
 
         $data = $fileData['data'];
 
-        if (isset($fileData['encoder']) && $fileData['encoder'] === 'base64') {
+        if (isset($fileData['encoding']) && $fileData['encoding'] === 'base64') {
             $data = base64_decode($data);
         }
 
@@ -91,13 +91,17 @@ class FixtureData implements JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        // Todo: work out base64_encode on arrays
-
-        return [
+        $response = [
             'statusCode' => $this->statusCode,
             'headers' => $this->headers,
-            'data' => base64_encode($this->data),
-            'encoder' => 'base64',
+            'data' => $this->data,
         ];
+
+        if (mb_check_encoding($response['data'], 'UTF-8') === false) {
+            $response['data'] = base64_encode($response['data']);
+            $response['encoding'] = 'base64';
+        }
+
+        return $response;
     }
 }

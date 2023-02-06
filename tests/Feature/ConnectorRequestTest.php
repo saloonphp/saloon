@@ -125,7 +125,7 @@ test('it throws an exception if you do not key an array of requests', function (
     $connector = new InvalidServiceRequestConnector();
 
     $this->expectException(InvalidRequestKeyException::class);
-    $this->expectDeprecationMessage('Request groups must be keyed.');
+    $this->expectExceptionMessage('Request groups must be keyed.');
 
     $connector->custom();
 });
