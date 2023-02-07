@@ -51,16 +51,6 @@ class OffsetRequestPaginator extends RequestPaginator
     }
 
     /**
-     * @return iterable<int, array<string, mixed>>
-     *
-     * @TODO entry data type
-     */
-    public function entries(): iterable
-    {
-        return $this->currentResponse->json('data');
-    }
-
-    /**
      * @return int
      */
     public function totalPages(): int
@@ -70,109 +60,14 @@ class OffsetRequestPaginator extends RequestPaginator
             $this->current();
         }
 
-        return $this->lastPage();
+        return (int) ceil($this->totalEntries() / $this->limit());
     }
 
-    /**
-     * @return int
-     */
-    public function firstPage(): int
+    protected function reset(): void
     {
-        return 1;
-    }
-
-    /**
-     * @return int
-     */
-    public function firstOffset(): int
-    {
-        return 0;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function previousPage(): ?int
-    {
-        return $this->currentPage() > $this->firstPage() ? $this->currentPage() - 1  : null;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function previousOffset(): ?int
-    {
-        $previousOffset = $this->currentOffset() - $this->limit();
-
-        return $previousOffset > $this->firstOffset() ? $previousOffset : null;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasPreviousOffset(): bool
-    {
-        return ! is_null($this->previousOffset());
-    }
-
-    /**
-     * @return int
-     */
-    public function currentPage(): int
-    {
-        return (int) ceil($this->totalEntries() / $this->totalPages());
-    }
-
-    /**
-     * @return int|null
-     */
-    public function nextPage(): ?int
-    {
-        return $this->currentPage() < $this->lastPage() ? $this->currentPage() + 1 : null;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function nextOffset(): ?int
-    {
-        $nextOffset = $this->currentOffset() + $this->limit();
-
-        return $nextOffset < $this->lastOffset() ? $nextOffset : null;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasNextOffset(): bool
-    {
-        return ! is_null($this->nextOffset());
-    }
-
-    /**
-     * @return int
-     */
-    public function lastPage(): int
-    {
-        // Make sure we have a response.
-        if (is_null($this->currentResponse)) {
-            $this->current();
-        }
-
-        return (int) floor($this->totalEntries() / $this->totalPages());
-    }
-
-    /**
-     * @return int
-     */
-    public function lastOffset(): int
-    {
-        // Make sure we have a response.
-        if (is_null($this->currentResponse)) {
-            $this->current();
-        }
-
-        return $this->totalEntries() - $this->limit();
+        // Rewind to the original offset, instead of strictly the first offset.
+        // Otherwise it could be an 'unexpected' behaviour, if we don't start over from where we started.
+        $this->currentOffset = $this->originalOffset;
     }
 
     /**
@@ -189,24 +84,17 @@ class OffsetRequestPaginator extends RequestPaginator
     }
 
     /**
-     * @return void
+     * @return bool
      */
-    public function rewind(): void
+    protected function isFinished(): bool
     {
-        if (! $this->shouldRewind()) {
-            return;
-        }
-
-        parent::rewind();
-
-        // Rewind to the original offset, instead of strictly the first offset.
-        // Otherwise it could be an 'unexpected' behaviour, if we don't start over from where we started.
-        $this->currentOffset = $this->originalOffset;
+        return $this->currentOffset() >= $this->totalEntries();
     }
 
     /**
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function key(): int
     {
         return $this->currentOffset();

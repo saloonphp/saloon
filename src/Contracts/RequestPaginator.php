@@ -72,13 +72,6 @@ interface RequestPaginator extends Countable, Iterator
     public function totalEntries(): int;
 
     /**
-     * @return iterable<array-key, mixed>
-     *
-     * @TODO entry data type
-     */
-    public function entries(): iterable;
-
-    /**
      * @return int|null
      */
     public function limit(): ?int;
@@ -90,77 +83,6 @@ interface RequestPaginator extends Countable, Iterator
      *        F.e., page, offset
      */
     public function totalPages(): int;
-
-    /**
-     * @return string|int
-     *
-     * @TODO: Make naming more abstract and versatile.
-     *        F.e., page, offset
-     */
-    #[ReturnTypeWillChange]
-    public function firstPage(): string|int;
-
-    /**
-     * @return bool
-     */
-    public function isFirstPage(): bool;
-
-    /**
-     * @return string|int|null Previous page number, or null if there is no previous page.
-     *
-     * @TODO: Make naming more abstract and versatile.
-     *        F.e., page, offset
-     */
-    #[ReturnTypeWillChange]
-    public function previousPage(): string|int|null;
-
-    /**
-     * @return bool
-     *
-     * @TODO: Make naming more abstract and versatile.
-     *        F.e., page, offset
-     */
-    public function hasPreviousPage(): bool;
-
-    /**
-     * @return string|int Current page number.
-     *
-     * @TODO: Make naming more abstract and versatile.
-     *        F.e., page, offset
-     */
-    #[ReturnTypeWillChange]
-    public function currentPage(): string|int;
-
-    /**
-     * @return string|int|null Next page number, or null if there is no next page.
-     *
-     * @TODO: Make naming more abstract and versatile.
-     *        F.e., page, offset
-     */
-    #[ReturnTypeWillChange]
-    public function nextPage(): string|int|null;
-
-    /**
-     * @return bool
-     *
-     * @TODO: Make naming more abstract and versatile.
-     *        F.e., page, offset
-     */
-    public function hasNextPage(): bool;
-
-    /**
-     * @return string|int
-     *
-     * @TODO: Make naming more abstract and versatile.
-     *        F.e., page, offset
-     */
-    #[ReturnTypeWillChange]
-    public function lastPage(): string|int;
-
-    /**
-     * @return bool
-     */
-    public function isLastPage(): bool;
 
     /**
      * The iteration methods are defined in the order PHP executes them.

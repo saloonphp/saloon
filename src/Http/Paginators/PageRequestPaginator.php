@@ -47,17 +47,7 @@ class PageRequestPaginator extends RequestPaginator
             $this->current();
         }
 
-        return $this->currentResponse->json('total');
-    }
-
-    /**
-     * @return iterable<int, array<string, mixed>>
-     *
-     * @TODO entry data type
-     */
-    public function entries(): iterable
-    {
-        return $this->currentResponse->json('data');
+        return $this->currentResponse->json('json');
     }
 
     /**
@@ -70,44 +60,14 @@ class PageRequestPaginator extends RequestPaginator
             $this->current();
         }
 
-        return $this->lastPage();
-    }
-
-    /**
-     * @return int
-     */
-    public function firstPage(): int
-    {
-        return 1;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function previousPage(): ?int
-    {
-        return $this->currentPage() > $this->firstPage() ? $this->currentPage() - 1 : null;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function nextPage(): ?int
-    {
-        return $this->currentPage() < $this->totalPages() ? $this->currentPage() + 1 : null;
-    }
-
-    /**
-     * @return int
-     */
-    public function lastPage(): int
-    {
-        // Make sure we have a response.
-        if (is_null($this->currentResponse)) {
-            $this->current();
-        }
-
         return $this->currentResponse->json('last_page');
+    }
+
+    protected function reset(): void
+    {
+        // Rewind to the original page, instead of strictly the first page.
+        // Otherwise it could be an 'unexpected' behaviour, if we don't start over from where we started.
+        $this->currentPage = $this->originalPage;
     }
 
     /**
@@ -118,31 +78,28 @@ class PageRequestPaginator extends RequestPaginator
     protected function applyPagination(Request $request): void
     {
         if (! is_null($this->limit())) {
-            $request->query()->add($this->limitName, $this->limit());
+            $request->query()->add($this->limitName(), $this->limit());
         }
 
-        $request->query()->add($this->pageName, $this->currentPage());
+        $request->query()->add($this->pageName(), $this->currentPage());
     }
 
     /**
-     * @return void
+     * @return bool
      */
-    public function rewind(): void
+    protected function isFinished(): bool
     {
-        if (! $this->shouldRewind()) {
-            return;
-        }
-
-        parent::rewind();
-
-        // Rewind to the original page, instead of strictly the first page.
-        // Otherwise it could be an 'unexpected' behaviour, if we don't start over from where we started.
-        $this->currentPage = $this->originalPage;
+        // Because of how Iterators are iterated, we need to check
+        //   if the current page is more than the total pages.
+        // Checking if it's equal to total pages will fall 1 page short,
+        //   as Iterators are first increased, then checked for validity.
+        return $this->currentPage() > $this->totalPages();
     }
 
     /**
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function key(): int
     {
         return $this->currentPage();

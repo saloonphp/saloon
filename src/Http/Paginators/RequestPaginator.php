@@ -56,6 +56,13 @@ abstract class RequestPaginator implements RequestPaginatorContract
     ) {}
 
     /**
+     * Called by this base RequestPaginator, when it's rewinding.
+     *
+     * @return void
+     */
+    abstract protected function reset(): void;
+
+    /**
      * Apply paging information, like setting the Request query parameter 'page', or 'offset', etc.
      *
      * @param \Saloon\Contracts\Request $request
@@ -63,6 +70,8 @@ abstract class RequestPaginator implements RequestPaginatorContract
      * @return void
      */
     abstract protected function applyPagination(Request $request): void;
+
+    abstract protected function isFinished(): bool;
 
     /**
      * @param callable(int $pendingRequests): (int)|int $concurrency
@@ -133,7 +142,7 @@ abstract class RequestPaginator implements RequestPaginatorContract
     public function shouldRewind(): bool
     {
         return $this->rewindingEnabled()
-            || $this->isLastPage();
+            || $this->isFinished();
     }
 
     /**
@@ -145,44 +154,6 @@ abstract class RequestPaginator implements RequestPaginatorContract
     }
 
     /**
-     * @return bool
-     */
-    public function isFirstPage(): bool
-    {
-        return $this->currentPage() === $this->firstPage();
-    }
-
-    /**
-     * @return bool
-     *
-     * @TODO: Make naming more abstract and versatile.
-     *        F.e., page, offset
-     */
-    public function hasPreviousPage(): bool
-    {
-        return ! is_null($this->previousPage());
-    }
-
-    /**
-     * @return bool
-     *
-     * @TODO: Make naming more abstract and versatile.
-     *        F.e., page, offset
-     */
-    public function hasNextPage(): bool
-    {
-        return ! is_null($this->nextPage());
-    }
-
-    /**
-     * @return bool
-     */
-    public function isLastPage(): bool
-    {
-        return $this->currentPage() === $this->lastPage();
-    }
-
-    /**
      * @return void
      */
     public function rewind(): void
@@ -190,6 +161,8 @@ abstract class RequestPaginator implements RequestPaginatorContract
         if (! $this->shouldRewind()) {
             return;
         }
+
+        $this->reset();
 
         // Nullify the current response, so we don't accidentally check if there are more pages, even though we're starting over.
         $this->currentResponse = null;
@@ -207,8 +180,7 @@ abstract class RequestPaginator implements RequestPaginatorContract
             return true;
         }
 
-        return $this->hasNextPage()
-            || $this->isLastPage();
+        return ! $this->isFinished();
     }
 
     /**
@@ -222,8 +194,18 @@ abstract class RequestPaginator implements RequestPaginatorContract
             $request = clone $this->originalRequest,
         );
 
-        // TODO: async
+        if (! $this->isAsync()) {
+            return $this->currentResponse = $this->connector->send($request);
+        }
 
-        return $this->currentResponse = $this->connector->send($request);
+        $promise = $this->connector->sendAsync($request);
+
+        // If we don't wait for the 'first' response, we won't know how many iterations we need.
+        // Awaiting one response is a small price to pay.
+        if (is_null($this->currentResponse)) {
+            $this->currentResponse = $promise->wait();
+        }
+
+        return $promise;
     }
 }
