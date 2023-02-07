@@ -154,6 +154,11 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function lastPage(): int
     {
+        // Make sure we have a response.
+        if (is_null($this->currentResponse)) {
+            $this->current();
+        }
+
         return (int) floor($this->totalEntries() / $this->totalPages());
     }
 
@@ -162,6 +167,11 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     public function lastOffset(): int
     {
+        // Make sure we have a response.
+        if (is_null($this->currentResponse)) {
+            $this->current();
+        }
+
         return $this->totalEntries() - $this->limit();
     }
 
@@ -170,7 +180,7 @@ class OffsetRequestPaginator extends RequestPaginator
      *
      * @return void
      */
-    protected function applyPaging(Request $request): void
+    protected function applyPagination(Request $request): void
     {
         $request->query()->merge([
             $this->limitName() => $this->limit(),
@@ -208,69 +218,5 @@ class OffsetRequestPaginator extends RequestPaginator
     public function next(): void
     {
         $this->currentOffset += $this->limit();
-    }
-
-    /**
-     * @return array{
-     *     connector: \Saloon\Contracts\Connector,
-     *     original_request: \Saloon\Contracts\Request,
-     *     limit_name: string,
-     *     limit: int,
-     *     rewinding_enabled: bool,
-     *     offset_name: string,
-     *     original_offset: int,
-     *     current_offset: int,
-     * }
-     *
-     * @see \Saloon\Http\Paginators\PageRequestPaginator::__serialize()
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->__serialize();
-    }
-
-    /**
-     * @return array{
-     *     connector: \Saloon\Contracts\Connector,
-     *     original_request: \Saloon\Contracts\Request,
-     *     limit_name: string,
-     *     limit: int,
-     *     rewinding_enabled: bool,
-     *     offset_name: string,
-     *     original_offset: int,
-     *     current_offset: int,
-     * }
-     */
-    public function __serialize(): array
-    {
-        return [
-            ...parent::__serialize(),
-            'offset_name' => $this->offsetName,
-            'original_offset' => $this->originalOffset,
-            'current_offset' => $this->currentOffset,
-        ];
-    }
-
-    /**
-     * @param array{
-     *     connector: \Saloon\Contracts\Connector,
-     *     original_request: \Saloon\Contracts\Request,
-     *     limit_name: string,
-     *     limit: int,
-     *     rewinding_enabled: bool,
-     *     offset_name: string,
-     *     original_offset: int,
-     *     current_offset: int,
-     * } $data
-     *
-     * @return void
-     */
-    public function __unserialize(array $data): void
-    {
-        parent::__unserialize($data);
-
-        $this->offsetName = $data['offset_name'];
-        $this->originalOffset = $data['original_offset'];
-        $this->currentOffset = $data['current_offset'];
     }
 }

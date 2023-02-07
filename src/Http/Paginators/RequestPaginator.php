@@ -10,13 +10,12 @@ use Saloon\Contracts\Pool;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\RequestPaginator as RequestPaginatorContract;
 use Saloon\Contracts\Response;
-use Saloon\Contracts\SerialisableRequestPaginator;
 use Saloon\Traits\Request\HasPagination;
 
 // TODO 1: Look into serialising the Connector and original Request,
 //           to ensure that we can rebuild the paginator state without storing the entire multiverse.
 
-abstract class RequestPaginator implements RequestPaginatorContract, SerialisableRequestPaginator
+abstract class RequestPaginator implements RequestPaginatorContract
 {
     use HasPagination;
 
@@ -63,7 +62,7 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      *
      * @return void
      */
-    abstract protected function applyPaging(Request $request): void;
+    abstract protected function applyPagination(Request $request): void;
 
     /**
      * @param callable(int $pendingRequests): (int)|int $concurrency
@@ -146,14 +145,6 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
     }
 
     /**
-     * @return \Saloon\Contracts\Response|null
-     */
-    public function currentResponse(): ?Response
-    {
-        return $this->currentResponse;
-    }
-
-    /**
      * @return bool
      */
     public function isFirstPage(): bool
@@ -216,7 +207,8 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
             return true;
         }
 
-        return $this->hasNextPage();
+        return $this->hasNextPage()
+            || $this->isLastPage();
     }
 
     /**
@@ -226,68 +218,12 @@ abstract class RequestPaginator implements RequestPaginatorContract, Serialisabl
      */
     public function current(): Response|PromiseInterface
     {
-        $this->applyPaging(
+        $this->applyPagination(
             $request = clone $this->originalRequest,
         );
 
         // TODO: async
 
         return $this->currentResponse = $this->connector->send($request);
-    }
-
-    /**
-     * @return array{
-     *     connector: \Saloon\Contracts\Connector,
-     *     original_request: \Saloon\Contracts\Request,
-     *     limit_name: string,
-     *     limit: int|null,
-     *     rewinding_enabled: bool,
-     * }
-     *
-     * @see \Saloon\Http\Paginators\RequestPaginator::__serialize()
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->__serialize();
-    }
-
-    /**
-     * @return array{
-     *     connector: \Saloon\Contracts\Connector,
-     *     original_request: \Saloon\Contracts\Request,
-     *     limit_name: string,
-     *     limit: int|null,
-     *     rewinding_enabled: bool,
-     * }
-     */
-    public function __serialize(): array
-    {
-        return [
-            'connector' => $this->connector,
-            'original_request' => $this->originalRequest,
-            'limit_name' => $this->limitName,
-            'limit' => $this->limit,
-            'rewinding_enabled' => $this->rewindingEnabled,
-        ];
-    }
-
-    /**
-     * @param array{
-     *     connector: \Saloon\Contracts\Connector,
-     *     original_request: \Saloon\Contracts\Request,
-     *     limit_name: string,
-     *     limit: int|null,
-     *     rewinding_enabled: bool,
-     * } $data
-     *
-     * @return void
-     */
-    public function __unserialize(array $data): void
-    {
-        $this->connector = $data['connector'];
-        $this->originalRequest = $data['original_request'];
-        $this->limitName = $data['limit_name'];
-        $this->limit = $data['limit'];
-        $this->rewindingEnabled = $data['rewinding_enabled'];
     }
 }

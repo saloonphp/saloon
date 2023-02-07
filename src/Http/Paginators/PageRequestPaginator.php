@@ -102,6 +102,11 @@ class PageRequestPaginator extends RequestPaginator
      */
     public function lastPage(): int
     {
+        // Make sure we have a response.
+        if (is_null($this->currentResponse)) {
+            $this->current();
+        }
+
         return $this->currentResponse->json('last_page');
     }
 
@@ -110,7 +115,7 @@ class PageRequestPaginator extends RequestPaginator
      *
      * @return void
      */
-    protected function applyPaging(Request $request): void
+    protected function applyPagination(Request $request): void
     {
         if (! is_null($this->limit())) {
             $request->query()->add($this->limitName, $this->limit());
@@ -149,69 +154,5 @@ class PageRequestPaginator extends RequestPaginator
     public function next(): void
     {
         $this->currentPage++;
-    }
-
-    /**
-     * @return array{
-     *     connector: \Saloon\Contracts\Connector,
-     *     original_request: \Saloon\Contracts\Request,
-     *     limit_name: string,
-     *     limit: int|null,
-     *     rewinding_enabled: bool,
-     *     page_name: string,
-     *     original_page: int,
-     *     current_page: int,
-     * }
-     *
-     * @see \Saloon\Http\Paginators\PageRequestPaginator::__serialize()
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->__serialize();
-    }
-
-    /**
-     * @return array{
-     *     connector: \Saloon\Contracts\Connector,
-     *     original_request: \Saloon\Contracts\Request,
-     *     limit_name: string,
-     *     limit: int|null,
-     *     rewinding_enabled: bool,
-     *     page_name: string,
-     *     original_page: int,
-     *     current_page: int,
-     * }
-     */
-    public function __serialize(): array
-    {
-        return [
-            ...parent::__serialize(),
-            'page_name' => $this->pageName,
-            'original_page' => $this->originalPage,
-            'current_page' => $this->currentPage,
-        ];
-    }
-
-    /**
-     * @param array{
-     *     connector: \Saloon\Contracts\Connector,
-     *     original_request: \Saloon\Contracts\Request,
-     *     limit_name: string,
-     *     limit: int|null,
-     *     rewinding_enabled: bool,
-     *     page_name: string,
-     *     original_page: int,
-     *     current_page: int,
-     * } $data
-     *
-     * @return void
-     */
-    public function __unserialize(array $data): void
-    {
-        parent::__unserialize($data);
-
-        $this->pageName = $data['page_name'];
-        $this->originalPage = $data['original_page'];
-        $this->currentPage = $data['current_page'];
     }
 }
