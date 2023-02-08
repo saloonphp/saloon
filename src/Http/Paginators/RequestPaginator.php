@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Http\Paginators;
 
 use GuzzleHttp\Promise\PromiseInterface;
+use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\Pool;
 use Saloon\Contracts\Request;
@@ -54,6 +56,30 @@ abstract class RequestPaginator implements RequestPaginatorContract
         protected readonly Request $originalRequest,
         protected readonly ?int $limit = null,
     ) {}
+
+    /**
+     * @param string|null $property
+     *
+     * @return iterable<array-key, mixed>
+     */
+    public function json(string $property = null): iterable
+    {
+        foreach ($this as $response) {
+            yield $response->json($property);
+        }
+    }
+
+    /**
+     * @param string|null $property
+     * @param bool $lazy
+     *
+     * @return ($lazy is true ? \Illuminate\Support\LazyCollection<array-key, mixed> : \Illuminate\Support\Collection<array-key, mixed>)
+     */
+    public function collect(string $property = null, bool $lazy = true): LazyCollection|Collection
+    {
+        return LazyCollection::make($this->json($property))
+            ->unless($lazy)->collect();
+    }
 
     /**
      * Called by this base RequestPaginator, when it's rewinding.

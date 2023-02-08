@@ -6,6 +6,8 @@ namespace Saloon\Contracts;
 
 use Countable;
 use GuzzleHttp\Promise\PromiseInterface;
+use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
 use Iterator;
 use ReturnTypeWillChange;
 
@@ -83,6 +85,21 @@ interface RequestPaginator extends Countable, Iterator
      *        F.e., page, offset
      */
     public function totalPages(): int;
+
+    /**
+     * @param string|null $property
+     *
+     * @return iterable<array-key, mixed>
+     */
+    public function json(string $property = null): iterable;
+
+    /**
+     * @param string|null $property
+     * @param bool $lazy
+     *
+     * @return ($lazy is true ? \Illuminate\Support\LazyCollection<array-key, mixed> : \Illuminate\Support\Collection<array-key, mixed>)
+     */
+    public function collect(string $property = null, bool $lazy = true): LazyCollection|Collection;
 
     /**
      * The iteration methods are defined in the order PHP executes them.
