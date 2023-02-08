@@ -8,9 +8,6 @@ use Saloon\Contracts\Connector;
 use Saloon\Contracts\Request;
 use Saloon\Traits\Request\HasPagedPagination;
 
-// TODO 1: Look into serialising the Connector and original Request,
-//           to ensure that we can rebuild the paginator state without storing the entire multiverse.
-
 class PageRequestPaginator extends RequestPaginator
 {
     use HasPagedPagination;
@@ -47,7 +44,7 @@ class PageRequestPaginator extends RequestPaginator
             $this->current();
         }
 
-        return $this->currentResponse->json('json');
+        return $this->currentResponse->json('data');
     }
 
     /**

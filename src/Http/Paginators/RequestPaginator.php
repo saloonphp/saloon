@@ -14,9 +14,6 @@ use Saloon\Contracts\RequestPaginator as RequestPaginatorContract;
 use Saloon\Contracts\Response;
 use Saloon\Traits\Request\HasPagination;
 
-// TODO 1: Look into serialising the Connector and original Request,
-//           to ensure that we can rebuild the paginator state without storing the entire multiverse.
-
 abstract class RequestPaginator implements RequestPaginatorContract
 {
     use HasPagination;
@@ -97,6 +94,9 @@ abstract class RequestPaginator implements RequestPaginatorContract
      */
     abstract protected function applyPagination(Request $request): void;
 
+    /**
+     * @return bool
+     */
     abstract protected function isFinished(): bool;
 
     /**
@@ -184,7 +184,21 @@ abstract class RequestPaginator implements RequestPaginatorContract
      */
     public function rewind(): void
     {
+        // No need to rewind if we have no Response.
+        // I also brain-farted this one, as isFinished() usually checks for 'total pages' on the Response.
+        // If it doesn't have a Response, it'll call current(), causing a problematic bug.
+        // TODO: What will happen when we implement things like serialisation,
+        //         and the response will be null again, even though we're not on the first request?
+        if (is_null($this->currentResponse)) {
+            return;
+        }
+
         if (! $this->shouldRewind()) {
+            // When we break out of loops, next() won't be called.
+            // Because rewind() is then called on a new loop, we need to manually instruct a next().
+            // Otherwise we'll end up sending a new request for the latest retrieved page.
+            $this->next();
+
             return;
         }
 

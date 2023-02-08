@@ -33,6 +33,9 @@ test('you can continue a paginator from where it left off', function (): void {
 
     $paginator = $connector->paginate($request);
 
+    // Ensure it's disabled.
+    $paginator->enableRewinding(false);
+
     $responses = [];
     $superheroes = [];
 
@@ -40,13 +43,12 @@ test('you can continue a paginator from where it left off', function (): void {
         $responses[] = $response;
         $superheroes = [...$superheroes, ...$response->json('data')];
 
+        // Skip out of the first loop, to ensure in the second, that the RequestPaginator isn't reset.
         break;
     }
 
     expect($responses)->toHaveCount(1)->each->toBeInstanceOf(Response::class)
         ->and($superheroes)->toHaveCount(5)->each->toBeArray();
-
-    // TODO: See the test skip() message.
 
     foreach ($paginator as $response) {
         $responses[] = $response;
@@ -55,10 +57,7 @@ test('you can continue a paginator from where it left off', function (): void {
 
     expect($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class)
         ->and($superheroes)->toHaveCount(20)->each->toBeArray();
-})->skip(<<<'REASON'
-    Because we're breaking out of the previous loop, `Iterator::next()` won't be executed.
-    Which means that we'll redo the same request. We need to find a way to properly continue where we left off.
-REASON);
+});
 
 test('you can iterate a paginator in for loops', function (): void {
     $connector = new PageRequestPaginatorConnector;

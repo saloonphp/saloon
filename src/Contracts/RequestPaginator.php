@@ -111,7 +111,7 @@ interface RequestPaginator extends Countable, Iterator
      * 4. {@see Iterator::next()}      - increase the position
      * --------------------------------------------------------------------------------------------
      * Because of the order-, and how things are executed, it's recommended to retrieve an item in (2), as opposed to (4).
-     * I.e., only use (4) to increase the 'page' number (actual page, offset, etc), and then retrieve- and return the response.
+     * I.e., only use (4) to increase the 'page' number (actual page, offset, etc), and then retrieve- and return the response in (2).
      */
 
     /**

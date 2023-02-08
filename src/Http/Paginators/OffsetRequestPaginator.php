@@ -8,9 +8,6 @@ use Saloon\Contracts\Connector;
 use Saloon\Contracts\Request;
 use Saloon\Traits\Request\HasOffsetPagination;
 
-// TODO 1: Look into serialising the Connector and original Request,
-//           to ensure that we can rebuild the paginator state without storing the entire multiverse.
-
 class OffsetRequestPaginator extends RequestPaginator
 {
     use HasOffsetPagination;
