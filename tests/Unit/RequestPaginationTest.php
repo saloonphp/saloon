@@ -27,6 +27,26 @@ test('you can yield from a paginator', function (): void {
         ->and($superheroes)->toHaveCount(20)->each->toBeArray();
 });
 
+test('you can collect a paginator', function (): void {
+    $connector = new PageRequestPaginatorConnector;
+    $request = new PageGetSuperHeroesRequest;
+
+    $collection = $connector->paginate($request)->collect();
+
+    expect($collection)->toBeInstanceOf(LazyCollection::class);
+
+    $superheroes = [];
+
+    // TODO: This is definitely not the right way.
+    //       Make proper assertions.
+    $responses = $collection->each(function (Response $response) use (&$superheroes): void {
+        $superheroes = [...$superheroes, ...$response->json('data')];
+    })->all();
+
+    expect($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class)
+        ->and($superheroes)->toHaveCount(20)->each->toBeArray();
+});
+
 test('you can continue a paginator from where it left off', function (): void {
     $connector = new PageRequestPaginatorConnector;
     $request = new PageGetSuperHeroesRequest;

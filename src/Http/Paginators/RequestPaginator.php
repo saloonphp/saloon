@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Paginators;
 
+use Generator;
 use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
@@ -55,26 +56,26 @@ abstract class RequestPaginator implements RequestPaginatorContract
     ) {}
 
     /**
-     * @param string|null $property
+     * @param string|null $key
      *
-     * @return iterable<array-key, mixed>
+     * @return iterable<array-key, ($key is null ? Response : mixed)>
      */
-    public function json(string $property = null): iterable
+    public function json(string $key = null): iterable
     {
         foreach ($this as $response) {
-            yield $response->json($property);
+            yield is_null($key) ? $response : $response->json($key);
         }
     }
 
     /**
-     * @param string|null $property
+     * @param string|null $key
      * @param bool $lazy
      *
-     * @return ($lazy is true ? \Illuminate\Support\LazyCollection<array-key, mixed> : \Illuminate\Support\Collection<array-key, mixed>)
+     * @return ($lazy is true ? \Illuminate\Support\LazyCollection<array-key, ($key is null ? Response : mixed)> : \Illuminate\Support\Collection<array-key, ($key is null ? Response : mixed)>)
      */
-    public function collect(string $property = null, bool $lazy = true): LazyCollection|Collection
+    public function collect(string $key = null, bool $lazy = true): LazyCollection|Collection
     {
-        return LazyCollection::make($this->json($property))
+        return LazyCollection::make(fn (): Generator => yield from $this->json($key))
             ->unless($lazy)->collect();
     }
 
