@@ -23,7 +23,7 @@ trait HasPagedPagination
      *
      * @return $this
      */
-    public function usingPageName(string $pageName): static
+    public function setPageKeyName(string $pageName): static
     {
         $this->pageName = $pageName;
 
@@ -33,7 +33,7 @@ trait HasPagedPagination
     /**
      * @return string
      */
-    public function pageName(): string
+    public function getPageKeyName(): string
     {
         return $this->pageName;
     }

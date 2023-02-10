@@ -26,7 +26,7 @@ trait HasOffsetPagination
      *
      * @return $this
      */
-    public function usingOffsetName(string $offsetName): static
+    public function setOffsetKeyName(string $offsetName): static
     {
         $this->offsetName = $offsetName;
 
@@ -36,7 +36,7 @@ trait HasOffsetPagination
     /**
      * @return string
      */
-    public function offsetName(): string
+    public function getOffsetKeyName(): string
     {
         return $this->offsetName;
     }

@@ -75,10 +75,10 @@ class PageRequestPaginator extends RequestPaginator
     protected function applyPagination(Request $request): void
     {
         if (! is_null($this->limit())) {
-            $request->query()->add($this->limitName(), $this->limit());
+            $request->query()->add($this->getLimitKeyName(), $this->limit());
         }
 
-        $request->query()->add($this->pageName(), $this->currentPage());
+        $request->query()->add($this->getPageKeyName(), $this->currentPage());
     }
 
     /**

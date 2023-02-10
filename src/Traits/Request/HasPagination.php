@@ -18,7 +18,7 @@ trait HasPagination
      *
      * @return $this
      */
-    public function usingLimitName(string $limitName): static
+    public function setLimitKeyName(string $limitName): static
     {
         $this->limitName = $limitName;
 
@@ -28,7 +28,7 @@ trait HasPagination
     /**
      * @return string
      */
-    public function limitName(): string
+    public function getLimitKeyName(): string
     {
         return $this->limitName;
     }
