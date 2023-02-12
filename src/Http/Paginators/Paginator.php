@@ -305,16 +305,6 @@ abstract class Paginator implements PaginatorContract
     }
 
     /**
-     * Get the query parameter key for the limit
-     *
-     * @return string
-     */
-    public function getLimitKeyName(): string
-    {
-        return $this->limitKeyName;
-    }
-
-    /**
      * Get the limit of the paginator
      *
      * @return int|null

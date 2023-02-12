@@ -72,8 +72,8 @@ class OffsetRequestPaginator extends Paginator
     protected function applyPagination(Request $request): void
     {
         $request->query()->merge([
-            $this->getLimitKeyName() => $this->limit(),
-            $this->getOffsetKeyName() => $this->currentOffset(),
+            $this->limitKeyName => $this->limit(),
+            $this->offsetKeyName => $this->currentOffset(),
         ]);
     }
 
