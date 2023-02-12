@@ -132,8 +132,6 @@ interface Paginator extends Countable, Iterator
      * Get the current response in the iterator
      *
      * @return \Saloon\Contracts\Response|\GuzzleHttp\Promise\PromiseInterface
-     *
-     * @TODO: Proper return type hint, for tools to resolve when either one is returned (async or not).
      */
     public function current(): Response|PromiseInterface;
 

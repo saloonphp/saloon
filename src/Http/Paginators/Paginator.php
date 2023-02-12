@@ -230,42 +230,46 @@ abstract class Paginator implements PaginatorContract
     }
 
     /**
+     * Rewind the paginator back to the beginning
+     *
      * @return void
      */
     public function rewind(): void
     {
-        // No need to rewind if we have no Response.
-        // I also brain-farted this one, as isFinished() usually checks for 'total pages' on the Response.
-        // If it doesn't have a Response, it'll call current(), causing a problematic bug.
-        // TODO: What will happen when we implement things like serialisation,
-        //         and the response will be null again, even though we're not on the first request?
         if (is_null($this->currentResponse)) {
             return;
         }
 
         if (! $this->shouldRewind()) {
-            // When we break out of loops, next() won't be called.
-            // Because rewind() is then called on a new loop, we need to manually instruct a next().
-            // Otherwise we'll end up sending a new request for the latest retrieved page.
+            // When we break out of loops, next() won't be called. Because rewind() is then called
+            // on a new loop, we need to manually instruct a next(). Otherwise we'll end up
+            // sending a new request for the latest retrieved page.
+
             $this->next();
 
             return;
         }
 
+        // Run the reset method on the paginator instance, so it can perform any property
+        // resets that they need.
+
         $this->reset();
 
-        // Nullify the current response, so we don't accidentally check if there are more pages, even though we're starting over.
+        // Nullify the current response, so we don't accidentally check if there are
+        // more pages, even though we're starting over.
+
         $this->currentResponse = null;
     }
 
     /**
+     * Check if the iterator is valid
+     *
      * @return bool
      */
     public function valid(): bool
     {
-        // If we haven't sent a request yet, and therefore don't have any response, the iterator is still valid.
-        // It's only ever invalid when we have sent a request, retrieved the response, and have no more pages after that.
-        // Otherwise PHP would immediately terminate  the iteration, without sending a request.
+        // If we haven't made any requests yet, then the iterator is valid.
+
         if (is_null($this->currentResponse)) {
             return true;
         }
@@ -274,9 +278,9 @@ abstract class Paginator implements PaginatorContract
     }
 
     /**
-     * @return \Saloon\Contracts\Response|\GuzzleHttp\Promise\PromiseInterface
+     * Retrieve the current page
      *
-     * @TODO: Proper return type hint, for tools to resolve when either one is returned (async or not).
+     * @return \Saloon\Contracts\Response|\GuzzleHttp\Promise\PromiseInterface
      */
     public function current(): Response|PromiseInterface
     {
