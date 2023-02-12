@@ -4,18 +4,25 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Paginators;
 
-use Saloon\Contracts\Connector;
 use Saloon\Contracts\Request;
-use Saloon\Traits\Request\HasOffsetPagination;
+use Saloon\Contracts\Connector;
 
-class OffsetRequestPaginator extends RequestPaginator
+class OffsetRequestPaginator extends Paginator
 {
-    use HasOffsetPagination;
-
     /**
      * @var int
      */
     protected readonly int $originalOffset;
+
+    /**
+     * @var string
+     */
+    protected string $offsetName = 'offset';
+
+    /**
+     * @var int
+     */
+    protected int $currentOffset = 0;
 
     /**
      * @param \Saloon\Contracts\Connector $connector
@@ -37,7 +44,7 @@ class OffsetRequestPaginator extends RequestPaginator
     /**
      * @return int
      */
-    public function totalEntries(): int
+    public function totalEntriesInResponse(): int
     {
         // Make sure we have a response.
         if (is_null($this->currentResponse)) {
@@ -57,7 +64,7 @@ class OffsetRequestPaginator extends RequestPaginator
             $this->current();
         }
 
-        return (int) ceil($this->totalEntries() / $this->limit());
+        return (int) ceil($this->totalEntriesInResponse() / $this->limit());
     }
 
     protected function reset(): void
@@ -85,7 +92,7 @@ class OffsetRequestPaginator extends RequestPaginator
      */
     protected function isFinished(): bool
     {
-        return $this->currentOffset() >= $this->totalEntries();
+        return $this->currentOffset() >= $this->totalEntriesInResponse();
     }
 
     /**
@@ -103,5 +110,33 @@ class OffsetRequestPaginator extends RequestPaginator
     public function next(): void
     {
         $this->currentOffset += $this->limit();
+    }
+
+    /**
+     * @param string $offsetName
+     *
+     * @return $this
+     */
+    public function setOffsetKeyName(string $offsetName): static
+    {
+        $this->offsetName = $offsetName;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOffsetKeyName(): string
+    {
+        return $this->offsetName;
+    }
+
+    /**
+     * @return int
+     */
+    public function currentOffset(): int
+    {
+        return $this->currentOffset;
     }
 }

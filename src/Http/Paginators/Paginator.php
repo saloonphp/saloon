@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Saloon\Http\Paginators;
 
 use Generator;
-use GuzzleHttp\Promise\PromiseInterface;
-use Illuminate\Support\Collection;
-use Illuminate\Support\LazyCollection;
-use Saloon\Contracts\Connector;
 use Saloon\Contracts\Pool;
 use Saloon\Contracts\Request;
-use Saloon\Contracts\RequestPaginator as RequestPaginatorContract;
 use Saloon\Contracts\Response;
+use Saloon\Contracts\Connector;
+use Illuminate\Support\Collection;
+use Illuminate\Support\LazyCollection;
+use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Traits\Request\HasPagination;
+use Saloon\Contracts\Paginator as PaginatorContract;
 
-abstract class RequestPaginator implements RequestPaginatorContract
+abstract class Paginator implements PaginatorContract
 {
     use HasPagination;
 
@@ -33,7 +33,7 @@ abstract class RequestPaginator implements RequestPaginatorContract
      *
      * @var bool
      *
-     * @see \Saloon\Contracts\RequestPaginator::enableRewinding()
+     * @see \Saloon\Contracts\Paginator::enableRewinding()
      *
      * @TODO Come up with a better name for this method.
      */
@@ -53,7 +53,8 @@ abstract class RequestPaginator implements RequestPaginatorContract
         protected readonly Connector $connector,
         protected readonly Request $originalRequest,
         protected readonly ?int $limit = null,
-    ) {}
+    ) {
+    }
 
     /**
      * @param string|null $key

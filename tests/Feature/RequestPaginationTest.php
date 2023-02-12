@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-use GuzzleHttp\Promise\PromiseInterface;
-use Illuminate\Support\LazyCollection;
 use Saloon\Contracts\Response;
-use Saloon\Tests\Fixtures\Connectors\OffsetRequestPaginatorConnector;
-use Saloon\Tests\Fixtures\Connectors\PageRequestPaginatorConnector;
-use Saloon\Tests\Fixtures\Requests\OffsetGetSuperHeroesRequest;
+use Saloon\Tests\Fixtures\Connectors\PagePaginatorConnector;
 use Saloon\Tests\Fixtures\Requests\PageGetSuperHeroesRequest;
+use Saloon\Tests\Fixtures\Connectors\OffsetPaginatorConnector;
+use Saloon\Tests\Fixtures\Requests\OffsetGetSuperHeroesRequest;
 
 test('you can configure a page paginator, and iterate over every request/response', function (): void {
-    $connector = new PageRequestPaginatorConnector;
+    $connector = new PagePaginatorConnector;
     $request = new PageGetSuperHeroesRequest;
 
     $paginator = $connector->paginate($request);
@@ -29,7 +27,7 @@ test('you can configure a page paginator, and iterate over every request/respons
 });
 
 test('you can configure a offset paginator, and iterate over every request/response', function (): void {
-    $connector = new OffsetRequestPaginatorConnector;
+    $connector = new OffsetPaginatorConnector;
     $request = new OffsetGetSuperHeroesRequest;
 
     $paginator = $connector->paginate($request, limit: 5);

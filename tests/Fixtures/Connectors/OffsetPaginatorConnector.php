@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Contracts\HasRequestPagination as HasRequestPaginationContract;
-use Saloon\Contracts\Request;
-use Saloon\Contracts\RequestPaginator;
 use Saloon\Http\Connector;
-use Saloon\Http\Paginators\OffsetRequestPaginator;
-use Saloon\Traits\Connector\HasRequestPagination;
+use Saloon\Contracts\Request;
+use Saloon\Contracts\Paginator;
 use Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\Http\Paginators\OffsetRequestPaginator;
+use Saloon\Contracts\HasPagination;
 
-class OffsetRequestPaginatorConnector extends Connector implements HasRequestPaginationContract
+class OffsetPaginatorConnector extends Connector implements HasPagination
 {
     use AcceptsJson;
-    use HasRequestPagination;
 
     /**
      * Define the base url of the api.
@@ -28,12 +26,13 @@ class OffsetRequestPaginatorConnector extends Connector implements HasRequestPag
     }
 
     /**
+     * Create a paginator instance
+     *
      * @param \Saloon\Contracts\Request $request
      * @param mixed ...$additionalArguments
-     *
-     * @return \Saloon\Contracts\RequestPaginator
+     * @return \Saloon\Contracts\Paginator
      */
-    protected function resolvePaginator(Request $request, mixed ...$additionalArguments): RequestPaginator
+    public function paginate(Request $request, mixed ...$additionalArguments): Paginator
     {
         return new OffsetRequestPaginator($this, $request, ...$additionalArguments);
     }

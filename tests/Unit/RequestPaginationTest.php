@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Unit;
 
-use GuzzleHttp\Promise\PromiseInterface;
-use Illuminate\Support\LazyCollection;
 use Saloon\Contracts\Response;
-use Saloon\Tests\Fixtures\Connectors\PageRequestPaginatorConnector;
+use Illuminate\Support\LazyCollection;
+use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Tests\Fixtures\Connectors\PagePaginatorConnector;
 use Saloon\Tests\Fixtures\Requests\PageGetSuperHeroesRequest;
 
 test('you can yield from a paginator', function (): void {
-    $connector = new PageRequestPaginatorConnector;
+    $connector = new PagePaginatorConnector;
     $request = new PageGetSuperHeroesRequest;
 
     $responses = [];
@@ -28,7 +28,7 @@ test('you can yield from a paginator', function (): void {
 });
 
 test('you can collect a paginator', function (): void {
-    $connector = new PageRequestPaginatorConnector;
+    $connector = new PagePaginatorConnector;
     $request = new PageGetSuperHeroesRequest;
 
     $collection = $connector->paginate($request)->collect();
@@ -48,7 +48,7 @@ test('you can collect a paginator', function (): void {
 });
 
 test('you can continue a paginator from where it left off', function (): void {
-    $connector = new PageRequestPaginatorConnector;
+    $connector = new PagePaginatorConnector;
     $request = new PageGetSuperHeroesRequest;
 
     $paginator = $connector->paginate($request);
@@ -80,7 +80,7 @@ test('you can continue a paginator from where it left off', function (): void {
 });
 
 test('you can iterate a paginator in for loops', function (): void {
-    $connector = new PageRequestPaginatorConnector;
+    $connector = new PagePaginatorConnector;
     $request = new PageGetSuperHeroesRequest;
 
     $paginator = $connector->paginate($request);
@@ -98,7 +98,7 @@ test('you can iterate a paginator in for loops', function (): void {
 });
 
 test('you can automagically rewind a paginator, starting over from the start in a new loop', function (): void {
-    $connector = new PageRequestPaginatorConnector;
+    $connector = new PagePaginatorConnector;
     $request = new PageGetSuperHeroesRequest;
 
     $paginator = $connector->paginate($request);
@@ -127,7 +127,7 @@ test('you can automagically rewind a paginator, starting over from the start in 
 });
 
 test('you can manually rewind a paginator, starting over from the start', function (): void {
-    $connector = new PageRequestPaginatorConnector;
+    $connector = new PagePaginatorConnector;
     $request = new PageGetSuperHeroesRequest;
 
     $paginator = $connector->paginate($request);
@@ -162,7 +162,7 @@ test('you can manually rewind a paginator, starting over from the start', functi
 });
 
 test('you can iterate a paginator asynchronously', function (): void {
-    $connector = new PageRequestPaginatorConnector;
+    $connector = new PagePaginatorConnector;
     $request = new PageGetSuperHeroesRequest;
 
     $paginator = $connector->paginate($request);
@@ -188,7 +188,7 @@ test('you can iterate a paginator asynchronously', function (): void {
 });
 
 test('you can pool a paginator', function (): void {
-    $connector = new PageRequestPaginatorConnector;
+    $connector = new PagePaginatorConnector;
     $request = new PageGetSuperHeroesRequest;
 
     $responses = [];

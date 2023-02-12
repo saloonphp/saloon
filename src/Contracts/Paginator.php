@@ -4,40 +4,48 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
+use Iterator;
 use Countable;
-use GuzzleHttp\Promise\PromiseInterface;
+use ReturnTypeWillChange;
 use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
-use Iterator;
-use ReturnTypeWillChange;
+use GuzzleHttp\Promise\PromiseInterface;
 
 /**
  * @extends  \Iterator<array-key, \Saloon\Contracts\Response|\GuzzleHttp\Promise\PromiseInterface>
  */
-interface RequestPaginator extends Countable, Iterator
+interface Paginator extends Countable, Iterator
 {
     /**
+     * Create a paginator pool
+     *
      * @param callable(int $pendingRequests): (int)|int $concurrency
      * @param callable(Response $response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
      * @param callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $exceptionHandler
      */
     public function pool(
         callable|int $concurrency = 5,
-        ?callable $responseHandler = null,
-        ?callable $exceptionHandler = null,
+        ?callable    $responseHandler = null,
+        ?callable    $exceptionHandler = null,
     ): Pool;
 
     /**
+     * Set the asynchronous mode on the paginator
+     *
      * @return $this
      */
     public function async(bool $async = true): static;
 
     /**
+     * Checks if the paginator will return asynchronous requests or not
+     *
      * @return bool
      */
     public function isAsync(): bool;
 
     /**
+     * Checks if rewinding is enabled
+     *
      * @return bool
      */
     public function rewindingEnabled(): bool;
@@ -52,41 +60,49 @@ interface RequestPaginator extends Countable, Iterator
      * @param bool $enableRewinding
      *
      * @return $this
-     *
-     * @TODO Come up with a better name for this method.
      */
     public function enableRewinding(bool $enableRewinding = true): static;
 
     /**
-     * Returns whether or not the Paginator will continue where it left off in a previous loop, or not.
+     * Returns whether the Paginator will continue where it left off in a previous loop, or not.
      *
      * @return bool
      *
-     * @see \Saloon\Contracts\RequestPaginator::enableRewinding()
-     *
-     * @TODO Come up with a better name for this method.
+     * @see \Saloon\Contracts\Paginator::enableRewinding()
      */
     public function shouldRewind(): bool;
 
     /**
-     * @return int Total entries this requested resource has, regardless of amount of queries done or that will be made.
+     * Total entries this requested resource has on the current page, regardless of amount of queries done or that will be made.
+     *
+     * @return int
+     */
+    public function totalEntriesInResponse(): int;
+
+    /**
+     * Total entries this requested resource has, regardless of amount of queries done or that will be made.
+     *
+     * @return int
      */
     public function totalEntries(): int;
 
     /**
+     * The limit of the paginator, like per-page.
+     *
      * @return int|null
      */
     public function limit(): ?int;
 
     /**
-     * @return int Total pages the requested resource has, given the payload, query parameters, etc, that are sent.
+     * Total pages the requested resource has, given the payload, query parameters, etc, that are sent.
      *
-     * @TODO: Make naming more abstract and versatile.
-     *        F.e., page, offset
+     * @return int
      */
     public function totalPages(): int;
 
     /**
+     * Iterate through a JSON array of results, key can be provided like "results".
+     *
      * @param string|null $key
      *
      * @return iterable<array-key, mixed>
@@ -94,6 +110,10 @@ interface RequestPaginator extends Countable, Iterator
     public function json(string $key = null): iterable;
 
     /**
+     * Create a Laravel collection for the results.
+     *
+     * Will return a collection of responses or a key can be provided to iterate over results.
+     *
      * @param string|null $key
      * @param bool $lazy
      *
@@ -102,29 +122,22 @@ interface RequestPaginator extends Countable, Iterator
     public function collect(string $key = null, bool $lazy = true): LazyCollection|Collection;
 
     /**
-     * The iteration methods are defined in the order PHP executes them.
-     * 0. {@see Iterator::rewind()}    - reset to first position (only run when it's first being iterated)
-     * --------------------------------------------------------------------------------------------
-     * 1. {@see Iterator::valid()}     - check if the iterator is valid (current position has an item)
-     * 2. {@see Iterator::current()}   - retrieve the item in the current position
-     * 3. {@see Iterator::key()}       - retrieve the current position
-     * 4. {@see Iterator::next()}      - increase the position
-     * --------------------------------------------------------------------------------------------
-     * Because of the order-, and how things are executed, it's recommended to retrieve an item in (2), as opposed to (4).
-     * I.e., only use (4) to increase the 'page' number (actual page, offset, etc), and then retrieve- and return the response in (2).
-     */
-
-    /**
+     * Rewind the iterator
+     *
      * @return void
      */
     public function rewind(): void;
 
     /**
+     * Check if the iterator is stil valid
+     *
      * @return bool
      */
     public function valid(): bool;
 
     /**
+     * Get the current response in the iterator
+     *
      * @return \Saloon\Contracts\Response|\GuzzleHttp\Promise\PromiseInterface
      *
      * @TODO: Proper return type hint, for tools to resolve when either one is returned (async or not).
@@ -132,12 +145,16 @@ interface RequestPaginator extends Countable, Iterator
     public function current(): Response|PromiseInterface;
 
     /**
+     * Get the current key of the iterator
+     *
      * @return string|int
      */
     #[ReturnTypeWillChange]
     public function key(): string|int;
 
     /**
+     * Move the iterator to the next item
+     *
      * @return void
      */
     public function next(): void;
