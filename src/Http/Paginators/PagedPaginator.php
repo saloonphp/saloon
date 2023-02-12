@@ -89,7 +89,7 @@ class PagedPaginator extends Paginator
             $request->query()->add($this->limitKeyName, $this->limit());
         }
 
-        $request->query()->add($this->pageKeyName, $this->currentPage());
+        $request->query()->add($this->pageKeyName, $this->currentPage);
     }
 
     /**
@@ -101,7 +101,7 @@ class PagedPaginator extends Paginator
     protected function isFinished(): bool
     {
         if ($this->isAsync()) {
-            return $this->currentPage() > $this->totalPages();
+            return $this->currentPage > $this->totalPages();
         }
 
         return is_null($this->currentResponse->json($this->nextPageKeyName));
@@ -115,7 +115,7 @@ class PagedPaginator extends Paginator
     #[ReturnTypeWillChange]
     public function key(): int
     {
-        return $this->currentPage();
+        return $this->currentPage;
     }
 
     /**
@@ -126,16 +126,6 @@ class PagedPaginator extends Paginator
     public function next(): void
     {
         $this->currentPage++;
-    }
-
-    /**
-     * Get the current page
-     *
-     * @return int
-     */
-    public function currentPage(): int
-    {
-        return $this->currentPage;
     }
 
     /**

@@ -66,3 +66,8 @@ function paginationMockClient(string $prefix): MockClient
         }
     ]);
 }
+
+function superheroes(): array
+{
+    return json_decode(file_get_contents(__DIR__ . '/Fixtures/Static/superheroes.json'), true, 512, JSON_THROW_ON_ERROR);
+}

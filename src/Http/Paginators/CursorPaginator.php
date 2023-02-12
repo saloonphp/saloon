@@ -3,10 +3,66 @@
 namespace Saloon\Http\Paginators;
 
 use ReturnTypeWillChange;
+use Saloon\Contracts\Connector;
 use Saloon\Contracts\Request;
 
 class CursorPaginator extends Paginator
 {
+    /**
+     * The original page the paginator started from
+     *
+     * @var int
+     */
+    protected readonly int $originalPage;
+
+    /**
+     * The current page of the iterator
+     *
+     * @var int
+     */
+    protected int $currentPage = 1;
+
+    /**
+     * The current cursor that was provided
+     *
+     * @var string|int|null
+     */
+    protected string|int|null $currentCursor = null;
+
+    /**
+     * The JSON key for the next page URL that contains the cursor
+     *
+     * @var string
+     */
+    protected string $nextPageKey = 'next_page_url';
+
+    /**
+     * The key/query parameter that contains the cursor
+     *
+     * @var string
+     */
+    protected string $cursorKey = 'cursor';
+
+    /**
+     * Constructor
+     *
+     * @param \Saloon\Contracts\Connector $connector
+     * @param \Saloon\Contracts\Request $originalRequest
+     * @param int|null $limit
+     * @param int $page
+     */
+    public function __construct(
+        Connector $connector,
+        Request   $originalRequest,
+        ?int      $limit = null,
+        int       $page = 1,
+    )
+    {
+        parent::__construct($connector, $originalRequest, $limit);
+
+        $this->currentPage = $this->originalPage = $page;
+    }
+
     /**
      * Move the iterator to the next item
      *
@@ -14,7 +70,8 @@ class CursorPaginator extends Paginator
      */
     public function next(): void
     {
-        // TODO: Implement next() method.
+        $this->currentPage++;
+        $this->currentCursor = $this->getCursor();
     }
 
     /**
@@ -24,7 +81,8 @@ class CursorPaginator extends Paginator
      */
     protected function reset(): void
     {
-        // TODO: Implement reset() method.
+        $this->currentPage = $this->originalPage;
+        $this->currentCursor = null;
     }
 
     /**
@@ -36,17 +94,22 @@ class CursorPaginator extends Paginator
      */
     protected function applyPagination(Request $request): void
     {
-        // TODO: Implement applyPagination() method.
+        $request->query()->add($this->cursorKey, $this->currentCursor);
     }
 
     /**
      * Check if the paginator has any more pages
      *
      * @return bool
+     * @throws \Saloon\Exceptions\PaginatorException
      */
     protected function isFinished(): bool
     {
-        // TODO: Implement isFinished() method.
+        if ($this->isAsync()) {
+            return $this->currentPage > $this->totalPages();
+        }
+
+        return is_null($this->currentResponse->json($this->nextPageKey));
     }
 
     /**
@@ -57,6 +120,63 @@ class CursorPaginator extends Paginator
     #[ReturnTypeWillChange]
     public function key(): string|int
     {
-        // TODO: Implement key() method.
+        return $this->currentPage;
+    }
+
+    /**
+     * Get the cursor
+     *
+     * @return string|int|null
+     */
+    protected function getCursor(): string|int|null
+    {
+        $cursor = parse_url($this->currentResponse->json($this->nextPageKey) ?? '', PHP_URL_QUERY);
+
+        if (empty($cursor)) {
+            return null;
+        }
+
+        parse_str($cursor, $formatted);
+
+        return $formatted[$this->cursorKey] ?? null;
+    }
+
+    /**
+     * Set the current page
+     *
+     * @param int $currentPage
+     * @return CursorPaginator
+     */
+    public function setCurrentPage(int $currentPage): static
+    {
+        $this->currentPage = $currentPage;
+
+        return $this;
+    }
+
+    /**
+     * Set the JSON key for the next page URL that contains the cursor
+     *
+     * @param string $nextPageKey
+     * @return CursorPaginator
+     */
+    public function setNextPageKey(string $nextPageKey): static
+    {
+        $this->nextPageKey = $nextPageKey;
+
+        return $this;
+    }
+
+    /**
+     * Set the key/query parameter that contains the cursor
+     *
+     * @param string $cursorKey
+     * @return CursorPaginator
+     */
+    public function setCursorKey(string $cursorKey): static
+    {
+        $this->cursorKey = $cursorKey;
+
+        return $this;
     }
 }

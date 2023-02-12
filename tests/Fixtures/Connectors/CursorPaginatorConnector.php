@@ -8,6 +8,7 @@ use Saloon\Http\Connector;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Paginator;
 use Saloon\Contracts\HasPagination;
+use Saloon\Http\Paginators\CursorPaginator;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Http\Paginators\PagedPaginator;
 
@@ -34,6 +35,6 @@ class CursorPaginatorConnector extends Connector implements HasPagination
      */
     public function paginate(Request $request, mixed ...$additionalArguments): Paginator
     {
-        return new PagedPaginator($this, $request, 5, ...$additionalArguments);
+        return new CursorPaginator($this, $request);
     }
 }

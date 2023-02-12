@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Response;
+use Saloon\Tests\Fixtures\Connectors\CursorPaginatorConnector;
 use Saloon\Tests\Fixtures\Connectors\PagePaginatorConnector;
+use Saloon\Tests\Fixtures\Requests\CursorGetSuperHeroesRequest;
 use Saloon\Tests\Fixtures\Requests\PageGetSuperHeroesRequest;
 use Saloon\Tests\Fixtures\Connectors\OffsetPaginatorConnector;
 use Saloon\Tests\Fixtures\Connectors\MinimalPaginatorConnector;
@@ -24,8 +26,9 @@ test('you can configure a page paginator, and iterate over every request/respons
         $superheroes = [...$superheroes, ...$response->json('data')];
     }
 
-    expect($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class)
-        ->and($superheroes)->toHaveCount(20)->each->toBeArray();
+    expect($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class);
+    expect($superheroes)->toHaveCount(20)->each->toBeArray();
+    expect($superheroes)->toEqual(superheroes());
 });
 
 test('you can configure a offset paginator, and iterate over every request/response', function (): void {
@@ -42,9 +45,30 @@ test('you can configure a offset paginator, and iterate over every request/respo
         $superheroes = [...$superheroes, ...$response->json('data')];
     }
 
-    expect($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class)
-        ->and($superheroes)->toHaveCount(20)->each->toBeArray();
+    expect($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class);
+    expect($superheroes)->toHaveCount(20)->each->toBeArray();
+    expect($superheroes)->toEqual(superheroes());
 });
+
+test('you can configure a cursor paginator, and iterate over every request/response', function (): void {
+    $connector = new CursorPaginatorConnector;
+    $request = new CursorGetSuperHeroesRequest;
+
+    $paginator = $connector->paginate($request, limit: 5);
+
+    $responses = [];
+    $superheroes = [];
+
+    foreach ($paginator as $response) {
+        $responses[] = $response;
+        $superheroes = [...$superheroes, ...$response->json('data')];
+    }
+
+    expect($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class);
+    expect($superheroes)->toHaveCount(20)->each->toBeArray();
+    expect($superheroes)->toEqual(superheroes());
+});
+
 
 test('you can configure a minimal paginator, and iterate over every request/response', function (): void {
     $connector = new MinimalPaginatorConnector;
@@ -60,8 +84,9 @@ test('you can configure a minimal paginator, and iterate over every request/resp
         $superheroes = [...$superheroes, ...$response->json('data')];
     }
 
-    expect($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class)
-        ->and($superheroes)->toHaveCount(20)->each->toBeArray();
+    expect($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class);
+    expect($superheroes)->toHaveCount(20)->each->toBeArray();
+    expect($superheroes)->toEqual(superheroes());
 });
 
 test('you can iterate a paginator asynchronously', function (): void {
@@ -88,6 +113,8 @@ test('you can iterate a paginator asynchronously', function (): void {
         ->and($promises)->toHaveCount(4)->each->toBeInstanceOf(PromiseInterface::class)
         ->and($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class)
         ->and($superheroes)->toHaveCount(20)->each->toBeArray();
+
+    expect(collect($superheroes)->sortBy('id')->toArray())->toEqual(superheroes());
 });
 
 test('you can pool a paginator', function (): void {
@@ -108,4 +135,6 @@ test('you can pool a paginator', function (): void {
 
     expect($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class)
         ->and($superheroes)->toHaveCount(20)->each->toBeArray();
+
+    expect(collect($superheroes)->sortBy('id')->toArray())->toEqual(superheroes());
 });
