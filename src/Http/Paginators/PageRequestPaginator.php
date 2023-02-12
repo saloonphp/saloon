@@ -61,6 +61,8 @@ class PageRequestPaginator extends Paginator
     ) {
         parent::__construct($connector, $originalRequest, $perPage);
 
+        $this->setLimitKeyName('per_page');
+
         $this->currentPage = $this->originalPage = $page;
     }
 
@@ -135,7 +137,7 @@ class PageRequestPaginator extends Paginator
      *
      * @return bool
      */
-    protected function isFinished(): bool
+    protected function hasMorePages(): bool
     {
         // Because of how iterators are iterated, we need to check if the current page
         // is more than the total pages. Checking if it's equal to total pages will

@@ -12,51 +12,57 @@ use Saloon\Contracts\Connector;
 use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Traits\Request\HasPagination;
 use Saloon\Contracts\Paginator as PaginatorContract;
 
 abstract class Paginator implements PaginatorContract
 {
-    use HasPagination;
+    /**
+     * The query parameter key for the limit
+     *
+     * @var string
+     */
+    protected string $limitKeyName = 'limit';
 
     /**
+     * Check if the paginator will use asynchronous responses or not
+     *
      * @var bool
      */
     protected bool $async = false;
 
     /**
-     * Whether or not the Paginator will skip rewinding, if it's used in a new loop.
-     * If not, it'll continue where it left off in a previous loop.
-     * While iterators, by design, starts over, Request Paginators should continue.
-     * Otherwise it'll re-send earlier requests.
-     * So make it default not to rewind, unless explicitly told to do so.
+     * Whether the Paginator will skip rewinding
      *
      * @var bool
-     *
-     * @see \Saloon\Contracts\Paginator::enableRewinding()
-     *
-     * @TODO Come up with a better name for this method.
      */
     protected bool $rewindingEnabled = false;
 
     /**
+     * The current response in the iterator
+     *
      * @var \Saloon\Contracts\Response|null
      */
     protected ?Response $currentResponse = null;
 
     /**
+     * Constructor
+     *
      * @param \Saloon\Contracts\Connector $connector
      * @param \Saloon\Contracts\Request $originalRequest
      * @param int|null $limit
      */
     public function __construct(
         protected readonly Connector $connector,
-        protected readonly Request $originalRequest,
-        protected readonly ?int $limit = null,
-    ) {
+        protected readonly Request   $originalRequest,
+        protected readonly ?int      $limit = null,
+    )
+    {
+        //
     }
 
     /**
+     * Iterate through a JSON array of results, key can be provided like "results".
+     *
      * @param string|null $key
      *
      * @return iterable<array-key, ($key is null ? Response : mixed)>
@@ -64,11 +70,15 @@ abstract class Paginator implements PaginatorContract
     public function json(string $key = null): iterable
     {
         foreach ($this as $response) {
-            yield is_null($key) ? $response : $response->json($key);
+            yield $response->json($key);
         }
     }
 
     /**
+     * Create a Laravel collection for the results.
+     *
+     * Will return a collection of responses or a key can be provided to iterate over results.
+     *
      * @param string|null $key
      * @param bool $lazy
      *
@@ -76,7 +86,7 @@ abstract class Paginator implements PaginatorContract
      */
     public function collect(string $key = null, bool $lazy = true): LazyCollection|Collection
     {
-        return LazyCollection::make(fn (): Generator => yield from $this->json($key))
+        return LazyCollection::make(fn(): Generator => yield from $this->json($key))
             ->unless($lazy)->collect();
     }
 
@@ -97,11 +107,15 @@ abstract class Paginator implements PaginatorContract
     abstract protected function applyPagination(Request $request): void;
 
     /**
+     * Check if the paginator has any more pages
+     *
      * @return bool
      */
-    abstract protected function isFinished(): bool;
+    abstract protected function hasMorePages(): bool;
 
     /**
+     * Create a paginator pool
+     *
      * @param callable(int $pendingRequests): (int)|int $concurrency
      * @param callable(\Saloon\Contracts\Response $response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
      * @param callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $exceptionHandler
@@ -109,11 +123,12 @@ abstract class Paginator implements PaginatorContract
      */
     public function pool(
         callable|int $concurrency = 5,
-        ?callable $responseHandler = null,
-        ?callable $exceptionHandler = null,
-    ): Pool {
-        // The purpose of a pool is to concurrently send requests.
-        // So 'force' set async.
+        ?callable    $responseHandler = null,
+        ?callable    $exceptionHandler = null,
+    ): Pool
+    {
+        // The purpose of a pool is to concurrently send requests. So 'force' set async.
+
         $this->async();
 
         return $this->connector->pool(
@@ -125,8 +140,9 @@ abstract class Paginator implements PaginatorContract
     }
 
     /**
-     * @param bool $async
+     * Set the asynchronous mode on the paginator
      *
+     * @param bool $async
      * @return $this
      */
     public function async(bool $async = true): static
@@ -137,6 +153,8 @@ abstract class Paginator implements PaginatorContract
     }
 
     /**
+     * Checks if the paginator will return asynchronous requests or not
+     *
      * @return bool
      */
     public function isAsync(): bool
@@ -145,6 +163,8 @@ abstract class Paginator implements PaginatorContract
     }
 
     /**
+     * Checks if rewinding is enabled
+     *
      * @return bool
      */
     public function rewindingEnabled(): bool
@@ -153,8 +173,9 @@ abstract class Paginator implements PaginatorContract
     }
 
     /**
-     * @param bool $enableRewinding
+     * Makes the Paginator continue where it left off in an earlier loop, instead of rewinding/'resetting' when used in a new loop.
      *
+     * @param bool $enableRewinding
      * @return $this
      */
     public function enableRewinding(bool $enableRewinding = true): static
@@ -165,15 +186,18 @@ abstract class Paginator implements PaginatorContract
     }
 
     /**
+     * Returns whether the Paginator will continue where it left off in a previous loop, or not.
+     *
      * @return bool
      */
     public function shouldRewind(): bool
     {
-        return $this->rewindingEnabled()
-            || $this->isFinished();
+        return $this->rewindingEnabled() || ! $this->hasMorePages();
     }
 
     /**
+     * Count the total pages in the paginator
+     *
      * @return int
      */
     public function count(): int
@@ -222,7 +246,7 @@ abstract class Paginator implements PaginatorContract
             return true;
         }
 
-        return ! $this->isFinished();
+        return $this->hasMorePages();
     }
 
     /**
@@ -244,10 +268,44 @@ abstract class Paginator implements PaginatorContract
 
         // If we don't wait for the 'first' response, we won't know how many iterations we need.
         // Awaiting one response is a small price to pay.
+
         if (is_null($this->currentResponse)) {
             $this->currentResponse = $promise->wait();
         }
 
         return $promise;
+    }
+
+    /**
+     * Set the query parameter key for the limit
+     *
+     * @param string $limitName
+     * @return $this
+     */
+    public function setLimitKeyName(string $limitName): static
+    {
+        $this->limitKeyName = $limitName;
+
+        return $this;
+    }
+
+    /**
+     * Get the query parameter key for the limit
+     *
+     * @return string
+     */
+    public function getLimitKeyName(): string
+    {
+        return $this->limitKeyName;
+    }
+
+    /**
+     * Get the limit of the paginator
+     *
+     * @return int|null
+     */
+    public function limit(): ?int
+    {
+        return $this->limit;
     }
 }
