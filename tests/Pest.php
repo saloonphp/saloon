@@ -67,6 +67,16 @@ function paginationMockClient(string $prefix): MockClient
     ]);
 }
 
+/**
+ * @returns array{
+ *     id: int<1, max>,
+ *     superhero: string,
+ *     publisher: string,
+ *     alter_ego: string,
+ *     first_appearance: string,
+ *     characters: string,
+ * }
+ */
 function superheroes(): array
 {
     return json_decode(file_get_contents(__DIR__ . '/Fixtures/Static/superheroes.json'), true, 512, JSON_THROW_ON_ERROR);
