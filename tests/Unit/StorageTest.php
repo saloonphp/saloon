@@ -34,11 +34,11 @@ test('you can retrieve a file from storage', function () {
 });
 
 test('you can put a file in storage', function () {
-    $filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon'));
+    $filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon/Testing'));
     $filesystem->deleteDirectory('/');
     $filesystem->createDirectory('/');
 
-    $storage = new Storage('tests/Fixtures/Saloon');
+    $storage = new Storage('tests/Fixtures/Saloon/Testing');
 
     expect($storage->exists('example.txt'))->toBeFalse();
 
