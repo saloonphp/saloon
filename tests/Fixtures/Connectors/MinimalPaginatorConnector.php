@@ -7,10 +7,9 @@ namespace Saloon\Tests\Fixtures\Connectors;
 use Saloon\Http\Connector;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Paginator;
-use Saloon\Tests\Fixtures\Paginators\MinimalPaginator;
-use Saloon\Traits\Plugins\AcceptsJson;
-use Saloon\Http\Paginators\PageRequestPaginator;
 use Saloon\Contracts\HasPagination;
+use Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\Tests\Fixtures\Paginators\MinimalPaginator;
 
 class MinimalPaginatorConnector extends Connector implements HasPagination
 {

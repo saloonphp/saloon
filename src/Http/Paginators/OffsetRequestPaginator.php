@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Paginators;
 
+use ReturnTypeWillChange;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Connector;
-use ReturnTypeWillChange;
 
 class OffsetRequestPaginator extends Paginator
 {

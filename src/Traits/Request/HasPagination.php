@@ -6,9 +6,4 @@ namespace Saloon\Traits\Request;
 
 trait HasPagination
 {
-
-
-
-
-
 }

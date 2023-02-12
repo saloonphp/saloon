@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use Saloon\Contracts\Response;
-use Saloon\Tests\Fixtures\Connectors\MinimalPaginatorConnector;
 use Saloon\Tests\Fixtures\Connectors\PagePaginatorConnector;
 use Saloon\Tests\Fixtures\Requests\PageGetSuperHeroesRequest;
 use Saloon\Tests\Fixtures\Connectors\OffsetPaginatorConnector;
+use Saloon\Tests\Fixtures\Connectors\MinimalPaginatorConnector;
 use Saloon\Tests\Fixtures\Requests\OffsetGetSuperHeroesRequest;
 
 test('you can configure a page paginator, and iterate over every request/response', function (): void {

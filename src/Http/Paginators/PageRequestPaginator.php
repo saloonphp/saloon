@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Paginators;
 
+use ReturnTypeWillChange;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Connector;
-use ReturnTypeWillChange;
 
 class PageRequestPaginator extends Paginator
 {
@@ -58,8 +58,7 @@ class PageRequestPaginator extends Paginator
         Request   $originalRequest,
         int       $perPage,
         int       $page = 1,
-    )
-    {
+    ) {
         parent::__construct($connector, $originalRequest, $perPage);
 
         $this->currentPage = $this->originalPage = $page;

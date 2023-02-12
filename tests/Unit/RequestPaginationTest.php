@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Unit;
 
-use Illuminate\Support\Collection;
 use Saloon\Contracts\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Tests\Fixtures\Connectors\PagePaginatorConnector;

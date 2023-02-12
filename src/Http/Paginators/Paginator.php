@@ -12,8 +12,8 @@ use Saloon\Contracts\Connector;
 use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Contracts\Paginator as PaginatorContract;
 use Saloon\Exceptions\PaginatorException;
+use Saloon\Contracts\Paginator as PaginatorContract;
 
 abstract class Paginator implements PaginatorContract
 {
@@ -63,8 +63,7 @@ abstract class Paginator implements PaginatorContract
         protected readonly Connector $connector,
         protected readonly Request   $originalRequest,
         protected readonly ?int      $limit = null,
-    )
-    {
+    ) {
         //
     }
 
@@ -140,8 +139,7 @@ abstract class Paginator implements PaginatorContract
         callable|int $concurrency = 5,
         ?callable    $responseHandler = null,
         ?callable    $exceptionHandler = null,
-    ): Pool
-    {
+    ): Pool {
         // The purpose of a pool is to concurrently send requests. So 'force' set async.
 
         $this->async();
