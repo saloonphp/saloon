@@ -90,7 +90,7 @@ class OffsetRequestPaginator extends Paginator
     /**
      * @return bool
      */
-    protected function hasMorePages(): bool
+    protected function isFinished(): bool
     {
         return $this->currentOffset() >= $this->totalEntriesInResponse();
     }

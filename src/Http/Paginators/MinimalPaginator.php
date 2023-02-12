@@ -29,9 +29,13 @@ class MinimalPaginator extends Paginator
      *
      * @return bool
      */
-    protected function hasMorePages(): bool
+    protected function isFinished(): bool
     {
-        return is_string($this->currentResponse->json('next_page_url'));
+        if ($this->async === true) {
+            return $this->currentPage > ((int)ceil($this->totalEntries() / $this->limit));
+        }
+
+        return is_null($this->currentResponse->json('next_page_url'));
     }
 
     /**
@@ -52,21 +56,10 @@ class MinimalPaginator extends Paginator
      */
     public function totalEntries(): int
     {
+        return $this->currentResponse->json('total');
+
         // Don't need
         // TODO: Implement totalEntries() method.
-    }
-
-    /**
-     * Total pages the requested resource has, given the payload, query parameters, etc, that are sent.
-     *
-     * @return int
-     */
-    public function totalPages(): int
-    {
-        return 1;
-
-        // Don't need
-        // TODO: Implement totalPages() method.
     }
 
     /**
@@ -103,5 +96,15 @@ class MinimalPaginator extends Paginator
     #[ReturnTypeWillChange] public function key(): string|int
     {
         return $this->currentPage;
+    }
+
+    /**
+     * Total pages the requested resource has, given the payload, query parameters, etc, that are sent.
+     *
+     * @return int
+     */
+    public function totalPages(): int
+    {
+        // TODO: Implement totalPages() method.
     }
 }

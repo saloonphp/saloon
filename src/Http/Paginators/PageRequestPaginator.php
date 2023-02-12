@@ -137,7 +137,7 @@ class PageRequestPaginator extends Paginator
      *
      * @return bool
      */
-    protected function hasMorePages(): bool
+    protected function isFinished(): bool
     {
         // Because of how iterators are iterated, we need to check if the current page
         // is more than the total pages. Checking if it's equal to total pages will

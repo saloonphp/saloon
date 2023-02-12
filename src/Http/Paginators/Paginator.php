@@ -111,7 +111,7 @@ abstract class Paginator implements PaginatorContract
      *
      * @return bool
      */
-    abstract protected function hasMorePages(): bool;
+    abstract protected function isFinished(): bool;
 
     /**
      * Create a paginator pool
@@ -192,7 +192,7 @@ abstract class Paginator implements PaginatorContract
      */
     public function shouldRewind(): bool
     {
-        return $this->rewindingEnabled() || ! $this->hasMorePages();
+        return $this->rewindingEnabled() || $this->isFinished();
     }
 
     /**
@@ -246,7 +246,9 @@ abstract class Paginator implements PaginatorContract
             return true;
         }
 
-        return $this->hasMorePages();
+        ray(! $this->isFinished());
+
+        return ! $this->isFinished();
     }
 
     /**
