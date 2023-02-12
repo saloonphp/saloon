@@ -11,7 +11,7 @@ use ReturnTypeWillChange;
 class PageRequestPaginator extends Paginator
 {
     /**
-     * The original page we started from
+     * The original page the paginator started from
      *
      * @var int
      */
@@ -32,18 +32,18 @@ class PageRequestPaginator extends Paginator
     protected string $pageKeyName = 'page';
 
     /**
-     * The query parameter name for the results
-     *
-     * @var string
-     */
-    protected string $resultsKeyName = 'data';
-
-    /**
-     * The query parameter name for the total
+     * The JSON key name for the total
      *
      * @var string
      */
     protected string $totalKeyName = 'total';
+
+    /**
+     * The JSON key name for the next page URL
+     *
+     * @var string
+     */
+    protected string $nextPageKeyName = 'next_page_url';
 
     /**
      * Constructor
@@ -55,53 +55,14 @@ class PageRequestPaginator extends Paginator
      */
     public function __construct(
         Connector $connector,
-        Request $originalRequest,
-        int $perPage,
-        int $page = 1,
-    ) {
+        Request   $originalRequest,
+        int       $perPage,
+        int       $page = 1,
+    )
+    {
         parent::__construct($connector, $originalRequest, $perPage);
 
-        $this->setLimitKeyName('per_page');
-
         $this->currentPage = $this->originalPage = $page;
-    }
-
-    /**
-     * Get the total entries in the current response result set
-     *
-     * @return int
-     */
-    public function totalEntriesInResponse(): int
-    {
-        if (is_null($this->currentResponse)) {
-            $this->current();
-        }
-
-        return count($this->currentResponse->json($this->resultsKeyName));
-    }
-
-    /**
-     * Total entries for the whole resource
-     *
-     * @return int
-     */
-    public function totalEntries(): int
-    {
-        if (is_null($this->currentResponse)) {
-            $this->current();
-        }
-
-        return $this->currentResponse->json($this->totalKeyName);
-    }
-
-    /**
-     * Get the total pages in the result set
-     *
-     * @return int
-     */
-    public function totalPages(): int
-    {
-        return (int)ceil($this->totalEntries() / $this->limit);
     }
 
     /**
@@ -133,18 +94,18 @@ class PageRequestPaginator extends Paginator
     }
 
     /**
-     * Check if the paginator has  finished
+     * Check if the paginator has finished
      *
      * @return bool
+     * @throws \Saloon\Exceptions\PaginatorException
      */
     protected function isFinished(): bool
     {
-        // Because of how iterators are iterated, we need to check if the current page
-        // is more than the total pages. Checking if it's equal to total pages will
-        // fall 1 page short, as Iterators are first increased, then checked for
-        // validity.
+        if ($this->isAsync()) {
+            return $this->currentPage() > $this->totalPages();
+        }
 
-        return $this->currentPage() > $this->totalPages();
+        return is_null($this->currentResponse->json($this->nextPageKeyName));
     }
 
     /**
@@ -205,19 +166,6 @@ class PageRequestPaginator extends Paginator
     }
 
     /**
-     * Set the results key name
-     *
-     * @param string $resultsKeyName
-     * @return PageRequestPaginator
-     */
-    public function setResultsKeyName(string $resultsKeyName): static
-    {
-        $this->resultsKeyName = $resultsKeyName;
-
-        return $this;
-    }
-
-    /**
      * Set the total key name
      *
      * @param string $totalKeyName
@@ -226,6 +174,19 @@ class PageRequestPaginator extends Paginator
     public function setTotalKeyName(string $totalKeyName): static
     {
         $this->totalKeyName = $totalKeyName;
+
+        return $this;
+    }
+
+    /**
+     * Set the next page key name
+     *
+     * @param string $nextPageKeyName
+     * @return PageRequestPaginator
+     */
+    public function setNextPageKeyName(string $nextPageKeyName): static
+    {
+        $this->nextPageKeyName = $nextPageKeyName;
 
         return $this;
     }

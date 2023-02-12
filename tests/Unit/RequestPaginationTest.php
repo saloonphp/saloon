@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Unit;
 
+use Illuminate\Support\Collection;
 use Saloon\Contracts\Response;
 use Illuminate\Support\LazyCollection;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -37,13 +38,65 @@ test('you can collect a paginator', function (): void {
 
     $superheroes = [];
 
-    // TODO: This is definitely not the right way.
-    //       Make proper assertions.
     $responses = $collection->each(function (Response $response) use (&$superheroes): void {
         $superheroes = [...$superheroes, ...$response->json('data')];
     })->all();
 
     expect($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class)
+        ->and($superheroes)->toHaveCount(20)->each->toBeArray();
+});
+
+test('you can collect a paginator with a regular collection', function (): void {
+    $connector = new PagePaginatorConnector;
+    $request = new PageGetSuperHeroesRequest;
+
+    $collection = $connector->paginate($request)->collect(lazy: false);
+
+    expect($collection)->toBeInstanceOf(Collection::class);
+
+    $superheroes = [];
+
+    $responses = $collection->each(function (Response $response) use (&$superheroes): void {
+        $superheroes = [...$superheroes, ...$response->json('data')];
+    })->all();
+
+    expect($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class)
+        ->and($superheroes)->toHaveCount(20)->each->toBeArray();
+});
+
+test('you can collect a paginator with a key to yield results', function (): void {
+    $connector = new PagePaginatorConnector;
+    $request = new PageGetSuperHeroesRequest;
+
+    $collection = $connector->paginate($request)->collect('data');
+
+    expect($collection)->toBeInstanceOf(LazyCollection::class);
+
+    $superheroes = [];
+
+    $responses = $collection->each(function (array $data) use (&$superheroes): void {
+        $superheroes[] = $data;
+    })->all();
+
+    expect($responses)->toHaveCount(20)->each->toBeArray()
+        ->and($superheroes)->toHaveCount(20)->each->toBeArray();
+});
+
+test('you can collect a paginator with a key to yield results without collapsing', function (): void {
+    $connector = new PagePaginatorConnector;
+    $request = new PageGetSuperHeroesRequest;
+
+    $collection = $connector->paginate($request)->collect('data', collapse: false);
+
+    expect($collection)->toBeInstanceOf(LazyCollection::class);
+
+    $superheroes = [];
+
+    $responses = $collection->each(function (array $data) use (&$superheroes): void {
+        $superheroes = array_merge($superheroes, $data);
+    })->all();
+
+    expect($responses)->toHaveCount(4)->each->toBeArray()
         ->and($superheroes)->toHaveCount(20)->each->toBeArray();
 });
 

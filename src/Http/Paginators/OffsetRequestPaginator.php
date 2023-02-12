@@ -6,25 +6,34 @@ namespace Saloon\Http\Paginators;
 
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Connector;
+use ReturnTypeWillChange;
 
 class OffsetRequestPaginator extends Paginator
 {
     /**
+     * The original offset the paginator started from
+     *
      * @var int
      */
     protected readonly int $originalOffset;
 
     /**
+     * The query parameter key name for offset
+     *
      * @var string
      */
-    protected string $offsetName = 'offset';
+    protected string $offsetKeyName = 'offset';
 
     /**
+     * The current offset the iterator is on
+     *
      * @var int
      */
     protected int $currentOffset = 0;
 
     /**
+     * Constructor
+     *
      * @param \Saloon\Contracts\Connector $connector
      * @param \Saloon\Contracts\Request $originalRequest
      * @param int $limit
@@ -42,41 +51,22 @@ class OffsetRequestPaginator extends Paginator
     }
 
     /**
-     * @return int
+     * Reset the iterator
+     *
+     * @return void
      */
-    public function totalEntriesInResponse(): int
-    {
-        // Make sure we have a response.
-        if (is_null($this->currentResponse)) {
-            $this->current();
-        }
-
-        return $this->currentResponse->json('total');
-    }
-
-    /**
-     * @return int
-     */
-    public function totalPages(): int
-    {
-        // Make sure we have a response.
-        if (is_null($this->currentResponse)) {
-            $this->current();
-        }
-
-        return (int) ceil($this->totalEntriesInResponse() / $this->limit());
-    }
-
     protected function reset(): void
     {
-        // Rewind to the original offset, instead of strictly the first offset.
-        // Otherwise it could be an 'unexpected' behaviour, if we don't start over from where we started.
+        // We'll rewind to the original offset instead strictly the first page. This is so
+        // we start from when the user requested us to start from, not actually the beginning.
+
         $this->currentOffset = $this->originalOffset;
     }
 
     /**
-     * @param \Saloon\Contracts\Request $request
+     * Apply the pagination to the current request instance
      *
+     * @param \Saloon\Contracts\Request $request
      * @return void
      */
     protected function applyPagination(Request $request): void
@@ -88,23 +78,30 @@ class OffsetRequestPaginator extends Paginator
     }
 
     /**
+     * Check if the paginator has finished
+     *
      * @return bool
+     * @throws \Saloon\Exceptions\PaginatorException
      */
     protected function isFinished(): bool
     {
-        return $this->currentOffset() >= $this->totalEntriesInResponse();
+        return $this->currentOffset() >= $this->totalResults();
     }
 
     /**
+     * Get the current key of the iterator
+     *
      * @return int
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function key(): int
     {
         return $this->currentOffset();
     }
 
     /**
+     * Move the iterator to the next item
+     *
      * @return void
      */
     public function next(): void
@@ -113,26 +110,21 @@ class OffsetRequestPaginator extends Paginator
     }
 
     /**
-     * @param string $offsetName
+     * Set the offset query parameter key name
      *
-     * @return $this
+     * @param string $offsetKeyName
+     * @return OffsetRequestPaginator
      */
-    public function setOffsetKeyName(string $offsetName): static
+    public function setOffsetKeyName(string $offsetKeyName): static
     {
-        $this->offsetName = $offsetName;
+        $this->offsetKeyName = $offsetKeyName;
 
         return $this;
     }
 
     /**
-     * @return string
-     */
-    public function getOffsetKeyName(): string
-    {
-        return $this->offsetName;
-    }
-
-    /**
+     * Get the current offset
+     *
      * @return int
      */
     public function currentOffset(): int

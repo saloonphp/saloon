@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Paginator as PaginatorContract;
+use Saloon\Exceptions\PaginatorException;
 
 abstract class Paginator implements PaginatorContract
 {
@@ -22,6 +23,13 @@ abstract class Paginator implements PaginatorContract
      * @var string
      */
     protected string $limitKeyName = 'limit';
+
+    /**
+     * The JSON key name for the results
+     *
+     * @var string
+     */
+    protected string $resultsKeyName = 'data';
 
     /**
      * Check if the paginator will use asynchronous responses or not
@@ -81,13 +89,20 @@ abstract class Paginator implements PaginatorContract
      *
      * @param string|null $key
      * @param bool $lazy
-     *
+     * @param bool $collapse
      * @return ($lazy is true ? \Illuminate\Support\LazyCollection<array-key, ($key is null ? Response : mixed)> : \Illuminate\Support\Collection<array-key, ($key is null ? Response : mixed)>)
      */
-    public function collect(string $key = null, bool $lazy = true): LazyCollection|Collection
+    public function collect(string $key = null, bool $lazy = true, bool $collapse = true): LazyCollection|Collection
     {
-        return LazyCollection::make(fn(): Generator => yield from $this->json($key))
-            ->unless($lazy)->collect();
+        $collection = LazyCollection::make(function () use ($key): Generator {
+            return isset($key) ? yield from $this->json($key) : yield from $this;
+        });
+
+        if (isset($key) && $collapse === true) {
+            $collection = $collection->collapse();
+        }
+
+        return $lazy === true ? $collection : $collection->collect();
     }
 
     /**
@@ -309,5 +324,51 @@ abstract class Paginator implements PaginatorContract
     public function limit(): ?int
     {
         return $this->limit;
+    }
+
+    /**
+     * Calculate the total results
+     *
+     * @return int
+     * @throws \Saloon\Exceptions\PaginatorException
+     */
+    public function totalResults(): int
+    {
+        if (is_null($this->currentResponse)) {
+            $this->current();
+        }
+
+        // Todo: Switch to total key
+        $total = $this->currentResponse->json('total');
+
+        if (is_null($total)) {
+            throw new PaginatorException('Unable to calculate the total results from the response. Make sure the total key is correct.');
+        }
+
+        return $total;
+    }
+
+    /**
+     * Get the total pages in the result set
+     *
+     * @return int
+     * @throws \Saloon\Exceptions\PaginatorException
+     */
+    public function totalPages(): int
+    {
+        return (int)ceil($this->totalResults() / $this->limit);
+    }
+
+    /**
+     * Set the results key name
+     *
+     * @param string $resultsKeyName
+     * @return PageRequestPaginator
+     */
+    public function setResultsKeyName(string $resultsKeyName): static
+    {
+        $this->resultsKeyName = $resultsKeyName;
+
+        return $this;
     }
 }

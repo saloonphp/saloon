@@ -73,18 +73,11 @@ interface Paginator extends Countable, Iterator
     public function shouldRewind(): bool;
 
     /**
-     * Total entries this requested resource has on the current page, regardless of amount of queries done or that will be made.
-     *
-     * @return int
-     */
-    public function totalEntriesInResponse(): int;
-
-    /**
      * Total entries this requested resource has, regardless of amount of queries done or that will be made.
      *
      * @return int
      */
-    public function totalEntries(): int;
+    public function totalResults(): int;
 
     /**
      * The limit of the paginator, like per-page.
@@ -116,10 +109,10 @@ interface Paginator extends Countable, Iterator
      *
      * @param string|null $key
      * @param bool $lazy
-     *
+     * @param bool $collapse
      * @return ($lazy is true ? \Illuminate\Support\LazyCollection<array-key, mixed> : \Illuminate\Support\Collection<array-key, mixed>)
      */
-    public function collect(string $key = null, bool $lazy = true): LazyCollection|Collection;
+    public function collect(string $key = null, bool $lazy = true, bool $collapse = true): LazyCollection|Collection;
 
     /**
      * Rewind the iterator
@@ -129,7 +122,7 @@ interface Paginator extends Countable, Iterator
     public function rewind(): void;
 
     /**
-     * Check if the iterator is stil valid
+     * Check if the iterator is still valid
      *
      * @return bool
      */
