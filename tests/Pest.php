@@ -62,7 +62,7 @@ function paginationMockClient(string $prefix): MockClient
         '*' => function (PendingRequest $pendingRequest) use ($prefix) {
             $query = http_build_query($pendingRequest->query()->all());
 
-            return MockResponse::fixture($prefix . ':' . $query);
+            return MockResponse::fixture($prefix . '-' . $query);
         },
     ]);
 }
