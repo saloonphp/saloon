@@ -8,7 +8,7 @@ use ReturnTypeWillChange;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Connector;
 
-class PageRequestPaginator extends Paginator
+class PagedPaginator extends Paginator
 {
     /**
      * The original page the paginator started from
@@ -142,7 +142,7 @@ class PageRequestPaginator extends Paginator
      * Set the current page
      *
      * @param int $currentPage
-     * @return PageRequestPaginator
+     * @return PagedPaginator
      */
     public function setCurrentPage(int $currentPage): static
     {
@@ -165,23 +165,10 @@ class PageRequestPaginator extends Paginator
     }
 
     /**
-     * Set the total key name
-     *
-     * @param string $totalKeyName
-     * @return PageRequestPaginator
-     */
-    public function setTotalKeyName(string $totalKeyName): static
-    {
-        $this->totalKeyName = $totalKeyName;
-
-        return $this;
-    }
-
-    /**
      * Set the next page key name
      *
      * @param string $nextPageKeyName
-     * @return PageRequestPaginator
+     * @return PagedPaginator
      */
     public function setNextPageKeyName(string $nextPageKeyName): static
     {

@@ -9,7 +9,7 @@ use Saloon\Contracts\Request;
 use Saloon\Contracts\Paginator;
 use Saloon\Contracts\HasPagination;
 use Saloon\Traits\Plugins\AcceptsJson;
-use Saloon\Http\Paginators\PageRequestPaginator;
+use Saloon\Http\Paginators\PagedPaginator;
 
 class PagePaginatorConnector extends Connector implements HasPagination
 {
@@ -34,6 +34,6 @@ class PagePaginatorConnector extends Connector implements HasPagination
      */
     public function paginate(Request $request, mixed ...$additionalArguments): Paginator
     {
-        return new PageRequestPaginator($this, $request, 5, ...$additionalArguments);
+        return new PagedPaginator($this, $request, 5, ...$additionalArguments);
     }
 }

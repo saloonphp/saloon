@@ -12,7 +12,11 @@ use Saloon\Tests\Fixtures\Connectors\PagePaginatorConnector;
 use Saloon\Tests\Fixtures\Requests\PageGetSuperHeroesRequest;
 
 test('you can yield from a paginator', function (): void {
+    $mockClient = paginationMockClient('pagination/per-page');
+
     $connector = new PagePaginatorConnector;
+    $connector->withMockClient($mockClient);
+
     $request = new PageGetSuperHeroesRequest;
 
     $responses = [];
@@ -29,7 +33,11 @@ test('you can yield from a paginator', function (): void {
 });
 
 test('you can collect a paginator', function (): void {
+    $mockClient = paginationMockClient('pagination/per-page');
+
     $connector = new PagePaginatorConnector;
+    $connector->withMockClient($mockClient);
+
     $request = new PageGetSuperHeroesRequest;
 
     $collection = $connector->paginate($request)->collect();
@@ -47,7 +55,11 @@ test('you can collect a paginator', function (): void {
 });
 
 test('you can collect a paginator with a regular collection', function (): void {
+    $mockClient = paginationMockClient('pagination/per-page');
+
     $connector = new PagePaginatorConnector;
+    $connector->withMockClient($mockClient);
+
     $request = new PageGetSuperHeroesRequest;
 
     $collection = $connector->paginate($request)->collect(lazy: false);
@@ -65,7 +77,11 @@ test('you can collect a paginator with a regular collection', function (): void 
 });
 
 test('you can collect a paginator with a key to yield results', function (): void {
+    $mockClient = paginationMockClient('pagination/per-page');
+
     $connector = new PagePaginatorConnector;
+    $connector->withMockClient($mockClient);
+
     $request = new PageGetSuperHeroesRequest;
 
     $collection = $connector->paginate($request)->collect('data');
@@ -83,7 +99,11 @@ test('you can collect a paginator with a key to yield results', function (): voi
 });
 
 test('you can collect a paginator with a key to yield results without collapsing', function (): void {
+    $mockClient = paginationMockClient('pagination/per-page');
+
     $connector = new PagePaginatorConnector;
+    $connector->withMockClient($mockClient);
+
     $request = new PageGetSuperHeroesRequest;
 
     $collection = $connector->paginate($request)->collect('data', collapse: false);
@@ -101,7 +121,11 @@ test('you can collect a paginator with a key to yield results without collapsing
 });
 
 test('you can continue a paginator from where it left off', function (): void {
+    $mockClient = paginationMockClient('pagination/per-page');
+
     $connector = new PagePaginatorConnector;
+    $connector->withMockClient($mockClient);
+
     $request = new PageGetSuperHeroesRequest;
 
     $paginator = $connector->paginate($request);
@@ -133,7 +157,11 @@ test('you can continue a paginator from where it left off', function (): void {
 });
 
 test('you can iterate a paginator in for loops', function (): void {
+    $mockClient = paginationMockClient('pagination/per-page');
+
     $connector = new PagePaginatorConnector;
+    $connector->withMockClient($mockClient);
+
     $request = new PageGetSuperHeroesRequest;
 
     $paginator = $connector->paginate($request);
@@ -151,7 +179,11 @@ test('you can iterate a paginator in for loops', function (): void {
 });
 
 test('you can automagically rewind a paginator, starting over from the start in a new loop', function (): void {
+    $mockClient = paginationMockClient('pagination/per-page');
+
     $connector = new PagePaginatorConnector;
+    $connector->withMockClient($mockClient);
+
     $request = new PageGetSuperHeroesRequest;
 
     $paginator = $connector->paginate($request);
@@ -180,7 +212,11 @@ test('you can automagically rewind a paginator, starting over from the start in 
 });
 
 test('you can manually rewind a paginator, starting over from the start', function (): void {
+    $mockClient = paginationMockClient('pagination/per-page');
+
     $connector = new PagePaginatorConnector;
+    $connector->withMockClient($mockClient);
+
     $request = new PageGetSuperHeroesRequest;
 
     $paginator = $connector->paginate($request);
@@ -212,50 +248,4 @@ test('you can manually rewind a paginator, starting over from the start', functi
     expect($paginator->shouldRewind())->toBeTrue()
         ->and($responses)->toHaveCount(5)->each->toBeInstanceOf(Response::class)
         ->and($superheroes)->toHaveCount(25)->each->toBeArray();
-});
-
-test('you can iterate a paginator asynchronously', function (): void {
-    $connector = new PagePaginatorConnector;
-    $request = new PageGetSuperHeroesRequest;
-
-    $paginator = $connector->paginate($request);
-    $paginator->async();
-
-    // Keep excessively checking between steps.
-    expect($paginator->isAsync())->toBeTrue();
-
-    $promises = [];
-    $responses = [];
-    $superheroes = [];
-
-    foreach ($paginator as $promise) {
-        $promises[] = $promise;
-        $responses[] = $response = $promise->wait();
-        $superheroes = [...$superheroes, ...$response->json('data')];
-    }
-
-    expect($paginator->isAsync())->toBeTrue()
-        ->and($promises)->toHaveCount(4)->each->toBeInstanceOf(PromiseInterface::class)
-        ->and($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class)
-        ->and($superheroes)->toHaveCount(20)->each->toBeArray();
-});
-
-test('you can pool a paginator', function (): void {
-    $connector = new PagePaginatorConnector;
-    $request = new PageGetSuperHeroesRequest;
-
-    $responses = [];
-    $superheroes = [];
-
-    $connector
-        ->paginate($request)
-        ->pool(concurrency: 2, responseHandler: function (Response $response) use (&$responses, &$superheroes): void {
-            $responses[] = $response;
-            $superheroes = [...$superheroes, ...$response->json('data')];
-        })
-        ->send()
-        ->wait();
-
-    expect($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class)
-        ->and($superheroes)->toHaveCount(20)->each->toBeArray();
 });

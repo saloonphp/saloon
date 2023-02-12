@@ -8,7 +8,7 @@ use ReturnTypeWillChange;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Connector;
 
-class OffsetRequestPaginator extends Paginator
+class OffsetPaginator extends Paginator
 {
     /**
      * The original offset the paginator started from
@@ -113,7 +113,7 @@ class OffsetRequestPaginator extends Paginator
      * Set the offset query parameter key name
      *
      * @param string $offsetKeyName
-     * @return OffsetRequestPaginator
+     * @return OffsetPaginator
      */
     public function setOffsetKeyName(string $offsetKeyName): static
     {

@@ -14,9 +14,12 @@ use Illuminate\Support\LazyCollection;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\PaginatorException;
 use Saloon\Contracts\Paginator as PaginatorContract;
+use Saloon\Traits\Makeable;
 
 abstract class Paginator implements PaginatorContract
 {
+    use Makeable;
+
     /**
      * The query parameter key for the limit
      *
@@ -30,6 +33,13 @@ abstract class Paginator implements PaginatorContract
      * @var string
      */
     protected string $resultsKeyName = 'data';
+
+    /**
+     * The JSON key name for the total
+     *
+     * @var string
+     */
+    protected string $totalKeyName = 'total';
 
     /**
      * Check if the paginator will use asynchronous responses or not
@@ -64,7 +74,7 @@ abstract class Paginator implements PaginatorContract
         protected readonly Request   $originalRequest,
         protected readonly ?int      $limit = null,
     ) {
-        //
+        $this->configure();
     }
 
     /**
@@ -105,7 +115,7 @@ abstract class Paginator implements PaginatorContract
     }
 
     /**
-     * Called by this base RequestPaginator, when it's rewinding.
+     * Called by this base paginator, when it's rewinding.
      *
      * @return void
      */
@@ -212,6 +222,7 @@ abstract class Paginator implements PaginatorContract
      * Count the total pages in the paginator
      *
      * @return int
+     * @throws \Saloon\Exceptions\PaginatorException
      */
     public function count(): int
     {
@@ -258,8 +269,6 @@ abstract class Paginator implements PaginatorContract
         if (is_null($this->currentResponse)) {
             return true;
         }
-
-        ray(! $this->isFinished());
 
         return ! $this->isFinished();
     }
@@ -326,8 +335,7 @@ abstract class Paginator implements PaginatorContract
             $this->current();
         }
 
-        // Todo: Switch to total key
-        $total = $this->currentResponse->json('total');
+        $total = $this->currentResponse->json($this->totalKeyName);
 
         if (is_null($total)) {
             throw new PaginatorException('Unable to calculate the total results from the response. Make sure the total key is correct.');
@@ -351,12 +359,35 @@ abstract class Paginator implements PaginatorContract
      * Set the results key name
      *
      * @param string $resultsKeyName
-     * @return PageRequestPaginator
+     * @return PagedPaginator
      */
     public function setResultsKeyName(string $resultsKeyName): static
     {
         $this->resultsKeyName = $resultsKeyName;
 
         return $this;
+    }
+
+    /**
+     * Set the JSON key name for total
+     *
+     * @param string $totalKeyName
+     * @return Paginator
+     */
+    public function setTotalKeyName(string $totalKeyName): static
+    {
+        $this->totalKeyName = $totalKeyName;
+
+        return $this;
+    }
+
+    /**
+     * Configure the paginator
+     *
+     * @return void
+     */
+    protected function configure(): void
+    {
+        //
     }
 }
