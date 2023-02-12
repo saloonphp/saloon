@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Http\Paginators;
 
 use ReturnTypeWillChange;
-use Saloon\Contracts\Connector;
 use Saloon\Contracts\Request;
+use Saloon\Contracts\Connector;
 
 class CursorPaginator extends Paginator
 {
@@ -56,8 +58,7 @@ class CursorPaginator extends Paginator
         Request   $originalRequest,
         ?int      $limit = null,
         int       $page = 1,
-    )
-    {
+    ) {
         parent::__construct($connector, $originalRequest, $limit);
 
         $this->currentPage = $this->originalPage = $page;

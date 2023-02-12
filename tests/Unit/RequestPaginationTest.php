@@ -7,7 +7,6 @@ namespace Saloon\Tests\Unit;
 use Saloon\Contracts\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Tests\Fixtures\Connectors\PagePaginatorConnector;
 use Saloon\Tests\Fixtures\Requests\PageGetSuperHeroesRequest;
 

@@ -8,9 +8,8 @@ use Saloon\Http\Connector;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Paginator;
 use Saloon\Contracts\HasPagination;
-use Saloon\Http\Paginators\CursorPaginator;
 use Saloon\Traits\Plugins\AcceptsJson;
-use Saloon\Http\Paginators\PagedPaginator;
+use Saloon\Http\Paginators\CursorPaginator;
 
 class CursorPaginatorConnector extends Connector implements HasPagination
 {

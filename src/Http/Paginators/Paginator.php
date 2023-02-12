@@ -6,6 +6,7 @@ namespace Saloon\Http\Paginators;
 
 use Generator;
 use Saloon\Contracts\Pool;
+use Saloon\Traits\Makeable;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\Connector;
@@ -14,7 +15,6 @@ use Illuminate\Support\LazyCollection;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\PaginatorException;
 use Saloon\Contracts\Paginator as PaginatorContract;
-use Saloon\Traits\Makeable;
 
 abstract class Paginator implements PaginatorContract
 {

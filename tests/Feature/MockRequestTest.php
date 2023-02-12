@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Saloon\Helpers\MockConfig;
 use Saloon\Http\Response;
+use Saloon\Helpers\MockConfig;
 use Saloon\Http\PendingRequest;
 use League\Flysystem\Filesystem;
 use Saloon\Http\Faking\MockClient;
