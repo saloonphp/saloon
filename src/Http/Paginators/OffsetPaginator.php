@@ -113,7 +113,7 @@ class OffsetPaginator extends Paginator
      * Set the offset query parameter key name
      *
      * @param string $offsetKeyName
-     * @return OffsetPaginator
+     * @return $this
      */
     public function setOffsetKeyName(string $offsetKeyName): static
     {

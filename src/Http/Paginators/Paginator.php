@@ -359,7 +359,7 @@ abstract class Paginator implements PaginatorContract
      * Set the results key name
      *
      * @param string $resultsKeyName
-     * @return PagedPaginator
+     * @return $this
      */
     public function setResultsKeyName(string $resultsKeyName): static
     {
@@ -372,7 +372,7 @@ abstract class Paginator implements PaginatorContract
      * Set the JSON key name for total
      *
      * @param string $totalKeyName
-     * @return Paginator
+     * @return $this
      */
     public function setTotalKeyName(string $totalKeyName): static
     {

@@ -132,7 +132,7 @@ class PagedPaginator extends Paginator
      * Set the current page
      *
      * @param int $currentPage
-     * @return PagedPaginator
+     * @return $this
      */
     public function setCurrentPage(int $currentPage): static
     {
@@ -158,7 +158,7 @@ class PagedPaginator extends Paginator
      * Set the next page key name
      *
      * @param string $nextPageKeyName
-     * @return PagedPaginator
+     * @return $this
      */
     public function setNextPageKeyName(string $nextPageKeyName): static
     {
