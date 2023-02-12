@@ -53,12 +53,7 @@ interface Paginator extends Countable, Iterator
     /**
      * Makes the Paginator continue where it left off in an earlier loop, instead of rewinding/'resetting' when used in a new loop.
      *
-     * Iterables are, by nature, rewinding ('resetting') whenever you use it in a new loop.
-     * I.e., if you go through 2 iterations in a loop, then break out of it, and iterate again in a new loop, it'll be rewound to the first element.
-     * This makes sure that the rewinding step is skipped.
-     *
      * @param bool $enableRewinding
-     *
      * @return $this
      */
     public function enableRewinding(bool $enableRewinding = true): static;
