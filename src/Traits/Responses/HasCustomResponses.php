@@ -22,6 +22,6 @@ trait HasCustomResponses
      */
     public function resolveResponseClass(): ?string
     {
-        return empty($this->response) ? null : $this->response;
+        return $this->response ?? null;
     }
 }
