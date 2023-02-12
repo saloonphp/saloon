@@ -136,5 +136,5 @@ test('you can pool a paginator', function (): void {
     expect($responses)->toHaveCount(4)->each->toBeInstanceOf(Response::class)
         ->and($superheroes)->toHaveCount(20)->each->toBeArray();
 
-    expect(collect($superheroes)->sortBy('superhero')->toArray())->toEqual(collect(superheroes())->sortBy('superhero')->toArray());
+    expect(collect($superheroes)->sortBy('id')->values()->toArray())->toEqual(superheroes());
 });
