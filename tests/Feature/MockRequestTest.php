@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Saloon\Helpers\MockConfig;
 use Saloon\Http\Response;
 use Saloon\Http\PendingRequest;
 use League\Flysystem\Filesystem;
@@ -20,11 +21,17 @@ use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
 use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
 
-$filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon'));
+$filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon/Testing'));
 
 beforeEach(function () use ($filesystem) {
+    MockConfig::setFixturePath('tests/Fixtures/Saloon/Testing');
+
     $filesystem->deleteDirectory('/');
     $filesystem->createDirectory('/');
+});
+
+afterEach(function () {
+    MockConfig::setFixturePath('tests/Fixtures/Saloon');
 });
 
 test('a request can be mocked with a sequence', function () {

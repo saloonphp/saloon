@@ -14,6 +14,7 @@
 # Caches, externally stored stuff, etc
 .php-cs-fixer.cache
 .phpunit.result.cache
+tests/Fixtures/Saloon/Testing
 
 # environments/configs
 phpstan.neon
