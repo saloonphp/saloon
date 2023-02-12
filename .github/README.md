@@ -1,4 +1,4 @@
-<p align="center"><img src="/art/header.png" alt="saloon's branding hero"></p>
+<p align="center"><img src="/art/header.png" alt="Logo with brown western bar doors with western scene in background and text that says: Saloon, Your Lone Star of your API integrations"></p>
 
 <div align="center">
 
@@ -54,16 +54,16 @@ Saloon aims to solve this.
 
 ## Contributing
 
-Please see [here](https://github.com/Sammyjo20/Saloon/blob/main/.github/CONTRIBUTING.md) for more details about contributing.
+Please see [here](../.github/CONTRIBUTING.md) for more details about contributing.
 
 ## Security
 
-Please see [here](https://github.com/Sammyjo20/Saloon/blob/main/.github/SECURITY.md) for our security policy.
+Please see [here](../.github/SECURITY.md) for our security policy.
 
 ## Credits
 
 - [Sam Carré](https://github.com/Sammyjo20)
-- [All Contributors](../../contributors)
+- [All Contributors](https://github.com/Sammyjo20/Saloon/contributors)
 
 And a special thanks to [Caneco](https://twitter.com/caneco) for the logo ✨
 
