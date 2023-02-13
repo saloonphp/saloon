@@ -10,4 +10,5 @@ trait HasRequestProperties
     use HasQuery;
     use HasConfig;
     use HasMiddleware;
+    use HasDelay;
 }

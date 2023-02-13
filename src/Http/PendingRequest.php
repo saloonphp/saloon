@@ -193,6 +193,9 @@ class PendingRequest implements PendingRequestContract
             ->merge($connector->middleware())
             ->merge($request->middleware());
 
+        $delay = $request->delay()->all();
+        $this->delay()->set($delay);
+
         return $this;
     }
 
