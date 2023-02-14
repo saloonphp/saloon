@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\RequestProperties;
 
-use Ramsey\Uuid\Type\Integer;
 use Saloon\Repositories\Body\IntegerBodyRepository;
 
 trait HasDelay
