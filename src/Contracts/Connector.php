@@ -43,7 +43,7 @@ interface Connector extends Authenticatable, CanThrowRequestExceptions, Conditio
      *
      * @template TKey of array-key
      *
-     * @param iterable<TKey, \GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>|callable(\Saloon\Contracts\Connector): (iterable<TKey, \GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>) $requests
+     * @param iterable|callable(\Saloon\Contracts\Connector): (iterable<TKey, \GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>) $requests
      * @param int|callable(int $pendingRequests): (int) $concurrency
      * @param callable(\Saloon\Contracts\Response, TKey $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
      * @param callable(mixed $reason, TKey $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $exceptionHandler
