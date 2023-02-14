@@ -172,7 +172,7 @@ class GuzzleSender implements Sender
             $requestOptions[$configVariable] = $value;
         }
 
-        if ($pendingRequest->delay()->all() > 0) {
+        if ($pendingRequest->delay()->greaterThan(0)) {
             $requestOptions[RequestOptions::DELAY] = $pendingRequest->delay()->all();
         }
 
