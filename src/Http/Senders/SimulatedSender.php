@@ -70,8 +70,9 @@ class SimulatedSender implements Sender
 
         // We'll return the synchronous response directly
 
-        if($pendingRequest->getRequest()->delay()->all() > 0) {
-            usleep($pendingRequest->getRequest()->delay()->all() *1000);
+        if($pendingRequest->delay()->greaterThan(0)) {
+            $sleep = ($pendingRequest->delay()->all() *1000);
+            usleep($pendingRequest->delay()->all() *1000);
         }
 
         if ($asynchronous === false) {

@@ -125,6 +125,7 @@ class PendingRequest implements PendingRequestContract
         $this->bootPlugins()
             ->mergeRequestProperties()
             ->mergeBody()
+            ->mergeDelay()
             ->bootConnectorAndRequest();
 
         // Now we will register the default middleware. The user's defined
@@ -217,7 +218,7 @@ class PendingRequest implements PendingRequestContract
             return $this;
         }
 
-        if (isset($connectorBody, $requestBody) && ! $connectorBody instanceof $requestBody) {
+        if (isset($connectorBody, $requestBody) && !$connectorBody instanceof $requestBody) {
             throw new PendingRequestException('Connector and request body types must be the same.');
         }
 
@@ -231,6 +232,15 @@ class PendingRequest implements PendingRequestContract
         }
 
         $this->body = clone $requestBody ?? clone $connectorBody;
+
+        return $this;
+    }
+
+    protected function mergeDelay(): static
+    {
+        $this->request->delay()->isNotEmpty() ?
+            $this->delay->set($this->request->delay()->all()) :
+            $this->delay->set($this->connector->delay()->all());
 
         return $this;
     }
@@ -426,7 +436,7 @@ class PendingRequest implements PendingRequestContract
     {
         $response = $this->request->resolveResponseClass() ?? $this->connector->resolveResponseClass() ?? Response::class;
 
-        if (! class_exists($response) || ! ReflectionHelper::isSubclassOf($response, ResponseContract::class)) {
+        if (!class_exists($response) || !ReflectionHelper::isSubclassOf($response, ResponseContract::class)) {
             throw new InvalidResponseClassException;
         }
 

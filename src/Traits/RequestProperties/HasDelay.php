@@ -4,29 +4,35 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\RequestProperties;
 
-use Saloon\Repositories\Body\IntBodyRepository;
+use Ramsey\Uuid\Type\Integer;
+use Saloon\Repositories\Body\IntegerBodyRepository;
 
 trait HasDelay
 {
     /**
      * Request Delay
      *
-     * @var IntBodyRepository
+     * @var IntegerBodyRepository
      */
-    protected IntBodyRepository $delay;
+    protected IntegerBodyRepository $delay;
 
-    public function delay(): IntBodyRepository
+    /**
+     * Delay repository
+     *
+     * @return ?IntegerBodyRepository
+     */
+    public function delay(): IntegerBodyRepository
     {
-        return $this->delay ??= new IntBodyRepository($this->defaultDelay());
+        return $this->delay ??= new IntegerBodyRepository($this->defaultDelay());
     }
 
     /**
      * Default Delay
      *
-     * @return int
+     * @return ?int
      */
-    protected function defaultDelay(): int
+    protected function defaultDelay(): ?int
     {
-        return 0;
+        return null;
     }
 }

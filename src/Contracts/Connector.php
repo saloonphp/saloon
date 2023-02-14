@@ -6,7 +6,7 @@ namespace Saloon\Contracts;
 
 use GuzzleHttp\Promise\PromiseInterface;
 
-interface Connector extends Authenticatable, CanThrowRequestExceptions, Conditionable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams, Makeable
+interface Connector extends Authenticatable, CanThrowRequestExceptions, Conditionable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams, Makeable, HasDelay
 {
     /**
      * \Handle the boot lifecycle hook
