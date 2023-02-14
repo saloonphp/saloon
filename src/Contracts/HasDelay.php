@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use Saloon\Repositories\Body\IntBodyRepository;
+use Saloon\Repositories\Body\IntegerBodyRepository;
 
 interface HasDelay
 {
     /**
      * Access the delay
      *
-     * @return IntBodyRepository
+     * @return IntegerBodyRepository
      */
-    public function delay(): IntBodyRepository;
+    public function delay(): IntegerBodyRepository;
 }

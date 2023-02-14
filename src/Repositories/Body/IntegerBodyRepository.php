@@ -8,7 +8,7 @@ use Saloon\Exceptions\UnableToCastToStringException;
 use Saloon\Traits\Conditionable;
 use Saloon\Contracts\Body\BodyRepository;
 
-class IntBodyRepository implements BodyRepository
+class IntegerBodyRepository implements BodyRepository
 {
     use Conditionable;
 
@@ -37,6 +37,9 @@ class IntBodyRepository implements BodyRepository
      */
     public function set(mixed $value): static
     {
+        if(! is_int($value) && ! is_null($value))
+            throw new \InvalidArgumentException('The value must be an integer or null.');
+
         $this->data = $value;
 
         return $this;
@@ -70,6 +73,31 @@ class IntBodyRepository implements BodyRepository
     public function isNotEmpty(): bool
     {
         return ! $this->isEmpty();
+    }
+
+    public function greaterThan(int $value): bool
+    {
+        return $this->data > $value;
+    }
+
+    public function lesserThan(int $value): bool
+    {
+        return $this->data < $value;
+    }
+
+    public function greaterOrEqualThan(int $value): bool
+    {
+        return $this->data >= $value;
+    }
+
+    public function lesserOrEqualThan(int $value): bool
+    {
+        return $this->data <= $value;
+    }
+
+    public function equalTo(int $value): bool
+    {
+        return $this->data === $value;
     }
 
     /**
