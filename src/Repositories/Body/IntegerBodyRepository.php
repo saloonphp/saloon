@@ -37,8 +37,9 @@ class IntegerBodyRepository implements BodyRepository
      */
     public function set(mixed $value): static
     {
-        if(! is_int($value) && ! is_null($value))
+        if(! is_int($value) && ! is_null($value)) {
             throw new \InvalidArgumentException('The value must be an integer or null.');
+        }    
 
         $this->data = $value;
 
