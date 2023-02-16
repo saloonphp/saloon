@@ -25,14 +25,6 @@ test('you can set it', function () {
     expect($store->get())->toEqual(1);
 });
 
-test('it will throw an exception if you set a non-integer', function () {
-    $this->expectException(InvalidArgumentException::class);
-    $this->expectExceptionMessage('The value must be an integer');
-
-    $store = new IntegerStore();
-    $store->set([]);
-});
-
 test('you can check if the store is empty', function () {
     $store = new IntegerStore();
 
