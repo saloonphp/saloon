@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\RequestProperties;
 
-use Saloon\Repositories\Body\IntegerBodyRepository;
+use Saloon\Repositories\IntegerStore;
 
 trait HasDelay
 {
     /**
      * Request Delay
      *
-     * @var IntegerBodyRepository
+     * @var IntegerStore
      */
-    protected IntegerBodyRepository $delay;
+    protected IntegerStore $delay;
 
     /**
      * Delay repository
      *
-     * @return ?IntegerBodyRepository
+     * @return \Saloon\Repositories\IntegerStore
      */
-    public function delay(): IntegerBodyRepository
+    public function delay(): IntegerStore
     {
-        return $this->delay ??= new IntegerBodyRepository($this->defaultDelay());
+        return $this->delay ??= new IntegerStore($this->defaultDelay());
     }
 
     /**
