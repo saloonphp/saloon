@@ -13,7 +13,7 @@ use Saloon\Contracts\Body\BodyRepository;
 /**
  * @method static static make(mixed $body = [], int $status = 200, array $headers = []) Create a new mock response
  */
-interface SimulatedResponsePayload extends Makeable
+interface SimulatedResponsePayload
 {
     /**
      * Create a new mock response from a fixture

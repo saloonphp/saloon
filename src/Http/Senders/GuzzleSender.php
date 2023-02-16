@@ -111,7 +111,7 @@ class GuzzleSender implements Sender
             // exception as this is likely a ConnectException, but it will
             // catch any new ones Guzzle release.
 
-            if (!$exception instanceof RequestException) {
+            if (! $exception instanceof RequestException) {
                 throw new FatalRequestException($exception, $pendingRequest);
             }
 
@@ -172,8 +172,8 @@ class GuzzleSender implements Sender
             $requestOptions[$configVariable] = $value;
         }
 
-        if ($pendingRequest->delay()->greaterThan(0)) {
-            $requestOptions[RequestOptions::DELAY] = $pendingRequest->delay()->all();
+        if ($pendingRequest->delay()->isNotEmpty()) {
+            $requestOptions[RequestOptions::DELAY] = $pendingRequest->delay()->get();
         }
 
         $body = $pendingRequest->body();
@@ -231,7 +231,7 @@ class GuzzleSender implements Sender
                     // exception as this is likely a ConnectException, but it will
                     // catch any new ones Guzzle release.
 
-                    if (!$guzzleException instanceof RequestException) {
+                    if (! $guzzleException instanceof RequestException) {
                         throw new FatalRequestException($guzzleException, $pendingRequest);
                     }
 
