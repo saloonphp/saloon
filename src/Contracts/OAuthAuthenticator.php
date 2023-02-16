@@ -14,14 +14,14 @@ interface OAuthAuthenticator extends Authenticator
     public function getAccessToken(): string;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getRefreshToken(): string;
+    public function getRefreshToken(): ?string;
 
     /**
-     * @return \DateTimeImmutable
+     * @return \DateTimeImmutable|null
      */
-    public function getExpiresAt(): DateTimeImmutable;
+    public function getExpiresAt(): ?DateTimeImmutable;
 
     /**
      * @return bool
