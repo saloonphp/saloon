@@ -8,7 +8,7 @@ use Saloon\Enums\Method;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 
-interface PendingRequest extends Authenticatable, Conditionable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams
+interface PendingRequest extends Authenticatable, Conditionable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams, HasDelay
 {
     /**
      * Execute the response pipeline.

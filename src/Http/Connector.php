@@ -14,6 +14,7 @@ use Saloon\Traits\Connector\HasSender;
 use Saloon\Traits\Connector\SendsRequests;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\Request\CastDtoFromResponse;
+use Saloon\Traits\RequestProperties\HasDelay;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Contracts\Connector as ConnectorContract;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
@@ -32,4 +33,5 @@ abstract class Connector implements ConnectorContract
     use Bootable;
     use Makeable;
     use HasPool;
+    use HasDelay;
 }
