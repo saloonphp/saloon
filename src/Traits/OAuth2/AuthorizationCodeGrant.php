@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Saloon\Traits\OAuth2;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
 use Saloon\Helpers\Str;
 use Saloon\Helpers\Date;
+use InvalidArgumentException;
 use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Response;
 use Saloon\Helpers\OAuth2\OAuthConfig;

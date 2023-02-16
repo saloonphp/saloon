@@ -21,8 +21,7 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
         readonly public string             $accessToken,
         readonly public ?string            $refreshToken = null,
         readonly public ?DateTimeImmutable $expiresAt = null,
-    )
-    {
+    ) {
         //
     }
 

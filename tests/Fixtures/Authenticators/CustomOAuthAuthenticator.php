@@ -22,8 +22,7 @@ class CustomOAuthAuthenticator extends AccessTokenAuthenticator
         readonly public string             $greeting,
         readonly public ?string            $refreshToken = null,
         readonly public ?DateTimeImmutable $expiresAt = null,
-    )
-    {
+    ) {
         //
     }
 
