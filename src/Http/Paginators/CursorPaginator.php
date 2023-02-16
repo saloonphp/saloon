@@ -127,7 +127,7 @@ class CursorPaginator extends Paginator
     /**
      * Get the cursor
      *
-     * @return array<string>|string|null
+     * @return string|int|null
      */
     protected function getCursor(): string|int|null
     {
@@ -139,7 +139,9 @@ class CursorPaginator extends Paginator
 
         parse_str($rawQuery, $query);
 
-        return $query[$this->cursorKey] ?? null;
+        $cursorValue = $query[$this->cursorKey] ?? null;
+
+        return is_array($cursorValue) ? $cursorValue[0] : $cursorValue;
     }
 
     /**
