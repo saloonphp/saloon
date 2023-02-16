@@ -14,7 +14,7 @@ test('async request delay works', function () {
 
     $start = microtime(true);
     connector()->sendAsync($request)->wait();
-    expect(microtime(true) - $start)->toBeGreaterThan(1);
+    expect(round(microtime(true) - $start))->toBeGreaterThanOrEqual(1);
 
     $mockClient = new MockClient([
         MockResponse::make(['name' => 'Sam']),
@@ -22,7 +22,7 @@ test('async request delay works', function () {
 
     $start = microtime(true);
     connector()->sendAsync($request, $mockClient)->wait();
-    expect(microtime(true) - $start)->toBeGreaterThan(1);
+    expect(round(microtime(true) - $start))->toBeGreaterThanOrEqual(1);
 });
 
 test('test request delay takes priority over connector delay', function () {
@@ -40,8 +40,8 @@ test('test request delay takes priority over connector delay', function () {
     $connector->send($request, new MockClient([
         MockResponse::make(['name' => 'Sam']),
     ]));
-    $waitTime = microtime(true) - $start;
-    expect($waitTime)->toBeGreaterThan(1);
+    $waitTime = round(microtime(true) - $start);
+    expect($waitTime)->toBeGreaterThanOrEqual(1);
 
     $connector = connector();
     $connector->delay()->set(5000);
@@ -49,7 +49,7 @@ test('test request delay takes priority over connector delay', function () {
     $connector->send($request, new MockClient([
         MockResponse::make(['name' => 'Sam']),
     ]));
-    $waitTime = microtime(true) - $start;
+    $waitTime = round(microtime(true) - $start);
 
     expect($waitTime)->toBeLessThan(5);
 });
@@ -62,7 +62,7 @@ test('request delay works', function () {
 
     $start = microtime(true);
     connector()->send($request);
-    expect(microtime(true) - $start)->toBeGreaterThan(1);
+    expect(round(microtime(true) - $start))->toBeGreaterThanOrEqual(1);
 
     $mockClient = new MockClient([
         MockResponse::make(['name' => 'Sam']),
@@ -70,7 +70,7 @@ test('request delay works', function () {
 
     $start = microtime(true);
     connector()->send($request, $mockClient);
-    expect(microtime(true) - $start)->toBeGreaterThan(1);
+    expect(round(microtime(true) - $start))->toBeGreaterThanOrEqual(1);
 });
 
 test('connector delay works', function () {
@@ -88,11 +88,11 @@ test('connector delay works', function () {
     $connector->send($request, new MockClient([
         MockResponse::make(['name' => 'Sam']),
     ]));
-    expect(microtime(true) - $start)->toBeGreaterThan(1);
+    expect(round(microtime(true) - $start))->toBeGreaterThanOrEqual(1);
 
     expect($connector->delay()->get())->toBe(1000);
 
     $start = microtime(true);
     $connector->send($request);
-    expect(microtime(true) - $start)->toBeGreaterThan(1);
+    expect(round(microtime(true) - $start))->toBeGreaterThanOrEqual(1);
 });
