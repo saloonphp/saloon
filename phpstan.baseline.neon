@@ -96,7 +96,7 @@ parameters:
 			path: src/Repositories/Body/MultipartBodyRepository.php
 
 		-
-			message: "#^Parameter \\#2 \\$ of callable callable\\(\\$this\\(Saloon\\\\Repositories\\\\Body\\\\StringBodyRepository\\), TValue\\)\\: void expects TValue, array\\|float\\|int\\|string\\|false\\|null given\\.$#" z
+			message: "#^Parameter \\#2 \\$ of callable callable\\(\\$this\\(Saloon\\\\Repositories\\\\Body\\\\StringBodyRepository\\), TValue\\)\\: void expects TValue, array\\|float\\|int\\|string\\|false\\|null given\\.$#"
 			count: 2
 			path: src/Repositories/Body/StringBodyRepository.php
 
