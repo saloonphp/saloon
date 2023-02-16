@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Saloon\Helpers\OAuth2;
 
 use Saloon\Traits\Makeable;
-use Saloon\Contracts\Makeable as MakeableContract;
 use Saloon\Exceptions\OAuthConfigValidationException;
 
 /**
  * @method static static make()
  */
-class OAuthConfig implements MakeableContract
+class OAuthConfig
 {
     use Makeable;
 

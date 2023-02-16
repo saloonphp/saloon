@@ -12,7 +12,7 @@ interface IntegerStore
      * @param int|null $value
      * @return $this
      */
-    public function set(mixed $value): static;
+    public function set(?int $value): static;
 
     /**
      * Retrieve all in the repository

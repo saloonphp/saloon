@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories;
 
-use InvalidArgumentException;
 use Saloon\Traits\Conditionable;
 use Saloon\Contracts\IntegerStore as IntegerStoreContract;
 
@@ -24,7 +23,7 @@ class IntegerStore implements IntegerStoreContract
      *
      * @param int|null $value
      */
-    public function __construct(int|null $value = null)
+    public function __construct(?int $value = null)
     {
         $this->set($value);
     }
@@ -35,12 +34,8 @@ class IntegerStore implements IntegerStoreContract
      * @param int|null $value
      * @return $this
      */
-    public function set(mixed $value): static
+    public function set(?int $value): static
     {
-        if (! is_int($value)) {
-            throw new InvalidArgumentException('The value must be an integer or null.');
-        }
-
         $this->data = $value;
 
         return $this;
