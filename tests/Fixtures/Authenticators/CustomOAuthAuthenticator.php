@@ -10,16 +10,18 @@ use Saloon\Http\Auth\AccessTokenAuthenticator;
 class CustomOAuthAuthenticator extends AccessTokenAuthenticator
 {
     /**
+     * Constructor
+     *
      * @param string $accessToken
-     * @param string $refreshToken
-     * @param DateTimeImmutable $expiresAt
      * @param string $greeting
+     * @param string|null $refreshToken
+     * @param \DateTimeImmutable|null $expiresAt
      */
     public function __construct(
-        public string $accessToken,
-        public string $refreshToken,
-        public DateTimeImmutable $expiresAt,
-        public string $greeting,
+        readonly public string             $accessToken,
+        readonly public string             $greeting,
+        readonly public ?string            $refreshToken = null,
+        readonly public ?DateTimeImmutable $expiresAt = null,
     ) {
         //
     }

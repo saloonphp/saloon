@@ -116,6 +116,23 @@ test('you can refresh a token from a connector', function () {
     expect($newAuthenticator->getExpiresAt())->toBeInstanceOf(DateTimeImmutable::class);
 });
 
+test('the refreshAccessToken method throws an exception if you provide it an authenticator that is not refreshable', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
+    ]);
+
+    $connector = new OAuth2Connector;
+
+    $connector->withMockClient($mockClient);
+
+    $authenticator = new AccessTokenAuthenticator('access', null, Date::now()->addSeconds(3600)->toDateTime());
+
+    $this->expectException(InvalidArgumentException::class);
+    $this->expectExceptionMessage('The provided OAuthAuthenticator does not contain a refresh token.');
+
+    $connector->refreshAccessToken($authenticator);
+});
+
 test('you can request the original response instead of the authenticator on the refresh tokens method', function () {
     $mockClient = new MockClient([
         MockResponse::make(['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
