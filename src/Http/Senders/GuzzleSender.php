@@ -173,7 +173,7 @@ class GuzzleSender implements Sender
         }
 
         if ($pendingRequest->delay()->isNotEmpty()) {
-            $requestOptions[RequestOptions::DELAY] = $pendingRequest->delay()->all();
+            $requestOptions[RequestOptions::DELAY] = $pendingRequest->delay()->get();
         }
 
         $body = $pendingRequest->body();

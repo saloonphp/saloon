@@ -8,13 +8,13 @@ use Saloon\Repositories\IntegerStore;
 test('the store is empty by default', function () {
     $store = new IntegerStore();
 
-    expect($store->all())->toEqual(null);
+    expect($store->get())->toEqual(null);
 });
 
 test('the store can have an array provided', function () {
     $store = new IntegerStore(1);
 
-    expect($store->all())->toEqual(1);
+    expect($store->get())->toEqual(1);
 });
 
 test('you can set it', function () {
@@ -22,7 +22,7 @@ test('you can set it', function () {
 
     $store->set(1);
 
-    expect($store->all())->toEqual(1);
+    expect($store->get())->toEqual(1);
 });
 
 test('it will throw an exception if you set a non-integer', function () {
