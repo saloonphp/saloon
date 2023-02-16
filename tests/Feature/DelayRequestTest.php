@@ -2,15 +2,9 @@
 
 declare(strict_types=1);
 
-use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
-use GuzzleHttp\Promise\RejectedPromise;
-use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
-use Saloon\Tests\Fixtures\Exceptions\TestResponseException;
 
 test('async request delay works', function () {
     $request = new UserRequest;
@@ -32,7 +26,6 @@ test('async request delay works', function () {
 });
 
 test('test request delay takes priority over connector delay', function () {
-
     $request = new UserRequest;
 
     $request
@@ -92,7 +85,7 @@ test('connector delay works', function () {
     expect($connector->delay()->all())->toBe(1000);
 
     $start = microtime(true);
-    $connector->send($request,new MockClient([
+    $connector->send($request, new MockClient([
         MockResponse::make(['name' => 'Sam']),
     ]));
     expect(microtime(true) - $start)->toBeGreaterThan(1);
@@ -103,4 +96,3 @@ test('connector delay works', function () {
     $connector->send($request);
     expect(microtime(true) - $start)->toBeGreaterThan(1);
 });
-
