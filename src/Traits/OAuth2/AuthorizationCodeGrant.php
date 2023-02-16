@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Traits\OAuth2;
 
 use DateTimeImmutable;
+use InvalidArgumentException;
 use Saloon\Helpers\Str;
 use Saloon\Helpers\Date;
 use Saloon\Helpers\URLHelper;
@@ -141,6 +142,10 @@ trait AuthorizationCodeGrant
         $this->oauthConfig()->validate();
 
         if ($refreshToken instanceof OAuthAuthenticator) {
+            if ($refreshToken->isNotRefreshable()) {
+                throw new InvalidArgumentException('The provided OAuthAuthenticator does not contain a refresh token.');
+            }
+
             $refreshToken = $refreshToken->getRefreshToken();
         }
 

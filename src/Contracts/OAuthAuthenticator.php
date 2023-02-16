@@ -32,4 +32,18 @@ interface OAuthAuthenticator extends Authenticator
      * @return bool
      */
     public function hasNotExpired(): bool;
+
+    /**
+     * Check if the authenticator is refreshable
+     *
+     * @return bool
+     */
+    public function isRefreshable(): bool;
+
+    /**
+     * Check if the authenticator is not refreshable
+     *
+     * @return bool
+     */
+    public function isNotRefreshable(): bool;
 }
