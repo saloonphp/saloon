@@ -10,7 +10,7 @@ test('async request delay works', function () {
     $request = new UserRequest;
     $request->delay()->set(1000);
 
-    expect($request->delay()->all())->toEqual(1000);
+    expect($request->delay()->get())->toEqual(1000);
 
     $start = microtime(true);
     connector()->sendAsync($request)->wait();
@@ -32,7 +32,7 @@ test('test request delay takes priority over connector delay', function () {
         ->delay()
         ->set(1000);
 
-    expect($request->delay()->all())->toEqual(1000);
+    expect($request->delay()->get())->toEqual(1000);
 
     $connector = connector();
 
@@ -58,7 +58,7 @@ test('request delay works', function () {
     $request = new UserRequest;
     $request->delay()->set(1000);
 
-    expect($request->delay()->all())->toEqual(1000);
+    expect($request->delay()->get())->toEqual(1000);
 
     $start = microtime(true);
     connector()->send($request);
@@ -82,7 +82,7 @@ test('connector delay works', function () {
     $connector->delay()->set(1000);
 
     expect($connector->delay()->isNotEmpty())->toBeTrue();
-    expect($connector->delay()->all())->toBe(1000);
+    expect($connector->delay()->get())->toBe(1000);
 
     $start = microtime(true);
     $connector->send($request, new MockClient([
@@ -90,7 +90,7 @@ test('connector delay works', function () {
     ]));
     expect(microtime(true) - $start)->toBeGreaterThan(1);
 
-    expect($connector->delay()->all())->toBe(1000);
+    expect($connector->delay()->get())->toBe(1000);
 
     $start = microtime(true);
     $connector->send($request);

@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories;
 
-use Saloon\Contracts\IntegerStore as IntegerStoreContract;
-use Saloon\Exceptions\UnableToCastToStringException;
+use InvalidArgumentException;
 use Saloon\Traits\Conditionable;
+use Saloon\Contracts\IntegerStore as IntegerStoreContract;
 
 class IntegerStore implements IntegerStoreContract
 {
     use Conditionable;
 
     /**
-     * Repository Data
+     * store Data
      *
      * @var int|null
      */
@@ -30,15 +30,15 @@ class IntegerStore implements IntegerStoreContract
     }
 
     /**
-     * Set a value inside the repository
+     * Set a value inside the store
      *
      * @param int|null $value
      * @return $this
      */
     public function set(mixed $value): static
     {
-        if (! is_int($value) && ! is_null($value)) {
-            throw new \InvalidArgumentException('The value must be an integer or null.');
+        if (! is_int($value)) {
+            throw new InvalidArgumentException('The value must be an integer or null.');
         }
 
         $this->data = $value;
@@ -47,17 +47,17 @@ class IntegerStore implements IntegerStoreContract
     }
 
     /**
-     * Retrieve all in the repository
+     * Retrieve all in the store
      *
      * @return int|null
      */
-    public function all(): ?int
+    public function get(): ?int
     {
         return $this->data;
     }
 
     /**
-     * Determine if the repository is empty
+     * Determine if the store is empty
      *
      * @return bool
      */
@@ -67,23 +67,12 @@ class IntegerStore implements IntegerStoreContract
     }
 
     /**
-     * Determine if the repository is not empty
+     * Determine if the store is not empty
      *
      * @return bool
      */
     public function isNotEmpty(): bool
     {
         return ! $this->isEmpty();
-    }
-
-    /**
-     * Convert the repository into a string
-     *
-     * @return string
-     * @throws \Saloon\Exceptions\UnableToCastToStringException
-     */
-    public function __toString(): string
-    {
-        throw new UnableToCastToStringException('Casting the IntBodyRepository as a string is not supported.');
     }
 }

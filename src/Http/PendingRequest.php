@@ -243,8 +243,8 @@ class PendingRequest implements PendingRequestContract
     protected function mergeDelay(): static
     {
         $this->request->delay()->isNotEmpty() ?
-            $this->delay()->set($this->request->delay()->all()) :
-            $this->delay()->set($this->connector->delay()->all());
+            $this->delay()->set($this->request->delay()->get()) :
+            $this->delay()->set($this->connector->delay()->get());
 
         return $this;
     }
