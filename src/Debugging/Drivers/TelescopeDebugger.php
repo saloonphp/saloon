@@ -6,9 +6,7 @@ namespace Saloon\Debugging\Drivers;
 
 use Laravel\Telescope\IncomingEntry;
 use Laravel\Telescope\Telescope;
-use Laravel\Telescope\Watchers\ClientRequestWatcher;
 use Saloon\Debugging\DebugData;
-use Saloon\Debugging\DebuggingDriver;
 
 class TelescopeDebugger implements DebuggingDriver
 {

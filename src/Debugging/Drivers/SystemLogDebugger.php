@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Saloon\Debugging\Drivers;
 
 use Saloon\Debugging\DebugData;
-use Saloon\Debugging\DebuggingDriver;
 
 class SystemLogDebugger implements DebuggingDriver
 {
@@ -26,6 +25,9 @@ class SystemLogDebugger implements DebuggingDriver
         return $this;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function formatData(DebugData $data): array
     {
         // TODO: Format the $data, and send it appropriately to the syslog().
