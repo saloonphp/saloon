@@ -32,8 +32,8 @@ class OffsetPaginatorConnector extends Connector implements HasPagination
      * @param mixed ...$additionalArguments
      * @return \Saloon\Contracts\Paginator
      */
-    public function paginate(Request $request, mixed ...$additionalArguments): Paginator
+    public function paginate(Request $request, mixed ...$additionalArguments): OffsetPaginator
     {
-        return new OffsetPaginator($this, $request, ...$additionalArguments);
+        return new OffsetPaginator($this, $request, 5, ...$additionalArguments);
     }
 }

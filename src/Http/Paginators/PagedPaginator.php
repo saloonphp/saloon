@@ -32,13 +32,6 @@ class PagedPaginator extends Paginator
     protected string $pageKeyName = 'page';
 
     /**
-     * The JSON key name for the total
-     *
-     * @var string
-     */
-    protected string $totalKeyName = 'total';
-
-    /**
      * The JSON key name for the next page URL
      *
      * @var string
@@ -86,10 +79,10 @@ class PagedPaginator extends Paginator
     protected function applyPagination(Request $request): void
     {
         if (! is_null($this->limit())) {
-            $request->query()->add($this->limitKeyName, $this->limit());
+            $request->query()->add($this->getLimitKeyName(), $this->limit());
         }
 
-        $request->query()->add($this->pageKeyName, $this->currentPage);
+        $request->query()->add($this->getPageKeyName(), $this->getCurrentPage());
     }
 
     /**
@@ -101,10 +94,10 @@ class PagedPaginator extends Paginator
     protected function isFinished(): bool
     {
         if ($this->isAsync()) {
-            return $this->currentPage > $this->totalPages();
+            return $this->getCurrentPage() > $this->totalPages();
         }
 
-        return is_null($this->currentResponse->json($this->nextPageKeyName));
+        return is_null($this->currentResponse->json($this->getNextPageKeyName()));
     }
 
     /**
@@ -165,5 +158,35 @@ class PagedPaginator extends Paginator
         $this->nextPageKeyName = $nextPageKeyName;
 
         return $this;
+    }
+
+    /**
+     * Get the current page
+     *
+     * @return int
+     */
+    public function getCurrentPage(): int
+    {
+        return $this->currentPage;
+    }
+
+    /**
+     * Get the page query parameter name
+     *
+     * @return string
+     */
+    public function getPageKeyName(): string
+    {
+        return $this->pageKeyName;
+    }
+
+    /**
+     * Get the next page key name
+     *
+     * @return string
+     */
+    public function getNextPageKeyName(): string
+    {
+        return $this->nextPageKeyName;
     }
 }

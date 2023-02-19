@@ -144,4 +144,26 @@ interface Paginator extends Countable, Iterator
      * @return void
      */
     public function next(): void;
+
+    /**
+     * Set the limit of the paginator
+     *
+     * @param int|null $limit
+     * @return $this
+     */
+    public function setLimit(?int $limit): static;
+
+    /**
+     * Get the limit key name
+     *
+     * @return string
+     */
+    public function getLimitKeyName(): string;
+
+    /**
+     * Get the total key name
+     *
+     * @return string
+     */
+    public function getTotalKeyName(): string;
 }

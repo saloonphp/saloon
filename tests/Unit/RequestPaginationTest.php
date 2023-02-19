@@ -7,7 +7,12 @@ namespace Saloon\Tests\Unit;
 use Saloon\Contracts\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
+use Saloon\Exceptions\PaginatorException;
+use Saloon\Tests\Fixtures\Connectors\CursorPaginatorConnector;
+use Saloon\Tests\Fixtures\Connectors\OffsetPaginatorConnector;
 use Saloon\Tests\Fixtures\Connectors\PagePaginatorConnector;
+use Saloon\Tests\Fixtures\Requests\CursorGetSuperHeroesRequest;
+use Saloon\Tests\Fixtures\Requests\OffsetGetSuperHeroesRequest;
 use Saloon\Tests\Fixtures\Requests\PageGetSuperHeroesRequest;
 
 test('you can yield from a paginator', function (): void {
@@ -247,4 +252,88 @@ test('you can manually rewind a paginator, starting over from the start', functi
     expect($paginator->shouldRewind())->toBeTrue()
         ->and($responses)->toHaveCount(5)->each->toBeInstanceOf(Response::class)
         ->and($superheroes)->toHaveCount(25)->each->toBeArray();
+});
+
+test('you can query the total results of a paginator before it iterated', function () {
+    $mockClient = paginationMockClient('pagination/per-page');
+    $connector = new PagePaginatorConnector;
+    $connector->withMockClient($mockClient);
+
+    $request = new PageGetSuperHeroesRequest;
+    $paginator = $connector->paginate($request);
+
+    expect($paginator->totalResults())->toEqual(20);
+    expect($paginator->totalPages())->toEqual(4);
+});
+
+test('if it cannot calculate the total pages it will throw an exception', function () {
+    $connector = new CursorPaginatorConnector;
+
+    $request = new PageGetSuperHeroesRequest;
+    $paginator = $connector->paginate($request)->setTotalKeyName('count');
+
+    $this->expectException(PaginatorException::class);
+    $this->expectExceptionMessage('Unable to calculate the total results from the response. Make sure the total key is correct.');
+
+    expect($paginator->totalResults())->toEqual(20);
+});
+
+test('you can set and get the limit and total key names', function () {
+    $connector = new CursorPaginatorConnector;
+    $request = new PageGetSuperHeroesRequest;
+    $paginator = $connector->paginate($request);
+
+    expect($paginator->getLimitKeyName())->toEqual('limit');
+    expect($paginator->getTotalKeyName())->toEqual('total');
+
+    $paginator->setLimitKeyName('top');
+    $paginator->setTotalKeyName('count');
+
+    expect($paginator->getLimitKeyName())->toEqual('top');
+    expect($paginator->getTotalKeyName())->toEqual('count');
+});
+
+test('on a paged paginator you can set and get the current page, page key and next page key', function () {
+    $connector = new PagePaginatorConnector;
+    $request = new PageGetSuperHeroesRequest;
+    $paginator = $connector->paginate($request);
+
+    expect($paginator->getCurrentPage())->toEqual(1);
+    expect($paginator->getPageKeyName())->toEqual('page');
+    expect($paginator->getNextPageKeyName())->toEqual('next_page_url');
+
+    $paginator->setCurrentPage(2);
+    $paginator->setPageKeyName('paper');
+    $paginator->setNextPageKeyName('next');
+
+    expect($paginator->getCurrentPage())->toEqual(2);
+    expect($paginator->getPageKeyName())->toEqual('paper');
+    expect($paginator->getNextPageKeyName())->toEqual('next');
+});
+
+test('with a offset paginator you can set and get the offset key name', function () {
+    $connector = new OffsetPaginatorConnector;
+    $request = new OffsetGetSuperHeroesRequest;
+    $paginator = $connector->paginate($request);
+
+    expect($paginator->getOffsetKeyName())->toEqual('offset');
+
+    $paginator->setOffsetKeyName('skip');
+
+    expect($paginator->getOffsetKeyName())->toEqual('skip');
+});
+
+test('with a cursor paginator you can set and get the next page key and cursor key', function () {
+    $connector = new CursorPaginatorConnector;
+    $request = new CursorGetSuperHeroesRequest;
+    $paginator = $connector->paginate($request);
+
+    expect($paginator->getNextPageKey())->toEqual('next_page_url');
+    expect($paginator->getCursorKey())->toEqual('cursor');
+
+    $paginator->setNextPageKey('next');
+    $paginator->setCursorKey('token');
+
+    expect($paginator->getNextPageKey())->toEqual('next');
+    expect($paginator->getCursorKey())->toEqual('token');
 });

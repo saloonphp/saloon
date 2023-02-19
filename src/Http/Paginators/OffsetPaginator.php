@@ -72,8 +72,8 @@ class OffsetPaginator extends Paginator
     protected function applyPagination(Request $request): void
     {
         $request->query()->merge([
-            $this->limitKeyName => $this->limit(),
-            $this->offsetKeyName => $this->currentOffset(),
+            $this->getLimitKeyName() => $this->limit(),
+            $this->getOffsetKeyName() => $this->currentOffset(),
         ]);
     }
 
@@ -120,6 +120,16 @@ class OffsetPaginator extends Paginator
         $this->offsetKeyName = $offsetKeyName;
 
         return $this;
+    }
+
+    /**
+     * Get the offset key name
+     *
+     * @return string
+     */
+    public function getOffsetKeyName(): string
+    {
+        return $this->offsetKeyName;
     }
 
     /**

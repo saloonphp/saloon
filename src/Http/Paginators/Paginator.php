@@ -28,13 +28,6 @@ abstract class Paginator implements PaginatorContract
     protected string $limitKeyName = 'limit';
 
     /**
-     * The JSON key name for the results
-     *
-     * @var string
-     */
-    protected string $resultsKeyName = 'data';
-
-    /**
      * The JSON key name for the total
      *
      * @var string
@@ -72,8 +65,9 @@ abstract class Paginator implements PaginatorContract
     public function __construct(
         protected readonly Connector $connector,
         protected readonly Request   $originalRequest,
-        protected readonly ?int      $limit = null,
-    ) {
+        protected ?int               $limit = null,
+    )
+    {
         $this->configure();
     }
 
@@ -149,7 +143,8 @@ abstract class Paginator implements PaginatorContract
         callable|int $concurrency = 5,
         ?callable    $responseHandler = null,
         ?callable    $exceptionHandler = null,
-    ): Pool {
+    ): Pool
+    {
         // The purpose of a pool is to concurrently send requests. So 'force' set async.
 
         $this->async();
@@ -360,19 +355,6 @@ abstract class Paginator implements PaginatorContract
     }
 
     /**
-     * Set the results key name
-     *
-     * @param string $resultsKeyName
-     * @return $this
-     */
-    public function setResultsKeyName(string $resultsKeyName): static
-    {
-        $this->resultsKeyName = $resultsKeyName;
-
-        return $this;
-    }
-
-    /**
      * Set the JSON key name for total
      *
      * @param string $totalKeyName
@@ -383,6 +365,39 @@ abstract class Paginator implements PaginatorContract
         $this->totalKeyName = $totalKeyName;
 
         return $this;
+    }
+
+    /**
+     * Set the limit of the paginator
+     *
+     * @param int|null $limit
+     * @return $this
+     */
+    public function setLimit(?int $limit): static
+    {
+        $this->limit = $limit;
+
+        return $this;
+    }
+
+    /**
+     * Get the limit key name
+     *
+     * @return string
+     */
+    public function getLimitKeyName(): string
+    {
+        return $this->limitKeyName;
+    }
+
+    /**
+     * Get the total key name
+     *
+     * @return string
+     */
+    public function getTotalKeyName(): string
+    {
+        return $this->totalKeyName;
     }
 
     /**

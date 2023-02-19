@@ -30,9 +30,9 @@ class PagePaginatorConnector extends Connector implements HasPagination
      *
      * @param \Saloon\Contracts\Request $request
      * @param mixed ...$additionalArguments
-     * @return \Saloon\Contracts\Paginator
+     * @return \Saloon\Http\Paginators\PagedPaginator
      */
-    public function paginate(Request $request, mixed ...$additionalArguments): Paginator
+    public function paginate(Request $request, mixed ...$additionalArguments): PagedPaginator
     {
         return new PagedPaginator($this, $request, 5, ...$additionalArguments);
     }
