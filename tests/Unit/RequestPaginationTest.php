@@ -8,12 +8,12 @@ use Saloon\Contracts\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\LazyCollection;
 use Saloon\Exceptions\PaginatorException;
+use Saloon\Tests\Fixtures\Connectors\PagePaginatorConnector;
+use Saloon\Tests\Fixtures\Requests\PageGetSuperHeroesRequest;
 use Saloon\Tests\Fixtures\Connectors\CursorPaginatorConnector;
 use Saloon\Tests\Fixtures\Connectors\OffsetPaginatorConnector;
-use Saloon\Tests\Fixtures\Connectors\PagePaginatorConnector;
 use Saloon\Tests\Fixtures\Requests\CursorGetSuperHeroesRequest;
 use Saloon\Tests\Fixtures\Requests\OffsetGetSuperHeroesRequest;
-use Saloon\Tests\Fixtures\Requests\PageGetSuperHeroesRequest;
 
 test('you can yield from a paginator', function (): void {
     $mockClient = paginationMockClient('pagination/per-page');

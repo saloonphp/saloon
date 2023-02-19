@@ -66,8 +66,7 @@ abstract class Paginator implements PaginatorContract
         protected readonly Connector $connector,
         protected readonly Request   $originalRequest,
         protected ?int               $limit = null,
-    )
-    {
+    ) {
         $this->configure();
     }
 
@@ -143,8 +142,7 @@ abstract class Paginator implements PaginatorContract
         callable|int $concurrency = 5,
         ?callable    $responseHandler = null,
         ?callable    $exceptionHandler = null,
-    ): Pool
-    {
+    ): Pool {
         // The purpose of a pool is to concurrently send requests. So 'force' set async.
 
         $this->async();

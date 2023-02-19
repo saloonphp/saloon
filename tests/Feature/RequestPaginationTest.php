@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use Saloon\Contracts\Connector;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
-use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Contracts\Connector;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Tests\Fixtures\Connectors\PagePaginatorConnector;
 use Saloon\Tests\Fixtures\Requests\PageGetSuperHeroesRequest;
 use Saloon\Tests\Fixtures\Connectors\CursorPaginatorConnector;
@@ -247,7 +247,7 @@ test('you can configure the limit for each paginator and it will send the correc
     // We'll assert that we sent the proper query parameter to the API
 
     expect(
-        array_map(fn($response) => $response->getPendingRequest()->query()->all(), $responses)
+        array_map(fn ($response) => $response->getPendingRequest()->query()->all(), $responses)
     )->each->toHaveKey($limitKeyName, 10);
 
     expect($responses)->toHaveCount(2)->each->toBeInstanceOf(Response::class);

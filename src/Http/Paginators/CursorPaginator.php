@@ -58,8 +58,7 @@ class CursorPaginator extends Paginator
         Request   $originalRequest,
         int       $limit,
         int       $page = 1,
-    )
-    {
+    ) {
         parent::__construct($connector, $originalRequest, $limit);
 
         $this->currentPage = $this->originalPage = $page;
