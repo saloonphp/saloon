@@ -99,3 +99,18 @@ parameters:
 			message: "#^Parameter \\#2 \\$ of callable callable\\(\\$this\\(Saloon\\\\Repositories\\\\Body\\\\StringBodyRepository\\), TValue\\)\\: void expects TValue, array\\|float\\|int\\|string\\|false\\|null given\\.$#"
 			count: 2
 			path: src/Repositories/Body/StringBodyRepository.php
+
+		-
+			message: "#^Call to an undefined method GuzzleHttp\\\\Promise\\\\PromiseInterface\\|Saloon\\\\Contracts\\\\Response\\:\\:json\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Paginators/Paginator.php
+
+		-
+			message: "#^Parameter \\#1 \\$requests of method Saloon\\\\Contracts\\\\Connector\\:\\:pool\\(\\) expects \\(callable\\(Saloon\\\\Contracts\\\\Connector\\)\\: iterable\\<GuzzleHttp\\\\Promise\\\\PromiseInterface\\|Saloon\\\\Contracts\\\\Request\\>\\)\\|iterable\\<GuzzleHttp\\\\Promise\\\\PromiseInterface\\|Saloon\\\\Contracts\\\\Request\\>, \\$this\\(Saloon\\\\Http\\\\Paginators\\\\Paginator\\) given\\.$#"
+			count: 1
+			path: src/Http/Paginators/Paginator.php
+
+		-
+			message: "#^Parameter \\#2 \\$ of callable callable\\(\\$this\\(Saloon\\\\Repositories\\\\IntegerStore\\), TValue\\)\\: void expects TValue, array\\|float\\|int\\|string\\|false\\|null given\\.$#"
+			count: 2
+			path: src/Repositories/IntegerStore.php
