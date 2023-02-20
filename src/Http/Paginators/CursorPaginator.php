@@ -36,14 +36,14 @@ class CursorPaginator extends Paginator
      *
      * @var string
      */
-    protected string $nextPageKey = 'next_page_url';
+    protected string $nextPageKeyName = 'next_page_url';
 
     /**
      * The key/query parameter that contains the cursor
      *
      * @var string
      */
-    protected string $cursorKey = 'cursor';
+    protected string $cursorKeyName = 'cursor';
 
     /**
      * Constructor
@@ -99,7 +99,7 @@ class CursorPaginator extends Paginator
             $request->query()->add($this->getLimitKeyName(), $this->limit());
         }
 
-        $request->query()->add($this->getCursorKey(), $this->currentCursor);
+        $request->query()->add($this->getCursorKeyName(), $this->currentCursor);
     }
 
     /**
@@ -114,7 +114,7 @@ class CursorPaginator extends Paginator
             return $this->currentPage > $this->totalPages();
         }
 
-        return is_null($this->currentResponse->json($this->getNextPageKey()));
+        return is_null($this->currentResponse->json($this->getNextPageKeyName()));
     }
 
     /**
@@ -135,7 +135,7 @@ class CursorPaginator extends Paginator
      */
     protected function getCursor(): string|int|null
     {
-        $rawQuery = parse_url($this->currentResponse->json($this->getNextPageKey()) ?? '', PHP_URL_QUERY);
+        $rawQuery = parse_url($this->currentResponse->json($this->getNextPageKeyName()) ?? '', PHP_URL_QUERY);
 
         if (empty($rawQuery)) {
             return null;
@@ -143,7 +143,7 @@ class CursorPaginator extends Paginator
 
         parse_str($rawQuery, $query);
 
-        $cursorValue = $query[$this->getCursorKey()] ?? null;
+        $cursorValue = $query[$this->getCursorKeyName()] ?? null;
 
         return is_array($cursorValue) ? $cursorValue[0] : $cursorValue;
     }
@@ -151,12 +151,12 @@ class CursorPaginator extends Paginator
     /**
      * Set the JSON key for the next page URL that contains the cursor
      *
-     * @param string $nextPageKey
+     * @param string $nextPageKeyName
      * @return $this
      */
-    public function setNextPageKey(string $nextPageKey): static
+    public function setNextPageKeyName(string $nextPageKeyName): static
     {
-        $this->nextPageKey = $nextPageKey;
+        $this->nextPageKeyName = $nextPageKeyName;
 
         return $this;
     }
@@ -164,12 +164,12 @@ class CursorPaginator extends Paginator
     /**
      * Set the key/query parameter that contains the cursor
      *
-     * @param string $cursorKey
+     * @param string $cursorKeyName
      * @return $this
      */
-    public function setCursorKey(string $cursorKey): static
+    public function setCursorKeyName(string $cursorKeyName): static
     {
-        $this->cursorKey = $cursorKey;
+        $this->cursorKeyName = $cursorKeyName;
 
         return $this;
     }
@@ -179,9 +179,9 @@ class CursorPaginator extends Paginator
      *
      * @return string
      */
-    public function getNextPageKey(): string
+    public function getNextPageKeyName(): string
     {
-        return $this->nextPageKey;
+        return $this->nextPageKeyName;
     }
 
     /**
@@ -189,8 +189,8 @@ class CursorPaginator extends Paginator
      *
      * @return string
      */
-    public function getCursorKey(): string
+    public function getCursorKeyName(): string
     {
-        return $this->cursorKey;
+        return $this->cursorKeyName;
     }
 }
