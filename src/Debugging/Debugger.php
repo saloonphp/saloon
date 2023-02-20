@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Saloon\Debugging;
 
 use InvalidArgumentException;
-use Saloon\Debugging\Drivers\DebuggingDriver;
+use Saloon\Contracts\DebuggingDriver;
 
 class Debugger
 {
     /**
-     * @var array<string, \Saloon\Debugging\Drivers\DebuggingDriver>
+     * @var array<string, \Saloon\Contracts\DebuggingDriver>
      */
     protected array $registeredDrivers = [];
 
@@ -30,7 +30,7 @@ class Debugger
     protected bool $afterSent = false;
 
     /**
-     * @param \Saloon\Debugging\Drivers\DebuggingDriver $driver
+     * @param \Saloon\Contracts\DebuggingDriver $driver
      *
      * @return $this
      */
@@ -42,7 +42,7 @@ class Debugger
     }
 
     /**
-     * @param \Saloon\Debugging\Drivers\DebuggingDriver|string $driver A DebuggingDriver or the name one of a registered one.
+     * @param \Saloon\Contracts\DebuggingDriver|string $driver A DebuggingDriver or the name one of a registered one.
      *
      * @return $this
      */
@@ -60,7 +60,7 @@ class Debugger
     }
 
     /**
-     * @param \Saloon\Debugging\Drivers\DebuggingDriver|string $driver A DebuggingDriver or the name one of a registered one.
+     * @param \Saloon\Contracts\DebuggingDriver|string $driver A DebuggingDriver or the name one of a registered one.
      *
      * @return $this
      */
@@ -74,7 +74,7 @@ class Debugger
     }
 
     /**
-     * @param \Saloon\Debugging\Drivers\DebuggingDriver|string $driver A DebuggingDriver or the name one of a registered one.
+     * @param \Saloon\Contracts\DebuggingDriver|string $driver A DebuggingDriver or the name one of a registered one.
      *
      * @return $this
      */
