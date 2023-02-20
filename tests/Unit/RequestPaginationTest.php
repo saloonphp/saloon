@@ -328,12 +328,12 @@ test('with a cursor paginator you can set and get the next page key and cursor k
     $request = new CursorGetSuperHeroesRequest;
     $paginator = $connector->paginate($request);
 
-    expect($paginator->getNextPageKey())->toEqual('next_page_url');
-    expect($paginator->getCursorKey())->toEqual('cursor');
+    expect($paginator->getNextPageKeyName())->toEqual('next_page_url');
+    expect($paginator->getCursorKeyName())->toEqual('cursor');
 
-    $paginator->setNextPageKey('next');
-    $paginator->setCursorKey('token');
+    $paginator->setNextPageKeyName('next');
+    $paginator->setCursorKeyName('token');
 
-    expect($paginator->getNextPageKey())->toEqual('next');
-    expect($paginator->getCursorKey())->toEqual('token');
+    expect($paginator->getNextPageKeyName())->toEqual('next');
+    expect($paginator->getCursorKeyName())->toEqual('token');
 });
