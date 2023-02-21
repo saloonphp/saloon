@@ -13,42 +13,32 @@ A Laravel/PHP package that helps you build beautiful API integrations and SDKs �
 </div>
 
 ## Introduction
-Saloon offers a fluent, object-oriented wrapper to build your next API integration or PHP SDK. It makes sharing API requests throughout your application a breeze. You don’t have to configure a HTTP client, so you can start sending requests really quickly.
-
-If you need request faking for your tests, Saloon has it out of the box alongside many other useful tools like OAuth2 boilerplate and caching. If you use Laravel, there's also a dedicated Laravel package with artisan console commands to help you build even faster.
+Saloon is a PHP library that provides you with a beautiful API integration framework. It gives you with all the tools you need to build and test API integrations for your application or SDKs. It can be easily customised with plugins, but It comes pre-configured for you so you can get to sending API requests right away. Saloon comes with many exciting features out of the box like recording requests in your tests, caching, OAuth2 and pagination. 
 
 ```php
 <?php
 
-$connector = new ForgeConnector('api-token');
+$forge = new ForgeConnector('api-token');
 
-$response = $connector->send(new GetServersRequest);
+$response = $forge->send(new GetServersRequest);
 $data = $response->json();
 ```
 
-## Features
+## Key Features
 
-- Simple and easy to learn syntax that standardises the way you interact with APIs
-- Abstract API integrations into classes so you can keep your code DRY
-- Configuration is fast and can be shared across all your requests
-- Built on top of Guzzle, one of the most popular PHP HTTP clients.
-- Framework agnostic
-- Mocking requests for testing
-- Great for building your own PHP SDKs
-- Authentication & OAuth2 boilerplate already built for you
-- Scalable with lots of API integrations across many team members
+- Provides a simple, easy-to-learn, object-oriented syntax that standardises the way you interact with APIs
+- No HTTP client configuration is required but can be completely customised if you need
+- Abstract API integrations into classes to keep your code tidy and centralised
+- Great for building your next PHP SDKs or package/library
+- Works great within a team as it provides a standard everyone can follow
+- Application/framework agnostic
+- Packed full of features like request recording, request concurrency, caching, data-transfer-object support, and full Laravel support.
+- Fully extendable and welcomes your own implementations
+- Uses Guzzle, the most popular PHP HTTP client
 
 ## Documentation
 
 [Click here to read the documentation](https://docs.saloon.dev)
-
-## Why Saloon?
-
-Building API integrations can be time consuming. After you have found an API client to use, you’re faced with lots of configuration to remember and it’s hard to repeat requests without copying and pasting, and then when you introduce patterns like OAuth2 everything gets complicated. You’ll often find yourself writing the same boilerplate code over and over again.
-
-We’ve standardised the way we talk to APIs with PSR-7 and PSR-18 but we haven’t got a standard structure to build API integrations.
-
-Saloon aims to solve this.
 
 ## Contributing
 
