@@ -10,6 +10,7 @@ use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
 use Saloon\Debugging\DebugData;
 use Saloon\Debugging\Debugger;
+use Saloon\Debugging\Drivers\RayDebugger;
 
 trait HasDebugging
 {
@@ -25,7 +26,21 @@ trait HasDebugging
             $this instanceof Request => $this->middleware(),
         };
 
-        $callback($debugger = new Debugger);
+        // Todo:
+        // Come up with a nicer way to register these debuggers. Perhaps inside the
+        // constructor of the debugger we can register them. It would be nice if we
+        // can have a way to register additional like the telescope from the Laravel
+        // package.
+
+        // Todo: Make register driver static but allow people to register ad-hoc drivers
+
+        $debugger = new Debugger;
+
+        $debugger->registerDriver(new RayDebugger);
+
+        $callback($debugger);
+
+        // Todo: Move this logic after the register default middleware so we log the very final PendingRequest.
 
         $middlewarePipeline->onRequest(function (PendingRequest $pendingRequest) use ($debugger): void {
             $debugger->send(new DebugData($pendingRequest, null));

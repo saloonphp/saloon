@@ -36,7 +36,7 @@ class Debugger
      */
     public function registerDriver(DebuggingDriver $driver): static
     {
-        $this->registeredDrivers[ $driver->name() ] = $driver;
+        $this->registeredDrivers[$driver->name()] = $driver;
 
         return $this;
     }
@@ -48,13 +48,17 @@ class Debugger
      */
     public function usingDriver(DebuggingDriver|string $driver): static
     {
+        // Todo: Throw an exception if the string-based driver (not class) does not exist.
+        // Todo: Also make sure to implode the array_keys of the registered drivers so you get a nice error
+        // Todo: message like: "Available drivers: ray, syslog, laravel" etc
+
         if ($driver instanceof DebuggingDriver) {
             $this->registerDriver($driver);
         }
 
         $driverName = is_string($driver) ? $driver : $driver->name();
 
-        $this->useDrivers[ $driverName ] = true;
+        $this->useDrivers[$driverName] = true;
 
         return $this;
     }
@@ -68,7 +72,7 @@ class Debugger
     {
         $driverName = is_string($driver) ? $driver : $driver->name();
 
-        unset($this->useDrivers[ $driverName ]);
+        unset($this->useDrivers[$driverName]);
 
         return $this;
     }
@@ -112,26 +116,31 @@ class Debugger
     }
 
     /**
+     * Before and after sent
+     *
+     * @return $this
+     */
+    public function beforeAndAfterSent(bool $beforeAndAfterSent = true): static
+    {
+        return $this->beforeSent($beforeAndAfterSent)->afterSent($beforeAndAfterSent);
+    }
+
+    /**
      * @param string $name
      * @param array<string, mixed> $arguments
-     *
-     * @return mixed
+     * @return $this
      */
-    public function __call(string $name, array $arguments): mixed
+    public function __call(string $name, array $arguments): static
     {
         if (str_starts_with($name, 'using')) {
-            return $this->usingDriver(
-                strtolower(substr($name, 5)),
-            );
+            return $this->usingDriver(strtolower(substr($name, 5)));
         }
 
         if (str_starts_with($name, 'only')) {
-            return $this->onlyDriver(
-                strtolower(substr($name, 4)),
-            );
+            return $this->onlyDriver(strtolower(substr($name, 4)));
         }
 
-        // TODO: How should we handle this?
+        // TODO: Throw a MethodNotFound exception
         throw new InvalidArgumentException;
     }
 
@@ -147,13 +156,13 @@ class Debugger
                 continue;
             }
 
-            if ($data->wasNotSent() && $this->beforeSent) {
-                $this->registeredDrivers[ $driverName ]->send($data);
+            if ($this->beforeSent === true && $data->wasNotSent()) {
+                $this->registeredDrivers[$driverName]->send($data);
                 continue;
             }
 
-            if ($data->wasSent() && $this->afterSent) {
-                $this->registeredDrivers[ $driverName ]->send($data);
+            if ($this->afterSent === true && $data->wasSent()) {
+                $this->registeredDrivers[$driverName]->send($data);
                 continue;
             }
         }
