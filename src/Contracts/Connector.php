@@ -6,7 +6,7 @@ namespace Saloon\Contracts;
 
 use GuzzleHttp\Promise\PromiseInterface;
 
-interface Connector extends Authenticatable, CanThrowRequestExceptions, Conditionable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams, Makeable
+interface Connector extends Authenticatable, CanThrowRequestExceptions, HasConfig, HasHeaders, HasQueryParams, HasDelay, HasMiddlewarePipeline, HasMockClient
 {
     /**
      * \Handle the boot lifecycle hook
@@ -43,7 +43,7 @@ interface Connector extends Authenticatable, CanThrowRequestExceptions, Conditio
      *
      * @template TKey of array-key
      *
-     * @param iterable<TKey, \GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>|callable(\Saloon\Contracts\Connector): (iterable<TKey, \GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>) $requests
+     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request>|callable(\Saloon\Contracts\Connector): iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Contracts\Request> $requests
      * @param int|callable(int $pendingRequests): (int) $concurrency
      * @param callable(\Saloon\Contracts\Response, TKey $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
      * @param callable(mixed $reason, TKey $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $exceptionHandler

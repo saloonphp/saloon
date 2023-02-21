@@ -34,11 +34,11 @@ test('you can retrieve a file from storage', function () {
 });
 
 test('you can put a file in storage', function () {
-    $filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon'));
+    $filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon/Testing'));
     $filesystem->deleteDirectory('/');
     $filesystem->createDirectory('/');
 
-    $storage = new Storage('tests/Fixtures/Saloon');
+    $storage = new Storage('tests/Fixtures/Saloon/Testing');
 
     expect($storage->exists('example.txt'))->toBeFalse();
 
@@ -50,11 +50,11 @@ test('you can put a file in storage', function () {
 });
 
 test('it will create a file with nested folders', function () {
-    $filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon'));
+    $filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon/Testing'));
     $filesystem->deleteDirectory('/');
     $filesystem->createDirectory('/');
 
-    $path = 'some' . DIRECTORY_SEPARATOR . 'other' . DIRECTORY_SEPARATOR . 'directories' . DIRECTORY_SEPARATOR . 'example.txt';
+    $path = 'Testing' . DIRECTORY_SEPARATOR . 'some' . DIRECTORY_SEPARATOR . 'other' . DIRECTORY_SEPARATOR . 'directories' . DIRECTORY_SEPARATOR . 'example.txt';
 
     $storage = new Storage('tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'Saloon');
 

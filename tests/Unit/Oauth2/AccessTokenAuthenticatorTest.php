@@ -32,6 +32,27 @@ it('can return if it has expired or not', function () {
 
     $authenticator = new AccessTokenAuthenticator($accessToken, $refreshToken, $expiresAt);
 
+    expect($authenticator->isRefreshable())->toBeTrue();
+    expect($authenticator->isNotRefreshable())->toBeFalse();
+    expect($authenticator->hasExpired())->toBeTrue();
+    expect($authenticator->hasNotExpired())->toBeFalse();
+});
+
+test('can be constructed without a refresh token or expiry', function () {
+    $authenticator = new AccessTokenAuthenticator('access');
+
+    expect($authenticator->getAccessToken())->toEqual('access');
+    expect($authenticator->getRefreshToken())->toBeNull();
+    expect($authenticator->getExpiresAt())->toBeNull();
+    expect($authenticator->isRefreshable())->toBeFalse();
+    expect($authenticator->isNotRefreshable())->toBeTrue();
+});
+
+test('can be constructed with just an access token and expiry', function () {
+    $expiresAt = Date::now()->subMinutes(5)->toDateTime();
+
+    $authenticator = new AccessTokenAuthenticator('access', null, $expiresAt);
+
     expect($authenticator->hasExpired())->toBeTrue();
     expect($authenticator->hasNotExpired())->toBeFalse();
 });

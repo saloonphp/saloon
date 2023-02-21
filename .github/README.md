@@ -20,11 +20,9 @@ If you need request faking for your tests, Saloon has it out of the box alongsid
 ```php
 <?php
 
-use App\Http\Saloon\Requests\GetForgeServerRequest;
+$connector = new ForgeConnector('api-token');
 
-$request = new GetForgeServerRequest(serverId: '123456');
-
-$response = $request->send();
+$response = $connector->send(new GetServersRequest);
 $data = $response->json();
 ```
 

@@ -14,14 +14,14 @@ interface OAuthAuthenticator extends Authenticator
     public function getAccessToken(): string;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getRefreshToken(): string;
+    public function getRefreshToken(): ?string;
 
     /**
-     * @return \DateTimeImmutable
+     * @return \DateTimeImmutable|null
      */
-    public function getExpiresAt(): DateTimeImmutable;
+    public function getExpiresAt(): ?DateTimeImmutable;
 
     /**
      * @return bool
@@ -32,4 +32,18 @@ interface OAuthAuthenticator extends Authenticator
      * @return bool
      */
     public function hasNotExpired(): bool;
+
+    /**
+     * Check if the authenticator is refreshable
+     *
+     * @return bool
+     */
+    public function isRefreshable(): bool;
+
+    /**
+     * Check if the authenticator is not refreshable
+     *
+     * @return bool
+     */
+    public function isNotRefreshable(): bool;
 }

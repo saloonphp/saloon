@@ -125,6 +125,7 @@ class PendingRequest implements PendingRequestContract
         $this->bootPlugins()
             ->mergeRequestProperties()
             ->mergeBody()
+            ->mergeDelay()
             ->bootConnectorAndRequest();
 
         // Now we will register the default middleware. The user's defined
@@ -228,6 +229,22 @@ class PendingRequest implements PendingRequestContract
         }
 
         $this->body = clone $requestBody ?? clone $connectorBody;
+
+        return $this;
+    }
+
+    /**
+     * Merge delay together
+     *
+     * Request delay takes priority over connector delay
+     *
+     * @return $this
+     */
+    protected function mergeDelay(): static
+    {
+        $this->request->delay()->isNotEmpty() ?
+            $this->delay()->set($this->request->delay()->get()) :
+            $this->delay()->set($this->connector->delay()->get());
 
         return $this;
     }

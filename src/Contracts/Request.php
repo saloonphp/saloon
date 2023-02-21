@@ -6,7 +6,7 @@ namespace Saloon\Contracts;
 
 use Saloon\Enums\Method;
 
-interface Request extends Authenticatable, CanThrowRequestExceptions, Conditionable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams, Makeable
+interface Request extends Authenticatable, CanThrowRequestExceptions, HasConfig, HasHeaders, HasQueryParams, HasDelay, HasMiddlewarePipeline, HasMockClient
 {
     /**
      * Get the HTTP method

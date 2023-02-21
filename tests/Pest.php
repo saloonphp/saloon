@@ -26,6 +26,9 @@ declare(strict_types=1);
 |
 */
 
+use Saloon\Http\Faking\MockClient;
+use Saloon\Contracts\PendingRequest;
+use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 expect()->extend('toBeOne', function () {
@@ -51,4 +54,30 @@ function apiUrl()
 function connector(): TestConnector
 {
     return new TestConnector;
+}
+
+function paginationMockClient(string $prefix): MockClient
+{
+    return new MockClient([
+        '*' => function (PendingRequest $pendingRequest) use ($prefix) {
+            $query = http_build_query($pendingRequest->query()->all());
+
+            return MockResponse::fixture($prefix . '-' . $query);
+        },
+    ]);
+}
+
+/**
+ * @returns array{
+ *     id: int<1, max>,
+ *     superhero: string,
+ *     publisher: string,
+ *     alter_ego: string,
+ *     first_appearance: string,
+ *     characters: string,
+ * }
+ */
+function superheroes(): array
+{
+    return json_decode(file_get_contents(__DIR__ . '/Fixtures/Static/superheroes.json'), true, 512, JSON_THROW_ON_ERROR);
 }
