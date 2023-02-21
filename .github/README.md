@@ -36,9 +36,9 @@ $data = $response->json();
 - Fully extendable and welcomes your own implementations
 - Uses Guzzle, the most popular PHP HTTP client
 
-## Documentation
+## Getting Started
 
-[Click here to read the documentation](https://docs.saloon.dev)
+[Click here to get started](https://docs.saloon.dev/getting-started/installation)
 
 ## Contributing
 
