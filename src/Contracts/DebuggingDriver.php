@@ -8,6 +8,9 @@ use Saloon\Debugging\DebugData;
 
 interface DebuggingDriver
 {
+    /**
+     * @return string
+     */
     public function name(): string;
 
     /**
