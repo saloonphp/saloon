@@ -38,7 +38,9 @@ trait HasDebugging
 
         $debugger->registerDriver(new RayDebugger);
 
-        $callback($debugger);
+        if (! is_null($callback)) {
+            $callback($debugger);
+        }
 
         // Todo: Move this logic after the register default middleware so we log the very final PendingRequest.
 
@@ -48,6 +50,6 @@ trait HasDebugging
             $debugger->send(new DebugData($response->getPendingRequest(), $response));
         });
 
-        return $this;
+        return is_null($callback) ? $debugger : $this;
     }
 }
