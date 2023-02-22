@@ -28,42 +28,42 @@ class DebugData
         return ! $this->wasSent();
     }
 
-    public function connector(): Connector
+    public function getConnector(): Connector
     {
         return $this->pendingRequest->getConnector();
     }
 
-    public function sender(): Sender
+    public function getSender(): Sender
     {
         return $this->pendingRequest->getSender();
     }
 
-    public function pendingRequest(): PendingRequest
+    public function getPendingRequest(): PendingRequest
     {
         return $this->pendingRequest;
     }
 
-    public function request(): Request
+    public function getRequest(): Request
     {
         return $this->pendingRequest->getRequest();
     }
 
-    public function url(): string
+    public function getUrl(): string
     {
         return $this->pendingRequest->getUrl();
     }
 
-    public function method(): Method
+    public function getMethod(): Method
     {
         return $this->pendingRequest->getMethod();
     }
 
-    public function response(): ?Response
+    public function getResponse(): ?Response
     {
         return $this->response;
     }
 
-    public function statusCode(): ?int
+    public function getStatusCode(): ?int
     {
         return $this->response?->status();
     }
