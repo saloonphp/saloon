@@ -12,7 +12,7 @@ class Debugger
     /**
      * @var array<string, \Saloon\Contracts\DebuggingDriver>
      */
-    protected array $registeredDrivers = [];
+    protected static array $registeredDrivers = [];
 
     /**
      * @var array<string, bool>
@@ -34,11 +34,11 @@ class Debugger
      *
      * @return $this
      */
-    public function registerDriver(DebuggingDriver $driver): static
+    public static function registerDriver(DebuggingDriver $driver): static
     {
-        $this->registeredDrivers[$driver->name()] = $driver;
+        static::$registeredDrivers[$driver->name()] = $driver;
 
-        return $this;
+        return new static;
     }
 
     /**
@@ -53,7 +53,7 @@ class Debugger
         // Todo: message like: "Available drivers: ray, syslog, laravel" etc
 
         if ($driver instanceof DebuggingDriver) {
-            $this->registerDriver($driver);
+            static::registerDriver($driver);
         }
 
         $driverName = is_string($driver) ? $driver : $driver->name();
@@ -157,12 +157,12 @@ class Debugger
             }
 
             if ($this->beforeSent === true && $data->wasNotSent()) {
-                $this->registeredDrivers[$driverName]->send($data);
+                static::$registeredDrivers[$driverName]->send($data);
                 continue;
             }
 
             if ($this->afterSent === true && $data->wasSent()) {
-                $this->registeredDrivers[$driverName]->send($data);
+                static::$registeredDrivers[$driverName]->send($data);
                 continue;
             }
         }
