@@ -15,11 +15,11 @@ use Saloon\Debugging\Drivers\RayDebugger;
 trait HasDebugging
 {
     /**
-     * @param callable(\Saloon\Debugging\Debugger): (void) $callback
+     * @param callable(\Saloon\Debugging\Debugger): (void)|null $callback
      *
-     * @return $this
+     * @return ($callback is null ? \Saloon\Debugging\Debugger : $this)
      */
-    public function debug(callable $callback): static
+    public function debug(?callable $callback = null): Debugger|static
     {
         $middlewarePipeline = match (true) {
             $this instanceof Connector,
