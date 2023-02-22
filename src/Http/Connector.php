@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use Saloon\Contracts\HasDebugging as HasDebuggingContract;
 use Saloon\Traits\Bootable;
 use Saloon\Traits\HasDebugging;
 use Saloon\Traits\Makeable;
@@ -20,7 +21,7 @@ use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Contracts\Connector as ConnectorContract;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 
-abstract class Connector implements ConnectorContract
+abstract class Connector implements ConnectorContract, HasDebuggingContract
 {
     use AuthenticatesRequests;
     use HasRequestProperties;

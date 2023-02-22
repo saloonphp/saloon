@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use Saloon\Contracts\HasDebugging;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Config;
 use Saloon\Helpers\Helpers;
@@ -13,6 +14,8 @@ use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
+use Saloon\Http\Middleware\DebugRequest;
+use Saloon\Http\Middleware\DebugResponse;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\HasBody;
@@ -287,6 +290,14 @@ class PendingRequest implements PendingRequestContract
         // middleware can set the MockClient before we run the MockResponse.
 
         $middleware->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
+
+        // Finally, we'll register the debugging middleware. This should always
+        // stay at the bottom of the middleware chain, so we output the very
+        // latest PendingRequest/Response
+
+        $middleware->onRequest(new DebugRequest,false, 'debugRequest');
+
+        $middleware->onResponse(new DebugResponse,false, 'debugResponse');
 
         return $this;
     }

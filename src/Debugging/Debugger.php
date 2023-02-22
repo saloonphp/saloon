@@ -6,13 +6,21 @@ namespace Saloon\Debugging;
 
 use InvalidArgumentException;
 use Saloon\Contracts\DebuggingDriver;
+use Saloon\Debugging\Drivers\ErrorLogDebugger;
+use Saloon\Debugging\Drivers\RayDebugger;
+use Saloon\Debugging\Drivers\SystemLogDebugger;
 
 class Debugger
 {
     /**
      * @var array<string, \Saloon\Contracts\DebuggingDriver>
      */
-    protected static array $registeredDrivers = [];
+    protected static array $globalRegisteredDrivers = [];
+
+    /**
+     * @var array<string, \Saloon\Contracts\DebuggingDriver>
+     */
+    protected array $registeredDrivers = [];
 
     /**
      * @var array<string, bool>
@@ -22,23 +30,42 @@ class Debugger
     /**
      * @var bool
      */
-    protected bool $beforeSent = false;
+    protected bool $showRequest = false;
 
     /**
      * @var bool
      */
-    protected bool $afterSent = false;
+    protected bool $showResponse = false;
+
+    public function __construct()
+    {
+        $this->registerDriver(new RayDebugger);
+        $this->registerDriver(new ErrorLogDebugger);
+        $this->registerDriver(new SystemLogDebugger);
+    }
 
     /**
      * @param \Saloon\Contracts\DebuggingDriver $driver
      *
      * @return $this
      */
-    public static function registerDriver(DebuggingDriver $driver): static
+    public static function registerGlobalDriver(DebuggingDriver $driver): static
     {
-        static::$registeredDrivers[$driver->name()] = $driver;
+        static::$globalRegisteredDrivers[$driver->name()] = $driver;
 
         return new static;
+    }
+
+    /**
+     * @param \Saloon\Contracts\DebuggingDriver $driver
+     *
+     * @return $this
+     */
+    public function registerDriver(DebuggingDriver $driver): static
+    {
+        $this->registeredDrivers[$driver->name()] = $driver;
+
+        return $this;
     }
 
     /**
@@ -53,7 +80,7 @@ class Debugger
         // Todo: message like: "Available drivers: ray, syslog, laravel" etc
 
         if ($driver instanceof DebuggingDriver) {
-            static::registerDriver($driver);
+            static::registerGlobalDriver($driver);
         }
 
         $driverName = is_string($driver) ? $driver : $driver->name();
@@ -92,25 +119,25 @@ class Debugger
     }
 
     /**
-     * @param bool $beforeSent
+     * @param bool $showRequest
      *
      * @return $this
      */
-    public function beforeSent(bool $beforeSent = true): static
+    public function showRequest(bool $showRequest = true): static
     {
-        $this->beforeSent = $beforeSent;
+        $this->showRequest = $showRequest;
 
         return $this;
     }
 
     /**
-     * @param bool $afterSent
+     * @param bool $showResponse
      *
      * @return $this
      */
-    public function afterSent(bool $afterSent = true): static
+    public function showResponse(bool $showResponse = true): static
     {
-        $this->afterSent = $afterSent;
+        $this->showResponse = $showResponse;
 
         return $this;
     }
@@ -120,9 +147,22 @@ class Debugger
      *
      * @return $this
      */
-    public function beforeAndAfterSent(bool $beforeAndAfterSent = true): static
+    public function showRequestAndResponse(bool $showRequestAndResponse = true): static
     {
-        return $this->beforeSent($beforeAndAfterSent)->afterSent($beforeAndAfterSent);
+        return $this->showRequest($showRequestAndResponse)->showResponse($showRequestAndResponse);
+    }
+
+    /**
+     * Get the registered drivers
+     *
+     * @return array
+     */
+    protected function getRegisteredDrivers(): array
+    {
+        return [
+            ...static::$globalRegisteredDrivers,
+            ...$this->registeredDrivers,
+        ];
     }
 
     /**
@@ -156,13 +196,15 @@ class Debugger
                 continue;
             }
 
-            if ($this->beforeSent === true && $data->wasNotSent()) {
-                static::$registeredDrivers[$driverName]->send($data);
+            $registeredDrivers = $this->getRegisteredDrivers();
+
+            if ($this->showRequest === true && $data->wasNotSent()) {
+                $registeredDrivers[$driverName]->send($data);
                 continue;
             }
 
-            if ($this->afterSent === true && $data->wasSent()) {
-                static::$registeredDrivers[$driverName]->send($data);
+            if ($this->showResponse === true && $data->wasSent()) {
+                $registeredDrivers[$driverName]->send($data);
                 continue;
             }
         }

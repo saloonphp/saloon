@@ -71,4 +71,18 @@ class Helpers
     {
         return $value instanceof Closure ? $value(...$args) : $value;
     }
+
+    /**
+     * Process an item and return it back
+     *
+     * @param mixed $value
+     * @param callable $callback
+     * @return mixed
+     */
+    public static function tap(mixed $value, callable $callback): mixed
+    {
+        $callback($value);
+
+        return $value;
+    }
 }
