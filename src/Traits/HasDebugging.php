@@ -27,16 +27,16 @@ trait HasDebugging
      * Retrieve the debugger
      *
      * @param callable|null $callback
-     * @return ($callback is null ? \Saloon\Debugging\Debugger : $this)
+     * @return \Saloon\Debugging\Debugger
      */
-    public function debug(?callable $callback = null): Debugger|static
+    public function debug(?callable $callback = null): Debugger
     {
         $debugger = $this->debugger ??= new Debugger;
 
-        if (is_null($callback)) {
-            return $debugger;
+        if (is_callable($callback)) {
+            $callback($debugger);
         }
 
-        return Helpers::tap($this, static fn () => $callback($debugger));
+        return $debugger;
     }
 }

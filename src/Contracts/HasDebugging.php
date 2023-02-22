@@ -10,7 +10,7 @@ interface HasDebugging
      * Retrieve the debugger
      *
      * @param callable|null $callback
-     * @return ($callback is null ? \Saloon\Debugging\Debugger : $this)
+     * @return \Saloon\Debugging\Debugger
      */
-    public function debug(?callable $callback = null): Debugger|static;
+    public function debug(?callable $callback = null): Debugger;
 }

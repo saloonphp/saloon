@@ -80,7 +80,7 @@ class Debugger
         // Todo: message like: "Available drivers: ray, syslog, laravel" etc
 
         if ($driver instanceof DebuggingDriver) {
-            static::registerGlobalDriver($driver);
+            $this->registerDriver($driver);
         }
 
         $driverName = is_string($driver) ? $driver : $driver->name();
