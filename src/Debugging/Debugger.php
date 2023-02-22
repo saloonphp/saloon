@@ -155,7 +155,7 @@ class Debugger
     /**
      * Get the registered drivers
      *
-     * @return array
+     * @return array<string, \Saloon\Contracts\DebuggingDriver>
      */
     protected function getRegisteredDrivers(): array
     {

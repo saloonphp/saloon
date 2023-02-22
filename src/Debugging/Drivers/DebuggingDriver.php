@@ -15,7 +15,7 @@ abstract class DebuggingDriver implements DebuggingDriverContract
 {
     /**
      * @param \Saloon\Debugging\DebugData $data
-     * @param bool $preserveObjects
+     * @param bool $asArray
      * @return array<string, mixed>
      */
     protected function formatData(DebugData $data, bool $asArray = false): array
