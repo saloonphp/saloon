@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace Saloon\Debugging;
 
-use Saloon\Contracts\Connector;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Enums\Method;
+use Saloon\Contracts\Sender;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
-use Saloon\Contracts\Sender;
-use Saloon\Enums\Method;
+use Saloon\Contracts\Connector;
+use Saloon\Contracts\PendingRequest;
 
 class DebugData
 {
     public function __construct(
         protected readonly PendingRequest $pendingRequest,
         protected readonly ?Response $response,
-    ) {}
+    ) {
+    }
 
     public function wasSent(): bool
     {

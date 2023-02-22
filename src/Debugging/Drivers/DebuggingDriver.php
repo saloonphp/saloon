@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Debugging\Drivers;
 
-use Saloon\Contracts\ArrayStore;
-use Saloon\Contracts\Body\BodyRepository;
-use Saloon\Contracts\DebuggingDriver as DebuggingDriverContract;
 use Saloon\Contracts\Response;
 use Saloon\Debugging\DebugData;
+use Saloon\Contracts\ArrayStore;
+use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Repositories\Body\MultipartBodyRepository;
-use Throwable;
+use Saloon\Contracts\DebuggingDriver as DebuggingDriverContract;
 
 abstract class DebuggingDriver implements DebuggingDriverContract
 {
@@ -99,10 +98,9 @@ abstract class DebuggingDriver implements DebuggingDriverContract
     protected function formatDataAsArray(array $formattedData): array
     {
         return array_map(static function (mixed $item) {
-            return match(true) {
-                $item instanceof ArrayStore => $item->all(),
+            return match (true) {
+                $item instanceof ArrayStore, $item instanceof BodyRepository => $item->all(),
                 $item instanceof MultipartBodyRepository => $item->toArray(),
-                $item instanceof BodyRepository => $item->all(),
                 default => $item,
             };
         }, $formattedData);

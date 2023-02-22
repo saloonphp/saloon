@@ -6,8 +6,8 @@ namespace Saloon\Debugging;
 
 use InvalidArgumentException;
 use Saloon\Contracts\DebuggingDriver;
-use Saloon\Debugging\Drivers\ErrorLogDebugger;
 use Saloon\Debugging\Drivers\RayDebugger;
+use Saloon\Debugging\Drivers\ErrorLogDebugger;
 use Saloon\Debugging\Drivers\SystemLogDebugger;
 
 class Debugger
@@ -173,11 +173,11 @@ class Debugger
     public function __call(string $name, array $arguments): static
     {
         if (str_starts_with($name, 'using')) {
-            return $this->usingDriver(strtolower(substr($name, 5)));
+            return $this->usingDriver(mb_strtolower(mb_substr($name, 5)));
         }
 
         if (str_starts_with($name, 'only')) {
-            return $this->onlyDriver(strtolower(substr($name, 4)));
+            return $this->onlyDriver(mb_strtolower(mb_substr($name, 4)));
         }
 
         // TODO: Throw a MethodNotFound exception

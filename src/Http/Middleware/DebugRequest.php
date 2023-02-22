@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Http\Middleware;
 
+use Saloon\Debugging\DebugData;
 use Saloon\Contracts\HasDebugging;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\RequestMiddleware;
-use Saloon\Debugging\DebugData;
 
 class DebugRequest implements RequestMiddleware
 {

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Http\Middleware;
 
-use Saloon\Contracts\HasDebugging;
 use Saloon\Contracts\Response;
-use Saloon\Contracts\ResponseMiddleware;
 use Saloon\Debugging\DebugData;
+use Saloon\Contracts\HasDebugging;
+use Saloon\Contracts\ResponseMiddleware;
 
 class DebugResponse implements ResponseMiddleware
 {

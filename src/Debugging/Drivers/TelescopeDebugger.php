@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Debugging\Drivers;
 
-use Laravel\Telescope\IncomingEntry;
-use Laravel\Telescope\Telescope;
 use Saloon\Debugging\DebugData;
+use Laravel\Telescope\Telescope;
+use Laravel\Telescope\IncomingEntry;
 
 class TelescopeDebugger extends DebuggingDriver
 {

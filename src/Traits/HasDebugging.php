@@ -4,15 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits;
 
-use Saloon\Contracts\Connector;
-use Saloon\Contracts\PendingRequest;
-use Saloon\Contracts\Request;
-use Saloon\Contracts\Response;
-use Saloon\Debugging\DebugData;
 use Saloon\Debugging\Debugger;
-use Saloon\Debugging\Drivers\RayDebugger;
-use Saloon\Debugging\Drivers\SystemLogDebugger;
-use Saloon\Helpers\Helpers;
 
 trait HasDebugging
 {

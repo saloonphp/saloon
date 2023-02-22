@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use Saloon\Contracts\HasDebugging;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Config;
 use Saloon\Helpers\Helpers;
@@ -14,14 +13,14 @@ use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
-use Saloon\Http\Middleware\DebugRequest;
-use Saloon\Http\Middleware\DebugResponse;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Helpers\ReflectionHelper;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Http\Middleware\DebugRequest;
 use Saloon\Contracts\Body\BodyRepository;
+use Saloon\Http\Middleware\DebugResponse;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Contracts\SimulatedResponsePayload;
 use Saloon\Exceptions\PendingRequestException;
@@ -295,9 +294,9 @@ class PendingRequest implements PendingRequestContract
         // stay at the bottom of the middleware chain, so we output the very
         // latest PendingRequest/Response
 
-        $middleware->onRequest(new DebugRequest,false, 'debugRequest');
+        $middleware->onRequest(new DebugRequest, false, 'debugRequest');
 
-        $middleware->onResponse(new DebugResponse,false, 'debugResponse');
+        $middleware->onResponse(new DebugResponse, false, 'debugResponse');
 
         return $this;
     }
