@@ -4,23 +4,33 @@ declare(strict_types=1);
 
 namespace Saloon\Debugging\Drivers;
 
+use Saloon\Contracts\ArrayStore;
+use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Contracts\DebuggingDriver as DebuggingDriverContract;
+use Saloon\Contracts\Response;
 use Saloon\Debugging\DebugData;
+use Saloon\Repositories\Body\MultipartBodyRepository;
 use Throwable;
 
 abstract class DebuggingDriver implements DebuggingDriverContract
 {
     /**
      * @param \Saloon\Debugging\DebugData $data
-     *
+     * @param bool $preserveObjects
      * @return array<string, mixed>
      */
-    protected function formatData(DebugData $data): array
+    protected function formatData(DebugData $data, bool $asArray = false): array
     {
-        return [
+        $formattedData = [
             ...$this->formatRequestData($data),
             ...$this->formatResponseData($data),
         ];
+
+        if ($asArray === false) {
+            return $formattedData;
+        }
+
+        return $this->formatDataAsArray($formattedData);
     }
 
     /**
@@ -31,11 +41,17 @@ abstract class DebuggingDriver implements DebuggingDriverContract
     protected function formatRequestData(DebugData $data): array
     {
         return [
-            'method' => $data->method(),
-            'uri' => $data->url(),
-            'request_headers' => $data->pendingRequest()->headers(),
-            'request_query' => $data->pendingRequest()->query()->all(),
-            'request_payload' => $data->pendingRequest()->body()?->all(),
+            'method' => $data->getMethod(),
+            'uri' => $data->getUrl(),
+            'request_headers' => $data->getPendingRequest()->headers(),
+            'request_query' => $data->getPendingRequest()->query(),
+            'request_payload' => $data->getPendingRequest()->body(),
+            'sender_options' => $data->getPendingRequest()->config(),
+            'classes' => [
+                'request' => $data->getRequest()::class,
+                'connector' => $data->getConnector()::class,
+                'sender' => $data->getSender()::class,
+            ],
         ];
     }
 
@@ -46,39 +62,49 @@ abstract class DebuggingDriver implements DebuggingDriverContract
      */
     protected function formatResponseData(DebugData $data): array
     {
-        if (is_null($data->response())) {
+        $response = $data->getResponse();
+
+        if (is_null($response)) {
             return [];
         }
 
         return [
-            'response_status' => $data->response()->status(),
-            'response_headers' => $data->response()->headers(),
-
-            // TODO: This should be converted to body/content, and stuff like that.
-            'response_body' => $this->formatResponseBody($data),
+            'response_status' => $response->status(),
+            'response_headers' => $response->headers(),
+            'response_body' => $this->formatResponseBody($response),
         ];
     }
 
     /**
-     * @param \Saloon\Debugging\DebugData $data
+     * Format the response body
      *
+     * @param \Saloon\Contracts\Response $response
      * @return mixed
      */
-    protected function formatResponseBody(DebugData $data): mixed
+    protected function formatResponseBody(Response $response): mixed
     {
-        return match ($data->response()?->header('Content-Type')) {
-            'application/json' => $data->response()->json(),
-            'application/xml' => $data->response()->xml(),
-            default => (function () use ($data): mixed {
-                try {
-                    // JSON is the most common.
-                    return $data->response()?->json();
-                } catch (Throwable) {}
+        if (str_contains($response->header('Content-Type') ?? '', 'application/json')) {
+            return $response->json();
+        }
 
-                $xml = $data->response()?->xml();
+        return $response->body();
+    }
 
-                return false !== $xml ? $xml : $data->response()?->body();
-            })(),
-        };
+    /**
+     * Format the items of the array into arrays
+     *
+     * @param array $formattedData
+     * @return array
+     */
+    protected function formatDataAsArray(array $formattedData): array
+    {
+        return array_map(static function (mixed $item) {
+            return match(true) {
+                $item instanceof ArrayStore => $item->all(),
+                $item instanceof MultipartBodyRepository => $item->toArray(),
+                $item instanceof BodyRepository => $item->all(),
+                default => $item,
+            };
+        }, $formattedData);
     }
 }

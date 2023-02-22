@@ -20,7 +20,7 @@ class RayDebugger extends DebuggingDriver
      */
     public function send(DebugData $data): static
     {
-        ray($this->formatData($data));
+        ray($this->formatData($data, true))->label('Saloon Debugger');
 
         return $this;
     }

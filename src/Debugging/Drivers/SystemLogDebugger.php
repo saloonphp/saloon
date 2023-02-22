@@ -20,7 +20,7 @@ class SystemLogDebugger extends DebuggingDriver
      */
     public function send(DebugData $data): static
     {
-        syslog(LOG_DEBUG, print_r($this->formatData($data), true));
+        syslog(LOG_DEBUG, print_r($this->formatData($data, true), true));
 
         return $this;
     }

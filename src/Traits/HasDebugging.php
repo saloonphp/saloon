@@ -11,6 +11,7 @@ use Saloon\Contracts\Response;
 use Saloon\Debugging\DebugData;
 use Saloon\Debugging\Debugger;
 use Saloon\Debugging\Drivers\RayDebugger;
+use Saloon\Debugging\Drivers\SystemLogDebugger;
 
 trait HasDebugging
 {
@@ -37,6 +38,7 @@ trait HasDebugging
         $debugger = new Debugger;
 
         $debugger->registerDriver(new RayDebugger);
+        $debugger->registerDriver(new SystemLogDebugger);
 
         if (! is_null($callback)) {
             $callback($debugger);
