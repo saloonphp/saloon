@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use Saloon\Contracts\Authenticator;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Config;
 use Saloon\Helpers\Helpers;
@@ -17,6 +16,7 @@ use Saloon\Helpers\PluginHelper;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\HasBody;
+use Saloon\Contracts\Authenticator;
 use Saloon\Helpers\ReflectionHelper;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Body\BodyRepository;

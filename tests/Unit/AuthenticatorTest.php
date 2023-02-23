@@ -6,8 +6,8 @@ use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Auth\TokenAuthenticator;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Exceptions\MissingAuthenticatorException;
 use Saloon\Tests\Fixtures\Requests\RequiresAuthRequest;
 use Saloon\Tests\Fixtures\Authenticators\PizzaAuthenticator;
@@ -146,14 +146,13 @@ test('if you use the authenticate method on a fully constructed pending request 
     $pendingRequest = $connector->createPendingRequest(new UserRequest);
 
     expect($pendingRequest->headers()->all())->toEqual([
-        'Accept' => 'application/json'
+        'Accept' => 'application/json',
     ]);
 
     $pendingRequest->authenticate(new TokenAuthenticator('yee-haw-request'));
 
     expect($pendingRequest->headers()->all())->toEqual([
         'Accept' => 'application/json',
-        'Authorization' => 'Bearer yee-haw-request'
+        'Authorization' => 'Bearer yee-haw-request',
     ]);
 });
-
