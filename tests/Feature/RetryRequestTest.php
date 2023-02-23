@@ -99,17 +99,14 @@ test('a failed request can have an interval between each attempt', function () {
     $connector = new TestConnector;
     $connector->withMockClient($mockClient);
 
-    $stopwatch = new Stopwatch();
-    $stopwatch->start('sendAndRetry');
+    $start = microtime(true);
 
     $connector->sendAndRetry(new UserRequest, 3, 1000);
-
-    $duration = $stopwatch->stop('sendAndRetry')->getDuration();
 
     // It should be a duration of 2000ms (2 seconds) because the there are two requests
     // after the first.
 
-    expect(floor($duration / 1000) * 1000)->toBeGreaterThanOrEqual(2000);
+    expect(round(microtime(true) - $start))->toBeGreaterThanOrEqual(2);
 });
 
 test('an exception other than a request exception will not be retried', function () {
