@@ -6,6 +6,7 @@ use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Auth\TokenAuthenticator;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Exceptions\MissingAuthenticatorException;
 use Saloon\Tests\Fixtures\Requests\RequiresAuthRequest;
@@ -139,3 +140,20 @@ test('you can add an authenticator inside of request middleware', function () {
 
     expect($pendingRequest->headers()->get('Authorization'))->toEqual('Bearer yee-haw-request');
 });
+
+test('if you use the authenticate method on a fully constructed pending request it will authenticate right away', function () {
+    $connector = new TestConnector();
+    $pendingRequest = $connector->createPendingRequest(new UserRequest);
+
+    expect($pendingRequest->headers()->all())->toEqual([
+        'Accept' => 'application/json'
+    ]);
+
+    $pendingRequest->authenticate(new TokenAuthenticator('yee-haw-request'));
+
+    expect($pendingRequest->headers()->all())->toEqual([
+        'Accept' => 'application/json',
+        'Authorization' => 'Bearer yee-haw-request'
+    ]);
+});
+
