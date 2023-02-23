@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Saloon\Http\Auth\TokenAuthenticator;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
@@ -262,4 +263,24 @@ test('it throws an exception if you do not provide any attempts', function () {
     $this->expectExceptionMessage('Maximum number of attempts has been reached.');
 
     $connector->sendAndRetry(new UserRequest, 0);
+});
+
+test('you can authenticate the pending request inside the retry handler', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam'], 401),
+        MockResponse::make(['name' => 'Gareth'], 200),
+    ]);
+
+    $connector = new TestConnector;
+    $connector->withMockClient($mockClient);
+
+    $response = $connector->sendAndRetry(new UserRequest, 2, 0, function (Exception $exception, PendingRequest $pendingRequest) {
+        $pendingRequest->authenticate(new TokenAuthenticator('newToken'));
+
+        return true;
+    });
+
+    expect($response->status())->toBe(200);
+    expect($response->json())->toEqual(['name' => 'Gareth']);
+    expect($response->getPendingRequest()->headers()->get('Authorization'))->toEqual('Bearer newToken');
 });
