@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Saloon\Contracts\Request;
 use Saloon\Helpers\Str;
 use Saloon\Helpers\Date;
 use Saloon\Http\Response;
+use Saloon\Contracts\Request;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\InvalidStateException;
