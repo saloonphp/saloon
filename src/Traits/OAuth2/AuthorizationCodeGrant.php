@@ -96,10 +96,13 @@ trait AuthorizationCodeGrant
     /**
      * Get the access token.
      *
+     * @template TRequest \Saloon\Contracts\Request
+     *
      * @param string $code
      * @param string|null $state
      * @param string|null $expectedState
      * @param bool $returnResponse
+     * @param callable(TRequest): TRequest|null $requestModifier
      * @return \Saloon\Contracts\OAuthAuthenticator|\Saloon\Contracts\Response
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidResponseClassException
@@ -107,7 +110,7 @@ trait AuthorizationCodeGrant
      * @throws \Saloon\Exceptions\OAuthConfigValidationException
      * @throws \Saloon\Exceptions\PendingRequestException
      */
-    public function getAccessToken(string $code, string $state = null, string $expectedState = null, bool $returnResponse = false): OAuthAuthenticator|Response
+    public function getAccessToken(string $code, string $state = null, string $expectedState = null, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
         $this->oauthConfig()->validate();
 
@@ -115,7 +118,13 @@ trait AuthorizationCodeGrant
             throw new InvalidStateException;
         }
 
-        $response = $this->send(new GetAccessTokenRequest($code, $this->oauthConfig()));
+        $request = new GetAccessTokenRequest($code, $this->oauthConfig());
+
+        if (is_callable($requestModifier)) {
+            $requestModifier($request);
+        }
+
+        $response = $this->send($request);
 
         if ($returnResponse === true) {
             return $response;
@@ -129,15 +138,18 @@ trait AuthorizationCodeGrant
     /**
      * Refresh the access token.
      *
+     * @template TRequest \Saloon\Contracts\Request
+     *
      * @param \Saloon\Contracts\OAuthAuthenticator|string $refreshToken
      * @param bool $returnResponse
+     * @param callable(TRequest): TRequest|null $requestModifier
      * @return \Saloon\Contracts\OAuthAuthenticator|\Saloon\Contracts\Response
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\OAuthConfigValidationException
      * @throws \Saloon\Exceptions\PendingRequestException
      */
-    public function refreshAccessToken(OAuthAuthenticator|string $refreshToken, bool $returnResponse = false): OAuthAuthenticator|Response
+    public function refreshAccessToken(OAuthAuthenticator|string $refreshToken, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
         $this->oauthConfig()->validate();
 
@@ -149,7 +161,13 @@ trait AuthorizationCodeGrant
             $refreshToken = $refreshToken->getRefreshToken();
         }
 
-        $response = $this->send(new GetRefreshTokenRequest($this->oauthConfig(), $refreshToken));
+        $request = new GetRefreshTokenRequest($this->oauthConfig(), $refreshToken);
+
+        if (is_callable($requestModifier)) {
+            $requestModifier($request);
+        }
+
+        $response = $this->send($request);
 
         if ($returnResponse === true) {
             return $response;
