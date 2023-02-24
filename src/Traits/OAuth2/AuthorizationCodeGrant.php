@@ -173,7 +173,7 @@ trait AuthorizationCodeGrant
 
         $accessToken = $responseData->access_token;
         $refreshToken = $responseData->refresh_token ?? $fallbackRefreshToken;
-        $expiresAt = Date::now()->addSeconds($responseData->expires_in)->toDateTime();
+        $expiresAt = $responseData->expires_in ? Date::now()->addSeconds($responseData->expires_in)->toDateTime() : null;
 
         return $this->createOAuthAuthenticator($accessToken, $refreshToken, $expiresAt);
     }
@@ -183,10 +183,10 @@ trait AuthorizationCodeGrant
      *
      * @param string $accessToken
      * @param string $refreshToken
-     * @param \DateTimeImmutable $expiresAt
-     * @return \Saloon\Contracts\OAuthAuthenticator
+     * @param DateTimeImmutable|null $expiresAt
+     * @return OAuthAuthenticator
      */
-    protected function createOAuthAuthenticator(string $accessToken, string $refreshToken, DateTimeImmutable $expiresAt): OAuthAuthenticator
+    protected function createOAuthAuthenticator(string $accessToken, string $refreshToken, ?DateTimeImmutable $expiresAt = null): OAuthAuthenticator
     {
         return new AccessTokenAuthenticator($accessToken, $refreshToken, $expiresAt);
     }

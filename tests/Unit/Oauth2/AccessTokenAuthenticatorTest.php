@@ -56,3 +56,11 @@ test('can be constructed with just an access token and expiry', function () {
     expect($authenticator->hasExpired())->toBeTrue();
     expect($authenticator->hasNotExpired())->toBeFalse();
 });
+
+test('it allows expires_in to be optional', function () {
+    $authenticator = new AccessTokenAuthenticator('access', 'refresh', null);
+
+    expect($authenticator->getExpiresAt())->toBeNull();
+    expect($authenticator->isRefreshable())->toBeTrue();
+    expect($authenticator->isNotRefreshable())->toBeFalse();
+});
