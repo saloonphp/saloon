@@ -173,7 +173,7 @@ trait AuthorizationCodeGrant
 
         $accessToken = $responseData->access_token;
         $refreshToken = $responseData->refresh_token ?? $fallbackRefreshToken;
-        $expiresAt = $responseData->expires_in ? Date::now()->addSeconds($responseData->expires_in)->toDateTime() : null;
+        $expiresAt = isset($responseData->expires_in) ? Date::now()->addSeconds($responseData->expires_in)->toDateTime() : null;
 
         return $this->createOAuthAuthenticator($accessToken, $refreshToken, $expiresAt);
     }
