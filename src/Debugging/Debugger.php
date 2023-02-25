@@ -9,30 +9,41 @@ use Saloon\Contracts\DebuggingDriver;
 use Saloon\Debugging\Drivers\RayDebugger;
 use Saloon\Debugging\Drivers\ErrorLogDebugger;
 use Saloon\Debugging\Drivers\SystemLogDebugger;
+use Saloon\Exceptions\UnknownDriverException;
 
 class Debugger
 {
     /**
+     * Globally registered drivers
+     *
      * @var array<string, \Saloon\Contracts\DebuggingDriver>
      */
     protected static array $globalRegisteredDrivers = [];
 
     /**
+     * Locally registered drivers
+     *
      * @var array<string, \Saloon\Contracts\DebuggingDriver>
      */
     protected array $registeredDrivers = [];
 
     /**
+     * Drivers that have been subscribed to
+     *
      * @var array<string, bool>
      */
     protected array $useDrivers = [];
 
     /**
+     * Denotes if we send the request to the debugging driver
+     *
      * @var bool
      */
     protected bool $showRequest = false;
 
     /**
+     * Denotes if we send the response to the debugging driver
+     *
      * @var bool
      */
     protected bool $showResponse = false;
@@ -45,6 +56,8 @@ class Debugger
     }
 
     /**
+     * Register a driver globally
+     *
      * @param \Saloon\Contracts\DebuggingDriver $driver
      *
      * @return $this
@@ -57,6 +70,8 @@ class Debugger
     }
 
     /**
+     * Register a driver
+     *
      * @param \Saloon\Contracts\DebuggingDriver $driver
      *
      * @return $this
@@ -69,21 +84,28 @@ class Debugger
     }
 
     /**
+     * Subscribe to a given driver
+     *
      * @param \Saloon\Contracts\DebuggingDriver|string $driver A DebuggingDriver or the name one of a registered one.
      *
      * @return $this
+     * @throws \Saloon\Exceptions\UnknownDriverException
      */
     public function usingDriver(DebuggingDriver|string $driver): static
     {
-        // Todo: Throw an exception if the string-based driver (not class) does not exist.
-        // Todo: Also make sure to implode the array_keys of the registered drivers so you get a nice error
-        // Todo: message like: "Available drivers: ray, syslog, laravel" etc
-
         if ($driver instanceof DebuggingDriver) {
             $this->registerDriver($driver);
         }
 
         $driverName = is_string($driver) ? $driver : $driver->name();
+
+        // We'll validate that the driver exists
+
+        $registeredDriverNames = array_keys($this->getRegisteredDrivers());
+
+        if (! in_array($driverName, $registeredDriverNames, true)) {
+            throw new UnknownDriverException(sprintf('Unable to find the "%s" driver. Registered drivers: %s', $driverName, implode(',', $registeredDriverNames)));
+        }
 
         $this->useDrivers[$driverName] = true;
 
@@ -91,6 +113,8 @@ class Debugger
     }
 
     /**
+     * Unsubscribe from a driver
+     *
      * @param \Saloon\Contracts\DebuggingDriver|string $driver A DebuggingDriver or the name one of a registered one.
      *
      * @return $this
@@ -105,9 +129,12 @@ class Debugger
     }
 
     /**
+     * Only use a given driver
+     *
      * @param \Saloon\Contracts\DebuggingDriver|string $driver A DebuggingDriver or the name one of a registered one.
      *
      * @return $this
+     * @throws \Saloon\Exceptions\UnknownDriverException
      */
     public function onlyDriver(DebuggingDriver|string $driver): static
     {
@@ -119,6 +146,8 @@ class Debugger
     }
 
     /**
+     * Send the request to the debugging driver.
+     *
      * @param bool $showRequest
      *
      * @return $this
@@ -131,6 +160,8 @@ class Debugger
     }
 
     /**
+     * Send the response to the debugging driver.
+     *
      * @param bool $showResponse
      *
      * @return $this
@@ -143,7 +174,7 @@ class Debugger
     }
 
     /**
-     * Before and after sent
+     * Send the request and response to the debugging driver.
      *
      * @return $this
      */
@@ -157,7 +188,7 @@ class Debugger
      *
      * @return array<string, \Saloon\Contracts\DebuggingDriver>
      */
-    protected function getRegisteredDrivers(): array
+    public function getRegisteredDrivers(): array
     {
         return [
             ...static::$globalRegisteredDrivers,
@@ -166,25 +197,8 @@ class Debugger
     }
 
     /**
-     * @param string $name
-     * @param array<string, mixed> $arguments
-     * @return $this
-     */
-    public function __call(string $name, array $arguments): static
-    {
-        if (str_starts_with($name, 'using')) {
-            return $this->usingDriver(mb_strtolower(mb_substr($name, 5)));
-        }
-
-        if (str_starts_with($name, 'only')) {
-            return $this->onlyDriver(mb_strtolower(mb_substr($name, 4)));
-        }
-
-        // TODO: Throw a MethodNotFound exception
-        throw new InvalidArgumentException;
-    }
-
-    /**
+     * Send the debugging data to the given driver
+     *
      * @param \Saloon\Debugging\DebugData $data
      *
      * @return $this
@@ -205,7 +219,6 @@ class Debugger
 
             if ($this->showResponse === true && $data->wasSent()) {
                 $registeredDrivers[$driverName]->send($data);
-                continue;
             }
         }
 

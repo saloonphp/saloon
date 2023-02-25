@@ -16,12 +16,10 @@ class ErrorLogDebugger extends DebuggingDriver
     /**
      * @param \Saloon\Debugging\DebugData $data
      *
-     * @return $this
+     * @return void
      */
-    public function send(DebugData $data): static
+    public function send(DebugData $data): void
     {
         error_log(print_r($this->formatData($data, true), true), LOG_DEBUG);
-
-        return $this;
     }
 }

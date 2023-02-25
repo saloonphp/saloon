@@ -46,11 +46,9 @@ abstract class DebuggingDriver implements DebuggingDriverContract
             'request_query' => $data->getPendingRequest()->query(),
             'request_payload' => $data->getPendingRequest()->body(),
             'sender_config' => $data->getPendingRequest()->config(),
-            'classes' => [
-                'request' => $data->getRequest()::class,
-                'connector' => $data->getConnector()::class,
-                'sender' => $data->getSender()::class,
-            ],
+            'request_class' => $data->getRequest()::class,
+            'connector_class' => $data->getConnector()::class,
+            'sender_class' => $data->getSender()::class,
         ];
     }
 
@@ -71,6 +69,7 @@ abstract class DebuggingDriver implements DebuggingDriverContract
             'response_status' => $response->status(),
             'response_headers' => $response->headers(),
             'response_body' => $this->formatResponseBody($response),
+            'response_class' => $response::class,
         ];
     }
 
@@ -82,7 +81,13 @@ abstract class DebuggingDriver implements DebuggingDriverContract
      */
     protected function formatResponseBody(Response $response): mixed
     {
-        if (str_contains($response->header('Content-Type') ?? '', 'application/json')) {
+        $contentType = $response->header('Content-Type') ?? '';
+
+        if (is_array($contentType)) {
+            $contentType = $contentType[0];
+        }
+
+        if (str_contains($contentType, 'application/json')) {
             return $response->json();
         }
 

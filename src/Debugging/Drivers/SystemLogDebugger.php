@@ -16,12 +16,10 @@ class SystemLogDebugger extends DebuggingDriver
     /**
      * @param \Saloon\Debugging\DebugData $data
      *
-     * @return $this
+     * @return void
      */
-    public function send(DebugData $data): static
+    public function send(DebugData $data): void
     {
         syslog(LOG_DEBUG, print_r($this->formatData($data, true), true));
-
-        return $this;
     }
 }

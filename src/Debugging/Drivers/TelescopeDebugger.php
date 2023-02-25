@@ -18,13 +18,11 @@ class TelescopeDebugger extends DebuggingDriver
     /**
      * @param \Saloon\Debugging\DebugData $data
      *
-     * @return $this
+     * @return void
      */
-    public function send(DebugData $data): static
+    public function send(DebugData $data): void
     {
         Telescope::recordClientRequest(IncomingEntry::make($this->formatData($data)));
-
-        return $this;
     }
 
     protected function formatData(DebugData $data): array
