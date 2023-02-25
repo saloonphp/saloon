@@ -96,13 +96,13 @@ trait AuthorizationCodeGrant
     /**
      * Get the access token.
      *
-     * @template TRequest \Saloon\Contracts\Request
+     * @template TRequest of \Saloon\Contracts\Request
      *
      * @param string $code
      * @param string|null $state
      * @param string|null $expectedState
      * @param bool $returnResponse
-     * @param callable(TRequest): TRequest|null $requestModifier
+     * @param callable(TRequest): (void)|null $requestModifier
      * @return \Saloon\Contracts\OAuthAuthenticator|\Saloon\Contracts\Response
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidResponseClassException
@@ -138,11 +138,11 @@ trait AuthorizationCodeGrant
     /**
      * Refresh the access token.
      *
-     * @template TRequest \Saloon\Contracts\Request
+     * @template TRequest of \Saloon\Contracts\Request
      *
      * @param \Saloon\Contracts\OAuthAuthenticator|string $refreshToken
      * @param bool $returnResponse
-     * @param callable(TRequest): TRequest|null $requestModifier
+     * @param callable(TRequest): (void)|null $requestModifier
      * @return \Saloon\Contracts\OAuthAuthenticator|\Saloon\Contracts\Response
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidResponseClassException
