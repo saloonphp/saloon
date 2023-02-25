@@ -60,9 +60,9 @@ class OAuthConfig
     /**
      * Callable that modifies the OAuth requests
      *
-     * @var callable(\Saloon\Contracts\Request): (void)|null
+     * @var \Closure(\Saloon\Contracts\Request): (void)|null
      */
-    protected mixed $requestModifier = null;
+    protected Closure $requestModifier = null;
 
     /**
      * The default scopes that will be applied to every authorization URL.
@@ -235,12 +235,14 @@ class OAuthConfig
     /**
      * Set the request modifier callable which can be used to modify the request being sent
      *
-     * @param callable(\Saloon\Contracts\Request): (void) $requestModifier
+     * @template TRequest of \Saloon\Contracts\Request
+     *
+     * @param callable(TRequest): (void) $requestModifier
      * @return $this
      */
     public function setRequestModifier(callable $requestModifier): static
     {
-        $this->requestModifier = $requestModifier;
+        $this->requestModifier = $requestModifier(...);
 
         return $this;
     }
@@ -248,8 +250,10 @@ class OAuthConfig
     /**
      * Invoke the OAuth2 config request modifier
      *
-     * @param \Saloon\Contracts\Request $request
-     * @return \Saloon\Contracts\Request
+     * @template TRequest of \Saloon\Contracts\Request
+     *
+     * @param TRequest $request
+     * @return TRequest
      */
     public function invokeRequestModifier(Request $request): Request
     {
