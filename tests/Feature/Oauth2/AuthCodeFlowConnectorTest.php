@@ -225,6 +225,33 @@ test('you can get the user from an oauth connector', function () {
     ]);
 });
 
+test('you can tap into the the user request', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['user' => 'Sam']),
+    ]);
+
+    $connector = new OAuth2Connector;
+    $connector->withMockClient($mockClient);
+
+    $accessToken = new AccessTokenAuthenticator('access', 'refresh', Date::now()->addSeconds(3600)->toDateTime());
+
+    $response = $connector->getUser($accessToken, function (Request $request) {
+        $request->query()->add('yee', 'haw');
+    });
+
+    expect($response)->toBeInstanceOf(Response::class);
+
+    $pendingRequest = $response->getPendingRequest();
+
+    expect($pendingRequest->query()->all())->toEqual(['yee' => 'haw']);
+
+    expect($pendingRequest->headers()->all())->toEqual([
+        'Accept' => 'application/json',
+        'Authorization' => 'Bearer access',
+        'Content-Type' => 'application/x-www-form-urlencoded',
+    ]);
+});
+
 test('you can customize the oauth authenticator', function () {
     $mockClient = new MockClient([
         MockResponse::make(['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),

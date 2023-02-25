@@ -216,15 +216,22 @@ trait AuthorizationCodeGrant
     /**
      * Get the authenticated user.
      *
+     * @template TRequest of \Saloon\Contracts\Request
+     *
      * @param \Saloon\Contracts\OAuthAuthenticator $oauthAuthenticator
+     * @param callable(TRequest): (void)|null $requestModifier
      * @return \Saloon\Contracts\Response
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\PendingRequestException
      */
-    public function getUser(OAuthAuthenticator $oauthAuthenticator): Response
+    public function getUser(OAuthAuthenticator $oauthAuthenticator, ?callable $requestModifier = null): Response
     {
         $request = GetUserRequest::make($this->oauthConfig())->authenticate($oauthAuthenticator);
+
+        if (is_callable($requestModifier)) {
+            $requestModifier($request);
+        }
 
         $request = $this->oauthConfig()->invokeRequestModifier($request);
 
