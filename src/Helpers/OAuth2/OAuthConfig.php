@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Helpers\OAuth2;
 
 use Saloon\Traits\Makeable;
+use Saloon\Contracts\Request;
 use Saloon\Exceptions\OAuthConfigValidationException;
 
 /**
@@ -55,6 +56,13 @@ class OAuthConfig
      * @var string
      */
     protected string $userEndpoint = 'user';
+
+    /**
+     * Callable that modifies the OAuth requests
+     *
+     * @var callable(\Saloon\Contracts\Request): (void)|null
+     */
+    protected mixed $requestModifier = null;
 
     /**
      * The default scopes that will be applied to every authorization URL.
@@ -222,6 +230,38 @@ class OAuthConfig
         $this->defaultScopes = $defaultScopes;
 
         return $this;
+    }
+
+    /**
+     * Set the request modifier callable which can be used to modify the request being sent
+     *
+     * @param callable(\Saloon\Contracts\Request): (void) $requestModifier
+     * @return $this
+     */
+    public function setRequestModifier(callable $requestModifier): static
+    {
+        $this->requestModifier = $requestModifier;
+
+        return $this;
+    }
+
+    /**
+     * Invoke the OAuth2 config request modifier
+     *
+     * @param \Saloon\Contracts\Request $request
+     * @return \Saloon\Contracts\Request
+     */
+    public function invokeRequestModifier(Request $request): Request
+    {
+        $requestModifier = $this->requestModifier;
+
+        if (is_null($requestModifier)) {
+            return $request;
+        }
+
+        $requestModifier($request);
+
+        return $request;
     }
 
     /**

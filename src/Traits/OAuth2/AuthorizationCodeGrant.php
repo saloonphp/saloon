@@ -120,6 +120,8 @@ trait AuthorizationCodeGrant
 
         $request = new GetAccessTokenRequest($code, $this->oauthConfig());
 
+        $request = $this->oauthConfig()->invokeRequestModifier($request);
+
         if (is_callable($requestModifier)) {
             $requestModifier($request);
         }
@@ -162,6 +164,8 @@ trait AuthorizationCodeGrant
         }
 
         $request = new GetRefreshTokenRequest($this->oauthConfig(), $refreshToken);
+
+        $request = $this->oauthConfig()->invokeRequestModifier($request);
 
         if (is_callable($requestModifier)) {
             $requestModifier($request);
@@ -220,9 +224,11 @@ trait AuthorizationCodeGrant
      */
     public function getUser(OAuthAuthenticator $oauthAuthenticator): Response
     {
-        return $this->send(
-            GetUserRequest::make($this->oauthConfig())->authenticate($oauthAuthenticator)
-        );
+        $request = GetUserRequest::make($this->oauthConfig())->authenticate($oauthAuthenticator);
+
+        $request = $this->oauthConfig()->invokeRequestModifier($request);
+
+        return $this->send($request);
     }
 
     /**
