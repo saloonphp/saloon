@@ -16,6 +16,7 @@ use Saloon\Helpers\PluginHelper;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\HasBody;
+use Saloon\Contracts\Authenticator;
 use Saloon\Helpers\ReflectionHelper;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Http\Middleware\DebugRequest;
@@ -96,6 +97,13 @@ class PendingRequest implements PendingRequestContract
     protected bool $asynchronous = false;
 
     /**
+     * Determines if the PendingRequest is ready to be sent
+     *
+     * @var bool
+     */
+    protected bool $ready = false;
+
+    /**
      * Build up the request payload.
      *
      * @param \Saloon\Contracts\Connector $connector
@@ -136,10 +144,14 @@ class PendingRequest implements PendingRequestContract
 
         $this->registerDefaultMiddleware();
 
-        // Finally, we will execute the request middleware pipeline which will
+        // Next, we will execute the request middleware pipeline which will
         // process any middleware added on the connector or the request.
 
         $this->executeRequestPipeline();
+
+        // Finally, we'll mark our PendingRequest as ready.
+
+        $this->ready = true;
     }
 
     /**
@@ -513,5 +525,27 @@ class PendingRequest implements PendingRequestContract
     public function isAsynchronous(): bool
     {
         return $this->asynchronous;
+    }
+
+    /**
+     * Authenticate the PendingRequest
+     *
+     * @param \Saloon\Contracts\Authenticator $authenticator
+     * @return $this
+     */
+    public function authenticate(Authenticator $authenticator): static
+    {
+        $this->authenticator = $authenticator;
+
+        // If the PendingRequest has already been constructed, it would be nice
+        // for someone to be able to run the "authenticate" method after. This
+        // will allow us to do this. With future versions of Saloon we will
+        // likely remove this method.
+
+        if ($this->ready === true) {
+            $this->authenticator->set($this);
+        }
+
+        return $this;
     }
 }

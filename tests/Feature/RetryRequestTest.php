@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Symfony\Component\Stopwatch\Stopwatch;
+use Saloon\Http\Auth\TokenAuthenticator;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
@@ -98,17 +98,14 @@ test('a failed request can have an interval between each attempt', function () {
     $connector = new TestConnector;
     $connector->withMockClient($mockClient);
 
-    $stopwatch = new Stopwatch();
-    $stopwatch->start('sendAndRetry');
+    $start = microtime(true);
 
     $connector->sendAndRetry(new UserRequest, 3, 1000);
-
-    $duration = $stopwatch->stop('sendAndRetry')->getDuration();
 
     // It should be a duration of 2000ms (2 seconds) because the there are two requests
     // after the first.
 
-    expect(floor($duration / 1000) * 1000)->toBeGreaterThanOrEqual(2000);
+    expect(round(microtime(true) - $start))->toBeGreaterThanOrEqual(2);
 });
 
 test('an exception other than a request exception will not be retried', function () {
@@ -262,4 +259,24 @@ test('it throws an exception if you do not provide any attempts', function () {
     $this->expectExceptionMessage('Maximum number of attempts has been reached.');
 
     $connector->sendAndRetry(new UserRequest, 0);
+});
+
+test('you can authenticate the pending request inside the retry handler', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam'], 401),
+        MockResponse::make(['name' => 'Gareth'], 200),
+    ]);
+
+    $connector = new TestConnector;
+    $connector->withMockClient($mockClient);
+
+    $response = $connector->sendAndRetry(new UserRequest, 2, 0, function (Exception $exception, PendingRequest $pendingRequest) {
+        $pendingRequest->authenticate(new TokenAuthenticator('newToken'));
+
+        return true;
+    });
+
+    expect($response->status())->toBe(200);
+    expect($response->json())->toEqual(['name' => 'Gareth']);
+    expect($response->getPendingRequest()->headers()->get('Authorization'))->toEqual('Bearer newToken');
 });
