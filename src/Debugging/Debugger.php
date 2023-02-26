@@ -60,7 +60,7 @@ class Debugger
      *
      * @param \Saloon\Contracts\DebuggingDriver $driver
      *
-     * @return $this
+     * @return static
      */
     public static function registerGlobalDriver(DebuggingDriver $driver): static
     {

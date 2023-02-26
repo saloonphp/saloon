@@ -97,17 +97,15 @@ abstract class DebuggingDriver implements DebuggingDriverContract
     /**
      * Format the items of the array into arrays
      *
-     * @param array $formattedData
-     * @return array
+     * @param array<string, mixed> $formattedData
+     * @return array<string, mixed>
      */
     protected function formatDataAsArray(array $formattedData): array
     {
-        return array_map(static function (mixed $item) {
-            return match (true) {
-                $item instanceof ArrayStore, $item instanceof BodyRepository => $item->all(),
-                $item instanceof MultipartBodyRepository => $item->toArray(),
-                default => $item,
-            };
+        return array_map(static fn (mixed $item) => match (true) {
+            $item instanceof ArrayStore, $item instanceof BodyRepository => $item->all(),
+            $item instanceof MultipartBodyRepository => $item->toArray(),
+            default => $item,
         }, $formattedData);
     }
 }

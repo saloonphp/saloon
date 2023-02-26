@@ -75,9 +75,11 @@ class Helpers
     /**
      * Process an item and return it back
      *
-     * @param mixed $value
-     * @param callable $callback
-     * @return mixed
+     * @template TValue
+     *
+     * @param TValue $value
+     * @param callable(TValue): (void) $callback
+     * @return TValue
      */
     public static function tap(mixed $value, callable $callback): mixed
     {

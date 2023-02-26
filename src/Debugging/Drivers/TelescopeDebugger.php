@@ -25,7 +25,12 @@ class TelescopeDebugger extends DebuggingDriver
         Telescope::recordClientRequest(IncomingEntry::make($this->formatData($data)));
     }
 
-    protected function formatData(DebugData $data): array
+    /**
+     * @param DebugData $data
+     * @param bool $asArray
+     * @return array<string, mixed>
+     */
+    protected function formatData(DebugData $data, bool $asArray = false): array
     {
         // TODO: Format the $data, and send it appropriately to Telescope.
         // TODO: We should hide sensitive information, like Telescope does by default.
