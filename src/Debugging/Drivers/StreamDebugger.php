@@ -23,12 +23,12 @@ class StreamDebugger extends DebuggingDriver
      */
     public function __construct(mixed $resource)
     {
-        if (is_string($resource)) {
+        if (is_string($resource) && file_exists($resource)) {
             $resource = fopen($resource, 'wb');
         }
 
         if (! is_resource($resource)) {
-            throw new InvalidArgumentException('Invalid value for argument `$resource`. The value must be a resource like fopen.');
+            throw new InvalidArgumentException('Invalid value for argument `$resource`. The value must be a resource like fopen or a path to a valid file.');
         }
 
         $this->resource = $resource;
