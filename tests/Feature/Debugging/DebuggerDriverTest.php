@@ -29,12 +29,24 @@ test('you can debug using the ray driver', function () {
         $debugger->showRequestAndResponse()->usingDriver('ray');
     });
 
+    expect($fakeRay->getSentRequests())->toHaveCount(0);
+
     $connector->send(new UserRequest);
 
-    // TODO:
-    // Not sure how to fake ray. I've tried making a FakeRay client
-    // but it's not working as the content value is completely encoded
-})->skip('TODO');
+    $sentRequests = $fakeRay->getSentRequests();
+
+    expect($sentRequests)->toHaveCount(4);
+
+    expect($sentRequests[0]['payloads'][0]['type'])->toEqual('log');
+
+    expect($sentRequests[1]['payloads'][0]['type'])->toEqual('label');
+    expect($sentRequests[1]['payloads'][0]['content'])->toEqual(['label' => 'Saloon Debugger']);
+
+    expect($sentRequests[2]['payloads'][0]['type'])->toEqual('log');
+
+    expect($sentRequests[3]['payloads'][0]['type'])->toEqual('label');
+    expect($sentRequests[3]['payloads'][0]['content'])->toEqual(['label' => 'Saloon Debugger']);
+});
 
 test('you can debug using the syslog driver', function () {
     //
