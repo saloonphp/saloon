@@ -20,10 +20,7 @@ abstract class DebuggingDriver implements DebuggingDriverContract
      */
     protected function formatData(DebugData $data, bool $asArray = false): array
     {
-        $formattedData = [
-            ...$this->formatRequestData($data),
-            ...$this->formatResponseData($data),
-        ];
+        $formattedData = $data->wasNotSent() ? $this->formatRequestData($data) : $this->formatResponseData($data);
 
         if ($asArray === false) {
             return $formattedData;
