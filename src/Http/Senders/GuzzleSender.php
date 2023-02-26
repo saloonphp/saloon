@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Saloon\Http\Senders;
 
 use Exception;
-use Psr\Http\Message\RequestInterface;
 use Saloon\Enums\Timeout;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;

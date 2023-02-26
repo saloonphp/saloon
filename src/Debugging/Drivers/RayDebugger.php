@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Debugging\Drivers;
 
-use Saloon\Debugging\DebugData;
-use Spatie\Ray\Client;
 use Spatie\Ray\Ray;
+use Spatie\Ray\Client;
+use Saloon\Debugging\DebugData;
 
 class RayDebugger extends DebuggingDriver
 {
@@ -41,7 +41,7 @@ class RayDebugger extends DebuggingDriver
      */
     public function send(DebugData $data): void
     {
-        Ray::create(static::$rayClient, static::$rayUuid)->send($this->formatData($data))->label('Saloon Debugger');
+        Ray::create(self::$rayClient, self::$rayUuid)->send($this->formatData($data))->label('Saloon Debugger');
     }
 
     /**

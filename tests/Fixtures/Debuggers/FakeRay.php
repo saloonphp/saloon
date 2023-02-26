@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Tests\Fixtures\Debuggers;
 
 use Spatie\Ray\Client;
@@ -72,7 +74,7 @@ class FakeRay extends Client
 
     protected function baseDirectory(): string
     {
-        return str_replace("/tests/TestClasses", '', __DIR__);
+        return str_replace('/tests/TestClasses', '', __DIR__);
     }
 
     protected function convertToUnixPath(string $path): string

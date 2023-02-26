@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-use League\Flysystem\Filesystem;
-use League\Flysystem\Local\LocalFilesystemAdapter;
 use Saloon\Debugging\Debugger;
-use Saloon\Debugging\Drivers\RayDebugger;
-use Saloon\Debugging\Drivers\StreamDebugger;
+use League\Flysystem\Filesystem;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Debugging\Drivers\RayDebugger;
+use Saloon\Debugging\Drivers\StreamDebugger;
 use Saloon\Tests\Fixtures\Debuggers\FakeRay;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use League\Flysystem\Local\LocalFilesystemAdapter;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('you can debug using the ray driver', function () {
     $fakeRay = new FakeRay();
@@ -19,7 +19,7 @@ test('you can debug using the ray driver', function () {
     RayDebugger::setRay($fakeRay);
 
     $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sam'], 200, ['X-Foo' => 'Bar'])
+        new MockResponse(['name' => 'Sam'], 200, ['X-Foo' => 'Bar']),
     ]);
 
     $connector = new TestConnector;
@@ -51,7 +51,7 @@ test('you can debug the stream driver', function (mixed $resource) {
     fwrite(is_string($resource) ? fopen($resource, 'wb') : $resource, '');
 
     $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sam'], 200, ['X-Foo' => 'Bar'])
+        new MockResponse(['name' => 'Sam'], 200, ['X-Foo' => 'Bar']),
     ]);
 
     $connector = new TestConnector;

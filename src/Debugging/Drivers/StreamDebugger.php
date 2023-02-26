@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Debugging\Drivers;
 
 use InvalidArgumentException;
@@ -10,7 +12,7 @@ class StreamDebugger extends DebuggingDriver
     /**
      * Resource
      *
-     * @var resource $resource
+     * @var resource
      */
     protected mixed $resource;
 

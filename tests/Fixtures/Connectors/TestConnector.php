@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use ReturnTypeWillChange;
-use Saloon\Contracts\Response;
 use Saloon\Http\Connector;
-use Saloon\Tests\Fixtures\Requests\UserRequest;
-use Saloon\Tests\Fixtures\Responses\CustomResponse;
 use Saloon\Traits\Plugins\AcceptsJson;
 
 class TestConnector extends Connector
