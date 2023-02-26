@@ -7,6 +7,7 @@ namespace Saloon\Helpers;
 use Saloon\Contracts\Sender;
 use Saloon\Http\Senders\GuzzleSender;
 use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
+use Spatie\Ray\Client;
 
 final class Config
 {

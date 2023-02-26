@@ -17,5 +17,4 @@ parameters:
   - src
 
   ignoreErrors:
-   - "#^Unsafe usage of new static\\(\\)\\.$#"
-   - "#^Call to method label\\(\\) on an unknown class Spatie\\\\(LaravelRay|RayBundle|WordPressRay|YiiRay)\\\\Ray\\.$#"
+  - "#^Unsafe usage of new static\\(\\)\\.$#"

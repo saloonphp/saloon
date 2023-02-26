@@ -39,7 +39,7 @@ test('it will debug a request being sent', function () {
     expect($debuggedRequests)->toHaveCount(1);
     expect($debuggedResponses)->toHaveCount(1);
 
-    $formattedRequest = [
+    expect($debuggedRequests[0])->toEqual([
         'method' => Method::GET,
         'uri' => 'https://tests.saloon.dev/api/user',
         'request_headers' => new ArrayStore(['Accept' => 'application/json']),
@@ -49,12 +49,9 @@ test('it will debug a request being sent', function () {
         'request_class' => $request::class,
         'connector_class' => $connector::class,
         'sender_class' => $connector->sender()::class,
-    ];
-
-    expect($debuggedRequests[0])->toEqual($formattedRequest);
+    ]);
 
     expect($debuggedResponses[0])->toEqual([
-        ...$formattedRequest,
         'response_status' => $response->status(),
         'response_headers' => $response->headers(),
         'response_body' => $response->json(),

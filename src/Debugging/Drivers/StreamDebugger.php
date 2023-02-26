@@ -5,7 +5,7 @@ namespace Saloon\Debugging\Drivers;
 use InvalidArgumentException;
 use Saloon\Debugging\DebugData;
 
-class FileDebugger extends DebuggingDriver
+class StreamDebugger extends DebuggingDriver
 {
     /**
      * Resource
@@ -17,10 +17,14 @@ class FileDebugger extends DebuggingDriver
     /**
      * Constructor
      *
-     * @param resource $resource
+     * @param resource|string $resource
      */
     public function __construct(mixed $resource)
     {
+        if (is_string($resource)) {
+            $resource = fopen($resource, 'wb');
+        }
+
         if (! is_resource($resource)) {
             throw new InvalidArgumentException('Invalid value for argument `$resource`. The value must be a resource like fopen.');
         }
