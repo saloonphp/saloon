@@ -10,6 +10,7 @@ use Saloon\Debugging\Drivers\SystemLogDebugger;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Debuggers\ArrayDebugger;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('the debugger is instantiated with some default debugging drivers', function () {
@@ -49,4 +50,15 @@ test('the debug data can access the underlying pending request and response', fu
 
     expect($debugData->wasSent())->toBeTrue();
     expect($debugData->wasNotSent())->toBeFalse();
+});
+
+test('you can register global drivers', function () {
+    $connector = new TestConnector;
+    $debugger = $connector->debug();
+
+    $arrayDebugger = new ArrayDebugger;
+
+    Debugger::registerGlobalDriver($arrayDebugger);
+
+    expect($debugger->getRegisteredDrivers())->toHaveKey('array', $arrayDebugger);
 });
