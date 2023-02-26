@@ -104,7 +104,7 @@ class Debugger
         $registeredDriverNames = array_keys($this->getRegisteredDrivers());
 
         if (! in_array($driverName, $registeredDriverNames, true)) {
-            throw new UnknownDriverException(sprintf('Unable to find the "%s" driver. Registered drivers: %s', $driverName, implode(',', $registeredDriverNames)));
+            throw new UnknownDriverException(sprintf('Unable to find the "%s" driver. Registered drivers: %s', $driverName, implode(', ', $registeredDriverNames)));
         }
 
         $this->useDrivers[$driverName] = true;
