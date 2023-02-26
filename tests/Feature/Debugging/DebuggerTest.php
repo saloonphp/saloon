@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-use Saloon\Debugging\Debugger;
 use Saloon\Enums\Method;
+use Saloon\Debugging\Debugger;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
 use Saloon\Repositories\ArrayStore;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Debuggers\ArrayDebugger;
 use Saloon\Tests\Fixtures\Requests\HasBodyRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Requests\HasXmlBodyRequest;
 use Saloon\Tests\Fixtures\Requests\HasFormBodyRequest;
 use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
 use Saloon\Tests\Fixtures\Requests\HasMultipartBodyRequest;
-use Saloon\Tests\Fixtures\Requests\HasXmlBodyRequest;
-use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('it will debug a request being sent', function () {
     $connector = new TestConnector;
@@ -64,7 +64,7 @@ test('it will debug a request being sent', function () {
 
 test('if the debugger has been configured to run before sent it will log the request', function () {
     $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sam'], 201, ['X-Yee' => 'Haw', 'Content-Type' => 'application/json'])
+        new MockResponse(['name' => 'Sam'], 201, ['X-Yee' => 'Haw', 'Content-Type' => 'application/json']),
     ]);
 
     $connector = new TestConnector;
@@ -87,7 +87,7 @@ test('if the debugger has been configured to run before sent it will log the req
 
 test('if the debugger has been configured to run after sent it will log the response', function () {
     $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sam'], 201, ['X-Yee' => 'Haw', 'Content-Type' => 'application/json'])
+        new MockResponse(['name' => 'Sam'], 201, ['X-Yee' => 'Haw', 'Content-Type' => 'application/json']),
     ]);
 
     $connector = new TestConnector;
@@ -110,7 +110,7 @@ test('if the debugger has been configured to run after sent it will log the resp
 
 test('it will output the request payload if there is a body sent', function ($request) {
     $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sam'], 201, ['X-Yee' => 'Haw', 'Content-Type' => ['application/json','charset=utf-8']])
+        new MockResponse(['name' => 'Sam'], 201, ['X-Yee' => 'Haw', 'Content-Type' => ['application/json','charset=utf-8']]),
     ]);
 
     $connector = new TestConnector;
@@ -139,7 +139,7 @@ test('it will output the request payload if there is a body sent', function ($re
 
 test('if a response does not provide a content type of "application/json" then the body is not formatted', function () {
     $mockClient = new MockClient([
-        new MockResponse('Hello World', 201, ['X-Yee' => 'Haw'])
+        new MockResponse('Hello World', 201, ['X-Yee' => 'Haw']),
     ]);
 
     $connector = new TestConnector;
@@ -163,4 +163,3 @@ test('if a response does not provide a content type of "application/json" then t
 test('if the formatted data is a flat array all the objects will be converted down into strings to arrays', function () {
     //
 })->skip();
-

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-use Saloon\Debugging\DebugData;
 use Saloon\Debugging\Debugger;
-use Saloon\Debugging\Drivers\ErrorLogDebugger;
-use Saloon\Debugging\Drivers\RayDebugger;
-use Saloon\Debugging\Drivers\SystemLogDebugger;
+use Saloon\Debugging\DebugData;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Tests\Fixtures\Debuggers\ArrayDebugger;
+use Saloon\Debugging\Drivers\RayDebugger;
+use Saloon\Debugging\Drivers\ErrorLogDebugger;
+use Saloon\Debugging\Drivers\SystemLogDebugger;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Debuggers\ArrayDebugger;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('the debugger is instantiated with some default debugging drivers', function () {
     $connector = new TestConnector;

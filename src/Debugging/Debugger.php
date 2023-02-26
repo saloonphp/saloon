@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Debugging;
 
-use InvalidArgumentException;
 use Saloon\Contracts\DebuggingDriver;
 use Saloon\Debugging\Drivers\RayDebugger;
+use Saloon\Exceptions\UnknownDriverException;
 use Saloon\Debugging\Drivers\ErrorLogDebugger;
 use Saloon\Debugging\Drivers\SystemLogDebugger;
-use Saloon\Exceptions\UnknownDriverException;
 
 class Debugger
 {
