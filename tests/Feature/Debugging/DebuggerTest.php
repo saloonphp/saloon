@@ -110,7 +110,7 @@ test('if the debugger has been configured to run after sent it will log the resp
 
 test('it will output the request payload if there is a body sent', function ($request) {
     $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sam'], 201, ['X-Yee' => 'Haw', 'Content-Type' => 'application/json'])
+        new MockResponse(['name' => 'Sam'], 201, ['X-Yee' => 'Haw', 'Content-Type' => ['application/json','charset=utf-8']])
     ]);
 
     $connector = new TestConnector;
@@ -164,21 +164,3 @@ test('if the formatted data is a flat array all the objects will be converted do
     //
 })->skip();
 
-test('when debugging a mock response the response body in the mock will be used', function () {
-    $mockClient = new MockClient([
-        new MockResponse(['name' => 'Sam'], 201, ['X-Yee' => 'Haw', 'Content-Type' => 'application/json'])
-    ]);
-
-    $connector = new TestConnector;
-    $connector->withMockClient($mockClient);
-
-    $arrayDebugger = new ArrayDebugger;
-
-    $connector->debug(function (Debugger $debugger) use ($arrayDebugger) {
-        $debugger->showRequestAndResponse()->usingDriver($arrayDebugger);
-    });
-
-    $response = $connector->send(new HasJsonBodyRequest);
-
-    // dd($arrayDebugger->getResponses());
-})->skip();
