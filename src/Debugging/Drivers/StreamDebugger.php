@@ -51,7 +51,7 @@ class StreamDebugger extends DebuggingDriver
     public function send(DebugData $data): void
     {
         $message = $data->wasNotSent() ? 'Saloon Request' : 'Saloon Response';
-        $encoded = json_encode($this->formatData($data, true), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+        $encoded = json_encode($this->formatData($data), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
 
         fwrite($this->resource, sprintf('%s:%s%s %s', $message, PHP_EOL, $encoded, PHP_EOL));
     }

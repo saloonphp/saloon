@@ -17,9 +17,12 @@ class ErrorLogDebugger extends DebuggingDriver
      * @param \Saloon\Debugging\DebugData $data
      *
      * @return void
+     * @throws \JsonException
      */
     public function send(DebugData $data): void
     {
-        error_log(print_r($this->formatData($data, true), true), LOG_DEBUG);
+        $encoded = json_encode($this->formatData($data), JSON_THROW_ON_ERROR);
+
+        error_log(print_r($encoded, true), LOG_DEBUG);
     }
 }

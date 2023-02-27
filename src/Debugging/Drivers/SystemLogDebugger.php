@@ -17,9 +17,12 @@ class SystemLogDebugger extends DebuggingDriver
      * @param \Saloon\Debugging\DebugData $data
      *
      * @return void
+     * @throws \JsonException
      */
     public function send(DebugData $data): void
     {
-        syslog(LOG_DEBUG, print_r($this->formatData($data, true), true));
+        $encoded = json_encode($this->formatData($data), JSON_THROW_ON_ERROR);
+
+        syslog(LOG_DEBUG, print_r($encoded, true));
     }
 }
