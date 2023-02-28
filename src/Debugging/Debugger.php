@@ -106,40 +106,7 @@ class Debugger
             throw new UnknownDriverException(sprintf('Unable to find the "%s" driver. Registered drivers: %s', $driverName, implode(', ', $registeredDriverNames)));
         }
 
-        $this->useDrivers[$driverName] = true;
-
-        return $this;
-    }
-
-    /**
-     * Unsubscribe from a driver
-     *
-     * @param \Saloon\Contracts\DebuggingDriver|string $driver A DebuggingDriver or the name one of a registered one.
-     *
-     * @return $this
-     */
-    public function withoutDriver(DebuggingDriver|string $driver): static
-    {
-        $driverName = is_string($driver) ? $driver : $driver->name();
-
-        unset($this->useDrivers[$driverName]);
-
-        return $this;
-    }
-
-    /**
-     * Only use a given driver
-     *
-     * @param \Saloon\Contracts\DebuggingDriver|string $driver A DebuggingDriver or the name one of a registered one.
-     *
-     * @return $this
-     * @throws \Saloon\Exceptions\UnknownDriverException
-     */
-    public function onlyDriver(DebuggingDriver|string $driver): static
-    {
-        $this->useDrivers = [];
-
-        $this->usingDriver($driver);
+        $this->useDrivers[] = $driverName;
 
         return $this;
     }
@@ -204,11 +171,7 @@ class Debugger
      */
     public function send(DebugData $data): static
     {
-        foreach ($this->useDrivers as $driverName => $shouldUse) {
-            if (! $shouldUse) {
-                continue;
-            }
-
+        foreach ($this->useDrivers as $driverName) {
             $registeredDrivers = $this->getRegisteredDrivers();
 
             if ($this->showRequest === true && $data->wasNotSent()) {

@@ -6,27 +6,17 @@ namespace Saloon\Debugging\Drivers;
 
 use Saloon\Contracts\Response;
 use Saloon\Debugging\DebugData;
-use Saloon\Contracts\ArrayStore;
-use Saloon\Contracts\Body\BodyRepository;
-use Saloon\Repositories\Body\MultipartBodyRepository;
 use Saloon\Contracts\DebuggingDriver as DebuggingDriverContract;
 
 abstract class DebuggingDriver implements DebuggingDriverContract
 {
     /**
      * @param \Saloon\Debugging\DebugData $data
-     * @param bool $asArray
      * @return array<string, mixed>
      */
-    protected function formatData(DebugData $data, bool $asArray = false): array
+    protected function formatData(DebugData $data): array
     {
-        $formattedData = $data->wasNotSent() ? $this->formatRequestData($data) : $this->formatResponseData($data);
-
-        if ($asArray === false) {
-            return $formattedData;
-        }
-
-        return $this->formatDataAsArray($formattedData);
+        return $data->wasNotSent() ? $this->formatRequestData($data) : $this->formatResponseData($data);
     }
 
     /**
@@ -89,20 +79,5 @@ abstract class DebuggingDriver implements DebuggingDriverContract
         }
 
         return $response->body();
-    }
-
-    /**
-     * Format the items of the array into arrays
-     *
-     * @param array<string, mixed> $formattedData
-     * @return array<string, mixed>
-     */
-    protected function formatDataAsArray(array $formattedData): array
-    {
-        return array_map(static fn (mixed $item) => match (true) {
-            $item instanceof ArrayStore, $item instanceof BodyRepository => $item->all(),
-            $item instanceof MultipartBodyRepository => $item->toArray(),
-            default => $item,
-        }, $formattedData);
     }
 }
