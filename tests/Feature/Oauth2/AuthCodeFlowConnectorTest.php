@@ -54,6 +54,21 @@ test('default state is generated automatically with every authorization url if s
     expect(Str::endsWith($url, $state))->toBeTrue();
 });
 
+test('additional query parameters can be added passed to the authorization url', function () {
+    $connector = new OAuth2Connector;
+
+    $url = $connector->getAuthorizationUrl(
+        ['scope-1', 'scope-2'],
+        state: 'my-state',
+        additionalQueryParameters: ['another-param'=>'another-value', 'yee'=>'haw']
+    );
+
+    expect(str_ends_with($url, 'another-param=another-value&yee=haw'))->toBeTrue();
+    expect($url)->toEqual(
+        'https://oauth.saloon.dev/authorize?response_type=code&scope=scope-1%20scope-2&client_id=client-id&redirect_uri=https%3A%2F%2Fmy-app.saloon.dev%2Fauth%2Fcallback&state=my-state&another-param=another-value&yee=haw'
+    );
+});
+
 test('you can request a token from a connector', function () {
     $mockClient = new MockClient([
         MockResponse::make(['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600]),
