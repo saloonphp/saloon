@@ -81,7 +81,7 @@ trait AuthorizationCodeGrant
             'client_id' => $clientId,
             'redirect_uri' => $redirectUri,
             'state' => $this->state,
-            ...$additionalQueryParameters
+            ...$additionalQueryParameters,
         ];
 
         $query = http_build_query($queryParameters, '', '&', PHP_QUERY_RFC3986);
