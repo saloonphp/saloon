@@ -29,7 +29,7 @@ class Debugger
     /**
      * Drivers that have been subscribed to
      *
-     * @var array<string, bool>
+     * @var array<int, string>
      */
     protected array $useDrivers = [];
 

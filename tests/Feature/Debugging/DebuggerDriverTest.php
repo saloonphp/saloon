@@ -3,14 +3,11 @@
 declare(strict_types=1);
 
 use Saloon\Debugging\Debugger;
-use League\Flysystem\Filesystem;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Debugging\Drivers\RayDebugger;
-use Saloon\Debugging\Drivers\StreamDebugger;
 use Saloon\Tests\Fixtures\Debuggers\FakeRay;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
-use League\Flysystem\Local\LocalFilesystemAdapter;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('you can debug using the ray driver', function () {
