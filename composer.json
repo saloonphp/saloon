@@ -29,7 +29,6 @@
         "friendsofphp/php-cs-fixer": "^3.5",
         "illuminate/collections": "^9.39",
         "league/flysystem": "^3.0",
-        "nunomaduro/phpinsights": "^2.6",
         "pestphp/pest": "^1.21",
         "phpstan/phpstan": "^1.9",
         "spatie/ray": "^1.33",
