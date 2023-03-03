@@ -114,7 +114,7 @@ class Debugger
         // Finally, let's check if the driver can be used
 
         if (! $driver->hasDependencies()) {
-            throw new DebuggingDriverException('The driver cannot be used as it does not have the dependencies it requires installed.');
+            throw new DebuggingDriverException(sprintf('The driver "%s" cannot be used because its dependencies are not installed.', $driverName));
         }
 
         // If we have the dependency, then we will add the driver to the used drivers.

@@ -168,7 +168,7 @@ test('it throws an exception if the debugging driver does not have the dependenc
     $connector->withMockClient($mockClient);
 
     $this->expectException(DebuggingDriverException::class);
-    $this->expectExceptionMessage('The driver cannot be used as it does not have the dependencies it requires installed.');
+    $this->expectExceptionMessage('The driver "missingDependency" cannot be used because its dependencies are not installed.');
 
     $connector->debug(function (Debugger $debugger) {
         $debugger->registerDriver(new MissingDependencyDebugger);
