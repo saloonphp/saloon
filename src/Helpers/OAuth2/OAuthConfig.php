@@ -270,10 +270,11 @@ class OAuthConfig
     /**
      * Validate the OAuth2 config.
      *
+     * @param bool $withRedirectUrl
      * @return bool
      * @throws \Saloon\Exceptions\OAuthConfigValidationException
      */
-    public function validate(): bool
+    public function validate(bool $withRedirectUrl = true): bool
     {
         if (empty($this->getClientId())) {
             throw new OAuthConfigValidationException('The Client ID is empty or has not been provided.');
@@ -283,7 +284,7 @@ class OAuthConfig
             throw new OAuthConfigValidationException('The Client Secret is empty or has not been provided.');
         }
 
-        if (empty($this->getRedirectUri())) {
+        if ($withRedirectUrl === true && empty($this->getRedirectUri())) {
             throw new OAuthConfigValidationException('The Redirect URI is empty or has not been provided.');
         }
 
