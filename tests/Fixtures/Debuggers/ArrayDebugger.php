@@ -62,4 +62,16 @@ class ArrayDebugger extends DebuggingDriver
     {
         return $this->responses;
     }
+
+    /**
+     * Determines if the debugging driver can be used
+     *
+     * E.g if it has the correct dependencies
+     *
+     * @return bool
+     */
+    public function hasDependencies(): bool
+    {
+        return true;
+    }
 }

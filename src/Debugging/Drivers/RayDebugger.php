@@ -35,6 +35,16 @@ class RayDebugger extends DebuggingDriver
     }
 
     /**
+     * Check if the debugging driver can be used
+     *
+     * @return bool
+     */
+    public function hasDependencies(): bool
+    {
+        return class_exists(Ray::class);
+    }
+
+    /**
      * @param \Saloon\Debugging\DebugData $data
      *
      * @return void

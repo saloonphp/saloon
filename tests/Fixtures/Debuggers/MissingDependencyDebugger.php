@@ -2,42 +2,40 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Debugging\Drivers;
+namespace Saloon\Tests\Fixtures\Debuggers;
 
 use Saloon\Debugging\DebugData;
+use Saloon\Debugging\Drivers\DebuggingDriver;
 
-class SystemLogDebugger extends DebuggingDriver
+class MissingDependencyDebugger extends DebuggingDriver
 {
     /**
-     * Define the name
-     *
      * @return string
      */
     public function name(): string
     {
-        return 'syslog';
+        return 'missingDependency';
     }
 
     /**
-     * Check if the debugging driver can be used
+     * Determines if the debugging driver can be used
+     *
+     * E.g if it has the correct dependencies
      *
      * @return bool
      */
     public function hasDependencies(): bool
     {
-        return true;
+        return false;
     }
 
     /**
      * @param \Saloon\Debugging\DebugData $data
      *
      * @return void
-     * @throws \JsonException
      */
     public function send(DebugData $data): void
     {
-        $encoded = json_encode($this->formatData($data), JSON_THROW_ON_ERROR);
-
-        syslog(LOG_DEBUG, $encoded);
+        //
     }
 }

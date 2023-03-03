@@ -8,9 +8,24 @@ use Saloon\Debugging\DebugData;
 
 class ErrorLogDebugger extends DebuggingDriver
 {
+    /**
+     * Define the name
+     *
+     * @return string
+     */
     public function name(): string
     {
         return 'error_log';
+    }
+
+    /**
+     * Check if the debugging driver can be used
+     *
+     * @return bool
+     */
+    public function hasDependencies(): bool
+    {
+        return true;
     }
 
     /**

@@ -48,19 +48,6 @@ class Helpers
     }
 
     /**
-     * Get the class "basename" of the given object / class.
-     *
-     * @param object|class-string $class
-     * @return string
-     */
-    public static function classBasename(object|string $class): string
-    {
-        $class = is_object($class) ? get_class($class) : $class;
-
-        return basename(str_replace('\\', '/', $class));
-    }
-
-    /**
      * Return the default value of the given value.
      *
      * @param mixed $value
@@ -70,21 +57,5 @@ class Helpers
     public static function value(mixed $value, mixed ...$args): mixed
     {
         return $value instanceof Closure ? $value(...$args) : $value;
-    }
-
-    /**
-     * Process an item and return it back
-     *
-     * @template TValue
-     *
-     * @param TValue $value
-     * @param callable(TValue): (void) $callback
-     * @return TValue
-     */
-    public static function tap(mixed $value, callable $callback): mixed
-    {
-        $callback($value);
-
-        return $value;
     }
 }

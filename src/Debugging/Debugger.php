@@ -6,6 +6,7 @@ namespace Saloon\Debugging;
 
 use Saloon\Contracts\DebuggingDriver;
 use Saloon\Debugging\Drivers\RayDebugger;
+use Saloon\Exceptions\DebuggingDriverException;
 use Saloon\Exceptions\UnknownDriverException;
 use Saloon\Debugging\Drivers\ErrorLogDebugger;
 use Saloon\Debugging\Drivers\SystemLogDebugger;
@@ -88,7 +89,7 @@ class Debugger
      * @param \Saloon\Contracts\DebuggingDriver|string $driver A DebuggingDriver or the name one of a registered one.
      *
      * @return $this
-     * @throws \Saloon\Exceptions\UnknownDriverException
+     * @throws \Saloon\Exceptions\UnknownDriverException|\Saloon\Exceptions\DebuggingDriverException
      */
     public function usingDriver(DebuggingDriver|string $driver): static
     {
@@ -96,16 +97,27 @@ class Debugger
             $this->registerDriver($driver);
         }
 
+        // Let's grab the driver name
+
         $driverName = is_string($driver) ? $driver : $driver->name();
 
         // We'll validate that the driver exists
 
         $registeredDrivers = $this->getRegisteredDrivers();
-        $registeredDrivers[$driverName] ?? throw new UnknownDriverException(sprintf(
+
+        $driver = $registeredDrivers[$driverName] ?? throw new UnknownDriverException(sprintf(
             'Unable to find the "%s" driver. Registered drivers: %s',
             $driverName,
             implode(', ', array_keys($registeredDrivers)),
         ));
+
+        // Finally, let's check if the driver can be used
+
+        if (! $driver->hasDependencies()) {
+            throw new DebuggingDriverException('The driver cannot be used as it does not have the dependencies it requires installed.');
+        }
+
+        // If we have the dependency, then we will add the driver to the used drivers.
 
         $this->useDrivers[] = $driverName;
 

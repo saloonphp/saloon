@@ -16,6 +16,15 @@ interface DebuggingDriver
     public function name(): string;
 
     /**
+     * Determines if the debugging driver can be used
+     *
+     * E.g if it has the correct dependencies
+     *
+     * @return bool
+     */
+    public function hasDependencies(): bool;
+
+    /**
      * Send the data to the debugger
      *
      * @param \Saloon\Debugging\DebugData $data

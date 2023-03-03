@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 use Saloon\Enums\Method;
 use Saloon\Debugging\Debugger;
+use Saloon\Exceptions\DebuggingDriverException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Repositories\ArrayStore;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Tests\Fixtures\Debuggers\MissingDependencyDebugger;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Debuggers\ArrayDebugger;
 use Saloon\Tests\Fixtures\Requests\HasBodyRequest;
@@ -157,6 +159,20 @@ test('if a response does not provide a content type of "application/json" then t
     expect($debuggedResponses[0]['response_body'])->toEqual('Hello World');
 });
 
-test('if the formatted data is a flat array all the objects will be converted down into strings to arrays', function () {
-    //
-})->skip();
+test('it throws an exception if the debugging driver does not have the dependencies installed', function () {
+    $mockClient = new MockClient([
+        new MockResponse('Hello World', 201, ['X-Yee' => 'Haw']),
+    ]);
+
+    $connector = new TestConnector;
+    $connector->withMockClient($mockClient);
+
+    $this->expectException(DebuggingDriverException::class);
+    $this->expectExceptionMessage('The driver cannot be used as it does not have the dependencies it requires installed.');
+
+    $connector->debug(function (Debugger $debugger) {
+        $debugger->registerDriver(new MissingDependencyDebugger);
+
+        $debugger->showResponse()->usingDriver('missingDependency');
+    });
+});
