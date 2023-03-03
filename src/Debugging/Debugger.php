@@ -100,11 +100,12 @@ class Debugger
 
         // We'll validate that the driver exists
 
-        $registeredDriverNames = array_keys($this->getRegisteredDrivers());
-
-        if (! in_array($driverName, $registeredDriverNames, true)) {
-            throw new UnknownDriverException(sprintf('Unable to find the "%s" driver. Registered drivers: %s', $driverName, implode(', ', $registeredDriverNames)));
-        }
+        $registeredDrivers = $this->getRegisteredDrivers();
+        $registeredDrivers[$driverName] ?? throw new UnknownDriverException(sprintf(
+            'Unable to find the "%s" driver. Registered drivers: %s',
+            $driverName,
+            implode(', ', array_keys($registeredDrivers)),
+        ));
 
         $this->useDrivers[] = $driverName;
 

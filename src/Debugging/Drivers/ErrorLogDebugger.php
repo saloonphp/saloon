@@ -23,6 +23,6 @@ class ErrorLogDebugger extends DebuggingDriver
     {
         $encoded = json_encode($this->formatData($data), JSON_THROW_ON_ERROR);
 
-        error_log(print_r($encoded, true), LOG_DEBUG);
+        error_log($encoded, LOG_DEBUG);
     }
 }

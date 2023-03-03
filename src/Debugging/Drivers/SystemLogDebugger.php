@@ -23,6 +23,6 @@ class SystemLogDebugger extends DebuggingDriver
     {
         $encoded = json_encode($this->formatData($data), JSON_THROW_ON_ERROR);
 
-        syslog(LOG_DEBUG, print_r($encoded, true));
+        syslog(LOG_DEBUG, $encoded);
     }
 }
