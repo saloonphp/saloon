@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
+use Saloon\Contracts\DataObjects\WithConnector;
 use Throwable;
 use SimpleXMLElement;
 use Saloon\Helpers\Arr;
@@ -135,6 +136,10 @@ trait HasResponseHelpers
 
         if ($dataObject instanceof WithResponse) {
             $dataObject->setResponse($this);
+        }
+
+        if ($dataObject instanceof WithConnector) {
+            $dataObject->setConnector($this->pendingRequest->getConnector());
         }
 
         return $dataObject;
