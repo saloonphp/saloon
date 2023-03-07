@@ -61,7 +61,7 @@ class Limit
         $this->hits = $this->allow;
 
         if (isset($releaseInSeconds)) {
-            $this->releaseInSeconds = $releaseInSeconds;
+            $this->expiryTimestamp = Date::now()->addSeconds($releaseInSeconds)->toDateTime()->getTimestamp();
         }
     }
 
@@ -90,10 +90,6 @@ class Limit
     public function hit(int $amount = 1): static
     {
         $this->hits += $amount;
-
-        if (is_null($this->expiryTimestamp)) {
-            $this->expiryTimestamp = Date::now()->addSeconds($this->releaseInSeconds)->toDateTime()->getTimestamp();
-        }
 
         return $this;
     }
@@ -140,7 +136,7 @@ class Limit
      */
     public function getExpiryTimestamp(): ?int
     {
-        return $this->expiryTimestamp;
+        return $this->expiryTimestamp ??= Date::now()->addSeconds($this->releaseInSeconds)->toDateTime()->getTimestamp();
     }
 
     /**
