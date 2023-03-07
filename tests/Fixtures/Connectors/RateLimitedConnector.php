@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
+use Predis\Client;
+use Saloon\Contracts\PendingRequest;
+use Saloon\Contracts\RateLimitStore;
 use Saloon\Http\Connector;
 use Saloon\Http\RateLimiting\Limit;
+use Saloon\Http\RateLimiting\Stores\RedisStore;
 use Saloon\Traits\Connector\HasRateLimiting;
 use Saloon\Traits\Plugins\AcceptsJson;
 
@@ -44,7 +48,18 @@ class RateLimitedConnector extends Connector
     protected function resolveLimits(): array
     {
         return [
-            Limit::allow(10)->everyMinute(),
+            Limit::allow(10)->everyMinute()->withId('sammy'),
+            Limit::allow(10)->everyMinute()->withId('limit-email'),
         ];
+    }
+
+    /**
+     * Resolve the rate limit store
+     *
+     * @return RateLimitStore
+     */
+    protected function resolveRateLimitStore(): RateLimitStore
+    {
+        return new RedisStore(new Client);
     }
 }

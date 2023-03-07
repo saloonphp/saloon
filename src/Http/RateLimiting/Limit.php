@@ -4,6 +4,7 @@ namespace Saloon\Http\RateLimiting;
 
 use ReflectionClass;
 use Saloon\Contracts\Connector;
+use Saloon\Contracts\Request;
 use Saloon\Helpers\Date;
 
 class Limit
@@ -13,7 +14,7 @@ class Limit
      *
      * @var string
      */
-    protected string $connectorName;
+    protected string $objectName;
 
     protected ?string $customId = null;
 
@@ -84,12 +85,12 @@ class Limit
         return $this->releaseInSeconds;
     }
 
-    public function get(): int
+    public function getHits(): int
     {
         return $this->hits;
     }
 
-    public function set(int $amount): static
+    public function setHits(int $amount): static
     {
         $this->hits = $amount;
 
@@ -100,6 +101,8 @@ class Limit
     {
         $this->hits += $amount;
 
+        // Todo: Do we need the expiry timestamp?
+
         if (is_null($this->expiryTimestamp)) {
             $this->expiryTimestamp = Date::now()->addSeconds($this->releaseInSeconds)->toDateTime()->getTimestamp();
         }
@@ -109,9 +112,22 @@ class Limit
 
     public function getId(): string
     {
-        return $this->customId ?? sprintf('%s_a:%sr:%s', $this->connectorName, $this->allow, $this->releaseInSeconds);
+        return $this->customId ?? sprintf('%s_a:%sr:%s', $this->objectName, $this->allow, $this->releaseInSeconds);
 
         // Todo: Calculate ID based on allow + release in seconds
+    }
+
+    /**
+     * with a custom id
+     *
+     * @param string|null $id
+     * @return $this
+     */
+    public function withId(?string $id): Limit
+    {
+        $this->customId = $id;
+
+        return $this;
     }
 
     public function everyMinute(): static
@@ -122,13 +138,13 @@ class Limit
     }
 
     /**
-     * @param \Saloon\Contracts\Connector $connector
+     * @param \Saloon\Contracts\Connector|\Saloon\Contracts\Request $object
      * @return $this
      * @throws \ReflectionException
      */
-    public function setConnectorName(Connector $connector): Limit
+    public function setObjectName(Connector|Request $object): Limit
     {
-        $this->connectorName = (new ReflectionClass($connector::class))->getShortName();
+        $this->objectName = (new ReflectionClass($object::class))->getShortName();
 
         return $this;
     }
