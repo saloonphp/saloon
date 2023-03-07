@@ -47,9 +47,10 @@ class RateLimitedConnector extends Connector
      */
     protected function resolveLimits(): array
     {
+        // We'll only allow 8 requests
+
         return [
-            Limit::allow(10)->everyMinute()->withId('sammy'),
-            Limit::allow(10)->everyMinute()->withId('limit-email'),
+            Limit::allow(10, 0.8)->everyMinute(),
         ];
     }
 

@@ -5,6 +5,7 @@ namespace Saloon\Traits\Connector;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\RateLimitStore;
 use Saloon\Contracts\Response;
+use Saloon\Exceptions\RateLimitReachedException;
 use Saloon\Helpers\LimitHelper;
 use Saloon\Http\RateLimiting\Limit;
 
@@ -34,8 +35,8 @@ trait HasRateLimiting
             // We'll check here if we have reached the rate limit - if we have
             // then we need to throw the limit exception
 
-            if ($this->hasReachedRateLimit()) {
-                $this->throwLimitException($store);
+            if ($limit = $this->getExceededLimit()) {
+                $this->throwLimitException($limit);
             }
         });
 
@@ -53,7 +54,7 @@ trait HasRateLimiting
                     continue;
                 }
 
-                $this->throwLimitException($store, $limit);
+                $this->throwLimitException($limit);
             }
         });
 
@@ -91,11 +92,43 @@ trait HasRateLimiting
         $limit->hit();
     }
 
-    protected function throwLimitException(RateLimitStore $store, Limit $limit = null)
+    /**
+     * Throw the limit exception
+     *
+     * @param \Saloon\Http\RateLimiting\Limit $limit
+     * @return void
+     * @throws \Saloon\Exceptions\RateLimitReachedException
+     */
+    protected function throwLimitException(Limit $limit): void
     {
-        // Store the limit in the driver
+        throw new RateLimitReachedException($limit);
+    }
 
-        throw new \Exception('Hit limit!');
+    /**
+     * Get the first limit that has exceeded
+     *
+     * @return \Saloon\Http\RateLimiting\Limit|null
+     * @throws \ReflectionException
+     */
+    public function getExceededLimit(): ?Limit
+    {
+        $limits = LimitHelper::hydrateLimits($this->resolveLimits(), $this);
+
+        if (empty($limits)) {
+            return null;
+        }
+
+        $store = $this->resolveRateLimitStore();
+
+        foreach ($limits as $limit) {
+            $limit = $store->hydrateLimit($limit);
+
+            if ($limit->hasReachedLimit()) {
+                return $limit;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -106,22 +139,6 @@ trait HasRateLimiting
      */
     public function hasReachedRateLimit(): bool
     {
-        $limits = LimitHelper::hydrateLimits($this->resolveLimits(), $this);
-
-        if (empty($limits)) {
-            return false;
-        }
-
-        $store = $this->resolveRateLimitStore();
-
-        foreach ($limits as $limit) {
-            $limit = $store->hydrateLimit($limit);
-
-            if ($limit->hasReachedLimit()) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->getExceededLimit() instanceof Limit;
     }
 }

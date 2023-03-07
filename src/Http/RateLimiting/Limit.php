@@ -20,8 +20,6 @@ class Limit
 
     protected int $hits = 0;
 
-    protected bool $reachedLimitManually = false;
-
     protected int $allow;
 
     protected float $threshold;
@@ -32,6 +30,8 @@ class Limit
 
     public function __construct(int $allow, float $threshold = 0.95)
     {
+        // Todo: Build protections into here to prevent limiters being used that haven't been properly setup
+
         $this->allow = $allow;
         $this->threshold = $threshold;
     }
@@ -58,7 +58,7 @@ class Limit
 
     public function exceeded($releaseInSeconds = null): void
     {
-        $this->reachedLimitManually = true;
+        $this->hits = $this->allow;
 
         if (isset($releaseInSeconds)) {
             $this->releaseInSeconds = $releaseInSeconds;
@@ -66,16 +66,6 @@ class Limit
     }
 
     public function hasReachedLimit(): bool
-    {
-        return $this->reachedLimitManually === true || $this->isWithinThreshold();
-    }
-
-    /**
-     * Check if we are within the threshold
-     *
-     * @return bool
-     */
-    public function isWithinThreshold(): bool
     {
         return $this->hits >= ($this->threshold * $this->allow);
     }
@@ -101,8 +91,6 @@ class Limit
     {
         $this->hits += $amount;
 
-        // Todo: Do we need the expiry timestamp?
-
         if (is_null($this->expiryTimestamp)) {
             $this->expiryTimestamp = Date::now()->addSeconds($this->releaseInSeconds)->toDateTime()->getTimestamp();
         }
@@ -113,8 +101,6 @@ class Limit
     public function getId(): string
     {
         return $this->customId ?? sprintf('%s_a:%sr:%s', $this->objectName, $this->allow, $this->releaseInSeconds);
-
-        // Todo: Calculate ID based on allow + release in seconds
     }
 
     /**
@@ -146,6 +132,24 @@ class Limit
     {
         $this->objectName = (new ReflectionClass($object::class))->getShortName();
 
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getExpiryTimestamp(): ?int
+    {
+        return $this->expiryTimestamp;
+    }
+
+    /**
+     * @param int|null $expiryTimestamp
+     * @return Limit
+     */
+    public function setExpiryTimestamp(?int $expiryTimestamp): Limit
+    {
+        $this->expiryTimestamp = $expiryTimestamp;
         return $this;
     }
 

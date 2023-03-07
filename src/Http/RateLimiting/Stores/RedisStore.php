@@ -21,12 +21,20 @@ class RedisStore implements RateLimitStore
      *
      * @param \Saloon\Http\RateLimiting\Limit $limit
      * @return \Saloon\Http\RateLimiting\Limit
+     * @throws \JsonException
      */
     public function hydrateLimit(Limit $limit): Limit
     {
         $value = $this->redis->get($limit->getId());
 
-        $limit->setHits($value ?? 0);
+        if (is_null($value)) {
+            return $limit;
+        }
+
+        $data = json_decode($value, false, 512, JSON_THROW_ON_ERROR);
+
+        $limit->setHits($data->hits);
+        $limit->setExpiryTimestamp($data->timestamp);
 
         return $limit;
     }
@@ -36,17 +44,17 @@ class RedisStore implements RateLimitStore
      *
      * @param \Saloon\Http\RateLimiting\Limit $limit
      * @return void
+     * @throws \JsonException
      */
     public function commitLimit(Limit $limit): void
     {
-        if (! $this->redis->exists($limit->getId())) {
-            $this->redis->setex($limit->getId(), $limit->getReleaseInSeconds(), $limit->getHits());
-        }
+        $remainingSeconds = round($limit->getExpiryTimestamp() - microtime(true));
 
-        // Todo: Work out a better way to do this with less calls to redis
+        $data = [
+            'timestamp' => $limit->getExpiryTimestamp(),
+            'hits' => $limit->getHits(),
+        ];
 
-        $this->redis->setex($limit->getId(), $this->redis->ttl($limit->getId()), $limit->getHits());
-
-        // TODO: Implement commitLimit() method.
+        $this->redis->setex($limit->getId(), $remainingSeconds, json_encode($data, JSON_THROW_ON_ERROR));
     }
 }
