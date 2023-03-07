@@ -28,6 +28,8 @@ class Limit
 
     protected int $releaseInSeconds;
 
+    protected bool $untilMidnight = false;
+
     public function __construct(int $allow, float $threshold = 0.95)
     {
         // Todo: Build protections into here to prevent limiters being used that haven't been properly setup
@@ -96,7 +98,7 @@ class Limit
 
     public function getId(): string
     {
-        return $this->customId ?? sprintf('%s_a:%sr:%s', $this->objectName, $this->allow, $this->releaseInSeconds);
+        return $this->customId ?? sprintf('%s_a:%sr:%s', $this->objectName, $this->allow, $this->untilMidnight ? 'midnight' : $this->releaseInSeconds);
     }
 
     /**
@@ -112,12 +114,6 @@ class Limit
         return $this;
     }
 
-    public function everyMinute(): static
-    {
-        $this->releaseInSeconds = 60;
-
-        return $this;
-    }
 
     /**
      * @param \Saloon\Contracts\Connector|\Saloon\Contracts\Request $object
@@ -143,10 +139,59 @@ class Limit
      * @param int|null $expiryTimestamp
      * @return Limit
      */
-    public function setExpiryTimestamp(?int $expiryTimestamp): Limit
+    public function setExpiryTimestamp(?int $expiryTimestamp): static
     {
         $this->expiryTimestamp = $expiryTimestamp;
         return $this;
+    }
+
+    public function everySeconds(int $seconds): static
+    {
+        $this->releaseInSeconds = $seconds;
+
+        return $this;
+    }
+
+    public function everyMinute(): static
+    {
+        return $this->everySeconds(60);
+    }
+
+    public function everyFiveMinutes(): static
+    {
+        return $this->everySeconds(60 * 5);
+    }
+
+    public function everyThirtyMinutes(): static
+    {
+        return $this->everySeconds(60 * 30);
+    }
+
+    public function everyHour(): static
+    {
+        return $this->everySeconds(60 * 60);
+    }
+
+    public function everySixHours(): static
+    {
+        return $this->everySeconds(60 * 60 * 6);
+    }
+
+    public function everyTwelveHours(): static
+    {
+        return $this->everySeconds(60 * 60 * 12);
+    }
+
+    public function everyDay(): static
+    {
+        return $this->everySeconds(60 * 60 * 24);
+    }
+
+    public function untilMidnightTonight(): static
+    {
+        $this->untilMidnight = true;
+
+        return $this->everySeconds(strtotime('tomorrow') - time());
     }
 
     // Todo: Add methods like everyMinute / everyHour / everyDay etc

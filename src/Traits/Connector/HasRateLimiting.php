@@ -43,6 +43,8 @@ trait HasRateLimiting
         // Register the limit counter
 
         $pendingRequest->middleware()->onResponse(function (Response $response) use ($limits, $store) {
+            $limitReached = null;
+
             foreach ($limits as $limit) {
                 $limit = $store->hydrateLimit($limit);
 
@@ -50,15 +52,18 @@ trait HasRateLimiting
 
                 $store->commitLimit($limit);
 
-                if (! $limit->hasReachedLimit()) {
-                    continue;
-                }
+                // We should set a variable here so even if the first limiter gets
+                // thrown, we will commit every limiter.
 
-                $this->throwLimitException($limit);
+                if ($limit->hasReachedLimit()) {
+                    $limitReached = $limit;
+                }
+            }
+
+            if ($limitReached) {
+                $this->throwLimitException($limitReached);
             }
         });
-
-        // dd($limits[0]);
     }
 
     /**
