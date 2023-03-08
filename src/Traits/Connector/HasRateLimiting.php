@@ -57,6 +57,13 @@ trait HasRateLimiting
                 // We should set a variable here so even if the first limiter gets
                 // thrown, we will commit every limiter.
 
+                // Todo:
+                // Problem Scenario: Say that the response is 429 and our code runs the "exceeded"
+                // method. The issue with this method is that it will commit the max for every
+                // limiter, not just the one we want - which could make it trickier because
+                // it may only be hitting a specific limiter, like 429 too many attempts in
+                // the current hour, we don't have to rule out the whole day
+
                 if ($limit->hasReachedLimit()) {
                     $limitReached = $limit;
                 }
