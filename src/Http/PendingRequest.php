@@ -19,7 +19,9 @@ use Saloon\Contracts\Body\HasBody;
 use Saloon\Contracts\Authenticator;
 use Saloon\Helpers\ReflectionHelper;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Http\Middleware\DebugRequest;
 use Saloon\Contracts\Body\BodyRepository;
+use Saloon\Http\Middleware\DebugResponse;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Contracts\SimulatedResponsePayload;
 use Saloon\Exceptions\PendingRequestException;
@@ -299,6 +301,14 @@ class PendingRequest implements PendingRequestContract
         // middleware can set the MockClient before we run the MockResponse.
 
         $middleware->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
+
+        // Finally, we'll register the debugging middleware. This should always
+        // stay at the bottom of the middleware chain, so we output the very
+        // latest PendingRequest/Response
+
+        $middleware->onRequest(new DebugRequest, false, 'debugRequest');
+
+        $middleware->onResponse(new DebugResponse, false, 'debugResponse');
 
         return $this;
     }

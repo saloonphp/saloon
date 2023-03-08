@@ -102,30 +102,4 @@ class Str
 
         return $string;
     }
-
-    /**
-     * Convert a value to studly caps case.
-     *
-     * @param string $value
-     * @return string
-     */
-    public static function studly(string $value): string
-    {
-        $words = explode(' ', str_replace(['-', '_'], ' ', $value));
-
-        $studlyWords = array_map(fn ($word) => ucfirst($word), $words);
-
-        return implode($studlyWords);
-    }
-
-    /**
-     * Convert a value to camel case.
-     *
-     * @param string $value
-     * @return string
-     */
-    public static function camel(string $value): string
-    {
-        return lcfirst(static::studly($value));
-    }
 }

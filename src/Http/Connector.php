@@ -6,6 +6,7 @@ namespace Saloon\Http;
 
 use Saloon\Traits\Bootable;
 use Saloon\Traits\Makeable;
+use Saloon\Traits\HasDebugging;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Traits\Connector\HasPool;
@@ -18,8 +19,9 @@ use Saloon\Traits\Request\CastDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Contracts\Connector as ConnectorContract;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
+use Saloon\Contracts\HasDebugging as HasDebuggingContract;
 
-abstract class Connector implements ConnectorContract
+abstract class Connector implements ConnectorContract, HasDebuggingContract
 {
     use AuthenticatesRequests;
     use HasRequestProperties;
@@ -34,4 +36,5 @@ abstract class Connector implements ConnectorContract
     use Makeable;
     use HasPool;
     use HasDelay;
+    use HasDebugging;
 }
