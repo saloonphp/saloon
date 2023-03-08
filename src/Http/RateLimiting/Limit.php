@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Http\RateLimiting;
 
-use InvalidArgumentException;
 use ReflectionClass;
 use Saloon\Helpers\Date;
+use InvalidArgumentException;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Connector;
 
