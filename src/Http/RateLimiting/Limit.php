@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http\RateLimiting;
 
+use InvalidArgumentException;
 use ReflectionClass;
 use Saloon\Helpers\Date;
 use Saloon\Contracts\Request;
@@ -32,8 +33,12 @@ class Limit
 
     protected bool $untilMidnight = false;
 
-    public function __construct(int $allow, float $threshold = 0.95)
+    public function __construct(int $allow, float $threshold = 1)
     {
+        if ($threshold < 0 || $threshold > 1) {
+            throw new InvalidArgumentException('Threshold must be a float between 0 and 1. For example a 85% threshold would be 0.85.');
+        }
+
         // Todo: Build protections into here to prevent limiters being used that haven't been properly setup
 
         $this->allow = $allow;
@@ -84,15 +89,10 @@ class Limit
         return $this->hits;
     }
 
-    public function setHits(int $amount): static
-    {
-        $this->hits = $amount;
-
-        return $this;
-    }
-
     public function hit(int $amount = 1): static
     {
+        // Todo: If we have exceeded limit $exceededLimit === true then we ignore any additional hits
+
         $this->hits += $amount;
 
         return $this;
@@ -213,7 +213,7 @@ class Limit
         }
 
         if (isset($values['hits'])) {
-            $this->setHits($values['hits']);
+            $this->hit($values['hits']);
         }
 
         return $this;

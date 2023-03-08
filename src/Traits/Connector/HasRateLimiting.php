@@ -50,7 +50,13 @@ trait HasRateLimiting
             foreach ($limits as $limit) {
                 $limit = $store->hydrateLimit($limit);
 
+                // Todo: Rename processLimit to "handleRateLimitResponse"
+
                 $this->processLimit($response, $limit);
+
+                // Todo: Maybe check here if hasExceededLimit which means we've been manually exceeded. We'll then just commit this one and throw
+
+                // Todo: Always run $limit->hit() after handling the limit response
 
                 $store->commitLimit($limit);
 
@@ -63,6 +69,12 @@ trait HasRateLimiting
                 // limiter, not just the one we want - which could make it trickier because
                 // it may only be hitting a specific limiter, like 429 too many attempts in
                 // the current hour, we don't have to rule out the whole day
+
+                /**
+                 * Todo
+                 * Not sure about checking if we have reached the limit here because
+                 * you could make request 10 but it will throw an exception even though the response is probably fine
+                 */
 
                 if ($limit->hasReachedLimit()) {
                     $limitReached = $limit;
