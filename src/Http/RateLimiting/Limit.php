@@ -197,5 +197,51 @@ class Limit
         return $this->everySeconds(strtotime('tomorrow') - time());
     }
 
-    // Todo: Add methods like everyMinute / everyHour / everyDay etc
+    /**
+     * Set the properties from an encoded string
+     *
+     * @param string $properties
+     * @return $this
+     * @throws \JsonException
+     */
+    public function unserializeStoreData(string $properties): static
+    {
+        $values = json_decode($properties, true, 512, JSON_THROW_ON_ERROR);
+
+        if (isset($values['timestamp'])) {
+            $this->setExpiryTimestamp($values['timestamp']);
+        }
+
+        if (isset($values['hits'])) {
+            $this->setHits($values['hits']);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the encoded properties to be stored
+     *
+     * @return string
+     * @throws \JsonException
+     */
+    public function serializeStoreData(): string
+    {
+        return json_encode([
+            'timestamp' => $this->getExpiryTimestamp(),
+            'hits' => $this->getHits()
+        ], JSON_THROW_ON_ERROR);
+    }
+
+    /**
+     * Get the remaining time in seconds
+     *
+     * @return int
+     */
+    public function getRemainingSeconds(): int
+    {
+        $now = Date::now()->toDateTime()->getTimestamp();
+
+        return (int)round($this->getExpiryTimestamp() - $now);
+    }
 }

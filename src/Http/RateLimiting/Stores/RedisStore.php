@@ -10,9 +10,11 @@ use Saloon\Contracts\RateLimitStore;
 
 class RedisStore implements RateLimitStore
 {
-    // Todo: Might not need this, consider removing
-
-
+    /**
+     * Constructor
+     *
+     * @param \Predis\Client $redis
+     */
     public function __construct(protected Client $redis)
     {
         //
@@ -33,12 +35,7 @@ class RedisStore implements RateLimitStore
             return $limit;
         }
 
-        $data = json_decode($value, false, 512, JSON_THROW_ON_ERROR);
-
-        $limit->setHits($data->hits);
-        $limit->setExpiryTimestamp($data->timestamp);
-
-        return $limit;
+        return $limit->unserializeStoreData($value);
     }
 
     /**
@@ -50,13 +47,10 @@ class RedisStore implements RateLimitStore
      */
     public function commitLimit(Limit $limit): void
     {
-        $remainingSeconds = round($limit->getExpiryTimestamp() - microtime(true));
-
-        $data = [
-            'timestamp' => $limit->getExpiryTimestamp(),
-            'hits' => $limit->getHits(),
-        ];
-
-        $this->redis->setex($limit->getId(), $remainingSeconds, json_encode($data, JSON_THROW_ON_ERROR));
+        $this->redis->setex(
+            key: $limit->getId(),
+            seconds: $limit->getRemainingSeconds(),
+            value: $limit->serializeStoreData()
+        );
     }
 }
