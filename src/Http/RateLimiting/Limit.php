@@ -229,7 +229,7 @@ class Limit
     {
         return json_encode([
             'timestamp' => $this->getExpiryTimestamp(),
-            'hits' => $this->getHits()
+            'hits' => $this->getHits(),
         ], JSON_THROW_ON_ERROR);
     }
 
