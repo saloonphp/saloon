@@ -109,7 +109,7 @@ class Limit
      * @param string|null $id
      * @return $this
      */
-    public function withId(?string $id): Limit
+    public function id(?string $id): Limit
     {
         $this->customId = $id;
 

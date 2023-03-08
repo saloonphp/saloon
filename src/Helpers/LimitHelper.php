@@ -26,8 +26,10 @@ class LimitHelper
             return [];
         }
 
-        return array_map(static function (Limit $limit) use ($connectorOrRequest) {
-            return $limit->setObjectName($connectorOrRequest);
-        }, $limits);
+        $limits = Arr::mapWithKeys($limits, static function (Limit $limit, int|string $key) use ($connectorOrRequest) {
+            return [$key => is_string($key) ? $limit->id($key) : $limit->setObjectName($connectorOrRequest)];
+        });
+
+        return array_values($limits);
     }
 }
