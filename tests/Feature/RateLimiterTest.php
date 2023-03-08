@@ -13,7 +13,7 @@ test('a rate limiter will be increased as you make requests', function () {
 
     $connector = new RateLimitedConnector;
     $connector->withMockClient($mockClient);
-    
+
     $response = $connector->send(new UserRequest);
 
     dd($response->json());

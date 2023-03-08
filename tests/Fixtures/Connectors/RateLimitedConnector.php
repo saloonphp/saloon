@@ -47,10 +47,9 @@ class RateLimitedConnector extends Connector
      */
     protected function resolveLimits(): array
     {
-        // We'll only allow 8 requests
-
         return [
             Limit::allow(10)->everyMinute(),
+            Limit::allow(15)->everyHour(),
             Limit::allow(20)->untilMidnightTonight(),
         ];
     }
