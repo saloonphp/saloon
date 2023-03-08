@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 use Saloon\Enums\Method;
 use Saloon\Debugging\Debugger;
-use Saloon\Exceptions\DebuggingDriverException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Repositories\ArrayStore;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Tests\Fixtures\Debuggers\MissingDependencyDebugger;
+use Saloon\Exceptions\DebuggingDriverException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Debuggers\ArrayDebugger;
 use Saloon\Tests\Fixtures\Requests\HasBodyRequest;
@@ -17,6 +16,7 @@ use Saloon\Tests\Fixtures\Requests\HasXmlBodyRequest;
 use Saloon\Tests\Fixtures\Requests\HasFormBodyRequest;
 use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
 use Saloon\Tests\Fixtures\Requests\HasMultipartBodyRequest;
+use Saloon\Tests\Fixtures\Debuggers\MissingDependencyDebugger;
 
 test('it will debug a request being sent', function () {
     $connector = new TestConnector;

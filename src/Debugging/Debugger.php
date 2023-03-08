@@ -6,10 +6,10 @@ namespace Saloon\Debugging;
 
 use Saloon\Contracts\DebuggingDriver;
 use Saloon\Debugging\Drivers\RayDebugger;
-use Saloon\Exceptions\DebuggingDriverException;
 use Saloon\Exceptions\UnknownDriverException;
 use Saloon\Debugging\Drivers\ErrorLogDebugger;
 use Saloon\Debugging\Drivers\SystemLogDebugger;
+use Saloon\Exceptions\DebuggingDriverException;
 
 class Debugger
 {
