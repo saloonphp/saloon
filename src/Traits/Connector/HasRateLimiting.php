@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Traits\Connector;
 
-use Saloon\Contracts\PendingRequest;
-use Saloon\Contracts\RateLimitStore;
 use Saloon\Contracts\Response;
-use Saloon\Exceptions\RateLimitReachedException;
 use Saloon\Helpers\LimitHelper;
 use Saloon\Http\RateLimiting\Limit;
+use Saloon\Contracts\PendingRequest;
+use Saloon\Contracts\RateLimitStore;
+use Saloon\Exceptions\RateLimitReachedException;
 
 trait HasRateLimiting
 {
@@ -91,6 +93,7 @@ trait HasRateLimiting
     {
         if ($response->status() === 429) {
             $limit->exceeded();
+
             return;
         }
 

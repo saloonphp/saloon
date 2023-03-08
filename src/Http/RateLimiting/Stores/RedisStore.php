@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Http\RateLimiting\Stores;
 
 use Predis\Client;
-use Saloon\Contracts\RateLimitStore;
 use Saloon\Http\RateLimiting\Limit;
+use Saloon\Contracts\RateLimitStore;
 
 class RedisStore implements RateLimitStore
 {

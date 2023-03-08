@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Helpers;
 
-use Saloon\Contracts\Connector;
 use Saloon\Contracts\Request;
+use Saloon\Contracts\Connector;
 use Saloon\Http\RateLimiting\Limit;
 
 class LimitHelper
@@ -18,7 +20,7 @@ class LimitHelper
      */
     public static function hydrateLimits(array $limits, Connector|Request $connectorOrRequest): array
     {
-        $limits = array_filter($limits, static fn(mixed $value) => $value instanceof Limit);
+        $limits = array_filter($limits, static fn (mixed $value) => $value instanceof Limit);
 
         if (empty($limits)) {
             return [];

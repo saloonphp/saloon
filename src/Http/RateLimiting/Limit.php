@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Http\RateLimiting;
 
 use ReflectionClass;
-use Saloon\Contracts\Connector;
-use Saloon\Contracts\Request;
 use Saloon\Helpers\Date;
+use Saloon\Contracts\Request;
+use Saloon\Contracts\Connector;
 
 class Limit
 {
@@ -142,6 +144,7 @@ class Limit
     public function setExpiryTimestamp(?int $expiryTimestamp): static
     {
         $this->expiryTimestamp = $expiryTimestamp;
+
         return $this;
     }
 

@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Connectors;
 
 use Predis\Client;
-use Saloon\Contracts\PendingRequest;
-use Saloon\Contracts\RateLimitStore;
 use Saloon\Http\Connector;
 use Saloon\Http\RateLimiting\Limit;
-use Saloon\Http\RateLimiting\Stores\RedisStore;
-use Saloon\Traits\Connector\HasRateLimiting;
+use Saloon\Contracts\RateLimitStore;
 use Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\Traits\Connector\HasRateLimiting;
+use Saloon\Http\RateLimiting\Stores\RedisStore;
 
 class RateLimitedConnector extends Connector
 {
