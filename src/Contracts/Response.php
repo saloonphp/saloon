@@ -10,6 +10,9 @@ use Illuminate\Support\Collection;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * @template TDto
+ */
 interface Response extends HasHeaders
 {
     /**
@@ -114,7 +117,7 @@ interface Response extends HasHeaders
     /**
      * Convert the response into a DTO
      *
-     * @return mixed
+     * @return TDto
      */
     public function dto(): mixed;
 
