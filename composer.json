@@ -30,6 +30,7 @@
         "illuminate/collections": "^9.39",
         "league/flysystem": "^3.0",
         "pestphp/pest": "^1.21",
+        "pestphp/pest-plugin-parallel": "^1.2",
         "phpstan/phpstan": "^1.9",
         "spatie/ray": "^1.33",
         "symfony/dom-crawler": "^6.0"
