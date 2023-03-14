@@ -13,7 +13,9 @@ use Saloon\Exceptions\InvalidStateException;
 use Saloon\Http\OAuth2\GetAccessTokenRequest;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
 use Saloon\Http\OAuth2\GetRefreshTokenRequest;
+use Saloon\Exceptions\OAuthConfigValidationException;
 use Saloon\Tests\Fixtures\Connectors\OAuth2Connector;
+use Saloon\Tests\Fixtures\Connectors\NoConfigAuthCodeConnector;
 use Saloon\Tests\Fixtures\Authenticators\CustomOAuthAuthenticator;
 use Saloon\Tests\Fixtures\Connectors\CustomResponseOAuth2Connector;
 
@@ -337,4 +339,51 @@ test('you can register a global request modifier that is called on every step of
         GetRefreshTokenRequest::class,
         GetUserRequest::class,
     ]);
+});
+
+test('if you attempt to use the authorization code flow without a client id it will throw an exception', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['access_token' => 'access', 'expires_in' => 3600], 200),
+    ]);
+
+    $connector = new NoConfigAuthCodeConnector;
+    $connector->withMockClient($mockClient);
+
+    $this->expectException(OAuthConfigValidationException::class);
+    $this->expectExceptionMessage('The Client ID is empty or has not been provided.');
+
+    $connector->getAccessToken('code');
+});
+
+test('if you attempt to use the authorization code flow without a secret it will throw an exception', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['access_token' => 'access', 'expires_in' => 3600], 200),
+    ]);
+
+    $connector = new NoConfigAuthCodeConnector;
+    $connector->withMockClient($mockClient);
+
+    $connector->oauthConfig()->setClientId('hello');
+
+    $this->expectException(OAuthConfigValidationException::class);
+    $this->expectExceptionMessage('The Client Secret is empty or has not been provided.');
+
+    $connector->getAccessToken('code');
+});
+
+test('if you attempt to use the authorization code flow without a redirect uri it will throw an exception', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['access_token' => 'access', 'expires_in' => 3600], 200),
+    ]);
+
+    $connector = new NoConfigAuthCodeConnector;
+    $connector->withMockClient($mockClient);
+
+    $connector->oauthConfig()->setClientId('hello');
+    $connector->oauthConfig()->setClientSecret('secret');
+
+    $this->expectException(OAuthConfigValidationException::class);
+    $this->expectExceptionMessage('The Redirect URI is empty or has not been provided.');
+
+    $connector->getAccessToken('code');
 });
