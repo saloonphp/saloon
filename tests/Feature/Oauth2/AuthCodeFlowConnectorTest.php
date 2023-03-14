@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Saloon\Exceptions\OAuthConfigValidationException;
 use Saloon\Helpers\Str;
 use Saloon\Helpers\Date;
 use Saloon\Http\Response;
@@ -14,9 +13,9 @@ use Saloon\Exceptions\InvalidStateException;
 use Saloon\Http\OAuth2\GetAccessTokenRequest;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
 use Saloon\Http\OAuth2\GetRefreshTokenRequest;
-use Saloon\Tests\Fixtures\Connectors\NoConfigAuthCodeConnector;
-use Saloon\Tests\Fixtures\Connectors\NoConfigClientCredentialsConnector;
+use Saloon\Exceptions\OAuthConfigValidationException;
 use Saloon\Tests\Fixtures\Connectors\OAuth2Connector;
+use Saloon\Tests\Fixtures\Connectors\NoConfigAuthCodeConnector;
 use Saloon\Tests\Fixtures\Authenticators\CustomOAuthAuthenticator;
 use Saloon\Tests\Fixtures\Connectors\CustomResponseOAuth2Connector;
 

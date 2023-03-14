@@ -1,10 +1,12 @@
 <?php
 
-use GuzzleHttp\Promise\FulfilledPromise;
-use Psr\Http\Message\RequestInterface;
+declare(strict_types=1);
+
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Promise\FulfilledPromise;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('default guzzle config options are sent', function () {
     $connector = new TestConnector;

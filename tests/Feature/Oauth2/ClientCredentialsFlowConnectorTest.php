@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
-use Saloon\Exceptions\OAuthConfigValidationException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
+use Saloon\Exceptions\OAuthConfigValidationException;
 use Saloon\Tests\Fixtures\Connectors\ClientCredentialsConnector;
-use Saloon\Tests\Fixtures\Connectors\NoConfigAuthCodeConnector;
 use Saloon\Tests\Fixtures\Connectors\NoConfigClientCredentialsConnector;
 
 test('you can get the authenticator from the connector', function () {
