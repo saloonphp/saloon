@@ -548,4 +548,30 @@ class PendingRequest implements PendingRequestContract
 
         return $this;
     }
+
+    /**
+     * Set the URL of the PendingRequest
+     *
+     * @param string $url
+     * @return $this
+     */
+    public function setUrl(string $url): static
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * Set the method of the PendingRequest
+     *
+     * @param \Saloon\Enums\Method $method
+     * @return $this
+     */
+    public function setMethod(Method $method): static
+    {
+        $this->method = $method;
+
+        return $this;
+    }
 }
