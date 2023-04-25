@@ -323,4 +323,4 @@ test('a middleware pipeline is correctly destructed when finished', function ():
     unset($pipeline);
 
     expect($pipelineReference->get())->toBeNull();
-})->skip();
+});
