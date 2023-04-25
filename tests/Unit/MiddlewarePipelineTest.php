@@ -294,3 +294,33 @@ test('a response pipe can be added to the top of the pipeline', function () {
 
     expect($names)->toEqual(['Taylor', 'Sam']);
 });
+
+test('a middleware pipeline is correctly destructed when finished', function (): void {
+    /**
+     * This is related to wrapping the {@see \Saloon\Helpers\MiddlewarePipeline::onRequest()} and {@see \Saloon\Helpers\MiddlewarePipeline::onResponse()}
+     *   callbacks in {@see \Closure}s, for additional, relevant logic.
+     * For some reason, this is causing PHP to not destruct things correctly, keeping unused classes intact.
+     * Concretely speaking, for Saloon, this means that the Connector will *not* get destructed, and thereby also not the underlying client.
+     * Which in turn leaves open file handles until the process terminates.
+     */
+
+    $pipelineReference = WeakReference::create($pipeline = new MiddlewarePipeline);
+    $pipeline
+        ->onRequest(function (PendingRequest $request) {
+            // Doesn't really matter.
+        })
+        ->onResponse(function (PendingRequest $request) {
+            // Doesn't really matter.
+        });
+
+    expect($pipeline)->toBeInstanceOf(\Saloon\Contracts\MiddlewarePipeline::class)
+        ->and($pipeline->getRequestPipeline())->toBeInstanceOf(\Saloon\Contracts\Pipeline::class)
+        ->and($pipeline->getRequestPipeline()->getPipes())->toHaveCount(1)
+        ->and($pipeline->getResponsePipeline())->toBeInstanceOf(\Saloon\Contracts\Pipeline::class)
+        ->and($pipeline->getResponsePipeline()->getPipes())->toHaveCount(1)
+        ->and($pipelineReference->get())->toEqual($pipeline);
+
+    unset($pipeline);
+
+    expect($pipelineReference->get())->toBeNull();
+})->skip();
