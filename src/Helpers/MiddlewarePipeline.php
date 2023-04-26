@@ -48,14 +48,17 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     public function onRequest(callable $callable, bool $prepend = false, ?string $name = null): static
     {
         /**
-         * For some reason, PHP is not destructing Closures, or 'things' using Closures, correctly, keeping unused classes intact.
-         * Binding to an empty, anonymous class is a workaround for the issue.
+         * For some reason, PHP is not destructing non-static Closures, or 'things' using non-static Closures, correctly, keeping unused objects intact.
+         * Using a *static* Closure, or re-binding it to an empty, anonymous class/object is a workaround for the issue.
          * If we don't, things using the MiddlewarePipeline, in turn, won't destruct.
          * Concretely speaking, for Saloon, this means that the Connector will *not* get destructed, and thereby also not the underlying client.
          * Which in turn leaves open file handles until the process terminates.
+         *
+         * Do note that this is entirely about our *wrapping* Closure below.
+         * The provided callable doesn't affect the MiddlewarePipeline.
          */
 
-        $callbackWrapper = Closure::bind(function (PendingRequest $pendingRequest) use ($callable): PendingRequest {
+        $this->requestPipeline->pipe(static function (PendingRequest $pendingRequest) use ($callable): PendingRequest {
             $result = $callable($pendingRequest);
 
             if ($result instanceof PendingRequest) {
@@ -67,9 +70,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
             }
 
             return $pendingRequest;
-        }, new class {});
-
-        $this->requestPipeline = $this->requestPipeline->pipe($callbackWrapper, $prepend, $name);
+        }, $prepend, $name);
 
         return $this;
     }
@@ -86,20 +87,21 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     public function onResponse(callable $callable, bool $prepend = false, ?string $name = null): static
     {
         /**
-         * For some reason, PHP is not destructing Closures, or 'things' using Closures, correctly, keeping unused classes intact.
-         * Binding to an empty, anonymous class is a workaround for the issue.
+         * For some reason, PHP is not destructing non-static Closures, or 'things' using non-static Closures, correctly, keeping unused objects intact.
+         * Using a *static* Closure, or re-binding it to an empty, anonymous class/object is a workaround for the issue.
          * If we don't, things using the MiddlewarePipeline, in turn, won't destruct.
          * Concretely speaking, for Saloon, this means that the Connector will *not* get destructed, and thereby also not the underlying client.
          * Which in turn leaves open file handles until the process terminates.
+         *
+         * Do note that this is entirely about our *wrapping* Closure below.
+         * The provided callable doesn't affect the MiddlewarePipeline.
          */
 
-        $callbackWrapper = Closure::bind(function (Response $response) use ($callable): Response {
+        $this->responsePipeline->pipe(static function (Response $response) use ($callable): Response {
             $result = $callable($response);
 
             return $result instanceof Response ? $result : $response;
-        }, new class {});
-
-        $this->responsePipeline = $this->responsePipeline->pipe($callbackWrapper, $prepend, $name);
+        }, $prepend, $name);
 
         return $this;
     }
