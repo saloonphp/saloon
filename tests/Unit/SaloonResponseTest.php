@@ -238,3 +238,15 @@ test('the dom method will return a crawler instance', function () {
     expect($response->dom())->toBeInstanceOf(Crawler::class);
     expect($response->dom())->toEqual(new Crawler($dom));
 });
+
+test('when using the body methods the stream is rewound back to the start', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+
+    expect($response->json())->toEqual(['foo' => 'bar']);
+    expect($response->body())->toEqual('{"foo":"bar"}');
+    expect($response->object())->toEqual((object)['foo' => 'bar']);
+});
