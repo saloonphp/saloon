@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
-use LogicException;
 use Throwable;
+use LogicException;
 use SimpleXMLElement;
 use Saloon\Helpers\Arr;
 use Illuminate\Support\Collection;
