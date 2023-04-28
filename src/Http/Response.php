@@ -105,7 +105,14 @@ class Response implements ResponseContract
      */
     public function body(): string
     {
-        return (string)$this->stream();
+        $stream = $this->stream();
+        $body = $stream->getContents();
+
+        if ($stream->isSeekable()) {
+            $stream->rewind();
+        }
+
+        return $body;
     }
 
     /**

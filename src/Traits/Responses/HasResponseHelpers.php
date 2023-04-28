@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
+use LogicException;
 use Throwable;
 use SimpleXMLElement;
 use Saloon\Helpers\Arr;
@@ -143,13 +144,13 @@ trait HasResponseHelpers
     /**
      * Convert the response into a DTO or throw a LogicException if the response failed
      *
-     * @throws \LogicException
+     * @throws LogicException
      * @return mixed
      */
     public function dtoOrFail(): mixed
     {
         if ($this->failed()) {
-            throw new \LogicException('Unable to create data transfer object as the response has failed.', 0, $this->toException());
+            throw new LogicException('Unable to create data transfer object as the response has failed.', 0, $this->toException());
         }
 
         return $this->dto();
