@@ -333,9 +333,7 @@ class PendingRequest implements PendingRequestContract
      */
     public function executeResponsePipeline(ResponseContract $response): ResponseContract
     {
-        $this->middleware()->executeResponsePipeline($response);
-
-        return $response;
+        return $this->middleware()->executeResponsePipeline($response);
     }
 
     /**

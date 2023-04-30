@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\Psr7\Response;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\ArrayStore;
@@ -9,8 +10,10 @@ use Illuminate\Support\Collection;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Symfony\Component\DomCrawler\Crawler;
+use Saloon\Http\Response as SaloonResponse;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('you can get the original pending request', function () {
     $mockClient = new MockClient([
@@ -249,4 +252,26 @@ test('when using the body methods the stream is rewound back to the start', func
     expect($response->json())->toEqual(['foo' => 'bar']);
     expect($response->body())->toEqual('{"foo":"bar"}');
     expect($response->object())->toEqual((object)['foo' => 'bar']);
+});
+
+test('if a response is changed through middleware the new instance is used', function () {
+
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
+    ]);
+
+    $connector = new TestConnector;
+
+    $connector->middleware()->onResponse(function (SaloonResponse $response) {
+        // Let's modify the body while sending!
+        $psrResponse = $response->getPsrResponse();
+        $newPsrResponse = $psrResponse->withBody(Utils::streamFor('Hello World!'));
+
+        return $response::fromPsrResponse($newPsrResponse, $response->getPendingRequest());
+    });
+
+    $response = $connector->send(new UserRequest, $mockClient);
+
+    expect($response->body())->toEqual('Hello World!');
+    expect($response->headers()->all())->toEqual(['X-Custom-Header' => 'Howdy']);
 });
