@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Utils;
+use GuzzleHttp\Psr7\Response;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\ArrayStore;
 use Illuminate\Support\Collection;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\Response as SaloonResponse;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Symfony\Component\DomCrawler\Crawler;
+use Saloon\Http\Response as SaloonResponse;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('you can get the original pending request', function () {
     $mockClient = new MockClient([
