@@ -31,3 +31,4 @@ test('you can overwrite the url and the method of the pending request', function
     expect($pendingRequest->getUrl())->toEqual('https://other-endpoint.co.uk/user');
     expect($pendingRequest->getMethod())->toEqual(Method::POST);
 });
+
