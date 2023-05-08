@@ -53,13 +53,6 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
     public function getResponseClass(): string;
 
     /**
-     * Get the request sender.
-     *
-     * @return \Saloon\Contracts\Sender
-     */
-    public function getSender(): Sender;
-
-    /**
      * Retrieve the body on the instance
      *
      * @return \Saloon\Contracts\Body\BodyRepository|null

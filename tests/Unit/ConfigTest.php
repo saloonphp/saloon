@@ -40,15 +40,19 @@ test('the config can specify global middleware', function () {
 test('you can change the global default sender used', function () {
     Config::setDefaultSender(ArraySender::class);
 
-    $response = TestConnector::make()->send(new UserRequest);
+    $connector = new TestConnector;
 
-    expect($response->getPendingRequest()->getSender())->toBeInstanceOf(ArraySender::class);
+    $connector->send(new UserRequest);
+
+    expect($connector->sender())->toBeInstanceOf(ArraySender::class);
 
     Config::resetDefaultSender();
 
-    $response = TestConnector::make()->send(new UserRequest);
+    $connector = new TestConnector;
 
-    expect($response->getPendingRequest()->getSender())->toBeInstanceOf(GuzzleSender::class);
+    $response = $connector->send(new UserRequest);
+
+    expect($response->getPendingRequest()->getConnector()->sender())->toBeInstanceOf(GuzzleSender::class);
 });
 
 test('you can change how the global default sender is resolved', function () {

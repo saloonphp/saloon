@@ -6,6 +6,7 @@ use Saloon\Debugging\Debugger;
 use Saloon\Debugging\DebugData;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\Senders\GuzzleSender;
 use Saloon\Http\Senders\SimulatedSender;
 use Saloon\Debugging\Drivers\RayDebugger;
 use Saloon\Debugging\Drivers\ErrorLogDebugger;
@@ -40,7 +41,7 @@ test('the debug data can access the underlying pending request and response', fu
 
     $debugData = new DebugData($pendingRequest, $response);
 
-    expect($debugData->getSender())->toBeInstanceOf(SimulatedSender::class);
+    expect($debugData->getSender())->toBeInstanceOf(GuzzleSender::class);
     expect($debugData->getPendingRequest())->toBe($pendingRequest);
     expect($debugData->getResponse())->toBe($response);
     expect($debugData->getConnector())->toBe($connector);

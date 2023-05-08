@@ -63,7 +63,7 @@ class DebugData
      */
     public function getSender(): Sender
     {
-        return $this->pendingRequest->getSender();
+        return $this->getConnector()->sender();
     }
 
     /**

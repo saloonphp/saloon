@@ -7,7 +7,6 @@ namespace Saloon\Http;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Config;
 use Saloon\Helpers\Helpers;
-use Saloon\Contracts\Sender;
 use Saloon\Contracts\Request;
 use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Connector;
@@ -19,7 +18,6 @@ use Saloon\Contracts\Body\HasBody;
 use Saloon\Contracts\Authenticator;
 use Saloon\Helpers\ReflectionHelper;
 use Saloon\Http\Middleware\DebugRequest;
-use Saloon\Http\Senders\SimulatedSender;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\Middleware\DebugResponse;
 use Saloon\Traits\Auth\AuthenticatesRequests;
@@ -384,16 +382,6 @@ class PendingRequest implements PendingRequestContract
     public function getResponseClass(): string
     {
         return $this->responseClass;
-    }
-
-    /**
-     * Get the request sender.
-     *
-     * @return \Saloon\Contracts\Sender
-     */
-    public function getSender(): Sender
-    {
-        return $this->hasSimulatedResponsePayload() ? new SimulatedSender : $this->connector->sender();
     }
 
     /**
