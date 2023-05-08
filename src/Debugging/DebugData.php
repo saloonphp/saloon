@@ -47,26 +47,6 @@ class DebugData
     }
 
     /**
-     * Get the connector from the PendingRequest
-     *
-     * @return \Saloon\Contracts\Connector
-     */
-    public function getConnector(): Connector
-    {
-        return $this->pendingRequest->getConnector();
-    }
-
-    /**
-     * Get the sender from the PendingRequest
-     *
-     * @return \Saloon\Contracts\Sender
-     */
-    public function getSender(): Sender
-    {
-        return $this->getConnector()->sender();
-    }
-
-    /**
      * Get the PendingRequest
      *
      * @return \Saloon\Contracts\PendingRequest
@@ -74,6 +54,16 @@ class DebugData
     public function getPendingRequest(): PendingRequest
     {
         return $this->pendingRequest;
+    }
+
+    /**
+     * Get the connector from the PendingRequest
+     *
+     * @return \Saloon\Contracts\Connector
+     */
+    public function getConnector(): Connector
+    {
+        return $this->pendingRequest->getConnector();
     }
 
     /**
