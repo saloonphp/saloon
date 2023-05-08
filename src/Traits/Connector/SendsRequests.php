@@ -10,10 +10,10 @@ use Saloon\Contracts\Response;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\MockClient;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Http\Senders\SimulatedSender;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
-use Saloon\Http\Senders\SimulatedSender;
 
 trait SendsRequests
 {
