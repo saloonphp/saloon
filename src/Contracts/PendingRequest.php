@@ -90,20 +90,6 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
     public function hasSimulatedResponsePayload(): bool;
 
     /**
-     * Send the PendingRequest
-     *
-     * @return \Saloon\Contracts\Response
-     */
-    public function send(): Response;
-
-    /**
-     * Send the PendingRequest asynchronously
-     *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function sendAsync(): PromiseInterface;
-
-    /**
      * Create a data object from the response
      *
      * @param \Saloon\Contracts\Response $response

@@ -13,12 +13,12 @@ use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
+use Saloon\Http\Senders\SimulatedSender;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Contracts\Authenticator;
 use Saloon\Helpers\ReflectionHelper;
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Http\Middleware\DebugRequest;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\Middleware\DebugResponse;
@@ -229,7 +229,7 @@ class PendingRequest implements PendingRequestContract
             return $this;
         }
 
-        if (isset($connectorBody, $requestBody) && ! $connectorBody instanceof $requestBody) {
+        if (isset($connectorBody, $requestBody) && !$connectorBody instanceof $requestBody) {
             throw new PendingRequestException('Connector and request body types must be the same.');
         }
 
@@ -393,7 +393,7 @@ class PendingRequest implements PendingRequestContract
      */
     public function getSender(): Sender
     {
-        return $this->connector->sender();
+        return $this->hasSimulatedResponsePayload() ? new SimulatedSender : $this->connector->sender();
     }
 
     /**
@@ -460,35 +460,11 @@ class PendingRequest implements PendingRequestContract
     {
         $response = $this->request->resolveResponseClass() ?? $this->connector->resolveResponseClass() ?? Response::class;
 
-        if (! class_exists($response) || ! ReflectionHelper::isSubclassOf($response, ResponseContract::class)) {
+        if (!class_exists($response) || !ReflectionHelper::isSubclassOf($response, ResponseContract::class)) {
             throw new InvalidResponseClassException;
         }
 
         return $response;
-    }
-
-    /**
-     * Send the PendingRequest
-     *
-     * @return \Saloon\Contracts\Response
-     */
-    public function send(): ResponseContract
-    {
-        $this->setAsynchronous(false);
-
-        return (new Dispatcher($this))->execute();
-    }
-
-    /**
-     * Send the PendingRequest asynchronously
-     *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function sendAsync(): PromiseInterface
-    {
-        $this->setAsynchronous(true);
-
-        return (new Dispatcher($this))->execute();
     }
 
     /**

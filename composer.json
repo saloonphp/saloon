@@ -29,7 +29,7 @@
         "friendsofphp/php-cs-fixer": "^3.5",
         "illuminate/collections": "^9.39",
         "league/flysystem": "^3.0",
-        "pestphp/pest": "^2.2.3",
+        "pestphp/pest": "^1.0",
         "phpstan/phpstan": "^1.9",
         "spatie/ray": "^1.33",
         "symfony/dom-crawler": "^6.0"

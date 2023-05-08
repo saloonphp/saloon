@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Saloon\Contracts\Request;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
@@ -146,7 +147,7 @@ test('you can customise if the method should retry', function () {
     $this->expectException(InternalServerErrorException::class);
     $this->expectExceptionMessage('Internal Server Error (500) Response: {"name":"Gareth"}');
 
-    $connector->sendAndRetry(new UserRequest, 3, 0, function (RequestException $exception, PendingRequest $pendingRequest) {
+    $connector->sendAndRetry(new UserRequest, 3, 0, function (RequestException $exception, Request $request) {
         return $exception->getResponse()->json() !== ['name' => 'Gareth'];
     });
 });
@@ -210,10 +211,10 @@ test('you can modify the pending request inside the retry handler', function () 
 
     $index = 0;
 
-    $response = $connector->sendAndRetry(new UserRequest, 5, 0, function (Exception $exception, PendingRequest $pendingRequest) use (&$index) {
+    $response = $connector->sendAndRetry(new UserRequest, 5, 0, function (Exception $exception, Request $request) use (&$index) {
         $index++;
 
-        $pendingRequest->headers()->add('X-Test-Index', $index);
+        $request->headers()->add('X-Test-Index', $index);
 
         return true;
     });
@@ -235,8 +236,8 @@ test('retry against a live endpoint to test GuzzleSender', function () {
     $request = new HeaderErrorRequest();
     $index = 0;
 
-    $response = $connector->sendAndRetry($request, 6, 0, function (Exception $exception, PendingRequest $pendingRequest) use (&$exceptions, &$index) {
-        $pendingRequest->headers()->add('X-Yee-Haw', $index++);
+    $response = $connector->sendAndRetry($request, 6, 0, function (Exception $exception, Request $request) use (&$exceptions, &$index) {
+        $request->headers()->add('X-Yee-Haw', $index++);
 
         return true;
     });
@@ -270,8 +271,8 @@ test('you can authenticate the pending request inside the retry handler', functi
     $connector = new TestConnector;
     $connector->withMockClient($mockClient);
 
-    $response = $connector->sendAndRetry(new UserRequest, 2, 0, function (Exception $exception, PendingRequest $pendingRequest) {
-        $pendingRequest->authenticate(new TokenAuthenticator('newToken'));
+    $response = $connector->sendAndRetry(new UserRequest, 2, 0, function (Exception $exception, Request $request) {
+        $request->authenticate(new TokenAuthenticator('newToken'));
 
         return true;
     });

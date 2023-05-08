@@ -9,6 +9,7 @@ use Saloon\Http\Faking\MockResponse;
 use Saloon\Debugging\Drivers\RayDebugger;
 use Saloon\Debugging\Drivers\ErrorLogDebugger;
 use Saloon\Debugging\Drivers\SystemLogDebugger;
+use Saloon\Http\Senders\SimulatedSender;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Debuggers\ArrayDebugger;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
@@ -34,12 +35,12 @@ test('the debug data can access the underlying pending request and response', fu
     $connector = new TestConnector;
     $request = new UserRequest;
 
-    $pendingRequest = $connector->createPendingRequest($request, $mockClient);
-    $response = $pendingRequest->send();
+    $response = $connector->send($request, $mockClient);
+    $pendingRequest = $response->getPendingRequest();
 
     $debugData = new DebugData($pendingRequest, $response);
 
-    expect($debugData->getSender())->toBe($connector->sender());
+    expect($debugData->getSender())->toBeInstanceOf(SimulatedSender::class);
     expect($debugData->getPendingRequest())->toBe($pendingRequest);
     expect($debugData->getResponse())->toBe($response);
     expect($debugData->getConnector())->toBe($connector);
