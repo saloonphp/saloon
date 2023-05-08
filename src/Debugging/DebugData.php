@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Saloon\Debugging;
 
 use Saloon\Enums\Method;
-use Saloon\Contracts\Sender;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\Connector;

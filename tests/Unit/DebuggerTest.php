@@ -6,7 +6,6 @@ use Saloon\Debugging\Debugger;
 use Saloon\Debugging\DebugData;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\Senders\GuzzleSender;
 use Saloon\Debugging\Drivers\RayDebugger;
 use Saloon\Debugging\Drivers\ErrorLogDebugger;
 use Saloon\Debugging\Drivers\SystemLogDebugger;
