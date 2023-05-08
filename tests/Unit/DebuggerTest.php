@@ -40,7 +40,7 @@ test('the debug data can access the underlying pending request and response', fu
 
     $debugData = new DebugData($pendingRequest, $response);
 
-    expect($debugData->getSender())->toBeInstanceOf(GuzzleSender::class);
+    expect($debugData->getSender())->toBe($connector->sender());
     expect($debugData->getPendingRequest())->toBe($pendingRequest);
     expect($debugData->getResponse())->toBe($response);
     expect($debugData->getConnector())->toBe($connector);
