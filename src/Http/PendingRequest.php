@@ -13,13 +13,13 @@ use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
-use Saloon\Http\Senders\SimulatedSender;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Contracts\Authenticator;
 use Saloon\Helpers\ReflectionHelper;
 use Saloon\Http\Middleware\DebugRequest;
+use Saloon\Http\Senders\SimulatedSender;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\Middleware\DebugResponse;
 use Saloon\Traits\Auth\AuthenticatesRequests;
@@ -229,7 +229,7 @@ class PendingRequest implements PendingRequestContract
             return $this;
         }
 
-        if (isset($connectorBody, $requestBody) && !$connectorBody instanceof $requestBody) {
+        if (isset($connectorBody, $requestBody) && ! $connectorBody instanceof $requestBody) {
             throw new PendingRequestException('Connector and request body types must be the same.');
         }
 
@@ -460,7 +460,7 @@ class PendingRequest implements PendingRequestContract
     {
         $response = $this->request->resolveResponseClass() ?? $this->connector->resolveResponseClass() ?? Response::class;
 
-        if (!class_exists($response) || !ReflectionHelper::isSubclassOf($response, ResponseContract::class)) {
+        if (! class_exists($response) || ! ReflectionHelper::isSubclassOf($response, ResponseContract::class)) {
             throw new InvalidResponseClassException;
         }
 

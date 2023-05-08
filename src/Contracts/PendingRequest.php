@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Saloon\Contracts;
 
 use Saloon\Enums\Method;
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 
 interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams, HasDelay
