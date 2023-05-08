@@ -34,12 +34,11 @@ test('the debug data can access the underlying pending request and response', fu
     $connector = new TestConnector;
     $request = new UserRequest;
 
-    $pendingRequest = $connector->createPendingRequest($request, $mockClient);
-    $response = $pendingRequest->send();
+    $response = $connector->send($request, $mockClient);
+    $pendingRequest = $response->getPendingRequest();
 
     $debugData = new DebugData($pendingRequest, $response);
 
-    expect($debugData->getSender())->toBe($connector->sender());
     expect($debugData->getPendingRequest())->toBe($pendingRequest);
     expect($debugData->getResponse())->toBe($response);
     expect($debugData->getConnector())->toBe($connector);

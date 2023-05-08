@@ -10,6 +10,7 @@ use Saloon\Contracts\Response;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\MockClient;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Http\Senders\SimulatedSender;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
@@ -25,12 +26,41 @@ trait SendsRequests
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws \Saloon\Exceptions\SenderException
+     * @throws \Throwable
      */
     public function send(Request $request, MockClient $mockClient = null): Response
     {
-        // 🚀 ... 🪐  ... 💫
+        $pendingRequest = $this->createPendingRequest($request, $mockClient);
 
-        return $this->createPendingRequest($request, $mockClient)->send();
+        $sender = $pendingRequest->hasSimulatedResponsePayload() ? new SimulatedSender : $this->sender();
+
+        $response = $sender->sendRequest($pendingRequest);
+
+        return $pendingRequest->executeResponsePipeline($response);
+    }
+
+    /**
+     * Send a request asynchronously
+     *
+     * @param \Saloon\Contracts\Request $request
+     * @param \Saloon\Contracts\MockClient|null $mockClient
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
+     * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws \Saloon\Exceptions\SenderException
+     * @throws \Throwable
+     */
+    public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface
+    {
+        $pendingRequest = $this->createPendingRequest($request, $mockClient)->setAsynchronous(true);
+
+        $sender = $pendingRequest->hasSimulatedResponsePayload() ? new SimulatedSender : $this->sender();
+
+        $promise = $sender->sendRequest($pendingRequest, $pendingRequest->isAsynchronous());
+
+        return $promise->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
     }
 
     /**
@@ -39,7 +69,7 @@ trait SendsRequests
      * @param \Saloon\Contracts\Request $request
      * @param int $maxAttempts
      * @param int $interval
-     * @param callable(\Throwable, \Saloon\Contracts\PendingRequest): (bool)|null $handleRetry
+     * @param callable(\Throwable, \Saloon\Contracts\Request): (bool)|null $handleRetry
      * @param bool $throw
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @return \Saloon\Contracts\Response
@@ -48,11 +78,17 @@ trait SendsRequests
      * @throws \Saloon\Exceptions\PendingRequestException
      * @throws \Saloon\Exceptions\Request\FatalRequestException
      * @throws \Saloon\Exceptions\Request\RequestException
+     * @throws \Saloon\Exceptions\SenderException
+     * @throws \Throwable
      */
     public function sendAndRetry(Request $request, int $maxAttempts, int $interval = 0, callable $handleRetry = null, bool $throw = true, MockClient $mockClient = null): Response
     {
         $currentAttempt = 0;
-        $pendingRequest = $this->createPendingRequest($request, $mockClient);
+        $currentRequest = clone $request;
+
+        if ($mockClient instanceof MockClient) {
+            $currentRequest->withMockClient($mockClient);
+        }
 
         while ($currentAttempt < $maxAttempts) {
             $currentAttempt++;
@@ -68,7 +104,7 @@ trait SendsRequests
                 // We'll attempt to send the PendingRequest. We'll also use the throw
                 // method which will throw an exception if the request has failed.
 
-                return $pendingRequest->send()->throw();
+                return $this->send($currentRequest)->throw();
             } catch (FatalRequestException|RequestException $exception) {
                 // We won't create another pending request if our current attempt is
                 // the max attempts we can make
@@ -77,14 +113,14 @@ trait SendsRequests
                     return $exception instanceof RequestException && $throw === false ? $exception->getResponse() : throw $exception;
                 }
 
-                $pendingRequest = $this->createPendingRequest($request, $mockClient);
+                $currentRequest = clone $request;
 
                 // When either the FatalRequestException happens or the RequestException
                 // happens, we should catch it and check if we should retry. If someone
                 // has provided a callable into $handleRetry, we'll wait for the result
                 // of the callable to retry.
 
-                if (is_null($handleRetry) || $handleRetry($exception, $pendingRequest) === true) {
+                if (is_null($handleRetry) || $handleRetry($exception, $currentRequest) === true) {
                     continue;
                 }
 
@@ -97,23 +133,6 @@ trait SendsRequests
         }
 
         throw new LogicException('Maximum number of attempts has been reached.');
-    }
-
-    /**
-     * Send a request asynchronously
-     *
-     * @param \Saloon\Contracts\Request $request
-     * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
-     * @throws \Saloon\Exceptions\PendingRequestException
-     */
-    public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface
-    {
-        // 🚀 ... 🪐  ... 💫
-
-        return $this->createPendingRequest($request, $mockClient)->sendAsync();
     }
 
     /**

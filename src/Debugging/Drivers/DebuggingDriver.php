@@ -35,7 +35,7 @@ abstract class DebuggingDriver implements DebuggingDriverContract
             'sender_config' => $data->getPendingRequest()->config(),
             'request_class' => $data->getRequest()::class,
             'connector_class' => $data->getConnector()::class,
-            'sender_class' => $data->getSender()::class,
+            'sender_class' => $data->getConnector()->sender()::class,
         ];
     }
 

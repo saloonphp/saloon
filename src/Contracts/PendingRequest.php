@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Saloon\Contracts;
 
 use Saloon\Enums\Method;
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 
 interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams, HasDelay
@@ -54,13 +53,6 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
     public function getResponseClass(): string;
 
     /**
-     * Get the request sender.
-     *
-     * @return \Saloon\Contracts\Sender
-     */
-    public function getSender(): Sender;
-
-    /**
      * Retrieve the body on the instance
      *
      * @return \Saloon\Contracts\Body\BodyRepository|null
@@ -88,20 +80,6 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
      * @return bool
      */
     public function hasSimulatedResponsePayload(): bool;
-
-    /**
-     * Send the PendingRequest
-     *
-     * @return \Saloon\Contracts\Response
-     */
-    public function send(): Response;
-
-    /**
-     * Send the PendingRequest asynchronously
-     *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function sendAsync(): PromiseInterface;
 
     /**
      * Create a data object from the response

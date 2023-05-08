@@ -7,7 +7,6 @@ namespace Saloon\Http;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Config;
 use Saloon\Helpers\Helpers;
-use Saloon\Contracts\Sender;
 use Saloon\Contracts\Request;
 use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Connector;
@@ -18,7 +17,6 @@ use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Contracts\Authenticator;
 use Saloon\Helpers\ReflectionHelper;
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Http\Middleware\DebugRequest;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\Middleware\DebugResponse;
@@ -387,16 +385,6 @@ class PendingRequest implements PendingRequestContract
     }
 
     /**
-     * Get the request sender.
-     *
-     * @return \Saloon\Contracts\Sender
-     */
-    public function getSender(): Sender
-    {
-        return $this->connector->sender();
-    }
-
-    /**
      * Retrieve the body on the instance
      *
      * @return \Saloon\Contracts\Body\BodyRepository|null
@@ -465,30 +453,6 @@ class PendingRequest implements PendingRequestContract
         }
 
         return $response;
-    }
-
-    /**
-     * Send the PendingRequest
-     *
-     * @return \Saloon\Contracts\Response
-     */
-    public function send(): ResponseContract
-    {
-        $this->setAsynchronous(false);
-
-        return (new Dispatcher($this))->execute();
-    }
-
-    /**
-     * Send the PendingRequest asynchronously
-     *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     */
-    public function sendAsync(): PromiseInterface
-    {
-        $this->setAsynchronous(true);
-
-        return (new Dispatcher($this))->execute();
     }
 
     /**

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Saloon\Debugging;
 
 use Saloon\Enums\Method;
-use Saloon\Contracts\Sender;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\Connector;
@@ -47,26 +46,6 @@ class DebugData
     }
 
     /**
-     * Get the connector from the PendingRequest
-     *
-     * @return \Saloon\Contracts\Connector
-     */
-    public function getConnector(): Connector
-    {
-        return $this->pendingRequest->getConnector();
-    }
-
-    /**
-     * Get the sender from the PendingRequest
-     *
-     * @return \Saloon\Contracts\Sender
-     */
-    public function getSender(): Sender
-    {
-        return $this->pendingRequest->getSender();
-    }
-
-    /**
      * Get the PendingRequest
      *
      * @return \Saloon\Contracts\PendingRequest
@@ -74,6 +53,16 @@ class DebugData
     public function getPendingRequest(): PendingRequest
     {
         return $this->pendingRequest;
+    }
+
+    /**
+     * Get the connector from the PendingRequest
+     *
+     * @return \Saloon\Contracts\Connector
+     */
+    public function getConnector(): Connector
+    {
+        return $this->pendingRequest->getConnector();
     }
 
     /**
