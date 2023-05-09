@@ -6,12 +6,11 @@ namespace Saloon\Http\OAuth2;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use Saloon\Contracts\Body\HasBody;
 use Saloon\Traits\Body\HasFormBody;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Traits\Plugins\AcceptsJson;
 
-class GetRefreshTokenRequest extends Request implements HasBody
+class GetRefreshTokenRequest extends Request
 {
     use HasFormBody;
     use AcceptsJson;
