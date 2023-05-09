@@ -1,10 +1,12 @@
 <?php
 
-use Saloon\Exceptions\InvalidBodyReturnTypeException;
-use Saloon\Tests\Fixtures\Connectors\InvalidBodyReturnTypeConnector;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Tests\Fixtures\Requests\InvalidBodyReturnTypeRequest;
+declare(strict_types=1);
+
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Exceptions\InvalidBodyReturnTypeException;
+use Saloon\Tests\Fixtures\Requests\InvalidBodyReturnTypeRequest;
+use Saloon\Tests\Fixtures\Connectors\InvalidBodyReturnTypeConnector;
 
 test('if the body method on the connector does not return a BodyRepository it will throw an exception', function () {
     $connector = new InvalidBodyReturnTypeConnector;
