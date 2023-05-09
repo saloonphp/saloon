@@ -14,7 +14,6 @@ use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
-use Saloon\Contracts\Body\HasBody;
 use Saloon\Contracts\Authenticator;
 use Saloon\Helpers\ReflectionHelper;
 use Saloon\Http\Middleware\DebugRequest;
@@ -28,6 +27,7 @@ use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Repositories\Body\ArrayBodyRepository;
 use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Exceptions\InvalidResponseClassException;
+use Saloon\Exceptions\InvalidBodyReturnTypeException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
@@ -210,7 +210,7 @@ class PendingRequest implements PendingRequestContract
     }
 
     /**
-     * Merge the body together
+     * Merge the request body together
      *
      * @return $this
      * @throws \Saloon\Exceptions\PendingRequestException
@@ -220,11 +220,19 @@ class PendingRequest implements PendingRequestContract
         $connector = $this->connector;
         $request = $this->request;
 
-        $connectorBody = $connector instanceof HasBody ? $connector->body() : null;
-        $requestBody = $request instanceof HasBody ? $request->body() : null;
+        $connectorBody = method_exists($connector, 'body') ? $connector->body() : null;
+        $requestBody = method_exists($request, 'body') ? $request->body() : null;
 
         if (is_null($connectorBody) && is_null($requestBody)) {
             return $this;
+        }
+
+        if (isset($connectorBody) && ! $connectorBody instanceof BodyRepository) {
+            throw new InvalidBodyReturnTypeException('connector');
+        }
+
+        if (isset($requestBody) && ! $requestBody instanceof BodyRepository) {
+            throw new InvalidBodyReturnTypeException('request');
         }
 
         if (isset($connectorBody, $requestBody) && ! $connectorBody instanceof $requestBody) {

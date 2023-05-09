@@ -9,8 +9,6 @@ use Saloon\Repositories\Body\FormBodyRepository;
 
 trait HasFormBody
 {
-    use ChecksForHasBody;
-
     /**
      * Body Repository
      *
