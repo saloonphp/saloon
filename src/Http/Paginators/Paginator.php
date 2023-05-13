@@ -338,7 +338,7 @@ abstract class Paginator implements PaginatorContract
             throw new PaginatorException('Unable to calculate the total results from the response. Make sure the total key is correct.');
         }
 
-        return $total;
+        return (int) $total;
     }
 
     /**
