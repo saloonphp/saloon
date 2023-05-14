@@ -14,6 +14,7 @@ use Saloon\Contracts\PendingRequest;
 use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
 use Saloon\Repositories\Body\FormBodyRepository;
@@ -106,21 +107,23 @@ class GuzzleSender implements Sender
 
         try {
             $guzzleResponse = $this->client->send($guzzleRequest, $guzzleRequestOptions);
-        } catch (TransferException $exception) {
-            // When the exception wasn't a RequestException, we'll throw a fatal
-            // exception as this is likely a ConnectException, but it will
-            // catch any new ones Guzzle release.
 
-            if (! $exception instanceof RequestException) {
+            return $this->createResponse($pendingRequest, $guzzleResponse);
+        } catch (ConnectException $exception) {
+            // ConnectException means a network exception has happened, like Guzzle
+            // not being able to connect to the host.
+
+            throw new FatalRequestException($exception, $pendingRequest);
+        } catch (RequestException $exception) {
+            // Sometimes, Guzzle will throw a RequestException without a response. This
+            // means that it was fatal, so we should still throw a fatal request exception.
+
+            if (is_null($exception->getResponse())) {
                 throw new FatalRequestException($exception, $pendingRequest);
             }
 
-            // Otherwise, we'll create a response.
-
             return $this->createResponse($pendingRequest, $exception->getResponse(), $exception);
         }
-
-        return $this->createResponse($pendingRequest, $guzzleResponse);
     }
 
     /**
@@ -232,6 +235,13 @@ class GuzzleSender implements Sender
                     // catch any new ones Guzzle release.
 
                     if (! $guzzleException instanceof RequestException) {
+                        throw new FatalRequestException($guzzleException, $pendingRequest);
+                    }
+
+                    // Sometimes, Guzzle will throw a RequestException without a response. This
+                    // means that it was fatal, so we should still throw a fatal request exception.
+
+                    if (is_null($guzzleException->getResponse())) {
                         throw new FatalRequestException($guzzleException, $pendingRequest);
                     }
 
