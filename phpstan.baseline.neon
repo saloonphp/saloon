@@ -76,7 +76,7 @@ parameters:
 			path: src/Http/Response.php
 
 		-
-			message: "#^Method Saloon\\\\Http\\\\Senders\\\\GuzzleSender\\:\\:createRequestOptions\\(\\) should return array\\<'allow_redirects'\\|'auth'\\|'body'\\|'cert'\\|'connect_timeout'\\|'cookies'\\|'debug'\\|'decode_content'\\|'delay'\\|'expect'\\|'force_ip_resolve'\\|'form_params'\\|'headers'\\|'http_errors'\\|'idn_conversion'\\|'json'\\|'multipart'\\|'on_headers'\\|'on_stats'\\|'progress'\\|'proxy'\\|'query'\\|'read_timeout'\\|'sink'\\|'ssl_key'\\|'stream'\\|'synchronous'\\|'timeout'\\|'verify'\\|'version', mixed\\> but returns array\\<string, mixed\\>\\.$#"
+			message: "#^Method Saloon\\\\Http\\\\Senders\\\\GuzzleSender\\:\\:createRequestOptions\\(\\) should return array\\<'allow_redirects'\\|'auth'\\|'body'\\|'cert'\\|'connect_timeout'\\|'cookies'\\|'crypto_method'\\|'debug'\\|'decode_content'\\|'delay'\\|'expect'\\|'force_ip_resolve'\\|'form_params'\\|'headers'\\|'http_errors'\\|'idn_conversion'\\|'json'\\|'multipart'\\|'on_headers'\\|'on_stats'\\|'progress'\\|'proxy'\\|'query'\\|'read_timeout'\\|'sink'\\|'ssl_key'\\|'stream'\\|'synchronous'\\|'timeout'\\|'verify'\\|'version', mixed\\> but returns array\\<string, mixed\\>\\.$#"
 			count: 2
 			path: src/Http/Senders/GuzzleSender.php
 
