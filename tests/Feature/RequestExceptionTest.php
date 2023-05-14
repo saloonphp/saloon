@@ -12,6 +12,7 @@ use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Tests\Fixtures\Requests\BadResponseRequest;
 use Saloon\Tests\Fixtures\Connectors\BadResponseConnector;
 use Saloon\Tests\Fixtures\Exceptions\CustomRequestException;
@@ -244,3 +245,27 @@ test('you can customise if saloon determines if a request has failed on a reques
 
     expect($responseB->failed())->toBeTrue();
 });
+
+test('the sender will throw a FatalRequestException if it cannot connect to a site using synchronous', function (string $url) {
+    $connector = new TestConnector($url);
+    $request = new UserRequest();
+
+    $this->expectException(FatalRequestException::class);
+
+    $response = $connector->send($request);
+})->with([
+    'https://saloon.saloon.test',
+    'https://saloon.doesnt-exist',
+]);
+
+test('the sender will throw a FatalRequestException if it cannot connect to a site using asynchronous', function (string $url) {
+    $connector = new TestConnector($url);
+    $request = new UserRequest();
+
+    $this->expectException(FatalRequestException::class);
+
+    $connector->sendAsync($request)->wait();
+})->with([
+    'https://saloon.saloon.test',
+    'https://saloon.doesnt-exist',
+]);
