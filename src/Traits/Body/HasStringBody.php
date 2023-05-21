@@ -6,7 +6,7 @@ namespace Saloon\Traits\Body;
 
 use Saloon\Repositories\Body\StringBodyRepository;
 
-trait HasBody
+trait HasStringBody
 {
     use ChecksForHasBody;
 

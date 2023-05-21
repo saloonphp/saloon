@@ -198,4 +198,14 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
 
         return Arr::mapWithKeys($multipartValues, static fn (MultipartValue $value) => [$value->name => $value]);
     }
+
+    /**
+     * Determine if the body can be merged
+     *
+     * @return bool
+     */
+    public function isMergeable(): bool
+    {
+        return true;
+    }
 }

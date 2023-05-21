@@ -10,11 +10,11 @@ use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\DebuggingDriverException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Debuggers\ArrayDebugger;
-use Saloon\Tests\Fixtures\Requests\HasBodyRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasXmlBodyRequest;
 use Saloon\Tests\Fixtures\Requests\HasFormBodyRequest;
 use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
+use Saloon\Tests\Fixtures\Requests\HasStringBodyRequest;
 use Saloon\Tests\Fixtures\Requests\HasMultipartBodyRequest;
 use Saloon\Tests\Fixtures\Debuggers\MissingDependencyDebugger;
 
@@ -133,7 +133,7 @@ test('it will output the request payload if there is a body sent', function ($re
     new HasFormBodyRequest,
     new HasMultipartBodyRequest,
     new HasXmlBodyRequest,
-    new HasBodyRequest,
+    new HasStringBodyRequest,
 ]);
 
 test('if a response does not provide a content type of "application/json" then the body is not formatted', function () {

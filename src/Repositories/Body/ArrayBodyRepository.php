@@ -149,4 +149,14 @@ class ArrayBodyRepository implements BodyRepository
     {
         throw new UnableToCastToStringException('Casting the ArrayBodyRepository as a string is not supported.');
     }
+
+    /**
+     * Determine if the body can be merged
+     *
+     * @return bool
+     */
+    public function isMergeable(): bool
+    {
+        return true;
+    }
 }

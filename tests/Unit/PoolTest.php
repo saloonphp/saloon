@@ -323,3 +323,24 @@ test('throws an exception if an invalid item is passed into the iterator', funct
 
     expect(fn () => $pool->send()->wait())->toThrow(InvalidPoolItemException::class);
 });
+
+test('you can get the requests provided into the pool', function () {
+    $connector = new TestConnector;
+
+    $requests = [
+        new UserRequest,
+        new UserRequest,
+        new TestConnector,
+    ];
+
+    $pool = $connector->pool($requests);
+    $iterable = $pool->getRequests();
+
+    expect($iterable)->toBeIterable();
+
+    foreach ($iterable as $index => $request) {
+        expect($request)->toEqual($requests[$index]);
+    }
+
+    expect($index)->toEqual(2);
+});

@@ -36,4 +36,11 @@ interface BodyRepository extends Stringable
      * @return bool
      */
     public function isNotEmpty(): bool;
+
+    /**
+     * Determine if the body can be merged
+     *
+     * @return bool
+     */
+    public function isMergeable(): bool;
 }

@@ -66,3 +66,9 @@ test('it will create a file with nested folders', function () {
 
     expect($storage->get($path))->toEqual('Hello World');
 });
+
+test('you can get the base directory path from the storage class', function () {
+    $storage = new Storage('tests/Fixtures/Saloon');
+
+    expect($storage->getBaseDirectory())->toEqual('tests/Fixtures/Saloon');
+});

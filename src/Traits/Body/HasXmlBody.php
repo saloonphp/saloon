@@ -8,7 +8,7 @@ use Saloon\Contracts\PendingRequest;
 
 trait HasXmlBody
 {
-    use HasBody;
+    use HasStringBody;
 
     /**
      * Boot the plugin
