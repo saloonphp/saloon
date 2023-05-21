@@ -6,12 +6,12 @@ namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use Saloon\Traits\Body\HasBody;
+use Saloon\Traits\Body\HasStringBody;
 use Saloon\Contracts\Body\HasBody as HasBodyContract;
 
-class HasBodyRequest extends Request implements HasBodyContract
+class HasStringBodyRequest extends Request implements HasBodyContract
 {
-    use HasBody;
+    use HasStringBody;
 
     /**
      * Define the method that the request will use.

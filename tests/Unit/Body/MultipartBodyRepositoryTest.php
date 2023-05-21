@@ -139,6 +139,8 @@ test('you can convert the repository into an array', function () {
 test('you can merge items together into the body repository', function () {
     $body = new MultipartBodyRepository();
 
+    expect($body->isMergeable())->toBeTrue();
+
     $body->add('name', 'Sam');
     $body->add('sidekick', 'Mantas');
 

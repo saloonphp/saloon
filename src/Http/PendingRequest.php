@@ -227,18 +227,30 @@ class PendingRequest implements PendingRequestContract
             return $this;
         }
 
+        // When both the connector and the request use the `HasBody` interface - we will enforce
+        // that they are both of the same type. This means there won't be any confusion when
+        // merging.
+
         if (isset($connectorBody, $requestBody) && ! $connectorBody instanceof $requestBody) {
             throw new PendingRequestException('Connector and request body types must be the same.');
         }
 
-        if ($connectorBody instanceof ArrayBodyRepository && $requestBody instanceof ArrayBodyRepository) {
-            $repository = clone $connectorBody;
-            $repository->merge($requestBody->all());
+        // When both the connector and the request body repositories are mergeable then we
+        // will merge them together.
 
-            $this->body = $repository;
+        if (isset($connectorBody, $requestBody) && $connectorBody->isMergeable() && $requestBody->isMergeable()) {
+            $repository = clone $connectorBody;
+
+            // We'll clone the request body into the connector body so any properties on the request
+            // body will take priority if they are using a keyed array.
+
+            $this->body = $repository->merge($requestBody->all());
 
             return $this;
         }
+
+        // If the request bodies aren't mergeable then we will prefer the request
+        // body over the connector body.
 
         $this->body = clone $requestBody ?? clone $connectorBody;
 

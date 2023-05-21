@@ -45,3 +45,9 @@ test('you can check if the store is empty or not', function () {
     expect($body->isEmpty())->toBeFalse();
     expect($body->isNotEmpty())->toBeTrue();
 });
+
+test('you cannot merge two string bodies together', function () {
+    $body = new StringBodyRepository();
+
+    expect($body->isMergeable())->toBeFalse();
+});

@@ -6,6 +6,8 @@ use Saloon\Data\MultipartValue;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
+use Saloon\Repositories\Body\MultipartBodyRepository;
+use Saloon\Tests\Fixtures\Connectors\HasMultipartBodyConnector;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasMultipartBodyRequest;
 
@@ -14,6 +16,32 @@ test('the default body is loaded', function () {
 
     expect($request->body()->all())->toEqual([
         'nickname' => new MultipartValue('nickname', 'Sam', 'user.txt', ['X-Saloon' => 'Yee-haw!']),
+    ]);
+});
+
+test('when both the connector and the request have the same request bodies they will be merged', function () {
+    $connector = new HasMultipartBodyConnector;
+    $request = new HasMultipartBodyRequest;
+
+    expect($connector->body()->all())->toEqual([
+        'nickname' => new MultipartValue('nickname', 'Gareth', 'user.txt', ['X-Saloon' => 'Yee-haw!']),
+        'drink' => new MultipartValue('drink', 'Moonshine', 'moonshine.txt', ['X-My-Head' => 'Spinning!']),
+    ]);
+
+    expect($request->body()->all())->toEqual([
+        'nickname' => new MultipartValue('nickname', 'Sam', 'user.txt', ['X-Saloon' => 'Yee-haw!']),
+    ]);
+
+    // Nickname should be overwritten to "Sam" and "drink" should be merged in
+
+    $pendingRequest = $connector->createPendingRequest($request);
+    $pendingRequestBody = $pendingRequest->body();
+
+    expect($pendingRequestBody)->toBeInstanceOf(MultipartBodyRepository::class);
+
+    expect($pendingRequestBody->all())->toEqual([
+        'nickname' => new MultipartValue('nickname', 'Sam', 'user.txt', ['X-Saloon' => 'Yee-haw!']),
+        'drink' => new MultipartValue('drink', 'Moonshine', 'moonshine.txt', ['X-My-Head' => 'Spinning!']),
     ]);
 });
 

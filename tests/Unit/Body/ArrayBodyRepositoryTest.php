@@ -97,6 +97,10 @@ test('you can get an item', function () {
     $body->add('name', 'Sam');
 
     expect($body->get('name'))->toEqual('Sam');
+
+    // When omitting the key it should act like `->all()`
+
+    expect($body->get())->toEqual(['name' => 'Sam']);
 });
 
 test('you can get an item with an integer key', function () {
@@ -118,6 +122,8 @@ test('you can get all items', function () {
 
 test('you can merge items together into the body repository', function () {
     $body = new ArrayBodyRepository();
+
+    expect($body->isMergeable())->toBeTrue();
 
     $body->add('name', 'Sam');
     $body->add('sidekick', 'Mantas');

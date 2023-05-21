@@ -6,7 +6,7 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Http\Connector;
 use Saloon\Helpers\Helpers;
-use Saloon\Traits\Body\HasBody;
+use Saloon\Traits\Body\HasStringBody;
 use Saloon\Traits\Body\HasXmlBody;
 use Saloon\Traits\Body\HasFormBody;
 use Saloon\Traits\Body\HasJsonBody;
@@ -21,7 +21,7 @@ test('each of the body traits has the ChecksForWithBody trait added', function (
 
     expect($uses)->toHaveKey(ChecksForHasBody::class, ChecksForHasBody::class);
 })->with([
-    HasBody::class,
+    HasStringBody::class,
     HasFormBody::class,
     HasJsonBody::class,
     HasMultipartBody::class,
