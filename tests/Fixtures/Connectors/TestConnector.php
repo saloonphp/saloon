@@ -14,13 +14,23 @@ class TestConnector extends Connector
     public bool $unique = false;
 
     /**
+     * Constructor
+     *
+     * @param string|null $url
+     */
+    public function __construct(protected ?string $url = null)
+    {
+        //
+    }
+
+    /**
      * Define the base url of the api.
      *
      * @return string
      */
     public function resolveBaseUrl(): string
     {
-        return apiUrl();
+        return $this->url ?? apiUrl();
     }
 
     /**
