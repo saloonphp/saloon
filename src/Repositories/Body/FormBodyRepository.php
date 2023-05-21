@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
+use Saloon\Traits\Body\CreatesStreamFromString;
+
 class FormBodyRepository extends ArrayBodyRepository
 {
+    use CreatesStreamFromString;
+
     /**
      * Convert into a string.
      *

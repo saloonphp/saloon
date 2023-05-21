@@ -11,9 +11,21 @@ class QueryParameterConnector extends Connector
 {
     use AcceptsJson;
 
+    /**
+     * Constructor
+     *
+     * @param string|null $url
+     */
+    public function __construct(public ?string $url = null)
+    {
+        if (is_null($this->url)) {
+            $this->url = apiUrl();
+        }
+    }
+
     public function resolveBaseUrl(): string
     {
-        return apiUrl();
+        return $this->url;
     }
 
     protected function defaultQuery(): array

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts\Body;
 
+use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\StreamInterface;
 use Stringable;
 
 interface BodyRepository extends Stringable
@@ -43,4 +45,12 @@ interface BodyRepository extends Stringable
      * @return bool
      */
     public function isMergeable(): bool;
+
+    /**
+     * Convert the body repository into a stream
+     *
+     * @param StreamFactoryInterface $streamFactory
+     * @return StreamInterface
+     */
+    public function toStream(StreamFactoryInterface $streamFactory): StreamInterface;
 }

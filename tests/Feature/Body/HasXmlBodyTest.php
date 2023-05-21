@@ -9,18 +9,15 @@ use GuzzleHttp\Promise\FulfilledPromise;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasXmlBodyRequest;
 
-test('the default body is loaded', function () {
+test('the default body is loaded with the content type header', function () {
     $request = new HasXmlBodyRequest();
 
     expect($request->body()->all())->toEqual('<p>Howdy</p>');
-});
 
-test('the content-type header is set in the pending request', function () {
-    $request = new HasXmlBodyRequest();
+    $connector = new TestConnector;
+    $pendingRequest = $connector->createPendingRequest($request);
 
-    $pendingRequest = TestConnector::make()->createPendingRequest($request);
-
-    expect($pendingRequest->headers()->all())->toHaveKey('Content-Type', 'application/xml');
+    expect($pendingRequest->headers()->get('Content-Type'))->toEqual('application/xml');
 });
 
 test('the guzzle sender properly sends it', function () {

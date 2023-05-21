@@ -5,9 +5,17 @@ declare(strict_types=1);
 namespace Saloon\Contracts;
 
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Data\FactoryCollection;
 
 interface Sender
 {
+    /**
+     * Get the factory collection
+     *
+     * @return FactoryCollection
+     */
+    public function getFactoryCollection(): FactoryCollection;
+
     /**
      * Send the request.
      *

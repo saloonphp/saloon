@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Saloon\Repositories\Body;
 
 use InvalidArgumentException;
+use LogicException;
+use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\StreamInterface;
 use Saloon\Traits\Conditionable;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Exceptions\UnableToCastToStringException;
@@ -158,5 +161,16 @@ class ArrayBodyRepository implements BodyRepository
     public function isMergeable(): bool
     {
         return true;
+    }
+
+    /**
+     * Convert the body repository into a stream
+     *
+     * @param StreamFactoryInterface $streamFactory
+     * @return StreamInterface
+     */
+    public function toStream(StreamFactoryInterface $streamFactory): StreamInterface
+    {
+        throw new LogicException('Unable to create a stream directly from an array body repository.');
     }
 }

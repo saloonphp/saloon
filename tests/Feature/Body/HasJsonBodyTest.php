@@ -13,13 +13,18 @@ use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
 use Saloon\Tests\Fixtures\Connectors\HasJsonBodyConnector;
 use Saloon\Tests\Fixtures\Requests\HasMultipartBodyRequest;
 
-test('the default body is loaded', function () {
+test('the default body is loaded with the content type header', function () {
     $request = new HasJsonBodyRequest();
 
     expect($request->body()->all())->toEqual([
         'name' => 'Sam',
         'catchphrase' => 'Yeehaw!',
     ]);
+
+    $connector = new TestConnector;
+    $pendingRequest = $connector->createPendingRequest($request);
+
+    expect($pendingRequest->headers()->get('Content-Type'))->toEqual('application/json');
 });
 
 test('the content-type header is set in the pending request', function () {

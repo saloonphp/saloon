@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
+use Saloon\Traits\Body\CreatesStreamFromString;
 use Saloon\Traits\Conditionable;
 use Saloon\Contracts\Body\BodyRepository;
 
 class StringBodyRepository implements BodyRepository
 {
+    use CreatesStreamFromString;
     use Conditionable;
 
     /**

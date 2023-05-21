@@ -32,6 +32,13 @@ final class Config
     private static string $defaultSender = GuzzleSender::class;
 
     /**
+     * Default User Agent
+     *
+     * @var string
+     */
+    private static string $userAgent = 'Saloon/3';
+
+    /**
      * Sender resolver
      *
      * @var callable|null
@@ -100,5 +107,25 @@ final class Config
     public static function resetDefaultSender(): void
     {
         self::$defaultSender = self::DEFAULT_SENDER;
+    }
+
+    /**
+     * Get the User Agent
+     *
+     * @return string
+     */
+    public static function getUserAgent(): string
+    {
+        return self::$userAgent;
+    }
+
+    /**
+     * Set the User Agent
+     *
+     * @param string $userAgent
+     */
+    public static function setUserAgent(string $userAgent): void
+    {
+        self::$userAgent = $userAgent;
     }
 }

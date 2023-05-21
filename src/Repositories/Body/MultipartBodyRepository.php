@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
+use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\StreamInterface;
+use Saloon\Contracts\MultipartBodyFactory;
+use Saloon\Exceptions\BodyException;
 use Saloon\Helpers\Arr;
 use InvalidArgumentException;
 use Saloon\Contracts\Arrayable;
 use Saloon\Data\MultipartValue;
+use Saloon\Helpers\Str;
 use Saloon\Traits\Conditionable;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Exceptions\UnableToCastToStringException;
 
-class MultipartBodyRepository implements BodyRepository, Arrayable
+class MultipartBodyRepository implements BodyRepository
 {
     use Conditionable;
 
@@ -24,13 +29,29 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
     protected ArrayBodyRepository $data;
 
     /**
+     * The Multipart Boundary
+     *
+     * @var string
+     */
+    protected string $boundary;
+
+    /**
+     * Multipart Body Factory
+     *
+     * @var MultipartBodyFactory
+     */
+    protected MultipartBodyFactory $multipartBodyFactory;
+
+    /**
      * Constructor
      *
      * @param array<\Saloon\Data\MultipartValue> $value
+     * @throws \Exception
      */
-    public function __construct(array $value = [])
+    public function __construct(array $value = [], string $boundary = null)
     {
         $this->data = new ArrayBodyRepository;
+        $this->boundary = is_null($boundary) ? Str::random(40) : $boundary;
 
         $this->set($value);
     }
@@ -166,23 +187,6 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
     }
 
     /**
-     * Convert the instance to an array
-     *
-     * Converts all the multipart value objects into arrays.
-     *
-     * @return array<array{
-     *     name: string,
-     *     contents: mixed,
-     *     filename: string|null,
-     *     headers: array<string, mixed>,
-     * }>
-     */
-    public function toArray(): array
-    {
-        return array_values(array_map(static fn (MultipartValue $value) => $value->toArray(), $this->all()));
-    }
-
-    /**
      * Parse a multipart array
      *
      * @param array<string, mixed> $value
@@ -207,5 +211,44 @@ class MultipartBodyRepository implements BodyRepository, Arrayable
     public function isMergeable(): bool
     {
         return true;
+    }
+
+    /**
+     * Set the multipart body factory
+     *
+     * @param MultipartBodyFactory $multipartBodyFactory
+     * @return MultipartBodyRepository
+     */
+    public function setMultipartBodyFactory(MultipartBodyFactory $multipartBodyFactory): MultipartBodyRepository
+    {
+        $this->multipartBodyFactory = $multipartBodyFactory;
+
+        return $this;
+    }
+
+    /**
+     * Get the boundary
+     *
+     * @return string
+     */
+    public function getBoundary(): string
+    {
+        return $this->boundary;
+    }
+
+    /**
+     * Convert the body repository into a stream
+     *
+     * @param StreamFactoryInterface $streamFactory
+     * @return StreamInterface
+     * @throws BodyException
+     */
+    public function toStream(StreamFactoryInterface $streamFactory): StreamInterface
+    {
+        if (! isset($this->multipartBodyFactory)) {
+            throw new BodyException('Unable to create a multipart body stream because the multipart body factory was not set.');
+        }
+
+        return $this->multipartBodyFactory->create($streamFactory, $this->all(), $this->getBoundary());
     }
 }

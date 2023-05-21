@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Body;
 
+use Saloon\Contracts\PendingRequest;
 use Saloon\Repositories\Body\MultipartBodyRepository;
 
 trait HasMultipartBody
@@ -16,6 +17,17 @@ trait HasMultipartBody
      * @var \Saloon\Repositories\Body\MultipartBodyRepository
      */
     protected MultipartBodyRepository $body;
+
+    /**
+     * Boot the HasMultipartBody trait
+     *
+     * @param PendingRequest $pendingRequest
+     * @return void
+     */
+    public function bootHasMultipartBody(PendingRequest $pendingRequest): void
+    {
+        $pendingRequest->headers()->add('Content-Type', 'multipart/form-data; boundary=' . $this->body()->getBoundary());
+    }
 
     /**
      * Retrieve the data repository

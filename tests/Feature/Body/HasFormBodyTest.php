@@ -9,13 +9,18 @@ use GuzzleHttp\Promise\FulfilledPromise;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasFormBodyRequest;
 
-test('the default body is loaded', function () {
+test('the default body is loaded with the content type header', function () {
     $request = new HasFormBodyRequest();
 
     expect($request->body()->all())->toEqual([
         'name' => 'Sam',
         'catchphrase' => 'Yeehaw!',
     ]);
+
+    $connector = new TestConnector;
+    $pendingRequest = $connector->createPendingRequest($request);
+
+    expect($pendingRequest->headers()->get('Content-Type'))->toEqual('application/x-www-form-urlencoded');
 });
 
 test('the guzzle sender properly sends it', function () {

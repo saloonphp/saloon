@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\UriInterface;
+use Saloon\Data\FactoryCollection;
 use Saloon\Enums\Method;
 use Saloon\Contracts\Body\BodyRepository;
 
@@ -37,6 +40,13 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
      * @return string
      */
     public function getUrl(): string;
+
+    /**
+     * Get the URI for the pending request.
+     *
+     * @return UriInterface
+     */
+    public function getUri(): UriInterface;
 
     /**
      * Get the HTTP method used for the request
@@ -103,4 +113,26 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
      * @return bool
      */
     public function isAsynchronous(): bool;
+
+    /**
+     * Set the factory collection
+     *
+     * @param FactoryCollection $factoryCollection
+     * @return $this
+     */
+    public function setFactoryCollection(FactoryCollection $factoryCollection): static;
+
+    /**
+     * Get the factory collection
+     *
+     * @return FactoryCollection
+     */
+    public function getFactoryCollection(): FactoryCollection;
+
+    /**
+     * Get the PSR-7 request
+     *
+     * @return RequestInterface
+     */
+    public function getPsrRequest(): RequestInterface;
 }

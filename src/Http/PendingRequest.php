@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\UriInterface;
+use Saloon\Data\FactoryCollection;
 use Saloon\Enums\Method;
+use Saloon\Exceptions\BodyException;
 use Saloon\Helpers\Config;
 use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Request;
@@ -12,6 +16,7 @@ use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
+use Saloon\Repositories\Body\MultipartBodyRepository;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\HasBody;
@@ -50,6 +55,13 @@ class PendingRequest implements PendingRequestContract
      * @var \Saloon\Contracts\Connector
      */
     protected Connector $connector;
+
+    /**
+     * The factory collection.
+     *
+     * @var FactoryCollection
+     */
+    protected FactoryCollection $factoryCollection;
 
     /**
      * The URL the request will be made to.
@@ -114,6 +126,7 @@ class PendingRequest implements PendingRequestContract
     {
         $this->connector = $connector;
         $this->request = $request;
+        $this->factoryCollection = $connector->sender()->getFactoryCollection();
         $this->url = $this->resolveRequestUrl();
         $this->method = $request->getMethod();
         $this->responseClass = $this->resolveResponseClass();
@@ -187,6 +200,7 @@ class PendingRequest implements PendingRequestContract
         $request = $this->request;
 
         $this->headers()->merge(
+            ['User-Agent' => Config::getUserAgent()],
             $connector->headers()->all(),
             $request->headers()->all()
         );
@@ -234,6 +248,11 @@ class PendingRequest implements PendingRequestContract
             throw new PendingRequestException('Connector and request body types must be the same.');
         }
 
+        // We'll start by cloning the request or connector body depending on which
+        // one has been set.
+
+        $body = clone $requestBody ?? clone $connectorBody;
+
         // When both the connector and the request body repositories are mergeable then we
         // will merge them together.
 
@@ -243,15 +262,18 @@ class PendingRequest implements PendingRequestContract
             // We'll clone the request body into the connector body so any properties on the request
             // body will take priority if they are using a keyed array.
 
-            $this->body = $repository->merge($requestBody->all());
-
-            return $this;
+            $body = $repository->merge($requestBody->all());
         }
 
-        // If the request bodies aren't mergeable then we will prefer the request
-        // body over the connector body.
+        // Now we'll check if the body is a MultipartBodyRepository. If it is, then we must
+        // set the body factory on the instance so the toStream method can create a stream
+        // later on in the process.
 
-        $this->body = clone $requestBody ?? clone $connectorBody;
+        if ($body instanceof MultipartBodyRepository) {
+            $body->setMultipartBodyFactory($this->factoryCollection->multipartBodyFactory);
+        }
+
+        $this->body = $body;
 
         return $this;
     }
@@ -373,6 +395,26 @@ class PendingRequest implements PendingRequestContract
     public function getUrl(): string
     {
         return $this->url;
+    }
+
+    /**
+     * Get the URI for the pending request.
+     *
+     * @return UriInterface
+     */
+    public function getUri(): UriInterface
+    {
+        $uri = $this->factoryCollection->uriFactory->createUri($this->getUrl());
+
+        // We'll parse the existing query parameters from the URL (if they have been defined)
+        // and then we'll merge in Saloon's query parameters. Our query parameters will take
+        // priority over any that were defined in the URL.
+
+        parse_str($uri->getQuery(), $existingQuery);
+
+        return $uri->withQuery(
+            http_build_query(array_merge($existingQuery, $this->query()->all()))
+        );
     }
 
     /**
@@ -546,5 +588,53 @@ class PendingRequest implements PendingRequestContract
         $this->method = $method;
 
         return $this;
+    }
+
+    /**
+     * Set the factory collection
+     *
+     * @param FactoryCollection $factoryCollection
+     * @return $this
+     */
+    public function setFactoryCollection(FactoryCollection $factoryCollection): static
+    {
+        $this->factoryCollection = $factoryCollection;
+
+        return $this;
+    }
+
+    /**
+     * Get the factory collection
+     *
+     * @return FactoryCollection
+     */
+    public function getFactoryCollection(): FactoryCollection
+    {
+        return $this->factoryCollection;
+    }
+
+    /**
+     * Get the PSR-7 request
+     *
+     * @return RequestInterface
+     */
+    public function getPsrRequest(): RequestInterface
+    {
+        $factories = $this->factoryCollection;
+
+        $request = $factories->requestFactory->createRequest(
+            method: $this->getMethod()->value,
+            uri: $this->getUri(),
+        );
+
+        foreach ($this->headers()->all() as $headerName => $headerValue) {
+            $request = $request->withHeader($headerName, $headerValue);
+        }
+
+        if ($this->body() instanceof BodyRepository) {
+            $request = $request->withBody($this->body()->toStream($factories->streamFactory));
+        }
+
+        return $request;
     }
 }

@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Saloon\Http\Senders;
 
 use Exception;
+use GuzzleHttp\Psr7\HttpFactory;
+use Psr\Http\Message\RequestInterface;
+use Saloon\Data\FactoryCollection;
 use Saloon\Enums\Timeout;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
@@ -17,6 +20,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
+use Saloon\Helpers\GuzzleMultipartBodyFactory;
 use Saloon\Repositories\Body\FormBodyRepository;
 use Saloon\Repositories\Body\JsonBodyRepository;
 use Saloon\Contracts\Response as ResponseContract;
@@ -48,6 +52,23 @@ class GuzzleSender implements Sender
     public function __construct()
     {
         $this->client = $this->createGuzzleClient();
+    }
+
+    /**
+     * Get the factory collection
+     *
+     * @return FactoryCollection
+     */
+    public function getFactoryCollection(): FactoryCollection
+    {
+        $factory = new HttpFactory;
+
+        return new FactoryCollection(
+            requestFactory: $factory,
+            uriFactory: $factory,
+            streamFactory: $factory,
+            multipartBodyFactory: new GuzzleMultipartBodyFactory,
+        );
     }
 
     /**
@@ -148,9 +169,9 @@ class GuzzleSender implements Sender
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function createGuzzleRequest(PendingRequest $pendingRequest): Request
+    protected function createGuzzleRequest(PendingRequest $pendingRequest): RequestInterface
     {
-        return new Request($pendingRequest->getMethod()->value, $pendingRequest->getUrl());
+        return $pendingRequest->getPsrRequest();
     }
 
     /**
@@ -163,35 +184,15 @@ class GuzzleSender implements Sender
     {
         $requestOptions = [];
 
-        if ($pendingRequest->headers()->isNotEmpty()) {
-            $requestOptions[RequestOptions::HEADERS] = $pendingRequest->headers()->all();
-        }
-
-        if ($pendingRequest->query()->isNotEmpty()) {
-            $requestOptions[RequestOptions::QUERY] = $pendingRequest->query()->all();
-        }
-
         foreach ($pendingRequest->config()->all() as $configVariable => $value) {
             $requestOptions[$configVariable] = $value;
         }
 
+        // Todo: Implement delay ourselves?
+
         if ($pendingRequest->delay()->isNotEmpty()) {
             $requestOptions[RequestOptions::DELAY] = $pendingRequest->delay()->get();
         }
-
-        $body = $pendingRequest->body();
-
-        if (is_null($body) || $body->isEmpty()) {
-            return $requestOptions;
-        }
-
-        match (true) {
-            $body instanceof JsonBodyRepository => $requestOptions[RequestOptions::JSON] = $body->all(),
-            $body instanceof MultipartBodyRepository => $requestOptions[RequestOptions::MULTIPART] = $body->toArray(),
-            $body instanceof FormBodyRepository => $requestOptions[RequestOptions::FORM_PARAMS] = $body->all(),
-            $body instanceof StringBodyRepository => $requestOptions[RequestOptions::BODY] = $body->all(),
-            default => $requestOptions[RequestOptions::BODY] = (string)$body,
-        };
 
         return $requestOptions;
     }
