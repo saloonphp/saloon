@@ -10,11 +10,11 @@ use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\DebuggingDriverException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Debuggers\ArrayDebugger;
-use Saloon\Tests\Fixtures\Requests\HasStringBodyRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasXmlBodyRequest;
 use Saloon\Tests\Fixtures\Requests\HasFormBodyRequest;
 use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
+use Saloon\Tests\Fixtures\Requests\HasStringBodyRequest;
 use Saloon\Tests\Fixtures\Requests\HasMultipartBodyRequest;
 use Saloon\Tests\Fixtures\Debuggers\MissingDependencyDebugger;
 

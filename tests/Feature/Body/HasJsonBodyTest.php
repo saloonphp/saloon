@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use Saloon\Exceptions\PendingRequestException;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
+use Saloon\Exceptions\PendingRequestException;
 use Saloon\Repositories\Body\JsonBodyRepository;
-use Saloon\Tests\Fixtures\Connectors\HasJsonBodyConnector;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
+use Saloon\Tests\Fixtures\Connectors\HasJsonBodyConnector;
 use Saloon\Tests\Fixtures\Requests\HasMultipartBodyRequest;
 
 test('the default body is loaded', function () {
@@ -39,7 +39,7 @@ test('when both the connector and the request have the same request bodies they 
 
     expect($connector->body()->all())->toEqual([
         'name' => 'Gareth',
-        'drink' => 'Moonshine'
+        'drink' => 'Moonshine',
     ]);
 
     expect($request->body()->all())->toEqual([

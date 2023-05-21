@@ -6,10 +6,10 @@ use Saloon\Data\MultipartValue;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
-use Saloon\Repositories\Body\MultipartBodyRepository;
-use Saloon\Tests\Fixtures\Connectors\HasMultipartBodyConnector;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Repositories\Body\MultipartBodyRepository;
 use Saloon\Tests\Fixtures\Requests\HasMultipartBodyRequest;
+use Saloon\Tests\Fixtures\Connectors\HasMultipartBodyConnector;
 
 test('the default body is loaded', function () {
     $request = new HasMultipartBodyRequest();

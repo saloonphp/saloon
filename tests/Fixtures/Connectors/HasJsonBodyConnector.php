@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Contracts\Body\HasBody;
 use Saloon\Http\Connector;
+use Saloon\Contracts\Body\HasBody;
 use Saloon\Traits\Body\HasJsonBody;
 use Saloon\Traits\Plugins\AcceptsJson;
 
@@ -52,7 +52,7 @@ class HasJsonBodyConnector extends Connector implements HasBody
     {
         return [
             'name' => 'Gareth',
-            'drink' => 'Moonshine'
+            'drink' => 'Moonshine',
         ];
     }
 }

@@ -5,8 +5,8 @@ declare(strict_types=1);
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
-use Saloon\Tests\Fixtures\Requests\HasStringBodyRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Requests\HasStringBodyRequest;
 
 test('the default body is loaded', function () {
     $request = new HasStringBodyRequest();

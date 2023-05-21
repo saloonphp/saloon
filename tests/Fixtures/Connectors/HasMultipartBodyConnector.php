@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Connectors;
 
-use Saloon\Contracts\Body\HasBody;
-use Saloon\Data\MultipartValue;
 use Saloon\Http\Connector;
-use Saloon\Traits\Body\HasJsonBody;
-use Saloon\Traits\Body\HasMultipartBody;
+use Saloon\Data\MultipartValue;
+use Saloon\Contracts\Body\HasBody;
 use Saloon\Traits\Plugins\AcceptsJson;
+use Saloon\Traits\Body\HasMultipartBody;
 
 class HasMultipartBodyConnector extends Connector implements HasBody
 {

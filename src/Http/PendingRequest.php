@@ -25,7 +25,6 @@ use Saloon\Contracts\SimulatedResponsePayload;
 use Saloon\Exceptions\PendingRequestException;
 use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Middleware\DetermineMockResponse;
-use Saloon\Repositories\Body\ArrayBodyRepository;
 use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
