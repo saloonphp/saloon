@@ -6,8 +6,8 @@ namespace Saloon\Helpers;
 
 use Closure;
 use Saloon\Contracts\Response;
-use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\FakeResponse;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Pipeline as PipelineContract;
 use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 

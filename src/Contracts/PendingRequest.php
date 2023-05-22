@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Enums\Method;
 use Psr\Http\Message\UriInterface;
 use Saloon\Data\FactoryCollection;
 use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 
 interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams, HasDelay

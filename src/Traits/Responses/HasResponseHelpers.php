@@ -9,10 +9,10 @@ use LogicException;
 use SimpleXMLElement;
 use Saloon\Helpers\Arr;
 use Illuminate\Support\Collection;
+use Saloon\Contracts\FakeResponse;
 use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Helpers\RequestExceptionHelper;
 use Saloon\Contracts\DataObjects\WithResponse;
-use Saloon\Contracts\FakeResponse;
 
 trait HasResponseHelpers
 {
