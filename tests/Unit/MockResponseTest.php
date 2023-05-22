@@ -27,10 +27,10 @@ test('pulling a response from the sequence will return the correct response', fu
 test('a mock response can have raw body data', function () {
     $response = MockResponse::make('xml', 200, ['Content-Type' => 'application/json']);
 
-    expect($response->getHeaders()->all())->toEqual(['Content-Type' => 'application/json']);
+    expect($response->headers()->all())->toEqual(['Content-Type' => 'application/json']);
     expect($response->getStatus())->toEqual(200);
-    expect($response->getBody())->toBeInstanceOf(StringBodyRepository::class);
-    expect($response->getBody()->all())->toEqual('xml');
+    expect($response->body())->toBeInstanceOf(StringBodyRepository::class);
+    expect($response->body()->all())->toEqual('xml');
 });
 
 test('a response can have a method added to it', function () {

@@ -62,6 +62,7 @@ class GuzzleSender implements Sender
             requestFactory: $factory,
             uriFactory: $factory,
             streamFactory: $factory,
+            responseFactory: $factory,
             multipartBodyFactory: new GuzzleMultipartBodyFactory,
         );
     }
@@ -103,7 +104,7 @@ class GuzzleSender implements Sender
      */
     public function send(PendingRequest $pendingRequest): ResponseContract
     {
-        $request = $pendingRequest->getPsrRequest();
+        $request = $pendingRequest->createPsrRequest();
         $requestOptions = $this->createRequestOptions($pendingRequest);
 
         try {
@@ -135,7 +136,7 @@ class GuzzleSender implements Sender
      */
     public function sendAsync(PendingRequest $pendingRequest): PromiseInterface
     {
-        $request = $pendingRequest->getPsrRequest();
+        $request = $pendingRequest->createPsrRequest();
         $requestOptions = $this->createRequestOptions($pendingRequest);
 
         $promise = $this->client->sendAsync($request, $requestOptions);

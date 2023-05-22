@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Contracts;
 
 use Closure;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Throwable;
 use Saloon\Http\Faking\Fixture;
 use Psr\Http\Message\ResponseInterface;
@@ -36,14 +38,14 @@ interface SimulatedResponsePayload
      *
      * @return \Saloon\Contracts\ArrayStore
      */
-    public function getHeaders(): ArrayStore;
+    public function headers(): ArrayStore;
 
     /**
      * Get the response body
      *
      * @return \Saloon\Contracts\Body\BodyRepository
      */
-    public function getBody(): BodyRepository;
+    public function body(): BodyRepository;
 
     /**
      * Get the formatted body on the response.
@@ -78,7 +80,9 @@ interface SimulatedResponsePayload
     /**
      * Get the response as a ResponseInterface
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param ResponseFactoryInterface $responseFactory
+     * @param StreamFactoryInterface $streamFactory
+     * @return ResponseInterface
      */
-    public function getPsrResponse(): ResponseInterface;
+    public function createPsrResponse(ResponseFactoryInterface $responseFactory, StreamFactoryInterface $streamFactory): ResponseInterface;
 }

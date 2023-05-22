@@ -72,7 +72,7 @@ test('the guzzle sender properly sends it', function () {
                 'Sam',
             );
 
-            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse());
         };
     });
 

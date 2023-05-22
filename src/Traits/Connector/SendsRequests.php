@@ -34,9 +34,11 @@ trait SendsRequests
     {
         $pendingRequest = $this->createPendingRequest($request, $mockClient);
 
-        $sender = $pendingRequest->hasSimulatedResponsePayload() ? new SimulatedSender : $this->sender();
+        $sender = $this->sender();
 
-        $response = $sender->send($pendingRequest);
+        $response = $pendingRequest->hasSimulatedResponsePayload()
+            ? $pendingRequest->createFakeResponse()
+            : $sender->send($pendingRequest);
 
         return $pendingRequest->executeResponsePipeline($response);
     }
@@ -56,9 +58,13 @@ trait SendsRequests
     {
         $pendingRequest = $this->createPendingRequest($request, $mockClient)->setAsynchronous(true);
 
-        $sender = $pendingRequest->hasSimulatedResponsePayload() ? new SimulatedSender : $this->sender();
+        $sender = $this->sender();
 
-        return $sender->sendAsync($pendingRequest)
+        $promise = $pendingRequest->hasSimulatedResponsePayload()
+            ? $pendingRequest->createFakeResponse()
+            : $sender->sendAsync($pendingRequest);
+
+        return $promise
             ->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
     }
 

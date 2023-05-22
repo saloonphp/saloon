@@ -17,7 +17,7 @@ test('a psr-7 request can be created from the PendingRequest', function () {
     $request = new UserRequest;
 
     $pendingRequest = $connector->createPendingRequest($request);
-    $request = $pendingRequest->getPsrRequest();
+    $request = $pendingRequest->createPsrRequest();
 
     expect($request)->toBeInstanceOf(RequestInterface::class);
     expect($request->getUri())->toBeInstanceOf(UriInterface::class);
@@ -37,7 +37,7 @@ test('if request body is present then it will be on the psr-7 request', function
     $request = new HasJsonBodyRequest;
 
     $pendingRequest = $connector->createPendingRequest($request);
-    $request = $pendingRequest->getPsrRequest();
+    $request = $pendingRequest->createPsrRequest();
 
     $body = $request->getBody();
 

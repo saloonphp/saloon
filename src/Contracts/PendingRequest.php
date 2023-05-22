@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
+use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Enums\Method;
 use Psr\Http\Message\UriInterface;
 use Saloon\Data\FactoryCollection;
@@ -134,5 +135,12 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
      *
      * @return RequestInterface
      */
-    public function getPsrRequest(): RequestInterface;
+    public function createPsrRequest(): RequestInterface;
+
+    /**
+     * Create the fake response
+     *
+     * @return PromiseInterface|Response
+     */
+    public function createFakeResponse(): PromiseInterface|Response;
 }

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Http\Faking;
 
 use Closure;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Throwable;
 use Saloon\Traits\Makeable;
 use Saloon\Repositories\ArrayStore;
@@ -90,7 +92,7 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
      *
      * @return \Saloon\Contracts\ArrayStore
      */
-    public function getHeaders(): ArrayStoreContract
+    public function headers(): ArrayStoreContract
     {
         return $this->headers;
     }
@@ -100,7 +102,7 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
      *
      * @return \Saloon\Contracts\Body\BodyRepository
      */
-    public function getBody(): BodyRepository
+    public function body(): BodyRepository
     {
         return $this->body;
     }
@@ -158,10 +160,18 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
     /**
      * Get the response as a ResponseInterface
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param ResponseFactoryInterface $responseFactory
+     * @param StreamFactoryInterface $streamFactory
+     * @return ResponseInterface
      */
-    public function getPsrResponse(): ResponseInterface
+    public function createPsrResponse(ResponseFactoryInterface $responseFactory, StreamFactoryInterface $streamFactory): ResponseInterface
     {
-        return new GuzzleResponse($this->getStatus(), $this->getHeaders()->all(), $this->getBodyAsString());
+        $response = $responseFactory->createResponse($this->getStatus());
+
+        foreach ($this->headers()->all() as $headerName => $headerValue) {
+            $response = $response->withHeader($headerName, $headerValue);
+        }
+
+        return $response->withBody($streamFactory->createStream($this->getBodyAsString()));
     }
 }

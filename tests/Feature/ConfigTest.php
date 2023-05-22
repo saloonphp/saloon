@@ -17,7 +17,7 @@ test('default guzzle config options are sent', function () {
             expect($options)->toHaveKey('connect_timeout', 10);
             expect($options)->toHaveKey('timeout', 30);
 
-            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse());
         };
     });
 
@@ -37,7 +37,7 @@ test('you can pass additional guzzle config options and they are merged from the
             expect($options)->toHaveKey('debug', true);
             expect($options)->toHaveKey('verify', false);
 
-            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse());
         };
     });
 

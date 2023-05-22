@@ -20,7 +20,7 @@ test('a request is given a default timeout and connect timeout', function () {
             expect($options['connect_timeout'])->toEqual(10);
             expect($options['timeout'])->toEqual(30);
 
-            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse());
         };
     }, 'test');
 

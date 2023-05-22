@@ -49,7 +49,7 @@ class SimulatedSender implements Sender
         $responseClass = $pendingRequest->getResponseClass();
 
         $response = $responseClass::fromPsrResponse(
-            psrResponse: $simulatedResponsePayload->getPsrResponse(),
+            psrResponse: $simulatedResponsePayload->createPsrResponse(),
             pendingRequest: $pendingRequest,
             senderException: $exception
         );

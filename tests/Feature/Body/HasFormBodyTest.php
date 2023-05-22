@@ -36,7 +36,7 @@ test('the guzzle sender properly sends it', function () {
             expect($guzzleRequest->getHeader('Content-Type'))->toEqual(['application/x-www-form-urlencoded']);
             expect((string)$guzzleRequest->getBody())->toEqual((string)$request->body());
 
-            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse());
         };
     });
 
