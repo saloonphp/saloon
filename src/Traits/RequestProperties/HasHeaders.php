@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\RequestProperties;
 
-use Saloon\Helpers\Config;
 use Saloon\Repositories\ArrayStore;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 

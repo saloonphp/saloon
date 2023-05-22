@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
-use Saloon\Traits\Body\CreatesStreamFromString;
 use Saloon\Traits\Conditionable;
 use Saloon\Contracts\Body\BodyRepository;
+use Saloon\Traits\Body\CreatesStreamFromString;
 
 class StringBodyRepository implements BodyRepository
 {

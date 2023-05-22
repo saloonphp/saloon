@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Contracts;
 
-use Psr\Http\Message\StreamFactoryInterface;
-use Psr\Http\Message\StreamInterface;
 use Saloon\Data\MultipartValue;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 interface MultipartBodyFactory
 {

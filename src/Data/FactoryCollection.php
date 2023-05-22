@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Data;
 
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Saloon\Contracts\MultipartBodyFactory;
+use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 
 class FactoryCollection
 {
@@ -25,8 +27,7 @@ class FactoryCollection
         readonly public UriFactoryInterface     $uriFactory,
         readonly public StreamFactoryInterface  $streamFactory,
         readonly public MultipartBodyFactory    $multipartBodyFactory,
-    )
-    {
+    ) {
         //
     }
 }

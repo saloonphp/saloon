@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Traits\Body;
 
-use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
 trait CreatesStreamFromString
 {

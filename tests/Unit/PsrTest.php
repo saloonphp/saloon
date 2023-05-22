@@ -1,15 +1,16 @@
 <?php
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UriInterface;
-use Saloon\Contracts\Body\BodyRepository;
+declare(strict_types=1);
+
 use Saloon\Helpers\Config;
-use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
+use Psr\Http\Message\UriInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\RequestInterface;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterRequest;
-use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 
 test('a psr-7 request can be created from the PendingRequest', function () {
     $connector = new TestConnector;

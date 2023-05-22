@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use Psr\Http\Message\RequestInterface;
+use Saloon\Enums\Method;
 use Psr\Http\Message\UriInterface;
 use Saloon\Data\FactoryCollection;
-use Saloon\Enums\Method;
+use Psr\Http\Message\RequestInterface;
 use Saloon\Contracts\Body\BodyRepository;
 
 interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams, HasDelay

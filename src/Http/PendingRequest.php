@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\UriInterface;
-use Saloon\Data\FactoryCollection;
 use Saloon\Enums\Method;
-use Saloon\Exceptions\BodyException;
 use Saloon\Helpers\Config;
 use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Request;
@@ -16,12 +12,14 @@ use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
-use Saloon\Repositories\Body\MultipartBodyRepository;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
+use Psr\Http\Message\UriInterface;
 use Saloon\Contracts\Body\HasBody;
+use Saloon\Data\FactoryCollection;
 use Saloon\Contracts\Authenticator;
 use Saloon\Helpers\ReflectionHelper;
+use Psr\Http\Message\RequestInterface;
 use Saloon\Http\Middleware\DebugRequest;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\Middleware\DebugResponse;
@@ -32,6 +30,7 @@ use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Exceptions\InvalidResponseClassException;
+use Saloon\Repositories\Body\MultipartBodyRepository;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
 

@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
-use Psr\Http\Message\StreamFactoryInterface;
-use Psr\Http\Message\StreamInterface;
-use Saloon\Contracts\MultipartBodyFactory;
-use Saloon\Exceptions\BodyException;
 use Saloon\Helpers\Arr;
-use InvalidArgumentException;
-use Saloon\Contracts\Arrayable;
-use Saloon\Data\MultipartValue;
 use Saloon\Helpers\Str;
+use InvalidArgumentException;
+use Saloon\Data\MultipartValue;
 use Saloon\Traits\Conditionable;
+use Saloon\Exceptions\BodyException;
+use Psr\Http\Message\StreamInterface;
 use Saloon\Contracts\Body\BodyRepository;
+use Saloon\Contracts\MultipartBodyFactory;
+use Psr\Http\Message\StreamFactoryInterface;
 use Saloon\Exceptions\UnableToCastToStringException;
 
 class MultipartBodyRepository implements BodyRepository

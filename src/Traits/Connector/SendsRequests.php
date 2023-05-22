@@ -11,7 +11,9 @@ use Saloon\Http\PendingRequest;
 use Saloon\Contracts\MockClient;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Http\Senders\SimulatedSender;
+use Saloon\Exceptions\PendingRequestException;
 use Saloon\Exceptions\Request\RequestException;
+use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
@@ -24,9 +26,8 @@ trait SendsRequests
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @return \Saloon\Contracts\Response
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
-     * @throws \Saloon\Exceptions\PendingRequestException
-     * @throws \Saloon\Exceptions\SenderException
+     * @throws InvalidResponseClassException
+     * @throws PendingRequestException
      * @throws \Throwable
      */
     public function send(Request $request, MockClient $mockClient = null): Response
@@ -35,7 +36,7 @@ trait SendsRequests
 
         $sender = $pendingRequest->hasSimulatedResponsePayload() ? new SimulatedSender : $this->sender();
 
-        $response = $sender->sendRequest($pendingRequest);
+        $response = $sender->send($pendingRequest);
 
         return $pendingRequest->executeResponsePipeline($response);
     }
@@ -47,9 +48,8 @@ trait SendsRequests
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @return \GuzzleHttp\Promise\PromiseInterface
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
-     * @throws \Saloon\Exceptions\PendingRequestException
-     * @throws \Saloon\Exceptions\SenderException
+     * @throws InvalidResponseClassException
+     * @throws PendingRequestException
      * @throws \Throwable
      */
     public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface
@@ -58,9 +58,8 @@ trait SendsRequests
 
         $sender = $pendingRequest->hasSimulatedResponsePayload() ? new SimulatedSender : $this->sender();
 
-        $promise = $sender->sendRequest($pendingRequest, $pendingRequest->isAsynchronous());
-
-        return $promise->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
+        return $sender->sendAsync($pendingRequest)
+            ->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
     }
 
     /**
@@ -74,8 +73,8 @@ trait SendsRequests
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @return \Saloon\Contracts\Response
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
-     * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws InvalidResponseClassException
+     * @throws PendingRequestException
      * @throws \Saloon\Exceptions\Request\FatalRequestException
      * @throws \Saloon\Exceptions\Request\RequestException
      * @throws \Saloon\Exceptions\SenderException
@@ -142,8 +141,8 @@ trait SendsRequests
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @return \Saloon\Contracts\PendingRequest
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
-     * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws InvalidResponseClassException
+     * @throws PendingRequestException
      */
     public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequestContract
     {

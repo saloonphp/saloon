@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Saloon\Http\Senders;
 
 use Exception;
-use GuzzleHttp\Psr7\HttpFactory;
-use Psr\Http\Message\RequestInterface;
-use Saloon\Data\FactoryCollection;
 use Saloon\Enums\Timeout;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use Saloon\Contracts\Sender;
 use GuzzleHttp\RequestOptions;
+use GuzzleHttp\Psr7\HttpFactory;
+use Saloon\Data\FactoryCollection;
 use Saloon\Contracts\PendingRequest;
 use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\ResponseInterface;
@@ -21,12 +20,8 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
 use Saloon\Helpers\GuzzleMultipartBodyFactory;
-use Saloon\Repositories\Body\FormBodyRepository;
-use Saloon\Repositories\Body\JsonBodyRepository;
 use Saloon\Contracts\Response as ResponseContract;
-use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Repositories\Body\MultipartBodyRepository;
 
 class GuzzleSender implements Sender
 {
@@ -90,27 +85,12 @@ class GuzzleSender implements Sender
         // customise or add middleware to the handler stack.
 
         return new GuzzleClient([
+            RequestOptions::CRYPTO_METHOD => STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
             RequestOptions::CONNECT_TIMEOUT => Timeout::CONNECT->value,
             RequestOptions::TIMEOUT => Timeout::REQUEST->value,
             RequestOptions::HTTP_ERRORS => true,
             'handler' => $this->handlerStack,
         ]);
-    }
-
-    /**
-     * Send a request
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @param bool $asynchronous
-     * @return \Saloon\Contracts\Response|\GuzzleHttp\Promise\PromiseInterface
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Saloon\Exceptions\Request\FatalRequestException
-     */
-    public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): ResponseContract|PromiseInterface
-    {
-        return $asynchronous === true
-            ? $this->sendAsynchronousRequest($pendingRequest)
-            : $this->sendSynchronousRequest($pendingRequest);
     }
 
     /**
@@ -121,13 +101,13 @@ class GuzzleSender implements Sender
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Saloon\Exceptions\Request\FatalRequestException
      */
-    protected function sendSynchronousRequest(PendingRequest $pendingRequest): ResponseContract
+    public function send(PendingRequest $pendingRequest): ResponseContract
     {
-        $guzzleRequest = $this->createGuzzleRequest($pendingRequest);
-        $guzzleRequestOptions = $this->createRequestOptions($pendingRequest);
+        $request = $pendingRequest->getPsrRequest();
+        $requestOptions = $this->createRequestOptions($pendingRequest);
 
         try {
-            $guzzleResponse = $this->client->send($guzzleRequest, $guzzleRequestOptions);
+            $guzzleResponse = $this->client->send($request, $requestOptions);
 
             return $this->createResponse($pendingRequest, $guzzleResponse);
         } catch (ConnectException $exception) {
@@ -153,25 +133,14 @@ class GuzzleSender implements Sender
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    protected function sendAsynchronousRequest(PendingRequest $pendingRequest): PromiseInterface
+    public function sendAsync(PendingRequest $pendingRequest): PromiseInterface
     {
-        $guzzleRequest = $this->createGuzzleRequest($pendingRequest);
-        $guzzleRequestOptions = $this->createRequestOptions($pendingRequest);
+        $request = $pendingRequest->getPsrRequest();
+        $requestOptions = $this->createRequestOptions($pendingRequest);
 
-        $promise = $this->client->sendAsync($guzzleRequest, $guzzleRequestOptions);
+        $promise = $this->client->sendAsync($request, $requestOptions);
 
         return $this->processPromise($promise, $pendingRequest);
-    }
-
-    /**
-     * Create the Guzzle request
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    protected function createGuzzleRequest(PendingRequest $pendingRequest): RequestInterface
-    {
-        return $pendingRequest->getPsrRequest();
     }
 
     /**
@@ -200,17 +169,17 @@ class GuzzleSender implements Sender
     /**
      * Create a response.
      *
-     * @param \Saloon\Contracts\PendingRequest $pendingSaloonRequest
-     * @param \Psr\Http\Message\ResponseInterface $guzzleResponse
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @param \Psr\Http\Message\ResponseInterface $response
      * @param \Exception|null $exception
      * @return \Saloon\Contracts\Response
      */
-    protected function createResponse(PendingRequest $pendingSaloonRequest, ResponseInterface $guzzleResponse, Exception $exception = null): ResponseContract
+    protected function createResponse(PendingRequest $pendingRequest, ResponseInterface $response, Exception $exception = null): ResponseContract
     {
         /** @var class-string<\Saloon\Contracts\Response> $responseClass */
-        $responseClass = $pendingSaloonRequest->getResponseClass();
+        $responseClass = $pendingRequest->getResponseClass();
 
-        return $responseClass::fromPsrResponse($guzzleResponse, $pendingSaloonRequest, $exception);
+        return $responseClass::fromPsrResponse($response, $pendingRequest, $exception);
     }
 
     /**

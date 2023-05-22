@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
-use InvalidArgumentException;
 use LogicException;
-use Psr\Http\Message\StreamFactoryInterface;
-use Psr\Http\Message\StreamInterface;
+use InvalidArgumentException;
 use Saloon\Traits\Conditionable;
+use Psr\Http\Message\StreamInterface;
 use Saloon\Contracts\Body\BodyRepository;
+use Psr\Http\Message\StreamFactoryInterface;
 use Saloon\Exceptions\UnableToCastToStringException;
 
 class ArrayBodyRepository implements BodyRepository

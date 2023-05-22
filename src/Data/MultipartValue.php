@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Saloon\Data;
 
 use InvalidArgumentException;
-use Saloon\Contracts\Arrayable;
 use Psr\Http\Message\StreamInterface;
 
 class MultipartValue
