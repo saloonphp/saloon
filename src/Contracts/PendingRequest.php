@@ -71,26 +71,26 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
     public function body(): ?BodyRepository;
 
     /**
-     * Get the simulated response payload
+     * Get the fake response
      *
-     * @return \Saloon\Contracts\SimulatedResponsePayload|null
+     * @return \Saloon\Contracts\FakeResponse|null
      */
-    public function getSimulatedResponsePayload(): ?SimulatedResponsePayload;
+    public function getFakeResponse(): ?FakeResponse;
 
     /**
-     * Set the simulated response payload
+     * Set the fake response
      *
-     * @param \Saloon\Contracts\SimulatedResponsePayload|null $simulatedResponsePayload
+     * @param \Saloon\Contracts\FakeResponse|null $fakeResponse
      * @return $this
      */
-    public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): static;
+    public function setFakeResponse(?FakeResponse $fakeResponse): static;
 
     /**
-     * Check if simulated response payload is present.
+     * Check if a fake response is present
      *
      * @return bool
      */
-    public function hasSimulatedResponsePayload(): bool;
+    public function hasFakeResponse(): bool;
 
     /**
      * Create a data object from the response

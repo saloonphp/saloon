@@ -36,7 +36,7 @@ trait SendsRequests
 
         $sender = $this->sender();
 
-        $response = $pendingRequest->hasSimulatedResponsePayload()
+        $response = $pendingRequest->hasFakeResponse()
             ? $pendingRequest->createFakeResponse()
             : $sender->send($pendingRequest);
 
@@ -60,7 +60,7 @@ trait SendsRequests
 
         $sender = $this->sender();
 
-        $promise = $pendingRequest->hasSimulatedResponsePayload()
+        $promise = $pendingRequest->hasFakeResponse()
             ? $pendingRequest->createFakeResponse()
             : $sender->sendAsync($pendingRequest);
 

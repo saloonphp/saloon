@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
-use Saloon\Contracts\SimulatedResponsePayload;
+use Saloon\Contracts\FakeResponse;
 
 trait HasSimulationMethods
 {
@@ -33,7 +33,7 @@ trait HasSimulationMethods
      *
      * @return bool
      */
-    public function isSimulated(): bool
+    public function isFaked(): bool
     {
         return $this->isMocked() || $this->isCached();
     }
@@ -67,12 +67,12 @@ trait HasSimulationMethods
     /**
      * Set the simulated response payload if the response was simulated.
      *
-     * @param \Saloon\Contracts\SimulatedResponsePayload $simulatedResponsePayload
+     * @param \Saloon\Contracts\FakeResponse $fakeResponse
      * @return $this
      */
-    public function setSimulatedResponsePayload(SimulatedResponsePayload $simulatedResponsePayload): static
+    public function setFakeResponse(FakeResponse $fakeResponse): static
     {
-        $this->simulatedResponsePayload = $simulatedResponsePayload;
+        $this->fakeResponse = $fakeResponse;
 
         return $this;
     }
@@ -80,10 +80,10 @@ trait HasSimulationMethods
     /**
      * Get the simulated response payload if the response was simulated.
      *
-     * @return \Saloon\Contracts\SimulatedResponsePayload|null
+     * @return \Saloon\Contracts\FakeResponse|null
      */
-    public function getSimulatedResponsePayload(): ?SimulatedResponsePayload
+    public function getFakeResponse(): ?FakeResponse
     {
-        return $this->simulatedResponsePayload;
+        return $this->fakeResponse;
     }
 }

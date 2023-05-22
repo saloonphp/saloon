@@ -212,11 +212,11 @@ interface Response extends HasHeaders
     public function isMocked(): bool;
 
     /**
-     * Check if a response has been simulated
+     * Check if a response has been faked
      *
      * @return bool
      */
-    public function isSimulated(): bool;
+    public function isFaked(): bool;
 
     /**
      * Set if a response has been mocked or not.
@@ -237,17 +237,17 @@ interface Response extends HasHeaders
     /**
      * Set the simulated response payload if the response was simulated.
      *
-     * @param \Saloon\Contracts\SimulatedResponsePayload $simulatedResponsePayload
+     * @param \Saloon\Contracts\FakeResponse $fakeResponse
      * @return $this
      */
-    public function setSimulatedResponsePayload(SimulatedResponsePayload $simulatedResponsePayload): static;
+    public function setFakeResponse(FakeResponse $fakeResponse): static;
 
     /**
      * Get the simulated response payload if the response was simulated.
      *
-     * @return \Saloon\Contracts\SimulatedResponsePayload|null
+     * @return \Saloon\Contracts\FakeResponse|null
      */
-    public function getSimulatedResponsePayload(): ?SimulatedResponsePayload;
+    public function getFakeResponse(): ?FakeResponse;
 
     /**
      * Get the original sender exception

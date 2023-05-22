@@ -13,13 +13,12 @@ use Saloon\Repositories\ArrayStore;
 use Saloon\Contracts\PendingRequest;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Contracts\Body\BodyRepository;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Saloon\Repositories\Body\JsonBodyRepository;
 use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
-use Saloon\Contracts\SimulatedResponsePayload as SimulatedResponsePayloadContract;
+use Saloon\Contracts\FakeResponse as FakeResponseContract;
 
-class SimulatedResponsePayload implements SimulatedResponsePayloadContract
+class FakeResponse implements FakeResponseContract
 {
     use Makeable;
 

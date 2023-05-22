@@ -15,7 +15,7 @@ use Saloon\Contracts\Body\BodyRepository;
 /**
  * @method static static make(mixed $body = [], int $status = 200, array $headers = []) Create a new mock response
  */
-interface SimulatedResponsePayload
+interface FakeResponse
 {
     /**
      * Create a new mock response from a fixture

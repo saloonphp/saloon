@@ -29,21 +29,22 @@ use Saloon\Http\Middleware\DebugRequest;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\Middleware\DebugResponse;
 use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Contracts\SimulatedResponsePayload;
+use Saloon\Contracts\FakeResponse;
 use Saloon\Exceptions\PendingRequestException;
 use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Repositories\Body\MultipartBodyRepository;
+use Saloon\Traits\PendingRequest\CreatesFakeResponses;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
-use Throwable;
 
 class PendingRequest implements PendingRequestContract
 {
     use AuthenticatesRequests;
     use HasRequestProperties;
+    use CreatesFakeResponses;
     use Conditionable;
     use HasMockClient;
 
@@ -99,9 +100,9 @@ class PendingRequest implements PendingRequestContract
     /**
      * The simulated response.
      *
-     * @var \Saloon\Contracts\SimulatedResponsePayload|null
+     * @var \Saloon\Contracts\FakeResponse|null
      */
-    protected ?SimulatedResponsePayload $simulatedResponsePayload = null;
+    protected ?FakeResponse $fakeResponseData = null;
 
     /**
      * Determine if the pending request is asynchronous
@@ -455,22 +456,22 @@ class PendingRequest implements PendingRequestContract
     /**
      * Get the simulated response payload
      *
-     * @return \Saloon\Contracts\SimulatedResponsePayload|null
+     * @return \Saloon\Contracts\FakeResponse|null
      */
-    public function getSimulatedResponsePayload(): ?SimulatedResponsePayload
+    public function getFakeResponse(): ?FakeResponse
     {
-        return $this->simulatedResponsePayload;
+        return $this->fakeResponseData;
     }
 
     /**
      * Set the simulated response payload
      *
-     * @param \Saloon\Contracts\SimulatedResponsePayload|null $simulatedResponsePayload
+     * @param \Saloon\Contracts\FakeResponse|null $fakeResponse
      * @return $this
      */
-    public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): static
+    public function setFakeResponse(?FakeResponse $fakeResponse): static
     {
-        $this->simulatedResponsePayload = $simulatedResponsePayload;
+        $this->fakeResponseData = $fakeResponse;
 
         return $this;
     }
@@ -480,9 +481,9 @@ class PendingRequest implements PendingRequestContract
      *
      * @return bool
      */
-    public function hasSimulatedResponsePayload(): bool
+    public function hasFakeResponse(): bool
     {
-        return $this->simulatedResponsePayload instanceof SimulatedResponsePayload;
+        return $this->fakeResponseData instanceof FakeResponse;
     }
 
     /**
@@ -641,80 +642,5 @@ class PendingRequest implements PendingRequestContract
         }
 
         return $request;
-    }
-
-    /**
-     * Create the fake response
-     *
-     * @return PromiseInterface|ResponseContract
-     * @throws PendingRequestException
-     * @throws Throwable
-     */
-    public function createFakeResponse(): PromiseInterface|Response
-    {
-        // Todo: Refactor this...
-
-        $fakeResponseData = $this->getSimulatedResponsePayload();
-
-        if (! $fakeResponseData instanceof SimulatedResponsePayload) {
-            throw new PendingRequestException('Unable to create fake response because there is no fake response data.');
-        }
-
-        $response = $fakeResponseData->createPsrResponse(
-            responseFactory: $this->factoryCollection->responseFactory,
-            streamFactory: $this->factoryCollection->streamFactory,
-        );
-
-        // Check if the SimulatedResponsePayload throws an exception. If the request is
-        // asynchronous, then we should allow the promise handler to deal with the exception.
-
-        $exception = $fakeResponseData->getException($this);
-
-        if ($exception instanceof Throwable && $this->isAsynchronous() === false) {
-            throw $exception;
-        }
-
-        // Let's create our response!
-
-        /** @var class-string<\Saloon\Contracts\Response> $responseClass */
-        $responseClass = $this->getResponseClass();
-
-        $response = $responseClass::fromPsrResponse(
-            psrResponse: $response,
-            pendingRequest: $this,
-            senderException: $exception
-        );
-
-        // When the SimulatedResponsePayload is specifically a MockResponse then
-        // we will record the response, and we'll set the "isMocked" property
-        // on the response.
-
-        if ($fakeResponseData instanceof MockResponse) {
-            $this->getMockClient()?->recordResponse($response);
-            $response->setMocked(true);
-        }
-
-        // We'll also set the SimulatedResponsePayload on the response
-        // for people to access it if they need to.
-
-        $response->setSimulatedResponsePayload($fakeResponseData);
-
-        // We'll return the synchronous response directly
-
-        if ($this->delay()->isNotEmpty()) {
-            usleep($this->delay()->get() * 1000);
-        }
-
-        if ($this->isAsynchronous() === false) {
-            return $response;
-        }
-
-        // When mocking asynchronous requests we need to wrap the response
-        // in FulfilledPromise or RejectedPromise depending on if the
-        // response has an exception.
-
-        $exception ??= $response->toException();
-
-        return $exception instanceof Throwable ? new RejectedPromise($exception) : new FulfilledPromise($response);
     }
 }
