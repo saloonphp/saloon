@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Connector;
 
+use GuzzleHttp\Promise\Create;
+use GuzzleHttp\Promise\Promise;
 use LogicException;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
@@ -45,26 +47,39 @@ trait SendsRequests
     /**
      * Send a request asynchronously
      *
-     * @param \Saloon\Contracts\Request $request
-     * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     * @throws \ReflectionException
-     * @throws InvalidResponseClassException
-     * @throws PendingRequestException
-     * @throws \Throwable
+     * @param Request $request
+     * @param MockClient|null $mockClient
+     * @return PromiseInterface
      */
     public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface
     {
-        $pendingRequest = $this->createPendingRequest($request, $mockClient)->setAsynchronous(true);
-
         $sender = $this->sender();
 
-        $promise = $pendingRequest->hasFakeResponse()
-            ? $pendingRequest->createFakeResponse()
-            : $sender->sendAsync($pendingRequest);
+        // We'll wrap the following logic into our own Promise which means we won't
+        // build up our PendingRequest until the promise is actually being sent
+        // this is great because our middleware will only run right before
+        // the request is sent.
 
-        return $promise
-            ->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
+        return $promise = new Promise(function () use (&$promise, $request, $mockClient, $sender) {
+            $pendingRequest = $this->createPendingRequest($request, $mockClient)->setAsynchronous(true);
+
+            // We need to check if the Pending Request contains a fake response.
+            // If it does, then we will create the fake response. Otherwise,
+            // we'll send the request.
+
+            $requestPromise = $pendingRequest->hasFakeResponse()
+                ? $pendingRequest->createFakeResponse()
+                : $sender->sendAsync($pendingRequest);
+
+            $requestPromise
+                ->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
+
+            // We'll resolve the promise's value with another promise.
+            // We'll also force the promise to be executed synchronously
+            // because we're already inside a promise.
+
+            $promise->resolve($requestPromise->wait());
+        });
     }
 
     /**
