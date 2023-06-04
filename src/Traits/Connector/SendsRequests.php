@@ -75,10 +75,10 @@ trait SendsRequests
                 ->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
 
             // We'll resolve the promise's value with another promise.
-            // We'll also force the promise to be executed synchronously
-            // because we're already inside a promise.
+            // We will use promise chaining as Guzzle's will fulfill
+            // the request promise.
 
-            $promise->resolve($requestPromise->wait());
+            $promise->resolve($requestPromise);
         });
     }
 

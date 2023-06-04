@@ -88,7 +88,7 @@ test('an asynchronous request will return a custom response', function () {
     expect($response)->foo()->toBe('bar');
 });
 
-test('middleware is executed when a asynchornous request is sent', function () {
+test('middleware is only executed when an asynchronous request is sent', function () {
     $mockClient = new MockClient([
         MockResponse::make(['foo' => 'bar']),
     ]);
