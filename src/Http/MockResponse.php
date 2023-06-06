@@ -148,6 +148,10 @@ class MockResponse
             return json_encode($data);
         }
 
+        if (empty($data)) {
+            return null;
+        }
+
         return $data;
     }
 

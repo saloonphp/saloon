@@ -76,7 +76,7 @@ trait CollectsData
     }
 
     /**
-     *  Get all data or filter with a key.
+     * Get all data or filter with a key.
      *
      * @param string|null $key
      * @return mixed

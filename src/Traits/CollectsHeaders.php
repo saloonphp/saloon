@@ -96,12 +96,12 @@ trait CollectsHeaders
     /**
      * Get an individual header
      *
-     * @param string|null $key
-     * @return array
+     * @param string $key
+     * @return string
      */
     public function getHeader(string $key): string
     {
-        return $this->getHeaders($key);
+        return $this->getHeaders($key) ?? '';
     }
 
     /**
