@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Saloon\Debugging\DebugData;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
