@@ -68,3 +68,12 @@ test('a response can be a custom response class', function () {
     expect($response)->customCastMethod()->toBeInstanceOf(UserData::class);
     expect($response)->foo()->toBe('bar');
 });
+
+test('a mock response can have null for the data', function () {
+    $mockClient = new MockClient([MockResponse::make(null, 200)]);
+    $request = new UserRequest();
+
+    $response = $request->send($mockClient);
+
+    expect($response->body())->toEqual('');
+});
