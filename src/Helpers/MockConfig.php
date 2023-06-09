@@ -21,6 +21,13 @@ final class MockConfig
     private static bool $throwOnMissingFixtures = false;
 
     /**
+     * Denotes if e-mails in responses should be obfuscated when recording fixtures.
+     *
+     * @var bool
+     */
+    private static bool $obfuscateEmails = false;
+
+    /**
      * Set the fixture path
      *
      * @param string $path
@@ -59,5 +66,25 @@ final class MockConfig
     public static function isThrowingOnMissingFixtures(): bool
     {
         return self::$throwOnMissingFixtures;
+    }
+
+    /**
+     * Obfuscate e-mails in responses when recording fixtures
+     *
+     * @return void
+     */
+    public static function obfuscateEmails(): void
+    {
+        self::$obfuscateEmails = true;
+    }
+
+    /**
+     * Should we obfuscate e-mails in fixtures?
+     *
+     * @return bool
+     */
+    public static function shouldObfuscateEmails(): bool
+    {
+        return self::$obfuscateEmails;
     }
 }
