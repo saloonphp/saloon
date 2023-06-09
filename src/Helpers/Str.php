@@ -102,4 +102,28 @@ class Str
 
         return $string;
     }
+    
+    // Sources
+    // https://stackoverflow.com/questions/68639402/looking-for-regex-to-obfuscate-email-to-tw-de
+    // https://github.com/gremo/email-obfuscator
+    public static function obfuscateEmails($string)
+    {
+        $patterns = array(
+            '|[_a-z0-9-]+(?:\.[_a-z0-9-]+)*@[a-z0-9-]+(?:\.[a-z0-9-]+)*(?:\.[a-z]{2,3})|i', // plain emails
+        );
+
+        foreach ($patterns as $pattern) {
+            $string = preg_replace_callback($pattern, function ($parts) {
+                // Clean up element parts.
+                $parts = array_map('trim', $parts);
+
+                $obfuscate_pattern = "/^\w\K[^\s@]+@(\w)[^\s.@]+/";
+                $replacement = "*@$1***";
+                return preg_replace($obfuscate_pattern, $replacement, $parts[0]);
+
+            }, $string);
+        }
+
+        return $string;
+    }    
 }
