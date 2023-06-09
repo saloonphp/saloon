@@ -7,6 +7,8 @@ namespace Saloon\Data;
 use JsonSerializable;
 use Saloon\Contracts\Response;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Helpers\Str;
+use Saloon\Helpers\MockConfig;
 
 class RecordedResponse implements JsonSerializable
 {
@@ -67,7 +69,7 @@ class RecordedResponse implements JsonSerializable
         return new static(
             statusCode: $response->status(),
             headers: $response->headers()->all(),
-            data: $response->body(),
+            data: MockConfig::shouldObfuscateEmails() ? Str::obfuscateEmail($response->body()) : $response->body(),
         );
     }
 
