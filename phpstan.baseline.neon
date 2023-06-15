@@ -114,3 +114,8 @@ parameters:
 			message: "#^Parameter \\#2 \\$ of callable callable\\(\\$this, TValue\\)\\: void expects TValue\\, array\\|float\\|int\\|string\\|false\\|null given.$#"
 			count: 2
 			path: src/Repositories/Body/StringBodyRepository.php
+
+		-
+			message: "#^Parameter \\#2 \\$ of callable callable\\(\\$this, TValue\\)\\: void expects TValue\\, array\\|float\\|int\\|string\\|false\\|null given.$#"
+			count: 2
+			path: src/Repositories/Body/StreamBodyRepository.php

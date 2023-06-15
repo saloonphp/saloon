@@ -55,7 +55,7 @@ class StreamBodyRepository implements BodyRepository
     /**
      * Retrieve the stream from the repository
      *
-     * @return StreamInterface|resource|null
+     * @return StreamInterface|null
      */
     public function all(): ?StreamInterface
     {
@@ -67,7 +67,7 @@ class StreamBodyRepository implements BodyRepository
      *
      * Alias of "all" method.
      *
-     * @return StreamInterface|resource|null
+     * @return StreamInterface|null
      */
     public function get(): ?StreamInterface
     {
@@ -101,10 +101,16 @@ class StreamBodyRepository implements BodyRepository
      */
     public function __toString(): string
     {
-        $contents = $this->stream?->getContents() ?? '';
+        $stream = &$this->stream;
 
-        if ($this->stream?->isSeekable()) {
-            $this->stream?->rewind();
+        if (is_null($stream)) {
+            return '';
+        }
+
+        $contents = $stream->getContents();
+
+        if ($stream->isSeekable()) {
+            $stream->rewind();
         }
 
         return $contents;
