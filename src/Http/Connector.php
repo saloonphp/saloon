@@ -37,4 +37,16 @@ abstract class Connector implements ConnectorContract, HasDebuggingContract
     use HasPool;
     use HasDelay;
     use HasDebugging;
+
+    /**
+     * Handle serializing
+     *
+     * @return array
+     */
+    public function __sleep(): array
+    {
+        $this->destroySender();
+
+        return array_keys(get_object_vars($this));
+    }
 }

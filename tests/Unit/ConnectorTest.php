@@ -6,6 +6,7 @@ use Saloon\Http\Response;
 use GuzzleHttp\Promise\Promise;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\Senders\GuzzleSender;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasConnectorUserRequest;
@@ -55,4 +56,19 @@ test('you can send an asynchronous request through the connector', function () {
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->json())->toEqual(['name' => 'Sammyjo20', 'actual_name' => 'Sam Carré', 'twitter' => '@carre_sam']);
+});
+
+test('when serializing a connector the sender is unset', function () {
+    $connector = new TestConnector;
+    $sender = $connector->sender();
+
+    $destroyedSenderConnector = clone $connector;
+    $destroyedSenderConnector->destroySender();
+
+    expect($sender)->toBeInstanceOf(GuzzleSender::class);
+
+    $serialized = serialize($connector);
+
+    expect($serialized)->toBeString();
+    expect(unserialize($serialized))->toEqual($destroyedSenderConnector);
 });

@@ -34,6 +34,18 @@ trait HasSender
     }
 
     /**
+     * Unset the sender
+     *
+     * @return $this
+     */
+    public function destroySender(): static
+    {
+        unset($this->sender);
+
+        return $this;
+    }
+
+    /**
      * Define the default request sender.
      *
      * @return \Saloon\Contracts\Sender

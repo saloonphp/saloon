@@ -61,3 +61,16 @@ test('it will throw an exception if the sender does not implement the sender int
 
     $connector->sender();
 });
+
+test('the sender can be destroyed', function () {
+    $connector = new TestConnector();
+    $senderA = $connector->sender();
+
+    expect($senderA)->toBe($connector->sender());
+
+    $connector->destroySender();
+
+    $senderB = $connector->sender();
+
+    expect($senderA)->not->toBe($senderB);
+});
