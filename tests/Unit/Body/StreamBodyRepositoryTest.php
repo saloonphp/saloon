@@ -106,3 +106,9 @@ test('the stream is rewound after converting to a string', function () {
     expect((string)$body)->toEqual('Howdy');
     expect($stream->getContents())->toEqual('Howdy');
 });
+
+test('if the contents of the body is null then an empty string is returned', function () {
+    $body = new StreamBodyRepository();
+
+    expect((string)$body)->toEqual('');
+});
