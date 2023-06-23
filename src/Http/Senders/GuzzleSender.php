@@ -6,6 +6,7 @@ namespace Saloon\Http\Senders;
 
 use Exception;
 use Saloon\Enums\Timeout;
+use Saloon\Helpers\Config;
 use GuzzleHttp\HandlerStack;
 use Saloon\Contracts\Sender;
 use GuzzleHttp\RequestOptions;
@@ -19,7 +20,6 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
-use Saloon\Helpers\Config;
 use Saloon\Helpers\GuzzleMultipartBodyFactory;
 use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Exceptions\Request\FatalRequestException;
