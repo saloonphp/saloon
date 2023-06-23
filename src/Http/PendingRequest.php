@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Config;
 use Saloon\Helpers\Helpers;
@@ -258,7 +259,7 @@ class PendingRequest implements PendingRequestContract
         // When both the connector and the request body repositories are mergeable then we
         // will merge them together.
 
-        if (isset($connectorBody, $requestBody) && $connectorBody->isMergeable() && $requestBody->isMergeable()) {
+        if (isset($connectorBody, $requestBody) && $connectorBody instanceof MergeableBody && $requestBody instanceof MergeableBody) {
             $repository = clone $connectorBody;
 
             // We'll clone the request body into the connector body so any properties on the request

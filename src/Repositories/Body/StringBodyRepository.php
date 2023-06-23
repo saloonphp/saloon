@@ -82,14 +82,4 @@ class StringBodyRepository implements BodyRepository
     {
         return $this->all() ?? '';
     }
-
-    /**
-     * Determine if the body can be merged
-     *
-     * @return bool
-     */
-    public function isMergeable(): bool
-    {
-        return false;
-    }
 }

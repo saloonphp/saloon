@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
+use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Helpers\Arr;
 use Saloon\Helpers\Str;
 use InvalidArgumentException;
@@ -16,7 +17,7 @@ use Saloon\Contracts\MultipartBodyFactory;
 use Psr\Http\Message\StreamFactoryInterface;
 use Saloon\Exceptions\UnableToCastToStringException;
 
-class MultipartBodyRepository implements BodyRepository
+class MultipartBodyRepository implements BodyRepository, MergeableBody
 {
     use Conditionable;
 
@@ -200,16 +201,6 @@ class MultipartBodyRepository implements BodyRepository
         }
 
         return Arr::mapWithKeys($multipartValues, static fn (MultipartValue $value) => [$value->name => $value]);
-    }
-
-    /**
-     * Determine if the body can be merged
-     *
-     * @return bool
-     */
-    public function isMergeable(): bool
-    {
-        return true;
     }
 
     /**

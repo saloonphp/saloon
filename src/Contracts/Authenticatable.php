@@ -40,16 +40,6 @@ interface Authenticatable
     public function withBasicAuth(string $username, string $password): static;
 
     /**
-     * Authenticate the request with "digest" authentication.
-     *
-     * @param string $username
-     * @param string $password
-     * @param string $digest
-     * @return $this
-     */
-    public function withDigestAuth(string $username, string $password, string $digest): static;
-
-    /**
      * Authenticate the request with a query parameter token.
      *
      * @param string $parameter

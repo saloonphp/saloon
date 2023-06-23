@@ -118,16 +118,6 @@ class StreamBodyRepository implements BodyRepository
     }
 
     /**
-     * Determine if the body can be merged
-     *
-     * @return bool
-     */
-    public function isMergeable(): bool
-    {
-        return false;
-    }
-
-    /**
      * Convert the body repository into a stream
      *
      * @param StreamFactoryInterface $streamFactory

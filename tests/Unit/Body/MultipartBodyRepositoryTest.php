@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Data\MultipartValue;
 use Saloon\Repositories\Body\MultipartBodyRepository;
 
@@ -117,7 +118,7 @@ test('you can get all items', function () {
 test('you can merge items together into the body repository', function () {
     $body = new MultipartBodyRepository();
 
-    expect($body->isMergeable())->toBeTrue();
+    expect($body)->toBeInstanceOf(MergeableBody::class);
 
     $body->add('name', 'Sam');
     $body->add('sidekick', 'Mantas');

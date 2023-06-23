@@ -40,13 +40,6 @@ interface BodyRepository extends Stringable
     public function isNotEmpty(): bool;
 
     /**
-     * Determine if the body can be merged
-     *
-     * @return bool
-     */
-    public function isMergeable(): bool;
-
-    /**
      * Convert the body repository into a stream
      *
      * @param StreamFactoryInterface $streamFactory
