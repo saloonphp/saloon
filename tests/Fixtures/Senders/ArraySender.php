@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Senders;
 
-use Saloon\Http\Response;
 use Saloon\Contracts\Sender;
 use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Data\FactoryCollection;
