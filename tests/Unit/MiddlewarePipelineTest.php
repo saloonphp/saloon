@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Response;
 use Saloon\Http\PendingRequest;
+use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Helpers\MiddlewarePipeline;

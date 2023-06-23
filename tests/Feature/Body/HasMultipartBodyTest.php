@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use Saloon\Data\MultipartValue;
+use Saloon\Http\PendingRequest;
 use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
-use Saloon\Http\PendingRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Repositories\Body\MultipartBodyRepository;
 use Saloon\Tests\Fixtures\Requests\HasMultipartBodyRequest;
