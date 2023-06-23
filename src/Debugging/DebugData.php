@@ -10,7 +10,7 @@ use Saloon\Contracts\Response;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\PendingRequest;
 
-class DebugData
+readonly class DebugData
 {
     /**
      * Constructor
@@ -19,9 +19,10 @@ class DebugData
      * @param \Saloon\Contracts\Response|null $response
      */
     public function __construct(
-        protected readonly PendingRequest $pendingRequest,
-        protected readonly ?Response $response,
-    ) {
+        protected PendingRequest $pendingRequest,
+        protected ?Response      $response,
+    )
+    {
         //
     }
 
@@ -32,7 +33,7 @@ class DebugData
      */
     public function wasSent(): bool
     {
-        return ! is_null($this->response);
+        return !is_null($this->response);
     }
 
     /**
@@ -42,7 +43,7 @@ class DebugData
      */
     public function wasNotSent(): bool
     {
-        return ! $this->wasSent();
+        return !$this->wasSent();
     }
 
     /**

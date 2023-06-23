@@ -19,7 +19,7 @@
     ],
     "homepage": "https://github.com/sammyjo20/saloon",
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "guzzlehttp/guzzle": "^7.7",
         "psr/http-factory": "^1.0",
         "guzzlehttp/promises": "^1.5 || ^2.0",
