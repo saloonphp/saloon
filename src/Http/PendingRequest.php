@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Config;
 use Saloon\Helpers\Helpers;
@@ -23,6 +22,7 @@ use Saloon\Contracts\Authenticator;
 use Saloon\Helpers\ReflectionHelper;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
+use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Http\Middleware\DebugRequest;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\Middleware\DebugResponse;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
-use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Helpers\Arr;
 use Saloon\Helpers\Str;
 use InvalidArgumentException;
@@ -12,6 +11,7 @@ use Saloon\Data\MultipartValue;
 use Saloon\Traits\Conditionable;
 use Saloon\Exceptions\BodyException;
 use Psr\Http\Message\StreamInterface;
+use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Contracts\MultipartBodyFactory;
 use Psr\Http\Message\StreamFactoryInterface;

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Data\MultipartValue;
+use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Repositories\Body\MultipartBodyRepository;
 
 test('the store is empty by default', function () {

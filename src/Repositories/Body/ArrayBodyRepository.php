@@ -6,9 +6,9 @@ namespace Saloon\Repositories\Body;
 
 use LogicException;
 use InvalidArgumentException;
-use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Traits\Conditionable;
 use Psr\Http\Message\StreamInterface;
+use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Contracts\Body\BodyRepository;
 use Psr\Http\Message\StreamFactoryInterface;
 use Saloon\Exceptions\UnableToCastToStringException;
