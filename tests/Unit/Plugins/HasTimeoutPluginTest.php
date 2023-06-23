@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -20,7 +21,9 @@ test('a request is given a default timeout and connect timeout', function () {
             expect($options['connect_timeout'])->toEqual(10);
             expect($options['timeout'])->toEqual(30);
 
-            return new FulfilledPromise(MockResponse::make()->createPsrResponse());
+            $factory = new HttpFactory;
+
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse($factory, $factory));
         };
     }, 'test');
 

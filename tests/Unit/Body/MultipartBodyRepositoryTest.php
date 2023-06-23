@@ -114,28 +114,6 @@ test('you can get all items', function () {
     ]);
 });
 
-test('you can convert the repository into an array', function () {
-    $body = new MultipartBodyRepository();
-
-    $body->add('name', 'Sam', 'welcome.txt', ['a' => 'b']);
-    $body->add('superhero', 'Iron Man');
-
-    expect($body->toArray())->toEqual([
-        0 => [
-            'name' => 'name',
-            'contents' => 'Sam',
-            'filename' => 'welcome.txt',
-            'headers' => ['a' => 'b'],
-        ],
-        1 => [
-            'name' => 'superhero',
-            'contents' => 'Iron Man',
-            'filename' => null,
-            'headers' => [],
-        ],
-    ]);
-});
-
 test('you can merge items together into the body repository', function () {
     $body = new MultipartBodyRepository();
 

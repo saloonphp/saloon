@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Saloon\Http\PendingRequest;
+use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -36,7 +37,9 @@ test('the guzzle sender properly sends it', function () {
             expect($guzzleRequest->getHeader('Content-Type'))->toEqual(['application/x-www-form-urlencoded']);
             expect((string)$guzzleRequest->getBody())->toEqual((string)$request->body());
 
-            return new FulfilledPromise(MockResponse::make()->createPsrResponse());
+            $factory = new HttpFactory;
+
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse($factory, $factory));
         };
     });
 

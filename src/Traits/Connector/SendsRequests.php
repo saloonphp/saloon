@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Connector;
 
-use GuzzleHttp\Promise\Create;
-use GuzzleHttp\Promise\Promise;
 use LogicException;
 use Saloon\Contracts\Request;
+use GuzzleHttp\Promise\Create;
 use Saloon\Contracts\Response;
+use GuzzleHttp\Promise\Promise;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\MockClient;
 use GuzzleHttp\Promise\PromiseInterface;

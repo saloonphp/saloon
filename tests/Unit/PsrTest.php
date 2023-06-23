@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Saloon\Helpers\Config;
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\RequestInterface;
@@ -25,7 +24,6 @@ test('a psr-7 request can be created from the PendingRequest', function () {
     expect($request->getMethod())->toEqual('GET');
     expect($request->getHeaders())->toEqual([
         'Host' => ['tests.saloon.dev'],
-        'User-Agent' => [Config::getUserAgent()],
         'Accept' => ['application/json'],
     ]);
 

@@ -202,7 +202,6 @@ class PendingRequest implements PendingRequestContract
         $request = $this->request;
 
         $this->headers()->merge(
-            ['User-Agent' => Config::getUserAgent()],
             $connector->headers()->all(),
             $request->headers()->all()
         );
@@ -636,6 +635,8 @@ class PendingRequest implements PendingRequestContract
         if ($this->body() instanceof BodyRepository) {
             $request = $request->withBody($this->body()->toStream($factories->streamFactory));
         }
+
+        // Todo: Invoke the `onPsrRequest` hooks
 
         return $request;
     }

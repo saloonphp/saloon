@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use Saloon\Traits\Conditionable;
 use Psr\Http\Message\StreamInterface;
 use Saloon\Contracts\Body\BodyRepository;
+use Psr\Http\Message\StreamFactoryInterface;
 
 class StreamBodyRepository implements BodyRepository
 {
@@ -114,5 +115,26 @@ class StreamBodyRepository implements BodyRepository
         }
 
         return $contents;
+    }
+
+    /**
+     * Determine if the body can be merged
+     *
+     * @return bool
+     */
+    public function isMergeable(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Convert the body repository into a stream
+     *
+     * @param StreamFactoryInterface $streamFactory
+     * @return StreamInterface
+     */
+    public function toStream(StreamFactoryInterface $streamFactory): StreamInterface
+    {
+        return $this->all() ?? $streamFactory->createStream('');
     }
 }

@@ -23,6 +23,7 @@ trait HasMultipartBody
      *
      * @param PendingRequest $pendingRequest
      * @return void
+     * @throws \Exception
      */
     public function bootHasMultipartBody(PendingRequest $pendingRequest): void
     {
@@ -33,6 +34,7 @@ trait HasMultipartBody
      * Retrieve the data repository
      *
      * @return \Saloon\Repositories\Body\MultipartBodyRepository
+     * @throws \Exception
      */
     public function body(): MultipartBodyRepository
     {

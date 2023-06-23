@@ -93,6 +93,7 @@ test('the guzzle sender has default options configured', function () {
         'connect_timeout' => 10,
         'timeout' => 30,
         'http_errors' => true,
+        'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
     ]);
 
     expect($freshClient->getConfig())->toEqual($client->getConfig());

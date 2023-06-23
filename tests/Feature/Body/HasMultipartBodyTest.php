@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Saloon\Data\MultipartValue;
+use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -72,7 +73,9 @@ test('the guzzle sender properly sends it', function () {
                 'Sam',
             );
 
-            return new FulfilledPromise(MockResponse::make()->createPsrResponse());
+            $factory = new HttpFactory;
+
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse($factory, $factory));
         };
     });
 
