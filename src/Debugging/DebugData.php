@@ -21,8 +21,7 @@ readonly class DebugData
     public function __construct(
         protected PendingRequest $pendingRequest,
         protected ?Response      $response,
-    )
-    {
+    ) {
         //
     }
 
@@ -33,7 +32,7 @@ readonly class DebugData
      */
     public function wasSent(): bool
     {
-        return !is_null($this->response);
+        return ! is_null($this->response);
     }
 
     /**
@@ -43,7 +42,7 @@ readonly class DebugData
      */
     public function wasNotSent(): bool
     {
-        return !$this->wasSent();
+        return ! $this->wasSent();
     }
 
     /**
