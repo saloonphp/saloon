@@ -10,6 +10,8 @@ use Saloon\Contracts\PendingRequest;
 class BasicAuthenticator implements Authenticator
 {
     /**
+     * Constructor
+     *
      * @param string $username
      * @param string $password
      */
@@ -28,6 +30,6 @@ class BasicAuthenticator implements Authenticator
      */
     public function set(PendingRequest $pendingRequest): void
     {
-        $pendingRequest->config()->add('auth', [$this->username, $this->password]);
+        $pendingRequest->headers()->add('Authorization', 'Basic ' . base64_encode($this->username . ':' . $this->password));
     }
 }
