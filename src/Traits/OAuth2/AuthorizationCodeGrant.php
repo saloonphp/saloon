@@ -8,8 +8,10 @@ use DateTimeImmutable;
 use Saloon\Helpers\Str;
 use Saloon\Helpers\Date;
 use InvalidArgumentException;
+use Saloon\Contracts\Request;
 use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Response;
+use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Http\OAuth2\GetUserRequest;
 use Saloon\Contracts\OAuthAuthenticator;
 use Saloon\Exceptions\InvalidStateException;
@@ -94,7 +96,7 @@ trait AuthorizationCodeGrant
             throw new InvalidStateException;
         }
 
-        $request = new GetAccessTokenRequest($code, $this->oauthConfig());
+        $request = $this->resolveAccessTokenRequest($code, $this->oauthConfig());
 
         $request = $this->oauthConfig()->invokeRequestModifier($request);
 
@@ -139,7 +141,7 @@ trait AuthorizationCodeGrant
             $refreshToken = $refreshToken->getRefreshToken();
         }
 
-        $request = new GetRefreshTokenRequest($this->oauthConfig(), $refreshToken);
+        $request = $this->resolveRefreshTokenRequest($this->oauthConfig(), $refreshToken);
 
         $request = $this->oauthConfig()->invokeRequestModifier($request);
 
@@ -203,7 +205,7 @@ trait AuthorizationCodeGrant
      */
     public function getUser(OAuthAuthenticator $oauthAuthenticator, ?callable $requestModifier = null): Response
     {
-        $request = GetUserRequest::make($this->oauthConfig())->authenticate($oauthAuthenticator);
+        $request = $this->resolveUserRequest($this->oauthConfig())->authenticate($oauthAuthenticator);
 
         if (is_callable($requestModifier)) {
             $requestModifier($request);
@@ -222,5 +224,40 @@ trait AuthorizationCodeGrant
     public function getState(): ?string
     {
         return $this->state;
+    }
+
+    /**
+     * Resolve the access token request
+     *
+     * @param string $code
+     * @param OAuthConfig $oauthConfig
+     * @return Request
+     */
+    protected function resolveAccessTokenRequest(string $code, OAuthConfig $oauthConfig): Request
+    {
+        return new GetAccessTokenRequest($code, $oauthConfig);
+    }
+
+    /**
+     * Resolve the refresh token request
+     *
+     * @param OAuthConfig $oauthConfig
+     * @param string $refreshToken
+     * @return Request
+     */
+    protected function resolveRefreshTokenRequest(OAuthConfig $oauthConfig, string $refreshToken): Request
+    {
+        return new GetRefreshTokenRequest($oauthConfig, $refreshToken);
+    }
+
+    /**
+     * Resolve the user request
+     *
+     * @param OAuthConfig $oauthConfig
+     * @return Request
+     */
+    protected function resolveUserRequest(OAuthConfig $oauthConfig): Request
+    {
+        return new GetUserRequest($oauthConfig);
     }
 }

@@ -6,7 +6,9 @@ namespace Saloon\Traits\OAuth2;
 
 use DateTimeImmutable;
 use Saloon\Helpers\Date;
+use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
+use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Contracts\OAuthAuthenticator;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
 use Saloon\Http\OAuth2\GetClientCredentialsTokenRequest;
@@ -34,7 +36,7 @@ trait ClientCredentialsGrant
     {
         $this->oauthConfig()->validate(withRedirectUrl: false);
 
-        $request = new GetClientCredentialsTokenRequest($this->oauthConfig(), $scopes, $scopeSeparator);
+        $request = $this->resolveAccessTokenRequest($this->oauthConfig(), $scopes, $scopeSeparator);
 
         $request = $this->oauthConfig()->invokeRequestModifier($request);
 
@@ -79,5 +81,18 @@ trait ClientCredentialsGrant
     protected function createOAuthAuthenticator(string $accessToken, ?DateTimeImmutable $expiresAt = null): OAuthAuthenticator
     {
         return new AccessTokenAuthenticator($accessToken, null, $expiresAt);
+    }
+
+    /**
+     * Resolve the access token request
+     *
+     * @param OAuthConfig $oauthConfig
+     * @param array $scopes
+     * @param string $scopeSeparator
+     * @return Request
+     */
+    protected function resolveAccessTokenRequest(OAuthConfig $oauthConfig, array $scopes = [], string $scopeSeparator = ' '): Request
+    {
+        return new GetClientCredentialsTokenRequest($oauthConfig, $scopes, $scopeSeparator);
     }
 }
