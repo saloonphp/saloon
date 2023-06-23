@@ -4,17 +4,27 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
+use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 
 interface Connector extends Authenticatable, CanThrowRequestExceptions, HasConfig, HasHeaders, HasQueryParams, HasDelay, HasMiddlewarePipeline, HasMockClient
 {
     /**
-     * \Handle the boot lifecycle hook
+     * Handle the boot lifecycle hook
      *
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return void
      */
     public function boot(PendingRequest $pendingRequest): void;
+
+    /**
+     * Handle the PSR request before it is sent
+     *
+     * @param \Psr\Http\Message\RequestInterface $request
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return \Psr\Http\Message\RequestInterface
+     */
+    public function handlePsrRequest(RequestInterface $request, PendingRequest $pendingRequest): RequestInterface;
 
     /**
      * Cast the response to a DTO.

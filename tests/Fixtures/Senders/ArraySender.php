@@ -16,16 +16,6 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
 class ArraySender implements Sender
 {
     /**
-     * Get the sender's response class
-     *
-     * @return string
-     */
-    public function getResponseClass(): string
-    {
-        return Response::class;
-    }
-
-    /**
      * Get the factory collection
      *
      * @return FactoryCollection
@@ -54,7 +44,7 @@ class ArraySender implements Sender
         /** @var class-string<\Saloon\Contracts\Response> $responseClass */
         $responseClass = $pendingRequest->getResponseClass();
 
-        return $responseClass::fromPsrResponse(new GuzzleResponse(200, ['X-Fake' => true], 'Default'), $pendingRequest, null);
+        return $responseClass::fromPsrResponse(new GuzzleResponse(200, ['X-Fake' => true], 'Default'), $pendingRequest, $pendingRequest->createPsrRequest());
     }
 
     /**

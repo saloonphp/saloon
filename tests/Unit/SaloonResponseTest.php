@@ -9,6 +9,7 @@ use Saloon\Contracts\ArrayStore;
 use Illuminate\Support\Collection;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use Psr\Http\Message\RequestInterface;
 use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Http\Response as SaloonResponse;
 use Saloon\Exceptions\Request\RequestException;
@@ -37,6 +38,17 @@ test('you can get the original request', function () {
     $response = connector()->send($request, $mockClient);
 
     expect($response->getRequest())->toBe($request);
+});
+
+test('you can get the psr-7 request', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
+    ]);
+
+    $request = new UserRequest;
+    $response = connector()->send($request, $mockClient);
+
+    expect($response->getPsrRequest())->toBeInstanceOf(RequestInterface::class);
 });
 
 test('it will throw an exception when you use the throw method', function () {
@@ -255,7 +267,6 @@ test('when using the body methods the stream is rewound back to the start', func
 });
 
 test('if a response is changed through middleware the new instance is used', function () {
-
     $mockClient = new MockClient([
         MockResponse::make(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
     ]);
@@ -267,7 +278,7 @@ test('if a response is changed through middleware the new instance is used', fun
         $psrResponse = $response->getPsrResponse();
         $newPsrResponse = $psrResponse->withBody(Utils::streamFor('Hello World!'));
 
-        return $response::fromPsrResponse($newPsrResponse, $response->getPendingRequest());
+        return $response::fromPsrResponse($newPsrResponse, $response->getPendingRequest(), $response->getPsrRequest());
     });
 
     $response = $connector->send(new UserRequest, $mockClient);

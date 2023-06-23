@@ -82,7 +82,7 @@ test('you can add a named response pipe to the middleware', function () {
     $factory = new HttpFactory;
 
     $pendingRequest = connector()->createPendingRequest(new UserRequest);
-    $response = Response::fromPsrResponse(MockResponse::make()->createPsrResponse($factory, $factory), $pendingRequest);
+    $response = Response::fromPsrResponse(MockResponse::make()->createPsrResponse($factory, $factory), $pendingRequest, $pendingRequest->createPsrRequest());
 
     $pipeline->executeResponsePipeline($response);
 

@@ -53,6 +53,7 @@ trait CreatesFakeResponses
         $response = $responseClass::fromPsrResponse(
             psrResponse: $response,
             pendingRequest: $this,
+            psrRequest: $this->createPsrRequest(),
             senderException: $exception
         );
 

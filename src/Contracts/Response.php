@@ -8,6 +8,7 @@ use Throwable;
 use SimpleXMLElement;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 interface Response extends HasHeaders
@@ -15,12 +16,13 @@ interface Response extends HasHeaders
     /**
      * Create an instance of the response from a PSR response
      *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @param \Psr\Http\Message\ResponseInterface $psrResponse
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @param \Psr\Http\Message\RequestInterface $psrRequest
      * @param \Throwable|null $senderException
      * @return $this
      */
-    public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, ?Throwable $senderException = null): static;
+    public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, ?Throwable $senderException = null): static;
 
     /**
      * Create a PSR response from the raw response.
@@ -78,6 +80,13 @@ interface Response extends HasHeaders
      * @return \Saloon\Contracts\Request
      */
     public function getRequest(): Request;
+
+    /**
+     * Get the PSR-7 request
+     *
+     * @return \Psr\Http\Message\RequestInterface
+     */
+    public function getPsrRequest(): RequestInterface;
 
     /**
      * Get the JSON decoded body of the response as an array or scalar value.

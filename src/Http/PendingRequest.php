@@ -12,6 +12,7 @@ use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
+use Saloon\Http\Middleware\DelayMiddleware;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Psr\Http\Message\UriInterface;
@@ -334,6 +335,10 @@ class PendingRequest implements PendingRequestContract
 
         $middleware->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
 
+        // Next, we'll invoke any delays that have been set on the PendingRequest
+
+        $middleware->onRequest(new DelayMiddleware, false, 'delayMiddleware');
+
         // Finally, we'll register the debugging middleware. This should always
         // stay at the bottom of the middleware chain, so we output the very
         // latest PendingRequest/Response
@@ -636,8 +641,12 @@ class PendingRequest implements PendingRequestContract
             $request = $request->withBody($this->body()->toStream($factories->streamFactory));
         }
 
-        // Todo: Invoke the `onPsrRequest` hooks
+        // Now we'll run our event hooks on both the connector and request which allows the
+        // user to be able to make any final changes to the PSR request if they need to
+        // like modifying the URI or adding extra headers.
 
-        return $request;
+        $request = $this->connector->handlePsrRequest($request, $this);
+
+        return $this->request->handlePsrRequest($request, $this);
     }
 }
