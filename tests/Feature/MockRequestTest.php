@@ -36,8 +36,6 @@ afterEach(function () {
 });
 
 test('a request can be mocked with a sequence', function () {
-    // Todo: Work out why mocking is now less performant.
-
     $mockClient = new MockClient([
         MockResponse::make(['name' => 'Sam'], 200, ['X-Foo' => 'Bar']),
         MockResponse::make(['name' => 'Alex']),
