@@ -20,6 +20,7 @@ use GuzzleHttp\Exception\TransferException;
 use Saloon\Repositories\Body\FormBodyRepository;
 use Saloon\Repositories\Body\JsonBodyRepository;
 use Saloon\Contracts\Response as ResponseContract;
+use Saloon\Repositories\Body\StreamBodyRepository;
 use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Repositories\Body\MultipartBodyRepository;
@@ -190,6 +191,7 @@ class GuzzleSender implements Sender
             $body instanceof MultipartBodyRepository => $requestOptions[RequestOptions::MULTIPART] = $body->toArray(),
             $body instanceof FormBodyRepository => $requestOptions[RequestOptions::FORM_PARAMS] = $body->all(),
             $body instanceof StringBodyRepository => $requestOptions[RequestOptions::BODY] = $body->all(),
+            $body instanceof StreamBodyRepository => $requestOptions[RequestOptions::BODY] = $body->all(),
             default => $requestOptions[RequestOptions::BODY] = (string)$body,
         };
 

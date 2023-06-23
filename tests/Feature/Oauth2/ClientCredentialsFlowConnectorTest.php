@@ -10,6 +10,8 @@ use Saloon\Http\Auth\AccessTokenAuthenticator;
 use Saloon\Exceptions\OAuthConfigValidationException;
 use Saloon\Tests\Fixtures\Connectors\ClientCredentialsConnector;
 use Saloon\Tests\Fixtures\Connectors\NoConfigClientCredentialsConnector;
+use Saloon\Tests\Fixtures\Connectors\CustomRequestClientCredentialsConnector;
+use Saloon\Tests\Fixtures\Requests\OAuth\CustomClientCredentialsAccessTokenRequest;
 
 test('you can get the authenticator from the connector', function () {
     $mockClient = new MockClient([
@@ -180,4 +182,17 @@ test('if you attempt to use the client credentials flow without a secret it will
     $this->expectExceptionMessage('The Client Secret is empty or has not been provided.');
 
     $connector->getAccessToken();
+});
+
+test('on the connector you can overwrite the getAccessToken request', function () {
+    $mockClient = new MockClient([
+        CustomClientCredentialsAccessTokenRequest::class => MockResponse::make(['access_token' => 'access', 'expires_in' => 3600], 200),
+    ]);
+
+    $connector = new CustomRequestClientCredentialsConnector();
+    $connector->withMockClient($mockClient);
+
+    $accessTokenResponse = $connector->getAccessToken(returnResponse: true);
+
+    expect($accessTokenResponse->getRequest())->toBeInstanceOf(CustomClientCredentialsAccessTokenRequest::class);
 });
