@@ -19,6 +19,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
+use Saloon\Helpers\Config;
 use Saloon\Helpers\GuzzleMultipartBodyFactory;
 use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Exceptions\Request\FatalRequestException;
@@ -86,7 +87,7 @@ class GuzzleSender implements Sender
         // customise or add middleware to the handler stack.
 
         return new GuzzleClient([
-            RequestOptions::CRYPTO_METHOD => STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
+            RequestOptions::CRYPTO_METHOD => Config::getTLSMethod(),
             RequestOptions::CONNECT_TIMEOUT => Timeout::CONNECT->value,
             RequestOptions::TIMEOUT => Timeout::REQUEST->value,
             RequestOptions::HTTP_ERRORS => true,
