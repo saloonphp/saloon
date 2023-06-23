@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
+use Saloon\Http\PendingRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasStringBodyRequest;
 
@@ -21,10 +22,14 @@ test('the guzzle sender properly sends it', function () {
 
     $request->headers()->add('Content-Type', 'application/custom');
 
-    $connector->sender()->addMiddleware(function (callable $handler) use ($request) {
-        return function (RequestInterface $guzzleRequest, array $options) use ($request) {
+    $asserted = false;
+
+    $connector->sender()->addMiddleware(function (callable $handler) use ($request, &$asserted) {
+        return function (RequestInterface $guzzleRequest, array $options) use ($request, &$asserted) {
             expect($guzzleRequest->getHeader('Content-Type'))->toEqual(['application/custom']);
             expect((string)$guzzleRequest->getBody())->toEqual((string)$request->body());
+
+            $asserted = true;
 
             $factory = new HttpFactory;
 
@@ -33,4 +38,6 @@ test('the guzzle sender properly sends it', function () {
     });
 
     $connector->send($request);
+
+    expect($asserted)->toBeTrue();
 });

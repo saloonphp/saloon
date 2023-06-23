@@ -7,6 +7,7 @@ use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
+use Saloon\Http\PendingRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Repositories\Body\MultipartBodyRepository;
 use Saloon\Tests\Fixtures\Requests\HasMultipartBodyRequest;
@@ -62,8 +63,14 @@ test('the guzzle sender properly sends it', function () {
     $connector = new TestConnector;
     $request = new HasMultipartBodyRequest;
 
-    $connector->sender()->addMiddleware(function (callable $handler) use ($request) {
-        return function (RequestInterface $guzzleRequest, array $options) use ($request) {
+    $asserted = false;
+
+    $request->middleware()->onRequest(static function (PendingRequest $pendingRequest) {
+        expect($pendingRequest->headers()->get('Content-Type'))->toContain('multipart/form-data; boundary=' . $pendingRequest->body()->getBoundary());
+    });
+
+    $connector->sender()->addMiddleware(function (callable $handler) use ($request, &$asserted) {
+        return function (RequestInterface $guzzleRequest, array $options) use ($request, &$asserted) {
             expect($guzzleRequest->getHeader('Content-Type')[0])->toContain('multipart/form-data; boundary=');
 
             expect((string)$guzzleRequest->getBody())->toContain(
@@ -73,6 +80,8 @@ test('the guzzle sender properly sends it', function () {
                 'Sam',
             );
 
+            $asserted = true;
+
             $factory = new HttpFactory;
 
             return new FulfilledPromise(MockResponse::make()->createPsrResponse($factory, $factory));
@@ -80,4 +89,6 @@ test('the guzzle sender properly sends it', function () {
     });
 
     $connector->send($request);
+
+    expect($asserted)->toBeTrue();
 });

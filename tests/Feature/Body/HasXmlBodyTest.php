@@ -29,10 +29,14 @@ test('the guzzle sender properly sends it', function () {
         expect($pendingRequest->headers()->get('Content-Type'))->toEqual('application/xml');
     });
 
-    $connector->sender()->addMiddleware(function (callable $handler) use ($request) {
-        return function (RequestInterface $guzzleRequest, array $options) use ($request) {
+    $asserted = false;
+
+    $connector->sender()->addMiddleware(function (callable $handler) use ($request, &$asserted) {
+        return function (RequestInterface $guzzleRequest, array $options) use ($request, &$asserted) {
             expect($guzzleRequest->getHeader('Content-Type'))->toEqual(['application/xml']);
             expect((string)$guzzleRequest->getBody())->toEqual((string)$request->body());
+
+            $asserted = true;
 
             $factory = new HttpFactory;
 
@@ -41,4 +45,6 @@ test('the guzzle sender properly sends it', function () {
     });
 
     $connector->send($request);
+
+    expect($asserted)->toBeTrue();
 });
