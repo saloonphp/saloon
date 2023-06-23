@@ -16,8 +16,12 @@ use Saloon\Http\OAuth2\GetRefreshTokenRequest;
 use Saloon\Exceptions\OAuthConfigValidationException;
 use Saloon\Tests\Fixtures\Connectors\OAuth2Connector;
 use Saloon\Tests\Fixtures\Connectors\NoConfigAuthCodeConnector;
+use Saloon\Tests\Fixtures\Requests\OAuth\CustomOAuthUserRequest;
 use Saloon\Tests\Fixtures\Authenticators\CustomOAuthAuthenticator;
+use Saloon\Tests\Fixtures\Connectors\CustomRequestOAuth2Connector;
+use Saloon\Tests\Fixtures\Requests\OAuth\CustomAccessTokenRequest;
 use Saloon\Tests\Fixtures\Connectors\CustomResponseOAuth2Connector;
+use Saloon\Tests\Fixtures\Requests\OAuth\CustomRefreshTokenRequest;
 
 test('you can get the redirect url from a connector', function () {
     $connector = new OAuth2Connector;
@@ -386,4 +390,27 @@ test('if you attempt to use the authorization code flow without a redirect uri i
     $this->expectExceptionMessage('The Redirect URI is empty or has not been provided.');
 
     $connector->getAccessToken('code');
+});
+
+test('on the connector you can overwrite all the request classes', function () {
+    $mockClient = new MockClient([
+        CustomAccessTokenRequest::class => MockResponse::make(['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600], 200),
+        CustomRefreshTokenRequest::class => MockResponse::make(['access_token' => 'access-new', 'refresh_token' => 'refresh-new', 'expires_in' => 3600]),
+        CustomOAuthUserRequest::class => MockResponse::make(['user' => 'Sam']),
+    ]);
+
+    $connector = new CustomRequestOAuth2Connector;
+    $connector->withMockClient($mockClient);
+
+    $accessTokenResponse = $connector->getAccessToken('code', returnResponse: true);
+
+    expect($accessTokenResponse->getRequest())->toBeInstanceOf(CustomAccessTokenRequest::class);
+
+    $refreshTokenResponse = $connector->refreshAccessToken('howdy', returnResponse: true);
+
+    expect($refreshTokenResponse->getRequest())->toBeInstanceOf(CustomRefreshTokenRequest::class);
+
+    $userResponse = $connector->getUser(new AccessTokenAuthenticator('howdy', 'partner'));
+
+    expect($userResponse->getRequest())->toBeInstanceOf(CustomOAuthUserRequest::class);
 });

@@ -21,6 +21,8 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
 use Saloon\Helpers\GuzzleMultipartBodyFactory;
 use Saloon\Contracts\Response as ResponseContract;
+use Saloon\Repositories\Body\StreamBodyRepository;
+use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Exceptions\Request\FatalRequestException;
 
 class GuzzleSender implements Sender

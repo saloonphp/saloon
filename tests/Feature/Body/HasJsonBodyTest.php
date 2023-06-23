@@ -92,3 +92,31 @@ test('the guzzle sender properly sends it', function () {
 
     $connector->send($request);
 });
+
+test('you can specify different json flags that the body repository should use', function () {
+    $request = new HasJsonBodyRequest();
+    $body = $request->body();
+
+    // We'll add a property with slashes
+
+    $body->add('url', 'https://docs.saloon.dev');
+
+    // By default, PHP will escape slashes
+
+    expect((string)$body)->toEqual('{"name":"Sam","catchphrase":"Yeehaw!","url":"https:\/\/docs.saloon.dev"}');
+
+    // Now we'll customise the flags
+
+    $body->setJsonFlags(JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+
+    expect((string)$body)->toEqual('{"name":"Sam","catchphrase":"Yeehaw!","url":"https://docs.saloon.dev"}');
+
+    expect($body->getJsonFlags())->toEqual(JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+});
+
+test('the JsonBodyRepository uses the JSON_THROW_ON_ERROR default flag', function () {
+    $request = new HasJsonBodyRequest();
+    $body = $request->body();
+
+    expect($body->getJsonFlags())->toEqual(JSON_THROW_ON_ERROR);
+});
