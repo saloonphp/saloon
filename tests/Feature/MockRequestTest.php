@@ -8,15 +8,20 @@ use Saloon\Http\PendingRequest;
 use League\Flysystem\Filesystem;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Exceptions\FixtureException;
+use Saloon\Tests\Fixtures\Mocking\UserFixture;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
+use Saloon\Tests\Fixtures\Mocking\SafeUserFixture;
 use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Mocking\MissingNameFixture;
 use Saloon\Tests\Fixtures\Requests\AlwaysThrowRequest;
 use Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
 use Saloon\Tests\Fixtures\Requests\FileDownloadRequest;
+use Saloon\Tests\Fixtures\Mocking\BeforeSaveUserFixture;
 use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
 use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
@@ -540,4 +545,96 @@ test('a fixture can record the file data from a request that returns a file down
     $responseB = connector()->send($requestB, $mockClient);
 
     expect($responseB->body())->toEqual(file_get_contents('tests/Fixtures/Files/test.pdf'));
+});
+
+test('you can create a custom fixture class', function () {
+    $mockClient = new MockClient([
+        MockResponse::fixture(UserFixture::class),
+        new UserFixture,
+    ]);
+
+    $responseA = connector()->send(new UserRequest, $mockClient);
+
+    expect($responseA->isMocked())->toBeFalse();
+    expect($responseA->status())->toEqual(200);
+    expect($responseA->json())->toEqual([
+        'name' => 'Sammyjo20',
+        'actual_name' => 'Sam',
+        'twitter' => '@carre_sam',
+    ]);
+
+    $responseB = connector()->send(new UserRequest, $mockClient);
+
+    expect($responseB->isMocked())->toBeTrue();
+    expect($responseB->status())->toEqual(200);
+    expect($responseB->json())->toEqual([
+        'name' => 'Sammyjo20',
+        'actual_name' => 'Sam',
+        'twitter' => '@carre_sam',
+    ]);
+});
+
+test('it will throw an exception if the custom fixture class is missing a name', function () {
+    $mockClient = new MockClient([
+        new MissingNameFixture,
+    ]);
+
+    $this->expectException(FixtureException::class);
+    $this->expectExceptionMessage('The fixture must have a name');
+
+    connector()->send(new UserRequest, $mockClient);
+});
+
+test('you can hide sensitive json body parameters and headers before the fixture is stored', function () {
+    $mockClient = new MockClient([
+        new SafeUserFixture,
+        new SafeUserFixture,
+    ]);
+
+    $responseA = connector()->send(new UserRequest, $mockClient);
+    $responseB = connector()->send(new UserRequest, $mockClient);
+
+    expect($responseA->json())->toEqual([
+        'name' => 'Sammyjo20',
+        'actual_name' => 'Sam',
+        'twitter' => '@carre_sam',
+    ]);
+
+    expect($responseA->header('Server'))->toEqual('cloudflare');
+    expect($responseA->header('Cache-Control'))->toEqual('no-cache, private');
+
+    expect($responseA->isSimulated())->toBeFalse();
+    expect($responseB->isSimulated())->toBeTrue();
+
+    expect($responseB->json())->toEqual([
+        'name' => 'Sxxx',
+        'actual_name' => 'REDACTED',
+        'twitter' => '@saloonphp',
+    ]);
+
+    expect($responseB->header('Server'))->toEqual('secret');
+    expect($responseB->header('Cache-Control'))->toEqual('no-cache, private, yeehaw');
+
+    $fixtureData = json_decode(file_get_contents('tests/Fixtures/Saloon/Testing/user.json'), true, 512, JSON_THROW_ON_ERROR);
+
+    expect($fixtureData['headers']['Server'])->toEqual('secret');
+    expect($fixtureData['headers']['Cache-Control'])->toEqual('no-cache, private, yeehaw');
+    expect($fixtureData['data'])->toEqual(json_encode([
+        'name' => 'Sxxx',
+        'actual_name' => 'REDACTED',
+        'twitter' => '@saloonphp',
+    ], JSON_THROW_ON_ERROR));
+});
+
+test('you can define a custom redaction method for non-json body fixtures', function () {
+    $mockClient = new MockClient([
+        new BeforeSaveUserFixture,
+        new BeforeSaveUserFixture,
+    ]);
+
+    $responseA = connector()->send(new UserRequest, $mockClient);
+    $responseB = connector()->send(new UserRequest, $mockClient);
+
+    expect($responseA->status())->toEqual(200);
+    expect($responseB->status())->toEqual(222);
 });

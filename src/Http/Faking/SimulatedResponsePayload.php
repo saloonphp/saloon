@@ -69,9 +69,14 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
      * @param string $name
      * @return \Saloon\Http\Faking\Fixture
      * @throws \Saloon\Exceptions\DirectoryNotFoundException
+     * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      */
     public static function fixture(string $name): Fixture
     {
+        if (class_exists($name) && is_subclass_of($name, Fixture::class)) {
+            return new $name;
+        }
+
         return new Fixture($name);
     }
 
