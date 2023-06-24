@@ -137,6 +137,8 @@ class PendingRequest implements PendingRequestContract
         $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient();
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
 
+        // Todo for Sam: Change to the new middleware order and see what breaks 🤞
+
         // After we have defined each of our properties, we will run the various
         // methods that build up the PendingRequest. It's important that the
         // order remains the same.
