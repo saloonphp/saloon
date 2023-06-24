@@ -23,7 +23,7 @@ class MultipartValue
         public ?string $filename = null,
         public array   $headers = []
     ) {
-        if (! $this->value instanceof StreamInterface && ! is_resource($value) && ! is_string($value) && ! is_numeric($value)) {
+        if (! $value instanceof StreamInterface && ! is_resource($value) && ! is_string($value) && ! is_numeric($value)) {
             throw new InvalidArgumentException(sprintf('The value property must be either a %s, resource, string or numeric.', StreamInterface::class));
         }
     }
