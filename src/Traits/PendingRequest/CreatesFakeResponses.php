@@ -31,21 +31,12 @@ trait CreatesFakeResponses
             throw new PendingRequestException('Unable to create fake response because there is no fake response data.');
         }
 
+        // Let's create our response!
+
         $response = $fakeResponse->createPsrResponse(
             responseFactory: $this->factoryCollection->responseFactory,
             streamFactory: $this->factoryCollection->streamFactory,
         );
-
-        // Check if the FakeResponse throws an exception. If the request is
-        // asynchronous, then we should allow the promise handler to deal with the exception.
-
-        $exception = $fakeResponse->getException($this);
-
-        if ($exception instanceof Throwable && $this->isAsynchronous() === false) {
-            throw $exception;
-        }
-
-        // Let's create our response!
 
         /** @var class-string<\Saloon\Contracts\Response> $responseClass */
         $responseClass = $this->getResponseClass();
@@ -54,39 +45,29 @@ trait CreatesFakeResponses
             psrResponse: $response,
             pendingRequest: $this,
             psrRequest: $this->createPsrRequest(),
-            senderException: $exception
         );
 
-        // When the FakeResponse is specifically a MockResponse then
-        // we will record the response, and we'll set the "isMocked" property
-        // on the response.
+        $response->setFakeResponse($fakeResponse);
+
+        // When the FakeResponse is specifically a MockResponse then we will
+        // record the response, and we'll set the "isMocked" property on
+        // the response.
 
         if ($fakeResponse instanceof MockResponse) {
             $this->getMockClient()?->recordResponse($response);
             $response->setMocked(true);
         }
 
-        // We'll also set the FakeResponse on the response
-        // for people to access it if they need to.
+        if ($this->isAsynchronous()) {
+            // When mocking asynchronous requests we need to wrap the response
+            // in FulfilledPromise or RejectedPromise depending on if the
+            // response has an exception.
 
-        $response->setFakeResponse($fakeResponse);
+            $exception ??= $response->toException();
 
-        // We'll return the synchronous response directly
-
-        if ($this->delay()->isNotEmpty()) {
-            usleep($this->delay()->get() * 1000);
+            return is_null($exception) ? new FulfilledPromise($response) : new RejectedPromise($exception);
         }
 
-        if ($this->isAsynchronous() === false) {
-            return $response;
-        }
-
-        // When mocking asynchronous requests we need to wrap the response
-        // in FulfilledPromise or RejectedPromise depending on if the
-        // response has an exception.
-
-        $exception ??= $response->toException();
-
-        return $exception instanceof Throwable ? new RejectedPromise($exception) : new FulfilledPromise($response);
+        return $response;
     }
 }

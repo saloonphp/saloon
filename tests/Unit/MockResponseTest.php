@@ -18,9 +18,9 @@ test('pulling a response from the sequence will return the correct response', fu
 
     $mockClient = new MockClient([$responseA, $responseB, $responseC]);
 
-    expect($mockClient->getNextFromSequence()->getStatus())->toEqual($responseA->getStatus());
-    expect($mockClient->getNextFromSequence()->getStatus())->toEqual($responseB->getStatus());
-    expect($mockClient->getNextFromSequence()->getStatus())->toEqual($responseC->getStatus());
+    expect($mockClient->getNextFromSequence()->getStatus())->toEqual($responseA->status());
+    expect($mockClient->getNextFromSequence()->getStatus())->toEqual($responseB->status());
+    expect($mockClient->getNextFromSequence()->getStatus())->toEqual($responseC->status());
     expect($mockClient->isEmpty())->toBeTrue();
 });
 
@@ -28,7 +28,7 @@ test('a mock response can have raw body data', function () {
     $response = MockResponse::make('xml', 200, ['Content-Type' => 'application/json']);
 
     expect($response->headers()->all())->toEqual(['Content-Type' => 'application/json']);
-    expect($response->getStatus())->toEqual(200);
+    expect($response->status())->toEqual(200);
     expect($response->body())->toBeInstanceOf(StringBodyRepository::class);
     expect($response->body()->all())->toEqual('xml');
 });

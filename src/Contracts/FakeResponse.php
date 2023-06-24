@@ -18,20 +18,11 @@ use Psr\Http\Message\ResponseFactoryInterface;
 interface FakeResponse
 {
     /**
-     * Create a new mock response from a fixture
-     *
-     * @param string $name
-     * @return \Saloon\Http\Faking\Fixture
-     * @throws \Saloon\Exceptions\DirectoryNotFoundException
-     */
-    public static function fixture(string $name): Fixture;
-
-    /**
      * Get the status from the responses
      *
      * @return int
      */
-    public function getStatus(): int;
+    public function status(): int;
 
     /**
      * Get the headers
@@ -48,34 +39,13 @@ interface FakeResponse
     public function body(): BodyRepository;
 
     /**
-     * Get the formatted body on the response.
+     * Create a new mock response from a fixture
      *
-     * @return string
+     * @param string $name
+     * @return \Saloon\Http\Faking\Fixture
+     * @throws \Saloon\Exceptions\DirectoryNotFoundException
      */
-    public function getBodyAsString(): string;
-
-    /**
-     * Throw an exception on the request.
-     *
-     * @param \Closure|\Throwable $value
-     * @return $this
-     */
-    public function throw(Closure|Throwable $value): static;
-
-    /**
-     * Checks if the response throws an exception.
-     *
-     * @return bool
-     */
-    public function throwsException(): bool;
-
-    /**
-     * Invoke the exception.
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return \Throwable|null
-     */
-    public function getException(PendingRequest $pendingRequest): ?Throwable;
+    public static function fixture(string $name): Fixture;
 
     /**
      * Get the response as a ResponseInterface

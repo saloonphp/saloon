@@ -138,13 +138,13 @@ class PendingRequest implements PendingRequestContract
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
 
         // After we have defined each of our properties, we will run the various
-        // methods that build up the PendingRequest. It's important that
-        // the order remains the same.
+        // methods that build up the PendingRequest. It's important that the
+        // order remains the same.
 
         // Plugins should be booted first, then we will merge the properties
         // from the connector and request, then authenticate the request
-        // followed by finally running the "boot" method with an
-        // almost complete PendingRequest.
+        // followed by finally running the "boot" method with an almost
+        // complete PendingRequest.
 
         $this->bootPlugins()
             ->mergeRequestProperties()
@@ -163,7 +163,8 @@ class PendingRequest implements PendingRequestContract
 
         $this->executeRequestPipeline();
 
-        // Finally, we'll mark our PendingRequest as ready.
+        // Finally, we'll mark our PendingRequest as ready. This makes some
+        // deferred processes like running authenticators run instantly.
 
         $this->ready = true;
     }

@@ -44,13 +44,6 @@ class FakeResponse implements FakeResponseContract
     protected BodyRepository $body;
 
     /**
-     * Exception Closure
-     *
-     * @var \Closure|null
-     */
-    protected ?Closure $responseException = null;
-
-    /**
      * Create a new mock response
      *
      * @param array<string, mixed>|string $body
@@ -65,15 +58,13 @@ class FakeResponse implements FakeResponseContract
     }
 
     /**
-     * Create a new mock response from a fixture
+     * Get the response body
      *
-     * @param string $name
-     * @return \Saloon\Http\Faking\Fixture
-     * @throws \Saloon\Exceptions\DirectoryNotFoundException
+     * @return \Saloon\Contracts\Body\BodyRepository
      */
-    public static function fixture(string $name): Fixture
+    public function body(): BodyRepository
     {
-        return new Fixture($name);
+        return $this->body;
     }
 
     /**
@@ -81,7 +72,7 @@ class FakeResponse implements FakeResponseContract
      *
      * @return int
      */
-    public function getStatus(): int
+    public function status(): int
     {
         return $this->status;
     }
@@ -97,63 +88,15 @@ class FakeResponse implements FakeResponseContract
     }
 
     /**
-     * Get the response body
+     * Create a new mock response from a fixture
      *
-     * @return \Saloon\Contracts\Body\BodyRepository
+     * @param string $name
+     * @return \Saloon\Http\Faking\Fixture
+     * @throws \Saloon\Exceptions\DirectoryNotFoundException|\Saloon\Exceptions\UnableToCreateDirectoryException
      */
-    public function body(): BodyRepository
+    public static function fixture(string $name): Fixture
     {
-        return $this->body;
-    }
-
-    /**
-     * Get the formatted body on the response.
-     *
-     * @return string
-     */
-    public function getBodyAsString(): string
-    {
-        return (string)$this->body;
-    }
-
-    /**
-     * Throw an exception on the request.
-     *
-     * @param \Closure|\Throwable $value
-     * @return $this
-     */
-    public function throw(Closure|Throwable $value): static
-    {
-        $closure = $value instanceof Throwable ? static fn () => $value : $value;
-
-        $this->responseException = $closure;
-
-        return $this;
-    }
-
-    /**
-     * Checks if the response throws an exception.
-     *
-     * @return bool
-     */
-    public function throwsException(): bool
-    {
-        return $this->responseException instanceof Closure;
-    }
-
-    /**
-     * Invoke the exception.
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return \Throwable|null
-     */
-    public function getException(PendingRequest $pendingRequest): ?Throwable
-    {
-        if (! $this->throwsException()) {
-            return null;
-        }
-
-        return call_user_func($this->responseException, $pendingRequest);
+        return new Fixture($name);
     }
 
     /**
@@ -165,12 +108,12 @@ class FakeResponse implements FakeResponseContract
      */
     public function createPsrResponse(ResponseFactoryInterface $responseFactory, StreamFactoryInterface $streamFactory): ResponseInterface
     {
-        $response = $responseFactory->createResponse($this->getStatus());
+        $response = $responseFactory->createResponse($this->status());
 
         foreach ($this->headers()->all() as $headerName => $headerValue) {
             $response = $response->withHeader($headerName, $headerValue);
         }
 
-        return $response->withBody($streamFactory->createStream($this->getBodyAsString()));
+        return $response->withBody($this->body()->toStream($streamFactory));
     }
 }

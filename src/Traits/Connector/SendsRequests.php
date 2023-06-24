@@ -35,11 +35,11 @@ trait SendsRequests
     {
         $pendingRequest = $this->createPendingRequest($request, $mockClient);
 
-        $sender = $this->sender();
-
-        $response = $pendingRequest->hasFakeResponse()
-            ? $pendingRequest->createFakeResponse()
-            : $sender->send($pendingRequest);
+        if ($pendingRequest->hasFakeResponse()) {
+            $response = $pendingRequest->createFakeResponse();
+        } else {
+            $response = $this->sender()->send($pendingRequest);
+        }
 
         return $pendingRequest->executeResponsePipeline($response);
     }
@@ -55,7 +55,7 @@ trait SendsRequests
     {
         $sender = $this->sender();
 
-        // We'll wrap the following logic into our own Promise which means we won't
+        // We'll wrap the following logic in our own Promise which means we won't
         // build up our PendingRequest until the promise is actually being sent
         // this is great because our middleware will only run right before
         // the request is sent.
@@ -67,12 +67,13 @@ trait SendsRequests
             // If it does, then we will create the fake response. Otherwise,
             // we'll send the request.
 
-            $requestPromise = $pendingRequest->hasFakeResponse()
-                ? $pendingRequest->createFakeResponse()
-                : $sender->sendAsync($pendingRequest);
+            if ($pendingRequest->hasFakeResponse()) {
+                $requestPromise = $pendingRequest->createFakeResponse();
+            } else {
+                $requestPromise = $sender->sendAsync($pendingRequest);
+            }
 
-            $requestPromise
-                ->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
+            $requestPromise->then(fn(Response $response) => $pendingRequest->executeResponsePipeline($response));
 
             // We'll resolve the promise's value with another promise.
             // We will use promise chaining as Guzzle's will fulfill
