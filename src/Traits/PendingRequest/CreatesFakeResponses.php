@@ -31,6 +31,15 @@ trait CreatesFakeResponses
             throw new PendingRequestException('Unable to create fake response because there is no fake response data.');
         }
 
+        // Check if the FakeResponse throws an exception. If the request is
+        // asynchronous, then we should allow the promise handler to deal with the exception.
+
+        $exception = $fakeResponse->getException($this);
+
+        if ($exception instanceof Throwable && $this->isAsynchronous() === false) {
+            throw $exception;
+        }
+
         // Let's create our response!
 
         $response = $fakeResponse->createPsrResponse(
@@ -45,6 +54,7 @@ trait CreatesFakeResponses
             psrResponse: $response,
             pendingRequest: $this,
             psrRequest: $this->createPsrRequest(),
+            senderException: $exception,
         );
 
         $response->setFakeResponse($fakeResponse);

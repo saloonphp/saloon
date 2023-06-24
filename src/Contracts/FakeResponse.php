@@ -37,6 +37,29 @@ interface FakeResponse
     public function body(): BodyRepository;
 
     /**
+     * Throw an exception on the request.
+     *
+     * @param \Closure|\Throwable $value
+     * @return $this
+     */
+    public function throw(Closure|Throwable $value): static;
+
+    /**
+     * Checks if the response throws an exception.
+     *
+     * @return bool
+     */
+    public function throwsException(): bool;
+
+    /**
+     * Get the exception
+     *
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return \Throwable|null
+     */
+    public function getException(PendingRequest $pendingRequest): ?Throwable;
+
+    /**
      * Create a new mock response from a fixture
      *
      * @param string $name

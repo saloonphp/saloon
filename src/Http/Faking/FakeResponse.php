@@ -41,6 +41,13 @@ class FakeResponse implements FakeResponseContract
     protected BodyRepository $body;
 
     /**
+     * Exception Closure
+     *
+     * @var \Closure|null
+     */
+    protected ?Closure $responseException = null;
+
+    /**
      * Create a new mock response
      *
      * @param array<string, mixed>|string $body
@@ -82,6 +89,46 @@ class FakeResponse implements FakeResponseContract
     public function headers(): ArrayStoreContract
     {
         return $this->headers;
+    }
+
+    /**
+     * Throw an exception on the request.
+     *
+     * @param \Closure|\Throwable $value
+     * @return $this
+     */
+    public function throw(Closure|Throwable $value): static
+    {
+        $closure = $value instanceof Throwable ? static fn () => $value : $value;
+
+        $this->responseException = $closure;
+
+        return $this;
+    }
+
+    /**
+     * Checks if the response throws an exception.
+     *
+     * @return bool
+     */
+    public function throwsException(): bool
+    {
+        return $this->responseException instanceof Closure;
+    }
+
+    /**
+     * Invoke the exception.
+     *
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return \Throwable|null
+     */
+    public function getException(PendingRequest $pendingRequest): ?Throwable
+    {
+        if (! $this->throwsException()) {
+            return null;
+        }
+
+        return call_user_func($this->responseException, $pendingRequest);
     }
 
     /**
