@@ -9,8 +9,10 @@ use League\Flysystem\Filesystem;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\FixtureException;
+use Saloon\Tests\Fixtures\Mocking\SuperheroFixture;
 use Saloon\Tests\Fixtures\Mocking\UserFixture;
 use Saloon\Exceptions\Request\RequestException;
+use Saloon\Tests\Fixtures\Requests\PageGetSuperHeroesRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
@@ -624,6 +626,19 @@ test('you can hide sensitive json body parameters and headers before the fixture
         'actual_name' => 'REDACTED',
         'twitter' => '@saloonphp',
     ], JSON_THROW_ON_ERROR));
+});
+
+test('the fixture swap tool works on multiple attempts and recursively', function () {
+    $mockClient = new MockClient([
+        new SuperheroFixture,
+        new SuperheroFixture,
+    ]);
+
+    $responseA = connector()->send(new PageGetSuperHeroesRequest, $mockClient);
+    $responseB = connector()->send(new PageGetSuperHeroesRequest, $mockClient);
+
+    expect($responseA->json()['data'])->each->toHaveKey('publisher', 'DC Comics');
+    expect($responseB->json()['data'])->each->toHaveKey('publisher', 'REDACTED');
 });
 
 test('you can define a custom redaction method for non-json body fixtures', function () {
