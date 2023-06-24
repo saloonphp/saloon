@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Faking;
 
-use Closure;
-use Throwable;
 use Saloon\Traits\Makeable;
 use Saloon\Repositories\ArrayStore;
-use Saloon\Contracts\PendingRequest;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 use Psr\Http\Message\StreamFactoryInterface;

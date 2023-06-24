@@ -73,7 +73,7 @@ trait SendsRequests
                 $requestPromise = $sender->sendAsync($pendingRequest);
             }
 
-            $requestPromise->then(fn(Response $response) => $pendingRequest->executeResponsePipeline($response));
+            $requestPromise->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
 
             // We'll resolve the promise's value with another promise.
             // We will use promise chaining as Guzzle's will fulfill
