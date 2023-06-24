@@ -549,7 +549,7 @@ test('a fixture can record the file data from a request that returns a file down
 
 test('you can create a custom fixture class', function () {
     $mockClient = new MockClient([
-        MockResponse::fixture(UserFixture::class),
+        new UserFixture,
         new UserFixture,
     ]);
 

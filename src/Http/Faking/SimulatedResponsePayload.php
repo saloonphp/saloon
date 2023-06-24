@@ -73,10 +73,6 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
      */
     public static function fixture(string $name): Fixture
     {
-        if (class_exists($name) && is_subclass_of($name, Fixture::class)) {
-            return new $name;
-        }
-
         return new Fixture($name);
     }
 
