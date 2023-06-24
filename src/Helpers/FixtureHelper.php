@@ -12,7 +12,7 @@ class FixtureHelper
      * @param array<string, mixed> $source
      * @param array<string, mixed> $rules
      * @param bool $caseSensitiveKeys
-     * @return array
+     * @return array<string, mixed>
      */
     public static function recursivelyReplaceAttributes(array $source, array $rules, bool $caseSensitiveKeys = true): array
     {

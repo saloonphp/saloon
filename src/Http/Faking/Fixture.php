@@ -172,7 +172,7 @@ class Fixture
     /**
      * Swap any sensitive headers
      *
-     * @return array
+     * @return array<string, string|callable>
      */
     protected function defineSensitiveHeaders(): array
     {
@@ -182,7 +182,7 @@ class Fixture
     /**
      * Swap any sensitive JSON parameters
      *
-     * @return array
+     * @return array<string, string|callable>
      */
     protected function defineSensitiveJsonParameters(): array
     {
