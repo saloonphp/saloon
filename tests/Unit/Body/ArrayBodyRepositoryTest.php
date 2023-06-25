@@ -8,7 +8,7 @@ use Saloon\Repositories\Body\ArrayBodyRepository;
 test('the store is empty by default', function () {
     $body = new ArrayBodyRepository();
 
-    expect($body->all())->toEqual([]);
+    expect($body->get())->toEqual([]);
 });
 
 test('the store can have an array provided', function () {
@@ -17,7 +17,7 @@ test('the store can have an array provided', function () {
         'sidekick' => 'Mantas',
     ]);
 
-    expect($body->all())->toEqual([
+    expect($body->get())->toEqual([
         'name' => 'Sam',
         'sidekick' => 'Mantas',
     ]);
@@ -28,7 +28,7 @@ test('you can set it', function () {
 
     $body->set(['name' => 'Sam']);
 
-    expect($body->all())->toEqual(['name' => 'Sam']);
+    expect($body->get())->toEqual(['name' => 'Sam']);
 });
 
 test('it will throw an exception if you set a non-array', function () {
@@ -44,7 +44,7 @@ test('you can add an item', function () {
 
     $body->add('name', 'Sam');
 
-    expect($body->all())->toEqual(['name' => 'Sam']);
+    expect($body->get())->toEqual(['name' => 'Sam']);
 });
 
 test('you can add an item with an integer key', function () {
@@ -52,7 +52,7 @@ test('you can add an item with an integer key', function () {
 
     $body->add(1, 'Sam');
 
-    expect($body->all())->toEqual([1 => 'Sam']);
+    expect($body->get())->toEqual([1 => 'Sam']);
 });
 
 test('you can add an item without a key', function () {
@@ -60,7 +60,7 @@ test('you can add an item without a key', function () {
 
     $body->add(null, 'Sam');
 
-    expect($body->all())->toEqual(['Sam']);
+    expect($body->get())->toEqual(['Sam']);
 });
 
 test('you can conditionally add items to the array store', function () {
@@ -71,7 +71,7 @@ test('you can conditionally add items to the array store', function () {
     $body->when(true, fn (ArrayBodyRepository $body) => $body->add('sidekick', 'Mantas'));
     $body->when(false, fn (ArrayBodyRepository $body) => $body->add('sidekick', 'Teo'));
 
-    expect($body->all())->toEqual(['name' => 'Gareth', 'sidekick' => 'Mantas']);
+    expect($body->get())->toEqual(['name' => 'Gareth', 'sidekick' => 'Mantas']);
 });
 
 test('you can delete an item', function () {
@@ -80,7 +80,7 @@ test('you can delete an item', function () {
     $body->add('name', 'Sam');
     $body->remove('name');
 
-    expect($body->all())->toEqual([]);
+    expect($body->get())->toEqual([]);
 });
 
 test('you can delete an item with an integer key', function () {
@@ -89,7 +89,7 @@ test('you can delete an item with an integer key', function () {
     $body->add(1, 'Sam');
     $body->remove(1);
 
-    expect($body->all())->toEqual([]);
+    expect($body->get())->toEqual([]);
 });
 
 test('you can get an item', function () {
@@ -118,7 +118,7 @@ test('you can get all items', function () {
     $body->add('name', 'Sam');
     $body->add('superhero', 'Iron Man');
 
-    expect($body->all())->toEqual(['name' => 'Sam', 'superhero' => 'Iron Man']);
+    expect($body->get())->toEqual(['name' => 'Sam', 'superhero' => 'Iron Man']);
 });
 
 test('you can merge items together into the body repository', function () {
@@ -131,7 +131,7 @@ test('you can merge items together into the body repository', function () {
 
     $body->merge(['sidekick' => 'Gareth'], ['superhero' => 'Black Widow']);
 
-    expect($body->all())->toEqual(['name' => 'Sam', 'sidekick' => 'Gareth', 'superhero' => 'Black Widow']);
+    expect($body->get())->toEqual(['name' => 'Sam', 'sidekick' => 'Gareth', 'superhero' => 'Black Widow']);
 });
 
 test('you can check if the store is empty or not', function () {

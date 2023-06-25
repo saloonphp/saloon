@@ -131,7 +131,7 @@ test('it will output the request payload if there is a body sent', function ($re
     if ($request instanceof HasMultipartBodyRequest) {
         expect($debuggedRequests[0]['request_payload'])->toBeInstanceOf(MultipartBodyRepository::class);
         expect($debuggedRequests[0]['request_payload']->getBoundary())->toEqual($request->body()->getBoundary());
-        expect($debuggedRequests[0]['request_payload']->all())->toEqual($request->body()->all());
+        expect($debuggedRequests[0]['request_payload']->get())->toEqual($request->body()->get());
     } else {
         expect($debuggedRequests[0]['request_payload'])->toEqual($request->body());
     }

@@ -90,7 +90,7 @@ class ArrayBodyRepository implements BodyRepository, MergeableBody
     public function get(string|int|null $key = null, mixed $default = null): mixed
     {
         if (is_null($key)) {
-            return $this->all();
+            return $this->data;
         }
 
         return $this->data[$key] ?? $default;
@@ -107,16 +107,6 @@ class ArrayBodyRepository implements BodyRepository, MergeableBody
         unset($this->data[$key]);
 
         return $this;
-    }
-
-    /**
-     * Retrieve all in the repository
-     *
-     * @return array<array-key, mixed>
-     */
-    public function all(): array
-    {
-        return $this->data;
     }
 
     /**

@@ -54,7 +54,7 @@ class MergeBody implements RequestMiddleware
             // We'll clone the request body into the connector body so any properties on the request
             // body will take priority if they are using a keyed array.
 
-            $body = $repository->merge($requestBody->all());
+            $body = $repository->merge($requestBody->get());
         }
 
         // Now we'll check if the body is a MultipartBodyRepository. If it is, then we must

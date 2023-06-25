@@ -30,7 +30,7 @@ test('a mock response can have raw body data', function () {
     expect($response->headers()->all())->toEqual(['Content-Type' => 'application/json']);
     expect($response->status())->toEqual(200);
     expect($response->body())->toBeInstanceOf(StringBodyRepository::class);
-    expect($response->body()->all())->toEqual('xml');
+    expect($response->body()->get())->toEqual('xml');
 });
 
 test('a response can have a method added to it', function () {

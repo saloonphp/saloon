@@ -7,14 +7,14 @@ use Saloon\Repositories\Body\StringBodyRepository;
 test('the store is empty by default', function () {
     $body = new StringBodyRepository();
 
-    expect($body->all())->toBeNull();
+    expect($body->get())->toBeNull();
 });
 
 
 test('the store can have a default string provided', function () {
     $body = new StringBodyRepository('Yeehaw!');
 
-    expect($body->all())->toEqual('Yeehaw!');
+    expect($body->get())->toEqual('Yeehaw!');
 });
 
 test('you can set it', function () {
@@ -22,7 +22,7 @@ test('you can set it', function () {
 
     $body->set('Yeehaw!');
 
-    expect($body->all())->toEqual('Yeehaw!');
+    expect($body->get())->toEqual('Yeehaw!');
 });
 
 test('you can conditionally set on the store', function () {
@@ -31,7 +31,7 @@ test('you can conditionally set on the store', function () {
     $body->when(true, fn (StringBodyRepository $body) => $body->set('Gareth'));
     $body->when(false, fn (StringBodyRepository $body) => $body->set('Sam'));
 
-    expect($body->all())->toEqual('Gareth');
+    expect($body->get())->toEqual('Gareth');
 });
 
 test('you can check if the store is empty or not', function () {

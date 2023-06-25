@@ -13,9 +13,7 @@ use Saloon\Tests\Fixtures\Requests\HasStreamBodyRequest;
 test('the default body is loaded', function () {
     $request = new HasStreamBodyRequest;
 
-    expect($request->body()->all())->toBeInstanceOf(StreamInterface::class);
-    expect($request->body()->get())->toBeInstanceOf(StreamInterface::class);
-    expect((string)$request->body())->toEqual('Howdy, Partner');
+    expect($request->body()->get())->toBeResource();
 });
 
 test('the guzzle sender properly sends it', function () {

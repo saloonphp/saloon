@@ -13,7 +13,7 @@ use Saloon\Tests\Fixtures\Requests\HasFormBodyRequest;
 test('the default body is loaded with the content type header', function () {
     $request = new HasFormBodyRequest();
 
-    expect($request->body()->all())->toEqual([
+    expect($request->body()->get())->toEqual([
         'name' => 'Sam',
         'catchphrase' => 'Yeehaw!',
     ]);

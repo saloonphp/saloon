@@ -49,7 +49,7 @@ class StringBodyRepository implements BodyRepository, Stringable
      *
      * @return string|null
      */
-    public function all(): ?string
+    public function get(): ?string
     {
         return $this->data;
     }
@@ -81,6 +81,6 @@ class StringBodyRepository implements BodyRepository, Stringable
      */
     public function __toString(): string
     {
-        return $this->all() ?? '';
+        return $this->get() ?? '';
     }
 }

@@ -13,7 +13,7 @@ use Saloon\Tests\Fixtures\Requests\HasXmlBodyRequest;
 test('the default body is loaded with the content type header', function () {
     $request = new HasXmlBodyRequest();
 
-    expect($request->body()->all())->toEqual('<p>Howdy</p>');
+    expect($request->body()->get())->toEqual('<p>Howdy</p>');
 
     $connector = new TestConnector;
     $pendingRequest = $connector->createPendingRequest($request);

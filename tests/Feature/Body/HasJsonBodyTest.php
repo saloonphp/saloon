@@ -17,7 +17,7 @@ use Saloon\Tests\Fixtures\Requests\HasMultipartBodyRequest;
 test('the default body is loaded with the content type header', function () {
     $request = new HasJsonBodyRequest();
 
-    expect($request->body()->all())->toEqual([
+    expect($request->body()->get())->toEqual([
         'name' => 'Sam',
         'catchphrase' => 'Yeehaw!',
     ]);
@@ -43,12 +43,12 @@ test('when both the connector and the request have the same request bodies they 
     $connector = new HasJsonBodyConnector;
     $request = new HasJsonBodyRequest;
 
-    expect($connector->body()->all())->toEqual([
+    expect($connector->body()->get())->toEqual([
         'name' => 'Gareth',
         'drink' => 'Moonshine',
     ]);
 
-    expect($request->body()->all())->toEqual([
+    expect($request->body()->get())->toEqual([
         'name' => 'Sam',
         'catchphrase' => 'Yeehaw!',
     ]);
@@ -60,7 +60,7 @@ test('when both the connector and the request have the same request bodies they 
 
     expect($pendingRequestBody)->toBeInstanceOf(JsonBodyRepository::class);
 
-    expect($pendingRequestBody->all())->toEqual([
+    expect($pendingRequestBody->get())->toEqual([
         'drink' => 'Moonshine',
         'name' => 'Sam',
         'catchphrase' => 'Yeehaw!',

@@ -53,7 +53,7 @@ class StreamBodyRepository implements BodyRepository
      *
      * @return StreamInterface|resource|null
      */
-    public function all(): mixed
+    public function get(): mixed
     {
         return $this->stream;
     }

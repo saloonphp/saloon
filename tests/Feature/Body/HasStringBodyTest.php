@@ -12,7 +12,7 @@ use Saloon\Tests\Fixtures\Requests\HasStringBodyRequest;
 test('the default body is loaded', function () {
     $request = new HasStringBodyRequest();
 
-    expect($request->body()->all())->toEqual('name: Sam');
+    expect($request->body()->get())->toEqual('name: Sam');
 });
 
 test('the guzzle sender properly sends it', function () {
