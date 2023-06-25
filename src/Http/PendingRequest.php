@@ -110,13 +110,6 @@ class PendingRequest implements PendingRequestContract
     protected bool $asynchronous = false;
 
     /**
-     * Determines if the PendingRequest is ready to be sent
-     *
-     * @var bool
-     */
-    protected bool $ready = false;
-
-    /**
      * Build up the request payload.
      *
      * @param \Saloon\Contracts\Connector $connector
@@ -139,36 +132,55 @@ class PendingRequest implements PendingRequestContract
 
         // Todo for Sam: Change to the new middleware order and see what breaks 🤞
 
-        // After we have defined each of our properties, we will run the various
-        // methods that build up the PendingRequest. It's important that the
-        // order remains the same.
+        $middleware = $this->middleware();
 
-        // Plugins should be booted first, then we will merge the properties
-        // from the connector and request, then authenticate the request
-        // followed by finally running the "boot" method with an almost
-        // complete PendingRequest.
+        $middleware->merge(Config::middleware());
 
-        $this->bootPlugins()
+        // New Middleware Order:
+        // 1. Global Middleware (Laravel)
+        // 2. Plugin Middleware (Rate Limiter)
+        // 3. Authentication
+        // 4. Mock Response
+        // 5. User Middleware
+        // 6. Debugging/Event/Delay Middleware
+
+        // Delay should always be at the bottom in case the user adds their own
+        // delay from inside of middleware.
+
+        // Todo: Move everything else into middleware
+
+        $this
+            ->bootPlugins()
             ->mergeRequestProperties()
             ->mergeBody()
-            ->mergeDelay()
-            ->bootConnectorAndRequest();
+            ->mergeDelay();
 
-        // Now we will register the default middleware. The user's defined
-        // middleware will come first, and then we will process the
-        // default middleware.
+        // Now we'll queue te delay middleware and authenticator middleware
 
-        $this->registerDefaultMiddleware();
+        $middleware
+            ->onRequest(new AuthenticateRequest, false, 'authenticateRequest')
+            ->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
+
+        // Next, we'll merge in the connector/request middleware
+
+        $middleware
+            ->merge($connector->middleware())
+            ->merge($request->middleware());
+
+        // Now we'll boot the connector and request which may add more middleware
+
+        $this->bootConnectorAndRequest();
+
+        // Now we will register the last middleware. This is middleware that will
+        // always run at the end no matter where it is placed in the chain. This
+        // is great for things like debugging and events.
+
+        $this->registerLastMiddleware();
 
         // Next, we will execute the request middleware pipeline which will
         // process any middleware added on the connector or the request.
 
         $this->executeRequestPipeline();
-
-        // Finally, we'll mark our PendingRequest as ready. This makes some
-        // deferred processes like running authenticators run instantly.
-
-        $this->ready = true;
     }
 
     /**
@@ -220,10 +232,6 @@ class PendingRequest implements PendingRequestContract
             $connector->config()->all(),
             $request->config()->all()
         );
-
-        $this->middleware()
-            ->merge($connector->middleware())
-            ->merge($request->middleware());
 
         return $this;
     }
@@ -321,31 +329,15 @@ class PendingRequest implements PendingRequestContract
      *
      * @return $this
      */
-    protected function registerDefaultMiddleware(): static
+    protected function registerLastMiddleware(): static
     {
-        // We'll merge in any global middleware here. These should run after
-        // the user's middleware.
-
-        $middleware = $this->middleware()->merge(Config::middleware());
-
-        // We're going to register the internal middleware that should be run before
-        // a request is sent. This order should remain exactly the same.
-
-        $middleware->onRequest(new AuthenticateRequest, false, 'authenticateRequest');
-
-        // Next we will run the MockClient and determine if we should send a real
-        // request or not. Keep DetermineMockResponse at the bottom so other
-        // middleware can set the MockClient before we run the MockResponse.
-
-        $middleware->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
-
-        // Next, we'll invoke any delays that have been set on the PendingRequest
-
-        $middleware->onRequest(new DelayMiddleware, false, 'delayMiddleware');
+        $middleware = $this->middleware();
 
         // Finally, we'll register the debugging middleware. This should always
         // stay at the bottom of the middleware chain, so we output the very
         // latest PendingRequest/Response
+
+        $middleware->onRequest(new DelayMiddleware, false, 'delayMiddleware');
 
         $middleware->onRequest(new DebugRequest, false, 'debugRequest');
 
@@ -567,9 +559,7 @@ class PendingRequest implements PendingRequestContract
         // will allow us to do this. With future versions of Saloon we will
         // likely remove this method.
 
-        if ($this->ready === true) {
-            $this->authenticator->set($this);
-        }
+        $this->authenticator->set($this);
 
         return $this;
     }
