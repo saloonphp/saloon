@@ -25,7 +25,7 @@ class DetermineMockResponse implements RequestMiddleware
             return $pendingRequest;
         }
 
-        if ($pendingRequest->hasSimulatedResponsePayload()) {
+        if ($pendingRequest->hasFakeResponse()) {
             return $pendingRequest;
         }
 
@@ -40,7 +40,7 @@ class DetermineMockResponse implements RequestMiddleware
 
         // If the mock response is a valid instance, we will return it.
         // The middleware pipeline will recognise this and will set
-        // it as the "SimulatedResponse" on the request.
+        // it as the "FakeResponse" on the request.
 
         if ($mockResponse instanceof MockResponse) {
             return $mockResponse;

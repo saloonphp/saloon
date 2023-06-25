@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts\Body;
 
-use Stringable;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 
-interface BodyRepository extends Stringable
+interface BodyRepository
 {
     /**
-     * Set a value inside the repository
+     * Set the raw data in the repository
      *
      * @param mixed $value
      * @return $this
@@ -17,11 +18,11 @@ interface BodyRepository extends Stringable
     public function set(mixed $value): static;
 
     /**
-     * Retrieve all in the repository
+     * Retrieve the raw data in the repository
      *
      * @return mixed
      */
-    public function all(): mixed;
+    public function get(): mixed;
 
     /**
      * Determine if the repository is empty
@@ -38,9 +39,10 @@ interface BodyRepository extends Stringable
     public function isNotEmpty(): bool;
 
     /**
-     * Determine if the body can be merged
+     * Convert the body repository into a stream
      *
-     * @return bool
+     * @param StreamFactoryInterface $streamFactory
+     * @return StreamInterface
      */
-    public function isMergeable(): bool;
+    public function toStream(StreamFactoryInterface $streamFactory): StreamInterface;
 }

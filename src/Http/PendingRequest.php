@@ -14,19 +14,25 @@ use Saloon\Contracts\MockClient;
 use Saloon\Helpers\PluginHelper;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
-use Saloon\Contracts\Body\HasBody;
+use Psr\Http\Message\UriInterface;
+use Saloon\Contracts\FakeResponse;
+use Saloon\Data\FactoryCollection;
 use Saloon\Contracts\Authenticator;
 use Saloon\Helpers\ReflectionHelper;
+use Saloon\Http\Middleware\MergeBody;
+use Psr\Http\Message\RequestInterface;
+use Saloon\Http\Middleware\MergeDelay;
 use Saloon\Http\Middleware\DebugRequest;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\Middleware\DebugResponse;
+use Saloon\Http\Middleware\DelayMiddleware;
 use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Contracts\SimulatedResponsePayload;
-use Saloon\Exceptions\PendingRequestException;
 use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Contracts\Response as ResponseContract;
+use Saloon\Http\Middleware\MergeRequestProperties;
 use Saloon\Exceptions\InvalidResponseClassException;
+use Saloon\Traits\PendingRequest\CreatesFakeResponses;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
@@ -34,15 +40,9 @@ class PendingRequest implements PendingRequestContract
 {
     use AuthenticatesRequests;
     use HasRequestProperties;
+    use CreatesFakeResponses;
     use Conditionable;
     use HasMockClient;
-
-    /**
-     * The request used by the instance.
-     *
-     * @var \Saloon\Contracts\Request
-     */
-    protected Request $request;
 
     /**
      * The connector making the request.
@@ -52,11 +52,11 @@ class PendingRequest implements PendingRequestContract
     protected Connector $connector;
 
     /**
-     * The URL the request will be made to.
+     * The request used by the instance.
      *
-     * @var string
+     * @var \Saloon\Contracts\Request
      */
-    protected string $url;
+    protected Request $request;
 
     /**
      * The method the request will use.
@@ -64,6 +64,13 @@ class PendingRequest implements PendingRequestContract
      * @var \Saloon\Enums\Method
      */
     protected Method $method;
+
+    /**
+     * The URL the request will be made to.
+     *
+     * @var string
+     */
+    protected string $url;
 
     /**
      * The class used for responses.
@@ -82,9 +89,9 @@ class PendingRequest implements PendingRequestContract
     /**
      * The simulated response.
      *
-     * @var \Saloon\Contracts\SimulatedResponsePayload|null
+     * @var \Saloon\Contracts\FakeResponse|null
      */
-    protected ?SimulatedResponsePayload $simulatedResponsePayload = null;
+    protected ?FakeResponse $fakeResponseData = null;
 
     /**
      * Determine if the pending request is asynchronous
@@ -94,11 +101,11 @@ class PendingRequest implements PendingRequestContract
     protected bool $asynchronous = false;
 
     /**
-     * Determines if the PendingRequest is ready to be sent
+     * The factory collection.
      *
-     * @var bool
+     * @var FactoryCollection
      */
-    protected bool $ready = false;
+    protected FactoryCollection $factoryCollection;
 
     /**
      * Build up the request payload.
@@ -108,47 +115,66 @@ class PendingRequest implements PendingRequestContract
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidResponseClassException
-     * @throws \Saloon\Exceptions\PendingRequestException
      */
     public function __construct(Connector $connector, Request $request, MockClient $mockClient = null)
     {
         $this->connector = $connector;
         $this->request = $request;
-        $this->url = $this->resolveRequestUrl();
         $this->method = $request->getMethod();
+        $this->url = $this->resolveRequestUrl();
+        $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
         $this->responseClass = $this->resolveResponseClass();
         $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient();
-        $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
+        $this->factoryCollection = $connector->sender()->getFactoryCollection();
 
-        // After we have defined each of our properties, we will run the various
-        // methods that build up the PendingRequest. It's important that
-        // the order remains the same.
+        $this->registerAndExecuteMiddleware();
+    }
 
-        // Plugins should be booted first, then we will merge the properties
-        // from the connector and request, then authenticate the request
-        // followed by finally running the "boot" method with an
-        // almost complete PendingRequest.
+    /**
+     * Register and execute middleware
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    protected function registerAndExecuteMiddleware(): void
+    {
+        $middleware = $this->middleware();
 
-        $this->bootPlugins()
-            ->mergeRequestProperties()
-            ->mergeBody()
-            ->mergeDelay()
-            ->bootConnectorAndRequest();
+        // New Middleware Order:
 
-        // Now we will register the default middleware. The user's defined
-        // middleware will come first, and then we will process the
-        // default middleware.
+        // 1. Global (Laravel)
+        // 2. Plugin (Rate Limiter)
+        // 3. Authentication
+        // 4. Mock Response
+        // 5. User
+        // 6. Delay/Debugging/Event
 
-        $this->registerDefaultMiddleware();
+        $middleware->merge(Config::middleware());
+
+        $this->bootPlugins();
+
+        // Now we'll queue te delay middleware and authenticator middleware
+
+        $middleware
+            ->onRequest(new MergeRequestProperties, false, 'mergeRequestProperties')
+            ->onRequest(new MergeBody, false, 'mergeBody')
+            ->onRequest(new MergeDelay, false, 'mergeDelay')
+            ->onRequest(new AuthenticateRequest, false, 'authenticateRequest')
+            ->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
+
+        $this->bootConnectorAndRequest();
+
+        $middleware
+            ->merge($this->connector->middleware())
+            ->merge($this->request->middleware())
+            ->onRequest(new DelayMiddleware, false, 'delayMiddleware')
+            ->onRequest(new DebugRequest, false, 'debugRequest')
+            ->onResponse(new DebugResponse, false, 'debugResponse');
 
         // Next, we will execute the request middleware pipeline which will
         // process any middleware added on the connector or the request.
 
-        $this->executeRequestPipeline();
-
-        // Finally, we'll mark our PendingRequest as ready.
-
-        $this->ready = true;
+        $middleware->executeRequestPipeline($this);
     }
 
     /**
@@ -177,102 +203,6 @@ class PendingRequest implements PendingRequestContract
     }
 
     /**
-     * Merge all the properties together.
-     *
-     * @return $this
-     */
-    protected function mergeRequestProperties(): static
-    {
-        $connector = $this->connector;
-        $request = $this->request;
-
-        $this->headers()->merge(
-            $connector->headers()->all(),
-            $request->headers()->all()
-        );
-
-        $this->query()->merge(
-            $connector->query()->all(),
-            $request->query()->all()
-        );
-
-        $this->config()->merge(
-            $connector->config()->all(),
-            $request->config()->all()
-        );
-
-        $this->middleware()
-            ->merge($connector->middleware())
-            ->merge($request->middleware());
-
-        return $this;
-    }
-
-    /**
-     * Merge the body together
-     *
-     * @return $this
-     * @throws \Saloon\Exceptions\PendingRequestException
-     */
-    protected function mergeBody(): static
-    {
-        $connector = $this->connector;
-        $request = $this->request;
-
-        $connectorBody = $connector instanceof HasBody ? $connector->body() : null;
-        $requestBody = $request instanceof HasBody ? $request->body() : null;
-
-        if (is_null($connectorBody) && is_null($requestBody)) {
-            return $this;
-        }
-
-        // When both the connector and the request use the `HasBody` interface - we will enforce
-        // that they are both of the same type. This means there won't be any confusion when
-        // merging.
-
-        if (isset($connectorBody, $requestBody) && ! $connectorBody instanceof $requestBody) {
-            throw new PendingRequestException('Connector and request body types must be the same.');
-        }
-
-        // When both the connector and the request body repositories are mergeable then we
-        // will merge them together.
-
-        if (isset($connectorBody, $requestBody) && $connectorBody->isMergeable() && $requestBody->isMergeable()) {
-            $repository = clone $connectorBody;
-
-            // We'll clone the request body into the connector body so any properties on the request
-            // body will take priority if they are using a keyed array.
-
-            $this->body = $repository->merge($requestBody->all());
-
-            return $this;
-        }
-
-        // If the request bodies aren't mergeable then we will prefer the request
-        // body over the connector body.
-
-        $this->body = clone $requestBody ?? clone $connectorBody;
-
-        return $this;
-    }
-
-    /**
-     * Merge delay together
-     *
-     * Request delay takes priority over connector delay
-     *
-     * @return $this
-     */
-    protected function mergeDelay(): static
-    {
-        $this->request->delay()->isNotEmpty() ?
-            $this->delay()->set($this->request->delay()->get()) :
-            $this->delay()->set($this->connector->delay()->get());
-
-        return $this;
-    }
-
-    /**
      * Run the boot method on the connector and request.
      *
      * @return $this
@@ -289,49 +219,13 @@ class PendingRequest implements PendingRequestContract
     }
 
     /**
-     * Register any default middleware to run at the end of the middleware stack.
+     * Get the request.
      *
-     * @return $this
+     * @return \Saloon\Contracts\Request
      */
-    protected function registerDefaultMiddleware(): static
+    public function getRequest(): Request
     {
-        // We'll merge in any global middleware here. These should run after
-        // the user's middleware.
-
-        $middleware = $this->middleware()->merge(Config::middleware());
-
-        // We're going to register the internal middleware that should be run before
-        // a request is sent. This order should remain exactly the same.
-
-        $middleware->onRequest(new AuthenticateRequest, false, 'authenticateRequest');
-
-        // Next we will run the MockClient and determine if we should send a real
-        // request or not. Keep DetermineMockResponse at the bottom so other
-        // middleware can set the MockClient before we run the MockResponse.
-
-        $middleware->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
-
-        // Finally, we'll register the debugging middleware. This should always
-        // stay at the bottom of the middleware chain, so we output the very
-        // latest PendingRequest/Response
-
-        $middleware->onRequest(new DebugRequest, false, 'debugRequest');
-
-        $middleware->onResponse(new DebugResponse, false, 'debugResponse');
-
-        return $this;
-    }
-
-    /**
-     * Execute the request pipeline.
-     *
-     * @return $this
-     */
-    protected function executeRequestPipeline(): static
-    {
-        $this->middleware()->executeRequestPipeline($this);
-
-        return $this;
+        return $this->request;
     }
 
     /**
@@ -345,15 +239,6 @@ class PendingRequest implements PendingRequestContract
         return $this->middleware()->executeResponsePipeline($response);
     }
 
-    /**
-     * Get the request.
-     *
-     * @return \Saloon\Contracts\Request
-     */
-    public function getRequest(): Request
-    {
-        return $this->request;
-    }
 
     /**
      * Get the connector.
@@ -373,6 +258,26 @@ class PendingRequest implements PendingRequestContract
     public function getUrl(): string
     {
         return $this->url;
+    }
+
+    /**
+     * Get the URI for the pending request.
+     *
+     * @return UriInterface
+     */
+    public function getUri(): UriInterface
+    {
+        $uri = $this->factoryCollection->uriFactory->createUri($this->getUrl());
+
+        // We'll parse the existing query parameters from the URL (if they have been defined)
+        // and then we'll merge in Saloon's query parameters. Our query parameters will take
+        // priority over any that were defined in the URL.
+
+        parse_str($uri->getQuery(), $existingQuery);
+
+        return $uri->withQuery(
+            http_build_query(array_merge($existingQuery, $this->query()->all()))
+        );
     }
 
     /**
@@ -408,22 +313,22 @@ class PendingRequest implements PendingRequestContract
     /**
      * Get the simulated response payload
      *
-     * @return \Saloon\Contracts\SimulatedResponsePayload|null
+     * @return \Saloon\Contracts\FakeResponse|null
      */
-    public function getSimulatedResponsePayload(): ?SimulatedResponsePayload
+    public function getFakeResponse(): ?FakeResponse
     {
-        return $this->simulatedResponsePayload;
+        return $this->fakeResponseData;
     }
 
     /**
      * Set the simulated response payload
      *
-     * @param \Saloon\Contracts\SimulatedResponsePayload|null $simulatedResponsePayload
+     * @param \Saloon\Contracts\FakeResponse|null $fakeResponse
      * @return $this
      */
-    public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): static
+    public function setFakeResponse(?FakeResponse $fakeResponse): static
     {
-        $this->simulatedResponsePayload = $simulatedResponsePayload;
+        $this->fakeResponseData = $fakeResponse;
 
         return $this;
     }
@@ -433,9 +338,9 @@ class PendingRequest implements PendingRequestContract
      *
      * @return bool
      */
-    public function hasSimulatedResponsePayload(): bool
+    public function hasFakeResponse(): bool
     {
-        return $this->simulatedResponsePayload instanceof SimulatedResponsePayload;
+        return $this->fakeResponseData instanceof FakeResponse;
     }
 
     /**
@@ -515,9 +420,7 @@ class PendingRequest implements PendingRequestContract
         // will allow us to do this. With future versions of Saloon we will
         // likely remove this method.
 
-        if ($this->ready === true) {
-            $this->authenticator->set($this);
-        }
+        $this->authenticator->set($this);
 
         return $this;
     }
@@ -544,6 +447,73 @@ class PendingRequest implements PendingRequestContract
     public function setMethod(Method $method): static
     {
         $this->method = $method;
+
+        return $this;
+    }
+
+    /**
+     * Set the factory collection
+     *
+     * @param FactoryCollection $factoryCollection
+     * @return $this
+     */
+    public function setFactoryCollection(FactoryCollection $factoryCollection): static
+    {
+        $this->factoryCollection = $factoryCollection;
+
+        return $this;
+    }
+
+    /**
+     * Get the factory collection
+     *
+     * @return FactoryCollection
+     */
+    public function getFactoryCollection(): FactoryCollection
+    {
+        return $this->factoryCollection;
+    }
+
+    /**
+     * Get the PSR-7 request
+     *
+     * @return RequestInterface
+     */
+    public function createPsrRequest(): RequestInterface
+    {
+        $factories = $this->factoryCollection;
+
+        $request = $factories->requestFactory->createRequest(
+            method: $this->getMethod()->value,
+            uri: $this->getUri(),
+        );
+
+        foreach ($this->headers()->all() as $headerName => $headerValue) {
+            $request = $request->withHeader($headerName, $headerValue);
+        }
+
+        if ($this->body() instanceof BodyRepository) {
+            $request = $request->withBody($this->body()->toStream($factories->streamFactory));
+        }
+
+        // Now we'll run our event hooks on both the connector and request which allows the
+        // user to be able to make any final changes to the PSR request if they need to
+        // like modifying the URI or adding extra headers.
+
+        $request = $this->connector->handlePsrRequest($request, $this);
+
+        return $this->request->handlePsrRequest($request, $this);
+    }
+
+    /**
+     * Set the body repository
+     *
+     * @param \Saloon\Contracts\Body\BodyRepository|null $body
+     * @return $this
+     */
+    public function setBody(?BodyRepository $body): static
+    {
+        $this->body = $body;
 
         return $this;
     }

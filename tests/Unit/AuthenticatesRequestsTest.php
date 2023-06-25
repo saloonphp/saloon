@@ -9,24 +9,10 @@ test('you can add basic auth to a request', function () {
     $request->withBasicAuth('Sammyjo20', 'Cowboy1');
 
     $pendingRequest = connector()->createPendingRequest($request);
-    $config = $pendingRequest->config()->all();
+    $headers = $pendingRequest->headers()->all();
 
-    expect($config['auth'])->toBeArray();
-    expect($config['auth'][0])->toEqual('Sammyjo20');
-    expect($config['auth'][1])->toEqual('Cowboy1');
-});
-
-test('you can add digest auth to a request', function () {
-    $request = new UserRequest;
-    $request->withDigestAuth('Sammyjo20', 'Cowboy1', 'Howdy');
-
-    $pendingRequest = connector()->createPendingRequest($request);
-    $config = $pendingRequest->config()->all();
-
-    expect($config['auth'])->toBeArray();
-    expect($config['auth'][0])->toEqual('Sammyjo20');
-    expect($config['auth'][1])->toEqual('Cowboy1');
-    expect($config['auth'][2])->toEqual('Howdy');
+    expect($headers)->toBeArray();
+    expect($headers['Authorization'])->toEqual('Basic ' . base64_encode('Sammyjo20:Cowboy1'));
 });
 
 test('you can attach an authorization token to a request', function () {

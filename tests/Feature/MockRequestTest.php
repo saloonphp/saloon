@@ -49,32 +49,32 @@ test('a request can be mocked with a sequence', function () {
 
     expect($responseA)->toBeInstanceOf(Response::class);
     expect($responseA->isMocked())->toBeTrue();
-    expect($responseA->isSimulated())->toBeTrue();
+    expect($responseA->isFaked())->toBeTrue();
     expect($responseA->isCached())->toBeFalse();
     expect($responseA->json())->toEqual(['name' => 'Sam']);
     expect($responseA->status())->toEqual(200);
-    expect($responseA->getSimulatedResponsePayload())->toBeInstanceOf(MockResponse::class);
+    expect($responseA->getFakeResponse())->toBeInstanceOf(MockResponse::class);
     expect($responseA->headers()->all())->toEqual(['X-Foo' => 'Bar']);
 
     $responseB = $connector->send(new UserRequest);
 
     expect($responseB)->toBeInstanceOf(Response::class);
     expect($responseB->isMocked())->toBeTrue();
-    expect($responseB->isSimulated())->toBeTrue();
+    expect($responseB->isFaked())->toBeTrue();
     expect($responseB->isCached())->toBeFalse();
     expect($responseB->json())->toEqual(['name' => 'Alex']);
     expect($responseB->status())->toEqual(200);
-    expect($responseB->getSimulatedResponsePayload())->toBeInstanceOf(MockResponse::class);
+    expect($responseB->getFakeResponse())->toBeInstanceOf(MockResponse::class);
 
     $responseC = $connector->send(new UserRequest);
 
     expect($responseC)->toBeInstanceOf(Response::class);
     expect($responseC->isMocked())->toBeTrue();
-    expect($responseC->isSimulated())->toBeTrue();
+    expect($responseC->isFaked())->toBeTrue();
     expect($responseC->isCached())->toBeFalse();
     expect($responseC->json())->toEqual(['error' => 'Server Unavailable']);
     expect($responseC->status())->toEqual(500);
-    expect($responseC->getSimulatedResponsePayload())->toBeInstanceOf(MockResponse::class);
+    expect($responseC->getFakeResponse())->toBeInstanceOf(MockResponse::class);
 
     $this->expectException(NoMockResponseFoundException::class);
 

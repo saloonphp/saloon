@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
-class FormBodyRepository extends ArrayBodyRepository
+use Stringable;
+use Saloon\Traits\Body\CreatesStreamFromString;
+
+class FormBodyRepository extends ArrayBodyRepository implements Stringable
 {
+    use CreatesStreamFromString;
+
     /**
      * Convert into a string.
      *
@@ -13,6 +18,6 @@ class FormBodyRepository extends ArrayBodyRepository
      */
     public function __toString(): string
     {
-        return http_build_query($this->all());
+        return http_build_query($this->get());
     }
 }

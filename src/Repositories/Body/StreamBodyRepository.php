@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
-use GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
 use Saloon\Traits\Conditionable;
 use Psr\Http\Message\StreamInterface;
 use Saloon\Contracts\Body\BodyRepository;
+use Psr\Http\Message\StreamFactoryInterface;
 
 class StreamBodyRepository implements BodyRepository
 {
@@ -17,9 +17,9 @@ class StreamBodyRepository implements BodyRepository
     /**
      * The stream body
      *
-     * @var StreamInterface|null
+     * @var StreamInterface|resource|null
      */
-    protected ?StreamInterface $stream = null;
+    protected mixed $stream = null;
 
     /**
      * Constructor
@@ -43,10 +43,6 @@ class StreamBodyRepository implements BodyRepository
             throw new InvalidArgumentException('The value must a resource or be an instance of ' . StreamInterface::class);
         }
 
-        if (is_resource($value)) {
-            $value = Utils::streamFor($value);
-        }
-
         $this->stream = $value;
 
         return $this;
@@ -55,23 +51,11 @@ class StreamBodyRepository implements BodyRepository
     /**
      * Retrieve the stream from the repository
      *
-     * @return StreamInterface|null
+     * @return StreamInterface|resource|null
      */
-    public function all(): ?StreamInterface
+    public function get(): mixed
     {
         return $this->stream;
-    }
-
-    /**
-     * Retrieve the stream from the repository
-     *
-     * Alias of "all" method.
-     *
-     * @return StreamInterface|null
-     */
-    public function get(): ?StreamInterface
-    {
-        return $this->all();
     }
 
     /**
@@ -95,24 +79,15 @@ class StreamBodyRepository implements BodyRepository
     }
 
     /**
-     * Get the contents of the stream as a string
+     * Convert the body repository into a stream
      *
-     * @return string
+     * @param StreamFactoryInterface $streamFactory
+     * @return StreamInterface
      */
-    public function __toString(): string
+    public function toStream(StreamFactoryInterface $streamFactory): StreamInterface
     {
-        $stream = &$this->stream;
+        $stream = $this->stream;
 
-        if (is_null($stream)) {
-            return '';
-        }
-
-        $contents = $stream->getContents();
-
-        if ($stream->isSeekable()) {
-            $stream->rewind();
-        }
-
-        return $contents;
+        return $stream instanceof StreamInterface ? $stream : $streamFactory->createStreamFromResource($stream);
     }
 }

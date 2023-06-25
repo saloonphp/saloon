@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 use Saloon\Contracts\Response;
+use GuzzleHttp\Promise\Promise;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
-use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
@@ -37,7 +37,7 @@ test('an asynchronous request will throw a saloon exception on an unsuccessful r
     $request = new UserRequest;
     $promise = connector()->sendAsync($request, $mockClient);
 
-    expect($promise)->toBeInstanceOf(RejectedPromise::class);
+    expect($promise)->toBeInstanceOf(Promise::class);
 
     try {
         $promise->wait();

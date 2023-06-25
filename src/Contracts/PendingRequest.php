@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Saloon\Contracts;
 
 use Saloon\Enums\Method;
+use Psr\Http\Message\UriInterface;
+use Saloon\Data\FactoryCollection;
+use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 
 interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams, HasDelay
@@ -39,6 +43,13 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
     public function getUrl(): string;
 
     /**
+     * Get the URI for the pending request.
+     *
+     * @return UriInterface
+     */
+    public function getUri(): UriInterface;
+
+    /**
      * Get the HTTP method used for the request
      *
      * @return \Saloon\Enums\Method
@@ -60,26 +71,26 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
     public function body(): ?BodyRepository;
 
     /**
-     * Get the simulated response payload
+     * Get the fake response
      *
-     * @return \Saloon\Contracts\SimulatedResponsePayload|null
+     * @return \Saloon\Contracts\FakeResponse|null
      */
-    public function getSimulatedResponsePayload(): ?SimulatedResponsePayload;
+    public function getFakeResponse(): ?FakeResponse;
 
     /**
-     * Set the simulated response payload
+     * Set the fake response
      *
-     * @param \Saloon\Contracts\SimulatedResponsePayload|null $simulatedResponsePayload
+     * @param \Saloon\Contracts\FakeResponse|null $fakeResponse
      * @return $this
      */
-    public function setSimulatedResponsePayload(?SimulatedResponsePayload $simulatedResponsePayload): static;
+    public function setFakeResponse(?FakeResponse $fakeResponse): static;
 
     /**
-     * Check if simulated response payload is present.
+     * Check if a fake response is present
      *
      * @return bool
      */
-    public function hasSimulatedResponsePayload(): bool;
+    public function hasFakeResponse(): bool;
 
     /**
      * Create a data object from the response
@@ -103,4 +114,41 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
      * @return bool
      */
     public function isAsynchronous(): bool;
+
+    /**
+     * Set the factory collection
+     *
+     * @param FactoryCollection $factoryCollection
+     * @return $this
+     */
+    public function setFactoryCollection(FactoryCollection $factoryCollection): static;
+
+    /**
+     * Get the factory collection
+     *
+     * @return FactoryCollection
+     */
+    public function getFactoryCollection(): FactoryCollection;
+
+    /**
+     * Get the PSR-7 request
+     *
+     * @return RequestInterface
+     */
+    public function createPsrRequest(): RequestInterface;
+
+    /**
+     * Create the fake response
+     *
+     * @return PromiseInterface|Response
+     */
+    public function createFakeResponse(): PromiseInterface|Response;
+
+    /**
+     *  Set the body repository
+     *
+     * @param \Saloon\Contracts\Body\BodyRepository|null $body
+     * @return $this
+     */
+    public function setBody(?BodyRepository $body): static;
 }

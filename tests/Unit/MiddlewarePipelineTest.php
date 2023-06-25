@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Saloon\Http\Response;
 use Saloon\Http\PendingRequest;
+use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Helpers\MiddlewarePipeline;
@@ -78,8 +79,10 @@ test('you can add a named response pipe to the middleware', function () {
             $count++;
         }, false, 'ResponsePipe');
 
+    $factory = new HttpFactory;
+
     $pendingRequest = connector()->createPendingRequest(new UserRequest);
-    $response = Response::fromPsrResponse(MockResponse::make()->getPsrResponse(), $pendingRequest);
+    $response = Response::fromPsrResponse(MockResponse::make()->createPsrResponse($factory, $factory), $pendingRequest, $pendingRequest->createPsrRequest());
 
     $pipeline->executeResponsePipeline($response);
 

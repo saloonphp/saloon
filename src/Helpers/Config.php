@@ -39,6 +39,13 @@ final class Config
     private static mixed $senderResolver = null;
 
     /**
+     * TLS Method
+     *
+     * @var int
+     */
+    private static int $tlsMethod = STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
+
+    /**
      * Update global middleware
      *
      * @return \Saloon\Contracts\MiddlewarePipeline
@@ -80,6 +87,26 @@ final class Config
     public static function setDefaultSender(string $senderClass): void
     {
         self::$defaultSender = $senderClass;
+    }
+
+    /**
+     * Get the TLS method
+     *
+     * @return int
+     */
+    public static function getTLSMethod(): int
+    {
+        return self::$tlsMethod;
+    }
+
+    /**
+     * Set the TLS method
+     *
+     * @param int $tlsMethod
+     */
+    public static function setTLSMethod(int $tlsMethod): void
+    {
+        self::$tlsMethod = $tlsMethod;
     }
 
     /**

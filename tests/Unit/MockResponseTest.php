@@ -18,19 +18,19 @@ test('pulling a response from the sequence will return the correct response', fu
 
     $mockClient = new MockClient([$responseA, $responseB, $responseC]);
 
-    expect($mockClient->getNextFromSequence()->getStatus())->toEqual($responseA->getStatus());
-    expect($mockClient->getNextFromSequence()->getStatus())->toEqual($responseB->getStatus());
-    expect($mockClient->getNextFromSequence()->getStatus())->toEqual($responseC->getStatus());
+    expect($mockClient->getNextFromSequence()->status())->toEqual($responseA->status());
+    expect($mockClient->getNextFromSequence()->status())->toEqual($responseB->status());
+    expect($mockClient->getNextFromSequence()->status())->toEqual($responseC->status());
     expect($mockClient->isEmpty())->toBeTrue();
 });
 
 test('a mock response can have raw body data', function () {
     $response = MockResponse::make('xml', 200, ['Content-Type' => 'application/json']);
 
-    expect($response->getHeaders()->all())->toEqual(['Content-Type' => 'application/json']);
-    expect($response->getStatus())->toEqual(200);
-    expect($response->getBody())->toBeInstanceOf(StringBodyRepository::class);
-    expect($response->getBody()->all())->toEqual('xml');
+    expect($response->headers()->all())->toEqual(['Content-Type' => 'application/json']);
+    expect($response->status())->toEqual(200);
+    expect($response->body())->toBeInstanceOf(StringBodyRepository::class);
+    expect($response->body()->get())->toEqual('xml');
 });
 
 test('a response can have a method added to it', function () {

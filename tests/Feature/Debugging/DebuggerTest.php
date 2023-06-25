@@ -11,6 +11,7 @@ use Saloon\Exceptions\DebuggingDriverException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Debuggers\ArrayDebugger;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Repositories\Body\MultipartBodyRepository;
 use Saloon\Tests\Fixtures\Requests\HasXmlBodyRequest;
 use Saloon\Tests\Fixtures\Requests\HasFormBodyRequest;
 use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
@@ -127,7 +128,13 @@ test('it will output the request payload if there is a body sent', function ($re
 
     expect($debuggedRequests)->toHaveCount(1);
 
-    expect($debuggedRequests[0]['request_payload'])->toEqual($request->body());
+    if ($request instanceof HasMultipartBodyRequest) {
+        expect($debuggedRequests[0]['request_payload'])->toBeInstanceOf(MultipartBodyRepository::class);
+        expect($debuggedRequests[0]['request_payload']->getBoundary())->toEqual($request->body()->getBoundary());
+        expect($debuggedRequests[0]['request_payload']->get())->toEqual($request->body()->get());
+    } else {
+        expect($debuggedRequests[0]['request_payload'])->toEqual($request->body());
+    }
 })->with([
     new HasJsonBodyRequest,
     new HasFormBodyRequest,

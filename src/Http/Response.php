@@ -10,6 +10,7 @@ use Saloon\Contracts\Request;
 use Saloon\Repositories\ArrayStore;
 use Saloon\Contracts\PendingRequest;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Traits\Responses\HasResponseHelpers;
 use Saloon\Contracts\Response as ResponseContract;
@@ -19,6 +20,13 @@ class Response implements ResponseContract
 {
     use Macroable;
     use HasResponseHelpers;
+
+    /**
+     * The PSR request
+     *
+     * @var RequestInterface
+     */
+    protected RequestInterface $psrRequest;
 
     /**
      * The PSR response from the sender.
@@ -44,12 +52,14 @@ class Response implements ResponseContract
     /**
      * Create a new response instance.
      *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @param \Psr\Http\Message\ResponseInterface $psrResponse
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @param \Psr\Http\Message\RequestInterface $psrRequest
      * @param \Throwable|null $senderException
      */
-    public function __construct(ResponseInterface $psrResponse, PendingRequest $pendingRequest, Throwable $senderException = null)
+    public function __construct(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, Throwable $senderException = null)
     {
+        $this->psrRequest = $psrRequest;
         $this->psrResponse = $psrResponse;
         $this->pendingRequest = $pendingRequest;
         $this->senderException = $senderException;
@@ -58,14 +68,15 @@ class Response implements ResponseContract
     /**
      * Create a new response instance
      *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @param \Psr\Http\Message\ResponseInterface $psrResponse
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @param \Psr\Http\Message\RequestInterface $psrRequest
      * @param \Throwable|null $senderException
      * @return static
      */
-    public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, ?Throwable $senderException = null): static
+    public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, ?Throwable $senderException = null): static
     {
-        return new static($psrResponse, $pendingRequest, $senderException);
+        return new static($psrResponse, $pendingRequest, $psrRequest, $senderException);
     }
 
     /**
@@ -86,6 +97,16 @@ class Response implements ResponseContract
     public function getRequest(): Request
     {
         return $this->pendingRequest->getRequest();
+    }
+
+    /**
+     * Get the PSR-7 request
+     *
+     * @return \Psr\Http\Message\RequestInterface
+     */
+    public function getPsrRequest(): RequestInterface
+    {
+        return $this->psrRequest;
     }
 
     /**

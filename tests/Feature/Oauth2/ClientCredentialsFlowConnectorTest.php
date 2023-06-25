@@ -31,7 +31,7 @@ test('you can get the authenticator from the connector', function () {
 
     $mockClient->assertSentCount(1);
 
-    expect($mockClient->getLastPendingRequest()->body()->all())->toEqual([
+    expect($mockClient->getLastPendingRequest()->body()->get())->toEqual([
         'grant_type' => 'client_credentials',
         'client_id' => 'client-id',
         'client_secret' => 'client-secret',
@@ -94,7 +94,7 @@ test('you can send scopes with the token request', function () {
 
     $mockClient->assertSentCount(1);
 
-    expect($mockClient->getLastPendingRequest()->body()->all())->toEqual([
+    expect($mockClient->getLastPendingRequest()->body()->get())->toEqual([
         'grant_type' => 'client_credentials',
         'client_id' => 'client-id',
         'client_secret' => 'client-secret',
@@ -120,7 +120,7 @@ test('default scopes on the oauth config will be merged in with the scopes on th
 
     $mockClient->assertSentCount(1);
 
-    expect($mockClient->getLastPendingRequest()->body()->all())->toEqual([
+    expect($mockClient->getLastPendingRequest()->body()->get())->toEqual([
         'grant_type' => 'client_credentials',
         'client_id' => 'client-id',
         'client_secret' => 'client-secret',
@@ -146,7 +146,7 @@ test('the scope separator can be customised', function () {
 
     $mockClient->assertSentCount(1);
 
-    expect($mockClient->getLastPendingRequest()->body()->all())->toEqual([
+    expect($mockClient->getLastPendingRequest()->body()->get())->toEqual([
         'grant_type' => 'client_credentials',
         'client_id' => 'client-id',
         'client_secret' => 'client-secret',

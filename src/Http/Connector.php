@@ -11,6 +11,7 @@ use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Traits\Connector\HasPool;
 use Saloon\Traits\HandlesExceptions;
+use Saloon\Traits\HandlesPsrRequest;
 use Saloon\Traits\Connector\HasSender;
 use Saloon\Traits\Connector\SendsRequests;
 use Saloon\Traits\Auth\AuthenticatesRequests;
@@ -28,6 +29,7 @@ abstract class Connector implements ConnectorContract, HasDebuggingContract
     use CastDtoFromResponse;
     use HasCustomResponses;
     use HandlesExceptions;
+    use HandlesPsrRequest;
     use HasMockClient;
     use SendsRequests;
     use Conditionable;

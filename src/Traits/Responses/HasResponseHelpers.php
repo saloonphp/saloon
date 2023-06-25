@@ -9,10 +9,10 @@ use LogicException;
 use SimpleXMLElement;
 use Saloon\Helpers\Arr;
 use Illuminate\Support\Collection;
+use Saloon\Contracts\FakeResponse;
 use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Helpers\RequestExceptionHelper;
 use Saloon\Contracts\DataObjects\WithResponse;
-use Saloon\Contracts\SimulatedResponsePayload;
 
 trait HasResponseHelpers
 {
@@ -49,9 +49,9 @@ trait HasResponseHelpers
     /**
      * The simulated response payload if the response was simulated.
      *
-     * @var \Saloon\Contracts\SimulatedResponsePayload|null
+     * @var \Saloon\Contracts\FakeResponse|null
      */
-    protected ?SimulatedResponsePayload $simulatedResponsePayload = null;
+    protected ?FakeResponse $fakeResponse = null;
 
     /**
      * Get the JSON decoded body of the response as an array or scalar value.

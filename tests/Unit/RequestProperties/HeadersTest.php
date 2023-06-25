@@ -12,7 +12,7 @@ test('default headers are merged in from a request', function () {
     $headers = $request->headers();
 
     expect($headers)->toBeInstanceOf(ArrayStore::class);
-    expect($headers)->toEqual(new ArrayStore([ 'X-Custom-Header' => 'Howdy']));
+    expect($headers)->toEqual(new ArrayStore(['X-Custom-Header' => 'Howdy']));
 });
 
 test('headers can be managed on a request', function () {

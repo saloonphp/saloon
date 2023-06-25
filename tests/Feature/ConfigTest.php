@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -17,7 +18,9 @@ test('default guzzle config options are sent', function () {
             expect($options)->toHaveKey('connect_timeout', 10);
             expect($options)->toHaveKey('timeout', 30);
 
-            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
+            $factory = new HttpFactory;
+
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse($factory, $factory));
         };
     });
 
@@ -37,7 +40,9 @@ test('you can pass additional guzzle config options and they are merged from the
             expect($options)->toHaveKey('debug', true);
             expect($options)->toHaveKey('verify', false);
 
-            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
+            $factory = new HttpFactory;
+
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse($factory, $factory));
         };
     });
 

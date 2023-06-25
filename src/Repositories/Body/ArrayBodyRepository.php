@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
+use LogicException;
 use InvalidArgumentException;
 use Saloon\Traits\Conditionable;
+use Psr\Http\Message\StreamInterface;
+use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Contracts\Body\BodyRepository;
-use Saloon\Exceptions\UnableToCastToStringException;
+use Psr\Http\Message\StreamFactoryInterface;
 
-class ArrayBodyRepository implements BodyRepository
+class ArrayBodyRepository implements BodyRepository, MergeableBody
 {
     use Conditionable;
 
@@ -86,7 +89,7 @@ class ArrayBodyRepository implements BodyRepository
     public function get(string|int|null $key = null, mixed $default = null): mixed
     {
         if (is_null($key)) {
-            return $this->all();
+            return $this->data;
         }
 
         return $this->data[$key] ?? $default;
@@ -103,16 +106,6 @@ class ArrayBodyRepository implements BodyRepository
         unset($this->data[$key]);
 
         return $this;
-    }
-
-    /**
-     * Retrieve all in the repository
-     *
-     * @return array<array-key, mixed>
-     */
-    public function all(): array
-    {
-        return $this->data;
     }
 
     /**
@@ -140,23 +133,13 @@ class ArrayBodyRepository implements BodyRepository
     }
 
     /**
-     * Convert to a string
+     * Convert the body repository into a stream
      *
-     * @return string
-     * @throws \Saloon\Exceptions\UnableToCastToStringException
+     * @param StreamFactoryInterface $streamFactory
+     * @return StreamInterface
      */
-    public function __toString(): string
+    public function toStream(StreamFactoryInterface $streamFactory): StreamInterface
     {
-        throw new UnableToCastToStringException('Casting the ArrayBodyRepository as a string is not supported.');
-    }
-
-    /**
-     * Determine if the body can be merged
-     *
-     * @return bool
-     */
-    public function isMergeable(): bool
-    {
-        return true;
+        throw new LogicException('Unable to create a stream directly from an array body repository.');
     }
 }

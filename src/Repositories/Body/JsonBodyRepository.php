@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
-class JsonBodyRepository extends ArrayBodyRepository
+use Stringable;
+use Saloon\Traits\Body\CreatesStreamFromString;
+
+class JsonBodyRepository extends ArrayBodyRepository implements Stringable
 {
+    use CreatesStreamFromString;
+
     /**
      * JSON encoding flags
      *
@@ -47,7 +52,7 @@ class JsonBodyRepository extends ArrayBodyRepository
      */
     public function __toString(): string
     {
-        $json = json_encode($this->all(), $this->getJsonFlags());
+        $json = json_encode($this->get(), $this->getJsonFlags());
 
         return $json === false ? '' : $json;
     }

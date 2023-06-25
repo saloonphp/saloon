@@ -4,16 +4,31 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
+use Saloon\Data\FactoryCollection;
 use GuzzleHttp\Promise\PromiseInterface;
 
 interface Sender
 {
     /**
-     * Send the request.
+     * Get the factory collection
      *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @param bool $asynchronous
-     * @return ($asynchronous is true ? \Saloon\Contracts\Response|PromiseInterface : \Saloon\Contracts\Response)
+     * @return FactoryCollection
      */
-    public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): Response|PromiseInterface;
+    public function getFactoryCollection(): FactoryCollection;
+
+    /**
+     * Send the request synchronously
+     *
+     * @param PendingRequest $pendingRequest
+     * @return Response
+     */
+    public function send(PendingRequest $pendingRequest): Response;
+
+    /**
+     * Send the request asynchronously
+     *
+     * @param PendingRequest $pendingRequest
+     * @return PromiseInterface
+     */
+    public function sendAsync(PendingRequest $pendingRequest): PromiseInterface;
 }

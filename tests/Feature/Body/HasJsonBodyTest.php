@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Saloon\Http\PendingRequest;
+use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -13,13 +14,18 @@ use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
 use Saloon\Tests\Fixtures\Connectors\HasJsonBodyConnector;
 use Saloon\Tests\Fixtures\Requests\HasMultipartBodyRequest;
 
-test('the default body is loaded', function () {
+test('the default body is loaded with the content type header', function () {
     $request = new HasJsonBodyRequest();
 
-    expect($request->body()->all())->toEqual([
+    expect($request->body()->get())->toEqual([
         'name' => 'Sam',
         'catchphrase' => 'Yeehaw!',
     ]);
+
+    $connector = new TestConnector;
+    $pendingRequest = $connector->createPendingRequest($request);
+
+    expect($pendingRequest->headers()->get('Content-Type'))->toEqual('application/json');
 });
 
 test('the content-type header is set in the pending request', function () {
@@ -37,12 +43,12 @@ test('when both the connector and the request have the same request bodies they 
     $connector = new HasJsonBodyConnector;
     $request = new HasJsonBodyRequest;
 
-    expect($connector->body()->all())->toEqual([
+    expect($connector->body()->get())->toEqual([
         'name' => 'Gareth',
         'drink' => 'Moonshine',
     ]);
 
-    expect($request->body()->all())->toEqual([
+    expect($request->body()->get())->toEqual([
         'name' => 'Sam',
         'catchphrase' => 'Yeehaw!',
     ]);
@@ -54,7 +60,7 @@ test('when both the connector and the request have the same request bodies they 
 
     expect($pendingRequestBody)->toBeInstanceOf(JsonBodyRepository::class);
 
-    expect($pendingRequestBody->all())->toEqual([
+    expect($pendingRequestBody->get())->toEqual([
         'drink' => 'Moonshine',
         'name' => 'Sam',
         'catchphrase' => 'Yeehaw!',
@@ -76,16 +82,24 @@ test('the guzzle sender properly sends it', function () {
         expect($pendingRequest->headers()->get('Content-Type'))->toEqual('application/json');
     });
 
-    $connector->sender()->addMiddleware(function (callable $handler) use ($request) {
-        return function (RequestInterface $guzzleRequest, array $options) use ($request) {
+    $asserted = false;
+
+    $connector->sender()->addMiddleware(function (callable $handler) use ($request, &$asserted) {
+        return function (RequestInterface $guzzleRequest, array $options) use ($request, &$asserted) {
             expect($guzzleRequest->getHeader('Content-Type'))->toEqual(['application/json']);
             expect((string)$guzzleRequest->getBody())->toEqual((string)$request->body());
 
-            return new FulfilledPromise(MockResponse::make()->getPsrResponse());
+            $asserted = true;
+
+            $factory = new HttpFactory;
+
+            return new FulfilledPromise(MockResponse::make()->createPsrResponse($factory, $factory));
         };
     });
 
     $connector->send($request);
+
+    expect($asserted)->toBeTrue();
 });
 
 test('you can specify different json flags that the body repository should use', function () {

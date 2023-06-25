@@ -6,8 +6,8 @@ namespace Saloon\Helpers;
 
 use Closure;
 use Saloon\Contracts\Response;
+use Saloon\Contracts\FakeResponse;
 use Saloon\Contracts\PendingRequest;
-use Saloon\Contracts\SimulatedResponsePayload;
 use Saloon\Contracts\Pipeline as PipelineContract;
 use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
@@ -39,7 +39,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Add a middleware before the request is sent
      *
-     * @param callable(\Saloon\Contracts\PendingRequest): (\Saloon\Contracts\PendingRequest|\Saloon\Contracts\SimulatedResponsePayload|void) $callable
+     * @param callable(\Saloon\Contracts\PendingRequest): (\Saloon\Contracts\PendingRequest|\Saloon\Contracts\FakeResponse|void) $callable
      * @param bool $prepend
      * @param string|null $name
      * @return $this
@@ -65,8 +65,8 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
                 return $result;
             }
 
-            if ($result instanceof SimulatedResponsePayload) {
-                $pendingRequest->setSimulatedResponsePayload($result);
+            if ($result instanceof FakeResponse) {
+                $pendingRequest->setFakeResponse($result);
             }
 
             return $pendingRequest;

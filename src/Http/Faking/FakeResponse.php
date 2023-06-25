@@ -11,13 +11,14 @@ use Saloon\Repositories\ArrayStore;
 use Saloon\Contracts\PendingRequest;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Contracts\Body\BodyRepository;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Saloon\Repositories\Body\JsonBodyRepository;
 use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
-use Saloon\Contracts\SimulatedResponsePayload as SimulatedResponsePayloadContract;
+use Saloon\Contracts\FakeResponse as FakeResponseContract;
 
-class SimulatedResponsePayload implements SimulatedResponsePayloadContract
+class FakeResponse implements FakeResponseContract
 {
     use Makeable;
 
@@ -64,15 +65,13 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
     }
 
     /**
-     * Create a new mock response from a fixture
+     * Get the response body
      *
-     * @param string $name
-     * @return \Saloon\Http\Faking\Fixture
-     * @throws \Saloon\Exceptions\DirectoryNotFoundException
+     * @return \Saloon\Contracts\Body\BodyRepository
      */
-    public static function fixture(string $name): Fixture
+    public function body(): BodyRepository
     {
-        return new Fixture($name);
+        return $this->body;
     }
 
     /**
@@ -80,7 +79,7 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
      *
      * @return int
      */
-    public function getStatus(): int
+    public function status(): int
     {
         return $this->status;
     }
@@ -90,29 +89,9 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
      *
      * @return \Saloon\Contracts\ArrayStore
      */
-    public function getHeaders(): ArrayStoreContract
+    public function headers(): ArrayStoreContract
     {
         return $this->headers;
-    }
-
-    /**
-     * Get the response body
-     *
-     * @return \Saloon\Contracts\Body\BodyRepository
-     */
-    public function getBody(): BodyRepository
-    {
-        return $this->body;
-    }
-
-    /**
-     * Get the formatted body on the response.
-     *
-     * @return string
-     */
-    public function getBodyAsString(): string
-    {
-        return (string)$this->body;
     }
 
     /**
@@ -156,12 +135,32 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
     }
 
     /**
+     * Create a new mock response from a fixture
+     *
+     * @param string $name
+     * @return \Saloon\Http\Faking\Fixture
+     * @throws \Saloon\Exceptions\DirectoryNotFoundException|\Saloon\Exceptions\UnableToCreateDirectoryException
+     */
+    public static function fixture(string $name): Fixture
+    {
+        return new Fixture($name);
+    }
+
+    /**
      * Get the response as a ResponseInterface
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param ResponseFactoryInterface $responseFactory
+     * @param StreamFactoryInterface $streamFactory
+     * @return ResponseInterface
      */
-    public function getPsrResponse(): ResponseInterface
+    public function createPsrResponse(ResponseFactoryInterface $responseFactory, StreamFactoryInterface $streamFactory): ResponseInterface
     {
-        return new GuzzleResponse($this->getStatus(), $this->getHeaders()->all(), $this->getBodyAsString());
+        $response = $responseFactory->createResponse($this->status());
+
+        foreach ($this->headers()->all() as $headerName => $headerValue) {
+            $response = $response->withHeader($headerName, $headerValue);
+        }
+
+        return $response->withBody($this->body()->toStream($streamFactory));
     }
 }

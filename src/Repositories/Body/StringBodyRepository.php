@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
+use Stringable;
 use Saloon\Traits\Conditionable;
 use Saloon\Contracts\Body\BodyRepository;
+use Saloon\Traits\Body\CreatesStreamFromString;
 
-class StringBodyRepository implements BodyRepository
+class StringBodyRepository implements BodyRepository, Stringable
 {
+    use CreatesStreamFromString;
     use Conditionable;
 
     /**
@@ -46,7 +49,7 @@ class StringBodyRepository implements BodyRepository
      *
      * @return string|null
      */
-    public function all(): ?string
+    public function get(): ?string
     {
         return $this->data;
     }
@@ -78,16 +81,6 @@ class StringBodyRepository implements BodyRepository
      */
     public function __toString(): string
     {
-        return $this->all() ?? '';
-    }
-
-    /**
-     * Determine if the body can be merged
-     *
-     * @return bool
-     */
-    public function isMergeable(): bool
-    {
-        return false;
+        return $this->get() ?? '';
     }
 }

@@ -9,48 +9,34 @@ use Throwable;
 use Saloon\Http\Faking\Fixture;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Contracts\Body\BodyRepository;
+use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 
 /**
  * @method static static make(mixed $body = [], int $status = 200, array $headers = []) Create a new mock response
  */
-interface SimulatedResponsePayload
+interface FakeResponse
 {
-    /**
-     * Create a new mock response from a fixture
-     *
-     * @param string $name
-     * @return \Saloon\Http\Faking\Fixture
-     * @throws \Saloon\Exceptions\DirectoryNotFoundException
-     */
-    public static function fixture(string $name): Fixture;
-
     /**
      * Get the status from the responses
      *
      * @return int
      */
-    public function getStatus(): int;
+    public function status(): int;
 
     /**
      * Get the headers
      *
      * @return \Saloon\Contracts\ArrayStore
      */
-    public function getHeaders(): ArrayStore;
+    public function headers(): ArrayStore;
 
     /**
      * Get the response body
      *
      * @return \Saloon\Contracts\Body\BodyRepository
      */
-    public function getBody(): BodyRepository;
-
-    /**
-     * Get the formatted body on the response.
-     *
-     * @return string
-     */
-    public function getBodyAsString(): string;
+    public function body(): BodyRepository;
 
     /**
      * Throw an exception on the request.
@@ -68,7 +54,7 @@ interface SimulatedResponsePayload
     public function throwsException(): bool;
 
     /**
-     * Invoke the exception.
+     * Get the exception
      *
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return \Throwable|null
@@ -76,9 +62,20 @@ interface SimulatedResponsePayload
     public function getException(PendingRequest $pendingRequest): ?Throwable;
 
     /**
+     * Create a new mock response from a fixture
+     *
+     * @param string $name
+     * @return \Saloon\Http\Faking\Fixture
+     * @throws \Saloon\Exceptions\DirectoryNotFoundException
+     */
+    public static function fixture(string $name): Fixture;
+
+    /**
      * Get the response as a ResponseInterface
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param ResponseFactoryInterface $responseFactory
+     * @param StreamFactoryInterface $streamFactory
+     * @return ResponseInterface
      */
-    public function getPsrResponse(): ResponseInterface;
+    public function createPsrResponse(ResponseFactoryInterface $responseFactory, StreamFactoryInterface $streamFactory): ResponseInterface;
 }

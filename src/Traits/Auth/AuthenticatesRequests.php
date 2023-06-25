@@ -8,7 +8,6 @@ use Saloon\Contracts\Authenticator;
 use Saloon\Http\Auth\BasicAuthenticator;
 use Saloon\Http\Auth\QueryAuthenticator;
 use Saloon\Http\Auth\TokenAuthenticator;
-use Saloon\Http\Auth\DigestAuthenticator;
 
 trait AuthenticatesRequests
 {
@@ -74,19 +73,6 @@ trait AuthenticatesRequests
     public function withBasicAuth(string $username, string $password): static
     {
         return $this->authenticate(new BasicAuthenticator($username, $password));
-    }
-
-    /**
-     * Authenticate the request with "digest" authentication.
-     *
-     * @param string $username
-     * @param string $password
-     * @param string $digest
-     * @return $this
-     */
-    public function withDigestAuth(string $username, string $password, string $digest): static
-    {
-        return $this->authenticate(new DigestAuthenticator($username, $password, $digest));
     }
 
     /**
