@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Faking;
 
+use Closure;
+use Saloon\Contracts\PendingRequest;
+use Throwable;
 use Saloon\Traits\Makeable;
 use Saloon\Repositories\ArrayStore;
 use Psr\Http\Message\ResponseInterface;

@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
+use Closure;
 use Saloon\Http\Faking\Fixture;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Throwable;
 
 /**
  * @method static static make(mixed $body = [], int $status = 200, array $headers = []) Create a new mock response
