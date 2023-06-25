@@ -6,7 +6,6 @@ namespace Saloon\Traits\Connector;
 
 use LogicException;
 use Saloon\Contracts\Request;
-use GuzzleHttp\Promise\Create;
 use Saloon\Contracts\Response;
 use GuzzleHttp\Promise\Promise;
 use Saloon\Http\PendingRequest;
@@ -28,7 +27,6 @@ trait SendsRequests
      * @return \Saloon\Contracts\Response
      * @throws \ReflectionException
      * @throws InvalidResponseClassException
-     * @throws PendingRequestException
      * @throws \Throwable
      */
     public function send(Request $request, MockClient $mockClient = null): Response
@@ -163,7 +161,6 @@ trait SendsRequests
      * @return \Saloon\Contracts\PendingRequest
      * @throws \ReflectionException
      * @throws InvalidResponseClassException
-     * @throws PendingRequestException
      */
     public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequestContract
     {
