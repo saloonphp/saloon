@@ -144,17 +144,6 @@ class ArrayBodyRepository implements BodyRepository, MergeableBody
     }
 
     /**
-     * Convert to a string
-     *
-     * @return string
-     * @throws \Saloon\Exceptions\UnableToCastToStringException
-     */
-    public function __toString(): string
-    {
-        throw new UnableToCastToStringException('Casting the ArrayBodyRepository as a string is not supported.');
-    }
-
-    /**
      * Convert the body repository into a stream
      *
      * @param StreamFactoryInterface $streamFactory

@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Saloon\Repositories\Body;
 
 use Saloon\Traits\Body\CreatesStreamFromString;
+use Stringable;
 
-class JsonBodyRepository extends ArrayBodyRepository
+class JsonBodyRepository extends ArrayBodyRepository implements Stringable
 {
     use CreatesStreamFromString;
 

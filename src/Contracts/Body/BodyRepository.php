@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts\Body;
 
-use Stringable;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-interface BodyRepository extends Stringable
+interface BodyRepository
 {
     /**
      * Set a value inside the repository

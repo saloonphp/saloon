@@ -176,17 +176,6 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
     }
 
     /**
-     * Convert to string
-     *
-     * @return string
-     * @throws \Saloon\Exceptions\UnableToCastToStringException
-     */
-    public function __toString(): string
-    {
-        throw new UnableToCastToStringException('Casting the MultipartBodyRepository as a string is not supported.');
-    }
-
-    /**
      * Parse a multipart array
      *
      * @param array<string, mixed> $value

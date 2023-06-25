@@ -7,8 +7,9 @@ namespace Saloon\Repositories\Body;
 use Saloon\Traits\Conditionable;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Traits\Body\CreatesStreamFromString;
+use Stringable;
 
-class StringBodyRepository implements BodyRepository
+class StringBodyRepository implements BodyRepository, Stringable
 {
     use CreatesStreamFromString;
     use Conditionable;
