@@ -143,4 +143,12 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
      * @return PromiseInterface|Response
      */
     public function createFakeResponse(): PromiseInterface|Response;
+
+    /**
+     *  Set the body repository
+     *
+     * @param \Saloon\Contracts\Body\BodyRepository|null $body
+     * @return $this
+     */
+    public function setBody(?BodyRepository $body): static;
 }

@@ -15,25 +15,23 @@ use Saloon\Helpers\PluginHelper;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Psr\Http\Message\UriInterface;
-use Saloon\Contracts\Body\HasBody;
 use Saloon\Contracts\FakeResponse;
 use Saloon\Data\FactoryCollection;
 use Saloon\Contracts\Authenticator;
 use Saloon\Helpers\ReflectionHelper;
-use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\Middleware\MergeBody;
 use Psr\Http\Message\RequestInterface;
-use Saloon\Contracts\Body\MergeableBody;
+use Saloon\Http\Middleware\MergeDelay;
 use Saloon\Http\Middleware\DebugRequest;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\Middleware\DebugResponse;
 use Saloon\Http\Middleware\DelayMiddleware;
 use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Exceptions\PendingRequestException;
 use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Contracts\Response as ResponseContract;
+use Saloon\Http\Middleware\MergeRequestProperties;
 use Saloon\Exceptions\InvalidResponseClassException;
-use Saloon\Repositories\Body\MultipartBodyRepository;
 use Saloon\Traits\PendingRequest\CreatesFakeResponses;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
@@ -47,13 +45,6 @@ class PendingRequest implements PendingRequestContract
     use HasMockClient;
 
     /**
-     * The request used by the instance.
-     *
-     * @var \Saloon\Contracts\Request
-     */
-    protected Request $request;
-
-    /**
      * The connector making the request.
      *
      * @var \Saloon\Contracts\Connector
@@ -61,18 +52,11 @@ class PendingRequest implements PendingRequestContract
     protected Connector $connector;
 
     /**
-     * The factory collection.
+     * The request used by the instance.
      *
-     * @var FactoryCollection
+     * @var \Saloon\Contracts\Request
      */
-    protected FactoryCollection $factoryCollection;
-
-    /**
-     * The URL the request will be made to.
-     *
-     * @var string
-     */
-    protected string $url;
+    protected Request $request;
 
     /**
      * The method the request will use.
@@ -80,6 +64,13 @@ class PendingRequest implements PendingRequestContract
      * @var \Saloon\Enums\Method
      */
     protected Method $method;
+
+    /**
+     * The URL the request will be made to.
+     *
+     * @var string
+     */
+    protected string $url;
 
     /**
      * The class used for responses.
@@ -110,6 +101,13 @@ class PendingRequest implements PendingRequestContract
     protected bool $asynchronous = false;
 
     /**
+     * The factory collection.
+     *
+     * @var FactoryCollection
+     */
+    protected FactoryCollection $factoryCollection;
+
+    /**
      * Build up the request payload.
      *
      * @param \Saloon\Contracts\Connector $connector
@@ -117,70 +115,66 @@ class PendingRequest implements PendingRequestContract
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidResponseClassException
-     * @throws \Saloon\Exceptions\PendingRequestException
      */
     public function __construct(Connector $connector, Request $request, MockClient $mockClient = null)
     {
         $this->connector = $connector;
         $this->request = $request;
-        $this->factoryCollection = $connector->sender()->getFactoryCollection();
-        $this->url = $this->resolveRequestUrl();
         $this->method = $request->getMethod();
+        $this->url = $this->resolveRequestUrl();
+        $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
         $this->responseClass = $this->resolveResponseClass();
         $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient();
-        $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
+        $this->factoryCollection = $connector->sender()->getFactoryCollection();
 
-        // Todo for Sam: Change to the new middleware order and see what breaks 🤞
+        $this->registerAndExecuteMiddleware();
+    }
 
+    /**
+     * Register and execute middleware
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    protected function registerAndExecuteMiddleware(): void
+    {
         $middleware = $this->middleware();
+
+        // New Middleware Order:
+
+        // 1. Global (Laravel)
+        // 2. Plugin (Rate Limiter)
+        // 3. Authentication
+        // 4. Mock Response
+        // 5. User
+        // 6. Delay/Debugging/Event
 
         $middleware->merge(Config::middleware());
 
-        // New Middleware Order:
-        // 1. Global Middleware (Laravel)
-        // 2. Plugin Middleware (Rate Limiter)
-        // 3. Authentication
-        // 4. Mock Response
-        // 5. User Middleware
-        // 6. Debugging/Event/Delay Middleware
-
-        // Delay should always be at the bottom in case the user adds their own
-        // delay from inside of middleware.
-
-        // Todo: Move everything else into middleware
-
-        $this
-            ->bootPlugins()
-            ->mergeRequestProperties()
-            ->mergeBody()
-            ->mergeDelay();
+        $this->bootPlugins();
 
         // Now we'll queue te delay middleware and authenticator middleware
 
         $middleware
+            ->onRequest(new MergeRequestProperties, false, 'mergeRequestProperties')
+            ->onRequest(new MergeBody, false, 'mergeBody')
+            ->onRequest(new MergeDelay, false, 'mergeDelay')
             ->onRequest(new AuthenticateRequest, false, 'authenticateRequest')
             ->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
 
-        // Next, we'll merge in the connector/request middleware
-
-        $middleware
-            ->merge($connector->middleware())
-            ->merge($request->middleware());
-
-        // Now we'll boot the connector and request which may add more middleware
-
         $this->bootConnectorAndRequest();
 
-        // Now we will register the last middleware. This is middleware that will
-        // always run at the end no matter where it is placed in the chain. This
-        // is great for things like debugging and events.
-
-        $this->registerLastMiddleware();
+        $middleware
+            ->merge($this->connector->middleware())
+            ->merge($this->request->middleware())
+            ->onRequest(new DelayMiddleware, false, 'delayMiddleware')
+            ->onRequest(new DebugRequest, false, 'debugRequest')
+            ->onResponse(new DebugResponse, false, 'debugResponse');
 
         // Next, we will execute the request middleware pipeline which will
         // process any middleware added on the connector or the request.
 
-        $this->executeRequestPipeline();
+        $middleware->executeRequestPipeline($this);
     }
 
     /**
@@ -209,106 +203,6 @@ class PendingRequest implements PendingRequestContract
     }
 
     /**
-     * Merge all the properties together.
-     *
-     * @return $this
-     */
-    protected function mergeRequestProperties(): static
-    {
-        $connector = $this->connector;
-        $request = $this->request;
-
-        $this->headers()->merge(
-            $connector->headers()->all(),
-            $request->headers()->all()
-        );
-
-        $this->query()->merge(
-            $connector->query()->all(),
-            $request->query()->all()
-        );
-
-        $this->config()->merge(
-            $connector->config()->all(),
-            $request->config()->all()
-        );
-
-        return $this;
-    }
-
-    /**
-     * Merge the body together
-     *
-     * @return $this
-     * @throws \Saloon\Exceptions\PendingRequestException
-     */
-    protected function mergeBody(): static
-    {
-        $connector = $this->connector;
-        $request = $this->request;
-
-        $connectorBody = $connector instanceof HasBody ? $connector->body() : null;
-        $requestBody = $request instanceof HasBody ? $request->body() : null;
-
-        if (is_null($connectorBody) && is_null($requestBody)) {
-            return $this;
-        }
-
-        // When both the connector and the request use the `HasBody` interface - we will enforce
-        // that they are both of the same type. This means there won't be any confusion when
-        // merging.
-
-        if (isset($connectorBody, $requestBody) && ! $connectorBody instanceof $requestBody) {
-            throw new PendingRequestException('Connector and request body types must be the same.');
-        }
-
-        // We'll start by cloning the request or connector body depending on which
-        // one has been set.
-
-        $body = clone $requestBody ?? clone $connectorBody;
-
-        // When both the connector and the request body repositories are mergeable then we
-        // will merge them together.
-
-        if (isset($connectorBody, $requestBody) && $connectorBody instanceof MergeableBody && $requestBody instanceof MergeableBody) {
-            $repository = clone $connectorBody;
-
-            // We'll clone the request body into the connector body so any properties on the request
-            // body will take priority if they are using a keyed array.
-
-            $body = $repository->merge($requestBody->all());
-        }
-
-        // Now we'll check if the body is a MultipartBodyRepository. If it is, then we must
-        // set the body factory on the instance so the toStream method can create a stream
-        // later on in the process.
-
-        if ($body instanceof MultipartBodyRepository) {
-            $body->setMultipartBodyFactory($this->factoryCollection->multipartBodyFactory);
-        }
-
-        $this->body = $body;
-
-        return $this;
-    }
-
-    /**
-     * Merge delay together
-     *
-     * Request delay takes priority over connector delay
-     *
-     * @return $this
-     */
-    protected function mergeDelay(): static
-    {
-        $this->request->delay()->isNotEmpty() ?
-            $this->delay()->set($this->request->delay()->get()) :
-            $this->delay()->set($this->connector->delay()->get());
-
-        return $this;
-    }
-
-    /**
      * Run the boot method on the connector and request.
      *
      * @return $this
@@ -325,37 +219,13 @@ class PendingRequest implements PendingRequestContract
     }
 
     /**
-     * Register any default middleware to run at the end of the middleware stack.
+     * Get the request.
      *
-     * @return $this
+     * @return \Saloon\Contracts\Request
      */
-    protected function registerLastMiddleware(): static
+    public function getRequest(): Request
     {
-        $middleware = $this->middleware();
-
-        // Finally, we'll register the debugging middleware. This should always
-        // stay at the bottom of the middleware chain, so we output the very
-        // latest PendingRequest/Response
-
-        $middleware->onRequest(new DelayMiddleware, false, 'delayMiddleware');
-
-        $middleware->onRequest(new DebugRequest, false, 'debugRequest');
-
-        $middleware->onResponse(new DebugResponse, false, 'debugResponse');
-
-        return $this;
-    }
-
-    /**
-     * Execute the request pipeline.
-     *
-     * @return $this
-     */
-    protected function executeRequestPipeline(): static
-    {
-        $this->middleware()->executeRequestPipeline($this);
-
-        return $this;
+        return $this->request;
     }
 
     /**
@@ -369,15 +239,6 @@ class PendingRequest implements PendingRequestContract
         return $this->middleware()->executeResponsePipeline($response);
     }
 
-    /**
-     * Get the request.
-     *
-     * @return \Saloon\Contracts\Request
-     */
-    public function getRequest(): Request
-    {
-        return $this->request;
-    }
 
     /**
      * Get the connector.
@@ -642,5 +503,18 @@ class PendingRequest implements PendingRequestContract
         $request = $this->connector->handlePsrRequest($request, $this);
 
         return $this->request->handlePsrRequest($request, $this);
+    }
+
+    /**
+     * Set the body repository
+     *
+     * @param \Saloon\Contracts\Body\BodyRepository|null $body
+     * @return $this
+     */
+    public function setBody(?BodyRepository $body): static
+    {
+        $this->body = $body;
+
+        return $this;
     }
 }
