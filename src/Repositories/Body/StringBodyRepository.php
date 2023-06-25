@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
+use Stringable;
 use Saloon\Traits\Conditionable;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Traits\Body\CreatesStreamFromString;
-use Stringable;
 
 class StringBodyRepository implements BodyRepository, Stringable
 {

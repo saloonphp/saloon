@@ -53,8 +53,8 @@ test('you can conditionally set on the store', function () {
     $resourceB = fopen('php://memory', 'rw+');
     fwrite($resourceB, 'Yeehaw');
 
-    $body->when(true, fn(StreamBodyRepository $body) => $body->set($resourceA));
-    $body->when(false, fn(StreamBodyRepository $body) => $body->set($resourceB));
+    $body->when(true, fn (StreamBodyRepository $body) => $body->set($resourceA));
+    $body->when(false, fn (StreamBodyRepository $body) => $body->set($resourceB));
 
     expect($body->get())->toEqual($resourceA);
 });
@@ -76,10 +76,10 @@ test('it will throw an exception if the value is not a resource or StreamInterfa
 
     new StreamBodyRepository($value);
 })->with([
-    fn() => 'Howdy',
-    fn() => 123,
-    fn() => [],
-    fn() => false,
+    fn () => 'Howdy',
+    fn () => 123,
+    fn () => [],
+    fn () => false,
 ]);
 
 test('it will throw an exception if the value is not a resource or StreamInterface when setting', function (mixed $value) {
@@ -87,10 +87,10 @@ test('it will throw an exception if the value is not a resource or StreamInterfa
 
     new StreamBodyRepository($value);
 })->with([
-    fn() => 'Howdy',
-    fn() => 123,
-    fn() => [],
-    fn() => false,
+    fn () => 'Howdy',
+    fn () => 123,
+    fn () => [],
+    fn () => false,
 ]);
 
 test('it allows null values', function () {

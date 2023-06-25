@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockResponse;
-use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;

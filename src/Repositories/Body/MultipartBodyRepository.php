@@ -15,7 +15,6 @@ use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Contracts\MultipartBodyFactory;
 use Psr\Http\Message\StreamFactoryInterface;
-use Saloon\Exceptions\UnableToCastToStringException;
 
 class MultipartBodyRepository implements BodyRepository, MergeableBody
 {

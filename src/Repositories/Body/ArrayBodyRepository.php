@@ -11,7 +11,6 @@ use Psr\Http\Message\StreamInterface;
 use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Contracts\Body\BodyRepository;
 use Psr\Http\Message\StreamFactoryInterface;
-use Saloon\Exceptions\UnableToCastToStringException;
 
 class ArrayBodyRepository implements BodyRepository, MergeableBody
 {
