@@ -31,7 +31,7 @@ class Storage
             $createMissingBaseDirectory ? $this->createDirectory($baseDirectory) : throw new DirectoryNotFoundException($baseDirectory);
         }
 
-        $this->baseDirectory = $baseDirectory;
+        $this->baseDirectory = base_path($baseDirectory);
     }
 
     /**
