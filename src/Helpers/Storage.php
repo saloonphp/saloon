@@ -31,7 +31,9 @@ class Storage
             $createMissingBaseDirectory ? $this->createDirectory($baseDirectory) : throw new DirectoryNotFoundException($baseDirectory);
         }
 
-        $this->baseDirectory = base_path($baseDirectory);
+        $this->baseDirectory = class_exists(\Saloon\Laravel\Saloon::class) && function_exists('base_path') 
+            ? base_path($baseDirectory) 
+            : $baseDirectory;
     }
 
     /**
