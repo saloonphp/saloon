@@ -46,21 +46,6 @@ parameters:
 			path: src/Http/PendingRequest.php
 
 		-
-			message: "#^Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\)\\: mixed, \\(callable\\(\\)\\: mixed\\)\\|object given\\.$#"
-			count: 2
-			path: src/Http/Response.php
-
-		-
-			message: "#^Parameter \\#1 \\$object of method ReflectionMethod\\:\\:invoke\\(\\) expects object\\|null, object\\|string given\\.$#"
-			count: 1
-			path: src/Http/Response.php
-
-		-
-			message: "#^Parameter \\#1 \\$objectOrClass of class ReflectionClass constructor expects class\\-string\\<T of object\\>\\|T of object, object\\|string given\\.$#"
-			count: 1
-			path: src/Http/Response.php
-
-		-
 			message: "#^Method Saloon\\\\Http\\\\Senders\\\\GuzzleSender\\:\\:createRequestOptions\\(\\) should return array\\<'allow_redirects'\\|'auth'\\|'body'\\|'cert'\\|'connect_timeout'\\|'cookies'\\|'crypto_method'\\|'debug'\\|'decode_content'\\|'delay'\\|'expect'\\|'force_ip_resolve'\\|'form_params'\\|'headers'\\|'http_errors'\\|'idn_conversion'\\|'json'\\|'multipart'\\|'on_headers'\\|'on_stats'\\|'progress'\\|'proxy'\\|'query'\\|'read_timeout'\\|'sink'\\|'ssl_key'\\|'stream'\\|'synchronous'\\|'timeout'\\|'verify'\\|'version', mixed\\> but returns array\\<string, mixed\\>\\.$#"
 			count: 2
 			path: src/Http/Senders/GuzzleSender.php
