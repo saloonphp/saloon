@@ -1,0 +1,94 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Saloon\Http\Senders;
+
+use Exception;
+use SoapFault;
+use SoapClient;
+use SoapHeader;
+use Saloon\Contracts\Sender;
+use Saloon\Contracts\Response;
+use Saloon\Contracts\PendingRequest;
+use Saloon\Http\Responses\SoapResponse;
+use Saloon\Contracts\Response as ResponseContract;
+use Saloon\Exceptions\Request\FatalRequestException;
+
+class SoapClientSender implements Sender
+{
+    /**
+     * The Soap client.
+     */
+    public SoapClient $client;
+
+    /**
+     * @throws FatalRequestException
+     */
+    public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): Response
+    {
+        try {
+            $this->client ??= new SoapClient(
+                wsdl: $pendingRequest->getConnector()->resolveBaseUrl(),
+                options: $pendingRequest->config()->all()
+            );
+
+            $headers = $this->createRequestHeaders(pendingRequest: $pendingRequest);
+            $this->client->__setSoapHeaders($headers);
+
+            $response = $this->client->__soapCall($pendingRequest->getRequest()->resolveEndpoint(), [$pendingRequest->query()->all()]);
+
+            return $this->createResponse(pendingSaloonRequest: $pendingRequest, response: $response);
+        } catch (SoapFault $exception) {
+            // A SoapFault exception will be thrown if an error occurs and
+            // the SoapClient was constructed with the exceptions option not set, or set to TRUE.
+            throw new FatalRequestException(originalException: $exception, pendingRequest:  $pendingRequest);
+
+        } catch (Exception $exception) {
+            return $this->createResponse(
+                pendingSaloonRequest: $pendingRequest,
+                response: null,
+                exception: $exception
+            );
+        }
+    }
+
+    /**
+     * Build up all the request headers
+     *
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @return array<SoapHeader>
+     */
+    protected function createRequestHeaders(PendingRequest $pendingRequest): array
+    {
+        $headers = [];
+        foreach ($pendingRequest->headers()->all() as $namespace => $value) {
+            if (is_array($value)) {
+                $headers[] = new SoapHeader(
+                    namespace: $namespace,
+                    name: ! empty($value[0]) ? $value[0] : '',
+                    data:! empty($value[1]) ? $value[1] : null,
+                    mustUnderstand: ! empty($value[2]) ? $value[2] : false,
+                    actor:! empty($value[3]) ? $value[3] : null
+                );
+            } else {
+                $headers[] = new SoapHeader(namespace: $namespace, name: $value);
+            }
+        }
+
+        return $headers;
+    }
+
+    /**
+     * Create a response.
+     */
+    protected function createResponse(PendingRequest $pendingSaloonRequest, mixed $response, Exception $exception = null): ResponseContract
+    {
+        return new SoapResponse(
+            client: $this->client,
+            response: $response,
+            pendingRequest: $pendingSaloonRequest,
+            senderException: $exception
+        );
+    }
+}
