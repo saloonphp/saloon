@@ -51,6 +51,11 @@ function apiUrl()
     return 'https://tests.saloon.dev/api';
 }
 
+function wsdlUrl()
+{
+    return 'https://www.w3schools.com/xml/tempconvert.asmx?WSDL';
+}
+
 function connector(): TestConnector
 {
     return new TestConnector;
