@@ -329,18 +329,6 @@ trait HasResponseHelpers
     }
 
     /**
-     * Close the stream and any underlying resources.
-     *
-     * @return $this
-     */
-    public function close(): static
-    {
-        $this->stream()->close();
-
-        return $this;
-    }
-
-    /**
      * Get the body of the response.
      *
      * @return string
