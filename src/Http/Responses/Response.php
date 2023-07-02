@@ -126,6 +126,18 @@ class Response implements HttpResponseContract
     }
 
     /**
+     * Close the stream and any underlying resources.
+     *
+     * @return $this
+     */
+    public function close(): static
+    {
+        $this->stream()->close();
+
+        return $this;
+    }
+
+    /**
      * Get the headers from the response.
      *
      * @return \Saloon\Contracts\ArrayStore
