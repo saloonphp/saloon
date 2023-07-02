@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use Saloon\Helpers\Str;
 use Saloon\Helpers\Date;
-use Saloon\Http\Response;
 use Saloon\Contracts\Request;
 use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Responses\Response;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\OAuth2\GetUserRequest;
 use Saloon\Exceptions\InvalidStateException;

@@ -10,10 +10,10 @@ use Illuminate\Support\Collection;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Symfony\Component\DomCrawler\Crawler;
-use Saloon\Http\Response as SaloonResponse;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Http\Responses\Response as SaloonResponse;
 
 test('you can get the original pending request', function () {
     $mockClient = new MockClient([

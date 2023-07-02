@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Http;
+namespace Saloon\Http\Responses;
 
 use Throwable;
 use Saloon\Traits\Macroable;

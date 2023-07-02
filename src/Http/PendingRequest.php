@@ -17,6 +17,7 @@ use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Contracts\Authenticator;
+use Saloon\Http\Responses\Response;
 use Saloon\Helpers\ReflectionHelper;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Http\Middleware\DebugRequest;
