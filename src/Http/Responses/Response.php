@@ -12,10 +12,10 @@ use Saloon\Contracts\PendingRequest;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Traits\Responses\HasResponseHelpers;
-use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
+use Saloon\Contracts\HttpResponse as HttpResponseContract;
 
-class Response implements ResponseContract
+class Response implements HttpResponseContract
 {
     use Macroable;
     use HasResponseHelpers;
