@@ -3,9 +3,12 @@
 declare(strict_types=1);
 
 use Saloon\Http\Senders\GuzzleSender;
+use Saloon\Http\Senders\SoapClientSender;
 use Saloon\Tests\Fixtures\Senders\ArraySender;
+use Saloon\Tests\Fixtures\Requests\SoapRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Connectors\SoapClientConnector;
 use Saloon\Tests\Fixtures\Connectors\ArraySenderConnector;
 use Saloon\Tests\Fixtures\Connectors\ArraySenderDefaultMethodConnector;
 
@@ -34,6 +37,19 @@ test('you can overwrite the sender on a connector using the property', function 
 
     expect($response->headers()->all())->toEqual(['X-Fake' => true]);
     expect($response->body())->toEqual('Default');
+});
+
+test('you can overwrite the soap sender on a connector using the defaultSender method', function () {
+    $connector = new SoapClientConnector();
+    $sender = $connector->sender();
+
+    expect($sender)->toBeInstanceOf(SoapClientSender::class);
+    expect($connector->sender())->toBe($sender);
+
+    $request = new SoapRequest(fahrenheit: 1);
+    $response = $connector->send($request);
+
+    expect($response->body())->toEqual('{"FahrenheitToCelsiusResult":"-17.2222222222222"}');
 });
 
 test('you can overwrite the sender on a connector using the defaultSender method', function () {
