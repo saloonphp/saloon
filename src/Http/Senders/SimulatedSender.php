@@ -13,7 +13,7 @@ use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\SimulatedResponsePayload;
-use Saloon\Contracts\Response as ResponseContract;
+use Saloon\Contracts\HttpResponse as HttpResponseContract;
 
 class SimulatedSender implements Sender
 {
@@ -22,11 +22,11 @@ class SimulatedSender implements Sender
      *
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @param bool $asynchronous
-     * @return \Saloon\Contracts\Response|\GuzzleHttp\Promise\PromiseInterface
+     * @return \Saloon\Contracts\HttpResponse|\GuzzleHttp\Promise\PromiseInterface
      * @throws \Saloon\Exceptions\SenderException
      * @throws \Throwable
      */
-    public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): ResponseContract|PromiseInterface
+    public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): HttpResponseContract|PromiseInterface
     {
         $simulatedResponsePayload = $pendingRequest->getSimulatedResponsePayload();
 
@@ -45,7 +45,7 @@ class SimulatedSender implements Sender
 
         // Let's create our response!
 
-        /** @var class-string<\Saloon\Contracts\Response> $responseClass */
+        /** @var class-string<\Saloon\Contracts\HttpResponse> $responseClass */
         $responseClass = $pendingRequest->getResponseClass();
 
         $response = $responseClass::fromPsrResponse(
