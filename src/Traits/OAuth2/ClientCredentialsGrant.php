@@ -66,7 +66,9 @@ trait ClientCredentialsGrant
         $responseData = $response->object();
 
         $accessToken = $responseData->access_token;
-        $expiresAt = isset($responseData->expires_in) ? Date::now()->addSeconds($responseData->expires_in)->toDateTime() : null;
+        $expiresAt = isset($responseData->expires_in) && is_numeric($responseData->expires_in)
+            ? Date::now()->addSeconds((int) $responseData->expires_in)->toDateTime()
+            : null;
 
         return $this->createOAuthAuthenticator($accessToken, $expiresAt);
     }
