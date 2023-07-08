@@ -22,6 +22,9 @@ class SoapClientSender implements Sender
      */
     public SoapClient $client;
 
+    /**
+     * @var array<SoapHeader>
+     */
     public array $headers;
 
     /**
@@ -59,8 +62,8 @@ class SoapClientSender implements Sender
     /**
      * Build up all the request headers
      *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return array<SoapHeader>
+     * @param PendingRequest $pendingRequest
+     * @return void
      */
     protected function createRequestHeaders(PendingRequest $pendingRequest): void
     {
