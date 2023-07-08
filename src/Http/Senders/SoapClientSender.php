@@ -107,4 +107,14 @@ class SoapClientSender implements Sender
     {
         return $this->client;
     }
+
+    /**
+     * Get the Soap headers
+     *
+     * @return array<SoapHeader>
+     */
+    public function getSoapHeaders(): array
+    {
+        return $this->headers;
+    }
 }
