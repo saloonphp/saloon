@@ -96,4 +96,15 @@ class SoapClientSender implements Sender
             senderException: $exception
         );
     }
+
+
+    /**
+     * Get the Soap client
+     *
+     * @return \SoapClient
+     */
+    public function getSoapClient(): SoapClient
+    {
+        return $this->client;
+    }
 }
