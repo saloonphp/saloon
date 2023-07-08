@@ -22,19 +22,22 @@ class SoapClientSender implements Sender
      */
     public SoapClient $client;
 
+    public array $headers;
+
     /**
      * @throws FatalRequestException
      */
     public function sendRequest(PendingRequest $pendingRequest, bool $asynchronous = false): Response
     {
         try {
+            $this->createRequestHeaders(pendingRequest: $pendingRequest);
+
             $this->client ??= new SoapClient(
                 wsdl: $pendingRequest->getConnector()->resolveBaseUrl(),
                 options: $pendingRequest->config()->all()
             );
 
-            $headers = $this->createRequestHeaders(pendingRequest: $pendingRequest);
-            $this->client->__setSoapHeaders($headers);
+            $this->client->__setSoapHeaders($this->headers);
 
             $response = $this->client->__soapCall($pendingRequest->getRequest()->resolveEndpoint(), [$pendingRequest->query()->all()]);
 
@@ -59,7 +62,7 @@ class SoapClientSender implements Sender
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return array<SoapHeader>
      */
-    protected function createRequestHeaders(PendingRequest $pendingRequest): array
+    protected function createRequestHeaders(PendingRequest $pendingRequest): void
     {
         $headers = [];
         foreach ($pendingRequest->headers()->all() as $namespace => $value) {
@@ -76,7 +79,7 @@ class SoapClientSender implements Sender
             }
         }
 
-        return $headers;
+        $this->headers = $headers;
     }
 
     /**
