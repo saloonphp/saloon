@@ -34,7 +34,7 @@ class SoapClientSender implements Sender
 
             $this->client ??= new SoapClient(
                 wsdl: $pendingRequest->getConnector()->resolveBaseUrl(),
-                options: $pendingRequest->config()->all()
+                options: $pendingRequest->config()->add('trace', 1)->all()
             );
 
             $this->client->__setSoapHeaders($this->headers);
