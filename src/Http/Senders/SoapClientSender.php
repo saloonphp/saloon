@@ -66,7 +66,9 @@ class SoapClientSender implements Sender
     {
         $headers = [];
         foreach ($pendingRequest->headers()->all() as $namespace => $value) {
-            if (is_array($value)) {
+            if ($value instanceof SoapHeader) {
+                $headers[] = $value;
+            } elseif (is_array($value)) {
                 $headers[] = new SoapHeader(
                     namespace: $namespace,
                     name: ! empty($value[0]) ? $value[0] : '',
