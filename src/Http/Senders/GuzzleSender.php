@@ -7,6 +7,7 @@ namespace Saloon\Http\Senders;
 use Exception;
 use Saloon\Enums\Timeout;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use Saloon\Contracts\Sender;
 use GuzzleHttp\RequestOptions;
@@ -169,7 +170,7 @@ class GuzzleSender implements Sender
         }
 
         if ($pendingRequest->query()->isNotEmpty()) {
-            $requestOptions[RequestOptions::QUERY] = $pendingRequest->query()->all();
+            $requestOptions[RequestOptions::QUERY] = Query::build($pendingRequest->query()->all());
         }
 
         foreach ($pendingRequest->config()->all() as $configVariable => $value) {
