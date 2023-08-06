@@ -48,7 +48,10 @@ class FixtureHelper
     {
         foreach ($patterns as $pattern => $replacement) {
             $matches = [];
-            preg_match($pattern, $source, $matches);
+
+            preg_match_all($pattern, $source, $matches);
+
+            $matches = array_unique($matches[0] ?? []);
 
             foreach ($matches as $match) {
                 $value = is_callable($replacement) ? $replacement($match) : $replacement;
