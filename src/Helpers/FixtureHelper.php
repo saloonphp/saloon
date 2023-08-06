@@ -36,4 +36,20 @@ class FixtureHelper
 
         return $source;
     }
+
+    /**
+     * Replace sensitive regex patterns
+     *
+     * @param string $source
+     * @param array<string, string> $patterns
+     * @return string
+     */
+    public static function replaceSensitiveRegexPatterns(string $source, array $patterns): string
+    {
+        foreach ($patterns as $pattern => $replacement) {
+            $source = preg_replace($pattern, $replacement, $source);
+        }
+
+        return $source;
+    }
 }

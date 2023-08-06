@@ -84,6 +84,7 @@ class Fixture
     {
         $recordedResponse = $this->swapSensitiveHeaders($recordedResponse);
         $recordedResponse = $this->swapSensitiveJson($recordedResponse);
+        $recordedResponse = $this->swapSensitiveBodyWithRegex($recordedResponse);
         $recordedResponse = $this->beforeSave($recordedResponse);
 
         $this->storage->put($this->getFixturePath(), $recordedResponse->toFile());
@@ -169,6 +170,21 @@ class Fixture
         return $recordedResponse;
     }
 
+    protected function swapSensitiveBodyWithRegex(RecordedResponse $recordedResponse): RecordedResponse
+    {
+        $sensitiveRegexPatterns = $this->defineSensitiveRegexPatterns();
+
+        if (empty($sensitiveRegexPatterns)) {
+            return $recordedResponse;
+        }
+
+        $redactedData = FixtureHelper::replaceSensitiveRegexPatterns($recordedResponse->data, $sensitiveRegexPatterns);
+
+        $recordedResponse->data = $redactedData;
+
+        return $recordedResponse;
+    }
+
     /**
      * Swap any sensitive headers
      *
@@ -185,6 +201,16 @@ class Fixture
      * @return array<string, string|callable>
      */
     protected function defineSensitiveJsonParameters(): array
+    {
+        return [];
+    }
+
+    /**
+     * Define regex patterns that should be replaced
+     *
+     * @return array<string, string>
+     */
+    protected function defineSensitiveRegexPatterns(): array
     {
         return [];
     }

@@ -9,6 +9,7 @@ use League\Flysystem\Filesystem;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\FixtureException;
+use Saloon\Tests\Fixtures\Mocking\RegexUserFixture;
 use Saloon\Tests\Fixtures\Mocking\UserFixture;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
@@ -652,4 +653,37 @@ test('you can define a custom redaction method for non-json body fixtures', func
 
     expect($responseA->status())->toEqual(200);
     expect($responseB->status())->toEqual(222);
+});
+
+test('you can define regex patterns that should be used to replace the body in fixtures', function () {
+    $mockClient = new MockClient([
+        new RegexUserFixture,
+        new RegexUserFixture,
+    ]);
+
+    $responseA = connector()->send(new UserRequest, $mockClient);
+    $responseB = connector()->send(new UserRequest, $mockClient);
+
+    expect($responseA->json())->toEqual([
+        'name' => 'Sammyjo20',
+        'actual_name' => 'Sam',
+        'twitter' => '@carre_sam',
+    ]);
+
+    expect($responseA->isSimulated())->toBeFalse();
+    expect($responseB->isSimulated())->toBeTrue();
+
+    expect($responseB->json())->toEqual([
+        'name' => 'Taylormyjo20',
+        'actual_name' => 'Taylor',
+        'twitter' => '**REDACTED-TWITTER**',
+    ]);
+
+    $fixtureData = json_decode(file_get_contents('tests/Fixtures/Saloon/Testing/user.json'), true, 512, JSON_THROW_ON_ERROR);
+
+    expect($fixtureData['data'])->toEqual(json_encode([
+        'name' => 'Taylormyjo20',
+        'actual_name' => 'Taylor',
+        'twitter' => '**REDACTED-TWITTER**',
+    ], JSON_THROW_ON_ERROR));
 });
