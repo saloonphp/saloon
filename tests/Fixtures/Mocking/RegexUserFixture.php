@@ -27,9 +27,9 @@ class RegexUserFixture extends Fixture
     {
         return [
             // Twitter Handle
-            '/(\@)([a-z0-9_]{1,15})/i' => '**REDACTED-TWITTER**',
+            '/@[a-z0-9_]{0,100}/' => '**REDACTED-TWITTER**',
             // The name Sam
-            '/Sam/' => 'Taylor',
+            '/Sam/' => fn (string $value) => substr_replace($value, 'xxx', 1),
         ];
     }
 }

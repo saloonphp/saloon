@@ -47,7 +47,14 @@ class FixtureHelper
     public static function replaceSensitiveRegexPatterns(string $source, array $patterns): string
     {
         foreach ($patterns as $pattern => $replacement) {
-            $source = preg_replace($pattern, $replacement, $source);
+            $matches = [];
+            preg_match($pattern, $source, $matches);
+
+            foreach ($matches as $match) {
+                $value = is_callable($replacement) ? $replacement($match) : $replacement;
+
+                $source = str_replace($match, $value, $source);
+            }
         }
 
         return $source;

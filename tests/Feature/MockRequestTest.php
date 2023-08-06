@@ -674,16 +674,16 @@ test('you can define regex patterns that should be used to replace the body in f
     expect($responseB->isSimulated())->toBeTrue();
 
     expect($responseB->json())->toEqual([
-        'name' => 'Taylormyjo20',
-        'actual_name' => 'Taylor',
+        'name' => 'Sxxxmyjo20',
+        'actual_name' => 'Sxxx',
         'twitter' => '**REDACTED-TWITTER**',
     ]);
 
     $fixtureData = json_decode(file_get_contents('tests/Fixtures/Saloon/Testing/user.json'), true, 512, JSON_THROW_ON_ERROR);
 
     expect($fixtureData['data'])->toEqual(json_encode([
-        'name' => 'Taylormyjo20',
-        'actual_name' => 'Taylor',
+        'name' => 'Sxxxmyjo20',
+        'actual_name' => 'Sxxx',
         'twitter' => '**REDACTED-TWITTER**',
     ], JSON_THROW_ON_ERROR));
 });

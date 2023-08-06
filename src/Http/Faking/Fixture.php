@@ -170,6 +170,12 @@ class Fixture
         return $recordedResponse;
     }
 
+    /**
+     * Swap sensitive body with regex patterns
+     *
+     * @param \Saloon\Data\RecordedResponse $recordedResponse
+     * @return \Saloon\Data\RecordedResponse
+     */
     protected function swapSensitiveBodyWithRegex(RecordedResponse $recordedResponse): RecordedResponse
     {
         $sensitiveRegexPatterns = $this->defineSensitiveRegexPatterns();
