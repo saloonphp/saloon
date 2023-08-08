@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Saloon\Repositories\Body;
 
 use Saloon\Helpers\Arr;
-use Saloon\Helpers\StringHelpers;
 use InvalidArgumentException;
 use Saloon\Data\MultipartValue;
 use Saloon\Traits\Conditionable;
+use Saloon\Helpers\StringHelpers;
 use Saloon\Exceptions\BodyException;
 use Psr\Http\Message\StreamInterface;
 use Saloon\Contracts\Body\MergeableBody;

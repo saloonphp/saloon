@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Exceptions\Request;
 
-use Saloon\Helpers\StatusCodeHelper;
 use Throwable;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\PendingRequest;
+use Saloon\Helpers\StatusCodeHelper;
 use Saloon\Exceptions\SaloonException;
 
 class RequestException extends SaloonException

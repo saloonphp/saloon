@@ -6,9 +6,9 @@ namespace Saloon\Helpers;
 
 use Closure;
 use ReflectionClass;
+use Saloon\Contracts\Request;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\PendingRequest;
-use Saloon\Contracts\Request;
 
 class Helpers
 {

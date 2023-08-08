@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Saloon\Helpers\StringHelpers;
 use Saloon\Helpers\Date;
 use Saloon\Http\Response;
 use Saloon\Contracts\Request;
