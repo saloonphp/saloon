@@ -21,39 +21,26 @@ class Response implements ResponseContract
 
     /**
      * The PSR request
-     *
-     * @var RequestInterface
      */
     protected RequestInterface $psrRequest;
 
     /**
      * The PSR response from the sender.
-     *
-     * @var \Psr\Http\Message\ResponseInterface
      */
     protected ResponseInterface $psrResponse;
 
     /**
      * The pending request that has all the request properties
-     *
-     * @var \Saloon\Contracts\PendingRequest
      */
     protected PendingRequest $pendingRequest;
 
     /**
      * The original sender exception
-     *
-     * @var \Throwable|null
      */
     protected ?Throwable $senderException = null;
 
     /**
      * Create a new response instance.
-     *
-     * @param \Psr\Http\Message\ResponseInterface $psrResponse
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @param \Psr\Http\Message\RequestInterface $psrRequest
-     * @param \Throwable|null $senderException
      */
     public function __construct(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, Throwable $senderException = null)
     {
@@ -65,12 +52,6 @@ class Response implements ResponseContract
 
     /**
      * Create a new response instance
-     *
-     * @param \Psr\Http\Message\ResponseInterface $psrResponse
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @param \Psr\Http\Message\RequestInterface $psrRequest
-     * @param \Throwable|null $senderException
-     * @return static
      */
     public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, ?Throwable $senderException = null): static
     {
@@ -79,8 +60,6 @@ class Response implements ResponseContract
 
     /**
      * Get the pending request that created the response.
-     *
-     * @return \Saloon\Contracts\PendingRequest
      */
     public function getPendingRequest(): PendingRequest
     {
@@ -89,8 +68,6 @@ class Response implements ResponseContract
 
     /**
      * Get the original request that created the response.
-     *
-     * @return \Saloon\Contracts\Request
      */
     public function getRequest(): Request
     {
@@ -99,8 +76,6 @@ class Response implements ResponseContract
 
     /**
      * Get the PSR-7 request
-     *
-     * @return \Psr\Http\Message\RequestInterface
      */
     public function getPsrRequest(): RequestInterface
     {
@@ -109,8 +84,6 @@ class Response implements ResponseContract
 
     /**
      * Create a PSR response from the raw response.
-     *
-     * @return \Psr\Http\Message\ResponseInterface
      */
     public function getPsrResponse(): ResponseInterface
     {
@@ -119,8 +92,6 @@ class Response implements ResponseContract
 
     /**
      * Get the body of the response as string.
-     *
-     * @return string
      */
     public function body(): string
     {
@@ -136,8 +107,6 @@ class Response implements ResponseContract
 
     /**
      * Get the body as a stream. Don't forget to close the stream after using ->close().
-     *
-     * @return \Psr\Http\Message\StreamInterface
      */
     public function stream(): StreamInterface
     {
@@ -146,8 +115,6 @@ class Response implements ResponseContract
 
     /**
      * Get the headers from the response.
-     *
-     * @return \Saloon\Contracts\ArrayStore
      */
     public function headers(): ArrayStoreContract
     {
@@ -160,8 +127,6 @@ class Response implements ResponseContract
 
     /**
      * Get the status code of the response.
-     *
-     * @return int
      */
     public function status(): int
     {
@@ -170,8 +135,6 @@ class Response implements ResponseContract
 
     /**
      * Get the original sender exception
-     *
-     * @return \Throwable|null
      */
     public function getSenderException(): ?Throwable
     {

@@ -10,8 +10,6 @@ interface DebuggingDriver
 {
     /**
      * Define the debugger name
-     *
-     * @return string
      */
     public function name(): string;
 
@@ -19,17 +17,11 @@ interface DebuggingDriver
      * Determines if the debugging driver can be used
      *
      * E.g if it has the correct dependencies
-     *
-     * @return bool
      */
     public function hasDependencies(): bool;
 
     /**
      * Send the data to the debugger
-     *
-     * @param \Saloon\Debugging\DebugData $data
-     *
-     * @return void
      */
     public function send(DebugData $data): void;
 }

@@ -15,8 +15,6 @@ class DtoConnector extends Connector
 
     /**
      * Define the base url of the api.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {
@@ -35,9 +33,6 @@ class DtoConnector extends Connector
 
     /**
      * Create DTO from Response
-     *
-     * @param Response $response
-     * @return mixed
      */
     public function createDtoFromResponse(Response $response): mixed
     {

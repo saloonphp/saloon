@@ -10,8 +10,6 @@ class StringHelpers
      * Determine if a given string matches a given pattern.
      *
      * @param string|iterable<string> $pattern
-     * @param string $value
-     * @return bool
      */
     public static function matchesPattern(string|iterable $pattern, string $value): bool
     {
@@ -46,10 +44,6 @@ class StringHelpers
 
     /**
      * Begin a string with a single instance of a given value.
-     *
-     * @param string $value
-     * @param string $prefix
-     * @return string
      */
     public static function start(string $value, string $prefix): string
     {
@@ -62,7 +56,6 @@ class StringHelpers
      * Generate a more truly "random" alpha-numeric string.
      *
      * @param int<1, max> $length
-     * @return string
      * @throws \Exception
      */
     public static function random(int $length = 16): string

@@ -11,9 +11,6 @@ class ResponseRecorder
 {
     /**
      * Record a response
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return \Saloon\Data\RecordedResponse
      */
     public static function record(Response $response): RecordedResponse
     {

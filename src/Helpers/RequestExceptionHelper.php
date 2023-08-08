@@ -24,10 +24,6 @@ class RequestExceptionHelper
 {
     /**
      * Create the request exception from a response
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @param \Throwable|null $previous
-     * @return \Saloon\Exceptions\Request\RequestException
      */
     public static function create(Response $response, Throwable $previous = null): RequestException
     {

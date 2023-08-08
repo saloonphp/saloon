@@ -11,9 +11,6 @@ class DelayMiddleware implements RequestMiddleware
 {
     /**
      * Register a request middleware
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return void
      */
     public function __invoke(PendingRequest $pendingRequest): void
     {

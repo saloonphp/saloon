@@ -10,15 +10,11 @@ trait HasOAuthConfig
 {
     /**
      * The OAuth2 Config
-     *
-     * @var \Saloon\Helpers\OAuth2\OAuthConfig
      */
     protected OAuthConfig $oauthConfig;
 
     /**
      * Manage the OAuth2 config
-     *
-     * @return \Saloon\Helpers\OAuth2\OAuthConfig
      */
     public function oauthConfig(): OAuthConfig
     {
@@ -27,8 +23,6 @@ trait HasOAuthConfig
 
     /**
      * Define the default Oauth 2 Config.
-     *
-     * @return \Saloon\Helpers\OAuth2\OAuthConfig
      */
     protected function defaultOauthConfig(): OAuthConfig
     {

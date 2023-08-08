@@ -18,15 +18,11 @@ class GetClientCredentialsTokenRequest extends Request implements HasBody
 
     /**
      * Define the method that the request will use.
-     *
-     * @var \Saloon\Enums\Method
      */
     protected Method $method = Method::POST;
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {
@@ -36,9 +32,7 @@ class GetClientCredentialsTokenRequest extends Request implements HasBody
     /**
      * Requires the authorization code and OAuth 2 config.
      *
-     * @param \Saloon\Helpers\OAuth2\OAuthConfig $oauthConfig
      * @param array<string> $scopes
-     * @param string $scopeSeparator
      */
     public function __construct(protected OAuthConfig $oauthConfig, protected array $scopes = [], protected string $scopeSeparator = ' ')
     {

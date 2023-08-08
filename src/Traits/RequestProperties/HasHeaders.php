@@ -11,15 +11,11 @@ trait HasHeaders
 {
     /**
      * Request Headers
-     *
-     * @var \Saloon\Contracts\ArrayStore
      */
     protected ArrayStoreContract $headers;
 
     /**
      * Access the headers
-     *
-     * @return \Saloon\Contracts\ArrayStore
      */
     public function headers(): ArrayStoreContract
     {

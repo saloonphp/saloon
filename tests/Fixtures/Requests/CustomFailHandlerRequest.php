@@ -19,8 +19,6 @@ class CustomFailHandlerRequest extends Request
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {
@@ -29,9 +27,6 @@ class CustomFailHandlerRequest extends Request
 
     /**
      * Determine if the request has failed
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return bool
      */
     public function hasRequestFailed(Response $response): bool
     {

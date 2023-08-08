@@ -67,7 +67,6 @@ class ArrayBodyRepository implements BodyRepository, MergeableBody
      * Add an element to the repository.
      *
      * @param array-key|null $key
-     * @param mixed|null $value
      * @return $this
      */
     public function add(string|int|null $key = null, mixed $value = null): static
@@ -83,7 +82,6 @@ class ArrayBodyRepository implements BodyRepository, MergeableBody
      * Get a specific key of the array
      *
      * @param array-key|null $key
-     * @param mixed|null $default
      * @return ($key is null ? array<array-key, mixed> : mixed)
      */
     public function get(string|int|null $key = null, mixed $default = null): mixed
@@ -111,7 +109,6 @@ class ArrayBodyRepository implements BodyRepository, MergeableBody
     /**
      * Determine if the repository is empty
      *
-     * @return bool
      *
      * @phpstan-assert-if-false non-empty-array $this->data
      */
@@ -123,7 +120,6 @@ class ArrayBodyRepository implements BodyRepository, MergeableBody
     /**
      * Determine if the repository is not empty
      *
-     * @return bool
      *
      * @phpstan-assert-if-true non-empty-array $this->data
      */
@@ -134,9 +130,6 @@ class ArrayBodyRepository implements BodyRepository, MergeableBody
 
     /**
      * Convert the body repository into a stream
-     *
-     * @param StreamFactoryInterface $streamFactory
-     * @return StreamInterface
      */
     public function toStream(StreamFactoryInterface $streamFactory): StreamInterface
     {

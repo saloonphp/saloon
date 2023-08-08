@@ -16,8 +16,6 @@ class CustomExceptionConnector extends Connector
 
     /**
      * Define the base url of the api.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {
@@ -26,10 +24,6 @@ class CustomExceptionConnector extends Connector
 
     /**
      * Customise the request exception handler
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @param \Throwable|null $senderException
-     * @return \Throwable|null
      */
     public function getRequestException(Response $response, ?Throwable $senderException): ?Throwable
     {

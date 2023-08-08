@@ -13,16 +13,13 @@ interface Connector extends Authenticatable, CanThrowRequestExceptions, HasConfi
      * Handle the boot lifecycle hook
      *
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return void
      */
     public function boot(PendingRequest $pendingRequest): void;
 
     /**
      * Handle the PSR request before it is sent
      *
-     * @param \Psr\Http\Message\RequestInterface $request
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return \Psr\Http\Message\RequestInterface
      */
     public function handlePsrRequest(RequestInterface $request, PendingRequest $pendingRequest): RequestInterface;
 
@@ -30,14 +27,11 @@ interface Connector extends Authenticatable, CanThrowRequestExceptions, HasConfi
      * Cast the response to a DTO.
      *
      * @param \Saloon\Contracts\Response $response
-     * @return mixed
      */
     public function createDtoFromResponse(Response $response): mixed;
 
     /**
      * Define the base URL of the API.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string;
 
@@ -81,10 +75,7 @@ interface Connector extends Authenticatable, CanThrowRequestExceptions, HasConfi
      * Send a synchronous request and retry if it fails
      *
      * @param \Saloon\Contracts\Request $request
-     * @param int $maxAttempts
-     * @param int $interval
      * @param callable(\Throwable, \Saloon\Contracts\PendingRequest): (bool)|null $handleRetry
-     * @param bool $throw
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @return \Saloon\Contracts\Response
      */
@@ -95,7 +86,6 @@ interface Connector extends Authenticatable, CanThrowRequestExceptions, HasConfi
      *
      * @param \Saloon\Contracts\Request $request
      * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface;
 

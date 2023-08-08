@@ -18,8 +18,6 @@ class HasJsonBodyConnector extends Connector implements HasBody
 
     /**
      * Constructor
-     *
-     * @param string|null $url
      */
     public function __construct(protected ?string $url = null)
     {
@@ -28,8 +26,6 @@ class HasJsonBodyConnector extends Connector implements HasBody
 
     /**
      * Define the base url of the api.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {

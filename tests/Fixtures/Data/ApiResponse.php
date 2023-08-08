@@ -8,9 +8,7 @@ use Saloon\Contracts\Response;
 
 class ApiResponse
 {
-    /**
-     * @param array $data
-     */
+    
     public function __construct(
         public array $data,
     ) {
@@ -18,7 +16,6 @@ class ApiResponse
     }
 
     /**
-     * @param Response $response
      * @return static
      */
     public static function fromSaloon(Response $response): self

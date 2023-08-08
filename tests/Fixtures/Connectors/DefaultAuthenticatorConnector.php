@@ -15,8 +15,6 @@ class DefaultAuthenticatorConnector extends Connector
 
     /**
      * Define the base url of the api.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {
@@ -35,8 +33,6 @@ class DefaultAuthenticatorConnector extends Connector
 
     /**
      * Provide default authentication.
-     *
-     * @return Authenticator|null
      */
     public function defaultAuth(): ?Authenticator
     {

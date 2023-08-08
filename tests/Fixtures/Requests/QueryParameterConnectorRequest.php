@@ -19,15 +19,11 @@ class QueryParameterConnectorRequest extends Request
 
     /**
      * The connector.
-     *
-     * @var string
      */
     protected string $connector = QueryParameterConnector::class;
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {

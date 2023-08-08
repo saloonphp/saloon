@@ -15,7 +15,6 @@ trait HasTestHandler
     /**
      * Boot a test handler that adds a simple header to the response.
      *
-     * @param \Saloon\Http\PendingRequest $pendingRequest
      * @return void
      */
     public function bootHasTestHandler(PendingRequest $pendingRequest)

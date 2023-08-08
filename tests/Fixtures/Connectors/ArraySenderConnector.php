@@ -14,15 +14,11 @@ class ArraySenderConnector extends Connector
 
     /**
      * Define the default sender class
-     *
-     * @var string
      */
     protected string $defaultSender = ArraySender::class;
 
     /**
      * Define the base url of the api.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {
@@ -32,7 +28,6 @@ class ArraySenderConnector extends Connector
     /**
      * Set the sender
      *
-     * @param string $defaultSender
      * @return $this
      */
     public function setDefaultSender(string $defaultSender): static

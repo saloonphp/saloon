@@ -28,15 +28,11 @@ class GuzzleSender implements Sender
 {
     /**
      * The Guzzle client.
-     *
-     * @var \GuzzleHttp\Client
      */
     protected GuzzleClient $client;
 
     /**
      * Guzzle's Handler Stack.
-     *
-     * @var \GuzzleHttp\HandlerStack
      */
     protected HandlerStack $handlerStack;
 
@@ -52,8 +48,6 @@ class GuzzleSender implements Sender
 
     /**
      * Get the factory collection
-     *
-     * @return FactoryCollection
      */
     public function getFactoryCollection(): FactoryCollection
     {
@@ -70,8 +64,6 @@ class GuzzleSender implements Sender
 
     /**
      * Create a new Guzzle client
-     *
-     * @return \GuzzleHttp\Client
      */
     protected function createGuzzleClient(): GuzzleClient
     {
@@ -98,8 +90,6 @@ class GuzzleSender implements Sender
     /**
      * Send a synchronous request.
      *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return \Saloon\Contracts\Response
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Saloon\Exceptions\Request\FatalRequestException
      */
@@ -131,9 +121,6 @@ class GuzzleSender implements Sender
 
     /**
      * Send an asynchronous request
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function sendAsync(PendingRequest $pendingRequest): PromiseInterface
     {
@@ -148,7 +135,6 @@ class GuzzleSender implements Sender
     /**
      * Build up all the request options
      *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return array<RequestOptions::*, mixed>
      */
     protected function createRequestOptions(PendingRequest $pendingRequest): array
@@ -164,12 +150,6 @@ class GuzzleSender implements Sender
 
     /**
      * Create a response.
-     *
-     * @param \Psr\Http\Message\RequestInterface $psrRequest
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @param \Psr\Http\Message\ResponseInterface $response
-     * @param \Exception|null $exception
-     * @return \Saloon\Contracts\Response
      */
     protected function createResponse(RequestInterface $psrRequest, PendingRequest $pendingRequest, ResponseInterface $response, Exception $exception = null): ResponseContract
     {
@@ -181,11 +161,6 @@ class GuzzleSender implements Sender
 
     /**
      * Update the promise provided by Guzzle.
-     *
-     * @param \Psr\Http\Message\RequestInterface $psrRequest
-     * @param \GuzzleHttp\Promise\PromiseInterface $promise
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     protected function processPromise(RequestInterface $psrRequest, PromiseInterface $promise, PendingRequest $pendingRequest): PromiseInterface
     {
@@ -229,8 +204,6 @@ class GuzzleSender implements Sender
     /**
      * Add a middleware to the handler stack.
      *
-     * @param callable $callable
-     * @param string $name
      * @return $this
      */
     public function addMiddleware(callable $callable, string $name = ''): static
@@ -243,7 +216,6 @@ class GuzzleSender implements Sender
     /**
      * Overwrite the entire handler stack.
      *
-     * @param \GuzzleHttp\HandlerStack $handlerStack
      * @return $this
      */
     public function setHandlerStack(HandlerStack $handlerStack): static
@@ -255,8 +227,6 @@ class GuzzleSender implements Sender
 
     /**
      * Get the handler stack.
-     *
-     * @return \GuzzleHttp\HandlerStack
      */
     public function getHandlerStack(): HandlerStack
     {
@@ -265,8 +235,6 @@ class GuzzleSender implements Sender
 
     /**
      * Get the Guzzle client
-     *
-     * @return \GuzzleHttp\Client
      */
     public function getGuzzleClient(): GuzzleClient
     {

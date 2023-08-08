@@ -19,15 +19,11 @@ class ConfigRequest extends Request
 
     /**
      * The connector.
-     *
-     * @var string
      */
     protected string $connector = HeaderConnector::class;
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {

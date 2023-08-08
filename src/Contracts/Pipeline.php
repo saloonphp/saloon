@@ -10,8 +10,6 @@ interface Pipeline
      * Add a pipe to the pipeline
      *
      * @param callable(mixed $payload): (mixed) $callable
-     * @param bool $prepend
-     * @param string|null $name
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
@@ -19,9 +17,6 @@ interface Pipeline
 
     /**
      * Process the pipeline.
-     *
-     * @param mixed $payload
-     * @return mixed
      */
     public function process(mixed $payload): mixed;
 

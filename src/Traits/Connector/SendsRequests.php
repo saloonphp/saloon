@@ -22,9 +22,6 @@ trait SendsRequests
     /**
      * Send a request
      *
-     * @param \Saloon\Contracts\Request $request
-     * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \Saloon\Contracts\Response
      * @throws \ReflectionException
      * @throws InvalidResponseClassException
      * @throws \Throwable
@@ -44,10 +41,6 @@ trait SendsRequests
 
     /**
      * Send a request asynchronously
-     *
-     * @param Request $request
-     * @param MockClient|null $mockClient
-     * @return PromiseInterface
      */
     public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface
     {
@@ -84,13 +77,7 @@ trait SendsRequests
     /**
      * Send a synchronous request and retry if it fails
      *
-     * @param \Saloon\Contracts\Request $request
-     * @param int $maxAttempts
-     * @param int $interval
      * @param callable(\Throwable, \Saloon\Contracts\Request): (bool)|null $handleRetry
-     * @param bool $throw
-     * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \Saloon\Contracts\Response
      * @throws \ReflectionException
      * @throws InvalidResponseClassException
      * @throws PendingRequestException
@@ -156,9 +143,6 @@ trait SendsRequests
     /**
      * Create a new PendingRequest
      *
-     * @param \Saloon\Contracts\Request $request
-     * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \Saloon\Contracts\PendingRequest
      * @throws \ReflectionException
      * @throws InvalidResponseClassException
      */

@@ -13,15 +13,11 @@ class RecordFixture implements ResponseMiddleware
 {
     /**
      * The Fixture
-     *
-     * @var \Saloon\Http\Faking\Fixture
      */
     protected Fixture $fixture;
 
     /**
      * Constructor
-     *
-     * @param \Saloon\Http\Faking\Fixture $fixture
      */
     public function __construct(Fixture $fixture)
     {
@@ -31,8 +27,6 @@ class RecordFixture implements ResponseMiddleware
     /**
      * Store the response
      *
-     * @param \Saloon\Contracts\Response $response
-     * @return void
      * @throws \JsonException
      * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      * @throws \Saloon\Exceptions\UnableToCreateFileException

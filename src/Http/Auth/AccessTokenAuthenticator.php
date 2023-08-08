@@ -12,10 +12,6 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
 {
     /**
      * Constructor
-     *
-     * @param string $accessToken
-     * @param string|null $refreshToken
-     * @param \DateTimeImmutable|null $expiresAt
      */
     public function __construct(
         readonly public string             $accessToken,
@@ -27,9 +23,6 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
 
     /**
      * Apply the authentication to the request.
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return void
      */
     public function set(PendingRequest $pendingRequest): void
     {
@@ -38,8 +31,6 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
 
     /**
      * Check if the access token has expired.
-     *
-     * @return bool
      */
     public function hasExpired(): bool
     {
@@ -52,8 +43,6 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
 
     /**
      * Check if the access token has not expired.
-     *
-     * @return bool
      */
     public function hasNotExpired(): bool
     {
@@ -62,8 +51,6 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
 
     /**
      * Get the access token
-     *
-     * @return string
      */
     public function getAccessToken(): string
     {
@@ -72,8 +59,6 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
 
     /**
      * Get the refresh token
-     *
-     * @return string|null
      */
     public function getRefreshToken(): ?string
     {
@@ -82,8 +67,6 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
 
     /**
      * Get the expires at DateTime instance
-     *
-     * @return \DateTimeImmutable|null
      */
     public function getExpiresAt(): ?DateTimeImmutable
     {
@@ -92,8 +75,6 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
 
     /**
      * Check if the authenticator is refreshable
-     *
-     * @return bool
      */
     public function isRefreshable(): bool
     {
@@ -102,8 +83,6 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
 
     /**
      * Check if the authenticator is not refreshable
-     *
-     * @return bool
      */
     public function isNotRefreshable(): bool
     {
@@ -112,8 +91,6 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
 
     /**
      * Serialize the access token.
-     *
-     * @return string
      */
     public function serialize(): string
     {
@@ -122,9 +99,6 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
 
     /**
      * Unserialize the access token.
-     *
-     * @param string $string
-     * @return static
      */
     public static function unserialize(string $string): static
     {

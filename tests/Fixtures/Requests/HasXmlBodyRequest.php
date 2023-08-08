@@ -15,15 +15,11 @@ class HasXmlBodyRequest extends Request implements HasBody
 
     /**
      * Define the method that the request will use.
-     *
-     * @var Method
      */
     protected Method $method = Method::GET;
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {
@@ -32,8 +28,6 @@ class HasXmlBodyRequest extends Request implements HasBody
 
     /**
      * Default Body
-     *
-     * @return string
      */
     protected function defaultBody(): string
     {

@@ -10,15 +10,12 @@ trait HasResponse
 {
     /**
      * The original response.
-     *
-     * @var \Saloon\Contracts\Response
      */
     protected Response $response;
 
     /**
      * Set the response on the data object.
      *
-     * @param \Saloon\Contracts\Response $response
      * @return $this
      */
     public function setResponse(Response $response): static
@@ -30,8 +27,6 @@ trait HasResponse
 
     /**
      * Get the response on the data object.
-     *
-     * @return \Saloon\Contracts\Response
      */
     public function getResponse(): Response
     {

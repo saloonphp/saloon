@@ -13,8 +13,6 @@ class RequestSelectionConnector extends Connector
 
     /**
      * Define the base url of the api.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {

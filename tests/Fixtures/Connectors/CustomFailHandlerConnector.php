@@ -14,8 +14,6 @@ class CustomFailHandlerConnector extends Connector
 
     /**
      * Define the base url of the api.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {
@@ -24,9 +22,6 @@ class CustomFailHandlerConnector extends Connector
 
     /**
      * Determine if the request has failed
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return bool|null
      */
     public function hasRequestFailed(Response $response): ?bool
     {

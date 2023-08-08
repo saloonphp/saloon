@@ -18,43 +18,31 @@ class OAuthConfig
 
     /**
      * The Client ID
-     *
-     * @var string
      */
     protected string $clientId = '';
 
     /**
      * The Client Secret
-     *
-     * @var string
      */
     protected string $clientSecret = '';
 
     /**
      * The Redirect URI
-     *
-     * @var string
      */
     protected string $redirectUri = '';
 
     /**
      * The endpoint used for the authorization URL.
-     *
-     * @var string
      */
     protected string $authorizeEndpoint = 'authorize';
 
     /**
      * The endpoint used to create and refresh tokens.
-     *
-     * @var string
      */
     protected string $tokenEndpoint = 'token';
 
     /**
      * The endpoint used to retrieve user information.
-     *
-     * @var string
      */
     protected string $userEndpoint = 'user';
 
@@ -74,8 +62,6 @@ class OAuthConfig
 
     /**
      * Get the Client ID
-     *
-     * @return string
      */
     public function getClientId(): string
     {
@@ -85,7 +71,6 @@ class OAuthConfig
     /**
      * Set the Client ID
      *
-     * @param string $clientId
      * @return $this
      */
     public function setClientId(string $clientId): static
@@ -97,8 +82,6 @@ class OAuthConfig
 
     /**
      * Get the Client Secret
-     *
-     * @return string
      */
     public function getClientSecret(): string
     {
@@ -108,7 +91,6 @@ class OAuthConfig
     /**
      * Set the Client Secret
      *
-     * @param string $clientSecret
      * @return $this
      */
     public function setClientSecret(string $clientSecret): static
@@ -120,8 +102,6 @@ class OAuthConfig
 
     /**
      * Get the Redirect URI
-     *
-     * @return string
      */
     public function getRedirectUri(): string
     {
@@ -131,7 +111,6 @@ class OAuthConfig
     /**
      * Set the Redirect URI
      *
-     * @param string $redirectUri
      * @return $this
      */
     public function setRedirectUri(string $redirectUri): static
@@ -143,8 +122,6 @@ class OAuthConfig
 
     /**
      * Get the authorization endpoint.
-     *
-     * @return string
      */
     public function getAuthorizeEndpoint(): string
     {
@@ -154,7 +131,6 @@ class OAuthConfig
     /**
      * Set the authorization endpoint.
      *
-     * @param string $authorizeEndpoint
      * @return $this
      */
     public function setAuthorizeEndpoint(string $authorizeEndpoint): static
@@ -166,8 +142,6 @@ class OAuthConfig
 
     /**
      * Get the token endpoint.
-     *
-     * @return string
      */
     public function getTokenEndpoint(): string
     {
@@ -177,7 +151,6 @@ class OAuthConfig
     /**
      * Set the token endpoint.
      *
-     * @param string $tokenEndpoint
      * @return $this
      */
     public function setTokenEndpoint(string $tokenEndpoint): static
@@ -189,8 +162,6 @@ class OAuthConfig
 
     /**
      * Get the user endpoint.
-     *
-     * @return string
      */
     public function getUserEndpoint(): string
     {
@@ -200,7 +171,6 @@ class OAuthConfig
     /**
      * Set the user endpoint.
      *
-     * @param string $userEndpoint
      * @return $this
      */
     public function setUserEndpoint(string $userEndpoint): static
@@ -270,8 +240,6 @@ class OAuthConfig
     /**
      * Validate the OAuth2 config.
      *
-     * @param bool $withRedirectUrl
-     * @return bool
      * @throws \Saloon\Exceptions\OAuthConfigValidationException
      */
     public function validate(bool $withRedirectUrl = true): bool

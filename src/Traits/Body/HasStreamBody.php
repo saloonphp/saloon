@@ -13,15 +13,11 @@ trait HasStreamBody
 
     /**
      * Body Repository
-     *
-     * @var \Saloon\Repositories\Body\StreamBodyRepository
      */
     protected StreamBodyRepository $body;
 
     /**
      * Retrieve the data repository
-     *
-     * @return \Saloon\Repositories\Body\StreamBodyRepository
      */
     public function body(): StreamBodyRepository
     {

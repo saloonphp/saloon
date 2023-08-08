@@ -19,15 +19,11 @@ class QueryParameterRequest extends Request
 
     /**
      * The connector.
-     *
-     * @var string
      */
     protected string $connector = TestConnector::class;
 
     /**
      * Constructor
-     *
-     * @param string $endpoint
      */
     public function __construct(readonly public string $endpoint = '/user')
     {
@@ -36,8 +32,6 @@ class QueryParameterRequest extends Request
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {

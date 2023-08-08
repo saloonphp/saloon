@@ -15,15 +15,11 @@ class HasStringBodyRequest extends Request implements HasBodyContract
 
     /**
      * Define the method that the request will use.
-     *
-     * @var Method
      */
     protected Method $method = Method::GET;
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {

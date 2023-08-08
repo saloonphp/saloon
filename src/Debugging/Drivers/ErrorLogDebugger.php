@@ -10,8 +10,6 @@ class ErrorLogDebugger extends DebuggingDriver
 {
     /**
      * Define the name
-     *
-     * @return string
      */
     public function name(): string
     {
@@ -20,8 +18,6 @@ class ErrorLogDebugger extends DebuggingDriver
 
     /**
      * Check if the debugging driver can be used
-     *
-     * @return bool
      */
     public function hasDependencies(): bool
     {
@@ -29,9 +25,6 @@ class ErrorLogDebugger extends DebuggingDriver
     }
 
     /**
-     * @param \Saloon\Debugging\DebugData $data
-     *
-     * @return void
      * @throws \JsonException
      */
     public function send(DebugData $data): void

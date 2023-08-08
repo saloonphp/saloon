@@ -9,29 +9,19 @@ use Saloon\Debugging\Drivers\DebuggingDriver;
 
 class ArrayDebugger extends DebuggingDriver
 {
-    /**
-     * @var array
-     */
+    
     protected array $requests = [];
 
-    /**
-     * @var array
-     */
+    
     protected array $responses = [];
 
-    /**
-     * @return string
-     */
+    
     public function name(): string
     {
         return 'array';
     }
 
-    /**
-     * @param \Saloon\Debugging\DebugData $data
-     *
-     * @return void
-     */
+    
     public function send(DebugData $data): void
     {
         if ($data->wasNotSent()) {
@@ -45,8 +35,6 @@ class ArrayDebugger extends DebuggingDriver
 
     /**
      * Get request
-     *
-     * @return array
      */
     public function getRequests(): array
     {
@@ -55,8 +43,6 @@ class ArrayDebugger extends DebuggingDriver
 
     /**
      * Get response
-     *
-     * @return array
      */
     public function getResponses(): array
     {
@@ -67,8 +53,6 @@ class ArrayDebugger extends DebuggingDriver
      * Determines if the debugging driver can be used
      *
      * E.g if it has the correct dependencies
-     *
-     * @return bool
      */
     public function hasDependencies(): bool
     {

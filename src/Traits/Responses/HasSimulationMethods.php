@@ -10,8 +10,6 @@ trait HasSimulationMethods
 {
     /**
      * Check if the response has been cached
-     *
-     * @return bool
      */
     public function isCached(): bool
     {
@@ -20,8 +18,6 @@ trait HasSimulationMethods
 
     /**
      * Check if the response has been mocked
-     *
-     * @return bool
      */
     public function isMocked(): bool
     {
@@ -30,8 +26,6 @@ trait HasSimulationMethods
 
     /**
      * Check if the response has been simulated
-     *
-     * @return bool
      */
     public function isFaked(): bool
     {
@@ -41,7 +35,6 @@ trait HasSimulationMethods
     /**
      * Set if a response has been cached or not.
      *
-     * @param bool $value
      * @return $this
      */
     public function setCached(bool $value): static
@@ -54,7 +47,6 @@ trait HasSimulationMethods
     /**
      * Set if a response has been mocked or not.
      *
-     * @param bool $value
      * @return $this
      */
     public function setMocked(bool $value): static
@@ -67,7 +59,6 @@ trait HasSimulationMethods
     /**
      * Set the simulated response payload if the response was simulated.
      *
-     * @param \Saloon\Contracts\FakeResponse $fakeResponse
      * @return $this
      */
     public function setFakeResponse(FakeResponse $fakeResponse): static
@@ -79,8 +70,6 @@ trait HasSimulationMethods
 
     /**
      * Get the simulated response payload if the response was simulated.
-     *
-     * @return \Saloon\Contracts\FakeResponse|null
      */
     public function getFakeResponse(): ?FakeResponse
     {

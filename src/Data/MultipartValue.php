@@ -12,9 +12,7 @@ class MultipartValue
     /**
      * Constructor
      *
-     * @param string $name
      * @param \Psr\Http\Message\StreamInterface|resource|string|int $value
-     * @param string|null $filename
      * @param array<string, mixed> $headers
      */
     public function __construct(

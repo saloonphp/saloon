@@ -12,22 +12,16 @@ class RayDebugger extends DebuggingDriver
 {
     /**
      * Spatie Ray Client
-     *
-     * @var \Spatie\Ray\Client|null
      */
     private static ?Client $rayClient = null;
 
     /**
      * Spatie Ray UUID
-     *
-     * @var string|null
      */
     private static ?string $rayUuid = null;
 
     /**
      * Define the debugger name
-     *
-     * @return string
      */
     public function name(): string
     {
@@ -36,19 +30,13 @@ class RayDebugger extends DebuggingDriver
 
     /**
      * Check if the debugging driver can be used
-     *
-     * @return bool
      */
     public function hasDependencies(): bool
     {
         return class_exists(Ray::class);
     }
 
-    /**
-     * @param \Saloon\Debugging\DebugData $data
-     *
-     * @return void
-     */
+    
     public function send(DebugData $data): void
     {
         Ray::create(self::$rayClient, self::$rayUuid)->send($this->formatData($data))->label('Saloon Debugger');
@@ -56,10 +44,6 @@ class RayDebugger extends DebuggingDriver
 
     /**
      * Set the Spatie Ray instance
-     *
-     * @param \Spatie\Ray\Client|null $rayClient
-     * @param string|null $rayUuid
-     * @return void
      */
     public static function setRay(?Client $rayClient = null, ?string $rayUuid = null): void
     {

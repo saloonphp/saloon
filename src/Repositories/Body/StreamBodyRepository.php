@@ -60,8 +60,6 @@ class StreamBodyRepository implements BodyRepository
 
     /**
      * Determine if the repository is empty
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -70,8 +68,6 @@ class StreamBodyRepository implements BodyRepository
 
     /**
      * Determine if the repository is not empty
-     *
-     * @return bool
      */
     public function isNotEmpty(): bool
     {
@@ -80,9 +76,6 @@ class StreamBodyRepository implements BodyRepository
 
     /**
      * Convert the body repository into a stream
-     *
-     * @param StreamFactoryInterface $streamFactory
-     * @return StreamInterface
      */
     public function toStream(StreamFactoryInterface $streamFactory): StreamInterface
     {

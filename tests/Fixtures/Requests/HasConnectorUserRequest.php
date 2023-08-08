@@ -15,8 +15,6 @@ class HasConnectorUserRequest extends Request
 
     /**
      * Define connector
-     *
-     * @var string
      */
     protected string $connector = TestConnector::class;
 
@@ -29,8 +27,6 @@ class HasConnectorUserRequest extends Request
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {

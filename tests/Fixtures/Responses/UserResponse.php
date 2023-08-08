@@ -18,7 +18,6 @@ class UserResponse extends Response
     }
 
     /**
-     * @return string|null
      * @throws \JsonException
      */
     public function foo(): ?string

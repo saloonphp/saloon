@@ -10,15 +10,11 @@ trait HasDelay
 {
     /**
      * Request Delay
-     *
-     * @var IntegerStore
      */
     protected IntegerStore $delay;
 
     /**
      * Delay repository
-     *
-     * @return \Saloon\Repositories\IntegerStore
      */
     public function delay(): IntegerStore
     {

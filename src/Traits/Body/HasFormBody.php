@@ -13,16 +13,11 @@ trait HasFormBody
 
     /**
      * Body Repository
-     *
-     * @var \Saloon\Repositories\Body\FormBodyRepository
      */
     protected FormBodyRepository $body;
 
     /**
      * Boot the HasFormBody trait
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return void
      */
     public function bootHasFormBody(PendingRequest $pendingRequest): void
     {
@@ -31,8 +26,6 @@ trait HasFormBody
 
     /**
      * Retrieve the data repository
-     *
-     * @return \Saloon\Repositories\Body\FormBodyRepository
      */
     public function body(): FormBodyRepository
     {

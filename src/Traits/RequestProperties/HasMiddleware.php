@@ -11,15 +11,11 @@ trait HasMiddleware
 {
     /**
      * Middleware Pipeline
-     *
-     * @var \Saloon\Contracts\MiddlewarePipeline
      */
     protected MiddlewarePipelineContract $middlewarePipeline;
 
     /**
      * Access the middleware pipeline
-     *
-     * @return \Saloon\Contracts\MiddlewarePipeline
      */
     public function middleware(): MiddlewarePipelineContract
     {

@@ -11,11 +11,6 @@ class CustomOAuthAuthenticator extends AccessTokenAuthenticator
 {
     /**
      * Constructor
-     *
-     * @param string $accessToken
-     * @param string $greeting
-     * @param string|null $refreshToken
-     * @param \DateTimeImmutable|null $expiresAt
      */
     public function __construct(
         readonly public string             $accessToken,
@@ -26,9 +21,7 @@ class CustomOAuthAuthenticator extends AccessTokenAuthenticator
         //
     }
 
-    /**
-     * @return string
-     */
+    
     public function getGreeting(): string
     {
         return $this->greeting;

@@ -18,8 +18,6 @@ class SoloErrorRequest extends SoloRequest
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {

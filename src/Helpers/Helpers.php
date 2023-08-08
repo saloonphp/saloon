@@ -53,10 +53,6 @@ class Helpers
 
     /**
      * Return the default value of the given value.
-     *
-     * @param mixed $value
-     * @param mixed ...$args
-     * @return mixed
      */
     public static function value(mixed $value, mixed ...$args): mixed
     {
@@ -67,8 +63,6 @@ class Helpers
      * Check if a class is a subclass of another.
      *
      * @param class-string $class
-     * @param string $subclass
-     * @return bool
      * @throws \ReflectionException
      */
     public static function isSubclassOf(string $class, string $subclass): bool
@@ -83,10 +77,6 @@ class Helpers
     /**
      * Boot a plugin
      *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @param \Saloon\Contracts\Connector|\Saloon\Contracts\Request $resource
-     * @param string $trait
-     * @return void
      * @throws \ReflectionException
      */
     public static function bootPlugin(PendingRequest $pendingRequest, Connector|Request $resource, string $trait): void

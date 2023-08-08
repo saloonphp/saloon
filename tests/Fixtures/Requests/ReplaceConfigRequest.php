@@ -29,8 +29,6 @@ class ReplaceConfigRequest extends Request
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {

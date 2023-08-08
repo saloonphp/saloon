@@ -12,15 +12,11 @@ trait HasStringBody
 
     /**
      * Body Repository
-     *
-     * @var \Saloon\Repositories\Body\StringBodyRepository
      */
     protected StringBodyRepository $body;
 
     /**
      * Retrieve the data repository
-     *
-     * @return \Saloon\Repositories\Body\StringBodyRepository
      */
     public function body(): StringBodyRepository
     {
@@ -29,8 +25,6 @@ trait HasStringBody
 
     /**
      * Default body
-     *
-     * @return string|null
      */
     protected function defaultBody(): ?string
     {

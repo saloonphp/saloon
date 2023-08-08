@@ -16,8 +16,6 @@ class ArraySender implements Sender
 {
     /**
      * Get the factory collection
-     *
-     * @return FactoryCollection
      */
     public function getFactoryCollection(): FactoryCollection
     {
@@ -34,9 +32,6 @@ class ArraySender implements Sender
 
     /**
      * Send the request synchronously
-     *
-     * @param PendingRequest $pendingRequest
-     * @return \Saloon\Contracts\Response
      */
     public function send(PendingRequest $pendingRequest): \Saloon\Contracts\Response
     {
@@ -48,9 +43,6 @@ class ArraySender implements Sender
 
     /**
      * Send the request asynchronously
-     *
-     * @param PendingRequest $pendingRequest
-     * @return PromiseInterface
      */
     public function sendAsync(PendingRequest $pendingRequest): PromiseInterface
     {

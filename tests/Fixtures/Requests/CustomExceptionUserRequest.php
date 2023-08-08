@@ -21,8 +21,6 @@ class CustomExceptionUserRequest extends Request
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {
@@ -31,10 +29,6 @@ class CustomExceptionUserRequest extends Request
 
     /**
      * Get the custom request exception
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @param \Throwable|null $senderException
-     * @return \Throwable|null
      */
     public function getRequestException(Response $response, ?Throwable $senderException): ?Throwable
     {

@@ -12,15 +12,11 @@ class CustomEndpointRequest extends Request
 {
     /**
      * Connector
-     *
-     * @var string
      */
     protected string $connector = CustomBaseUrlConnector::class;
 
     /**
      * Endpoint
-     *
-     * @var string
      */
     protected string $endpoint = '';
 
@@ -33,8 +29,6 @@ class CustomEndpointRequest extends Request
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {
@@ -43,9 +37,6 @@ class CustomEndpointRequest extends Request
 
     /**
      * Set an endpoint
-     *
-     * @param string $endpoint
-     * @return CustomEndpointRequest
      */
     public function setEndpoint(string $endpoint): CustomEndpointRequest
     {

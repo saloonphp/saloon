@@ -30,8 +30,6 @@ class HasXMLRequest extends Request implements HasBody
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {

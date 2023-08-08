@@ -10,9 +10,7 @@ use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class NoTrailingSlashRequest extends Request
 {
-    /**
-     * @var bool
-     */
+    
     public bool $addTrailingSlashAfterBaseUrl = false;
 
     /**
@@ -31,8 +29,6 @@ class NoTrailingSlashRequest extends Request
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {

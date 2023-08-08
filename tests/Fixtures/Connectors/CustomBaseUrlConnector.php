@@ -10,15 +10,11 @@ class CustomBaseUrlConnector extends Connector
 {
     /**
      * Base URL
-     *
-     * @var string
      */
     protected string $baseUrl = '';
 
     /**
      * Define the base URL of the API.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {
@@ -28,7 +24,6 @@ class CustomBaseUrlConnector extends Connector
     /**
      * Set a base URL
      *
-     * @param string $baseUrl
      * @return CustomBaseUrlConnector
      */
     public function setBaseUrl(string $baseUrl): static

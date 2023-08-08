@@ -12,9 +12,6 @@ class AuthenticateRequest implements RequestMiddleware
 {
     /**
      * Authenticate the pending request
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return void
      */
     public function __invoke(PendingRequest $pendingRequest): void
     {

@@ -15,15 +15,11 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
 {
     /**
      * Request Pipeline
-     *
-     * @var \Saloon\Contracts\Pipeline
      */
     protected PipelineContract $requestPipeline;
 
     /**
      * Response Pipeline
-     *
-     * @var \Saloon\Contracts\Pipeline
      */
     protected PipelineContract $responsePipeline;
 
@@ -40,8 +36,6 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      * Add a middleware before the request is sent
      *
      * @param callable(\Saloon\Contracts\PendingRequest): (\Saloon\Contracts\PendingRequest|\Saloon\Contracts\FakeResponse|void) $callable
-     * @param bool $prepend
-     * @param string|null $name
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
@@ -57,7 +51,6 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
          * Do note that this is entirely about our *wrapping* Closure below.
          * The provided callable doesn't affect the MiddlewarePipeline.
          */
-
         $this->requestPipeline->pipe(static function (PendingRequest $pendingRequest) use ($callable): PendingRequest {
             $result = $callable($pendingRequest);
 
@@ -79,8 +72,6 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      * Add a middleware after the request is sent
      *
      * @param callable(\Saloon\Contracts\Response): (\Saloon\Contracts\Response|void) $callable
-     * @param bool $prepend
-     * @param string|null $name
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
@@ -96,7 +87,6 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
          * Do note that this is entirely about our *wrapping* Closure below.
          * The provided callable doesn't affect the MiddlewarePipeline.
          */
-
         $this->responsePipeline->pipe(static function (Response $response) use ($callable): Response {
             $result = $callable($response);
 
@@ -108,9 +98,6 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
 
     /**
      * Process the request pipeline.
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return \Saloon\Contracts\PendingRequest
      */
     public function executeRequestPipeline(PendingRequest $pendingRequest): PendingRequest
     {
@@ -119,9 +106,6 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
 
     /**
      * Process the response pipeline.
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return \Saloon\Contracts\Response
      */
     public function executeResponsePipeline(Response $response): Response
     {
@@ -131,7 +115,6 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Merge in another middleware pipeline.
      *
-     * @param \Saloon\Contracts\MiddlewarePipeline $middlewarePipeline
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
@@ -155,8 +138,6 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
 
     /**
      * Get the request pipeline
-     *
-     * @return \Saloon\Contracts\Pipeline
      */
     public function getRequestPipeline(): PipelineContract
     {
@@ -165,8 +146,6 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
 
     /**
      * Get the response pipeline
-     *
-     * @return \Saloon\Contracts\Pipeline
      */
     public function getResponsePipeline(): PipelineContract
     {

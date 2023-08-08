@@ -13,15 +13,11 @@ class IntegerStore implements IntegerStoreContract
 
     /**
      * store Data
-     *
-     * @var int|null
      */
     protected ?int $data = null;
 
     /**
      * Constructor
-     *
-     * @param int|null $value
      */
     public function __construct(?int $value = null)
     {
@@ -31,7 +27,6 @@ class IntegerStore implements IntegerStoreContract
     /**
      * Set a value inside the store
      *
-     * @param int|null $value
      * @return $this
      */
     public function set(?int $value): static
@@ -43,8 +38,6 @@ class IntegerStore implements IntegerStoreContract
 
     /**
      * Retrieve all in the store
-     *
-     * @return int|null
      */
     public function get(): ?int
     {
@@ -53,8 +46,6 @@ class IntegerStore implements IntegerStoreContract
 
     /**
      * Determine if the store is empty
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -63,8 +54,6 @@ class IntegerStore implements IntegerStoreContract
 
     /**
      * Determine if the store is not empty
-     *
-     * @return bool
      */
     public function isNotEmpty(): bool
     {

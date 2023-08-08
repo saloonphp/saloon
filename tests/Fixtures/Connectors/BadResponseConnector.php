@@ -14,8 +14,6 @@ class BadResponseConnector extends Connector
 
     /**
      * Define the base url of the api.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {
@@ -24,9 +22,6 @@ class BadResponseConnector extends Connector
 
     /**
      * Check if we should throw an exception
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return bool
      */
     public function shouldThrowRequestException(Response $response): bool
     {

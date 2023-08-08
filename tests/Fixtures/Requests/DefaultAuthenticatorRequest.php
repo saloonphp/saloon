@@ -31,8 +31,6 @@ class DefaultAuthenticatorRequest extends Request
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {
@@ -41,8 +39,6 @@ class DefaultAuthenticatorRequest extends Request
 
     /**
      * Provide default authentication.
-     *
-     * @return Authenticator|null
      */
     protected function defaultAuth(): ?Authenticator
     {

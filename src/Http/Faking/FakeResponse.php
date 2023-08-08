@@ -24,29 +24,21 @@ class FakeResponse implements FakeResponseContract
 
     /**
      * HTTP Status Code
-     *
-     * @var int
      */
     protected int $status;
 
     /**
      * Headers
-     *
-     * @var \Saloon\Contracts\ArrayStore
      */
     protected ArrayStoreContract $headers;
 
     /**
      * Request Body
-     *
-     * @var \Saloon\Contracts\Body\BodyRepository
      */
     protected BodyRepository $body;
 
     /**
      * Exception Closure
-     *
-     * @var \Closure|null
      */
     protected ?Closure $responseException = null;
 
@@ -54,7 +46,6 @@ class FakeResponse implements FakeResponseContract
      * Create a new mock response
      *
      * @param array<string, mixed>|string $body
-     * @param int $status
      * @param array<string, mixed> $headers
      */
     public function __construct(array|string $body = [], int $status = 200, array $headers = [])
@@ -66,8 +57,6 @@ class FakeResponse implements FakeResponseContract
 
     /**
      * Get the response body
-     *
-     * @return \Saloon\Contracts\Body\BodyRepository
      */
     public function body(): BodyRepository
     {
@@ -76,8 +65,6 @@ class FakeResponse implements FakeResponseContract
 
     /**
      * Get the status from the responses
-     *
-     * @return int
      */
     public function status(): int
     {
@@ -86,8 +73,6 @@ class FakeResponse implements FakeResponseContract
 
     /**
      * Get the headers
-     *
-     * @return \Saloon\Contracts\ArrayStore
      */
     public function headers(): ArrayStoreContract
     {
@@ -97,7 +82,6 @@ class FakeResponse implements FakeResponseContract
     /**
      * Throw an exception on the request.
      *
-     * @param \Closure|\Throwable $value
      * @return $this
      */
     public function throw(Closure|Throwable $value): static
@@ -111,8 +95,6 @@ class FakeResponse implements FakeResponseContract
 
     /**
      * Checks if the response throws an exception.
-     *
-     * @return bool
      */
     public function throwsException(): bool
     {
@@ -121,9 +103,6 @@ class FakeResponse implements FakeResponseContract
 
     /**
      * Invoke the exception.
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return \Throwable|null
      */
     public function getException(PendingRequest $pendingRequest): ?Throwable
     {
@@ -137,7 +116,6 @@ class FakeResponse implements FakeResponseContract
     /**
      * Create a new mock response from a fixture
      *
-     * @param string $name
      * @return \Saloon\Http\Faking\Fixture
      * @throws \Saloon\Exceptions\DirectoryNotFoundException|\Saloon\Exceptions\UnableToCreateDirectoryException
      */
@@ -148,10 +126,6 @@ class FakeResponse implements FakeResponseContract
 
     /**
      * Get the response as a ResponseInterface
-     *
-     * @param ResponseFactoryInterface $responseFactory
-     * @param StreamFactoryInterface $streamFactory
-     * @return ResponseInterface
      */
     public function createPsrResponse(ResponseFactoryInterface $responseFactory, StreamFactoryInterface $streamFactory): ResponseInterface
     {

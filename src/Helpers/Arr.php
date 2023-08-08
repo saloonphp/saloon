@@ -13,8 +13,6 @@ class Arr
     /**
      * Determine whether the given value is array accessible.
      *
-     * @param mixed $value
-     * @return bool
      *
      * @phpstan-assert-if-true array|ArrayAccess $value
      */
@@ -28,7 +26,6 @@ class Arr
      *
      * @param array<array-key, mixed>|ArrayAccess<array-key, mixed> $array
      * @param array-key|float $key
-     * @return bool
      */
     private static function exists(array|ArrayAccess $array, string|int|float $key): bool
     {
@@ -46,7 +43,6 @@ class Arr
      *
      * @param array<array-key, mixed> $array
      * @param array-key|null $key
-     * @param mixed|null $default
      * @return ($key is null ? array<array-key, mixed> : mixed)
      */
     public static function get(array $array, string|int|null $key, mixed $default = null): mixed

@@ -22,23 +22,16 @@ class AuthenticatorPluginRequest extends Request
 
     /**
      * The connector.
-     *
-     * @var string
      */
     protected string $connector = TestConnector::class;
 
-    /**
-     * @param int|null $userId
-     * @param int|null $groupId
-     */
+    
     public function __construct(public ?int $userId = null, public ?int $groupId = null)
     {
         //
     }
 
-    /**
-     * @return string
-     */
+    
     public function resolveEndpoint(): string
     {
         return '/user';

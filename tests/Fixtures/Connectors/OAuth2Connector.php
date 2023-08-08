@@ -14,8 +14,6 @@ class OAuth2Connector extends Connector
 
     /**
      * Define the base URL.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {
@@ -24,8 +22,6 @@ class OAuth2Connector extends Connector
 
     /**
      * Define default Oauth config.
-     *
-     * @return OAuthConfig
      */
     protected function defaultOauthConfig(): OAuthConfig
     {

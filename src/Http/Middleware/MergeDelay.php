@@ -11,8 +11,6 @@ class MergeDelay implements RequestMiddleware
 {
     /**
      * Register a request middleware
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      */
     public function __invoke(PendingRequest $pendingRequest): void
     {

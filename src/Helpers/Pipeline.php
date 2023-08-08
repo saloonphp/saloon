@@ -21,8 +21,6 @@ class Pipeline implements PipelineContract
      * Add a pipe to the pipeline
      *
      * @param callable(mixed $payload): (mixed) $callable
-     * @param bool $prepend
-     * @param string|null $name
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
@@ -43,9 +41,6 @@ class Pipeline implements PipelineContract
 
     /**
      * Process the pipeline.
-     *
-     * @param mixed $payload
-     * @return mixed
      */
     public function process(mixed $payload): mixed
     {
@@ -89,9 +84,6 @@ class Pipeline implements PipelineContract
 
     /**
      * Check if a given pipe exists for a name
-     *
-     * @param string $name
-     * @return bool
      */
     protected function pipeExists(string $name): bool
     {

@@ -24,9 +24,7 @@ class DefaultEndpointRequest extends Request
      */
     protected string $connector = TestConnector::class;
 
-    /**
-     * @return string
-     */
+    
     public function resolveEndpoint(): string
     {
         return '';

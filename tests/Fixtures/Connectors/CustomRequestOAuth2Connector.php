@@ -18,8 +18,6 @@ class CustomRequestOAuth2Connector extends Connector
 
     /**
      * Define the base URL.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {
@@ -28,8 +26,6 @@ class CustomRequestOAuth2Connector extends Connector
 
     /**
      * Define default Oauth config.
-     *
-     * @return OAuthConfig
      */
     protected function defaultOauthConfig(): OAuthConfig
     {
@@ -41,10 +37,6 @@ class CustomRequestOAuth2Connector extends Connector
 
     /**
      * Resolve the access token request
-     *
-     * @param string $code
-     * @param OAuthConfig $oauthConfig
-     * @return Request
      */
     protected function resolveAccessTokenRequest(string $code, OAuthConfig $oauthConfig): Request
     {
@@ -53,10 +45,6 @@ class CustomRequestOAuth2Connector extends Connector
 
     /**
      * Resolve the refresh token request
-     *
-     * @param OAuthConfig $oauthConfig
-     * @param string $refreshToken
-     * @return Request
      */
     protected function resolveRefreshTokenRequest(OAuthConfig $oauthConfig, string $refreshToken): Request
     {
@@ -65,9 +53,6 @@ class CustomRequestOAuth2Connector extends Connector
 
     /**
      * Resolve the user request
-     *
-     * @param OAuthConfig $oauthConfig
-     * @return Request
      */
     protected function resolveUserRequest(OAuthConfig $oauthConfig): Request
     {

@@ -26,8 +26,6 @@ class UserRequestWithBoot extends Request
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {
@@ -40,9 +38,7 @@ class UserRequestWithBoot extends Request
         $this->addHeader('X-Request-Boot-With-Data', $request->farewell);
     }
 
-    /**
-     * @param string $farewell
-     */
+    
     public function __construct(protected string $farewell = 'Ride on, cowboy.')
     {
         //

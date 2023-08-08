@@ -10,8 +10,6 @@ interface HasDelay
 {
     /**
      * Access the delay
-     *
-     * @return IntegerStore
      */
     public function delay(): IntegerStore;
 }

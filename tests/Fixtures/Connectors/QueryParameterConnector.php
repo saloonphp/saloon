@@ -13,8 +13,6 @@ class QueryParameterConnector extends Connector
 
     /**
      * Constructor
-     *
-     * @param string|null $url
      */
     public function __construct(public ?string $url = null)
     {

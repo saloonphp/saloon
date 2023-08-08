@@ -41,4 +41,8 @@ return $config->setRules([
     'blank_line_after_opening_tag' => true,
     'single_import_per_statement' => true,
     'mb_str_functions' => true,
+    'no_superfluous_phpdoc_tags' => true,
+    'no_blank_lines_after_phpdoc' => true,
+    'no_empty_phpdoc' => true,
+    'phpdoc_trim' => true,
 ])->setFinder($finder);

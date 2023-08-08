@@ -12,8 +12,6 @@ class Date
 {
     /**
      * Constructor
-     *
-     * @param \DateTime $dateTime
      */
     public function __construct(protected DateTime $dateTime)
     {
@@ -22,8 +20,6 @@ class Date
 
     /**
      * Construct
-     *
-     * @return static
      */
     public static function now(): static
     {
@@ -33,7 +29,6 @@ class Date
     /**
      * Add seconds
      *
-     * @param int $seconds
      * @return $this
      */
     public function addSeconds(int $seconds): static
@@ -48,7 +43,6 @@ class Date
     /**
      * Subtract minutes
      *
-     * @param int $minutes
      * @return $this
      */
     public function subMinutes(int $minutes): static
@@ -62,8 +56,6 @@ class Date
 
     /**
      * Get the datetime instance
-     *
-     * @return \DateTimeImmutable
      */
     public function toDateTime(): DateTimeImmutable
     {

@@ -15,15 +15,11 @@ trait HasConnector
 {
     /**
      * The loaded connector used in requests.
-     *
-     * @var \Saloon\Contracts\Connector|null
      */
     private ?Connector $loadedConnector = null;
 
     /**
      *  Retrieve the loaded connector.
-     *
-     * @return \Saloon\Contracts\Connector
      */
     public function connector(): Connector
     {
@@ -33,7 +29,6 @@ trait HasConnector
     /**
      * Set the loaded connector at runtime.
      *
-     * @param \Saloon\Contracts\Connector $connector
      * @return $this
      */
     public function setConnector(Connector $connector): static
@@ -45,8 +40,6 @@ trait HasConnector
 
     /**
      * Create a new connector instance.
-     *
-     * @return \Saloon\Contracts\Connector
      */
     protected function resolveConnector(): Connector
     {
@@ -55,8 +48,6 @@ trait HasConnector
 
     /**
      * Access the HTTP sender
-     *
-     * @return \Saloon\Contracts\Sender
      */
     public function sender(): Sender
     {
@@ -65,9 +56,6 @@ trait HasConnector
 
     /**
      * Create a pending request
-     *
-     * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \Saloon\Contracts\PendingRequest
      */
     public function createPendingRequest(MockClient $mockClient = null): PendingRequest
     {
@@ -76,9 +64,6 @@ trait HasConnector
 
     /**
      * Send a request synchronously
-     *
-     * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \Saloon\Contracts\Response
      */
     public function send(MockClient $mockClient = null): Response
     {
@@ -87,9 +72,6 @@ trait HasConnector
 
     /**
      * Send a request asynchronously
-     *
-     * @param \Saloon\Contracts\MockClient|null $mockClient
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function sendAsync(MockClient $mockClient = null): PromiseInterface
     {

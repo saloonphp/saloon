@@ -13,7 +13,6 @@ class RecordedResponse implements JsonSerializable
     /**
      * Constructor
      *
-     * @param int $statusCode
      * @param array<string, mixed> $headers
      * @param mixed $data
      */
@@ -28,8 +27,6 @@ class RecordedResponse implements JsonSerializable
     /**
      * Create an instance from file contents
      *
-     * @param string $contents
-     * @return static
      * @throws \JsonException
      */
     public static function fromFile(string $contents): static
@@ -58,9 +55,6 @@ class RecordedResponse implements JsonSerializable
 
     /**
      * Create an instance from a Response
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return static
      */
     public static function fromResponse(Response $response): static
     {
@@ -74,7 +68,6 @@ class RecordedResponse implements JsonSerializable
     /**
      * Encode the instance to be stored as a file
      *
-     * @return string
      * @throws \JsonException
      */
     public function toFile(): string
@@ -84,8 +77,6 @@ class RecordedResponse implements JsonSerializable
 
     /**
      * Create a mock response from the fixture
-     *
-     * @return \Saloon\Http\Faking\MockResponse
      */
     public function toMockResponse(): MockResponse
     {

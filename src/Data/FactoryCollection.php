@@ -17,12 +17,6 @@ readonly class FactoryCollection
      *
      * This class is used to collect all the different PSR and Saloon factories
      * together into one, simple class that can be defined by senders.
-     *
-     * @param RequestFactoryInterface $requestFactory
-     * @param UriFactoryInterface $uriFactory
-     * @param StreamFactoryInterface $streamFactory
-     * @param ResponseFactoryInterface $responseFactory
-     * @param MultipartBodyFactory $multipartBodyFactory
      */
     public function __construct(
         public RequestFactoryInterface  $requestFactory,

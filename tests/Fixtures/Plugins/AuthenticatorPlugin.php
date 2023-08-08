@@ -8,10 +8,7 @@ use Saloon\Http\PendingRequest;
 
 trait AuthenticatorPlugin
 {
-    /**
-     * @param PendingRequest $pendingRequest
-     * @return void
-     */
+    
     public function bootAuthenticatorPlugin(PendingRequest $pendingRequest): void
     {
         $pendingRequest->withTokenAuth('plugin-auth');

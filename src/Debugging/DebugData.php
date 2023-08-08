@@ -14,9 +14,6 @@ readonly class DebugData
 {
     /**
      * Constructor
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @param \Saloon\Contracts\Response|null $response
      */
     public function __construct(
         protected PendingRequest $pendingRequest,
@@ -27,8 +24,6 @@ readonly class DebugData
 
     /**
      * Denotes if the request was sent
-     *
-     * @return bool
      */
     public function wasSent(): bool
     {
@@ -37,8 +32,6 @@ readonly class DebugData
 
     /**
      * Denotes if the request was not sent
-     *
-     * @return bool
      */
     public function wasNotSent(): bool
     {
@@ -47,8 +40,6 @@ readonly class DebugData
 
     /**
      * Get the PendingRequest
-     *
-     * @return \Saloon\Contracts\PendingRequest
      */
     public function getPendingRequest(): PendingRequest
     {
@@ -57,8 +48,6 @@ readonly class DebugData
 
     /**
      * Get the connector from the PendingRequest
-     *
-     * @return \Saloon\Contracts\Connector
      */
     public function getConnector(): Connector
     {
@@ -67,8 +56,6 @@ readonly class DebugData
 
     /**
      * Get the request from the PendingRequest
-     *
-     * @return \Saloon\Contracts\Request
      */
     public function getRequest(): Request
     {
@@ -77,8 +64,6 @@ readonly class DebugData
 
     /**
      * Get the URL from the PendingRequest
-     *
-     * @return string
      */
     public function getUrl(): string
     {
@@ -87,8 +72,6 @@ readonly class DebugData
 
     /**
      * Get the method from the PendingRequest
-     *
-     * @return \Saloon\Enums\Method
      */
     public function getMethod(): Method
     {
@@ -97,8 +80,6 @@ readonly class DebugData
 
     /**
      * Get the response
-     *
-     * @return \Saloon\Contracts\Response|null
      */
     public function getResponse(): ?Response
     {
@@ -107,8 +88,6 @@ readonly class DebugData
 
     /**
      * Get the status code from the response
-     *
-     * @return int|null
      */
     public function getStatusCode(): ?int
     {

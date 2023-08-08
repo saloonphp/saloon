@@ -31,17 +31,13 @@ class DefaultPizzaAuthenticatorRequest extends Request
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {
         return '/user';
     }
 
-    /**
-     * @return Authenticator|null
-     */
+    
     public function defaultAuth(): ?Authenticator
     {
         return new PizzaAuthenticator('BBQ Chicken', 'Lemonade');

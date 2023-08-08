@@ -44,29 +44,21 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * The connector making the request.
-     *
-     * @var \Saloon\Contracts\Connector
      */
     protected Connector $connector;
 
     /**
      * The request used by the instance.
-     *
-     * @var \Saloon\Contracts\Request
      */
     protected Request $request;
 
     /**
      * The method the request will use.
-     *
-     * @var \Saloon\Enums\Method
      */
     protected Method $method;
 
     /**
      * The URL the request will be made to.
-     *
-     * @var string
      */
     protected string $url;
 
@@ -79,38 +71,27 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * The body of the request.
-     *
-     * @var \Saloon\Contracts\Body\BodyRepository|null
      */
     protected ?BodyRepository $body = null;
 
     /**
      * The simulated response.
-     *
-     * @var \Saloon\Contracts\FakeResponse|null
      */
     protected ?FakeResponse $fakeResponseData = null;
 
     /**
      * Determine if the pending request is asynchronous
-     *
-     * @var bool
      */
     protected bool $asynchronous = false;
 
     /**
      * The factory collection.
-     *
-     * @var FactoryCollection
      */
     protected FactoryCollection $factoryCollection;
 
     /**
      * Build up the request payload.
      *
-     * @param \Saloon\Contracts\Connector $connector
-     * @param \Saloon\Contracts\Request $request
-     * @param \Saloon\Contracts\MockClient|null $mockClient
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidResponseClassException
      */
@@ -131,7 +112,6 @@ class PendingRequest implements PendingRequestContract
     /**
      * Register and execute middleware
      *
-     * @return void
      * @throws \ReflectionException
      */
     protected function registerAndExecuteMiddleware(): void
@@ -218,8 +198,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Get the request.
-     *
-     * @return \Saloon\Contracts\Request
      */
     public function getRequest(): Request
     {
@@ -228,9 +206,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Execute the response pipeline.
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return \Saloon\Contracts\Response
      */
     public function executeResponsePipeline(ResponseContract $response): ResponseContract
     {
@@ -240,8 +215,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Get the connector.
-     *
-     * @return \Saloon\Contracts\Connector
      */
     public function getConnector(): Connector
     {
@@ -250,8 +223,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Get the URL of the request.
-     *
-     * @return string
      */
     public function getUrl(): string
     {
@@ -260,8 +231,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Get the URI for the pending request.
-     *
-     * @return UriInterface
      */
     public function getUri(): UriInterface
     {
@@ -280,8 +249,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Get the HTTP method used for the request
-     *
-     * @return \Saloon\Enums\Method
      */
     public function getMethod(): Method
     {
@@ -300,8 +267,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Retrieve the body on the instance
-     *
-     * @return \Saloon\Contracts\Body\BodyRepository|null
      */
     public function body(): ?BodyRepository
     {
@@ -310,8 +275,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Get the simulated response payload
-     *
-     * @return \Saloon\Contracts\FakeResponse|null
      */
     public function getFakeResponse(): ?FakeResponse
     {
@@ -321,7 +284,6 @@ class PendingRequest implements PendingRequestContract
     /**
      * Set the simulated response payload
      *
-     * @param \Saloon\Contracts\FakeResponse|null $fakeResponse
      * @return $this
      */
     public function setFakeResponse(?FakeResponse $fakeResponse): static
@@ -333,8 +295,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Check if simulated response payload is present.
-     *
-     * @return bool
      */
     public function hasFakeResponse(): bool
     {
@@ -343,8 +303,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Build up the full request URL.
-     *
-     * @return string
      */
     protected function resolveRequestUrl(): string
     {
@@ -371,9 +329,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Create a data object from the response
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return mixed
      */
     public function createDtoFromResponse(ResponseContract $response): mixed
     {
@@ -383,7 +338,6 @@ class PendingRequest implements PendingRequestContract
     /**
      * Set if the request is going to be sent asynchronously
      *
-     * @param bool $asynchronous
      * @return $this
      */
     public function setAsynchronous(bool $asynchronous): static
@@ -395,8 +349,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Check if the request is asynchronous
-     *
-     * @return bool
      */
     public function isAsynchronous(): bool
     {
@@ -406,7 +358,6 @@ class PendingRequest implements PendingRequestContract
     /**
      * Authenticate the PendingRequest
      *
-     * @param \Saloon\Contracts\Authenticator $authenticator
      * @return $this
      */
     public function authenticate(Authenticator $authenticator): static
@@ -426,7 +377,6 @@ class PendingRequest implements PendingRequestContract
     /**
      * Set the URL of the PendingRequest
      *
-     * @param string $url
      * @return $this
      */
     public function setUrl(string $url): static
@@ -439,7 +389,6 @@ class PendingRequest implements PendingRequestContract
     /**
      * Set the method of the PendingRequest
      *
-     * @param \Saloon\Enums\Method $method
      * @return $this
      */
     public function setMethod(Method $method): static
@@ -452,7 +401,6 @@ class PendingRequest implements PendingRequestContract
     /**
      * Set the factory collection
      *
-     * @param FactoryCollection $factoryCollection
      * @return $this
      */
     public function setFactoryCollection(FactoryCollection $factoryCollection): static
@@ -464,8 +412,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Get the factory collection
-     *
-     * @return FactoryCollection
      */
     public function getFactoryCollection(): FactoryCollection
     {
@@ -474,8 +420,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Get the PSR-7 request
-     *
-     * @return RequestInterface
      */
     public function createPsrRequest(): RequestInterface
     {
@@ -506,7 +450,6 @@ class PendingRequest implements PendingRequestContract
     /**
      * Set the body repository
      *
-     * @param \Saloon\Contracts\Body\BodyRepository|null $body
      * @return $this
      */
     public function setBody(?BodyRepository $body): static

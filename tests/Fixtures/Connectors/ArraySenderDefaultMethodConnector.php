@@ -15,8 +15,6 @@ class ArraySenderDefaultMethodConnector extends Connector
 
     /**
      * Define the base url of the api.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {
@@ -25,8 +23,6 @@ class ArraySenderDefaultMethodConnector extends Connector
 
     /**
      * Default Sender
-     *
-     * @return \Saloon\Contracts\Sender
      */
     protected function defaultSender(): Sender
     {

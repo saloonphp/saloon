@@ -306,7 +306,6 @@ test('a middleware pipeline is correctly destructed when finished', function ():
      * Concretely speaking, for Saloon, this means that the Connector will *not* get destructed, and thereby also not the underlying client.
      * Which in turn leaves open file handles until the process terminates.
      */
-
     $pipelineReference = WeakReference::create($pipeline = new MiddlewarePipeline);
     $pipeline
         ->onRequest(function (PendingRequest $request) {

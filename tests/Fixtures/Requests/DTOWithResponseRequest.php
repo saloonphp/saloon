@@ -22,15 +22,11 @@ class DTOWithResponseRequest extends Request
 
     /**
      * The connector.
-     *
-     * @var string
      */
     protected string $connector = TestConnector::class;
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {
@@ -44,9 +40,6 @@ class DTOWithResponseRequest extends Request
 
     /**
      * Cast to a User.
-     *
-     * @param Response $response
-     * @return object
      */
     public function createDtoFromResponse(Response $response): object
     {

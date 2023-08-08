@@ -13,8 +13,6 @@ class NoConfigClientCredentialsConnector extends Connector
 
     /**
      * Define the base URL.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {

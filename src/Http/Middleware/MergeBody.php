@@ -16,8 +16,6 @@ class MergeBody implements RequestMiddleware
     /**
      * Register a request middleware
      *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return void
      * @throws \Saloon\Exceptions\PendingRequestException
      */
     public function __invoke(PendingRequest $pendingRequest): void

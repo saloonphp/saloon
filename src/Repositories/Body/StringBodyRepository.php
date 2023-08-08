@@ -16,8 +16,6 @@ class StringBodyRepository implements BodyRepository, Stringable
 
     /**
      * Repository Data
-     *
-     * @var string|null
      */
     protected ?string $data = null;
 
@@ -46,8 +44,6 @@ class StringBodyRepository implements BodyRepository, Stringable
 
     /**
      * Retrieve all in the repository
-     *
-     * @return string|null
      */
     public function get(): ?string
     {
@@ -56,8 +52,6 @@ class StringBodyRepository implements BodyRepository, Stringable
 
     /**
      * Determine if the repository is empty
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -66,8 +60,6 @@ class StringBodyRepository implements BodyRepository, Stringable
 
     /**
      * Determine if the repository is not empty
-     *
-     * @return bool
      */
     public function isNotEmpty(): bool
     {
@@ -76,8 +68,6 @@ class StringBodyRepository implements BodyRepository, Stringable
 
     /**
      * Convert the repository into a string
-     *
-     * @return string
      */
     public function __toString(): string
     {

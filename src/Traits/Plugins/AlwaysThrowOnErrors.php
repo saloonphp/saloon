@@ -11,9 +11,6 @@ trait AlwaysThrowOnErrors
 {
     /**
      * Boot AlwaysThrowOnErrors Plugin
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return void
      */
     public static function bootAlwaysThrowOnErrors(PendingRequest $pendingRequest): void
     {

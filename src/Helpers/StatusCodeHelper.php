@@ -8,9 +8,6 @@ class StatusCodeHelper
 {
     /**
      * Get the message for the HTTP code
-     *
-     * @param int $code
-     * @return string|null
      */
     public static function getMessage(int $code): ?string
     {

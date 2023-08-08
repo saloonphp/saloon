@@ -19,8 +19,6 @@ class BadResponseRequest extends Request
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {
@@ -29,9 +27,6 @@ class BadResponseRequest extends Request
 
     /**
      * Check if we should throw an exception
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return bool
      */
     public function shouldThrowRequestException(Response $response): bool
     {

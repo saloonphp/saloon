@@ -10,9 +10,6 @@ trait AcceptsJson
 {
     /**
      * Boot AcceptsJson Plugin
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return void
      */
     public static function bootAcceptsJson(PendingRequest $pendingRequest): void
     {

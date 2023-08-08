@@ -15,8 +15,6 @@ class JsonBodyRepository extends ArrayBodyRepository implements Stringable
      * JSON encoding flags
      *
      * Use a Bitmask to separate other flags. For example: JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR
-     *
-     * @var int
      */
     protected int $jsonFlags = JSON_THROW_ON_ERROR;
 
@@ -25,7 +23,6 @@ class JsonBodyRepository extends ArrayBodyRepository implements Stringable
      *
      * Must be a bitmask like: ->setJsonFlags(JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR)
      *
-     * @param int $flags
      * @return $this
      */
     public function setJsonFlags(int $flags): static
@@ -37,8 +34,6 @@ class JsonBodyRepository extends ArrayBodyRepository implements Stringable
 
     /**
      * Get the JSON encoding flags
-     *
-     * @return int
      */
     public function getJsonFlags(): int
     {
@@ -47,8 +42,6 @@ class JsonBodyRepository extends ArrayBodyRepository implements Stringable
 
     /**
      * Convert the body repository into a string.
-     *
-     * @return string
      */
     public function __toString(): string
     {

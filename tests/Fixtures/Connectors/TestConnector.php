@@ -15,8 +15,6 @@ class TestConnector extends Connector
 
     /**
      * Constructor
-     *
-     * @param string|null $url
      */
     public function __construct(protected ?string $url = null)
     {
@@ -25,8 +23,6 @@ class TestConnector extends Connector
 
     /**
      * Define the base url of the api.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {

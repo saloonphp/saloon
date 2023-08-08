@@ -13,9 +13,6 @@ class DebugResponse implements ResponseMiddleware
 {
     /**
      * Register a response middleware
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return void
      */
     public function __invoke(Response $response): void
     {

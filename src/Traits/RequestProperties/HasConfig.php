@@ -11,15 +11,11 @@ trait HasConfig
 {
     /**
      * Request Config
-     *
-     * @var \Saloon\Contracts\ArrayStore
      */
     protected ArrayStoreContract $config;
 
     /**
      * Access the config
-     *
-     * @return \Saloon\Contracts\ArrayStore
      */
     public function config(): ArrayStoreContract
     {

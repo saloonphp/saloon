@@ -19,8 +19,6 @@ final class Config
 
     /**
      * Middleware Pipeline
-     *
-     * @var \Saloon\Contracts\MiddlewarePipeline|null
      */
     private static ?MiddlewarePipelineContract $middlewarePipeline = null;
 
@@ -40,15 +38,11 @@ final class Config
 
     /**
      * TLS Method
-     *
-     * @var int
      */
     private static int $tlsMethod = STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
 
     /**
      * Update global middleware
-     *
-     * @return \Saloon\Contracts\MiddlewarePipeline
      */
     public static function middleware(): MiddlewarePipelineContract
     {
@@ -57,9 +51,6 @@ final class Config
 
     /**
      * Write a custom sender resolver
-     *
-     * @param callable|null $senderResolver
-     * @return void
      */
     public static function resolveSenderWith(?callable $senderResolver): void
     {
@@ -68,8 +59,6 @@ final class Config
 
     /**
      * Create a new default sender
-     *
-     * @return \Saloon\Contracts\Sender
      */
     public static function getDefaultSender(): Sender
     {
@@ -82,7 +71,6 @@ final class Config
      * Set the default sender
      *
      * @param class-string<\Saloon\Contracts\Sender> $senderClass
-     * @return void
      */
     public static function setDefaultSender(string $senderClass): void
     {
@@ -91,8 +79,6 @@ final class Config
 
     /**
      * Get the TLS method
-     *
-     * @return int
      */
     public static function getTLSMethod(): int
     {
@@ -101,8 +87,6 @@ final class Config
 
     /**
      * Set the TLS method
-     *
-     * @param int $tlsMethod
      */
     public static function setTLSMethod(int $tlsMethod): void
     {
@@ -111,8 +95,6 @@ final class Config
 
     /**
      * Reset global middleware
-     *
-     * @return void
      */
     public static function resetMiddleware(): void
     {
@@ -121,8 +103,6 @@ final class Config
 
     /**
      * Reset the default sender
-     *
-     * @return void
      */
     public static function resetDefaultSender(): void
     {

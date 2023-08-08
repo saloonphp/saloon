@@ -10,8 +10,6 @@ class InvalidResponseClassException extends SaloonException
 {
     /**
      * Constructor
-     *
-     * @param string|null $message
      */
     public function __construct(string $message = null)
     {

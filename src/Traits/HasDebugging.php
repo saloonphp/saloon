@@ -10,8 +10,6 @@ trait HasDebugging
 {
     /**
      * Debugger
-     *
-     * @var \Saloon\Debugging\Debugger|null
      */
     protected ?Debugger $debugger = null;
 
@@ -19,7 +17,6 @@ trait HasDebugging
      * Retrieve the debugger
      *
      * @param callable(\Saloon\Debugging\Debugger): (void)|null $callback
-     * @return \Saloon\Debugging\Debugger
      */
     public function debug(?callable $callback = null): Debugger
     {

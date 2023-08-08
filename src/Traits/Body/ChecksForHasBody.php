@@ -13,8 +13,6 @@ trait ChecksForHasBody
     /**
      * Check if the request or connector has the WithBody class.
      *
-     * @param \Saloon\Http\PendingRequest $pendingRequest
-     * @return void
      * @throws \Saloon\Exceptions\BodyException
      */
     public function bootChecksForHasBody(PendingRequest $pendingRequest): void

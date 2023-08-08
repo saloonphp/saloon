@@ -37,22 +37,16 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
 
     /**
      * Get the URL of the request.
-     *
-     * @return string
      */
     public function getUrl(): string;
 
     /**
      * Get the URI for the pending request.
-     *
-     * @return UriInterface
      */
     public function getUri(): UriInterface;
 
     /**
      * Get the HTTP method used for the request
-     *
-     * @return \Saloon\Enums\Method
      */
     public function getMethod(): Method;
 
@@ -65,8 +59,6 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
 
     /**
      * Retrieve the body on the instance
-     *
-     * @return \Saloon\Contracts\Body\BodyRepository|null
      */
     public function body(): ?BodyRepository;
 
@@ -87,8 +79,6 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
 
     /**
      * Check if a fake response is present
-     *
-     * @return bool
      */
     public function hasFakeResponse(): bool;
 
@@ -96,58 +86,46 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
      * Create a data object from the response
      *
      * @param \Saloon\Contracts\Response $response
-     * @return mixed
      */
     public function createDtoFromResponse(Response $response): mixed;
 
     /**
      * Set if the request is going to be sent asynchronously
      *
-     * @param bool $asynchronous
      * @return $this
      */
     public function setAsynchronous(bool $asynchronous): static;
 
     /**
      * Check if the request is asynchronous
-     *
-     * @return bool
      */
     public function isAsynchronous(): bool;
 
     /**
      * Set the factory collection
      *
-     * @param FactoryCollection $factoryCollection
      * @return $this
      */
     public function setFactoryCollection(FactoryCollection $factoryCollection): static;
 
     /**
      * Get the factory collection
-     *
-     * @return FactoryCollection
      */
     public function getFactoryCollection(): FactoryCollection;
 
     /**
      * Get the PSR-7 request
-     *
-     * @return RequestInterface
      */
     public function createPsrRequest(): RequestInterface;
 
     /**
      * Create the fake response
-     *
-     * @return PromiseInterface|Response
      */
     public function createFakeResponse(): PromiseInterface|Response;
 
     /**
      *  Set the body repository
      *
-     * @param \Saloon\Contracts\Body\BodyRepository|null $body
      * @return $this
      */
     public function setBody(?BodyRepository $body): static;

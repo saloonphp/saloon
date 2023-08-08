@@ -14,7 +14,6 @@ class Pipe
      * Constructor
      *
      * @param callable(mixed $payload): (mixed) $callable
-     * @param string|null $name
      */
     public function __construct(
         callable $callable,

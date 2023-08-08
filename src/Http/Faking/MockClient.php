@@ -68,7 +68,6 @@ class MockClient implements MockClientContract
      * Store the mock responses in the correct places.
      *
      * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $responses
-     * @return void
      * @throws \Saloon\Exceptions\InvalidMockResponseCaptureMethodException
      */
     public function addResponses(array $responses): void
@@ -86,8 +85,6 @@ class MockClient implements MockClientContract
      * Add a mock response to the client
      *
      * @param \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable $response
-     * @param string|null $captureMethod
-     * @return void
      * @throws \Saloon\Exceptions\InvalidMockResponseCaptureMethodException
      */
     public function addResponse(MockResponse|Fixture|callable $response, ?string $captureMethod = null): void
@@ -128,8 +125,6 @@ class MockClient implements MockClientContract
 
     /**
      * Get the next response in the sequence
-     *
-     * @return mixed
      */
     public function getNextFromSequence(): mixed
     {
@@ -139,7 +134,6 @@ class MockClient implements MockClientContract
     /**
      * Guess the next response based on the request.
      *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture
      * @throws \Saloon\Exceptions\NoMockResponseFoundException
      */
@@ -174,7 +168,6 @@ class MockClient implements MockClientContract
     /**
      * Guess the response from the URL.
      *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable|null
      */
     private function guessResponseFromUrl(PendingRequest $pendingRequest): MockResponse|Fixture|callable|null
@@ -192,8 +185,6 @@ class MockClient implements MockClientContract
 
     /**
      * Check if the responses are empty.
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -202,9 +193,6 @@ class MockClient implements MockClientContract
 
     /**
      * Record a response.
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return void
      */
     public function recordResponse(Response $response): void
     {
@@ -223,8 +211,6 @@ class MockClient implements MockClientContract
 
     /**
      * Get the last request that the mock manager sent.
-     *
-     * @return \Saloon\Contracts\Request|null
      */
     public function getLastRequest(): ?Request
     {
@@ -233,8 +219,6 @@ class MockClient implements MockClientContract
 
     /**
      * Get the last request that the mock manager sent.
-     *
-     * @return \Saloon\Contracts\PendingRequest|null
      */
     public function getLastPendingRequest(): ?PendingRequest
     {
@@ -243,8 +227,6 @@ class MockClient implements MockClientContract
 
     /**
      * Get the last response that the mock manager sent.
-     *
-     * @return \Saloon\Contracts\Response|null
      */
     public function getLastResponse(): ?Response
     {
@@ -262,8 +244,6 @@ class MockClient implements MockClientContract
     /**
      * Assert that a given request was sent.
      *
-     * @param string|callable $value
-     * @return void
      * @throws \ReflectionException
      */
     public function assertSent(string|callable $value): void
@@ -276,8 +256,6 @@ class MockClient implements MockClientContract
     /**
      * Assert that a given request was not sent.
      *
-     * @param string|callable $request
-     * @return void
      * @throws \ReflectionException
      */
     public function assertNotSent(string|callable $request): void
@@ -290,9 +268,7 @@ class MockClient implements MockClientContract
     /**
      * Assert JSON data was sent
      *
-     * @param string $request
      * @param array<string, mixed> $data
-     * @return void
      * @throws \ReflectionException
      */
     public function assertSentJson(string $request, array $data): void
@@ -304,8 +280,6 @@ class MockClient implements MockClientContract
 
     /**
      * Assert that nothing was sent.
-     *
-     * @return void
      */
     public function assertNothingSent(): void
     {
@@ -314,9 +288,6 @@ class MockClient implements MockClientContract
 
     /**
      * Assert a request count has been met.
-     *
-     * @param int $count
-     * @return void
      */
     public function assertSentCount(int $count): void
     {
@@ -326,8 +297,6 @@ class MockClient implements MockClientContract
     /**
      * Check if a given request was sent
      *
-     * @param string|callable $request
-     * @return bool
      * @throws \ReflectionException
      */
     protected function checkRequestWasSent(string|callable $request): bool
@@ -352,8 +321,6 @@ class MockClient implements MockClientContract
     /**
      * Check if a request has not been sent.
      *
-     * @param string|callable $request
-     * @return bool
      * @throws \ReflectionException
      */
     protected function checkRequestWasNotSent(string|callable $request): bool
@@ -363,9 +330,6 @@ class MockClient implements MockClientContract
 
     /**
      * Assert a given request was sent.
-     *
-     * @param string $request
-     * @return \Saloon\Contracts\Response|null
      */
     public function findResponseByRequest(string $request): ?Response
     {
@@ -390,9 +354,6 @@ class MockClient implements MockClientContract
 
     /**
      * Find a request that matches a given url pattern
-     *
-     * @param string $url
-     * @return \Saloon\Contracts\Response|null
      */
     public function findResponseByRequestUrl(string $url): ?Response
     {
@@ -419,9 +380,6 @@ class MockClient implements MockClientContract
 
     /**
      * Test if the closure can pass with the history.
-     *
-     * @param callable $closure
-     * @return bool
      */
     private function checkClosureAgainstResponses(callable $closure): bool
     {
@@ -460,8 +418,6 @@ class MockClient implements MockClientContract
 
     /**
      * Will return true if the history is empty.
-     *
-     * @return bool
      */
     private function checkHistoryEmpty(): bool
     {
@@ -472,7 +428,6 @@ class MockClient implements MockClientContract
      * Get the mock value.
      *
      * @param \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable $mockable
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture
      */
     private function mockResponseValue(MockResponse|Fixture|callable $mockable, PendingRequest $pendingRequest): MockResponse|Fixture

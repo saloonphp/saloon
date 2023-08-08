@@ -24,8 +24,6 @@ interface Authenticatable
     /**
      * Authenticate the request with an Authorization header.
      *
-     * @param string $token
-     * @param string $prefix
      * @return $this
      */
     public function withTokenAuth(string $token, string $prefix = 'Bearer'): static;
@@ -33,8 +31,6 @@ interface Authenticatable
     /**
      * Authenticate the request with "basic" authentication.
      *
-     * @param string $username
-     * @param string $password
      * @return $this
      */
     public function withBasicAuth(string $username, string $password): static;
@@ -42,8 +38,6 @@ interface Authenticatable
     /**
      * Authenticate the request with a query parameter token.
      *
-     * @param string $parameter
-     * @param string $value
      * @return $this
      */
     public function withQueryAuth(string $parameter, string $value): static;

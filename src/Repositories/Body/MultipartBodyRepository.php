@@ -29,15 +29,11 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
 
     /**
      * The Multipart Boundary
-     *
-     * @var string
      */
     protected string $boundary;
 
     /**
      * Multipart Body Factory
-     *
-     * @var MultipartBodyFactory
      */
     protected MultipartBodyFactory $multipartBodyFactory;
 
@@ -93,9 +89,7 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
     /**
      * Add an element to the repository.
      *
-     * @param string $name
      * @param \Psr\Http\Message\StreamInterface|resource|string $contents
-     * @param string|null $filename
      * @param array<string, mixed> $headers
      * @return $this
      */
@@ -109,7 +103,6 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
     /**
      * Attach a multipart file
      *
-     * @param \Saloon\Data\MultipartValue $file
      * @return $this
      */
     public function attach(MultipartValue $file): static
@@ -121,10 +114,6 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
 
     /**
      * Get a specific key of the array
-     *
-     * @param string|int|null $key
-     * @param mixed|null $default
-     * @return \Saloon\Data\MultipartValue|array
      */
     public function get(string|int $key = null, mixed $default = null): MultipartValue|array
     {
@@ -138,7 +127,6 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
     /**
      * Remove an item from the repository.
      *
-     * @param string $key
      * @return $this
      */
     public function remove(string $key): static
@@ -150,8 +138,6 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
 
     /**
      * Determine if the repository is empty
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -160,8 +146,6 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
 
     /**
      * Determine if the repository is not empty
-     *
-     * @return bool
      */
     public function isNotEmpty(): bool
     {
@@ -187,9 +171,6 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
 
     /**
      * Set the multipart body factory
-     *
-     * @param MultipartBodyFactory $multipartBodyFactory
-     * @return MultipartBodyRepository
      */
     public function setMultipartBodyFactory(MultipartBodyFactory $multipartBodyFactory): MultipartBodyRepository
     {
@@ -200,8 +181,6 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
 
     /**
      * Get the boundary
-     *
-     * @return string
      */
     public function getBoundary(): string
     {
@@ -211,8 +190,6 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
     /**
      * Convert the body repository into a stream
      *
-     * @param StreamFactoryInterface $streamFactory
-     * @return StreamInterface
      * @throws BodyException
      */
     public function toStream(StreamFactoryInterface $streamFactory): StreamInterface

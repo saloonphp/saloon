@@ -11,16 +11,11 @@ class TestResponseException extends Exception
 {
     /**
      * Pending Request
-     *
-     * @var \Saloon\Contracts\PendingRequest
      */
     protected PendingRequest $pendingRequest;
 
     /**
      * Constructor
-     *
-     * @param string $message
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      */
     public function __construct(string $message, PendingRequest $pendingRequest)
     {
@@ -31,8 +26,6 @@ class TestResponseException extends Exception
 
     /**
      * Get the pending request
-     *
-     * @return \Saloon\Contracts\PendingRequest
      */
     public function getPendingRequest(): PendingRequest
     {

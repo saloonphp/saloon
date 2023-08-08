@@ -10,15 +10,12 @@ trait HasMockClient
 {
     /**
      * Mock Client
-     *
-     * @var \Saloon\Contracts\MockClient|null
      */
     protected ?MockClient $mockClient = null;
 
     /**
      * Specify a mock client.
      *
-     * @param \Saloon\Contracts\MockClient $mockClient
      * @return $this
      */
     public function withMockClient(MockClient $mockClient): static
@@ -30,8 +27,6 @@ trait HasMockClient
 
     /**
      * Get the mock client.
-     *
-     * @return \Saloon\Contracts\MockClient|null
      */
     public function getMockClient(): ?MockClient
     {
@@ -40,8 +35,6 @@ trait HasMockClient
 
     /**
      * Determine if the instance has a mock client
-     *
-     * @return bool
      */
     public function hasMockClient(): bool
     {

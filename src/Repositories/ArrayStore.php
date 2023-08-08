@@ -41,10 +41,6 @@ class ArrayStore implements ArrayStoreContract
 
     /**
      * Retrieve a single item.
-     *
-     * @param string $key
-     * @param mixed|null $default
-     * @return mixed
      */
     public function get(string $key, mixed $default = null): mixed
     {
@@ -80,8 +76,6 @@ class ArrayStore implements ArrayStoreContract
     /**
      * Add an item to the repository.
      *
-     * @param string $key
-     * @param mixed $value
      * @return $this
      */
     public function add(string $key, mixed $value): static
@@ -94,7 +88,6 @@ class ArrayStore implements ArrayStoreContract
     /**
      * Remove an item from the store.
      *
-     * @param string $key
      * @return $this
      */
     public function remove(string $key): static
@@ -107,7 +100,6 @@ class ArrayStore implements ArrayStoreContract
     /**
      * Determine if the store is empty
      *
-     * @return bool
      *
      * @phpstan-assert-if-false non-empty-array $this->data
      */
@@ -119,7 +111,6 @@ class ArrayStore implements ArrayStoreContract
     /**
      * Determine if the store is not empty
      *
-     * @return bool
      *
      * @phpstan-assert-if-true non-empty-array $this->data
      */

@@ -13,30 +13,22 @@ class Fixture
 {
     /**
      * The extension used by the fixture
-     *
-     * @var string
      */
     protected static string $fixtureExtension = 'json';
 
     /**
      * The name of the fixture
-     *
-     * @var string
      */
     protected string $name;
 
     /**
      * The storage helper
-     *
-     * @var \Saloon\Helpers\Storage
      */
     protected Storage $storage;
 
     /**
      * Constructor
      *
-     * @param string $name
-     * @param \Saloon\Helpers\Storage|null $storage
      * @throws \Saloon\Exceptions\DirectoryNotFoundException
      * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      */
@@ -72,7 +64,6 @@ class Fixture
     /**
      * Store data as the fixture.
      *
-     * @param \Saloon\Data\RecordedResponse $recordedResponse
      * @return $this
      * @throws \JsonException
      * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
@@ -87,8 +78,6 @@ class Fixture
 
     /**
      * Get the fixture path
-     *
-     * @return string
      */
     public function getFixturePath(): string
     {

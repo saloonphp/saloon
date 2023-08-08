@@ -8,8 +8,6 @@ class DuplicatePipeNameException extends SaloonException
 {
     /**
      * Constructor
-     *
-     * @param string $name
      */
     public function __construct(string $name)
     {

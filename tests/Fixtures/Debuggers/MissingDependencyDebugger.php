@@ -9,9 +9,7 @@ use Saloon\Debugging\Drivers\DebuggingDriver;
 
 class MissingDependencyDebugger extends DebuggingDriver
 {
-    /**
-     * @return string
-     */
+    
     public function name(): string
     {
         return 'missingDependency';
@@ -21,19 +19,13 @@ class MissingDependencyDebugger extends DebuggingDriver
      * Determines if the debugging driver can be used
      *
      * E.g if it has the correct dependencies
-     *
-     * @return bool
      */
     public function hasDependencies(): bool
     {
         return false;
     }
 
-    /**
-     * @param \Saloon\Debugging\DebugData $data
-     *
-     * @return void
-     */
+    
     public function send(DebugData $data): void
     {
         //

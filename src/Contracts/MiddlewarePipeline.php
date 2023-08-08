@@ -10,8 +10,6 @@ interface MiddlewarePipeline
      * Add a middleware before the request is sent
      *
      * @param callable(\Saloon\Contracts\PendingRequest): (\Saloon\Contracts\PendingRequest|\Saloon\Contracts\FakeResponse|void) $callable
-     * @param bool $prepend
-     * @param string|null $name
      * @return $this
      */
     public function onRequest(callable $callable, bool $prepend = false, ?string $name = null): static;
@@ -20,8 +18,6 @@ interface MiddlewarePipeline
      * Add a middleware after the request is sent
      *
      * @param callable(\Saloon\Contracts\Response): (\Saloon\Contracts\Response|void) $callable
-     * @param bool $prepend
-     * @param string|null $name
      * @return $this
      */
     public function onResponse(callable $callable, bool $prepend = false, ?string $name = null): static;

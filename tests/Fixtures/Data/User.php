@@ -8,11 +8,7 @@ use Saloon\Http\Response;
 
 class User
 {
-    /**
-     * @param string $name
-     * @param string $actualName
-     * @param string $twitter
-     */
+    
     public function __construct(
         public string $name,
         public string $actualName,
@@ -22,7 +18,6 @@ class User
     }
 
     /**
-     * @param Response $response
      * @return static
      */
     public static function fromSaloon(Response $response): self

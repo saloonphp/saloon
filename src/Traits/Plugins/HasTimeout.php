@@ -11,9 +11,6 @@ trait HasTimeout
 {
     /**
      * Boot HasTimeout plugin.
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return void
      */
     public function bootHasTimeout(PendingRequest $pendingRequest): void
     {
@@ -25,8 +22,6 @@ trait HasTimeout
 
     /**
      * Get the request connection timeout.
-     *
-     * @return float
      */
     public function getConnectTimeout(): float
     {
@@ -35,8 +30,6 @@ trait HasTimeout
 
     /**
      * Get the request timeout.
-     *
-     * @return float
      */
     public function getRequestTimeout(): float
     {

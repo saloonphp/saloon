@@ -27,29 +27,21 @@ trait HasResponseHelpers
 
     /**
      * The decoded XML response.
-     *
-     * @var string
      */
     protected string $decodedXml;
 
     /**
      * Denotes if the response has been mocked.
-     *
-     * @var bool
      */
     protected bool $mocked = false;
 
     /**
      * Denotes if the response has been cached.
-     *
-     * @var bool
      */
     protected bool $cached = false;
 
     /**
      * The simulated response payload if the response was simulated.
-     *
-     * @var \Saloon\Contracts\FakeResponse|null
      */
     protected ?FakeResponse $fakeResponse = null;
 
@@ -57,7 +49,6 @@ trait HasResponseHelpers
      * Get the JSON decoded body of the response as an array or scalar value.
      *
      * @param array-key|null $key
-     * @param mixed|null $default
      * @return ($key is null ? array<array-key, mixed> : mixed)
      * @throws \JsonException
      */
@@ -77,7 +68,6 @@ trait HasResponseHelpers
     /**
      * Get the JSON decoded body of the response as an object.
      *
-     * @return object
      * @throws \JsonException
      */
     public function object(): object
@@ -87,9 +77,6 @@ trait HasResponseHelpers
 
     /**
      * Convert the XML response into a SimpleXMLElement.
-     *
-     * @param mixed ...$arguments
-     * @return \SimpleXMLElement|bool
      */
     public function xml(mixed ...$arguments): SimpleXMLElement|bool
     {
@@ -127,8 +114,6 @@ trait HasResponseHelpers
 
     /**
      * Cast the response to a DTO.
-     *
-     * @return mixed
      */
     public function dto(): mixed
     {
@@ -145,7 +130,6 @@ trait HasResponseHelpers
      * Convert the response into a DTO or throw a LogicException if the response failed
      *
      * @throws LogicException
-     * @return mixed
      */
     public function dtoOrFail(): mixed
     {
@@ -161,8 +145,6 @@ trait HasResponseHelpers
      *
      * Requires Symfony Crawler (composer require symfony/dom-crawler)
      * @see https://symfony.com/doc/current/components/dom_crawler.html
-     *
-     * @return \Symfony\Component\DomCrawler\Crawler
      */
     public function dom(): Crawler
     {
@@ -171,8 +153,6 @@ trait HasResponseHelpers
 
     /**
      * Determine if the request was successful.
-     *
-     * @return bool
      */
     public function successful(): bool
     {
@@ -181,8 +161,6 @@ trait HasResponseHelpers
 
     /**
      * Determine if the response code was "OK".
-     *
-     * @return bool
      */
     public function ok(): bool
     {
@@ -191,8 +169,6 @@ trait HasResponseHelpers
 
     /**
      * Determine if the response was a redirect.
-     *
-     * @return bool
      */
     public function redirect(): bool
     {
@@ -201,8 +177,6 @@ trait HasResponseHelpers
 
     /**
      * Determine if the response indicates a client or server error occurred.
-     *
-     * @return bool
      */
     public function failed(): bool
     {
@@ -219,8 +193,6 @@ trait HasResponseHelpers
 
     /**
      * Determine if the response indicates a client error occurred.
-     *
-     * @return bool
      */
     public function clientError(): bool
     {
@@ -229,8 +201,6 @@ trait HasResponseHelpers
 
     /**
      * Determine if the response indicates a server error occurred.
-     *
-     * @return bool
      */
     public function serverError(): bool
     {
@@ -254,8 +224,6 @@ trait HasResponseHelpers
 
     /**
      * Determine if the response should throw a request exception.
-     *
-     * @return bool
      */
     public function shouldThrowRequestException(): bool
     {
@@ -266,8 +234,6 @@ trait HasResponseHelpers
 
     /**
      * Create an exception if a server or client error occurred.
-     *
-     * @return \Throwable|null
      */
     public function toException(): ?Throwable
     {
@@ -280,8 +246,6 @@ trait HasResponseHelpers
 
     /**
      * Create the request exception
-     *
-     * @return \Throwable
      */
     protected function createException(): Throwable
     {
@@ -320,7 +284,6 @@ trait HasResponseHelpers
     /**
      * Get a header from the response.
      *
-     * @param string $header
      * @return string|array<array-key, mixed>|null
      */
     public function header(string $header): string|array|null
@@ -342,8 +305,6 @@ trait HasResponseHelpers
 
     /**
      * Get the body of the response.
-     *
-     * @return string
      */
     public function __toString(): string
     {

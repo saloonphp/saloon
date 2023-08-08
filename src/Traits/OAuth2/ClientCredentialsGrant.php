@@ -23,10 +23,7 @@ trait ClientCredentialsGrant
      * @template TRequest of \Saloon\Contracts\Request
      *
      * @param array<string> $scopes
-     * @param string $scopeSeparator
-     * @param bool $returnResponse
      * @param callable(TRequest): (void)|null $requestModifier
-     * @return \Saloon\Contracts\OAuthAuthenticator|\Saloon\Contracts\Response
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\OAuthConfigValidationException
@@ -57,9 +54,6 @@ trait ClientCredentialsGrant
 
     /**
      * Create the OAuthAuthenticator from a response.
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return \Saloon\Contracts\OAuthAuthenticator
      */
     protected function createOAuthAuthenticatorFromResponse(Response $response): OAuthAuthenticator
     {
@@ -75,10 +69,6 @@ trait ClientCredentialsGrant
 
     /**
      * Create the authenticator.
-     *
-     * @param string $accessToken
-     * @param DateTimeImmutable|null $expiresAt
-     * @return OAuthAuthenticator
      */
     protected function createOAuthAuthenticator(string $accessToken, ?DateTimeImmutable $expiresAt = null): OAuthAuthenticator
     {
@@ -87,11 +77,6 @@ trait ClientCredentialsGrant
 
     /**
      * Resolve the access token request
-     *
-     * @param OAuthConfig $oauthConfig
-     * @param array $scopes
-     * @param string $scopeSeparator
-     * @return Request
      */
     protected function resolveAccessTokenRequest(OAuthConfig $oauthConfig, array $scopes = [], string $scopeSeparator = ' '): Request
     {

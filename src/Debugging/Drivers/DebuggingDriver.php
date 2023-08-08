@@ -11,7 +11,6 @@ use Saloon\Contracts\DebuggingDriver as DebuggingDriverContract;
 abstract class DebuggingDriver implements DebuggingDriverContract
 {
     /**
-     * @param \Saloon\Debugging\DebugData $data
      * @return array<string, mixed>
      */
     protected function formatData(DebugData $data): array
@@ -20,8 +19,6 @@ abstract class DebuggingDriver implements DebuggingDriverContract
     }
 
     /**
-     * @param \Saloon\Debugging\DebugData $data
-     *
      * @return array<string, mixed>
      */
     protected function formatRequestData(DebugData $data): array
@@ -40,8 +37,6 @@ abstract class DebuggingDriver implements DebuggingDriverContract
     }
 
     /**
-     * @param \Saloon\Debugging\DebugData $data
-     *
      * @return array<string, mixed>
      */
     protected function formatResponseData(DebugData $data): array
@@ -62,9 +57,6 @@ abstract class DebuggingDriver implements DebuggingDriverContract
 
     /**
      * Format the response body
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return mixed
      */
     protected function formatResponseBody(Response $response): mixed
     {

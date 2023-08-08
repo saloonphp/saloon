@@ -13,8 +13,6 @@ class FormBodyRepository extends ArrayBodyRepository implements Stringable
 
     /**
      * Convert into a string.
-     *
-     * @return string
      */
     public function __toString(): string
     {

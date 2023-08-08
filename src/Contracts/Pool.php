@@ -49,8 +49,6 @@ interface Pool
 
     /**
      * Send the pool and create a Promise
-     *
-     * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function send(): PromiseInterface;
 }

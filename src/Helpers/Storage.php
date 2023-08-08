@@ -12,16 +12,12 @@ class Storage
 {
     /**
      * The base directory to access the files.
-     *
-     * @var string
      */
     protected string $baseDirectory;
 
     /**
      * Constructor
      *
-     * @param string $baseDirectory
-     * @param bool $createMissingBaseDirectory
      * @throws \Saloon\Exceptions\DirectoryNotFoundException
      * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      */
@@ -36,8 +32,6 @@ class Storage
 
     /**
      * Get the base directory
-     *
-     * @return string
      */
     public function getBaseDirectory(): string
     {
@@ -46,9 +40,6 @@ class Storage
 
     /**
      * Combine the base directory with a path.
-     *
-     * @param string $path
-     * @return string
      */
     protected function buildPath(string $path): string
     {
@@ -59,9 +50,6 @@ class Storage
 
     /**
      * Check if the file exists
-     *
-     * @param string $path
-     * @return bool
      */
     public function exists(string $path): bool
     {
@@ -70,9 +58,6 @@ class Storage
 
     /**
      * Check if the file is missing
-     *
-     * @param string $path
-     * @return bool
      */
     public function missing(string $path): bool
     {
@@ -81,9 +66,6 @@ class Storage
 
     /**
      * Retrieve an item from storage
-     *
-     * @param string $path
-     * @return bool|string
      */
     public function get(string $path): bool|string
     {
@@ -93,8 +75,6 @@ class Storage
     /**
      * Put an item in storage
      *
-     * @param string $path
-     * @param string $contents
      * @return $this
      * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      * @throws \Saloon\Exceptions\UnableToCreateFileException
@@ -121,8 +101,6 @@ class Storage
     /**
      * Create a directory
      *
-     * @param string $directory
-     * @return bool
      * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      */
     public function createDirectory(string $directory): bool

@@ -14,25 +14,16 @@ class RequestException extends SaloonException
 {
     /**
      * The Saloon Response
-     *
-     * @var \Saloon\Contracts\Response
      */
     protected Response $response;
 
     /**
      * Maximum length allowed for the body
-     *
-     * @var int
      */
     protected int $maxBodyLength = 200;
 
     /**
      * Create the RequestException
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @param string|null $message
-     * @param int $code
-     * @param \Throwable|null $previous
      */
     public function __construct(Response $response, ?string $message = null, int $code = 0, ?Throwable $previous = null)
     {
@@ -52,8 +43,6 @@ class RequestException extends SaloonException
 
     /**
      * Get the Saloon Response Class.
-     *
-     * @return \Saloon\Contracts\Response
      */
     public function getResponse(): Response
     {
@@ -62,8 +51,6 @@ class RequestException extends SaloonException
 
     /**
      * Get the pending request.
-     *
-     * @return \Saloon\Contracts\PendingRequest
      */
     public function getPendingRequest(): PendingRequest
     {
@@ -72,8 +59,6 @@ class RequestException extends SaloonException
 
     /**
      * Get the HTTP status code
-     *
-     * @return int
      */
     public function getStatus(): int
     {
@@ -82,8 +67,6 @@ class RequestException extends SaloonException
 
     /**
      * Get the status message
-     *
-     * @return string|null
      */
     public function getStatusMessage(): ?string
     {

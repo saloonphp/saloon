@@ -12,7 +12,6 @@ interface CanThrowRequestExceptions
      * Determine if the request has failed.
      *
      * @param \Saloon\Contracts\Response $response
-     * @return bool|null
      */
     public function hasRequestFailed(Response $response): ?bool;
 
@@ -21,7 +20,6 @@ interface CanThrowRequestExceptions
      * is used, or when AlwaysThrowOnErrors is used.
      *
      * @param \Saloon\Contracts\Response $response
-     * @return bool
      */
     public function shouldThrowRequestException(Response $response): bool;
 
@@ -29,8 +27,6 @@ interface CanThrowRequestExceptions
      * Get the request exception.
      *
      * @param \Saloon\Contracts\Response $response
-     * @param \Throwable|null $senderException
-     * @return \Throwable|null
      */
     public function getRequestException(Response $response, ?Throwable $senderException): ?Throwable;
 }

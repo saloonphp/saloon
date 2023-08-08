@@ -15,9 +15,7 @@ class CustomResponseOAuth2Connector extends Connector
 {
     use AuthorizationCodeGrant;
 
-    /**
-     * @param string $greeting
-     */
+    
     public function __construct(protected string $greeting)
     {
         //
@@ -25,8 +23,6 @@ class CustomResponseOAuth2Connector extends Connector
 
     /**
      * Define the base URL.
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {
@@ -35,8 +31,6 @@ class CustomResponseOAuth2Connector extends Connector
 
     /**
      * Define default Oauth config.
-     *
-     * @return OAuthConfig
      */
     protected function defaultOauthConfig(): OAuthConfig
     {
@@ -48,11 +42,6 @@ class CustomResponseOAuth2Connector extends Connector
 
     /**
      * Define a custom OAuth2 authenticator.
-     *
-     * @param string $accessToken
-     * @param string $refreshToken
-     * @param DateTimeImmutable $expiresAt
-     * @return OAuthAuthenticator
      */
     protected function createOAuthAuthenticator(string $accessToken, string $refreshToken, DateTimeImmutable $expiresAt): OAuthAuthenticator
     {

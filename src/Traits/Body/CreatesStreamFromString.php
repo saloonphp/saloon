@@ -11,9 +11,6 @@ trait CreatesStreamFromString
 {
     /**
      * Convert the body repository into a stream
-     *
-     * @param StreamFactoryInterface $streamFactory
-     * @return StreamInterface
      */
     public function toStream(StreamFactoryInterface $streamFactory): StreamInterface
     {

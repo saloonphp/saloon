@@ -11,9 +11,6 @@ class BasicAuthenticator implements Authenticator
 {
     /**
      * Constructor
-     *
-     * @param string $username
-     * @param string $password
      */
     public function __construct(
         public string $username,
@@ -24,9 +21,6 @@ class BasicAuthenticator implements Authenticator
 
     /**
      * Apply the authentication to the request.
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return void
      */
     public function set(PendingRequest $pendingRequest): void
     {

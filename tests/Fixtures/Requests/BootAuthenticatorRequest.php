@@ -24,23 +24,16 @@ class BootAuthenticatorRequest extends Request implements HasBody
 
     /**
      * The connector.
-     *
-     * @var string
      */
     protected string $connector = TestConnector::class;
 
-    /**
-     * @return string
-     */
+    
     public function resolveEndpoint(): string
     {
         return '/user';
     }
 
-    /**
-     * @param PendingRequest $pendingRequest
-     * @return void
-     */
+    
     public function boot(PendingRequest $pendingRequest): void
     {
         $pendingRequest->withTokenAuth('howdy-partner');

@@ -36,15 +36,11 @@ class Debugger
 
     /**
      * Denotes if we send the request to the debugging driver
-     *
-     * @var bool
      */
     protected bool $showRequest = false;
 
     /**
      * Denotes if we send the response to the debugging driver
-     *
-     * @var bool
      */
     protected bool $showResponse = false;
 
@@ -57,10 +53,6 @@ class Debugger
 
     /**
      * Register a driver globally
-     *
-     * @param \Saloon\Contracts\DebuggingDriver $driver
-     *
-     * @return static
      */
     public static function registerGlobalDriver(DebuggingDriver $driver): static
     {
@@ -72,7 +64,6 @@ class Debugger
     /**
      * Register a driver
      *
-     * @param \Saloon\Contracts\DebuggingDriver $driver
      *
      * @return $this
      */
@@ -127,7 +118,6 @@ class Debugger
     /**
      * Send the request to the debugging driver.
      *
-     * @param bool $showRequest
      *
      * @return $this
      */
@@ -141,7 +131,6 @@ class Debugger
     /**
      * Send the response to the debugging driver.
      *
-     * @param bool $showResponse
      *
      * @return $this
      */

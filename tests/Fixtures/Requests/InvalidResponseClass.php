@@ -27,15 +27,11 @@ class InvalidResponseClass extends Request
 
     /**
      * The connector.
-     *
-     * @var string
      */
     protected string $connector = TestConnector::class;
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {

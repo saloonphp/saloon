@@ -23,8 +23,6 @@ interface HasMockClient
 
     /**
      * Determine if the instance has a mock client
-     *
-     * @return bool
      */
     public function hasMockClient(): bool;
 }

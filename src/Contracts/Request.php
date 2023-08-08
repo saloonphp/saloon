@@ -11,15 +11,11 @@ interface Request extends Authenticatable, CanThrowRequestExceptions, HasConfig,
 {
     /**
      * Get the HTTP method
-     *
-     * @return \Saloon\Enums\Method
      */
     public function getMethod(): Method;
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     public function resolveEndpoint(): string;
 
@@ -27,16 +23,13 @@ interface Request extends Authenticatable, CanThrowRequestExceptions, HasConfig,
      * Handle the boot lifecycle hook
      *
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return void
      */
     public function boot(PendingRequest $pendingRequest): void;
 
     /**
      * Handle the PSR request before it is sent
      *
-     * @param \Psr\Http\Message\RequestInterface $request
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return \Psr\Http\Message\RequestInterface
      */
     public function handlePsrRequest(RequestInterface $request, PendingRequest $pendingRequest): RequestInterface;
 
@@ -44,7 +37,6 @@ interface Request extends Authenticatable, CanThrowRequestExceptions, HasConfig,
      * Cast the response to a DTO.
      *
      * @param \Saloon\Contracts\Response $response
-     * @return mixed
      */
     public function createDtoFromResponse(Response $response): mixed;
 

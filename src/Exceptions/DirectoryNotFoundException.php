@@ -8,8 +8,6 @@ class DirectoryNotFoundException extends SaloonException
 {
     /**
      * Constructor
-     *
-     * @param string $directory
      */
     public function __construct(string $directory)
     {
