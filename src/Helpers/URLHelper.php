@@ -15,7 +15,7 @@ class URLHelper
      */
     public static function matches(string $pattern, string $value): bool
     {
-        return Str::is(Str::start($pattern, '*'), $value);
+        return StringHelpers::matchesPattern(StringHelpers::start($pattern, '*'), $value);
     }
 
     /**

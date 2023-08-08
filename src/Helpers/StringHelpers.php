@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
-class Str
+class StringHelpers
 {
     /**
      * Determine if a given string matches a given pattern.
@@ -13,7 +13,7 @@ class Str
      * @param string $value
      * @return bool
      */
-    public static function is(string|iterable $pattern, string $value): bool
+    public static function matchesPattern(string|iterable $pattern, string $value): bool
     {
         if (! is_iterable($pattern)) {
             $pattern = [$pattern];
@@ -56,28 +56,6 @@ class Str
         $quoted = preg_quote($prefix, '/');
 
         return $prefix . preg_replace('/^(?:' . $quoted . ')+/u', '', $value);
-    }
-
-    /**
-     * Determine if a given string ends with a given substring.
-     *
-     * @param string $haystack
-     * @param string|iterable<string> $needles
-     * @return bool
-     */
-    public static function endsWith(string $haystack, string|iterable $needles): bool
-    {
-        if (! is_iterable($needles)) {
-            $needles = (array)$needles;
-        }
-
-        foreach ($needles as $needle) {
-            if ((string)$needle !== '' && str_ends_with($haystack, $needle)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**

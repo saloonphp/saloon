@@ -18,7 +18,7 @@ class Arr
      *
      * @phpstan-assert-if-true array|ArrayAccess $value
      */
-    public static function accessible(mixed $value): bool
+    private static function accessible(mixed $value): bool
     {
         return is_array($value) || $value instanceof ArrayAccess;
     }
@@ -30,7 +30,7 @@ class Arr
      * @param array-key|float $key
      * @return bool
      */
-    public static function exists(array|ArrayAccess $array, string|int|float $key): bool
+    private static function exists(array|ArrayAccess $array, string|int|float $key): bool
     {
         if (is_float($key)) {
             $key = (string)$key;

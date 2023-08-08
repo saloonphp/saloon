@@ -192,11 +192,11 @@ class PendingRequest implements PendingRequestContract
         $requestTraits = Helpers::classUsesRecursive($request);
 
         foreach ($connectorTraits as $connectorTrait) {
-            PluginHelper::bootPlugin($this, $connector, $connectorTrait);
+            Helpers::bootPlugin($this, $connector, $connectorTrait);
         }
 
         foreach ($requestTraits as $requestTrait) {
-            PluginHelper::bootPlugin($this, $request, $requestTrait);
+            Helpers::bootPlugin($this, $request, $requestTrait);
         }
 
         return $this;
@@ -364,7 +364,7 @@ class PendingRequest implements PendingRequestContract
     {
         $response = $this->request->resolveResponseClass() ?? $this->connector->resolveResponseClass() ?? Response::class;
 
-        if (! class_exists($response) || ! ReflectionHelper::isSubclassOf($response, ResponseContract::class)) {
+        if (! class_exists($response) || ! Helpers::isSubclassOf($response, ResponseContract::class)) {
             throw new InvalidResponseClassException;
         }
 
