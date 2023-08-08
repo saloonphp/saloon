@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Saloon\Helpers;
 
 use Closure;
+use ReflectionClass;
+use Saloon\Contracts\Request;
+use Saloon\Contracts\Connector;
+use Saloon\Contracts\PendingRequest;
 
 class Helpers
 {
@@ -57,5 +61,44 @@ class Helpers
     public static function value(mixed $value, mixed ...$args): mixed
     {
         return $value instanceof Closure ? $value(...$args) : $value;
+    }
+
+    /**
+     * Check if a class is a subclass of another.
+     *
+     * @param class-string $class
+     * @param string $subclass
+     * @return bool
+     * @throws \ReflectionException
+     */
+    public static function isSubclassOf(string $class, string $subclass): bool
+    {
+        if ($class === $subclass) {
+            return true;
+        }
+
+        return (new ReflectionClass($class))->isSubclassOf($subclass);
+    }
+
+    /**
+     * Boot a plugin
+     *
+     * @param \Saloon\Contracts\PendingRequest $pendingRequest
+     * @param \Saloon\Contracts\Connector|\Saloon\Contracts\Request $resource
+     * @param string $trait
+     * @return void
+     * @throws \ReflectionException
+     */
+    public static function bootPlugin(PendingRequest $pendingRequest, Connector|Request $resource, string $trait): void
+    {
+        $traitReflection = new ReflectionClass($trait);
+
+        $bootMethodName = 'boot' . $traitReflection->getShortName();
+
+        if (! method_exists($resource, $bootMethodName)) {
+            return;
+        }
+
+        $resource->{$bootMethodName}($pendingRequest);
     }
 }

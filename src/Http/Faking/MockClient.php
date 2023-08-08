@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Saloon\Http\Faking;
 
 use ReflectionClass;
+use Saloon\Helpers\Helpers;
 use Saloon\Contracts\Request;
 use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\PendingRequest;
-use Saloon\Helpers\ReflectionHelper;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Contracts\MockClient as MockClientContract;
@@ -339,7 +339,7 @@ class MockClient implements MockClientContract
         }
 
         if (is_string($request)) {
-            if (class_exists($request) && ReflectionHelper::isSubclassOf($request, Request::class)) {
+            if (class_exists($request) && Helpers::isSubclassOf($request, Request::class)) {
                 $passed = $this->findResponseByRequest($request) instanceof Response;
             } else {
                 $passed = $this->findResponseByRequestUrl($request) instanceof Response;

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Saloon\Helpers\Str;
 use Saloon\Helpers\Date;
 use Saloon\Http\Response;
 use Saloon\Contracts\Request;
@@ -63,7 +62,7 @@ test('default state is generated automatically with every authorization url if s
 
     expect($state)->toBeString();
 
-    expect(Str::endsWith($url, $state))->toBeTrue();
+    expect(str_ends_with($url, $state))->toBeTrue();
 });
 
 test('additional query parameters can be added passed to the authorization url', function () {

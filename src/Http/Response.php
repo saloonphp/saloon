@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Saloon\Http;
 
 use Throwable;
-use Saloon\Traits\Macroable;
 use Saloon\Contracts\Request;
 use Saloon\Repositories\ArrayStore;
 use Saloon\Contracts\PendingRequest;
@@ -18,7 +17,6 @@ use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
 class Response implements ResponseContract
 {
-    use Macroable;
     use HasResponseHelpers;
 
     /**

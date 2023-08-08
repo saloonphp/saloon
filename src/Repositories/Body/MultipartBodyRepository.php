@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Saloon\Repositories\Body;
 
 use Saloon\Helpers\Arr;
-use Saloon\Helpers\Str;
 use InvalidArgumentException;
 use Saloon\Data\MultipartValue;
 use Saloon\Traits\Conditionable;
+use Saloon\Helpers\StringHelpers;
 use Saloon\Exceptions\BodyException;
 use Psr\Http\Message\StreamInterface;
 use Saloon\Contracts\Body\MergeableBody;
@@ -50,7 +50,7 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
     public function __construct(array $value = [], string $boundary = null)
     {
         $this->data = new ArrayBodyRepository;
-        $this->boundary = is_null($boundary) ? Str::random(40) : $boundary;
+        $this->boundary = is_null($boundary) ? StringHelpers::random(40) : $boundary;
 
         $this->set($value);
     }

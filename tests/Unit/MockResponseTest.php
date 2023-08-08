@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Response;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Responses\UserData;
-use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Responses\UserResponse;
 use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Tests\Fixtures\Requests\UserRequestWithCustomResponse;
@@ -31,19 +29,6 @@ test('a mock response can have raw body data', function () {
     expect($response->status())->toEqual(200);
     expect($response->body())->toBeInstanceOf(StringBodyRepository::class);
     expect($response->body()->get())->toEqual('xml');
-});
-
-test('a response can have a method added to it', function () {
-    $mockClient = new MockClient([MockResponse::make([])]);
-    $request = new UserRequest();
-
-    Response::macro('yeehaw', function () {
-        return 'Yee-haw!';
-    });
-
-    $response = connector()->send($request, $mockClient);
-
-    expect($response->yeehaw())->toEqual('Yee-haw!');
 });
 
 test('a response can be a custom response class', function () {
