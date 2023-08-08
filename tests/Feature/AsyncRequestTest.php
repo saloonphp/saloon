@@ -51,16 +51,10 @@ test('an asynchronous response will still be passed through response middleware'
 
     $request = new UserRequest();
 
-    Response::macro('setValue', function ($value) {
-        $this->value = $value;
-    });
+    $passed = false;
 
-    Response::macro('getValue', function () {
-        return $this->value;
-    });
-
-    $request->middleware()->onResponse(function (Response $response) {
-        $response->setValue(true);
+    $request->middleware()->onResponse(function (Response $response) use (&$passed) {
+        $passed = true;
     });
 
     $connector = new TestConnector;
@@ -68,7 +62,7 @@ test('an asynchronous response will still be passed through response middleware'
     $promise = $connector->sendAsync($request, $mockClient);
     $response = $promise->wait();
 
-    expect($response->getValue())->toBeTrue();
+    expect($passed)->toBeTrue();
 });
 
 test('an asynchronous request will return a custom response', function () {

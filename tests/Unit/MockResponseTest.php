@@ -33,19 +33,6 @@ test('a mock response can have raw body data', function () {
     expect($response->body()->get())->toEqual('xml');
 });
 
-test('a response can have a method added to it', function () {
-    $mockClient = new MockClient([MockResponse::make([])]);
-    $request = new UserRequest();
-
-    Response::macro('yeehaw', function () {
-        return 'Yee-haw!';
-    });
-
-    $response = connector()->send($request, $mockClient);
-
-    expect($response->yeehaw())->toEqual('Yee-haw!');
-});
-
 test('a response can be a custom response class', function () {
     $mockClient = new MockClient([MockResponse::make(['foo' => 'bar'])]);
     $request = new UserRequestWithCustomResponse();
