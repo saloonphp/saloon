@@ -26,9 +26,6 @@ declare(strict_types=1);
 |
 */
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Contracts\PendingRequest;
-use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 expect()->extend('toBeOne', function () {
