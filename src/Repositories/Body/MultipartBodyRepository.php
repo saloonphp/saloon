@@ -7,8 +7,8 @@ namespace Saloon\Repositories\Body;
 use Saloon\Helpers\Arr;
 use InvalidArgumentException;
 use Saloon\Data\MultipartValue;
+use Saloon\Helpers\StringHelper;
 use Saloon\Traits\Conditionable;
-use Saloon\Helpers\StringHelpers;
 use Saloon\Exceptions\BodyException;
 use Psr\Http\Message\StreamInterface;
 use Saloon\Contracts\Body\MergeableBody;
@@ -50,7 +50,7 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
     public function __construct(array $value = [], string $boundary = null)
     {
         $this->data = new ArrayBodyRepository;
-        $this->boundary = is_null($boundary) ? StringHelpers::random(40) : $boundary;
+        $this->boundary = is_null($boundary) ? StringHelper::random(40) : $boundary;
 
         $this->set($value);
     }

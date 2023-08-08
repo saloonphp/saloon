@@ -10,7 +10,7 @@ use InvalidArgumentException;
 use Saloon\Contracts\Request;
 use Saloon\Helpers\URLHelper;
 use Saloon\Contracts\Response;
-use Saloon\Helpers\StringHelpers;
+use Saloon\Helpers\StringHelper;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Http\OAuth2\GetUserRequest;
 use Saloon\Contracts\OAuthAuthenticator;
@@ -50,7 +50,7 @@ trait AuthorizationCodeGrant
         $redirectUri = $config->getRedirectUri();
         $defaultScopes = $config->getDefaultScopes();
 
-        $this->state = $state ?? StringHelpers::random(32);
+        $this->state = $state ?? StringHelper::random(32);
 
         $queryParameters = [
             'response_type' => 'code',
