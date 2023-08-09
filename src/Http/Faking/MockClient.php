@@ -159,7 +159,7 @@ class MockClient implements MockClientContract
         }
 
         if (empty($this->sequenceResponses)) {
-            throw new NoMockResponseFoundException;
+            throw new NoMockResponseFoundException($request);
         }
 
         return $this->mockResponseValue($this->getNextFromSequence(), $pendingRequest);
