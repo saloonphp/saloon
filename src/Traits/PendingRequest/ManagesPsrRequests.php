@@ -33,14 +33,6 @@ trait ManagesPsrRequests
     }
 
     /**
-     * Get the factory collection
-     */
-    public function getFactoryCollection(): FactoryCollection
-    {
-        return $this->factoryCollection;
-    }
-
-    /**
      * Get the PSR-7 request
      */
     public function createPsrRequest(): RequestInterface
@@ -67,5 +59,13 @@ trait ManagesPsrRequests
         $request = $this->connector->handlePsrRequest($request, $this);
 
         return $this->request->handlePsrRequest($request, $this);
+    }
+
+    /**
+     * Get the factory collection
+     */
+    public function getFactoryCollection(): FactoryCollection
+    {
+        return $this->factoryCollection;
     }
 }

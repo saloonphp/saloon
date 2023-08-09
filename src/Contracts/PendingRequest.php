@@ -105,11 +105,6 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
     public function createPsrRequest(): RequestInterface;
 
     /**
-     * Create the fake response
-     */
-    public function createFakeResponse(): PromiseInterface|Response;
-
-    /**
      *  Set the body repository
      *
      * @return $this

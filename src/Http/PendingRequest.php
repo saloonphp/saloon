@@ -13,12 +13,9 @@ use Saloon\Contracts\Connector;
 use Saloon\Contracts\MockClient;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
-use Psr\Http\Message\UriInterface;
 use Saloon\Contracts\FakeResponse;
-use Saloon\Data\FactoryCollection;
 use Saloon\Contracts\Authenticator;
 use Saloon\Http\Middleware\MergeBody;
-use Psr\Http\Message\RequestInterface;
 use Saloon\Http\Middleware\MergeDelay;
 use Saloon\Http\Middleware\DebugRequest;
 use Saloon\Contracts\Body\BodyRepository;
@@ -30,7 +27,6 @@ use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Http\Middleware\MergeRequestProperties;
 use Saloon\Exceptions\InvalidResponseClassException;
-use Saloon\Traits\PendingRequest\CreatesFakeResponses;
 use Saloon\Traits\PendingRequest\ManagesPsrRequests;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
@@ -39,10 +35,9 @@ class PendingRequest implements PendingRequestContract
 {
     use AuthenticatesRequests;
     use HasRequestProperties;
-    use CreatesFakeResponses;
+    use ManagesPsrRequests;
     use Conditionable;
     use HasMockClient;
-    use ManagesPsrRequests;
 
     /**
      * The connector making the request.
@@ -86,7 +81,12 @@ class PendingRequest implements PendingRequestContract
      */
     public function __construct(Connector $connector, Request $request, MockClient $mockClient = null)
     {
+        // Let's start by getting our PSR factory collection. This object contains all the
+        // relevant factories for creating PSR-7 requests as well as URIs and streams.
+
         $this->factoryCollection = $connector->sender()->getFactoryCollection();
+
+        // Now we'll set the base properties
 
         $this->connector = $connector;
         $this->request = $request;
@@ -95,7 +95,11 @@ class PendingRequest implements PendingRequestContract
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
         $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient();
 
+        // Next, we'll boot our plugin traits.
+
         $this->bootPlugins();
+
+        // Finally, we'll register and execute the middleware pipeline.
 
         $this->registerAndExecuteMiddleware();
     }
@@ -158,6 +162,8 @@ class PendingRequest implements PendingRequestContract
         // 4. Mock Response
         // 5. User
         // 6. Delay/Debugging/Event
+
+        // Todo: Revisit middleware order
 
         $middleware->merge(Config::middleware());
 

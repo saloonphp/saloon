@@ -16,9 +16,12 @@ use Saloon\Exceptions\Request\RequestException;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
+use Saloon\Traits\PendingRequest\CreatesFakeResponses;
 
 trait SendsRequests
 {
+    use CreatesFakeResponses;
+
     /**
      * Send a request
      *
@@ -30,7 +33,7 @@ trait SendsRequests
         $pendingRequest = $this->createPendingRequest($request, $mockClient);
 
         if ($pendingRequest->hasFakeResponse()) {
-            $response = $pendingRequest->createFakeResponse();
+            $response = $this->createFakeResponse($pendingRequest);
         } else {
             $response = $this->sender()->send($pendingRequest);
         }
@@ -58,7 +61,7 @@ trait SendsRequests
             // we'll send the request.
 
             if ($pendingRequest->hasFakeResponse()) {
-                $requestPromise = $pendingRequest->createFakeResponse();
+                $requestPromise = $this->createFakeResponse($pendingRequest);
             } else {
                 $requestPromise = $sender->sendAsync($pendingRequest);
             }
