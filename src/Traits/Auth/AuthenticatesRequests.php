@@ -21,6 +21,8 @@ trait AuthenticatesRequests
      */
     protected function defaultAuth(): ?Authenticator
     {
+        // Todo: Allow array for multiple?
+
         return null;
     }
 

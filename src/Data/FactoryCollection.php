@@ -10,7 +10,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 
-readonly class FactoryCollection
+class FactoryCollection
 {
     /**
      * Constructor
@@ -19,11 +19,11 @@ readonly class FactoryCollection
      * together into one, simple class that can be defined by senders.
      */
     public function __construct(
-        public RequestFactoryInterface  $requestFactory,
-        public UriFactoryInterface      $uriFactory,
-        public StreamFactoryInterface   $streamFactory,
-        public ResponseFactoryInterface $responseFactory,
-        public MultipartBodyFactory     $multipartBodyFactory,
+        public readonly RequestFactoryInterface  $requestFactory,
+        public readonly UriFactoryInterface      $uriFactory,
+        public readonly StreamFactoryInterface   $streamFactory,
+        public readonly ResponseFactoryInterface $responseFactory,
+        public readonly MultipartBodyFactory     $multipartBodyFactory,
     ) {
         //
     }

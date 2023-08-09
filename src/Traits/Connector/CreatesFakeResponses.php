@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Traits\PendingRequest;
+namespace Saloon\Traits\Connector;
 
-use Saloon\Contracts\PendingRequest;
-use Throwable;
-use Saloon\Http\Response;
-use Saloon\Contracts\FakeResponse;
-use Saloon\Http\Faking\MockResponse;
-use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Exceptions\PendingRequestException;
+use GuzzleHttp\Promise\RejectedPromise;
+use Saloon\Contracts\FakeResponse;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Response as ResponseContract;
+use Saloon\Exceptions\PendingRequestException;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\Response;
+use Throwable;
 
 trait CreatesFakeResponses
 {

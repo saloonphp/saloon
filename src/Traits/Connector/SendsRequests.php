@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Connector;
 
+use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Promise\PromiseInterface;
 use LogicException;
+use Saloon\Contracts\MockClient;
+use Saloon\Contracts\PendingRequest as PendingRequestContract;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
-use GuzzleHttp\Promise\Promise;
-use Saloon\Http\PendingRequest;
-use Saloon\Contracts\MockClient;
-use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Exceptions\PendingRequestException;
-use Saloon\Exceptions\Request\RequestException;
 use Saloon\Exceptions\InvalidResponseClassException;
+use Saloon\Exceptions\PendingRequestException;
 use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Contracts\PendingRequest as PendingRequestContract;
-use Saloon\Traits\PendingRequest\CreatesFakeResponses;
+use Saloon\Exceptions\Request\RequestException;
+use Saloon\Http\PendingRequest;
 
 trait SendsRequests
 {

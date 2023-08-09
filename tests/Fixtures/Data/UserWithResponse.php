@@ -12,7 +12,6 @@ class UserWithResponse implements WithResponse
 {
     use HasResponse;
 
-    
     public function __construct(
         public string $name,
         public string $actualName,
@@ -21,7 +20,6 @@ class UserWithResponse implements WithResponse
         //
     }
 
-    
     public static function fromResponse(Response $response): static
     {
         $data = $response->json();
