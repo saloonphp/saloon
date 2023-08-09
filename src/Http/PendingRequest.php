@@ -25,7 +25,7 @@ use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\Middleware\DebugResponse;
 use Saloon\Http\Middleware\DelayMiddleware;
 use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Http\Middleware\AuthenticateRequest;
+use Saloon\Http\Middleware\InvokeDeferredAuthenticators;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Http\Middleware\MergeRequestProperties;
@@ -120,9 +120,11 @@ class PendingRequest implements PendingRequestContract
 
         // New Middleware Order:
 
+        // 1. Core things: Request property, body, delay, authentication,
+
         // 1. Global (Laravel)
         // 2. Plugin (Rate Limiter)
-        // 3. Authentication
+        // 3. Deferred Authentication
         // 4. Mock Response
         // 5. User
         // 6. Delay/Debugging/Event
@@ -137,7 +139,7 @@ class PendingRequest implements PendingRequestContract
             ->onRequest(new MergeRequestProperties, false, 'mergeRequestProperties')
             ->onRequest(new MergeBody, false, 'mergeBody')
             ->onRequest(new MergeDelay, false, 'mergeDelay')
-            ->onRequest(new AuthenticateRequest, false, 'authenticateRequest')
+            ->onRequest(new InvokeDeferredAuthenticators, false, 'invokeDeferredAuthenticators')
             ->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
 
         $this->bootConnectorAndRequest();

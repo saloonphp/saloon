@@ -8,7 +8,7 @@ use Saloon\Contracts\Authenticator;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\RequestMiddleware;
 
-class AuthenticateRequest implements RequestMiddleware
+class InvokeDeferredAuthenticators implements RequestMiddleware
 {
     /**
      * Authenticate the pending request
