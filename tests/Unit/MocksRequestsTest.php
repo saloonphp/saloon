@@ -36,7 +36,7 @@ test('you can provide a mock client on a request and all requests will be mocked
     expect($response->isMocked())->toBeTrue();
 });
 
-test('request mock clients are always prioritied', function () {
+test('request mock clients are always prioritized', function () {
     $mockClientA = new MockClient([
         MockResponse::make(['name' => 'Sam']),
     ]);
