@@ -83,13 +83,6 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
     public function hasFakeResponse(): bool;
 
     /**
-     * Create a data object from the response
-     *
-     * @param \Saloon\Contracts\Response $response
-     */
-    public function createDtoFromResponse(Response $response): mixed;
-
-    /**
      * Set if the request is going to be sent asynchronously
      *
      * @return $this
@@ -100,13 +93,6 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
      * Check if the request is asynchronous
      */
     public function isAsynchronous(): bool;
-
-    /**
-     * Set the factory collection
-     *
-     * @return $this
-     */
-    public function setFactoryCollection(FactoryCollection $factoryCollection): static;
 
     /**
      * Get the factory collection

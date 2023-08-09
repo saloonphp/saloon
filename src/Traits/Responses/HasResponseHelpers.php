@@ -117,7 +117,10 @@ trait HasResponseHelpers
      */
     public function dto(): mixed
     {
-        $dataObject = $this->pendingRequest->createDtoFromResponse($this);
+        $request = $this->pendingRequest->getRequest();
+        $connector = $this->pendingRequest->getConnector();
+
+        $dataObject = $request->createDtoFromResponse($this) ?? $connector->createDtoFromResponse($this);
 
         if ($dataObject instanceof WithResponse) {
             $dataObject->setResponse($this);

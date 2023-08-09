@@ -31,6 +31,7 @@ use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Http\Middleware\MergeRequestProperties;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Traits\PendingRequest\CreatesFakeResponses;
+use Saloon\Traits\PendingRequest\ManagesPsrRequests;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
@@ -41,6 +42,7 @@ class PendingRequest implements PendingRequestContract
     use CreatesFakeResponses;
     use Conditionable;
     use HasMockClient;
+    use ManagesPsrRequests;
 
     /**
      * The connector making the request.
@@ -63,13 +65,6 @@ class PendingRequest implements PendingRequestContract
     protected string $url;
 
     /**
-     * The class used for responses.
-     *
-     * @var class-string<\Saloon\Contracts\Response>
-     */
-    protected string $responseClass;
-
-    /**
      * The body of the request.
      */
     protected ?BodyRepository $body = null;
@@ -77,7 +72,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * The simulated response.
      */
-    protected ?FakeResponse $fakeResponseData = null;
+    protected ?FakeResponse $fakeResponse = null;
 
     /**
      * Determine if the pending request is asynchronous
@@ -85,76 +80,24 @@ class PendingRequest implements PendingRequestContract
     protected bool $asynchronous = false;
 
     /**
-     * The factory collection.
-     */
-    protected FactoryCollection $factoryCollection;
-
-    /**
      * Build up the request payload.
      *
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
      */
     public function __construct(Connector $connector, Request $request, MockClient $mockClient = null)
     {
+        $this->factoryCollection = $connector->sender()->getFactoryCollection();
+
         $this->connector = $connector;
         $this->request = $request;
         $this->method = $request->getMethod();
-        $this->url = $this->resolveRequestUrl();
+        $this->url = URLHelper::join($this->connector->resolveBaseUrl(), $this->request->resolveEndpoint());
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
-        $this->responseClass = $this->resolveResponseClass();
         $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient();
-        $this->factoryCollection = $connector->sender()->getFactoryCollection();
-
-        $this->registerAndExecuteMiddleware();
-    }
-
-    /**
-     * Register and execute middleware
-     *
-     * @throws \ReflectionException
-     */
-    protected function registerAndExecuteMiddleware(): void
-    {
-        $middleware = $this->middleware();
-
-        // New Middleware Order:
-
-        // 1. Core things: Request property, body, delay, authentication,
-
-        // 1. Global (Laravel)
-        // 2. Plugin (Rate Limiter)
-        // 3. Deferred Authentication
-        // 4. Mock Response
-        // 5. User
-        // 6. Delay/Debugging/Event
-
-        $middleware->merge(Config::middleware());
 
         $this->bootPlugins();
 
-        // Now we'll queue te delay middleware and authenticator middleware
-
-        $middleware
-            ->onRequest(new MergeRequestProperties, false, 'mergeRequestProperties')
-            ->onRequest(new MergeBody, false, 'mergeBody')
-            ->onRequest(new MergeDelay, false, 'mergeDelay')
-            ->onRequest(new InvokeDeferredAuthenticators, false, 'invokeDeferredAuthenticators')
-            ->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
-
-        $this->bootConnectorAndRequest();
-
-        $middleware
-            ->merge($this->connector->middleware())
-            ->merge($this->request->middleware())
-            ->onRequest(new DelayMiddleware, false, 'delayMiddleware')
-            ->onRequest(new DebugRequest, false, 'debugRequest')
-            ->onResponse(new DebugResponse, false, 'debugResponse');
-
-        // Next, we will execute the request middleware pipeline which will
-        // process any middleware added on the connector or the request.
-
-        $middleware->executeRequestPipeline($this);
+        $this->registerAndExecuteMiddleware();
     }
 
     /**
@@ -199,162 +142,47 @@ class PendingRequest implements PendingRequestContract
     }
 
     /**
-     * Get the request.
-     */
-    public function getRequest(): Request
-    {
-        return $this->request;
-    }
-
-    /**
-     * Execute the response pipeline.
-     */
-    public function executeResponsePipeline(ResponseContract $response): ResponseContract
-    {
-        return $this->middleware()->executeResponsePipeline($response);
-    }
-
-
-    /**
-     * Get the connector.
-     */
-    public function getConnector(): Connector
-    {
-        return $this->connector;
-    }
-
-    /**
-     * Get the URL of the request.
-     */
-    public function getUrl(): string
-    {
-        return $this->url;
-    }
-
-    /**
-     * Get the URI for the pending request.
-     */
-    public function getUri(): UriInterface
-    {
-        $uri = $this->factoryCollection->uriFactory->createUri($this->getUrl());
-
-        // We'll parse the existing query parameters from the URL (if they have been defined)
-        // and then we'll merge in Saloon's query parameters. Our query parameters will take
-        // priority over any that were defined in the URL.
-
-        parse_str($uri->getQuery(), $existingQuery);
-
-        return $uri->withQuery(
-            http_build_query(array_merge($existingQuery, $this->query()->all()))
-        );
-    }
-
-    /**
-     * Get the HTTP method used for the request
-     */
-    public function getMethod(): Method
-    {
-        return $this->method;
-    }
-
-    /**
-     * Get the response class used for the request
+     * Register and execute middleware
      *
-     * @return class-string<\Saloon\Contracts\Response>
+     * @return void
      */
-    public function getResponseClass(): string
+    protected function registerAndExecuteMiddleware(): void
     {
-        return $this->responseClass;
-    }
+        $middleware = $this->middleware();
 
-    /**
-     * Retrieve the body on the instance
-     */
-    public function body(): ?BodyRepository
-    {
-        return $this->body;
-    }
+        // New Middleware Order:
 
-    /**
-     * Get the simulated response payload
-     */
-    public function getFakeResponse(): ?FakeResponse
-    {
-        return $this->fakeResponseData;
-    }
+        // 1. Global (Laravel)
+        // 2. Plugin (Rate Limiter)
+        // 3. Deferred Authentication
+        // 4. Mock Response
+        // 5. User
+        // 6. Delay/Debugging/Event
 
-    /**
-     * Set the simulated response payload
-     *
-     * @return $this
-     */
-    public function setFakeResponse(?FakeResponse $fakeResponse): static
-    {
-        $this->fakeResponseData = $fakeResponse;
+        $middleware->merge(Config::middleware());
 
-        return $this;
-    }
+        // Now we'll queue te delay middleware and authenticator middleware
 
-    /**
-     * Check if simulated response payload is present.
-     */
-    public function hasFakeResponse(): bool
-    {
-        return $this->fakeResponseData instanceof FakeResponse;
-    }
+        $middleware
+            ->onRequest(new MergeRequestProperties, false, 'mergeRequestProperties')
+            ->onRequest(new MergeBody, false, 'mergeBody')
+            ->onRequest(new MergeDelay, false, 'mergeDelay')
+            ->onRequest(new InvokeDeferredAuthenticators, false, 'invokeDeferredAuthenticators')
+            ->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
 
-    /**
-     * Build up the full request URL.
-     */
-    protected function resolveRequestUrl(): string
-    {
-        return URLHelper::join($this->connector->resolveBaseUrl(), $this->request->resolveEndpoint());
-    }
+        $this->bootConnectorAndRequest();
 
-    /**
-     * Get the response class
-     *
-     * @return class-string<\Saloon\Contracts\Response>
-     * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
-     */
-    protected function resolveResponseClass(): string
-    {
-        $response = $this->request->resolveResponseClass() ?? $this->connector->resolveResponseClass() ?? Response::class;
+        $middleware
+            ->merge($this->connector->middleware())
+            ->merge($this->request->middleware())
+            ->onRequest(new DelayMiddleware, false, 'delayMiddleware')
+            ->onRequest(new DebugRequest, false, 'debugRequest')
+            ->onResponse(new DebugResponse, false, 'debugResponse');
 
-        if (! class_exists($response) || ! Helpers::isSubclassOf($response, ResponseContract::class)) {
-            throw new InvalidResponseClassException;
-        }
+        // Next, we will execute the request middleware pipeline which will
+        // process any middleware added on the connector or the request.
 
-        return $response;
-    }
-
-    /**
-     * Create a data object from the response
-     */
-    public function createDtoFromResponse(ResponseContract $response): mixed
-    {
-        return $this->request->createDtoFromResponse($response) ?? $this->connector->createDtoFromResponse($response);
-    }
-
-    /**
-     * Set if the request is going to be sent asynchronously
-     *
-     * @return $this
-     */
-    public function setAsynchronous(bool $asynchronous): static
-    {
-        $this->asynchronous = $asynchronous;
-
-        return $this;
-    }
-
-    /**
-     * Check if the request is asynchronous
-     */
-    public function isAsynchronous(): bool
-    {
-        return $this->asynchronous;
+        $middleware->executeRequestPipeline($this);
     }
 
     /**
@@ -377,7 +205,42 @@ class PendingRequest implements PendingRequestContract
     }
 
     /**
+     * Execute the response pipeline.
+     */
+    public function executeResponsePipeline(ResponseContract $response): ResponseContract
+    {
+        return $this->middleware()->executeResponsePipeline($response);
+    }
+
+    /**
+     * Get the request.
+     */
+    public function getRequest(): Request
+    {
+        return $this->request;
+    }
+
+    /**
+     * Get the connector.
+     */
+    public function getConnector(): Connector
+    {
+        return $this->connector;
+    }
+
+    /**
+     * Get the URL of the request.
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
      * Set the URL of the PendingRequest
+     *
+     * Note: This will be combined with the query parameters to create
+     * a UriInterface that will be passed to a PSR-7 request.
      *
      * @return $this
      */
@@ -386,6 +249,14 @@ class PendingRequest implements PendingRequestContract
         $this->url = $url;
 
         return $this;
+    }
+
+    /**
+     * Get the HTTP method used for the request
+     */
+    public function getMethod(): Method
+    {
+        return $this->method;
     }
 
     /**
@@ -401,52 +272,11 @@ class PendingRequest implements PendingRequestContract
     }
 
     /**
-     * Set the factory collection
-     *
-     * @return $this
+     * Retrieve the body on the instance
      */
-    public function setFactoryCollection(FactoryCollection $factoryCollection): static
+    public function body(): ?BodyRepository
     {
-        $this->factoryCollection = $factoryCollection;
-
-        return $this;
-    }
-
-    /**
-     * Get the factory collection
-     */
-    public function getFactoryCollection(): FactoryCollection
-    {
-        return $this->factoryCollection;
-    }
-
-    /**
-     * Get the PSR-7 request
-     */
-    public function createPsrRequest(): RequestInterface
-    {
-        $factories = $this->factoryCollection;
-
-        $request = $factories->requestFactory->createRequest(
-            method: $this->getMethod()->value,
-            uri: $this->getUri(),
-        );
-
-        foreach ($this->headers()->all() as $headerName => $headerValue) {
-            $request = $request->withHeader($headerName, $headerValue);
-        }
-
-        if ($this->body() instanceof BodyRepository) {
-            $request = $request->withBody($this->body()->toStream($factories->streamFactory));
-        }
-
-        // Now we'll run our event hooks on both the connector and request which allows the
-        // user to be able to make any final changes to the PSR request if they need to
-        // like modifying the URI or adding extra headers.
-
-        $request = $this->connector->handlePsrRequest($request, $this);
-
-        return $this->request->handlePsrRequest($request, $this);
+        return $this->body;
     }
 
     /**
@@ -457,6 +287,72 @@ class PendingRequest implements PendingRequestContract
     public function setBody(?BodyRepository $body): static
     {
         $this->body = $body;
+
+        return $this;
+    }
+
+    /**
+     * Get the fake response
+     */
+    public function getFakeResponse(): ?FakeResponse
+    {
+        return $this->fakeResponse;
+    }
+
+    /**
+     * Check if a fake response has been set
+     */
+    public function hasFakeResponse(): bool
+    {
+        return $this->fakeResponse instanceof FakeResponse;
+    }
+
+    /**
+     * Set the fake response
+     *
+     * @return $this
+     */
+    public function setFakeResponse(?FakeResponse $fakeResponse): static
+    {
+        $this->fakeResponse = $fakeResponse;
+
+        return $this;
+    }
+
+    /**
+     * Get the response class
+     *
+     * @return class-string<\Saloon\Contracts\Response>
+     * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\InvalidResponseClassException
+     */
+    public function getResponseClass(): string
+    {
+        $response = $this->request->resolveResponseClass() ?? $this->connector->resolveResponseClass() ?? Response::class;
+
+        if (! class_exists($response) || ! Helpers::isSubclassOf($response, ResponseContract::class)) {
+            throw new InvalidResponseClassException;
+        }
+
+        return $response;
+    }
+
+    /**
+     * Check if the request is asynchronous
+     */
+    public function isAsynchronous(): bool
+    {
+        return $this->asynchronous;
+    }
+
+    /**
+     * Set if the request is going to be sent asynchronously
+     *
+     * @return $this
+     */
+    public function setAsynchronous(bool $asynchronous): static
+    {
+        $this->asynchronous = $asynchronous;
 
         return $this;
     }

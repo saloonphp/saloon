@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Responses\UserResponse;
 use Saloon\Exceptions\NoMockResponseFoundException;
@@ -69,7 +70,13 @@ test('saloon throws an exception if the custom response is not a response class'
 
     $this->expectException(InvalidResponseClassException::class);
 
-    expect(connector()->createPendingRequest($invalidConnectorClassRequest));
+    $connector = new TestConnector;
+
+    $connector->withMockClient(new MockClient([
+        InvalidResponseClass::class => MockResponse::make([], 200),
+    ]));
+
+    $connector->send($invalidConnectorClassRequest);
 });
 
 test('defineEndpoint method may be blank in request class to use the base url', function () {

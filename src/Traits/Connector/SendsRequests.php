@@ -23,7 +23,6 @@ trait SendsRequests
      * Send a request
      *
      * @throws \ReflectionException
-     * @throws InvalidResponseClassException
      * @throws \Throwable
      */
     public function send(Request $request, MockClient $mockClient = null): Response
@@ -144,7 +143,6 @@ trait SendsRequests
      * Create a new PendingRequest
      *
      * @throws \ReflectionException
-     * @throws InvalidResponseClassException
      */
     public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequestContract
     {
