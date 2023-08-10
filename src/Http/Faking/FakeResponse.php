@@ -56,7 +56,7 @@ class FakeResponse implements FakeResponseContract
     }
 
     /**
-     * Get the response body
+     *  Get the response body
      */
     public function body(): BodyRepository
     {
@@ -117,7 +117,8 @@ class FakeResponse implements FakeResponseContract
      * Create a new mock response from a fixture
      *
      * @return \Saloon\Http\Faking\Fixture
-     * @throws \Saloon\Exceptions\DirectoryNotFoundException|\Saloon\Exceptions\UnableToCreateDirectoryException
+     * @throws \Saloon\Exceptions\DirectoryNotFoundException
+     * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      */
     public static function fixture(string $name): Fixture
     {
