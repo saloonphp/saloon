@@ -22,12 +22,12 @@ use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\Middleware\DebugResponse;
 use Saloon\Http\Middleware\DelayMiddleware;
 use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Http\Middleware\InvokeDeferredAuthenticators;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Http\Middleware\MergeRequestProperties;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Traits\PendingRequest\ManagesPsrRequests;
+use Saloon\Http\Middleware\InvokeDeferredAuthenticators;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
@@ -147,8 +147,6 @@ class PendingRequest implements PendingRequestContract
 
     /**
      * Register and execute middleware
-     *
-     * @return void
      */
     protected function registerAndExecuteMiddleware(): void
     {

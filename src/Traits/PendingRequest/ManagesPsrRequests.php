@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Traits\PendingRequest;
 
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
-use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Data\FactoryCollection;
+use Psr\Http\Message\RequestInterface;
+use Saloon\Contracts\Body\BodyRepository;
 
 trait ManagesPsrRequests
 {
