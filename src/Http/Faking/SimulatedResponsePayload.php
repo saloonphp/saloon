@@ -69,6 +69,7 @@ class SimulatedResponsePayload implements SimulatedResponsePayloadContract
      * @param string $name
      * @return \Saloon\Http\Faking\Fixture
      * @throws \Saloon\Exceptions\DirectoryNotFoundException
+     * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      */
     public static function fixture(string $name): Fixture
     {

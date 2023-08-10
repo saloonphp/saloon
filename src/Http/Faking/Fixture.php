@@ -7,6 +7,8 @@ namespace Saloon\Http\Faking;
 use Saloon\Helpers\Storage;
 use Saloon\Helpers\MockConfig;
 use Saloon\Data\RecordedResponse;
+use Saloon\Helpers\FixtureHelper;
+use Saloon\Exceptions\FixtureException;
 use Saloon\Exceptions\FixtureMissingException;
 
 class Fixture
@@ -23,7 +25,7 @@ class Fixture
      *
      * @var string
      */
-    protected string $name;
+    protected string $name = '';
 
     /**
      * The storage helper
@@ -40,7 +42,7 @@ class Fixture
      * @throws \Saloon\Exceptions\DirectoryNotFoundException
      * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      */
-    public function __construct(string $name, Storage $storage = null)
+    public function __construct(string $name = '', Storage $storage = null)
     {
         $this->name = $name;
         $this->storage = $storage ?? new Storage(MockConfig::getFixturePath(), true);
@@ -51,7 +53,7 @@ class Fixture
      *
      * @return \Saloon\Http\Faking\MockResponse|null
      * @throws \Saloon\Exceptions\FixtureMissingException
-     * @throws \JsonException
+     * @throws \JsonException|\Saloon\Exceptions\FixtureException
      */
     public function getMockResponse(): ?MockResponse
     {
@@ -76,10 +78,15 @@ class Fixture
      * @return $this
      * @throws \JsonException
      * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
-     * @throws \Saloon\Exceptions\UnableToCreateFileException
+     * @throws \Saloon\Exceptions\UnableToCreateFileException|\Saloon\Exceptions\FixtureException
      */
     public function store(RecordedResponse $recordedResponse): static
     {
+        $recordedResponse = $this->swapSensitiveHeaders($recordedResponse);
+        $recordedResponse = $this->swapSensitiveJson($recordedResponse);
+        $recordedResponse = $this->swapSensitiveBodyWithRegex($recordedResponse);
+        $recordedResponse = $this->beforeSave($recordedResponse);
+
         $this->storage->put($this->getFixturePath(), $recordedResponse->toFile());
 
         return $this;
@@ -89,9 +96,139 @@ class Fixture
      * Get the fixture path
      *
      * @return string
+     * @throws \Saloon\Exceptions\FixtureException
      */
     public function getFixturePath(): string
     {
-        return sprintf('%s.%s', $this->name, $this::$fixtureExtension);
+        $name = $this->name;
+
+        if (empty($name)) {
+            $name = $this->defineName();
+        }
+
+        if (empty($name)) {
+            throw new FixtureException('The fixture must have a name');
+        }
+
+        return sprintf('%s.%s', $name, $this::$fixtureExtension);
+    }
+
+    /**
+     * Define the fixture name
+     *
+     * @return string
+     */
+    protected function defineName(): string
+    {
+        return '';
+    }
+
+    /**
+     * Swap any sensitive headers
+     *
+     * @param \Saloon\Data\RecordedResponse $recordedResponse
+     * @return \Saloon\Data\RecordedResponse
+     */
+    protected function swapSensitiveHeaders(RecordedResponse $recordedResponse): RecordedResponse
+    {
+        $sensitiveHeaders = $this->defineSensitiveHeaders();
+
+        if (empty($sensitiveHeaders)) {
+            return $recordedResponse;
+        }
+
+        $recordedResponse->headers = FixtureHelper::recursivelyReplaceAttributes($recordedResponse->headers, $sensitiveHeaders, false);
+
+        return $recordedResponse;
+    }
+
+    /**
+     * Swap any sensitive JSON data
+     *
+     * @param \Saloon\Data\RecordedResponse $recordedResponse
+     * @return \Saloon\Data\RecordedResponse
+     * @throws \JsonException
+     */
+    protected function swapSensitiveJson(RecordedResponse $recordedResponse): RecordedResponse
+    {
+        $body = json_decode($recordedResponse->data, true);
+
+        if (empty($body) || json_last_error() !== JSON_ERROR_NONE) {
+            return $recordedResponse;
+        }
+
+        $sensitiveJsonParameters = $this->defineSensitiveJsonParameters();
+
+        if (empty($sensitiveJsonParameters)) {
+            return $recordedResponse;
+        }
+
+        $redactedData = FixtureHelper::recursivelyReplaceAttributes($body, $sensitiveJsonParameters);
+
+        $recordedResponse->data = json_encode($redactedData, JSON_THROW_ON_ERROR);
+
+        return $recordedResponse;
+    }
+
+    /**
+     * Swap sensitive body with regex patterns
+     *
+     * @param \Saloon\Data\RecordedResponse $recordedResponse
+     * @return \Saloon\Data\RecordedResponse
+     */
+    protected function swapSensitiveBodyWithRegex(RecordedResponse $recordedResponse): RecordedResponse
+    {
+        $sensitiveRegexPatterns = $this->defineSensitiveRegexPatterns();
+
+        if (empty($sensitiveRegexPatterns)) {
+            return $recordedResponse;
+        }
+
+        $redactedData = FixtureHelper::replaceSensitiveRegexPatterns($recordedResponse->data, $sensitiveRegexPatterns);
+
+        $recordedResponse->data = $redactedData;
+
+        return $recordedResponse;
+    }
+
+    /**
+     * Swap any sensitive headers
+     *
+     * @return array<string, string|callable>
+     */
+    protected function defineSensitiveHeaders(): array
+    {
+        return [];
+    }
+
+    /**
+     * Swap any sensitive JSON parameters
+     *
+     * @return array<string, string|callable>
+     */
+    protected function defineSensitiveJsonParameters(): array
+    {
+        return [];
+    }
+
+    /**
+     * Define regex patterns that should be replaced
+     *
+     * @return array<string, string>
+     */
+    protected function defineSensitiveRegexPatterns(): array
+    {
+        return [];
+    }
+
+    /**
+     * Hook to use before saving
+     *
+     * @param \Saloon\Data\RecordedResponse $recordedResponse
+     * @return \Saloon\Data\RecordedResponse
+     */
+    protected function beforeSave(RecordedResponse $recordedResponse): RecordedResponse
+    {
+        return $recordedResponse;
     }
 }
