@@ -6,7 +6,7 @@
 
 A Laravel/PHP package that helps you build beautiful API integrations and SDKs 🤠
 
-![Build Status](https://github.com/sammyjo20/saloon/actions/workflows/tests.yml/badge.svg)
+![Build Status](https://github.com/saloonphp/saloon/actions/workflows/tests.yml/badge.svg)
 
 [Click here to read the documentation](https://docs.saloon.dev)
 
