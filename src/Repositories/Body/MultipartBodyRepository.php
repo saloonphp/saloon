@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Repositories\Body;
 
-use Saloon\Helpers\Arr;
 use InvalidArgumentException;
 use Saloon\Data\MultipartValue;
+use Saloon\Helpers\ArrayHelpers;
 use Saloon\Traits\Conditionable;
 use Saloon\Helpers\StringHelpers;
 use Saloon\Exceptions\BodyException;
@@ -166,7 +166,7 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
             throw new InvalidArgumentException(sprintf('The value array must only contain %s objects.', MultipartValue::class));
         }
 
-        return Arr::mapWithKeys($multipartValues, static fn (MultipartValue $value) => [$value->name => $value]);
+        return ArrayHelpers::mapWithKeys($multipartValues, static fn (MultipartValue $value) => [$value->name => $value]);
     }
 
     /**

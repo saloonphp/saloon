@@ -19,11 +19,12 @@ use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
 trait SendsRequests
 {
+    use CreatesFakeResponses;
+
     /**
      * Send a request
      *
      * @throws \ReflectionException
-     * @throws InvalidResponseClassException
      * @throws \Throwable
      */
     public function send(Request $request, MockClient $mockClient = null): Response
@@ -31,7 +32,7 @@ trait SendsRequests
         $pendingRequest = $this->createPendingRequest($request, $mockClient);
 
         if ($pendingRequest->hasFakeResponse()) {
-            $response = $pendingRequest->createFakeResponse();
+            $response = $this->createFakeResponse($pendingRequest);
         } else {
             $response = $this->sender()->send($pendingRequest);
         }
@@ -59,7 +60,7 @@ trait SendsRequests
             // we'll send the request.
 
             if ($pendingRequest->hasFakeResponse()) {
-                $requestPromise = $pendingRequest->createFakeResponse();
+                $requestPromise = $this->createFakeResponse($pendingRequest);
             } else {
                 $requestPromise = $sender->sendAsync($pendingRequest);
             }
@@ -144,7 +145,6 @@ trait SendsRequests
      * Create a new PendingRequest
      *
      * @throws \ReflectionException
-     * @throws InvalidResponseClassException
      */
     public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequestContract
     {

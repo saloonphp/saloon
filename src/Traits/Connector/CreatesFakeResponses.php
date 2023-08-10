@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Traits\PendingRequest;
+namespace Saloon\Traits\Connector;
 
 use Throwable;
 use Saloon\Http\Response;
 use Saloon\Contracts\FakeResponse;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -23,37 +24,41 @@ trait CreatesFakeResponses
      * @throws PendingRequestException
      * @throws Throwable
      */
-    public function createFakeResponse(): PromiseInterface|Response
+    protected function createFakeResponse(PendingRequest $pendingRequest): PromiseInterface|Response
     {
-        $fakeResponse = $this->getFakeResponse();
+        $fakeResponse = $pendingRequest->getFakeResponse();
 
         if (! $fakeResponse instanceof FakeResponse) {
             throw new PendingRequestException('Unable to create fake response because there is no fake response data.');
         }
 
+        $isAsynchronous = $pendingRequest->isAsynchronous();
+
         // Check if the FakeResponse throws an exception. If the request is
         // asynchronous, then we should allow the promise handler to deal with the exception.
 
-        $exception = $fakeResponse->getException($this);
+        $exception = $fakeResponse->getException($pendingRequest);
 
-        if ($exception instanceof Throwable && $this->isAsynchronous() === false) {
+        if ($exception instanceof Throwable && $isAsynchronous === false) {
             throw $exception;
         }
 
         // Let's create our response!
 
+        $factories = $pendingRequest->getFactoryCollection();
+
         $response = $fakeResponse->createPsrResponse(
-            responseFactory: $this->factoryCollection->responseFactory,
-            streamFactory: $this->factoryCollection->streamFactory,
+            responseFactory: $factories->responseFactory,
+            streamFactory: $factories->streamFactory,
         );
 
         /** @var class-string<\Saloon\Contracts\Response> $responseClass */
-        $responseClass = $this->getResponseClass();
+        $responseClass = $pendingRequest->getResponseClass();
 
         $response = $responseClass::fromPsrResponse(
             psrResponse: $response,
-            pendingRequest: $this,
-            psrRequest: $this->createPsrRequest(),
+            pendingRequest: $pendingRequest,
+            psrRequest: $pendingRequest->createPsrRequest(),
             senderException: $exception,
         );
 
@@ -64,20 +69,23 @@ trait CreatesFakeResponses
         // the response.
 
         if ($fakeResponse instanceof MockResponse) {
-            $this->getMockClient()?->recordResponse($response);
+            $pendingRequest->getMockClient()?->recordResponse($response);
+
             $response->setMocked(true);
         }
 
-        if ($this->isAsynchronous()) {
-            // When mocking asynchronous requests we need to wrap the response
-            // in FulfilledPromise or RejectedPromise depending on if the
-            // response has an exception.
+        // When the request isn't async we'll just return the response
 
-            $exception ??= $response->toException();
-
-            return is_null($exception) ? new FulfilledPromise($response) : new RejectedPromise($exception);
+        if ($isAsynchronous === false) {
+            return $response;
         }
 
-        return $response;
+        // When mocking asynchronous requests we need to wrap the response
+        // in FulfilledPromise or RejectedPromise depending on if the
+        // response has an exception.
+
+        $exception ??= $response->toException();
+
+        return is_null($exception) ? new FulfilledPromise($response) : new RejectedPromise($exception);
     }
 }

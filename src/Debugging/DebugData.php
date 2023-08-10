@@ -10,7 +10,7 @@ use Saloon\Contracts\Response;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\PendingRequest;
 
-readonly class DebugData
+class DebugData
 {
     /**
      * Constructor

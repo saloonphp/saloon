@@ -7,7 +7,7 @@ namespace Saloon\Traits\Responses;
 use Throwable;
 use LogicException;
 use SimpleXMLElement;
-use Saloon\Helpers\Arr;
+use Saloon\Helpers\ArrayHelpers;
 use Illuminate\Support\Collection;
 use Saloon\Contracts\FakeResponse;
 use Symfony\Component\DomCrawler\Crawler;
@@ -16,8 +16,6 @@ use Saloon\Contracts\DataObjects\WithResponse;
 
 trait HasResponseHelpers
 {
-    use HasSimulationMethods;
-
     /**
      * The decoded JSON response.
      *
@@ -62,7 +60,7 @@ trait HasResponseHelpers
             return $this->decodedJson;
         }
 
-        return Arr::get($this->decodedJson, $key, $default);
+        return ArrayHelpers::get($this->decodedJson, $key, $default);
     }
 
     /**
@@ -117,7 +115,10 @@ trait HasResponseHelpers
      */
     public function dto(): mixed
     {
-        $dataObject = $this->pendingRequest->createDtoFromResponse($this);
+        $request = $this->pendingRequest->getRequest();
+        $connector = $this->pendingRequest->getConnector();
+
+        $dataObject = $request->createDtoFromResponse($this) ?? $connector->createDtoFromResponse($this);
 
         if ($dataObject instanceof WithResponse) {
             $dataObject->setResponse($this);
@@ -144,6 +145,7 @@ trait HasResponseHelpers
      * Parse the HTML or XML body into a Symfony DomCrawler instance.
      *
      * Requires Symfony Crawler (composer require symfony/dom-crawler)
+     *
      * @see https://symfony.com/doc/current/components/dom_crawler.html
      */
     public function dom(): Crawler
@@ -309,5 +311,73 @@ trait HasResponseHelpers
     public function __toString(): string
     {
         return $this->body();
+    }
+
+    /**
+     * Check if the response has been cached
+     */
+    public function isCached(): bool
+    {
+        return $this->cached;
+    }
+
+    /**
+     * Check if the response has been mocked
+     */
+    public function isMocked(): bool
+    {
+        return $this->mocked;
+    }
+
+    /**
+     * Check if the response has been simulated
+     */
+    public function isFaked(): bool
+    {
+        return $this->isMocked() || $this->isCached();
+    }
+
+    /**
+     * Set if a response has been cached or not.
+     *
+     * @return $this
+     */
+    public function setCached(bool $value): static
+    {
+        $this->cached = true;
+
+        return $this;
+    }
+
+    /**
+     * Set if a response has been mocked or not.
+     *
+     * @return $this
+     */
+    public function setMocked(bool $value): static
+    {
+        $this->mocked = true;
+
+        return $this;
+    }
+
+    /**
+     * Set the simulated response payload if the response was simulated.
+     *
+     * @return $this
+     */
+    public function setFakeResponse(FakeResponse $fakeResponse): static
+    {
+        $this->fakeResponse = $fakeResponse;
+
+        return $this;
+    }
+
+    /**
+     * Get the simulated response payload if the response was simulated.
+     */
+    public function getFakeResponse(): ?FakeResponse
+    {
+        return $this->fakeResponse;
     }
 }

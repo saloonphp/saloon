@@ -8,7 +8,6 @@ use Saloon\Enums\Method;
 use Psr\Http\Message\UriInterface;
 use Saloon\Data\FactoryCollection;
 use Psr\Http\Message\RequestInterface;
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 
 interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams, HasDelay
@@ -83,13 +82,6 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
     public function hasFakeResponse(): bool;
 
     /**
-     * Create a data object from the response
-     *
-     * @param \Saloon\Contracts\Response $response
-     */
-    public function createDtoFromResponse(Response $response): mixed;
-
-    /**
      * Set if the request is going to be sent asynchronously
      *
      * @return $this
@@ -102,13 +94,6 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
     public function isAsynchronous(): bool;
 
     /**
-     * Set the factory collection
-     *
-     * @return $this
-     */
-    public function setFactoryCollection(FactoryCollection $factoryCollection): static;
-
-    /**
      * Get the factory collection
      */
     public function getFactoryCollection(): FactoryCollection;
@@ -117,11 +102,6 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
      * Get the PSR-7 request
      */
     public function createPsrRequest(): RequestInterface;
-
-    /**
-     * Create the fake response
-     */
-    public function createFakeResponse(): PromiseInterface|Response;
 
     /**
      *  Set the body repository
