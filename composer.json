@@ -1,5 +1,5 @@
 {
-    "name": "sammyjo20/saloon",
+    "name": "saloonphp/saloon",
     "description": "Build beautiful API integrations and SDKs with Saloon",
     "license": "MIT",
     "type": "library",
@@ -17,7 +17,7 @@
             "role": "Developer"
         }
     ],
-    "homepage": "https://github.com/sammyjo20/saloon",
+    "homepage": "https://github.com/saloonphp/saloon",
     "require": {
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.5",
