@@ -22,12 +22,12 @@ use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\Middleware\DebugResponse;
 use Saloon\Http\Middleware\DelayMiddleware;
 use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Http\Middleware\MergeRequestProperties;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Traits\PendingRequest\ManagesPsrRequests;
-use Saloon\Http\Middleware\InvokeDeferredAuthenticators;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
@@ -171,7 +171,7 @@ class PendingRequest implements PendingRequestContract
             ->onRequest(new MergeRequestProperties, false, 'mergeRequestProperties')
             ->onRequest(new MergeBody, false, 'mergeBody')
             ->onRequest(new MergeDelay, false, 'mergeDelay')
-            ->onRequest(new InvokeDeferredAuthenticators, false, 'invokeDeferredAuthenticators')
+            ->onRequest(new AuthenticateRequest, false, 'authenticateRequest')
             ->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
 
         $this->bootConnectorAndRequest();
