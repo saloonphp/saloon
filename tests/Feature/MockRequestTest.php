@@ -11,6 +11,7 @@ use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\FixtureException;
 use Saloon\Tests\Fixtures\Mocking\UserFixture;
 use Saloon\Exceptions\Request\RequestException;
+use Saloon\Tests\Fixtures\Requests\PagedSuperheroRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use League\Flysystem\Local\LocalFilesystemAdapter;
@@ -25,7 +26,6 @@ use Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
 use Saloon\Tests\Fixtures\Requests\FileDownloadRequest;
 use Saloon\Tests\Fixtures\Mocking\BeforeSaveUserFixture;
 use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
-use Saloon\Tests\Fixtures\Requests\PageGetSuperHeroesRequest;
 use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
 use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
@@ -606,8 +606,8 @@ test('you can hide sensitive json body parameters and headers before the fixture
     expect($responseA->header('Server'))->toEqual('cloudflare');
     expect($responseA->header('Cache-Control'))->toEqual('no-cache, private');
 
-    expect($responseA->isSimulated())->toBeFalse();
-    expect($responseB->isSimulated())->toBeTrue();
+    expect($responseA->isFaked())->toBeFalse();
+    expect($responseB->isFaked())->toBeTrue();
 
     expect($responseB->json())->toEqual([
         'name' => 'Sxxx',
@@ -635,8 +635,8 @@ test('the fixture swap tool works on multiple attempts and recursively', functio
         new SuperheroFixture,
     ]);
 
-    $responseA = connector()->send(new PageGetSuperHeroesRequest, $mockClient);
-    $responseB = connector()->send(new PageGetSuperHeroesRequest, $mockClient);
+    $responseA = connector()->send(new PagedSuperheroRequest, $mockClient);
+    $responseB = connector()->send(new PagedSuperheroRequest, $mockClient);
 
     expect($responseA->json()['data'])->each->toHaveKey('publisher', 'DC Comics');
     expect($responseB->json()['data'])->each->toHaveKey('publisher', 'REDACTED');
@@ -670,8 +670,8 @@ test('you can define regex patterns that should be used to replace the body in f
         'twitter' => '@carre_sam',
     ]);
 
-    expect($responseA->isSimulated())->toBeFalse();
-    expect($responseB->isSimulated())->toBeTrue();
+    expect($responseA->isFaked())->toBeFalse();
+    expect($responseB->isFaked())->toBeTrue();
 
     expect($responseB->json())->toEqual([
         'name' => 'Sxxxmyjo20',
