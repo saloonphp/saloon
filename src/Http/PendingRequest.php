@@ -152,20 +152,8 @@ class PendingRequest implements PendingRequestContract
     {
         $middleware = $this->middleware();
 
-        // New Middleware Order:
-
-        // 1. Global (Laravel)
-        // 2. Plugin (Rate Limiter)
-        // 3. Deferred Authentication
-        // 4. Mock Response
-        // 5. User
-        // 6. Delay/Debugging/Event
-
-        // Todo: Revisit middleware order
-
-        $middleware->merge(Config::middleware());
-
-        // Now we'll queue te delay middleware and authenticator middleware
+        // We'll start with our core middleware like merging request properties, merging the
+        // body, delay and also running authenticators on the request.
 
         $middleware
             ->onRequest(new MergeRequestProperties, false, 'mergeRequestProperties')
@@ -174,17 +162,42 @@ class PendingRequest implements PendingRequestContract
             ->onRequest(new AuthenticateRequest, false, 'authenticateRequest')
             ->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
 
+        // Next, we'll merge in our "Global" middleware which can be middleware set by the
+        // user or set by Saloon's plugins like the Laravel Plugin. It's best that this
+        // middleware is run now because we want the user to still have an opportunity
+        // to overwrite anything applied by it.
+
+        $middleware->merge(Config::middleware());
+
+        // Now we'll "boot" the connector and request. This is a hook that can be run after
+        // the core middleware that allows you to add your own properties that are a higher
+        // priority than anything else.
+
         $this->bootConnectorAndRequest();
+
+        // Now we'll merge the middleware added on the connector and the request. This
+        // middleware will have almost the final object to play with and overwrite if
+        // they desire.
 
         $middleware
             ->merge($this->connector->middleware())
-            ->merge($this->request->middleware())
-            ->onRequest(new DelayMiddleware, false, 'delayMiddleware')
+            ->merge($this->request->middleware());
+
+        // Next, we'll delay the request if we need to. This will run before the final
+        // middleware.
+
+        $middleware->onRequest(new DelayMiddleware, false, 'delayMiddleware');
+
+        // Finally, we'll apply our "final" middleware. This is a group of middleware
+        // that will run at the end, no matter what. This is useful for debugging and
+        // events where we can guarantee that the middleware will be run at the end.
+
+        $middleware
             ->onRequest(new DebugRequest, false, 'debugRequest')
             ->onResponse(new DebugResponse, false, 'debugResponse');
 
         // Next, we will execute the request middleware pipeline which will
-        // process any middleware added on the connector or the request.
+        // process the middleware in the order we added it.
 
         $middleware->executeRequestPipeline($this);
     }
