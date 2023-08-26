@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Helpers;
 
 use Closure;
+use Saloon\Data\PipeOrder;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\FakeResponse;
 use Saloon\Contracts\PendingRequest;
@@ -39,7 +40,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
-    public function onRequest(callable $callable, bool $prepend = false, ?string $name = null): static
+    public function onRequest(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
     {
         /**
          * For some reason, PHP is not destructing non-static Closures, or 'things' using non-static Closures, correctly, keeping unused objects intact.
@@ -63,7 +64,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
             }
 
             return $pendingRequest;
-        }, $prepend, $name);
+        }, $name, $order);
 
         return $this;
     }
@@ -75,7 +76,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
-    public function onResponse(callable $callable, bool $prepend = false, ?string $name = null): static
+    public function onResponse(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
     {
         /**
          * For some reason, PHP is not destructing non-static Closures, or 'things' using non-static Closures, correctly, keeping unused objects intact.
@@ -91,7 +92,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
             $result = $callable($response);
 
             return $result instanceof Response ? $result : $response;
-        }, $prepend, $name);
+        }, $name, $order);
 
         return $this;
     }

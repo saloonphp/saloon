@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Middleware;
 
+use Saloon\Data\PipeOrder;
 use Saloon\Http\Faking\Fixture;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
@@ -15,6 +16,7 @@ class DetermineMockResponse implements RequestMiddleware
      * Guess a mock response
      *
      * @throws \JsonException
+     * @throws \Saloon\Exceptions\FixtureException
      * @throws \Saloon\Exceptions\FixtureMissingException
      */
     public function __invoke(PendingRequest $pendingRequest): PendingRequest|MockResponse
@@ -49,7 +51,7 @@ class DetermineMockResponse implements RequestMiddleware
         // middleware on the response to record the response.
 
         if (is_null($mockResponse) && $mockObject instanceof Fixture) {
-            $pendingRequest->middleware()->onResponse(new RecordFixture($mockObject), true, 'recordFixture');
+            $pendingRequest->middleware()->onResponse(new RecordFixture($mockObject), 'recordFixture', PipeOrder::first());
         }
 
         return $pendingRequest;

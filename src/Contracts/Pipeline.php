@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
+use Saloon\Data\PipeOrder;
+
 interface Pipeline
 {
     /**
@@ -13,7 +15,7 @@ interface Pipeline
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
-    public function pipe(callable $callable, bool $prepend = false, ?string $name = null): static;
+    public function pipe(callable $callable, ?string $name = null, ?PipeOrder $order = null): static;
 
     /**
      * Process the pipeline.
