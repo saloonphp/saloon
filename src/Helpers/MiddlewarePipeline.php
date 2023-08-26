@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Saloon\Helpers;
 
 use Closure;
+use Saloon\Data\PipeOrder;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\FakeResponse;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Pipeline as PipelineContract;
 use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
-use Saloon\Data\PipeOrder;
 
 class MiddlewarePipeline implements MiddlewarePipelineContract
 {
@@ -52,7 +52,6 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
          * Do note that this is entirely about our *wrapping* Closure below.
          * The provided callable doesn't affect the MiddlewarePipeline.
          */
-
         $this->requestPipeline->pipe(static function (PendingRequest $pendingRequest) use ($callable): PendingRequest {
             $result = $callable($pendingRequest);
 
@@ -89,7 +88,6 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
          * Do note that this is entirely about our *wrapping* Closure below.
          * The provided callable doesn't affect the MiddlewarePipeline.
          */
-
         $this->responsePipeline->pipe(static function (Response $response) use ($callable): Response {
             $result = $callable($response);
 

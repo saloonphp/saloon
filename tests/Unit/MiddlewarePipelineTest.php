@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Saloon\Data\Pipe;
-use Saloon\Data\PipeOrder;
 use Saloon\Http\Response;
+use Saloon\Data\PipeOrder;
 use Saloon\Http\PendingRequest;
 use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockClient;

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Helpers;
 
 use Saloon\Data\Pipe;
-use Saloon\Data\PipeOrder;
 use Saloon\Enums\Order;
+use Saloon\Data\PipeOrder;
 use Saloon\Exceptions\DuplicatePipeNameException;
 use Saloon\Contracts\Pipeline as PipelineContract;
 
@@ -53,15 +53,13 @@ class Pipeline implements PipelineContract
 
     /**
      * Sort the pipes based on the "order" classes
-     *
-     * @return array
      */
     protected function sortPipes(): array
     {
         $pipes = $this->pipes;
 
         /** @var array<\Saloon\Data\PipeOrder> $pipeNames */
-        $pipeOrders = array_map(static fn(Pipe $pipe) => $pipe->order, $pipes);
+        $pipeOrders = array_map(static fn (Pipe $pipe) => $pipe->order, $pipes);
 
         // Now we'll iterate through the pipe orders and if a specific pipe
         // requests to be placed at the top - we will move the pipe to the
