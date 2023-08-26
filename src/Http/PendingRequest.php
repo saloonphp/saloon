@@ -156,11 +156,11 @@ class PendingRequest implements PendingRequestContract
         // body, delay and also running authenticators on the request.
 
         $middleware
-            ->onRequest(new MergeRequestProperties, false, 'mergeRequestProperties')
-            ->onRequest(new MergeBody, false, 'mergeBody')
-            ->onRequest(new MergeDelay, false, 'mergeDelay')
-            ->onRequest(new AuthenticateRequest, false, 'authenticateRequest')
-            ->onRequest(new DetermineMockResponse, false, 'determineMockResponse');
+            ->onRequest(new MergeRequestProperties, 'mergeRequestProperties')
+            ->onRequest(new MergeBody, 'mergeBody')
+            ->onRequest(new MergeDelay, 'mergeDelay')
+            ->onRequest(new AuthenticateRequest, 'authenticateRequest')
+            ->onRequest(new DetermineMockResponse, 'determineMockResponse');
 
         // Next, we'll merge in our "Global" middleware which can be middleware set by the
         // user or set by Saloon's plugins like the Laravel Plugin. It's best that this
@@ -186,15 +186,15 @@ class PendingRequest implements PendingRequestContract
         // Next, we'll delay the request if we need to. This will run before the final
         // middleware.
 
-        $middleware->onRequest(new DelayMiddleware, false, 'delayMiddleware');
+        $middleware->onRequest(new DelayMiddleware, 'delayMiddleware');
 
         // Finally, we'll apply our "final" middleware. This is a group of middleware
         // that will run at the end, no matter what. This is useful for debugging and
         // events where we can guarantee that the middleware will be run at the end.
 
         $middleware
-            ->onRequest(new DebugRequest, false, 'debugRequest')
-            ->onResponse(new DebugResponse, false, 'debugResponse');
+            ->onRequest(new DebugRequest, 'debugRequest')
+            ->onResponse(new DebugResponse, 'debugResponse');
 
         // Next, we will execute the request middleware pipeline which will
         // process the middleware in the order we added it.

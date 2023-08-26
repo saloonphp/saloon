@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
+use Saloon\Data\PipeOrder;
+
 interface MiddlewarePipeline
 {
     /**
@@ -12,7 +14,7 @@ interface MiddlewarePipeline
      * @param callable(\Saloon\Contracts\PendingRequest): (\Saloon\Contracts\PendingRequest|\Saloon\Contracts\FakeResponse|void) $callable
      * @return $this
      */
-    public function onRequest(callable $callable, bool $prepend = false, ?string $name = null): static;
+    public function onRequest(callable $callable, ?string $name = null, ?PipeOrder $order = null): static;
 
     /**
      * Add a middleware after the request is sent
@@ -20,7 +22,7 @@ interface MiddlewarePipeline
      * @param callable(\Saloon\Contracts\Response): (\Saloon\Contracts\Response|void) $callable
      * @return $this
      */
-    public function onResponse(callable $callable, bool $prepend = false, ?string $name = null): static;
+    public function onResponse(callable $callable, ?string $name = null, ?PipeOrder $order = null): static;
 
     /**
      * Process the request pipeline.

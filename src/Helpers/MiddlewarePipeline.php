@@ -10,6 +10,7 @@ use Saloon\Contracts\FakeResponse;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Pipeline as PipelineContract;
 use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
+use Saloon\Data\PipeOrder;
 
 class MiddlewarePipeline implements MiddlewarePipelineContract
 {
@@ -39,7 +40,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
-    public function onRequest(callable $callable, bool $prepend = false, ?string $name = null): static
+    public function onRequest(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
     {
         /**
          * For some reason, PHP is not destructing non-static Closures, or 'things' using non-static Closures, correctly, keeping unused objects intact.
@@ -51,6 +52,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
          * Do note that this is entirely about our *wrapping* Closure below.
          * The provided callable doesn't affect the MiddlewarePipeline.
          */
+
         $this->requestPipeline->pipe(static function (PendingRequest $pendingRequest) use ($callable): PendingRequest {
             $result = $callable($pendingRequest);
 
@@ -63,7 +65,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
             }
 
             return $pendingRequest;
-        }, $prepend, $name);
+        }, $name, $order);
 
         return $this;
     }
@@ -75,7 +77,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
-    public function onResponse(callable $callable, bool $prepend = false, ?string $name = null): static
+    public function onResponse(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
     {
         /**
          * For some reason, PHP is not destructing non-static Closures, or 'things' using non-static Closures, correctly, keeping unused objects intact.
@@ -87,11 +89,12 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
          * Do note that this is entirely about our *wrapping* Closure below.
          * The provided callable doesn't affect the MiddlewarePipeline.
          */
+
         $this->responsePipeline->pipe(static function (Response $response) use ($callable): Response {
             $result = $callable($response);
 
             return $result instanceof Response ? $result : $response;
-        }, $prepend, $name);
+        }, $name, $order);
 
         return $this;
     }

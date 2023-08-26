@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Helpers;
 
 use Saloon\Data\Pipe;
+use Saloon\Data\PipeOrder;
+use Saloon\Enums\Order;
 use Saloon\Exceptions\DuplicatePipeNameException;
 use Saloon\Contracts\Pipeline as PipelineContract;
 
@@ -24,17 +26,15 @@ class Pipeline implements PipelineContract
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
-    public function pipe(callable $callable, bool $prepend = false, ?string $name = null): static
+    public function pipe(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
     {
-        $pipe = new Pipe($callable, $name);
+        $pipe = new Pipe($callable, $name, $order);
 
         if (is_string($name) && $this->pipeExists($name)) {
             throw new DuplicatePipeNameException($name);
         }
 
-        $prepend === true
-            ? array_unshift($this->pipes, $pipe)
-            : $this->pipes[] = $pipe;
+        $this->pipes[] = $pipe;
 
         return $this;
     }
@@ -44,11 +44,46 @@ class Pipeline implements PipelineContract
      */
     public function process(mixed $payload): mixed
     {
-        foreach ($this->pipes as $pipe) {
+        foreach ($this->sortPipes() as $pipe) {
             $payload = call_user_func($pipe->callable, $payload);
         }
 
         return $payload;
+    }
+
+    /**
+     * Sort the pipes based on the "order" classes
+     *
+     * @return array
+     */
+    protected function sortPipes(): array
+    {
+        $pipes = $this->pipes;
+
+        /** @var array<\Saloon\Data\PipeOrder> $pipeNames */
+        $pipeOrders = array_map(static fn(Pipe $pipe) => $pipe->order, $pipes);
+
+        // Now we'll iterate through the pipe orders and if a specific pipe
+        // requests to be placed at the top - we will move the pipe to the
+        // top of the array. If it wants to be at the bottom we can put it
+        // there too.
+
+        foreach ($pipeOrders as $index => $order) {
+            if (is_null($order)) {
+                continue;
+            }
+
+            $pipe = $pipes[$index];
+
+            unset($pipes[$index]);
+
+            match (true) {
+                $order->type === Order::FIRST => array_unshift($pipes, $pipe),
+                $order->type === Order::LAST => $pipes[] = $pipe,
+            };
+        }
+
+        return $pipes;
     }
 
     /**
@@ -66,7 +101,7 @@ class Pipeline implements PipelineContract
         // so we can check if the name already exists.
 
         foreach ($pipes as $pipe) {
-            $this->pipe($pipe->callable, false, $pipe->name);
+            $this->pipe($pipe->callable, $pipe->name, $pipe->order);
         }
 
         return $this;
