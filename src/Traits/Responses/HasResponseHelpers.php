@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
-use InvalidArgumentException;
-use Saloon\Contracts\Connector;
-use Saloon\Exceptions\InvalidFileException;
-use Saloon\Exceptions\UnableToCreateFileException;
 use Throwable;
 use LogicException;
 use SimpleXMLElement;
+use InvalidArgumentException;
+use Saloon\Contracts\Connector;
 use Saloon\Helpers\ArrayHelpers;
 use Illuminate\Support\Collection;
 use Saloon\Contracts\FakeResponse;
@@ -331,8 +329,6 @@ trait HasResponseHelpers
      * Save the body to a file
      *
      * @param string|resource $resourceOrPath
-     * @param bool $closeResource
-     * @return void
      */
     public function saveBodyToFile(mixed $resourceOrPath, bool $closeResource = true): void
     {

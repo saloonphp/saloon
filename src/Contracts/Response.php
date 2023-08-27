@@ -19,10 +19,7 @@ interface Response extends HasHeaders
     /**
      * Create an instance of the response from a PSR response
      *
-     * @param \Psr\Http\Message\ResponseInterface $psrResponse
      * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @param \Psr\Http\Message\RequestInterface $psrRequest
-     * @param \Throwable|null $senderException
      * @return $this
      */
     public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, ?Throwable $senderException = null): static;
@@ -68,8 +65,6 @@ interface Response extends HasHeaders
      * Create a temporary resource for the stream.
      *
      * Useful for storing the file.
-     *
-     * @return mixed
      */
     public function getRawStream(): mixed;
 
@@ -77,8 +72,6 @@ interface Response extends HasHeaders
      * Save the body to a file
      *
      * @param string|resource $resourceOrPath
-     * @param bool $closeResource
-     * @return void
      */
     public function saveBodyToFile(mixed $resourceOrPath, bool $closeResource = true): void;
 

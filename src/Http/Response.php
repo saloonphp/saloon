@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use Saloon\Contracts\Connector;
 use Throwable;
 use Saloon\Contracts\Request;
+use Saloon\Contracts\Connector;
 use Saloon\Repositories\ArrayStore;
 use Saloon\Contracts\PendingRequest;
 use Psr\Http\Message\StreamInterface;
