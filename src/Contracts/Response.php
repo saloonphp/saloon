@@ -11,6 +11,9 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * @internal
+ */
 interface Response extends HasHeaders
 {
     /**
@@ -22,16 +25,31 @@ interface Response extends HasHeaders
     public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, ?Throwable $senderException = null): static;
 
     /**
+     * Get the PSR request instance
+     */
+    public function getPsrRequest(): RequestInterface;
+
+    /**
      * Create a PSR response from the raw response.
      */
     public function getPsrResponse(): ResponseInterface;
 
     /**
      * Get the underlying PendingRequest that created the response
-     *
-     * @return \Saloon\Contracts\PendingRequest
      */
     public function getPendingRequest(): PendingRequest;
+
+    /**
+     * Get the connector that sent the request
+     */
+    public function getConnector(): Connector;
+
+    /**
+     * Get the original request
+     *
+     * @deprecated Will be removed in Saloon v4. Use $response->getPendingRequest()->getRequest() instead.
+     */
+    public function getRequest(): Request;
 
     /**
      * Get the body of the response as string.
@@ -42,6 +60,20 @@ interface Response extends HasHeaders
      * Get the body as a stream. Don't forget to close the stream after using ->close().
      */
     public function stream(): StreamInterface;
+
+    /**
+     * Create a temporary resource for the stream.
+     *
+     * Useful for storing the file.
+     */
+    public function getRawStream(): mixed;
+
+    /**
+     * Save the body to a file
+     *
+     * @param string|resource $resourceOrPath
+     */
+    public function saveBodyToFile(mixed $resourceOrPath, bool $closeResource = true): void;
 
     /**
      * Close the stream and any underlying resources.
@@ -63,24 +95,22 @@ interface Response extends HasHeaders
     public function status(): int;
 
     /**
-     * Get the original request
-     *
-     * @return \Saloon\Contracts\Request
-     */
-    public function getRequest(): Request;
-
-    /**
-     * Get the PSR-7 request
-     */
-    public function getPsrRequest(): RequestInterface;
-
-    /**
      * Get the JSON decoded body of the response as an array or scalar value.
      *
      * @param array-key|null $key
      * @return ($key is null ? array<array-key, mixed> : mixed)
      */
     public function json(string|int|null $key = null, mixed $default = null): mixed;
+
+    /**
+     * Get the JSON decoded body as an array. Provide a key to find a specific item in the JSON.
+     *
+     * Alias of json()
+     *
+     * @param array-key|null $key
+     * @return ($key is null ? array<array-key, mixed> : mixed)
+     */
+    public function array(string|int|null $key = null, mixed $default = null): mixed;
 
     /**
      * Get the JSON decoded body of the response as an object.
@@ -217,7 +247,7 @@ interface Response extends HasHeaders
     public function getSenderException(): ?Throwable;
 
     /**
-     * Get the body of the response.
+     * Get the body of the response as a string
      */
     public function __toString(): string;
 }

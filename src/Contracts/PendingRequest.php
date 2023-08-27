@@ -10,6 +10,9 @@ use Saloon\Data\FactoryCollection;
 use Psr\Http\Message\RequestInterface;
 use Saloon\Contracts\Body\BodyRepository;
 
+/**
+ * @internal
+ */
 interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMiddlewarePipeline, HasMockClient, HasQueryParams, HasDelay
 {
     /**

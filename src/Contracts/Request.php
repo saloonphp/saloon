@@ -7,6 +7,9 @@ namespace Saloon\Contracts;
 use Saloon\Enums\Method;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * @internal
+ */
 interface Request extends Authenticatable, CanThrowRequestExceptions, HasConfig, HasHeaders, HasQueryParams, HasDelay, HasMiddlewarePipeline, HasMockClient
 {
     /**

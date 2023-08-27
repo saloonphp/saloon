@@ -6,6 +6,7 @@ namespace Saloon\Http;
 
 use Throwable;
 use Saloon\Contracts\Request;
+use Saloon\Contracts\Connector;
 use Saloon\Repositories\ArrayStore;
 use Saloon\Contracts\PendingRequest;
 use Psr\Http\Message\StreamInterface;
@@ -67,7 +68,17 @@ class Response implements ResponseContract
     }
 
     /**
+     * Get the connector that sent the request
+     */
+    public function getConnector(): Connector
+    {
+        return $this->pendingRequest->getConnector();
+    }
+
+    /**
      * Get the original request that created the response.
+     *
+     * @deprecated Will be removed in Saloon v4. Use $response->getPendingRequest()->getRequest() instead.
      */
     public function getRequest(): Request
     {
@@ -95,14 +106,7 @@ class Response implements ResponseContract
      */
     public function body(): string
     {
-        $stream = $this->stream();
-        $body = $stream->getContents();
-
-        if ($stream->isSeekable()) {
-            $stream->rewind();
-        }
-
-        return $body;
+        return $this->stream()->getContents();
     }
 
     /**
@@ -110,7 +114,13 @@ class Response implements ResponseContract
      */
     public function stream(): StreamInterface
     {
-        return $this->psrResponse->getBody();
+        $stream = $this->psrResponse->getBody();
+
+        if ($stream->isSeekable()) {
+            $stream->rewind();
+        }
+
+        return $stream;
     }
 
     /**

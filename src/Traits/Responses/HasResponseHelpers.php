@@ -7,6 +7,8 @@ namespace Saloon\Traits\Responses;
 use Throwable;
 use LogicException;
 use SimpleXMLElement;
+use InvalidArgumentException;
+use Saloon\Contracts\Connector;
 use Saloon\Helpers\ArrayHelpers;
 use Illuminate\Support\Collection;
 use Saloon\Contracts\FakeResponse;
@@ -61,6 +63,20 @@ trait HasResponseHelpers
         }
 
         return ArrayHelpers::get($this->decodedJson, $key, $default);
+    }
+
+    /**
+     * Get the JSON decoded body as an array. Provide a key to find a specific item in the JSON.
+     *
+     * Alias of json()
+     *
+     * @param array-key|null $key
+     * @return ($key is null ? array<array-key, mixed> : mixed)
+     * @throws \JsonException
+     */
+    public function array(int|string|null $key = null, mixed $default = null): mixed
+    {
+        return $this->json($key, $default);
     }
 
     /**
@@ -291,6 +307,50 @@ trait HasResponseHelpers
     public function header(string $header): string|array|null
     {
         return $this->headers()->get($header);
+    }
+
+    /**
+     * Create a temporary resource for the stream.
+     *
+     * Useful for storing the file. Make sure to close the raw stream after you have used it.
+     *
+     * @return resource
+     */
+    public function getRawStream(): mixed
+    {
+        $temporaryResource = fopen('php://temp', 'wb+');
+
+        $this->saveBodyToFile($temporaryResource, false);
+
+        return $temporaryResource;
+    }
+
+    /**
+     * Save the body to a file
+     *
+     * @param string|resource $resourceOrPath
+     */
+    public function saveBodyToFile(mixed $resourceOrPath, bool $closeResource = true): void
+    {
+        if (! is_string($resourceOrPath) && ! is_resource($resourceOrPath)) {
+            throw new InvalidArgumentException('The $resourceOrPath argument must be either a file path or a resource.');
+        }
+
+        $resource = is_string($resourceOrPath) ? fopen($resourceOrPath, 'wb+') : $resourceOrPath;
+
+        rewind($resource);
+
+        $stream = $this->stream();
+
+        while (! $stream->eof()) {
+            fwrite($resource, $stream->read(1024));
+        }
+
+        rewind($resource);
+
+        if ($closeResource === true) {
+            fclose($resource);
+        }
     }
 
     /**
