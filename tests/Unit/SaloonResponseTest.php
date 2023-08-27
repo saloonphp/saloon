@@ -29,6 +29,18 @@ test('you can get the original pending request', function () {
     expect($pendingRequest->getRequest())->toBeInstanceOf(UserRequest::class);
 });
 
+test('you can get the connector', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
+    ]);
+
+    $request = new UserRequest;
+    $connector = new TestConnector;
+    $response = $connector->send($request, $mockClient);
+
+    expect($response->getConnector())->toBe($connector);
+});
+
 test('you can get the original request', function () {
     $mockClient = new MockClient([
         MockResponse::make(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
@@ -262,7 +274,9 @@ test('when using the body methods the stream is rewound back to the start', func
     $response = connector()->send(new UserRequest, $mockClient);
 
     expect($response->json())->toEqual(['foo' => 'bar']);
+    expect($response->array())->toEqual(['foo' => 'bar']);
     expect($response->body())->toEqual('{"foo":"bar"}');
+    expect(stream_get_contents($response->getRawStream()))->toEqual('{"foo":"bar"}');
     expect($response->object())->toEqual((object)['foo' => 'bar']);
 });
 
@@ -286,3 +300,47 @@ test('if a response is changed through middleware the new instance is used', fun
     expect($response->body())->toEqual('Hello World!');
     expect($response->headers()->all())->toEqual(['X-Custom-Header' => 'Howdy']);
 });
+
+test('you can get the response stream as a raw resource', function () {
+    $response = connector()->send(new UserRequest);
+
+    $resource = $response->getRawStream();
+
+    expect($resource)->toBeResource();
+
+    expect(stream_get_contents($resource))->toEqual('{"name":"Sammyjo20","actual_name":"Sam","twitter":"@carre_sam"}');
+});
+
+test('you can get the response stream as a raw resource with a mock response', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+
+    $resource = $response->getRawStream();
+
+    expect($resource)->toBeResource();
+
+    expect(stream_get_contents($resource))->toEqual('{"foo":"bar"}');
+});
+
+test('you can get save the response to a file', function (mixed $resourceOrPath) {
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+    $response->saveBodyToFile($resourceOrPath);
+
+    if (is_string($resourceOrPath)) {
+        $path = 'tests/Fixtures/Saloon/Testing/streamToFile1.json';
+    } else {
+        $path = 'tests/Fixtures/Saloon/Testing/streamToFile2.json';
+    }
+
+    expect(file_get_contents($path))->toEqual('{"foo":"bar"}');
+})->with([
+    'tests/Fixtures/Saloon/Testing/streamToFile1.json',
+    fn () => fopen('tests/Fixtures/Saloon/Testing/streamToFile2.json', 'wb+'),
+]);
