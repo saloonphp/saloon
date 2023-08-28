@@ -6,7 +6,8 @@
 
 A PHP package that helps you build beautiful API integrations and SDKs 🤠
 
-![Build Status](https://github.com/saloonphp/saloon/actions/workflows/tests.yml/badge.svg)
+[![Build Status](https://github.com/saloonphp/saloon/actions/workflows/tests.yml/badge.svg)](https://img.shields.io/github/actions/workflow/status/saloonphp/saloon/tests.yml?label=tests)
+![Downloads](https://img.shields.io/packagist/dm/sammyjo20/saloon)
 
 [Click here to read the documentation](https://docs.saloon.dev)
 
