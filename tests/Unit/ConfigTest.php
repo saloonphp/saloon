@@ -74,7 +74,7 @@ test('you can prevent stray api requests', function () {
     Config::preventStrayRequests();
 
     $this->expectException(StrayRequestException::class);
-    $this->expectExceptionMessage('Attempted to make a real API request! Make sure to use a MockClient or Saloon::fake() if you are using Laravel.');
+    $this->expectExceptionMessage('Attempted to make a real API request! Make sure to use a mock response or fixture.');
 
     TestConnector::make()->send(new UserRequest);
 
