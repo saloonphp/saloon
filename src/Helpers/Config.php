@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
-use Saloon\Contracts\PendingRequest;
 use Saloon\Contracts\Sender;
-use Saloon\Exceptions\SaloonException;
-use Saloon\Exceptions\StrayRequestException;
+use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Senders\GuzzleSender;
+use Saloon\Exceptions\StrayRequestException;
 use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
 final class Config

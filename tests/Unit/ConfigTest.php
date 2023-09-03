@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-use Saloon\Exceptions\SaloonException;
-use Saloon\Exceptions\StrayRequestException;
 use Saloon\Http\Response;
 use Saloon\Helpers\Config;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Senders\GuzzleSender;
+use Saloon\Exceptions\StrayRequestException;
 use Saloon\Tests\Fixtures\Senders\ArraySender;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
