@@ -7,6 +7,8 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Auth\TokenAuthenticator;
 use Saloon\Exceptions\Request\RequestException;
+use Saloon\Tests\Fixtures\Requests\HeaderErrorRetryRequest;
+use Saloon\Tests\Fixtures\Requests\RetryUserRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Exceptions\Request\FatalRequestException;
@@ -23,7 +25,7 @@ test('a failed request can be retried', function () {
     $connector = new TestConnector;
     $connector->withMockClient($mockClient);
 
-    $response = $connector->sendAndRetry(new UserRequest, 3);
+    $response = $connector->send(new RetryUserRequest(3));
 
     expect($response->status())->toBe(200);
     expect($response->json())->toEqual(['name' => 'Teodor']);
@@ -44,7 +46,7 @@ test('if the attempts are exhausted it will throw an exception from the last req
     $hitException = false;
 
     try {
-        $connector->sendAndRetry(new UserRequest, 3);
+        $connector->send(new RetryUserRequest(3));
     } catch (Exception $exception) {
         expect($exception)->toBeInstanceOf(InternalServerErrorException::class);
         expect($exception->getResponse()->json())->toEqual(['name' => 'Teodor']);
@@ -66,7 +68,7 @@ test('if the attempts are exhausted it will return the last response if throwing
     $connector = new TestConnector;
     $connector->withMockClient($mockClient);
 
-    $response = $connector->sendAndRetry(new UserRequest, 3, throw: false);
+    $response = $connector->send(new RetryUserRequest(3, throwOnMaxTries: false));
 
     expect($response->json())->toEqual(['name' => 'Teodor']);
 
@@ -77,7 +79,7 @@ test('if a fatal request exception happens even with throw disabled it will thro
     $mockClient = new MockClient([
         MockResponse::make(['name' => 'Sam'], 500),
         MockResponse::make(['name' => 'Gareth'], 500),
-        MockResponse::make(['name' => 'Teodor'], 500)->throw(fn ($pendingRequest) => new FatalRequestException(new Exception(), $pendingRequest)),
+        MockResponse::make(['name' => 'Teodor'], 500)->throw(fn($pendingRequest) => new FatalRequestException(new Exception(), $pendingRequest)),
     ]);
 
     $connector = new TestConnector;
@@ -85,7 +87,7 @@ test('if a fatal request exception happens even with throw disabled it will thro
 
     $this->expectException(FatalRequestException::class);
 
-    $connector->sendAndRetry(new UserRequest, 3, throw: false);
+    $connector->send(new RetryUserRequest(3, throwOnMaxTries: false));
 });
 
 test('a failed request can have an interval between each attempt', function () {
@@ -100,7 +102,7 @@ test('a failed request can have an interval between each attempt', function () {
 
     $start = microtime(true);
 
-    $connector->sendAndRetry(new UserRequest, 3, 1000);
+    $connector->send(new RetryUserRequest(3, 1000));
 
     // It should be a duration of 2000ms (2 seconds) because the there are two requests
     // after the first.
@@ -118,12 +120,12 @@ test('an exception other than a request exception will not be retried', function
     $connector = new TestConnector;
     $connector->withMockClient($mockClient);
 
-    $connector->middleware()->onResponse(fn () => throw new Exception('Yee-naw!'));
+    $connector->middleware()->onResponse(fn() => throw new Exception('Yee-naw!'));
 
     $hitException = false;
 
     try {
-        $connector->sendAndRetry(new UserRequest, 3);
+        $connector->send(new RetryUserRequest(3));
     } catch (Exception $ex) {
         expect($ex->getMessage())->toEqual('Yee-naw!');
         $hitException = true;
@@ -147,9 +149,9 @@ test('you can customise if the method should retry', function () {
     $this->expectException(InternalServerErrorException::class);
     $this->expectExceptionMessage('Internal Server Error (500) Response: {"name":"Gareth"}');
 
-    $connector->sendAndRetry(new UserRequest, 3, 0, function (RequestException $exception, Request $request) {
+    $connector->send(new RetryUserRequest(3, handleRetry: function (RequestException $exception, Request $request) {
         return $exception->getResponse()->json() !== ['name' => 'Gareth'];
-    });
+    }));
 });
 
 test('if the handle retry returns false it will throw an exception', function () {
@@ -165,7 +167,7 @@ test('if the handle retry returns false it will throw an exception', function ()
     $this->expectException(InternalServerErrorException::class);
     $this->expectExceptionMessage('Internal Server Error (500) Response: {"name":"Sam"}');
 
-    $connector->sendAndRetry(new UserRequest, 3, 0, fn () => false);
+    $connector->send(new RetryUserRequest(3, handleRetry: fn() => false));
 });
 
 test('if the handle retry returns false and throw option is disabled it will return a response', function () {
@@ -178,7 +180,7 @@ test('if the handle retry returns false and throw option is disabled it will ret
     $connector = new TestConnector;
     $connector->withMockClient($mockClient);
 
-    $response = $connector->sendAndRetry(new UserRequest, 5, 0, fn () => false, false);
+    $response = $connector->send(new RetryUserRequest(3, throwOnMaxTries: false, handleRetry: fn() => false));
 
     expect($response->status())->toBe(500);
     expect($response->json())->toEqual(['name' => 'Sam']);
@@ -186,7 +188,7 @@ test('if the handle retry returns false and throw option is disabled it will ret
 
 test('if the handle retry returns false and throw option is disabled but a fatal request exception happens it will still throw', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Sam'], 500)->throw(fn ($pendingRequest) => new FatalRequestException(new Exception(), $pendingRequest)),
+        MockResponse::make(['name' => 'Sam'], 500)->throw(fn($pendingRequest) => new FatalRequestException(new Exception(), $pendingRequest)),
         MockResponse::make(['name' => 'Gareth'], 500),
         MockResponse::make(['name' => 'Teodor'], 200),
     ]);
@@ -196,7 +198,7 @@ test('if the handle retry returns false and throw option is disabled but a fatal
 
     $this->expectException(FatalRequestException::class);
 
-    $connector->sendAndRetry(new UserRequest, 5, 0, fn () => false, false);
+    $connector->send(new RetryUserRequest(3, throwOnMaxTries: false, handleRetry: fn() => false));
 });
 
 test('you can modify the request inside the retry handler', function () {
@@ -211,13 +213,13 @@ test('you can modify the request inside the retry handler', function () {
 
     $index = 0;
 
-    $response = $connector->sendAndRetry(new UserRequest, 5, 0, function (Exception $exception, Request $request) use (&$index) {
+    $response = $connector->send(new RetryUserRequest(5, handleRetry: function (Exception $exception, Request $request) use (&$index) {
         $index++;
 
         $request->headers()->add('X-Test-Index', $index);
 
         return true;
-    });
+    }));
 
     expect($response->status())->toBe(200);
     expect($response->json())->toEqual(['name' => 'Teodor']);
@@ -233,14 +235,15 @@ test('retry against a live endpoint to test GuzzleSender', function () {
         $requestCount++;
     });
 
-    $request = new HeaderErrorRequest();
-    $index = 0;
-
-    $response = $connector->sendAndRetry($request, 6, 0, function (Exception $exception, Request $request) use (&$exceptions, &$index) {
+    $request = new HeaderErrorRetryRequest(6, handleRetry: function (Exception $exception, Request $request) use (&$exceptions, &$index) {
         $request->headers()->add('X-Yee-Haw', $index++);
 
         return true;
     });
+
+    $index = 0;
+
+    $response = $connector->send($request);
 
     // Request count is five because:
     // Request 1 - no header
@@ -262,11 +265,11 @@ test('you can authenticate the request inside the retry handler', function () {
     $connector = new TestConnector;
     $connector->withMockClient($mockClient);
 
-    $response = $connector->sendAndRetry(new UserRequest, 2, 0, function (Exception $exception, Request $request) {
+    $response = $connector->send(new RetryUserRequest(2, handleRetry: function (Exception $exception, Request $request) {
         $request->authenticate(new TokenAuthenticator('newToken'));
 
         return true;
-    });
+    }));
 
     expect($response->status())->toBe(200);
     expect($response->json())->toEqual(['name' => 'Gareth']);
@@ -288,7 +291,7 @@ test('the response pipeline is only executed once when retrying', function () {
         $counter++;
     });
 
-    $response = $connector->sendAndRetry(new UserRequest, 2, throw: false);
+    $response = $connector->send(new RetryUserRequest(2, throwOnMaxTries: false));
 
     expect($response->status())->toBe(500);
     expect($response->json())->toEqual(['name' => 'Gareth']);

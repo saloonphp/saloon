@@ -13,19 +13,21 @@ trait HasTries
     /**
      * The number of tries a request will be attempted
      *
-     * Null to disable the retry functionality.
+     * Set to null to disable the retry functionality.
      */
     public ?int $tries = null;
 
     /**
      * The interval between attempting to retry a request
+     *
+     * Set to null to disable the interval.
      */
-    public int $retryInterval = 0;
+    public ?int $retryInterval = null;
 
     /**
      * Should Saloon throw an exception on max tries?
      *
-     * Set to null to use default behaviour (throw)
+     * Set to null to always throw after maximum tries.
      */
     public ?bool $throwOnMaxTries = null;
 
