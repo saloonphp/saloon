@@ -27,34 +27,31 @@ trait SendsRequests
      */
     public function send(Request $request, MockClient $mockClient = null, callable $handleRetry = null): Response
     {
-        $tries = $request->tries ?? $this->tries ?? 1;
+        $maxTries = $request->tries ?? $this->tries ?? 1;
         $retryInterval = $request->retryInterval ?? $this->retryInterval ?? 0;
         $throwOnMaxTries = $request->throwOnMaxTries ?? $this->throwOnMaxTries ?? true;
 
-        if ($tries <= 0) {
-            $tries = 1;
+        if ($maxTries <= 0) {
+            $maxTries = 1;
         }
 
         if (is_null($handleRetry)) {
-            $handleRetry = static fn () => true;
+            $handleRetry = static fn() => true;
         }
 
-        $currentAttempt = 0;
+        $attempts = 0;
 
-        while ($currentAttempt < $tries) {
-            $currentAttempt++;
+        while ($attempts < $maxTries) {
+            $attempts++;
 
             // When the current attempt is greater than one, we will wait
             // the interval (if it has been provided)
 
-            if ($currentAttempt > 1) {
+            if ($attempts > 1) {
                 usleep($retryInterval * 1000);
             }
 
             try {
-                // Let's start by creating the PendingRequest for the current attempt.
-                // after that, we will send the request.
-
                 $pendingRequest = $this->createPendingRequest($request, $mockClient);
 
                 if ($pendingRequest->hasFakeResponse()) {
@@ -63,23 +60,21 @@ trait SendsRequests
                     $response = $this->sender()->send($pendingRequest);
                 }
 
+                // We'll execute the response pipeline now so that all the response
+                // middleware can be run before we throw any exceptions.
+
                 $response = $pendingRequest->executeResponsePipeline($response);
 
-                // We'll check if our tries is greater than one. If it is, then that
-                // means we will force an exception to be thrown if the request was
-                // unsuccessful. This will then force our catch handler to retry
-                // the request.
+                // We'll check if our tries is greater than one. If it is, then we will
+                // force an exception to be thrown if the request was unsuccessful.
+                // This will then force our catch handler to retry the request.
 
-                if ($tries > 1) {
+                if ($maxTries > 1) {
                     $response->throw();
                 }
 
-                // We'll return the response if the exception wasn't thrown.
-
                 return $response;
             } catch (FatalRequestException|RequestException $exception) {
-                $pendingRequest = $exception->getPendingRequest();
-
                 // We'll attempt to get the response from the exception. We'll only be able
                 // to do this if the exception was a "RequestException".
 
@@ -88,7 +83,7 @@ trait SendsRequests
                 // If we've reached our max attempts - we won't try again, but we'll either
                 // return the last response made or just throw an exception.
 
-                if ($currentAttempt === $tries) {
+                if ($attempts === $maxTries) {
                     return isset($exceptionResponse) && $throwOnMaxTries === false ? $exceptionResponse : throw $exception;
                 }
 
@@ -100,8 +95,7 @@ trait SendsRequests
                     && $request->handleRetry($exception, $request)
                     && $this->handleRetry($exception, $request);
 
-                // If we cannot retry we will simply return the response or throw the exception
-                // that we just caught in the last response.
+                // If we cannot retry we will simply return the response or throw the exception.
 
                 if ($allowRetry === false) {
                     return isset($response) && $throwOnMaxTries === false ? $exceptionResponse : throw $exception;
@@ -135,7 +129,7 @@ trait SendsRequests
                 $requestPromise = $sender->sendAsync($pendingRequest);
             }
 
-            $requestPromise->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
+            $requestPromise->then(fn(Response $response) => $pendingRequest->executeResponsePipeline($response));
 
             // We'll resolve the promise's value with another promise.
             // We will use promise chaining as Guzzle's will fulfill
