@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Saloon\Exceptions\SaloonException;
+use Saloon\Exceptions\StrayRequestException;
 use Saloon\Http\Response;
 use Saloon\Helpers\Config;
 use Saloon\Http\PendingRequest;
@@ -67,4 +69,15 @@ test('you can change how the global default sender is resolved', function () {
     $sender = TestConnector::make()->sender();
 
     expect($sender)->toBeInstanceOf(GuzzleSender::class);
+});
+
+test('you can prevent stray api requests', function () {
+    Config::preventStrayRequests();
+
+    $this->expectException(StrayRequestException::class);
+    $this->expectExceptionMessage('Attempted to make a real API request! Make sure to use a MockClient or Saloon::fake() if you are using Laravel.');
+
+    TestConnector::make()->send(new UserRequest);
+
+    Config::resetMiddleware();
 });
