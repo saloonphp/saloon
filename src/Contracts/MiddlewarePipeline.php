@@ -29,39 +29,28 @@ interface MiddlewarePipeline
 
     /**
      * Process the request pipeline.
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return \Saloon\Contracts\PendingRequest
      */
     public function executeRequestPipeline(PendingRequest $pendingRequest): PendingRequest;
 
     /**
      * Process the response pipeline.
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return \Saloon\Contracts\Response
      */
     public function executeResponsePipeline(Response $response): Response;
 
     /**
      * Merge in another middleware pipeline.
      *
-     * @param \Saloon\Contracts\MiddlewarePipeline $middlewarePipeline
      * @return $this
      */
     public function merge(self $middlewarePipeline): static;
 
     /**
      * Get the request pipeline
-     *
-     * @return \Saloon\Contracts\Pipeline
      */
     public function getRequestPipeline(): Pipeline;
 
     /**
      * Get the response pipeline
-     *
-     * @return \Saloon\Contracts\Pipeline
      */
     public function getResponsePipeline(): Pipeline;
 }

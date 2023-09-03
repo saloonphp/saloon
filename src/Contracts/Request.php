@@ -24,8 +24,6 @@ interface Request extends Authenticatable, CanThrowRequestExceptions, HasConfig,
 
     /**
      * Handle the boot lifecycle hook
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      */
     public function boot(PendingRequest $pendingRequest): void;
 
@@ -36,8 +34,6 @@ interface Request extends Authenticatable, CanThrowRequestExceptions, HasConfig,
 
     /**
      * Cast the response to a DTO.
-     *
-     * @param \Saloon\Contracts\Response $response
      */
     public function createDtoFromResponse(Response $response): mixed;
 

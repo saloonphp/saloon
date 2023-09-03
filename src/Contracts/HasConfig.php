@@ -11,8 +11,6 @@ interface HasConfig
 {
     /**
      * Access the config
-     *
-     * @return \Saloon\Contracts\ArrayStore
      */
     public function config(): ArrayStore;
 }

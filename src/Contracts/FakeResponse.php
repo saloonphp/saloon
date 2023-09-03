@@ -24,8 +24,6 @@ interface FakeResponse
 
     /**
      * Get the headers
-     *
-     * @return \Saloon\Contracts\ArrayStore
      */
     public function headers(): ArrayStore;
 
@@ -48,8 +46,6 @@ interface FakeResponse
 
     /**
      * Get the exception
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      */
     public function getException(PendingRequest $pendingRequest): ?Throwable;
 

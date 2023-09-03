@@ -8,8 +8,6 @@ interface HasBody
 {
     /**
      * Define Data
-     *
-     * @return \Saloon\Contracts\Body\BodyRepository
      */
     public function body(): BodyRepository;
 }

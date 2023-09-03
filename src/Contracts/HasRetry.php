@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Contracts;
 
-use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
+use Saloon\Exceptions\Request\FatalRequestException;
 
 /**
  * @internal
@@ -15,7 +17,5 @@ interface HasRetry
      *
      * Return true/false to enable the retry or not.
      */
-    public function handleRetry(Request $request, FatalRequestException|RequestException $exception, Response $response = null): bool;
-
-    // Todo: Consider adding retry-until functionality
+    public function handleRetry(FatalRequestException|RequestException $exception, Request $request): bool;
 }

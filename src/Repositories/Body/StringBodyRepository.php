@@ -21,8 +21,6 @@ class StringBodyRepository implements BodyRepository, Stringable
 
     /**
      * Constructor
-     *
-     * @param string|null $value
      */
     public function __construct(string|null $value = null)
     {

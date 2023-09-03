@@ -223,15 +223,12 @@ interface Response extends HasHeaders
     /**
      * Set the simulated response payload if the response was simulated.
      *
-     * @param \Saloon\Contracts\FakeResponse $fakeResponse
      * @return $this
      */
     public function setFakeResponse(FakeResponse $fakeResponse): static;
 
     /**
      * Get the simulated response payload if the response was simulated.
-     *
-     * @return \Saloon\Contracts\FakeResponse|null
      */
     public function getFakeResponse(): ?FakeResponse;
 

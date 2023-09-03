@@ -70,12 +70,7 @@ trait AuthorizationCodeGrant
      *
      * @template TRequest of \Saloon\Contracts\Request
      *
-     * @param string $code
-     * @param string|null $state
-     * @param string|null $expectedState
-     * @param bool $returnResponse
      * @param callable(TRequest): (void)|null $requestModifier
-     * @return \Saloon\Contracts\OAuthAuthenticator|\Saloon\Contracts\Response
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidStateException
      * @throws \Saloon\Exceptions\OAuthConfigValidationException
@@ -113,10 +108,7 @@ trait AuthorizationCodeGrant
      *
      * @template TRequest of \Saloon\Contracts\Request
      *
-     * @param \Saloon\Contracts\OAuthAuthenticator|string $refreshToken
-     * @param bool $returnResponse
      * @param callable(TRequest): (void)|null $requestModifier
-     * @return \Saloon\Contracts\OAuthAuthenticator|\Saloon\Contracts\Response
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\OAuthConfigValidationException
      * @throws \Throwable
@@ -181,9 +173,7 @@ trait AuthorizationCodeGrant
      *
      * @template TRequest of \Saloon\Contracts\Request
      *
-     * @param \Saloon\Contracts\OAuthAuthenticator $oauthAuthenticator
      * @param callable(TRequest): (void)|null $requestModifier
-     * @return \Saloon\Contracts\Response
      * @throws \ReflectionException
      * @throws \Throwable
      */

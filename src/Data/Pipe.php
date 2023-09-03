@@ -10,8 +10,6 @@ class Pipe
 {
     /**
      * The callable inside the pipe
-     *
-     * @var \Closure
      */
     public readonly Closure $callable;
 
@@ -24,8 +22,7 @@ class Pipe
         callable                   $callable,
         readonly public ?string    $name = null,
         readonly public ?PipeOrder $order = null,
-    )
-    {
+    ) {
         $this->callable = $callable(...);
     }
 }

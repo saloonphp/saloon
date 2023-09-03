@@ -13,8 +13,7 @@ class PipeOrder
      */
     public function __construct(
         public readonly Order $type,
-    )
-    {
+    ) {
         //
     }
 

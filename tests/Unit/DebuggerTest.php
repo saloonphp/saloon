@@ -39,6 +39,8 @@ test('the debug data can access the underlying pending request and response', fu
 
     $debugData = new DebugData($pendingRequest, $response);
 
+    $mockClient->assertSentCount(1);
+
     expect($debugData->getPendingRequest())->toBe($pendingRequest);
     expect($debugData->getResponse())->toBe($response);
     expect($debugData->getConnector())->toBe($connector);

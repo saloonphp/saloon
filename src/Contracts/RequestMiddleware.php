@@ -9,7 +9,6 @@ interface RequestMiddleware
     /**
      * Register a request middleware
      *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      * @return \Saloon\Contracts\PendingRequest|FakeResponse|void
      */
     public function __invoke(PendingRequest $pendingRequest);

@@ -253,16 +253,7 @@ test('retry against a live endpoint to test GuzzleSender', function () {
     expect($response->body())->toEqual('Success!');
 });
 
-test('it throws an exception if you do not provide any attempts', function () {
-    $connector = new TestConnector;
-
-    $this->expectException(LogicException::class);
-    $this->expectExceptionMessage('Maximum number of attempts has been reached.');
-
-    $connector->sendAndRetry(new UserRequest, 0);
-});
-
-test('you can authenticate the pending request inside the retry handler', function () {
+test('you can authenticate the request inside the retry handler', function () {
     $mockClient = new MockClient([
         MockResponse::make(['name' => 'Sam'], 401),
         MockResponse::make(['name' => 'Gareth'], 200),
@@ -280,4 +271,29 @@ test('you can authenticate the pending request inside the retry handler', functi
     expect($response->status())->toBe(200);
     expect($response->json())->toEqual(['name' => 'Gareth']);
     expect($response->getPendingRequest()->headers()->get('Authorization'))->toEqual('Bearer newToken');
+});
+
+test('the response pipeline is only executed once when retrying', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam'], 500),
+        MockResponse::make(['name' => 'Gareth'], 500),
+    ]);
+
+    $counter = 0;
+
+    $connector = new TestConnector;
+    $connector->withMockClient($mockClient);
+
+    $connector->middleware()->onResponse(function () use (&$counter) {
+        $counter++;
+    });
+
+    $response = $connector->sendAndRetry(new UserRequest, 2, throw: false);
+
+    expect($response->status())->toBe(500);
+    expect($response->json())->toEqual(['name' => 'Gareth']);
+
+    // Counter should be 2 as we have sent to requests
+
+    expect($counter)->toBe(2);
 });

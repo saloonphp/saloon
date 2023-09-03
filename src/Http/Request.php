@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use Saloon\Contracts\Response;
 use Saloon\Enums\Method;
-use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Exceptions\Request\RequestException;
 use Saloon\Traits\Bootable;
 use Saloon\Traits\HasTries;
 use Saloon\Traits\Makeable;
@@ -16,9 +13,9 @@ use Saloon\Traits\HasMockClient;
 use Saloon\Traits\HandlesExceptions;
 use Saloon\Traits\HandlesPsrRequest;
 use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Traits\Request\CreatesDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Contracts\Request as RequestContract;
+use Saloon\Traits\Request\CreatesDtoFromResponse;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 
 abstract class Request implements RequestContract

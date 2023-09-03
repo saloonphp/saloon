@@ -22,8 +22,6 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
 
     /**
      * Base Repository
-     *
-     * @var \Saloon\Repositories\Body\ArrayBodyRepository
      */
     protected ArrayBodyRepository $data;
 

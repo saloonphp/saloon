@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Connector;
 
-use LogicException;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
 use GuzzleHttp\Promise\Promise;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\MockClient;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Exceptions\PendingRequestException;
 use Saloon\Exceptions\Request\RequestException;
-use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
@@ -24,16 +21,23 @@ trait SendsRequests
     /**
      * Send a request
      *
+     * @param callable(\Throwable, \Saloon\Contracts\Request): (bool)|null $handleRetry
      * @throws \ReflectionException
      * @throws \Throwable
      */
-    public function send(Request $request, MockClient $mockClient = null): Response
+    public function send(Request $request, MockClient $mockClient = null, callable $handleRetry = null): Response
     {
-        $nextRequest = clone $request;
-
         $tries = $request->tries ?? $this->tries ?? 1;
         $retryInterval = $request->retryInterval ?? $this->retryInterval ?? 0;
         $throwOnMaxTries = $request->throwOnMaxTries ?? $this->throwOnMaxTries ?? true;
+
+        if ($tries <= 0) {
+            $tries = 1;
+        }
+
+        if (is_null($handleRetry)) {
+            $handleRetry = static fn () => true;
+        }
 
         $currentAttempt = 0;
 
@@ -51,13 +55,15 @@ trait SendsRequests
                 // Let's start by creating the PendingRequest for the current attempt.
                 // after that, we will send the request.
 
-                $pendingRequest = $this->createPendingRequest($nextRequest, $mockClient);
+                $pendingRequest = $this->createPendingRequest($request, $mockClient);
 
                 if ($pendingRequest->hasFakeResponse()) {
                     $response = $this->createFakeResponse($pendingRequest);
                 } else {
                     $response = $this->sender()->send($pendingRequest);
                 }
+
+                $response = $pendingRequest->executeResponsePipeline($response);
 
                 // We'll check if our tries is greater than one. If it is, then that
                 // means we will force an exception to be thrown if the request was
@@ -72,6 +78,8 @@ trait SendsRequests
 
                 return $response;
             } catch (FatalRequestException|RequestException $exception) {
+                $pendingRequest = $exception->getPendingRequest();
+
                 // We'll attempt to get the response from the exception. We'll only be able
                 // to do this if the exception was a "RequestException".
 
@@ -81,22 +89,22 @@ trait SendsRequests
                 // return the last response made or just throw an exception.
 
                 if ($currentAttempt === $tries) {
-                    return $exception instanceof RequestException && $throwOnMaxTries === false ? $exceptionResponse : throw $exception;
+                    return isset($exceptionResponse) && $throwOnMaxTries === false ? $exceptionResponse : throw $exception;
                 }
-
-                $nextRequest = clone $request;
 
                 // Now we'll run the "handleRetry" method on both the connector and the request.
                 // This method will return a boolean. If just one of the objects returns false
                 // then we won't handle the retry.
 
-                $handleRetry = $nextRequest->handleRetry($nextRequest, $exception, $exceptionResponse) && $this->handleRetry($nextRequest, $exception, $exceptionResponse);
+                $allowRetry = $handleRetry($exception, $request)
+                    && $request->handleRetry($exception, $request)
+                    && $this->handleRetry($exception, $request);
 
                 // If we cannot retry we will simply return the response or throw the exception
                 // that we just caught in the last response.
 
-                if ($handleRetry === false) {
-                    return $exception instanceof RequestException && $throwOnMaxTries === false ? $exceptionResponse : throw $exception;
+                if ($allowRetry === false) {
+                    return isset($response) && $throwOnMaxTries === false ? $exceptionResponse : throw $exception;
                 }
             }
         }
@@ -149,9 +157,8 @@ trait SendsRequests
         $request->tries = $tries;
         $request->retryInterval = $interval;
         $request->throwOnMaxTries = $throw;
-        $request->handleRetryCallable = $handleRetry;
 
-        return $this->send($request, $mockClient);
+        return $this->send($request, $mockClient, $handleRetry);
     }
 
     /**

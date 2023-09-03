@@ -16,7 +16,6 @@ trait HasPool
      * @param int|callable(int $pendingRequests): (int) $concurrency
      * @param callable(\Saloon\Contracts\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
      * @param callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $exceptionHandler
-     * @return \Saloon\Contracts\Pool
      */
     public function pool(iterable|callable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null): PoolContract
     {

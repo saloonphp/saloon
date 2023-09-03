@@ -13,16 +13,13 @@ class RecordedResponse implements JsonSerializable
     /**
      * Constructor
      *
-     * @param int $statusCode
      * @param array<string, mixed> $headers
-     * @param mixed $data
      */
     public function __construct(
         public int   $statusCode,
         public array $headers = [],
         public mixed $data = null,
-    )
-    {
+    ) {
         //
     }
 

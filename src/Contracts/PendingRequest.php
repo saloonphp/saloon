@@ -17,23 +17,16 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
 {
     /**
      * Execute the response pipeline.
-     *
-     * @param \Saloon\Contracts\Response $response
-     * @return \Saloon\Contracts\Response
      */
     public function executeResponsePipeline(Response $response): Response;
 
     /**
      * Get the request.
-     *
-     * @return \Saloon\Contracts\Request
      */
     public function getRequest(): Request;
 
     /**
      * Get the connector.
-     *
-     * @return \Saloon\Contracts\Connector
      */
     public function getConnector(): Connector;
 
@@ -66,15 +59,12 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
 
     /**
      * Get the fake response
-     *
-     * @return \Saloon\Contracts\FakeResponse|null
      */
     public function getFakeResponse(): ?FakeResponse;
 
     /**
      * Set the fake response
      *
-     * @param \Saloon\Contracts\FakeResponse|null $fakeResponse
      * @return $this
      */
     public function setFakeResponse(?FakeResponse $fakeResponse): static;

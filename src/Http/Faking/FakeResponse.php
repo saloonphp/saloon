@@ -116,7 +116,6 @@ class FakeResponse implements FakeResponseContract
     /**
      * Create a new mock response from a fixture
      *
-     * @return \Saloon\Http\Faking\Fixture
      * @throws \Saloon\Exceptions\DirectoryNotFoundException
      * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      */

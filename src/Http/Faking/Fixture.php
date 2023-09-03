@@ -43,7 +43,6 @@ class Fixture
     /**
      * Attempt to get the mock response from the fixture.
      *
-     * @return \Saloon\Http\Faking\MockResponse|null
      * @throws \Saloon\Exceptions\FixtureMissingException
      * @throws \JsonException|\Saloon\Exceptions\FixtureException
      */
