@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Requests;
 
 use Closure;
-use Saloon\Contracts\Request as RequestContract;
 use Saloon\Enums\Method;
-use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Exceptions\Request\RequestException;
 use Saloon\Http\Request;
+use Saloon\Exceptions\Request\RequestException;
+use Saloon\Contracts\Request as RequestContract;
+use Saloon\Exceptions\Request\FatalRequestException;
 
 class RetryUserRequest extends Request
 {

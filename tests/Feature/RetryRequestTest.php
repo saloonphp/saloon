@@ -7,12 +7,10 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Auth\TokenAuthenticator;
 use Saloon\Exceptions\Request\RequestException;
-use Saloon\Tests\Fixtures\Requests\HeaderErrorRetryRequest;
-use Saloon\Tests\Fixtures\Requests\RetryUserRequest;
-use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Tests\Fixtures\Requests\HeaderErrorRequest;
+use Saloon\Tests\Fixtures\Requests\RetryUserRequest;
+use Saloon\Tests\Fixtures\Requests\HeaderErrorRetryRequest;
 use Saloon\Exceptions\Request\Statuses\InternalServerErrorException;
 
 test('a failed request can be retried', function () {
@@ -79,7 +77,7 @@ test('if a fatal request exception happens even with throw disabled it will thro
     $mockClient = new MockClient([
         MockResponse::make(['name' => 'Sam'], 500),
         MockResponse::make(['name' => 'Gareth'], 500),
-        MockResponse::make(['name' => 'Teodor'], 500)->throw(fn($pendingRequest) => new FatalRequestException(new Exception(), $pendingRequest)),
+        MockResponse::make(['name' => 'Teodor'], 500)->throw(fn ($pendingRequest) => new FatalRequestException(new Exception(), $pendingRequest)),
     ]);
 
     $connector = new TestConnector;
@@ -120,7 +118,7 @@ test('an exception other than a request exception will not be retried', function
     $connector = new TestConnector;
     $connector->withMockClient($mockClient);
 
-    $connector->middleware()->onResponse(fn() => throw new Exception('Yee-naw!'));
+    $connector->middleware()->onResponse(fn () => throw new Exception('Yee-naw!'));
 
     $hitException = false;
 
@@ -167,7 +165,7 @@ test('if the handle retry returns false it will throw an exception', function ()
     $this->expectException(InternalServerErrorException::class);
     $this->expectExceptionMessage('Internal Server Error (500) Response: {"name":"Sam"}');
 
-    $connector->send(new RetryUserRequest(3, handleRetry: fn() => false));
+    $connector->send(new RetryUserRequest(3, handleRetry: fn () => false));
 });
 
 test('if the handle retry returns false and throw option is disabled it will return a response', function () {
@@ -180,7 +178,7 @@ test('if the handle retry returns false and throw option is disabled it will ret
     $connector = new TestConnector;
     $connector->withMockClient($mockClient);
 
-    $response = $connector->send(new RetryUserRequest(3, throwOnMaxTries: false, handleRetry: fn() => false));
+    $response = $connector->send(new RetryUserRequest(3, throwOnMaxTries: false, handleRetry: fn () => false));
 
     expect($response->status())->toBe(500);
     expect($response->json())->toEqual(['name' => 'Sam']);
@@ -188,7 +186,7 @@ test('if the handle retry returns false and throw option is disabled it will ret
 
 test('if the handle retry returns false and throw option is disabled but a fatal request exception happens it will still throw', function () {
     $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Sam'], 500)->throw(fn($pendingRequest) => new FatalRequestException(new Exception(), $pendingRequest)),
+        MockResponse::make(['name' => 'Sam'], 500)->throw(fn ($pendingRequest) => new FatalRequestException(new Exception(), $pendingRequest)),
         MockResponse::make(['name' => 'Gareth'], 500),
         MockResponse::make(['name' => 'Teodor'], 200),
     ]);
@@ -198,7 +196,7 @@ test('if the handle retry returns false and throw option is disabled but a fatal
 
     $this->expectException(FatalRequestException::class);
 
-    $connector->send(new RetryUserRequest(3, throwOnMaxTries: false, handleRetry: fn() => false));
+    $connector->send(new RetryUserRequest(3, throwOnMaxTries: false, handleRetry: fn () => false));
 });
 
 test('you can modify the request inside the retry handler', function () {

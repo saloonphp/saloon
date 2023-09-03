@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Connectors;
 
 use Closure;
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\Contracts\Request as RequestContract;
 use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Exceptions\Request\RequestException;
-use Saloon\Http\Connector;
-use Saloon\Traits\Plugins\AcceptsJson;
 
 class RetryConnector extends TestConnector
 {
