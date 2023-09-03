@@ -8,6 +8,7 @@ use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Senders\GuzzleSender;
+use Saloon\Exceptions\StrayRequestException;
 use Saloon\Tests\Fixtures\Senders\ArraySender;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
@@ -67,4 +68,15 @@ test('you can change how the global default sender is resolved', function () {
     $sender = TestConnector::make()->sender();
 
     expect($sender)->toBeInstanceOf(GuzzleSender::class);
+});
+
+test('you can prevent stray api requests', function () {
+    Config::preventStrayRequests();
+
+    $this->expectException(StrayRequestException::class);
+    $this->expectExceptionMessage('Attempted to make a real API request! Make sure to use a mock response or fixture.');
+
+    TestConnector::make()->send(new UserRequest);
+
+    Config::resetMiddleware();
 });
