@@ -7,7 +7,10 @@ namespace Saloon\Contracts;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 
-interface Connector extends Authenticatable, CanThrowRequestExceptions, HasConfig, HasHeaders, HasQueryParams, HasDelay, HasMiddlewarePipeline, HasMockClient
+/**
+ * @internal
+ */
+interface Connector extends Authenticatable, CanThrowRequestExceptions, HasConfig, HasHeaders, HasQueryParams, HasDelay, HasMiddlewarePipeline, HasMockClient, HasRetry
 {
     /**
      * Handle the boot lifecycle hook
@@ -18,8 +21,6 @@ interface Connector extends Authenticatable, CanThrowRequestExceptions, HasConfi
 
     /**
      * Handle the PSR request before it is sent
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      */
     public function handlePsrRequest(RequestInterface $request, PendingRequest $pendingRequest): RequestInterface;
 
@@ -75,11 +76,14 @@ interface Connector extends Authenticatable, CanThrowRequestExceptions, HasConfi
      * Send a synchronous request and retry if it fails
      *
      * @param \Saloon\Contracts\Request $request
+     * @param int $tries
+     * @param int $interval
      * @param callable(\Throwable, \Saloon\Contracts\PendingRequest): (bool)|null $handleRetry
+     * @param bool $throw
      * @param \Saloon\Contracts\MockClient|null $mockClient
      * @return \Saloon\Contracts\Response
      */
-    public function sendAndRetry(Request $request, int $maxAttempts, int $interval = 0, callable $handleRetry = null, bool $throw = false, MockClient $mockClient = null): Response;
+    public function sendAndRetry(Request $request, int $tries, int $interval = 0, callable $handleRetry = null, bool $throw = false, MockClient $mockClient = null): Response;
 
     /**
      * Send a request asynchronously

@@ -23,11 +23,13 @@ trait ClientCredentialsGrant
      * @template TRequest of \Saloon\Contracts\Request
      *
      * @param array<string> $scopes
+     * @param string $scopeSeparator
+     * @param bool $returnResponse
      * @param callable(TRequest): (void)|null $requestModifier
+     * @return \Saloon\Contracts\OAuthAuthenticator|\Saloon\Contracts\Response
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\OAuthConfigValidationException
-     * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws \Throwable
      */
     public function getAccessToken(array $scopes = [], string $scopeSeparator = ' ', bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {

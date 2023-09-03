@@ -70,12 +70,16 @@ trait AuthorizationCodeGrant
      *
      * @template TRequest of \Saloon\Contracts\Request
      *
+     * @param string $code
+     * @param string|null $state
+     * @param string|null $expectedState
+     * @param bool $returnResponse
      * @param callable(TRequest): (void)|null $requestModifier
+     * @return \Saloon\Contracts\OAuthAuthenticator|\Saloon\Contracts\Response
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\InvalidStateException
      * @throws \Saloon\Exceptions\OAuthConfigValidationException
-     * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws \Throwable
      */
     public function getAccessToken(string $code, string $state = null, string $expectedState = null, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
@@ -109,11 +113,13 @@ trait AuthorizationCodeGrant
      *
      * @template TRequest of \Saloon\Contracts\Request
      *
+     * @param \Saloon\Contracts\OAuthAuthenticator|string $refreshToken
+     * @param bool $returnResponse
      * @param callable(TRequest): (void)|null $requestModifier
+     * @return \Saloon\Contracts\OAuthAuthenticator|\Saloon\Contracts\Response
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\OAuthConfigValidationException
-     * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws \Throwable
      */
     public function refreshAccessToken(OAuthAuthenticator|string $refreshToken, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
@@ -175,10 +181,11 @@ trait AuthorizationCodeGrant
      *
      * @template TRequest of \Saloon\Contracts\Request
      *
+     * @param \Saloon\Contracts\OAuthAuthenticator $oauthAuthenticator
      * @param callable(TRequest): (void)|null $requestModifier
+     * @return \Saloon\Contracts\Response
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
-     * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws \Throwable
      */
     public function getUser(OAuthAuthenticator $oauthAuthenticator, ?callable $requestModifier = null): Response
     {

@@ -11,16 +11,10 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- * @internal
- */
 interface Response extends HasHeaders
 {
     /**
      * Create an instance of the response from a PSR response
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return $this
      */
     public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, ?Throwable $senderException = null): static;
 

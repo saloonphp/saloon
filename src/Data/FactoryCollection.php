@@ -24,7 +24,8 @@ class FactoryCollection
         public readonly StreamFactoryInterface   $streamFactory,
         public readonly ResponseFactoryInterface $responseFactory,
         public readonly MultipartBodyFactory     $multipartBodyFactory,
-    ) {
+    )
+    {
         //
     }
 }

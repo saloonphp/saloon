@@ -13,6 +13,7 @@ class RecordedResponse implements JsonSerializable
     /**
      * Constructor
      *
+     * @param int $statusCode
      * @param array<string, mixed> $headers
      * @param mixed $data
      */
@@ -20,7 +21,8 @@ class RecordedResponse implements JsonSerializable
         public int   $statusCode,
         public array $headers = [],
         public mixed $data = null,
-    ) {
+    )
+    {
         //
     }
 

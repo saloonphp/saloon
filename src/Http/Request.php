@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use Saloon\Contracts\Response;
 use Saloon\Enums\Method;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\Traits\Bootable;
+use Saloon\Traits\HasTries;
 use Saloon\Traits\Makeable;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Traits\HandlesExceptions;
 use Saloon\Traits\HandlesPsrRequest;
 use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Traits\Request\CastDtoFromResponse;
+use Saloon\Traits\Request\CreatesDtoFromResponse;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Contracts\Request as RequestContract;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
@@ -21,7 +25,7 @@ abstract class Request implements RequestContract
 {
     use AuthenticatesRequests;
     use HasRequestProperties;
-    use CastDtoFromResponse;
+    use CreatesDtoFromResponse;
     use HasCustomResponses;
     use HandlesExceptions;
     use HandlesPsrRequest;
@@ -29,6 +33,7 @@ abstract class Request implements RequestContract
     use Conditionable;
     use Bootable;
     use Makeable;
+    use HasTries;
 
     /**
      * Define the HTTP method.

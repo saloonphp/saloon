@@ -6,7 +6,7 @@ namespace Saloon\Traits\Request;
 
 use Saloon\Contracts\Response;
 
-trait CastDtoFromResponse
+trait CreatesDtoFromResponse
 {
     /**
      * Cast the response to a DTO.

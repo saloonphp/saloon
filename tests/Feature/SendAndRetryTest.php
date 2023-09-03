@@ -117,6 +117,7 @@ test('an exception other than a request exception will not be retried', function
 
     $connector = new TestConnector;
     $connector->withMockClient($mockClient);
+
     $connector->middleware()->onResponse(fn () => throw new Exception('Yee-naw!'));
 
     $hitException = false;

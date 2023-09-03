@@ -687,3 +687,44 @@ test('you can define regex patterns that should be used to replace the body in f
         'twitter' => '**REDACTED-TWITTER**',
     ], JSON_THROW_ON_ERROR));
 });
+
+test('request and response middleware is invoked when using fake responses', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam'], 200, ['X-Foo' => 'Bar']),
+        MockResponse::make(['name' => 'Alex']),
+        MockResponse::make(['error' => 'Server Unavailable'], 500),
+    ]);
+
+    $middlewareA = false;
+    $middlewareB = false;
+    $middlewareC = false;
+    $middlewareD = false;
+
+    $connector = new TestConnector;
+    $connector->withMockClient($mockClient);
+
+    $request = new UserRequest;
+
+    $connector->middleware()->onRequest(function () use (&$middlewareA) {
+        $middlewareA = true;
+    });
+
+    $connector->middleware()->onResponse(function () use (&$middlewareB) {
+        $middlewareB = true;
+    });
+
+    $request->middleware()->onRequest(function () use (&$middlewareC) {
+        $middlewareC = true;
+    });
+
+    $request->middleware()->onResponse(function () use (&$middlewareD) {
+        $middlewareD = true;
+    });
+
+    $responseA = $connector->send($request);
+
+    expect($middlewareA)->toBeTrue();
+    expect($middlewareB)->toBeTrue();
+    expect($middlewareC)->toBeTrue();
+    expect($middlewareD)->toBeTrue();
+});

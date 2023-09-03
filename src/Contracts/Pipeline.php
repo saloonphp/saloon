@@ -6,6 +6,9 @@ namespace Saloon\Contracts;
 
 use Saloon\Data\PipeOrder;
 
+/**
+ * @internal
+ */
 interface Pipeline
 {
     /**

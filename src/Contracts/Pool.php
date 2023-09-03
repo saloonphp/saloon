@@ -6,6 +6,9 @@ namespace Saloon\Contracts;
 
 use GuzzleHttp\Promise\PromiseInterface;
 
+/**
+ * @internal
+ */
 interface Pool
 {
     /**

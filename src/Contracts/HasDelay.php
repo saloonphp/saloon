@@ -6,6 +6,9 @@ namespace Saloon\Contracts;
 
 use Saloon\Repositories\IntegerStore;
 
+/**
+ * @internal
+ */
 interface HasDelay
 {
     /**

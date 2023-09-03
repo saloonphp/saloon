@@ -8,19 +8,29 @@ use DateTimeImmutable;
 
 interface OAuthAuthenticator extends Authenticator
 {
-    
+    /**
+     * Get the access token
+     */
     public function getAccessToken(): string;
 
-    
+    /**
+     * Get the refresh token
+     */
     public function getRefreshToken(): ?string;
 
-    
+    /**
+     * Get the expiry
+     */
     public function getExpiresAt(): ?DateTimeImmutable;
 
-    
+    /**
+     * Check if the authenticator has expired
+     */
     public function hasExpired(): bool;
 
-    
+    /**
+     * Check if the authenticator has not expired
+     */
     public function hasNotExpired(): bool;
 
     /**
