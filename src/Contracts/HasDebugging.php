@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
-use Saloon\Debugging\Debugger;
-
 /**
  * @internal
  */
 interface HasDebugging
 {
     /**
-     * Retrieve the debugger
+     * Register a request debugger
      *
-     * @param callable(\Saloon\Debugging\Debugger): (void)|null $callback
+     * @return $this
      */
-    public function debug(?callable $callback = null): Debugger;
+    public function debugRequest(callable $onRequest): static;
+
+    /**
+     * Register a response debugger
+     *
+     * @return $this
+     */
+    public function debugResponse(callable $onResponse): static;
 }

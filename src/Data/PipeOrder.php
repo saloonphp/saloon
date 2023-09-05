@@ -6,7 +6,7 @@ namespace Saloon\Data;
 
 use Saloon\Enums\Order;
 
-class PipeOrder
+final class PipeOrder
 {
     /**
      * Constructor

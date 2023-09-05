@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Senders;
 
-use Saloon\Contracts\Sender;
-use GuzzleHttp\Psr7\HttpFactory;
-use Saloon\Data\FactoryCollection;
-use Saloon\Contracts\PendingRequest;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Helpers\GuzzleMultipartBodyFactory;
+use GuzzleHttp\Psr7\HttpFactory;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use Saloon\Contracts\PendingRequest;
+use Saloon\Contracts\Sender;
+use Saloon\Data\FactoryCollection;
+use Saloon\Http\Senders\Factories\GuzzleMultipartBodyFactory;
 
 class ArraySender implements Sender
 {

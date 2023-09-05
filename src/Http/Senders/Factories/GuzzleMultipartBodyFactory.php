@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Helpers;
+namespace Saloon\Http\Senders\Factories;
 
-use Saloon\Data\MultipartValue;
 use GuzzleHttp\Psr7\MultipartStream;
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 use Saloon\Contracts\MultipartBodyFactory;
-use Psr\Http\Message\StreamFactoryInterface;
+use Saloon\Data\MultipartValue;
 
 class GuzzleMultipartBodyFactory implements MultipartBodyFactory
 {

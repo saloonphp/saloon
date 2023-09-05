@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
-class StringHelpers
+final class StringHelpers
 {
     /**
      * Determine if a given string matches a given pattern.

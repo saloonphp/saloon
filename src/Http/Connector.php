@@ -4,24 +4,24 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use Saloon\Contracts\Connector as ConnectorContract;
+use Saloon\Contracts\HasDebugging as HasDebuggingContract;
+use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\Bootable;
-use Saloon\Traits\HasTries;
-use Saloon\Traits\Makeable;
-use Saloon\Traits\HasDebugging;
 use Saloon\Traits\Conditionable;
-use Saloon\Traits\HasMockClient;
 use Saloon\Traits\Connector\HasPool;
-use Saloon\Traits\HandlesExceptions;
-use Saloon\Traits\HandlesPsrRequest;
 use Saloon\Traits\Connector\HasSender;
 use Saloon\Traits\Connector\SendsRequests;
-use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Traits\RequestProperties\HasDelay;
-use Saloon\Traits\Responses\HasCustomResponses;
+use Saloon\Traits\HandlesPsrRequest;
+use Saloon\Traits\HasDebugging;
+use Saloon\Traits\HasMockClient;
+use Saloon\Traits\Makeable;
+use Saloon\Traits\ManagesExceptions;
 use Saloon\Traits\Request\CreatesDtoFromResponse;
-use Saloon\Contracts\Connector as ConnectorContract;
+use Saloon\Traits\RequestProperties\HasDelay;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Saloon\Contracts\HasDebugging as HasDebuggingContract;
+use Saloon\Traits\RequestProperties\HasTries;
+use Saloon\Traits\Responses\HasCustomResponses;
 
 abstract class Connector implements ConnectorContract, HasDebuggingContract
 {
@@ -29,7 +29,7 @@ abstract class Connector implements ConnectorContract, HasDebuggingContract
     use AuthenticatesRequests;
     use HasRequestProperties;
     use HasCustomResponses;
-    use HandlesExceptions;
+    use ManagesExceptions;
     use HandlesPsrRequest;
     use HasMockClient;
     use SendsRequests;

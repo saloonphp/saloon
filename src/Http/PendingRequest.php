@@ -17,9 +17,7 @@ use Saloon\Contracts\FakeResponse;
 use Saloon\Contracts\Authenticator;
 use Saloon\Http\Middleware\MergeBody;
 use Saloon\Http\Middleware\MergeDelay;
-use Saloon\Http\Middleware\DebugRequest;
 use Saloon\Contracts\Body\BodyRepository;
-use Saloon\Http\Middleware\DebugResponse;
 use Saloon\Http\Middleware\DelayMiddleware;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Http\Middleware\AuthenticateRequest;
@@ -183,18 +181,10 @@ class PendingRequest implements PendingRequestContract
             ->merge($this->connector->middleware())
             ->merge($this->request->middleware());
 
-        // Next, we'll delay the request if we need to. This will run before the final
-        // middleware.
+        // Next, we'll delay the request if we need to. This needs to be as near to
+        // the end as possible to apply delay right before the request is sent.
 
         $middleware->onRequest(new DelayMiddleware, 'delayMiddleware');
-
-        // Finally, we'll apply our "final" middleware. This is a group of middleware
-        // that will run at the end, no matter what. This is useful for debugging and
-        // events where we can guarantee that the middleware will be run at the end.
-
-        $middleware
-            ->onRequest(new DebugRequest, 'debugRequest')
-            ->onResponse(new DebugResponse, 'debugResponse');
 
         // Next, we will execute the request middleware pipeline which will
         // process the middleware in the order we added it.

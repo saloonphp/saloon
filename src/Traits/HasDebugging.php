@@ -4,28 +4,27 @@ declare(strict_types=1);
 
 namespace Saloon\Traits;
 
-use Saloon\Debugging\Debugger;
+use Saloon\Data\PipeOrder;
 
 trait HasDebugging
 {
     /**
-     * Debugger
+     * Register a request debugger
+     *
+     * @return $this
      */
-    protected ?Debugger $debugger = null;
+    public function debugRequest(callable $onRequest): static
+    {
+        $this->middleware()->onRequest($onRequest(...), order: PipeOrder::last());
+    }
 
     /**
-     * Retrieve the debugger
+     * Register a response debugger
      *
-     * @param callable(\Saloon\Debugging\Debugger): (void)|null $callback
+     * @return $this
      */
-    public function debug(?callable $callback = null): Debugger
+    public function debugResponse(callable $onResponse): static
     {
-        $debugger = $this->debugger ??= new Debugger;
-
-        if (is_callable($callback)) {
-            $callback($debugger);
-        }
-
-        return $debugger;
+        $this->middleware()->onResponse($onResponse(...), order: PipeOrder::first());
     }
 }

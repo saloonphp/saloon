@@ -34,9 +34,10 @@ test('you can retrieve a file from storage', function () {
 });
 
 test('you can put a file in storage', function () {
-    $filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon/Testing/A'));
-    $filesystem->deleteDirectory('/');
-    $filesystem->createDirectory('/');
+    $directory = 'tests/Fixtures/Saloon/Testing/A';
+
+    rmdir($directory);
+    mkdir($directory);
 
     $storage = new Storage('tests/Fixtures/Saloon/Testing');
 

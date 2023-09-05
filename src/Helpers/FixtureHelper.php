@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
-class FixtureHelper
+final class FixtureHelper
 {
     /**
      * Recursively replaces array attributes

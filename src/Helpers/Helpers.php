@@ -10,7 +10,7 @@ use Saloon\Contracts\Request;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\PendingRequest;
 
-class Helpers
+final class Helpers
 {
     /**
      * Returns all traits used by a class, its parent classes and trait of their traits.

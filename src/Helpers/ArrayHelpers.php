@@ -8,7 +8,7 @@ use ArrayAccess;
 
 use function is_string;
 
-class ArrayHelpers
+final class ArrayHelpers
 {
     /**
      * Determine whether the given value is array accessible.
