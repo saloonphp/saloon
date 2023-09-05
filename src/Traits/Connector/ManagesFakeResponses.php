@@ -15,7 +15,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\PendingRequestException;
 use Saloon\Contracts\Response as ResponseContract;
 
-trait CreatesFakeResponses
+trait ManagesFakeResponses
 {
     /**
      * Create the fake response

@@ -16,10 +16,10 @@ use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
 trait SendsRequests
 {
-    use CreatesFakeResponses;
+    use ManagesFakeResponses;
 
     /**
-     * Send a request
+     * Send a request synchronously
      *
      * @param callable(\Throwable, \Saloon\Contracts\Request): (bool)|null $handleRetry
      * @throws \ReflectionException
@@ -27,6 +27,10 @@ trait SendsRequests
      */
     public function send(Request $request, MockClient $mockClient = null, callable $handleRetry = null): Response
     {
+        if (is_null($handleRetry)) {
+            $handleRetry = static fn () => true;
+        }
+
         $maxTries = $request->tries ?? $this->tries ?? 1;
         $retryInterval = $request->retryInterval ?? $this->retryInterval ?? 0;
         $throwOnMaxTries = $request->throwOnMaxTries ?? $this->throwOnMaxTries ?? true;
@@ -35,8 +39,8 @@ trait SendsRequests
             $maxTries = 1;
         }
 
-        if (is_null($handleRetry)) {
-            $handleRetry = static fn () => true;
+        if ($retryInterval <= 0) {
+            $retryInterval = 0;
         }
 
         $attempts = 0;

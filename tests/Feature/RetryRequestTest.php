@@ -298,3 +298,16 @@ test('the response pipeline is only executed once when retrying', function () {
 
     expect($counter)->toBe(2);
 });
+
+test('if negative values are provided for tries or retryInterval a default of zero will be applied', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam'], 500),
+    ]);
+
+    $connector = new TestConnector;
+    $connector->withMockClient($mockClient);
+
+    $connector->send(new RetryUserRequest(-1, -1));
+
+    $mockClient->assertSentCount(1);
+});
