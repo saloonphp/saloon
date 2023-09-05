@@ -55,10 +55,6 @@ test('when both the connector and the request have the same request bodies they 
     ]);
 });
 
-test('when both the connector and the request have the same request bodies the correct boundary header is used', function () {
-    // This is going to be for when we have the multipart building
-});
-
 test('the guzzle sender properly sends it', function () {
     $connector = new TestConnector;
     $request = new HasMultipartBodyRequest;

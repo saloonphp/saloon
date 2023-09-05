@@ -36,6 +36,16 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
     public function getUrl(): string;
 
     /**
+     * Set the URL of the PendingRequest
+     *
+     * Note: This will be combined with the query parameters to create
+     * a UriInterface that will be passed to a PSR-7 request.
+     *
+     * @return $this
+     */
+    public function setUrl(string $url): static;
+
+    /**
      * Get the URI for the pending request.
      */
     public function getUri(): UriInterface;
@@ -44,6 +54,13 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
      * Get the HTTP method used for the request
      */
     public function getMethod(): Method;
+
+    /**
+     * Set the method of the PendingRequest
+     *
+     * @return $this
+     */
+    public function setMethod(Method $method): static;
 
     /**
      * Get the response class used for the request
@@ -56,6 +73,13 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
      * Retrieve the body on the instance
      */
     public function body(): ?BodyRepository;
+
+    /**
+     * Set the body repository
+     *
+     * @return $this
+     */
+    public function setBody(?BodyRepository $body): static;
 
     /**
      * Get the fake response
@@ -95,11 +119,4 @@ interface PendingRequest extends Authenticatable, HasConfig, HasHeaders, HasMidd
      * Get the PSR-7 request
      */
     public function createPsrRequest(): RequestInterface;
-
-    /**
-     *  Set the body repository
-     *
-     * @return $this
-     */
-    public function setBody(?BodyRepository $body): static;
 }

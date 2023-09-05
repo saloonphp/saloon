@@ -317,14 +317,6 @@ class PendingRequest implements PendingRequestContract
     }
 
     /**
-     * Check if a fake response has been set
-     */
-    public function hasFakeResponse(): bool
-    {
-        return $this->fakeResponse instanceof FakeResponse;
-    }
-
-    /**
      * Set the fake response
      *
      * @return $this
@@ -334,6 +326,14 @@ class PendingRequest implements PendingRequestContract
         $this->fakeResponse = $fakeResponse;
 
         return $this;
+    }
+
+    /**
+     * Check if a fake response has been set
+     */
+    public function hasFakeResponse(): bool
+    {
+        return $this->fakeResponse instanceof FakeResponse;
     }
 
     /**
