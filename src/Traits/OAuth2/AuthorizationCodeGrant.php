@@ -72,10 +72,9 @@ trait AuthorizationCodeGrant
      *
      * @param callable(TRequest): (void)|null $requestModifier
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\InvalidStateException
      * @throws \Saloon\Exceptions\OAuthConfigValidationException
-     * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws \Throwable
      */
     public function getAccessToken(string $code, string $state = null, string $expectedState = null, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
@@ -111,9 +110,8 @@ trait AuthorizationCodeGrant
      *
      * @param callable(TRequest): (void)|null $requestModifier
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\OAuthConfigValidationException
-     * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws \Throwable
      */
     public function refreshAccessToken(OAuthAuthenticator|string $refreshToken, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
@@ -177,8 +175,7 @@ trait AuthorizationCodeGrant
      *
      * @param callable(TRequest): (void)|null $requestModifier
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
-     * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws \Throwable
      */
     public function getUser(OAuthAuthenticator $oauthAuthenticator, ?callable $requestModifier = null): Response
     {

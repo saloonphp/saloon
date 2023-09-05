@@ -28,8 +28,6 @@ interface MockClient
 
     /**
      * Guess the next response based on the request.
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      */
     public function guessNextResponse(PendingRequest $pendingRequest): MockResponse|Fixture;
 
@@ -40,8 +38,6 @@ interface MockClient
 
     /**
      * Record a response.
-     *
-     * @param \Saloon\Contracts\Response $response
      */
     public function recordResponse(Response $response): void;
 
@@ -54,22 +50,16 @@ interface MockClient
 
     /**
      * Get the last request that the mock manager sent.
-     *
-     * @return \Saloon\Contracts\Request|null
      */
     public function getLastRequest(): ?Request;
 
     /**
      * Get the last request that the mock manager sent.
-     *
-     * @return \Saloon\Contracts\PendingRequest|null
      */
     public function getLastPendingRequest(): ?PendingRequest;
 
     /**
      * Get the last response that the mock manager sent.
-     *
-     * @return \Saloon\Contracts\Response|null
      */
     public function getLastResponse(): ?Response;
 
@@ -102,15 +92,11 @@ interface MockClient
 
     /**
      * Assert a given request was sent.
-     *
-     * @return \Saloon\Contracts\Response|null
      */
     public function findResponseByRequest(string $request): ?Response;
 
     /**
      * Find a request that matches a given url pattern
-     *
-     * @return \Saloon\Contracts\Response|null
      */
     public function findResponseByRequestUrl(string $url): ?Response;
 }

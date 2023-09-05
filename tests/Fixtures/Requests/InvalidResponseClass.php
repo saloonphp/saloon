@@ -20,8 +20,6 @@ class InvalidResponseClass extends Request
 
     /**
      * Define the custom response
-     *
-     * @var string
      */
     protected ?string $response = UserResponseNoExtendSaloonResponse::class;
 

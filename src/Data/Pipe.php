@@ -8,6 +8,9 @@ use Closure;
 
 class Pipe
 {
+    /**
+     * The callable inside the pipe
+     */
     public readonly Closure $callable;
 
     /**
@@ -16,8 +19,8 @@ class Pipe
      * @param callable(mixed $payload): (mixed) $callable
      */
     public function __construct(
-        callable $callable,
-        readonly public ?string $name = null,
+        callable                   $callable,
+        readonly public ?string    $name = null,
         readonly public ?PipeOrder $order = null,
     ) {
         $this->callable = $callable(...);

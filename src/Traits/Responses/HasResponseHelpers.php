@@ -8,7 +8,6 @@ use Throwable;
 use LogicException;
 use SimpleXMLElement;
 use InvalidArgumentException;
-use Saloon\Contracts\Connector;
 use Saloon\Helpers\ArrayHelpers;
 use Illuminate\Support\Collection;
 use Saloon\Contracts\FakeResponse;

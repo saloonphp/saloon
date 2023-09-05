@@ -25,9 +25,8 @@ trait ClientCredentialsGrant
      * @param array<string> $scopes
      * @param callable(TRequest): (void)|null $requestModifier
      * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
      * @throws \Saloon\Exceptions\OAuthConfigValidationException
-     * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws \Throwable
      */
     public function getAccessToken(array $scopes = [], string $scopeSeparator = ' ', bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {

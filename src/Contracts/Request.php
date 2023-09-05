@@ -10,7 +10,7 @@ use Psr\Http\Message\RequestInterface;
 /**
  * @internal
  */
-interface Request extends Authenticatable, CanThrowRequestExceptions, HasConfig, HasHeaders, HasQueryParams, HasDelay, HasMiddlewarePipeline, HasMockClient
+interface Request extends Authenticatable, CanThrowRequestExceptions, HasConfig, HasHeaders, HasQueryParams, HasDelay, HasMiddlewarePipeline, HasMockClient, HasRetry
 {
     /**
      * Get the HTTP method
@@ -24,22 +24,16 @@ interface Request extends Authenticatable, CanThrowRequestExceptions, HasConfig,
 
     /**
      * Handle the boot lifecycle hook
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      */
     public function boot(PendingRequest $pendingRequest): void;
 
     /**
      * Handle the PSR request before it is sent
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
      */
     public function handlePsrRequest(RequestInterface $request, PendingRequest $pendingRequest): RequestInterface;
 
     /**
      * Cast the response to a DTO.
-     *
-     * @param \Saloon\Contracts\Response $response
      */
     public function createDtoFromResponse(Response $response): mixed;
 

@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
+/**
+ * @internal
+ */
 interface Authenticatable
 {
     /**
      * Retrieve the authenticator.
-     *
-     * @return \Saloon\Contracts\Authenticator|null
      */
     public function getAuthenticator(): ?Authenticator;
 
     /**
      * Authenticate the request with an authenticator.
      *
-     * @param \Saloon\Contracts\Authenticator $authenticator
      * @return $this
      */
     public function authenticate(Authenticator $authenticator): static;

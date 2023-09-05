@@ -84,7 +84,6 @@ class MockClient implements MockClientContract
     /**
      * Add a mock response to the client
      *
-     * @param \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable $response
      * @throws \Saloon\Exceptions\InvalidMockResponseCaptureMethodException
      */
     public function addResponse(MockResponse|Fixture|callable $response, ?string $captureMethod = null): void
@@ -134,7 +133,6 @@ class MockClient implements MockClientContract
     /**
      * Guess the next response based on the request.
      *
-     * @return \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture
      * @throws \Saloon\Exceptions\NoMockResponseFoundException
      */
     public function guessNextResponse(PendingRequest $pendingRequest): MockResponse|Fixture
@@ -167,8 +165,6 @@ class MockClient implements MockClientContract
 
     /**
      * Guess the response from the URL.
-     *
-     * @return \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable|null
      */
     private function guessResponseFromUrl(PendingRequest $pendingRequest): MockResponse|Fixture|callable|null
     {
@@ -426,9 +422,6 @@ class MockClient implements MockClientContract
 
     /**
      * Get the mock value.
-     *
-     * @param \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable $mockable
-     * @return \Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture
      */
     private function mockResponseValue(MockResponse|Fixture|callable $mockable, PendingRequest $pendingRequest): MockResponse|Fixture
     {

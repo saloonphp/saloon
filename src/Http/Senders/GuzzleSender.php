@@ -101,7 +101,7 @@ class GuzzleSender implements Sender
         try {
             $guzzleResponse = $this->client->send($request, $requestOptions);
 
-            return $this->createResponse($request, $pendingRequest, $guzzleResponse);
+            return $this->createResponse($guzzleResponse, $pendingRequest, $request);
         } catch (ConnectException $exception) {
             // ConnectException means a network exception has happened, like Guzzle
             // not being able to connect to the host.
@@ -111,11 +111,13 @@ class GuzzleSender implements Sender
             // Sometimes, Guzzle will throw a RequestException without a response. This
             // means that it was fatal, so we should still throw a fatal request exception.
 
-            if (is_null($exception->getResponse())) {
+            $guzzleResponse = $exception->getResponse();
+
+            if (is_null($guzzleResponse)) {
                 throw new FatalRequestException($exception, $pendingRequest);
             }
 
-            return $this->createResponse($request, $pendingRequest, $exception->getResponse(), $exception);
+            return $this->createResponse($guzzleResponse, $pendingRequest, $request, $exception);
         }
     }
 
@@ -151,12 +153,12 @@ class GuzzleSender implements Sender
     /**
      * Create a response.
      */
-    protected function createResponse(RequestInterface $psrRequest, PendingRequest $pendingRequest, ResponseInterface $response, Exception $exception = null): ResponseContract
+    protected function createResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, Exception $exception = null): ResponseContract
     {
         /** @var class-string<\Saloon\Contracts\Response> $responseClass */
         $responseClass = $pendingRequest->getResponseClass();
 
-        return $responseClass::fromPsrResponse($response, $pendingRequest, $psrRequest, $exception);
+        return $responseClass::fromPsrResponse($psrResponse, $pendingRequest, $psrRequest, $exception);
     }
 
     /**
@@ -170,7 +172,7 @@ class GuzzleSender implements Sender
                     // Instead of the promise returning a Guzzle response, we want to return
                     // a Saloon response.
 
-                    return $this->createResponse($psrRequest, $pendingRequest, $guzzleResponse);
+                    return $this->createResponse($guzzleResponse, $pendingRequest, $psrRequest);
                 },
                 function (TransferException $guzzleException) use ($pendingRequest, $psrRequest) {
                     // When the exception wasn't a RequestException, we'll throw a fatal
@@ -184,7 +186,9 @@ class GuzzleSender implements Sender
                     // Sometimes, Guzzle will throw a RequestException without a response. This
                     // means that it was fatal, so we should still throw a fatal request exception.
 
-                    if (is_null($guzzleException->getResponse())) {
+                    $guzzleResponse = $guzzleException->getResponse();
+
+                    if (is_null($guzzleResponse)) {
                         throw new FatalRequestException($guzzleException, $pendingRequest);
                     }
 
@@ -192,7 +196,7 @@ class GuzzleSender implements Sender
                     // This will run the exception through the exception handlers
                     // which allows the user to handle their own exceptions.
 
-                    $response = $this->createResponse($psrRequest, $pendingRequest, $guzzleException->getResponse(), $guzzleException);
+                    $response = $this->createResponse($guzzleResponse, $pendingRequest, $psrRequest, $guzzleException);
 
                     // Throw the exception our way
 

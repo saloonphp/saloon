@@ -14,7 +14,6 @@ class RecordedResponse implements JsonSerializable
      * Constructor
      *
      * @param array<string, mixed> $headers
-     * @param mixed $data
      */
     public function __construct(
         public int   $statusCode,

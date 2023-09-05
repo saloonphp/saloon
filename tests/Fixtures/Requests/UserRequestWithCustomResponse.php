@@ -19,8 +19,6 @@ class UserRequestWithCustomResponse extends Request
 
     /**
      * Default Response
-     *
-     * @var string
      */
     protected ?string $response = UserResponse::class;
 

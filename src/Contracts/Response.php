@@ -11,16 +11,10 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- * @internal
- */
 interface Response extends HasHeaders
 {
     /**
      * Create an instance of the response from a PSR response
-     *
-     * @param \Saloon\Contracts\PendingRequest $pendingRequest
-     * @return $this
      */
     public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, ?Throwable $senderException = null): static;
 
@@ -229,15 +223,12 @@ interface Response extends HasHeaders
     /**
      * Set the simulated response payload if the response was simulated.
      *
-     * @param \Saloon\Contracts\FakeResponse $fakeResponse
      * @return $this
      */
     public function setFakeResponse(FakeResponse $fakeResponse): static;
 
     /**
      * Get the simulated response payload if the response was simulated.
-     *
-     * @return \Saloon\Contracts\FakeResponse|null
      */
     public function getFakeResponse(): ?FakeResponse;
 

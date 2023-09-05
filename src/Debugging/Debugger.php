@@ -167,7 +167,6 @@ class Debugger
     /**
      * Send the debugging data to the given driver
      *
-     * @param \Saloon\Debugging\DebugData $data
      *
      * @return $this
      */
