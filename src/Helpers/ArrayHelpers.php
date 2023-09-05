@@ -8,6 +8,9 @@ use ArrayAccess;
 
 use function is_string;
 
+/**
+ * @internal
+ */
 final class ArrayHelpers
 {
     /**

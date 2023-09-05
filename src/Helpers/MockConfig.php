@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
+use Saloon\Contracts\PendingRequest;
+use Saloon\Exceptions\StrayRequestException;
+
 final class MockConfig
 {
     /**
@@ -46,5 +49,19 @@ final class MockConfig
     public static function isThrowingOnMissingFixtures(): bool
     {
         return self::$throwOnMissingFixtures;
+    }
+
+    /**
+     * Throw an exception if a request without a MockClient is made.
+     *
+     * @return void
+     */
+    public static function preventStrayRequests(): void
+    {
+        Config::middleware()->onRequest(static function (PendingRequest $pendingRequest) {
+            if (! $pendingRequest->hasMockClient()) {
+                throw new StrayRequestException;
+            }
+        });
     }
 }

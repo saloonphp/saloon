@@ -110,18 +110,4 @@ final class Config
     {
         self::$defaultSender = self::DEFAULT_SENDER;
     }
-
-    /**
-     * Throw an exception if a request without a MockClient is made.
-     *
-     * @return void
-     */
-    public static function preventStrayRequests(): void
-    {
-        self::middleware()->onRequest(static function (PendingRequest $pendingRequest) {
-            if (! $pendingRequest->hasMockClient()) {
-                throw new StrayRequestException;
-            }
-        });
-    }
 }

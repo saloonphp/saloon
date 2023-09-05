@@ -10,6 +10,9 @@ use Saloon\Contracts\Request;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\PendingRequest;
 
+/**
+ * @internal
+ */
 final class Helpers
 {
     /**

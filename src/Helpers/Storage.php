@@ -8,6 +8,9 @@ use Saloon\Exceptions\DirectoryNotFoundException;
 use Saloon\Exceptions\UnableToCreateFileException;
 use Saloon\Exceptions\UnableToCreateDirectoryException;
 
+/**
+ * @internal
+ */
 class Storage
 {
     /**
