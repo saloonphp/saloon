@@ -132,6 +132,7 @@ test('saloon throws an exception if it cant work out the url response', function
     expect($mockClient->guessNextResponse($connectorA->createPendingRequest($requestB)))->toEqual($responseB);
 
     $this->expectException(NoMockResponseFoundException::class);
+    $this->expectExceptionMessage('Saloon was unable to guess a mock response for your request [https://google.com/user], consider using a wildcard url mock or a connector mock.');
 
     expect($mockClient->guessNextResponse($connectorB->createPendingRequest($requestC)))->toEqual($responseC);
 });
