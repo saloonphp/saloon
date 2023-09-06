@@ -95,14 +95,4 @@ final class Helpers
 
         $resource->{$bootMethodName}($pendingRequest);
     }
-
-    /**
-     * Check if the request has the retry properties
-     */
-    public static function hasRetryProperties(Request|Connector $object): bool
-    {
-        return property_exists($object, 'tries')
-            && property_exists($object, 'retryInterval')
-            && property_exists($object, 'throwOnMaxTries');
-    }
 }
