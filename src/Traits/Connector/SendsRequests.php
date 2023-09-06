@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace Saloon\Traits\Connector;
 
 use LogicException;
+use Saloon\Helpers\Helpers;
+use InvalidArgumentException;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
 use GuzzleHttp\Promise\Promise;
+use Saloon\Helpers\RetryHelper;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\MockClient;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Traits\RequestProperties\HasTries;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
@@ -32,17 +36,9 @@ trait SendsRequests
             $handleRetry = static fn (): bool => true;
         }
 
-        $maxTries = $request->tries ?? $this->tries ?? 1;
-        $retryInterval = $request->retryInterval ?? $this->retryInterval ?? 0;
-        $throwOnMaxTries = $request->throwOnMaxTries ?? $this->throwOnMaxTries ?? true;
-
-        if ($maxTries <= 0) {
-            $maxTries = 1;
-        }
-
-        if ($retryInterval <= 0) {
-            $retryInterval = 0;
-        }
+        $maxTries = RetryHelper::getMaxTries($this, $request);
+        $retryInterval = RetryHelper::getRetryInterval($this, $request);
+        $throwOnMaxTries = RetryHelper::getThrowOnMaxTries($this, $request);
 
         $attempts = 0;
 
@@ -155,6 +151,10 @@ trait SendsRequests
      */
     public function sendAndRetry(Request $request, int $tries, int $interval = 0, callable $handleRetry = null, bool $throw = true, MockClient $mockClient = null): Response
     {
+        if (! array_key_exists(HasTries::class, Helpers::classUsesRecursive($request))) {
+            throw new InvalidArgumentException('The request class must use the "HasTries" trait.');
+        }
+
         $request->tries = $tries;
         $request->retryInterval = $interval;
         $request->throwOnMaxTries = $throw;
