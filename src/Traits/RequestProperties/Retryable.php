@@ -8,7 +8,7 @@ use Saloon\Contracts\Request;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Exceptions\Request\FatalRequestException;
 
-trait HasTries
+trait Retryable
 {
     /**
      * The number of times a request should be retried if a failure response is returned.
