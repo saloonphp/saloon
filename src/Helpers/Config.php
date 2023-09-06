@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Helpers;
 
 use Saloon\Contracts\Sender;
-use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Senders\GuzzleSender;
-use Saloon\Exceptions\StrayRequestException;
 use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
 final class Config
@@ -109,19 +107,5 @@ final class Config
     public static function resetDefaultSender(): void
     {
         self::$defaultSender = self::DEFAULT_SENDER;
-    }
-
-    /**
-     * Throw an exception if a request without a MockClient is made.
-     *
-     * @return void
-     */
-    public static function preventStrayRequests(): void
-    {
-        self::middleware()->onRequest(static function (PendingRequest $pendingRequest) {
-            if (! $pendingRequest->hasMockClient()) {
-                throw new StrayRequestException;
-            }
-        });
     }
 }

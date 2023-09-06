@@ -10,7 +10,10 @@ use Saloon\Contracts\Request;
 use Saloon\Contracts\Connector;
 use Saloon\Contracts\PendingRequest;
 
-class Helpers
+/**
+ * @internal
+ */
+final class Helpers
 {
     /**
      * Returns all traits used by a class, its parent classes and trait of their traits.
@@ -77,6 +80,7 @@ class Helpers
     /**
      * Boot a plugin
      *
+     * @param class-string $trait
      * @throws \ReflectionException
      */
     public static function bootPlugin(PendingRequest $pendingRequest, Connector|Request $resource, string $trait): void

@@ -146,10 +146,7 @@ class Pool implements PoolContract
     /**
      * Send the pool and create a Promise
      *
-     * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidPoolItemException
-     * @throws \Saloon\Exceptions\InvalidResponseClassException
-     * @throws \Saloon\Exceptions\PendingRequestException
      */
     public function send(): PromiseInterface
     {

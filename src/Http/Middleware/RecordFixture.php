@@ -6,7 +6,7 @@ namespace Saloon\Http\Middleware;
 
 use Saloon\Contracts\Response;
 use Saloon\Http\Faking\Fixture;
-use Saloon\Helpers\ResponseRecorder;
+use Saloon\Data\RecordedResponse;
 use Saloon\Contracts\ResponseMiddleware;
 
 class RecordFixture implements ResponseMiddleware
@@ -28,13 +28,14 @@ class RecordFixture implements ResponseMiddleware
      * Store the response
      *
      * @throws \JsonException
+     * @throws \Saloon\Exceptions\FixtureException
      * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      * @throws \Saloon\Exceptions\UnableToCreateFileException
      */
     public function __invoke(Response $response): void
     {
         $this->fixture->store(
-            ResponseRecorder::record($response)
+            RecordedResponse::fromResponse($response)
         );
     }
 }

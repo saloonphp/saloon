@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
-use Closure;
 use Saloon\Data\PipeOrder;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\FakeResponse;

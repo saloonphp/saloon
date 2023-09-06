@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Saloon\Http\Response;
 use Saloon\Helpers\Config;
+use Saloon\Helpers\MockConfig;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
@@ -75,7 +76,7 @@ test('you can change how the global default sender is resolved', function () {
 });
 
 test('you can prevent stray api requests', function () {
-    Config::preventStrayRequests();
+    MockConfig::preventStrayRequests();
 
     $this->expectException(StrayRequestException::class);
     $this->expectExceptionMessage('Attempted to make a real API request! Make sure to use a mock response or fixture.');

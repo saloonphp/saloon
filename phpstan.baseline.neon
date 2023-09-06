@@ -36,21 +36,6 @@ parameters:
 			path: src/Http/Faking/MockClient.php
 
 		-
-			message: "#^Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\)\\: mixed, \\(callable\\(\\)\\: mixed\\)\\|object given\\.$#"
-			count: 2
-			path: src/Http/Response.php
-
-		-
-			message: "#^Parameter \\#1 \\$object of method ReflectionMethod\\:\\:invoke\\(\\) expects object\\|null, object\\|string given\\.$#"
-			count: 1
-			path: src/Http/Response.php
-
-		-
-			message: "#^Parameter \\#1 \\$objectOrClass of class ReflectionClass constructor expects class\\-string\\<T of object\\>\\|T of object, object\\|string given\\.$#"
-			count: 1
-			path: src/Http/Response.php
-
-		-
 			message: "#^Method Saloon\\\\Http\\\\Senders\\\\GuzzleSender\\:\\:createRequestOptions\\(\\) should return array\\<'allow_redirects'\\|'auth'\\|'body'\\|'cert'\\|'connect_timeout'\\|'cookies'\\|'crypto_method'\\|'debug'\\|'decode_content'\\|'delay'\\|'expect'\\|'force_ip_resolve'\\|'form_params'\\|'headers'\\|'http_errors'\\|'idn_conversion'\\|'json'\\|'multipart'\\|'on_headers'\\|'on_stats'\\|'progress'\\|'proxy'\\|'query'\\|'read_timeout'\\|'sink'\\|'ssl_key'\\|'stream'\\|'synchronous'\\|'timeout'\\|'verify'\\|'version', mixed\\> but returns array\\<string, mixed\\>\\.$#"
 			count: 1
 			path: src/Http/Senders/GuzzleSender.php
@@ -99,3 +84,33 @@ parameters:
 			message: "#^Parameter \\#2 \\$ of callable callable\\(\\$this, TValue\\)\\: void expects TValue\\, array\\|float\\|int\\|string\\|false\\|null given.$#"
 			count: 2
 			path: src/Repositories/Body/StreamBodyRepository.php
+
+		-
+		 message: "#^Result of \\&\\& is always false.$#"
+		 count: 1
+		 path: src/Data/MultipartValue.php
+
+		-
+		 message: "#^Parameter \\#1 \\$response of method Saloon\\\\Contracts\\\\PendingRequest\\:\\:executeResponsePipeline\\(\\) expects Saloon\\\\Contracts\\\\Response\\, GuzzleHttp\\\\Promise\\\\PromiseInterface\\|Saloon\\\\Contracts\\\\Response given.$#"
+		 count: 1
+		 path: src/Traits/Connector/SendsRequests.php
+
+		-
+		 message: "#^Call to an undefined method GuzzleHttp\\\\Promise\\\\PromiseInterface\\|Saloon\\\\Contracts\\\\Response\\:\\:then\\(\\).$#"
+		 count: 1
+		 path: src/Traits/Connector/SendsRequests.php
+
+		-
+		 message: "#^Access to an undefined property Saloon\\\\Contracts\\\\Request\\:\\:\\$tries.$#"
+		 count: 1
+		 path: src/Traits/Connector/SendsRequests.php
+
+		-
+		 message: "#^Access to an undefined property Saloon\\\\Contracts\\\\Request\\:\\:\\$retryInterval.$#"
+		 count: 1
+		 path: src/Traits/Connector/SendsRequests.php
+
+		-
+		 message: "#^Access to an undefined property Saloon\\\\Contracts\\\\Request\\:\\:\\$throwOnMaxTries.$#"
+		 count: 1
+		 path: src/Traits/Connector/SendsRequests.php

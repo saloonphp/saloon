@@ -8,7 +8,10 @@ use DateTime;
 use DateInterval;
 use DateTimeImmutable;
 
-class Date
+/**
+ * @internal
+ */
+final class Date
 {
     /**
      * Constructor
@@ -21,9 +24,9 @@ class Date
     /**
      * Construct
      */
-    public static function now(): static
+    public static function now(): self
     {
-        return new static(new DateTime);
+        return new self(new DateTime);
     }
 
     /**
@@ -31,7 +34,7 @@ class Date
      *
      * @return $this
      */
-    public function addSeconds(int $seconds): static
+    public function addSeconds(int $seconds): self
     {
         $this->dateTime->add(
             DateInterval::createFromDateString($seconds . ' seconds')
@@ -45,7 +48,7 @@ class Date
      *
      * @return $this
      */
-    public function subMinutes(int $minutes): static
+    public function subMinutes(int $minutes): self
     {
         $this->dateTime->sub(
             DateInterval::createFromDateString($minutes . ' minutes')

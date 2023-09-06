@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
-class URLHelper
+/**
+ * @internal
+ */
+final class URLHelper
 {
     /**
      * Check if a URL matches a given pattern

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Traits;
+namespace Saloon\Traits\RequestProperties;
 
 use Saloon\Contracts\Request;
 use Saloon\Exceptions\Request\RequestException;

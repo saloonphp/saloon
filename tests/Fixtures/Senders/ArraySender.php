@@ -9,8 +9,8 @@ use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Data\FactoryCollection;
 use Saloon\Contracts\PendingRequest;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Helpers\GuzzleMultipartBodyFactory;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use Saloon\Http\Senders\Factories\GuzzleMultipartBodyFactory;
 
 class ArraySender implements Sender
 {

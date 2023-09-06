@@ -53,35 +53,27 @@ class Pipeline implements PipelineContract
 
     /**
      * Sort the pipes based on the "order" classes
+     *
+     * @return array<\Saloon\Data\Pipe>
      */
     protected function sortPipes(): array
     {
-        $pipes = $this->pipes;
+        $firstPipes = [];
+        $nullPipes = [];
+        $lastPipes = [];
 
-        /** @var array<\Saloon\Data\PipeOrder> $pipeNames */
-        $pipeOrders = array_map(static fn (Pipe $pipe) => $pipe->order, $pipes);
+        // We'll simply loop through each pipe and add them to their respective
+        // arrays based on the order type. We'll then merge the arrays.
 
-        // Now we'll iterate through the pipe orders and if a specific pipe
-        // requests to be placed at the top - we will move the pipe to the
-        // top of the array. If it wants to be at the bottom we can put it
-        // there too.
-
-        foreach ($pipeOrders as $index => $order) {
-            if (is_null($order)) {
-                continue;
-            }
-
-            $pipe = $pipes[$index];
-
-            unset($pipes[$index]);
-
-            match (true) {
-                $order->type === Order::FIRST => array_unshift($pipes, $pipe),
-                $order->type === Order::LAST => $pipes[] = $pipe,
+        foreach ($this->pipes as $pipe) {
+            match ($pipe->order?->type) {
+                Order::FIRST => $firstPipes[] = $pipe,
+                null => $nullPipes[] = $pipe,
+                Order::LAST => $lastPipes[] = $pipe,
             };
         }
 
-        return $pipes;
+        return array_merge($firstPipes, $nullPipes, $lastPipes);
     }
 
     /**

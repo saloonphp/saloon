@@ -20,9 +20,9 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
-use Saloon\Helpers\GuzzleMultipartBodyFactory;
 use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Http\Senders\Factories\GuzzleMultipartBodyFactory;
 
 class GuzzleSender implements Sender
 {

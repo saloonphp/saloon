@@ -7,7 +7,7 @@ namespace Saloon\Traits;
 use Throwable;
 use Saloon\Contracts\Response;
 
-trait HandlesExceptions
+trait ManagesExceptions
 {
     /**
      * Determine if the request has failed.
