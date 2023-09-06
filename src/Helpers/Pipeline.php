@@ -53,6 +53,8 @@ class Pipeline implements PipelineContract
 
     /**
      * Sort the pipes based on the "order" classes
+     *
+     * @return array<\Saloon\Data\Pipe>
      */
     protected function sortPipes(): array
     {

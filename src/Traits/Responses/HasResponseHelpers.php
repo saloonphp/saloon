@@ -319,6 +319,10 @@ trait HasResponseHelpers
     {
         $temporaryResource = fopen('php://temp', 'wb+');
 
+        if ($temporaryResource === false) {
+            throw new LogicException('Unable to create a temporary resource for the stream.');
+        }
+
         $this->saveBodyToFile($temporaryResource, false);
 
         return $temporaryResource;
@@ -336,6 +340,10 @@ trait HasResponseHelpers
         }
 
         $resource = is_string($resourceOrPath) ? fopen($resourceOrPath, 'wb+') : $resourceOrPath;
+
+        if ($resource === false) {
+            throw new LogicException('Unable to open the resource.');
+        }
 
         rewind($resource);
 

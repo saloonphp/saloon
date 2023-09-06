@@ -112,8 +112,10 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
 
     /**
      * Get a specific key of the array
+     *
+     * @return ($key is null ? array<array-key, mixed> : mixed)
      */
-    public function get(string|int $key = null, mixed $default = null): MultipartValue|array
+    public function get(string|int $key = null, mixed $default = null): mixed
     {
         if (is_null($key)) {
             return $this->data->get();
@@ -196,6 +198,6 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
             throw new BodyException('Unable to create a multipart body stream because the multipart body factory was not set.');
         }
 
-        return $this->multipartBodyFactory->create($streamFactory, $this->get(), $this->getBoundary());
+        return $this->multipartBodyFactory->create($streamFactory, (array)$this->get(), $this->getBoundary());
     }
 }

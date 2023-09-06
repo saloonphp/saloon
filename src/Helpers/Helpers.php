@@ -80,6 +80,7 @@ final class Helpers
     /**
      * Boot a plugin
      *
+     * @param class-string $trait
      * @throws \ReflectionException
      */
     public static function bootPlugin(PendingRequest $pendingRequest, Connector|Request $resource, string $trait): void
@@ -93,5 +94,15 @@ final class Helpers
         }
 
         $resource->{$bootMethodName}($pendingRequest);
+    }
+
+    /**
+     * Check if the request has the retry properties
+     */
+    public static function hasRetryProperties(Request|Connector $object): bool
+    {
+        return property_exists($object, 'tries')
+            && property_exists($object, 'retryInterval')
+            && property_exists($object, 'throwOnMaxTries');
     }
 }

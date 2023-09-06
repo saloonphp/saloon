@@ -34,10 +34,9 @@ test('you can retrieve a file from storage', function () {
 });
 
 test('you can put a file in storage', function () {
-    $directory = 'tests/Fixtures/Saloon/Testing/A';
-
-    rmdir($directory);
-    mkdir($directory);
+    $filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon/Testing'));
+    $filesystem->deleteDirectory('/');
+    $filesystem->createDirectory('/');
 
     $storage = new Storage('tests/Fixtures/Saloon/Testing');
 
@@ -51,7 +50,7 @@ test('you can put a file in storage', function () {
 });
 
 test('it will create a file with nested folders', function () {
-    $filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon/Testing/B'));
+    $filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon/Testing'));
     $filesystem->deleteDirectory('/');
     $filesystem->createDirectory('/');
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Connector;
 
+use LogicException;
 use Saloon\Contracts\Request;
 use Saloon\Contracts\Response;
 use GuzzleHttp\Promise\Promise;
@@ -28,7 +29,7 @@ trait SendsRequests
     public function send(Request $request, MockClient $mockClient = null, callable $handleRetry = null): Response
     {
         if (is_null($handleRetry)) {
-            $handleRetry = static fn () => true;
+            $handleRetry = static fn (): bool => true;
         }
 
         $maxTries = $request->tries ?? $this->tries ?? 1;
@@ -102,10 +103,12 @@ trait SendsRequests
                 // If we cannot retry we will simply return the response or throw the exception.
 
                 if ($allowRetry === false) {
-                    return isset($response) && $throwOnMaxTries === false ? $exceptionResponse : throw $exception;
+                    return isset($exceptionResponse) && $throwOnMaxTries === false ? $exceptionResponse : throw $exception;
                 }
             }
         }
+
+        throw new LogicException('The request was not sent.');
     }
 
     /**

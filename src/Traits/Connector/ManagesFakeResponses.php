@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Saloon\Traits\Connector;
 
 use Throwable;
-use Saloon\Http\Response;
 use Saloon\Contracts\FakeResponse;
 use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
@@ -20,11 +19,10 @@ trait ManagesFakeResponses
     /**
      * Create the fake response
      *
-     * @return PromiseInterface|ResponseContract
-     * @throws PendingRequestException
-     * @throws Throwable
+     * @throws \Saloon\Exceptions\PendingRequestException
+     * @throws \Throwable
      */
-    protected function createFakeResponse(PendingRequest $pendingRequest): PromiseInterface|Response
+    protected function createFakeResponse(PendingRequest $pendingRequest): ResponseContract|PromiseInterface
     {
         $fakeResponse = $pendingRequest->getFakeResponse();
 
