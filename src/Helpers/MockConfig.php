@@ -53,8 +53,6 @@ final class MockConfig
 
     /**
      * Throw an exception if a request without a MockClient is made.
-     *
-     * @return void
      */
     public static function preventStrayRequests(): void
     {

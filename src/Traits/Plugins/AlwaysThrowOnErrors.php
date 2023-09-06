@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Plugins;
 
+use Saloon\Data\PipeOrder;
 use Saloon\Contracts\Response;
 use Saloon\Contracts\PendingRequest;
 
@@ -14,6 +15,14 @@ trait AlwaysThrowOnErrors
      */
     public static function bootAlwaysThrowOnErrors(PendingRequest $pendingRequest): void
     {
-        $pendingRequest->middleware()->onResponse(fn (Response $response) => $response->throw());
+        // This middleware will simply use the "throw" method on the response
+        // which will check if the connector/request deems the response as a
+        // failure - if it does, it will throw a RequestException.
+
+        $pendingRequest->middleware()->onResponse(
+            callable: static fn (Response $response) => $response->throw(),
+            name: 'alwaysThrowOnErrors',
+            order: PipeOrder::last()
+        );
     }
 }

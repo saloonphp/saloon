@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Saloon\Helpers\MockConfig;
 use Saloon\Http\Response;
 use Saloon\Helpers\Config;
+use Saloon\Helpers\MockConfig;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;

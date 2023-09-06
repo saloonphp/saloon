@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Http\Middleware;
 
 use Saloon\Contracts\Response;
-use Saloon\Data\RecordedResponse;
 use Saloon\Http\Faking\Fixture;
-use Saloon\Helpers\ResponseRecorder;
+use Saloon\Data\RecordedResponse;
 use Saloon\Contracts\ResponseMiddleware;
 
 class RecordFixture implements ResponseMiddleware
