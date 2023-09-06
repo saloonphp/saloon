@@ -16,7 +16,7 @@ use Saloon\Traits\Connector\HasSender;
 use Saloon\Traits\Connector\SendsRequests;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\RequestProperties\HasDelay;
-use Saloon\Traits\RequestProperties\HasTries;
+use Saloon\Traits\RequestProperties\Retryable;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Traits\Request\CreatesDtoFromResponse;
 use Saloon\Contracts\Connector as ConnectorContract;
@@ -39,6 +39,6 @@ abstract class Connector implements ConnectorContract, HasDebuggingContract
     use Makeable;
     use HasPool;
     use HasDelay;
-    use HasTries;
+    use Retryable;
     use HasDebugging;
 }

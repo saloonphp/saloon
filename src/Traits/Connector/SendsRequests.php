@@ -14,7 +14,7 @@ use Saloon\Helpers\RetryHelper;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\MockClient;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Traits\RequestProperties\HasTries;
+use Saloon\Traits\RequestProperties\Retryable;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Contracts\PendingRequest as PendingRequestContract;
@@ -151,8 +151,8 @@ trait SendsRequests
      */
     public function sendAndRetry(Request $request, int $tries, int $interval = 0, callable $handleRetry = null, bool $throw = true, MockClient $mockClient = null): Response
     {
-        if (! array_key_exists(HasTries::class, Helpers::classUsesRecursive($request))) {
-            throw new InvalidArgumentException('The request class must use the "HasTries" trait.');
+        if (! array_key_exists(Retryable::class, Helpers::classUsesRecursive($request))) {
+            throw new InvalidArgumentException('The request class must use the "Retryable" trait.');
         }
 
         $request->tries = $tries;
