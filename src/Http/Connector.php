@@ -9,14 +9,12 @@ use Saloon\Traits\Makeable;
 use Saloon\Traits\HasDebugging;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
-use Saloon\Traits\Connector\HasPool;
 use Saloon\Traits\HandlesPsrRequest;
 use Saloon\Traits\ManagesExceptions;
-use Saloon\Traits\Connector\HasSender;
 use Saloon\Traits\Connector\SendsRequests;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\RequestProperties\HasDelay;
-use Saloon\Traits\RequestProperties\Retryable;
+use Saloon\Traits\RequestProperties\HasTries;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Traits\Request\CreatesDtoFromResponse;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
@@ -32,12 +30,10 @@ abstract class Connector
     use HasMockClient;
     use SendsRequests;
     use Conditionable;
-    use HasSender;
     use Bootable;
     use Makeable;
-    use HasPool;
     use HasDelay;
-    use Retryable;
+    use HasTries;
     use HasDebugging;
 
     /**

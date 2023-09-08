@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Traits\Connector;
 
 use LogicException;
+use Saloon\Http\Pool;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\Helpers\Helpers;
@@ -14,12 +15,13 @@ use Saloon\Helpers\RetryHelper;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Traits\RequestProperties\Retryable;
+use Saloon\Traits\RequestProperties\HasTries;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Exceptions\Request\FatalRequestException;
 
 trait SendsRequests
 {
+    use HasSender;
     use ManagesFakeResponses;
 
     /**
@@ -150,7 +152,7 @@ trait SendsRequests
      */
     public function sendAndRetry(Request $request, int $tries, int $interval = 0, callable $handleRetry = null, bool $throw = true, MockClient $mockClient = null): Response
     {
-        if (! array_key_exists(Retryable::class, Helpers::classUsesRecursive($request))) {
+        if (! array_key_exists(HasTries::class, Helpers::classUsesRecursive($request))) {
             throw new InvalidArgumentException('The request class must use the "Retryable" trait.');
         }
 
@@ -169,5 +171,18 @@ trait SendsRequests
     public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequest
     {
         return new PendingRequest($this, $request, $mockClient);
+    }
+
+    /**
+     * Create a request pool
+     *
+     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request>|callable(\Saloon\Http\Connector): iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request> $requests
+     * @param int|callable(int $pendingRequests): (int) $concurrency
+     * @param callable(\Saloon\Http\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
+     * @param callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $exceptionHandler
+     */
+    public function pool(iterable|callable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null): Pool
+    {
+        return new Pool($this, $requests, $concurrency, $responseHandler, $exceptionHandler);
     }
 }

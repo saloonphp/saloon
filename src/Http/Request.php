@@ -13,7 +13,7 @@ use Saloon\Traits\HasMockClient;
 use Saloon\Traits\HandlesPsrRequest;
 use Saloon\Traits\ManagesExceptions;
 use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Traits\RequestProperties\Retryable;
+use Saloon\Traits\RequestProperties\HasTries;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Traits\Request\CreatesDtoFromResponse;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
@@ -29,7 +29,7 @@ abstract class Request
     use HasMockClient;
     use Conditionable;
     use HasDebugging;
-    use Retryable;
+    use HasTries;
     use Bootable;
     use Makeable;
 
