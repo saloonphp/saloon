@@ -23,6 +23,16 @@ final class Config
     public static int $defaultTlsMethod = STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
 
     /**
+     * Default timeout (in seconds) for establishing a connection.
+     */
+    public static int $defaultConnectionTimeout = 10;
+
+    /**
+     * Default timeout (in seconds) for making requests
+     */
+    public static int $defaultRequestTimeout = 30;
+
+    /**
      * Resolve the sender with a callback
      *
      * @var callable|null

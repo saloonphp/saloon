@@ -6,7 +6,6 @@ namespace Saloon\Http\Senders;
 
 use Exception;
 use Saloon\Config;
-use Saloon\Enums\Timeout;
 use Saloon\Http\Response;
 use GuzzleHttp\HandlerStack;
 use Saloon\Contracts\Sender;
@@ -80,8 +79,8 @@ class GuzzleSender implements Sender
 
         return new GuzzleClient([
             RequestOptions::CRYPTO_METHOD => Config::$defaultTlsMethod,
-            RequestOptions::CONNECT_TIMEOUT => Timeout::CONNECT->value,
-            RequestOptions::TIMEOUT => Timeout::REQUEST->value,
+            RequestOptions::CONNECT_TIMEOUT => Config::$defaultConnectionTimeout,
+            RequestOptions::TIMEOUT => Config::$defaultRequestTimeout,
             RequestOptions::HTTP_ERRORS => true,
             'handler' => $this->handlerStack,
         ]);
