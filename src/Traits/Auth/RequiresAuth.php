@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Auth;
 
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Authenticator;
-use Saloon\Contracts\PendingRequest;
 use Saloon\Exceptions\MissingAuthenticatorException;
 
 trait RequiresAuth

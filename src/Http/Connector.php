@@ -9,21 +9,17 @@ use Saloon\Traits\Makeable;
 use Saloon\Traits\HasDebugging;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
-use Saloon\Traits\Connector\HasPool;
 use Saloon\Traits\HandlesPsrRequest;
 use Saloon\Traits\ManagesExceptions;
-use Saloon\Traits\Connector\HasSender;
 use Saloon\Traits\Connector\SendsRequests;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\RequestProperties\HasDelay;
-use Saloon\Traits\RequestProperties\Retryable;
+use Saloon\Traits\RequestProperties\HasTries;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Traits\Request\CreatesDtoFromResponse;
-use Saloon\Contracts\Connector as ConnectorContract;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Saloon\Contracts\HasDebugging as HasDebuggingContract;
 
-abstract class Connector implements ConnectorContract, HasDebuggingContract
+abstract class Connector
 {
     use CreatesDtoFromResponse;
     use AuthenticatesRequests;
@@ -34,11 +30,14 @@ abstract class Connector implements ConnectorContract, HasDebuggingContract
     use HasMockClient;
     use SendsRequests;
     use Conditionable;
-    use HasSender;
     use Bootable;
     use Makeable;
-    use HasPool;
     use HasDelay;
-    use Retryable;
+    use HasTries;
     use HasDebugging;
+
+    /**
+     * Define the base URL of the API.
+     */
+    abstract public function resolveBaseUrl(): string;
 }

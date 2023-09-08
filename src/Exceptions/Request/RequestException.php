@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Exceptions\Request;
 
 use Throwable;
-use Saloon\Contracts\Response;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\Response;
+use Saloon\Http\PendingRequest;
 use Saloon\Helpers\StatusCodeHelper;
 use Saloon\Exceptions\SaloonException;
 

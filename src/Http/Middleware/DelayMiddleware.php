@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Middleware;
 
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\RequestMiddleware;
 
 class DelayMiddleware implements RequestMiddleware

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Senders;
 
 use Saloon\Contracts\Sender;
+use Saloon\Http\PendingRequest;
 use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Data\FactoryCollection;
-use Saloon\Contracts\PendingRequest;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Saloon\Http\Senders\Factories\GuzzleMultipartBodyFactory;
@@ -33,9 +33,9 @@ class ArraySender implements Sender
     /**
      * Send the request synchronously
      */
-    public function send(PendingRequest $pendingRequest): \Saloon\Contracts\Response
+    public function send(PendingRequest $pendingRequest): \Saloon\Http\Response
     {
-        /** @var class-string<\Saloon\Contracts\Response> $responseClass */
+        /** @var class-string<\Saloon\Http\Response> $responseClass */
         $responseClass = $pendingRequest->getResponseClass();
 
         return $responseClass::fromPsrResponse(new GuzzleResponse(200, ['X-Fake' => true], 'Default'), $pendingRequest, $pendingRequest->createPsrRequest());

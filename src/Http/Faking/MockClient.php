@@ -5,18 +5,17 @@ declare(strict_types=1);
 namespace Saloon\Http\Faking;
 
 use ReflectionClass;
+use Saloon\Http\Request;
+use Saloon\Http\Response;
+use Saloon\Http\Connector;
 use Saloon\Helpers\Helpers;
-use Saloon\Contracts\Request;
 use Saloon\Helpers\URLHelper;
-use Saloon\Contracts\Response;
-use Saloon\Contracts\Connector;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Saloon\Exceptions\NoMockResponseFoundException;
-use Saloon\Contracts\MockClient as MockClientContract;
 use Saloon\Exceptions\InvalidMockResponseCaptureMethodException;
 
-class MockClient implements MockClientContract
+class MockClient
 {
     /**
      * Collection of all the responses that will be sequenced.
@@ -198,7 +197,7 @@ class MockClient implements MockClientContract
     /**
      * Get all the recorded responses
      *
-     * @return array<\Saloon\Contracts\Response>
+     * @return array<\Saloon\Http\Response>
      */
     public function getRecordedResponses(): array
     {
@@ -210,7 +209,7 @@ class MockClient implements MockClientContract
      */
     public function getLastRequest(): ?Request
     {
-        return $this->getLastResponse()?->getRequest();
+        return $this->getLastResponse()?->getPendingRequest()->getRequest();
     }
 
     /**
@@ -340,7 +339,7 @@ class MockClient implements MockClientContract
         }
 
         foreach ($this->getRecordedResponses() as $recordedResponse) {
-            if ($recordedResponse->getRequest() instanceof $request) {
+            if ($recordedResponse->getPendingRequest()->getRequest() instanceof $request) {
                 return $recordedResponse;
             }
         }
@@ -389,7 +388,7 @@ class MockClient implements MockClientContract
         $lastResponse = $this->getLastResponse();
 
         if ($lastResponse instanceof Response) {
-            $passed = $closure($lastResponse->getRequest(), $lastResponse);
+            $passed = $closure($lastResponse->getPendingRequest()->getRequest(), $lastResponse);
 
             if ($passed === true) {
                 return true;
@@ -400,7 +399,7 @@ class MockClient implements MockClientContract
         // responses and break out if we get a match.
 
         foreach ($this->getRecordedResponses() as $response) {
-            $request = $response->getRequest();
+            $request = $response->getPendingRequest()->getRequest();
 
             $passed = $closure($request, $response);
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Data;
 
 use JsonSerializable;
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
 use Saloon\Http\Faking\MockResponse;
 
 class RecordedResponse implements JsonSerializable

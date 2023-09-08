@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Authenticators;
 
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Authenticator;
-use Saloon\Contracts\PendingRequest;
 
 class PizzaAuthenticator implements Authenticator
 {
-    
+
     public function __construct(
         public string $pizza,
         public string $drink,

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts;
 
+use Saloon\Http\Response;
+use Saloon\Http\PendingRequest;
 use Saloon\Data\FactoryCollection;
 use GuzzleHttp\Promise\PromiseInterface;
 

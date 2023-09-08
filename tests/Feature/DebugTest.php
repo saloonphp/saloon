@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;

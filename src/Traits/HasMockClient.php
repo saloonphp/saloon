@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits;
 
-use Saloon\Contracts\MockClient;
+use Saloon\Http\Faking\MockClient;
 
 trait HasMockClient
 {

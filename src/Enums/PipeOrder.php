@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Enums;
 
-enum Order: string
+enum PipeOrder: string
 {
     case FIRST = 'first';
     case LAST = 'last';

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Exceptions;
 
 use Exception;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 
 class TestResponseException extends Exception
 {

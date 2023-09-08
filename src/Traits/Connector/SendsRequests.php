@@ -5,28 +5,25 @@ declare(strict_types=1);
 namespace Saloon\Traits\Connector;
 
 use LogicException;
-use Saloon\Helpers\Helpers;
-use InvalidArgumentException;
-use Saloon\Contracts\Request;
-use Saloon\Contracts\Response;
+use Saloon\Http\Pool;
+use Saloon\Http\Request;
+use Saloon\Http\Response;
 use GuzzleHttp\Promise\Promise;
-use Saloon\Helpers\RetryHelper;
 use Saloon\Http\PendingRequest;
-use Saloon\Contracts\MockClient;
+use Saloon\Http\Faking\MockClient;
 use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Traits\RequestProperties\Retryable;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
 trait SendsRequests
 {
+    use HasSender;
     use ManagesFakeResponses;
 
     /**
      * Send a request synchronously
      *
-     * @param callable(\Throwable, \Saloon\Contracts\Request): (bool)|null $handleRetry
+     * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
      * @throws \ReflectionException
      * @throws \Throwable
      */
@@ -36,11 +33,19 @@ trait SendsRequests
             $handleRetry = static fn (): bool => true;
         }
 
-        $maxTries = RetryHelper::getMaxTries($this, $request);
-        $retryInterval = RetryHelper::getRetryInterval($this, $request);
-        $throwOnMaxTries = RetryHelper::getThrowOnMaxTries($this, $request);
-
         $attempts = 0;
+
+        $maxTries = $request->tries ?? $this->tries ?? 1;
+        $retryInterval = $request->retryInterval ?? $this->retryInterval ?? 0;
+        $throwOnMaxTries = $request->throwOnMaxTries ?? $this->throwOnMaxTries ?? true;
+
+        if ($maxTries <= 0) {
+            $maxTries = 1;
+        }
+
+        if ($retryInterval <= 0) {
+            $retryInterval = 0;
+        }
 
         while ($attempts < $maxTries) {
             $attempts++;
@@ -145,16 +150,12 @@ trait SendsRequests
     /**
      * Send a synchronous request and retry if it fails
      *
-     * @param callable(\Throwable, \Saloon\Contracts\Request): (bool)|null $handleRetry
+     * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
      * @throws \ReflectionException
      * @throws \Throwable
      */
     public function sendAndRetry(Request $request, int $tries, int $interval = 0, callable $handleRetry = null, bool $throw = true, MockClient $mockClient = null): Response
     {
-        if (! array_key_exists(Retryable::class, Helpers::classUsesRecursive($request))) {
-            throw new InvalidArgumentException('The request class must use the "Retryable" trait.');
-        }
-
         $request->tries = $tries;
         $request->retryInterval = $interval;
         $request->throwOnMaxTries = $throw;
@@ -167,8 +168,21 @@ trait SendsRequests
      *
      * @throws \ReflectionException
      */
-    public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequestContract
+    public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequest
     {
         return new PendingRequest($this, $request, $mockClient);
+    }
+
+    /**
+     * Create a request pool
+     *
+     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request>|callable(\Saloon\Http\Connector): iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request> $requests
+     * @param int|callable(int $pendingRequests): (int) $concurrency
+     * @param callable(\Saloon\Http\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
+     * @param callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $exceptionHandler
+     */
+    public function pool(iterable|callable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null): Pool
+    {
+        return new Pool($this, $requests, $concurrency, $responseHandler, $exceptionHandler);
     }
 }

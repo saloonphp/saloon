@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Body;
 
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Repositories\Body\JsonBodyRepository;
 
 trait HasJsonBody

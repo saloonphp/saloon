@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use Saloon\Contracts\Connector;
 use Saloon\Traits\Request\HasConnector;
 use Saloon\Http\Connectors\NullConnector;
 

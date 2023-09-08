@@ -6,9 +6,9 @@ namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Traits\Body\HasJsonBody;
-use Saloon\Contracts\PendingRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 class BootAuthenticatorRequest extends Request implements HasBody
@@ -27,13 +27,13 @@ class BootAuthenticatorRequest extends Request implements HasBody
      */
     protected string $connector = TestConnector::class;
 
-    
+
     public function resolveEndpoint(): string
     {
         return '/user';
     }
 
-    
+
     public function boot(PendingRequest $pendingRequest): void
     {
         $pendingRequest->withTokenAuth('howdy-partner');

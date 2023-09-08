@@ -4,24 +4,22 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
-use Saloon\Data\PipeOrder;
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
+use Saloon\Enums\PipeOrder;
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\FakeResponse;
-use Saloon\Contracts\PendingRequest;
-use Saloon\Contracts\Pipeline as PipelineContract;
-use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
-class MiddlewarePipeline implements MiddlewarePipelineContract
+class MiddlewarePipeline
 {
     /**
      * Request Pipeline
      */
-    protected PipelineContract $requestPipeline;
+    protected Pipeline $requestPipeline;
 
     /**
      * Response Pipeline
      */
-    protected PipelineContract $responsePipeline;
+    protected Pipeline $responsePipeline;
 
     /**
      * Constructor
@@ -35,7 +33,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Add a middleware before the request is sent
      *
-     * @param callable(\Saloon\Contracts\PendingRequest): (\Saloon\Contracts\PendingRequest|\Saloon\Contracts\FakeResponse|void) $callable
+     * @param callable(\Saloon\Http\PendingRequest): (\Saloon\Http\PendingRequest|\Saloon\Contracts\FakeResponse|void) $callable
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
@@ -71,7 +69,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Add a middleware after the request is sent
      *
-     * @param callable(\Saloon\Contracts\Response): (\Saloon\Contracts\Response|void) $callable
+     * @param callable(\Saloon\Http\Response): (\Saloon\Http\Response|void) $callable
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
@@ -118,7 +116,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
-    public function merge(MiddlewarePipelineContract $middlewarePipeline): static
+    public function merge(MiddlewarePipeline $middlewarePipeline): static
     {
         $requestPipes = array_merge(
             $this->getRequestPipeline()->getPipes(),
@@ -139,7 +137,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Get the request pipeline
      */
-    public function getRequestPipeline(): PipelineContract
+    public function getRequestPipeline(): Pipeline
     {
         return $this->requestPipeline;
     }
@@ -147,7 +145,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Get the response pipeline
      */
-    public function getResponsePipeline(): PipelineContract
+    public function getResponsePipeline(): Pipeline
     {
         return $this->responsePipeline;
     }

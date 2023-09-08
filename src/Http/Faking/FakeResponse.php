@@ -7,8 +7,8 @@ namespace Saloon\Http\Faking;
 use Closure;
 use Throwable;
 use Saloon\Traits\Makeable;
+use Saloon\Http\PendingRequest;
 use Saloon\Repositories\ArrayStore;
-use Saloon\Contracts\PendingRequest;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -94,19 +94,11 @@ class FakeResponse implements FakeResponseContract
     }
 
     /**
-     * Checks if the response throws an exception.
-     */
-    public function throwsException(): bool
-    {
-        return $this->responseException instanceof Closure;
-    }
-
-    /**
      * Invoke the exception.
      */
     public function getException(PendingRequest $pendingRequest): ?Throwable
     {
-        if (! $this->throwsException()) {
+        if (! $this->responseException instanceof Closure) {
             return null;
         }
 

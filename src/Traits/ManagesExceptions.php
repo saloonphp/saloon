@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Traits;
 
 use Throwable;
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
 
 trait ManagesExceptions
 {
@@ -18,7 +18,7 @@ trait ManagesExceptions
     }
 
     /**
-     * Determine if we should throw an exception if the `$response->throw()` ({@see \Saloon\Contracts\Response::throw()})
+     * Determine if we should throw an exception if the `$response->throw()` ({@see \Saloon\Http\Response::throw()})
      * is used, or when AlwaysThrowOnErrors is used.
      */
     public function shouldThrowRequestException(Response $response): bool

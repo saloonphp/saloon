@@ -7,8 +7,8 @@ namespace Saloon\Tests\Fixtures\Requests;
 use Closure;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
+use Saloon\Http\Request as RequestContract;
 use Saloon\Exceptions\Request\RequestException;
-use Saloon\Contracts\Request as RequestContract;
 use Saloon\Exceptions\Request\FatalRequestException;
 
 class RetryUserRequest extends Request

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Exceptions\Request;
 
 use Throwable;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Exceptions\SaloonException;
 
 class FatalRequestException extends SaloonException

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Traits\Plugins;
 
 use Saloon\Enums\Timeout;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 
 trait HasTimeout
 {

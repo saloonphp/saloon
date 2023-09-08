@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Data;
 
 use Closure;
+use Saloon\Enums\PipeOrder;
 
 class Pipe
 {

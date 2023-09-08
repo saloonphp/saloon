@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Contracts\DataObjects;
 
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
 
 interface WithResponse
 {

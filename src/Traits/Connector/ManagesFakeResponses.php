@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Saloon\Traits\Connector;
 
 use Throwable;
+use Saloon\Http\Response;
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\FakeResponse;
-use Saloon\Contracts\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\PendingRequestException;
-use Saloon\Contracts\Response as ResponseContract;
 
 trait ManagesFakeResponses
 {
@@ -22,7 +22,7 @@ trait ManagesFakeResponses
      * @throws \Saloon\Exceptions\PendingRequestException
      * @throws \Throwable
      */
-    protected function createFakeResponse(PendingRequest $pendingRequest): ResponseContract|PromiseInterface
+    protected function createFakeResponse(PendingRequest $pendingRequest): Response|PromiseInterface
     {
         $fakeResponse = $pendingRequest->getFakeResponse();
 
@@ -50,7 +50,7 @@ trait ManagesFakeResponses
             streamFactory: $factories->streamFactory,
         );
 
-        /** @var class-string<\Saloon\Contracts\Response> $responseClass */
+        /** @var class-string<\Saloon\Http\Response> $responseClass */
         $responseClass = $pendingRequest->getResponseClass();
 
         $response = $responseClass::fromPsrResponse(

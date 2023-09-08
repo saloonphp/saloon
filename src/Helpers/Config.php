@@ -6,7 +6,6 @@ namespace Saloon\Helpers;
 
 use Saloon\Contracts\Sender;
 use Saloon\Http\Senders\GuzzleSender;
-use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
 final class Config
 {
@@ -20,7 +19,7 @@ final class Config
     /**
      * Middleware Pipeline
      */
-    private static ?MiddlewarePipelineContract $middlewarePipeline = null;
+    private static ?MiddlewarePipeline $middlewarePipeline = null;
 
     /**
      * Default Sender
@@ -44,7 +43,7 @@ final class Config
     /**
      * Update global middleware
      */
-    public static function middleware(): MiddlewarePipelineContract
+    public static function middleware(): MiddlewarePipeline
     {
         return self::$middlewarePipeline ??= new MiddlewarePipeline;
     }

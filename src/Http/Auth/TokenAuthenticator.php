@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Auth;
 
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Authenticator;
-use Saloon\Contracts\PendingRequest;
 
 class TokenAuthenticator implements Authenticator
 {
-    
+
     public function __construct(
         public string $token,
         public string $prefix = 'Bearer'
