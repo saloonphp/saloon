@@ -7,7 +7,7 @@ namespace Saloon\Http\Middleware;
 use Saloon\Http\Response;
 use Saloon\Http\Faking\Fixture;
 use Saloon\Data\RecordedResponse;
-use Saloon\Http\ResponseMiddleware;
+use Saloon\Contracts\ResponseMiddleware;
 
 class RecordFixture implements ResponseMiddleware
 {
