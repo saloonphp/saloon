@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Plugins;
 
-use Saloon\Data\PipeOrder;
 use Saloon\Http\Response;
+use Saloon\Data\PipeOrder;
 use Saloon\Http\PendingRequest;
 
 trait AlwaysThrowOnErrors

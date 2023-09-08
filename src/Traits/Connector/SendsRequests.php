@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Saloon\Traits\Connector;
 
 use LogicException;
-use Saloon\Helpers\Helpers;
-use InvalidArgumentException;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
+use Saloon\Helpers\Helpers;
+use InvalidArgumentException;
 use GuzzleHttp\Promise\Promise;
 use Saloon\Helpers\RetryHelper;
 use Saloon\Http\PendingRequest;

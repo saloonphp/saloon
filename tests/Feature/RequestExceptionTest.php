@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Saloon\Http\Response;
-use Saloon\Http\Faking\MockClient;
 use Saloon\Http\PendingRequest;
+use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Exception\ServerException;
 use Saloon\Exceptions\Request\ClientException;

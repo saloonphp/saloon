@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Authenticators;
 
-use Saloon\Contracts\Authenticator;
 use Saloon\Http\PendingRequest;
+use Saloon\Contracts\Authenticator;
 
 class PizzaAuthenticator implements Authenticator
 {

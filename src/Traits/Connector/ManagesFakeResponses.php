@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Connector;
 
-use Saloon\Http\Response;
 use Throwable;
-use Saloon\Contracts\FakeResponse;
+use Saloon\Http\Response;
 use Saloon\Http\PendingRequest;
+use Saloon\Contracts\FakeResponse;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Promise\FulfilledPromise;

@@ -6,13 +6,14 @@ namespace Saloon\Http\Senders;
 
 use Exception;
 use Saloon\Enums\Timeout;
+use Saloon\Http\Response;
 use Saloon\Helpers\Config;
 use GuzzleHttp\HandlerStack;
 use Saloon\Contracts\Sender;
 use GuzzleHttp\RequestOptions;
+use Saloon\Http\PendingRequest;
 use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Data\FactoryCollection;
-use Saloon\Http\PendingRequest;
 use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -21,7 +22,6 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
 use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Http\Response;
 use Saloon\Http\Senders\Factories\GuzzleMultipartBodyFactory;
 
 class GuzzleSender implements Sender

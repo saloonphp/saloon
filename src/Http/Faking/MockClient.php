@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Saloon\Http\Faking;
 
 use ReflectionClass;
-use Saloon\Helpers\Helpers;
 use Saloon\Http\Request;
-use Saloon\Helpers\URLHelper;
 use Saloon\Http\Response;
 use Saloon\Http\Connector;
+use Saloon\Helpers\Helpers;
+use Saloon\Helpers\URLHelper;
 use Saloon\Http\PendingRequest;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Saloon\Exceptions\NoMockResponseFoundException;

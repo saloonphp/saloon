@@ -6,10 +6,10 @@ namespace Saloon\Traits\OAuth2;
 
 use DateTimeImmutable;
 use Saloon\Helpers\Date;
-use InvalidArgumentException;
 use Saloon\Http\Request;
-use Saloon\Helpers\URLHelper;
 use Saloon\Http\Response;
+use InvalidArgumentException;
+use Saloon\Helpers\URLHelper;
 use Saloon\Helpers\StringHelpers;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Http\OAuth2\GetUserRequest;

@@ -7,6 +7,7 @@ namespace Saloon\Contracts;
 use Closure;
 use Throwable;
 use Saloon\Http\Faking\Fixture;
+use Saloon\Http\PendingRequest;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Contracts\Body\BodyRepository;
 use Psr\Http\Message\StreamFactoryInterface;

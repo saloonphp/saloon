@@ -6,7 +6,6 @@ namespace Saloon\Http;
 
 use Closure;
 use Generator;
-use Saloon\Http\Connector;
 use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Exceptions\InvalidPoolItemException;
@@ -51,7 +50,6 @@ class Pool
     /**
      * Constructor
      *
-     * @param \Saloon\Http\Connector $connector
      * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request>|callable(\Saloon\Http\Connector): iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request> $requests
      * @param int|callable(int $pendingRequests): (int) $concurrency
      * @param callable(\Saloon\Http\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler

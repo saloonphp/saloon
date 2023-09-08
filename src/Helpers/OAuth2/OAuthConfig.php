@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Helpers\OAuth2;
 
 use Closure;
-use Saloon\Traits\Makeable;
 use Saloon\Http\Request;
+use Saloon\Traits\Makeable;
 use Saloon\Exceptions\OAuthConfigValidationException;
 
 /**

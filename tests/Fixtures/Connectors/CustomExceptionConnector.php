@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Connectors;
 
 use Throwable;
-use Saloon\Http\Connector;
 use Saloon\Http\Response;
+use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Tests\Fixtures\Exceptions\ConnectorRequestException;
 

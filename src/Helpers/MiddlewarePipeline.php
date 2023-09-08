@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
-use Saloon\Data\PipeOrder;
 use Saloon\Http\Response;
-use Saloon\Contracts\FakeResponse;
+use Saloon\Data\PipeOrder;
 use Saloon\Http\PendingRequest;
+use Saloon\Contracts\FakeResponse;
 use Saloon\Contracts\Pipeline as PipelineContract;
 use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 

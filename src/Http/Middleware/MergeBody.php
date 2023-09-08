@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Middleware;
 
-use Saloon\Contracts\Body\HasBody;
 use Saloon\Http\PendingRequest;
+use Saloon\Contracts\Body\HasBody;
 use Saloon\Contracts\RequestMiddleware;
 use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Exceptions\PendingRequestException;

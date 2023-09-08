@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Senders;
 
 use Saloon\Contracts\Sender;
+use Saloon\Http\PendingRequest;
 use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Data\FactoryCollection;
-use Saloon\Http\PendingRequest;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Saloon\Http\Senders\Factories\GuzzleMultipartBodyFactory;
