@@ -39,4 +39,11 @@ abstract class Connector
     use HasDelay;
     use Retryable;
     use HasDebugging;
+
+    /**
+     * Define the base URL of the API.
+     *
+     * @return string
+     */
+    abstract public function resolveBaseUrl(): string;
 }
