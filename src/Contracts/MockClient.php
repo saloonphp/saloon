@@ -44,7 +44,7 @@ interface MockClient
     /**
      * Get all the recorded responses
      *
-     * @return array<\Saloon\Contracts\Response>
+     * @return array<\Saloon\Http\Response>
      */
     public function getRecordedResponses(): array;
 

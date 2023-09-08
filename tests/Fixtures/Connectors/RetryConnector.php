@@ -6,7 +6,7 @@ namespace Saloon\Tests\Fixtures\Connectors;
 
 use Closure;
 use Saloon\Exceptions\Request\RequestException;
-use Saloon\Contracts\Request as RequestContract;
+use Saloon\Http\Request as RequestContract;
 use Saloon\Exceptions\Request\FatalRequestException;
 
 class RetryConnector extends TestConnector

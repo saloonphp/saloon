@@ -7,9 +7,7 @@ namespace Saloon\Http;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Config;
 use Saloon\Helpers\Helpers;
-use Saloon\Contracts\Request;
 use Saloon\Helpers\URLHelper;
-use Saloon\Contracts\Connector;
 use Saloon\Contracts\MockClient;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
@@ -22,14 +20,12 @@ use Saloon\Http\Middleware\DelayMiddleware;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Middleware\DetermineMockResponse;
-use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Http\Middleware\MergeRequestProperties;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Traits\PendingRequest\ManagesPsrRequests;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
-class PendingRequest implements PendingRequestContract
+class PendingRequest
 {
     use AuthenticatesRequests;
     use HasRequestProperties;
@@ -214,7 +210,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Execute the response pipeline.
      */
-    public function executeResponsePipeline(ResponseContract $response): ResponseContract
+    public function executeResponsePipeline(Response $response): Response
     {
         return $this->middleware()->executeResponsePipeline($response);
     }
@@ -329,7 +325,7 @@ class PendingRequest implements PendingRequestContract
     /**
      * Get the response class
      *
-     * @return class-string<\Saloon\Contracts\Response>
+     * @return class-string<\Saloon\Http\Response>
      * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidResponseClassException
      */
@@ -337,7 +333,7 @@ class PendingRequest implements PendingRequestContract
     {
         $response = $this->request->resolveResponseClass() ?? $this->connector->resolveResponseClass() ?? Response::class;
 
-        if (! class_exists($response) || ! Helpers::isSubclassOf($response, ResponseContract::class)) {
+        if (! class_exists($response) || ! Helpers::isSubclassOf($response, Response::class)) {
             throw new InvalidResponseClassException;
         }
 

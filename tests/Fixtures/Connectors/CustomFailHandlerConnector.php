@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Connectors;
 
 use Saloon\Http\Connector;
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
 use Saloon\Traits\Plugins\AcceptsJson;
 
 class CustomFailHandlerConnector extends Connector

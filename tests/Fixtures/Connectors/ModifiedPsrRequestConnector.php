@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Connectors;
 
 use GuzzleHttp\Psr7\Uri;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 use Psr\Http\Message\RequestInterface;
 
 class ModifiedPsrRequestConnector extends TestConnector

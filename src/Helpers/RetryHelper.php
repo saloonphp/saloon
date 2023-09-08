@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
-use Saloon\Contracts\Request;
-use Saloon\Contracts\Connector;
+use Saloon\Http\Request;
+use Saloon\Http\Connector;
 
 /**
  * @internal

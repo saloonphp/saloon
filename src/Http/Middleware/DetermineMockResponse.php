@@ -6,7 +6,7 @@ namespace Saloon\Http\Middleware;
 
 use Saloon\Data\PipeOrder;
 use Saloon\Http\Faking\Fixture;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Contracts\RequestMiddleware;
 

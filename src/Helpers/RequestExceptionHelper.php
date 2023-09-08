@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Helpers;
 
 use Throwable;
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
 use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\ServerException;
 use Saloon\Exceptions\Request\RequestException;

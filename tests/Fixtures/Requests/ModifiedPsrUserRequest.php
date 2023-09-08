@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Requests;
 
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 use Psr\Http\Message\RequestInterface;
 
 class ModifiedPsrUserRequest extends UserRequest

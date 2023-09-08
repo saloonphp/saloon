@@ -6,6 +6,8 @@ namespace Saloon\Contracts;
 
 use Saloon\Data\FactoryCollection;
 use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Http\PendingRequest;
+use Saloon\Http\Response;
 
 interface Sender
 {

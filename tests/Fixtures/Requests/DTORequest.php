@@ -6,7 +6,7 @@ namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
 use Saloon\Tests\Fixtures\Data\User;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 

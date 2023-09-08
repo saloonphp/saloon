@@ -5,18 +5,14 @@ declare(strict_types=1);
 namespace Saloon\Http;
 
 use Throwable;
-use Saloon\Contracts\Request;
-use Saloon\Contracts\Connector;
 use Saloon\Repositories\ArrayStore;
-use Saloon\Contracts\PendingRequest;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Saloon\Traits\Responses\HasResponseHelpers;
-use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
-class Response implements ResponseContract
+class Response
 {
     use HasResponseHelpers;
 

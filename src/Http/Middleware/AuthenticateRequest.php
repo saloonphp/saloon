@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Http\Middleware;
 
 use Saloon\Contracts\Authenticator;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\RequestMiddleware;
 
 class AuthenticateRequest implements RequestMiddleware

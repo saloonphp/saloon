@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Saloon\Traits;
 
 use Saloon\Data\PipeOrder;
-use Saloon\Contracts\Response;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\Response;
+use Saloon\Http\PendingRequest;
 
 trait HasDebugging
 {
     /**
      * Register a request debugger
      *
-     * @param callable(\Saloon\Contracts\PendingRequest, \Psr\Http\Message\RequestInterface): void $onRequest
+     * @param callable(\Saloon\Http\PendingRequest, \Psr\Http\Message\RequestInterface): void $onRequest
      * @return $this
      */
     public function debugRequest(callable $onRequest): static
@@ -31,7 +31,7 @@ trait HasDebugging
     /**
      * Register a response debugger
      *
-     * @param callable(\Saloon\Contracts\Response, \Psr\Http\Message\ResponseInterface): void $onResponse
+     * @param callable(\Saloon\Http\Response, \Psr\Http\Message\ResponseInterface): void $onResponse
      * @return $this
      */
     public function debugResponse(callable $onResponse): static

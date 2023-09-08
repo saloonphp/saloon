@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
 use Saloon\Http\Faking\MockClient;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
 use GuzzleHttp\Exception\ServerException;
 use Saloon\Exceptions\Request\ClientException;

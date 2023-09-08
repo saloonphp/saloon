@@ -11,7 +11,6 @@ use GuzzleHttp\Exception\ConnectException;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
-use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Tests\Fixtures\Connectors\InvalidConnectionConnector;
@@ -32,7 +31,7 @@ test('you can create a pool on a connector', function () {
 
     $pool->setConcurrency(6);
 
-    $pool->withResponseHandler(function (ResponseContract $response) use (&$successCount) {
+    $pool->withResponseHandler(function (Response $response) use (&$successCount) {
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->json())->toEqual([
             'name' => 'Sammyjo20',

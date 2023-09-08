@@ -6,7 +6,7 @@ namespace Saloon\Helpers\OAuth2;
 
 use Closure;
 use Saloon\Traits\Makeable;
-use Saloon\Contracts\Request;
+use Saloon\Http\Request;
 use Saloon\Exceptions\OAuthConfigValidationException;
 
 /**
@@ -49,7 +49,7 @@ class OAuthConfig
     /**
      * Callable that modifies the OAuth requests
      *
-     * @var \Closure(\Saloon\Contracts\Request): (void)|null
+     * @var \Closure(\Saloon\Http\Request): (void)|null
      */
     protected ?Closure $requestModifier = null;
 
@@ -206,7 +206,7 @@ class OAuthConfig
     /**
      * Set the request modifier callable which can be used to modify the request being sent
      *
-     * @param callable(\Saloon\Contracts\Request): (void) $requestModifier
+     * @param callable(\Saloon\Http\Request): (void) $requestModifier
      * @return $this
      */
     public function setRequestModifier(callable $requestModifier): static
@@ -219,7 +219,7 @@ class OAuthConfig
     /**
      * Invoke the OAuth2 config request modifier
      *
-     * @template TRequest of \Saloon\Contracts\Request
+     * @template TRequest of \Saloon\Http\Request
      *
      * @param TRequest $request
      * @return TRequest

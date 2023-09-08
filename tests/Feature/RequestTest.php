@@ -14,6 +14,8 @@ test('a request can be made successfully', function () {
     $connector = new TestConnector();
     $response = $connector->send(new UserRequest);
 
+    dd($response);
+
     $data = $response->json();
 
     expect($response->getPendingRequest()->isAsynchronous())->toBeFalse();

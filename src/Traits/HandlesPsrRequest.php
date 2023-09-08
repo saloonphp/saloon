@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits;
 
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 use Psr\Http\Message\RequestInterface;
 
 trait HandlesPsrRequest

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Saloon\Traits\Request;
 
 use Saloon\Contracts\Sender;
-use Saloon\Contracts\Response;
-use Saloon\Contracts\Connector;
+use Saloon\Http\Response;
+use Saloon\Http\Connector;
 use Saloon\Contracts\MockClient;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 use GuzzleHttp\Promise\PromiseInterface;
 
 trait HasConnector

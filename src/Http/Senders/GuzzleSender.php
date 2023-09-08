@@ -12,7 +12,7 @@ use Saloon\Contracts\Sender;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Data\FactoryCollection;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 use GuzzleHttp\Client as GuzzleClient;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -20,8 +20,8 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\TransferException;
-use Saloon\Contracts\Response as ResponseContract;
 use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Http\Response;
 use Saloon\Http\Senders\Factories\GuzzleMultipartBodyFactory;
 
 class GuzzleSender implements Sender
@@ -93,7 +93,7 @@ class GuzzleSender implements Sender
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Saloon\Exceptions\Request\FatalRequestException
      */
-    public function send(PendingRequest $pendingRequest): ResponseContract
+    public function send(PendingRequest $pendingRequest): Response
     {
         $request = $pendingRequest->createPsrRequest();
         $requestOptions = $this->createRequestOptions($pendingRequest);
@@ -153,9 +153,9 @@ class GuzzleSender implements Sender
     /**
      * Create a response.
      */
-    protected function createResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, Exception $exception = null): ResponseContract
+    protected function createResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, Exception $exception = null): Response
     {
-        /** @var class-string<\Saloon\Contracts\Response> $responseClass */
+        /** @var class-string<\Saloon\Http\Response> $responseClass */
         $responseClass = $pendingRequest->getResponseClass();
 
         return $responseClass::fromPsrResponse($psrResponse, $pendingRequest, $psrRequest, $exception);

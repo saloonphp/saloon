@@ -14,7 +14,7 @@ interface MiddlewarePipeline
     /**
      * Add a middleware before the request is sent
      *
-     * @param callable(\Saloon\Contracts\PendingRequest): (\Saloon\Contracts\PendingRequest|\Saloon\Contracts\FakeResponse|void) $callable
+     * @param callable(\Saloon\Http\PendingRequest): (\Saloon\Http\PendingRequest|\Saloon\Contracts\FakeResponse|void) $callable
      * @return $this
      */
     public function onRequest(callable $callable, ?string $name = null, ?PipeOrder $order = null): static;
@@ -22,7 +22,7 @@ interface MiddlewarePipeline
     /**
      * Add a middleware after the request is sent
      *
-     * @param callable(\Saloon\Contracts\Response): (\Saloon\Contracts\Response|void) $callable
+     * @param callable(\Saloon\Http\Response): (\Saloon\Http\Response|void) $callable
      * @return $this
      */
     public function onResponse(callable $callable, ?string $name = null, ?PipeOrder $order = null): static;

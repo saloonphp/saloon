@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Saloon\Helpers;
 
 use Saloon\Data\PipeOrder;
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
 use Saloon\Contracts\FakeResponse;
-use Saloon\Contracts\PendingRequest;
+use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Pipeline as PipelineContract;
 use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
@@ -35,7 +35,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Add a middleware before the request is sent
      *
-     * @param callable(\Saloon\Contracts\PendingRequest): (\Saloon\Contracts\PendingRequest|\Saloon\Contracts\FakeResponse|void) $callable
+     * @param callable(\Saloon\Http\PendingRequest): (\Saloon\Http\PendingRequest|\Saloon\Contracts\FakeResponse|void) $callable
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
@@ -71,7 +71,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Add a middleware after the request is sent
      *
-     * @param callable(\Saloon\Contracts\Response): (\Saloon\Contracts\Response|void) $callable
+     * @param callable(\Saloon\Http\Response): (\Saloon\Http\Response|void) $callable
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */

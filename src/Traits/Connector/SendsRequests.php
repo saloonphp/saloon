@@ -7,8 +7,8 @@ namespace Saloon\Traits\Connector;
 use LogicException;
 use Saloon\Helpers\Helpers;
 use InvalidArgumentException;
-use Saloon\Contracts\Request;
-use Saloon\Contracts\Response;
+use Saloon\Http\Request;
+use Saloon\Http\Response;
 use GuzzleHttp\Promise\Promise;
 use Saloon\Helpers\RetryHelper;
 use Saloon\Http\PendingRequest;
@@ -17,7 +17,6 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Traits\RequestProperties\Retryable;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Contracts\PendingRequest as PendingRequestContract;
 
 trait SendsRequests
 {
@@ -26,7 +25,7 @@ trait SendsRequests
     /**
      * Send a request synchronously
      *
-     * @param callable(\Throwable, \Saloon\Contracts\Request): (bool)|null $handleRetry
+     * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
      * @throws \ReflectionException
      * @throws \Throwable
      */
@@ -145,7 +144,7 @@ trait SendsRequests
     /**
      * Send a synchronous request and retry if it fails
      *
-     * @param callable(\Throwable, \Saloon\Contracts\Request): (bool)|null $handleRetry
+     * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
      * @throws \ReflectionException
      * @throws \Throwable
      */
@@ -167,7 +166,7 @@ trait SendsRequests
      *
      * @throws \ReflectionException
      */
-    public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequestContract
+    public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequest
     {
         return new PendingRequest($this, $request, $mockClient);
     }

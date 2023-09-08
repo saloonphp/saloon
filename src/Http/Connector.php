@@ -19,11 +19,9 @@ use Saloon\Traits\RequestProperties\HasDelay;
 use Saloon\Traits\RequestProperties\Retryable;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Traits\Request\CreatesDtoFromResponse;
-use Saloon\Contracts\Connector as ConnectorContract;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
-use Saloon\Contracts\HasDebugging as HasDebuggingContract;
 
-abstract class Connector implements ConnectorContract, HasDebuggingContract
+abstract class Connector
 {
     use CreatesDtoFromResponse;
     use AuthenticatesRequests;

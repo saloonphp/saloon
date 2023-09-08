@@ -7,7 +7,7 @@ namespace Saloon\Tests\Fixtures\Requests;
 use Throwable;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use Saloon\Contracts\Response;
+use Saloon\Http\Response;
 use Saloon\Tests\Fixtures\Exceptions\CustomRequestException;
 
 class CustomExceptionUserRequest extends Request

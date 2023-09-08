@@ -15,11 +15,10 @@ use Saloon\Traits\ManagesExceptions;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\RequestProperties\Retryable;
 use Saloon\Traits\Responses\HasCustomResponses;
-use Saloon\Contracts\Request as RequestContract;
 use Saloon\Traits\Request\CreatesDtoFromResponse;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 
-abstract class Request implements RequestContract
+abstract class Request
 {
     use CreatesDtoFromResponse;
     use AuthenticatesRequests;

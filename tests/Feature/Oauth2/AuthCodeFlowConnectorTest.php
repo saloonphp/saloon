@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Saloon\Helpers\Date;
 use Saloon\Http\Response;
-use Saloon\Contracts\Request;
+use Saloon\Http\Request;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\OAuth2\GetUserRequest;

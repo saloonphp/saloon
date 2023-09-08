@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Connectors;
 
 use Saloon\Http\Connector;
-use Saloon\Contracts\Request;
+use Saloon\Http\Request;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Traits\OAuth2\AuthorizationCodeGrant;
 use Saloon\Tests\Fixtures\Requests\OAuth\CustomOAuthUserRequest;
