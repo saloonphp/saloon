@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use InvalidArgumentException;
+use Throwable;
 use LogicException;
 use SimpleXMLElement;
-use Throwable;
+use InvalidArgumentException;
 use Saloon\Helpers\ArrayHelpers;
 use Illuminate\Support\Collection;
 use Saloon\Contracts\FakeResponse;
