@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Saloon\Data\Pipe;
 use Saloon\Http\Response;
 use Saloon\Data\PipeOrder;
+use Saloon\Helpers\Pipeline;
 use Saloon\Http\PendingRequest;
 use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockClient;
@@ -385,10 +386,10 @@ test('a middleware pipeline is correctly destructed when finished', function ():
             // Doesn't really matter.
         });
 
-    expect($pipeline)->toBeInstanceOf(\Saloon\Contracts\MiddlewarePipeline::class)
-        ->and($pipeline->getRequestPipeline())->toBeInstanceOf(\Saloon\Contracts\Pipeline::class)
+    expect($pipeline)->toBeInstanceOf(MiddlewarePipeline::class)
+        ->and($pipeline->getRequestPipeline())->toBeInstanceOf(Pipeline::class)
         ->and($pipeline->getRequestPipeline()->getPipes())->toHaveCount(1)
-        ->and($pipeline->getResponsePipeline())->toBeInstanceOf(\Saloon\Contracts\Pipeline::class)
+        ->and($pipeline->getResponsePipeline())->toBeInstanceOf(Pipeline::class)
         ->and($pipeline->getResponsePipeline()->getPipes())->toHaveCount(2)
         ->and($pipelineReference->get())->toEqual($pipeline);
 

@@ -12,7 +12,7 @@ use InvalidArgumentException;
 use GuzzleHttp\Promise\Promise;
 use Saloon\Helpers\RetryHelper;
 use Saloon\Http\PendingRequest;
-use Saloon\Contracts\MockClient;
+use Saloon\Http\Faking\MockClient;
 use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Traits\RequestProperties\Retryable;
 use Saloon\Exceptions\Request\RequestException;

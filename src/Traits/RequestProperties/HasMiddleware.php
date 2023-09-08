@@ -5,19 +5,18 @@ declare(strict_types=1);
 namespace Saloon\Traits\RequestProperties;
 
 use Saloon\Helpers\MiddlewarePipeline;
-use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
 trait HasMiddleware
 {
     /**
      * Middleware Pipeline
      */
-    protected MiddlewarePipelineContract $middlewarePipeline;
+    protected MiddlewarePipeline $middlewarePipeline;
 
     /**
      * Access the middleware pipeline
      */
-    public function middleware(): MiddlewarePipelineContract
+    public function middleware(): MiddlewarePipeline
     {
         return $this->middlewarePipeline ??= new MiddlewarePipeline;
     }

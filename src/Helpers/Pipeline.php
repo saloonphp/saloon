@@ -8,9 +8,8 @@ use Saloon\Data\Pipe;
 use Saloon\Enums\Order;
 use Saloon\Data\PipeOrder;
 use Saloon\Exceptions\DuplicatePipeNameException;
-use Saloon\Contracts\Pipeline as PipelineContract;
 
-class Pipeline implements PipelineContract
+class Pipeline
 {
     /**
      * The pipes in the pipeline.

@@ -13,10 +13,9 @@ use Saloon\Helpers\URLHelper;
 use Saloon\Http\PendingRequest;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Saloon\Exceptions\NoMockResponseFoundException;
-use Saloon\Contracts\MockClient as MockClientContract;
 use Saloon\Exceptions\InvalidMockResponseCaptureMethodException;
 
-class MockClient implements MockClientContract
+class MockClient
 {
     /**
      * Collection of all the responses that will be sequenced.

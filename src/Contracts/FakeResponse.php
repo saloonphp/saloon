@@ -14,7 +14,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 
 /**
- * @method static static make(mixed $body = [], int $status = 200, array $headers = []) Create a new mock response
+ * @method static static make(mixed $body = [], int $status = 200, array $headers = [])
  */
 interface FakeResponse
 {

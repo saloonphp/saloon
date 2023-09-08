@@ -8,20 +8,18 @@ use Saloon\Http\Response;
 use Saloon\Data\PipeOrder;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\FakeResponse;
-use Saloon\Contracts\Pipeline as PipelineContract;
-use Saloon\Contracts\MiddlewarePipeline as MiddlewarePipelineContract;
 
-class MiddlewarePipeline implements MiddlewarePipelineContract
+class MiddlewarePipeline
 {
     /**
      * Request Pipeline
      */
-    protected PipelineContract $requestPipeline;
+    protected Pipeline $requestPipeline;
 
     /**
      * Response Pipeline
      */
-    protected PipelineContract $responsePipeline;
+    protected Pipeline $responsePipeline;
 
     /**
      * Constructor
@@ -118,7 +116,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
      * @return $this
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
-    public function merge(MiddlewarePipelineContract $middlewarePipeline): static
+    public function merge(MiddlewarePipeline $middlewarePipeline): static
     {
         $requestPipes = array_merge(
             $this->getRequestPipeline()->getPipes(),
@@ -139,7 +137,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Get the request pipeline
      */
-    public function getRequestPipeline(): PipelineContract
+    public function getRequestPipeline(): Pipeline
     {
         return $this->requestPipeline;
     }
@@ -147,7 +145,7 @@ class MiddlewarePipeline implements MiddlewarePipelineContract
     /**
      * Get the response pipeline
      */
-    public function getResponsePipeline(): PipelineContract
+    public function getResponsePipeline(): Pipeline
     {
         return $this->responsePipeline;
     }
