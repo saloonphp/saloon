@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\OAuth2;
 
+use DateInterval;
 use DateTimeImmutable;
-use Saloon\Helpers\Date;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
 use InvalidArgumentException;
@@ -153,9 +153,14 @@ trait AuthorizationCodeGrant
 
         $accessToken = $responseData->access_token;
         $refreshToken = $responseData->refresh_token ?? $fallbackRefreshToken;
-        $expiresAt = isset($responseData->expires_in) && is_numeric($responseData->expires_in)
-            ? Date::now()->addSeconds((int) $responseData->expires_in)->toDateTime()
-            : null;
+
+        $expiresAt = null;
+
+        if (isset($responseData->expires_in) && is_numeric($responseData->expires_in)) {
+            $expiresAt = (new DateTimeImmutable)->add(
+                DateInterval::createFromDateString((int)$responseData->expires_in . ' seconds')
+            );
+        }
 
         return $this->createOAuthAuthenticator($accessToken, $refreshToken, $expiresAt);
     }

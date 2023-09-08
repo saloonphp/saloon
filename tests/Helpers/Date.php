@@ -2,15 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Helpers;
+namespace Saloon\Tests\Helpers;
 
 use DateTime;
 use DateInterval;
 use DateTimeImmutable;
 
-/**
- * @internal
- */
 final class Date
 {
     /**

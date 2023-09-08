@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Connector;
 
-use Saloon\Helpers\Config;
+use Saloon\Config;
 use Saloon\Contracts\Sender;
 
 trait HasSender

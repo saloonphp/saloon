@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
+use Saloon\Config;
+use Saloon\Enums\PipeOrder;
 use Saloon\Http\PendingRequest;
 use Saloon\Exceptions\StrayRequestException;
 
@@ -56,10 +58,10 @@ final class MockConfig
      */
     public static function preventStrayRequests(): void
     {
-        Config::middleware()->onRequest(static function (PendingRequest $pendingRequest) {
+        Config::globalMiddleware()->onRequest(static function (PendingRequest $pendingRequest) {
             if (! $pendingRequest->hasMockClient()) {
                 throw new StrayRequestException;
             }
-        });
+        }, order: PipeOrder::LAST);
     }
 }

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use Saloon\Config;
 use Saloon\Http\Response;
-use Saloon\Helpers\Config;
 use Saloon\Helpers\MockConfig;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
@@ -15,8 +15,8 @@ use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 afterEach(function () {
-    Config::resetMiddleware();
-    Config::resetDefaultSender();
+    Config::clearGlobalMiddleware();
+    Config::$defaultSender = GuzzleSender::class;
 });
 
 test('the config can specify global middleware', function () {
@@ -26,11 +26,11 @@ test('the config can specify global middleware', function () {
 
     $count = 0;
 
-    Config::middleware()->onRequest(function (PendingRequest $pendingRequest) use (&$count) {
+    Config::globalMiddleware()->onRequest(function (PendingRequest $pendingRequest) use (&$count) {
         $count++;
     });
 
-    Config::middleware()->onResponse(function (Response $response) use (&$count) {
+    Config::globalMiddleware()->onResponse(function (Response $response) use (&$count) {
         $count++;
     });
 
@@ -40,7 +40,7 @@ test('the config can specify global middleware', function () {
 });
 
 test('you can change the global default sender used', function () {
-    Config::setDefaultSender(ArraySender::class);
+    Config::$defaultSender = ArraySender::class;
 
     $connector = new TestConnector;
 
@@ -48,7 +48,7 @@ test('you can change the global default sender used', function () {
 
     expect($connector->sender())->toBeInstanceOf(ArraySender::class);
 
-    Config::resetDefaultSender();
+    Config::$defaultSender = GuzzleSender::class;
 
     $connector = new TestConnector;
 
@@ -83,5 +83,5 @@ test('you can prevent stray api requests', function () {
 
     TestConnector::make()->send(new UserRequest);
 
-    Config::resetMiddleware();
+    Config::clearGlobalMiddleware();
 });

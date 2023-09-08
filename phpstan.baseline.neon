@@ -1,16 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$interval of method DateTime\\:\\:add\\(\\) expects DateInterval, DateInterval\\|false given\\.$#"
-			count: 1
-			path: src/Helpers/Date.php
-
-		-
-			message: "#^Parameter \\#1 \\$interval of method DateTime\\:\\:sub\\(\\) expects DateInterval, DateInterval\\|false given\\.$#"
-			count: 1
-			path: src/Helpers/Date.php
-
-		-
 			message: "#^Method Saloon\\\\Http\\\\Connector\\:\\:defaultSender\\(\\) should return Saloon\\\\Contracts\\\\Sender but returns object\\.$#"
 			count: 1
 			path: src/Http/Connector.php
