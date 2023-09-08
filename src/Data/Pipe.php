@@ -21,8 +21,8 @@ class Pipe
      */
     public function __construct(
         callable                   $callable,
-        readonly public ?string    $name = null,
-        readonly public ?PipeOrder $order = null,
+        public readonly ?string    $name = null,
+        public readonly ?PipeOrder $order = null,
     ) {
         $this->callable = $callable(...);
     }

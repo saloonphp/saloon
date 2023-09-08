@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use Saloon\Config;
 use Saloon\Enums\Method;
-use Saloon\Helpers\Config;
 use Saloon\Helpers\Helpers;
 use Saloon\Helpers\URLHelper;
 use Saloon\Traits\Conditionable;
@@ -161,7 +161,7 @@ class PendingRequest
         // middleware is run now because we want the user to still have an opportunity
         // to overwrite anything applied by it.
 
-        $middleware->merge(Config::middleware());
+        $middleware->merge(Config::globalMiddleware());
 
         // Now we'll "boot" the connector and request. This is a hook that can be run after
         // the core middleware that allows you to add your own properties that are a higher

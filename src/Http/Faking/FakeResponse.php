@@ -18,6 +18,9 @@ use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 use Saloon\Contracts\FakeResponse as FakeResponseContract;
 
+/**
+ * @method static static make(mixed $body = [], int $status = 200, array $headers = [])
+ */
 class FakeResponse implements FakeResponseContract
 {
     use Makeable;

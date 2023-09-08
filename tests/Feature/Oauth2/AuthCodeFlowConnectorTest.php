@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Saloon\Helpers\Date;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
+use Saloon\Tests\Helpers\Date;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\OAuth2\GetUserRequest;

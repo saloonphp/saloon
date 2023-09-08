@@ -16,7 +16,6 @@ final class ArrayHelpers
     /**
      * Determine whether the given value is array accessible.
      *
-     *
      * @phpstan-assert-if-true array|ArrayAccess $value
      */
     private static function accessible(mixed $value): bool
