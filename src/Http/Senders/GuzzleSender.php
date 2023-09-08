@@ -95,7 +95,7 @@ class GuzzleSender implements Sender
     public function send(PendingRequest $pendingRequest): Response
     {
         $request = $pendingRequest->createPsrRequest();
-        $requestOptions = $this->createRequestOptions($pendingRequest);
+        $requestOptions = $pendingRequest->config()->all();
 
         try {
             $guzzleResponse = $this->client->send($request, $requestOptions);
@@ -126,38 +126,11 @@ class GuzzleSender implements Sender
     public function sendAsync(PendingRequest $pendingRequest): PromiseInterface
     {
         $request = $pendingRequest->createPsrRequest();
-        $requestOptions = $this->createRequestOptions($pendingRequest);
+        $requestOptions = $pendingRequest->config()->all();
 
         $promise = $this->client->sendAsync($request, $requestOptions);
 
         return $this->processPromise($request, $promise, $pendingRequest);
-    }
-
-    /**
-     * Build up all the request options
-     *
-     * @return array<RequestOptions::*, mixed>
-     */
-    protected function createRequestOptions(PendingRequest $pendingRequest): array
-    {
-        $requestOptions = [];
-
-        foreach ($pendingRequest->config()->all() as $configVariable => $value) {
-            $requestOptions[$configVariable] = $value;
-        }
-
-        return $requestOptions;
-    }
-
-    /**
-     * Create a response.
-     */
-    protected function createResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, Exception $exception = null): Response
-    {
-        /** @var class-string<\Saloon\Http\Response> $responseClass */
-        $responseClass = $pendingRequest->getResponseClass();
-
-        return $responseClass::fromPsrResponse($psrResponse, $pendingRequest, $psrRequest, $exception);
     }
 
     /**
@@ -202,6 +175,17 @@ class GuzzleSender implements Sender
                     throw $response->toException();
                 }
             );
+    }
+
+    /**
+     * Create a response.
+     */
+    protected function createResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, Exception $exception = null): Response
+    {
+        /** @var class-string<\Saloon\Http\Response> $responseClass */
+        $responseClass = $pendingRequest->getResponseClass();
+
+        return $responseClass::fromPsrResponse($psrResponse, $pendingRequest, $psrRequest, $exception);
     }
 
     /**
