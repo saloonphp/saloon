@@ -209,7 +209,7 @@ class MockClient
      */
     public function getLastRequest(): ?Request
     {
-        return $this->getLastResponse()?->getRequest();
+        return $this->getLastResponse()?->getPendingRequest()->getRequest();
     }
 
     /**
@@ -339,7 +339,7 @@ class MockClient
         }
 
         foreach ($this->getRecordedResponses() as $recordedResponse) {
-            if ($recordedResponse->getRequest() instanceof $request) {
+            if ($recordedResponse->getPendingRequest()->getRequest() instanceof $request) {
                 return $recordedResponse;
             }
         }
@@ -388,7 +388,7 @@ class MockClient
         $lastResponse = $this->getLastResponse();
 
         if ($lastResponse instanceof Response) {
-            $passed = $closure($lastResponse->getRequest(), $lastResponse);
+            $passed = $closure($lastResponse->getPendingRequest()->getRequest(), $lastResponse);
 
             if ($passed === true) {
                 return true;
@@ -399,7 +399,7 @@ class MockClient
         // responses and break out if we get a match.
 
         foreach ($this->getRecordedResponses() as $response) {
-            $request = $response->getRequest();
+            $request = $response->getPendingRequest()->getRequest();
 
             $passed = $closure($request, $response);
 
