@@ -47,7 +47,7 @@ final class Config
     /**
      * Write a custom sender resolver
      */
-    public static function resolveSenderWith(?callable $senderResolver): void
+    public static function setSenderResolver(?callable $senderResolver): void
     {
         self::$senderResolver = $senderResolver;
     }

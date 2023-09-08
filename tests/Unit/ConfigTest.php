@@ -62,13 +62,13 @@ test('you can change how the global default sender is resolved', function () {
 
     expect($sender)->toBeInstanceOf(GuzzleSender::class);
 
-    Config::resolveSenderWith(static fn () => new ArraySender);
+    Config::setSenderResolver(static fn () => new ArraySender);
 
     $sender = TestConnector::make()->sender();
 
     expect($sender)->toBeInstanceOf(ArraySender::class);
 
-    Config::resolveSenderWith(null);
+    Config::setSenderResolver(null);
 
     $sender = TestConnector::make()->sender();
 
