@@ -48,8 +48,6 @@ abstract class Request
 
     /**
      * Define the endpoint for the request.
-     *
-     * @return string
      */
     abstract public function resolveEndpoint(): string;
 }

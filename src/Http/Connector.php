@@ -42,8 +42,6 @@ abstract class Connector
 
     /**
      * Define the base URL of the API.
-     *
-     * @return string
      */
     abstract public function resolveBaseUrl(): string;
 }
