@@ -94,19 +94,11 @@ class FakeResponse implements FakeResponseContract
     }
 
     /**
-     * Checks if the response throws an exception.
-     */
-    public function throwsException(): bool
-    {
-        return $this->responseException instanceof Closure;
-    }
-
-    /**
      * Invoke the exception.
      */
     public function getException(PendingRequest $pendingRequest): ?Throwable
     {
-        if (! $this->throwsException()) {
+        if (! $this->responseException instanceof Closure) {
             return null;
         }
 

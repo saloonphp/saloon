@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Saloon\Data\Pipe;
 use Saloon\Http\Response;
-use Saloon\Data\PipeOrder;
+use Saloon\Enums\PipeOrder;
 use Saloon\Helpers\Pipeline;
 use Saloon\Http\PendingRequest;
 use GuzzleHttp\Psr7\HttpFactory;
@@ -254,7 +254,7 @@ test('a request pipe can be added to the top of the pipeline', function () {
         })
         ->onRequest(function (PendingRequest $request) use (&$names) {
             $names[] = 'Taylor';
-        }, order: PipeOrder::first())
+        }, order: PipeOrder::FIRST)
         ->onRequest(function (PendingRequest $request) use (&$names) {
             $names[] = 'Andrew';
         });
@@ -276,7 +276,7 @@ test('a request pipe can be added to the bottom of the pipeline', function () {
         })
         ->onRequest(function (PendingRequest $request) use (&$names) {
             $names[] = 'Taylor';
-        }, order: PipeOrder::last())
+        }, order: PipeOrder::LAST)
         ->onRequest(function (PendingRequest $request) use (&$names) {
             $names[] = 'Andrew';
         });
@@ -327,7 +327,7 @@ test('a response pipe can be added to the top of the pipeline', function () {
         })
         ->onResponse(function (Response $response) use (&$names) {
             $names[] = 'Taylor';
-        }, order: PipeOrder::first())
+        }, order: PipeOrder::FIRST)
         ->onResponse(function (Response $response) use (&$names) {
             $names[] = 'Andrew';
         });
@@ -354,7 +354,7 @@ test('a response pipe can be added to the bottom of the pipeline', function () {
         })
         ->onResponse(function (Response $response) use (&$names) {
             $names[] = 'Taylor';
-        }, order: PipeOrder::last())
+        }, order: PipeOrder::LAST)
         ->onResponse(function (Response $response) use (&$names) {
             $names[] = 'Andrew';
         });
@@ -381,7 +381,7 @@ test('a middleware pipeline is correctly destructed when finished', function ():
         })
         ->onResponse(function (PendingRequest $request) {
             // Doesn't really matter.
-        }, order: PipeOrder::last())
+        }, order: PipeOrder::LAST)
         ->onResponse(function (PendingRequest $request) {
             // Doesn't really matter.
         });

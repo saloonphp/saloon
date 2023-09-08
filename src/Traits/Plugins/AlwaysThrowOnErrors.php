@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Traits\Plugins;
 
 use Saloon\Http\Response;
-use Saloon\Data\PipeOrder;
+use Saloon\Enums\PipeOrder;
 use Saloon\Http\PendingRequest;
 
 trait AlwaysThrowOnErrors
@@ -22,7 +22,7 @@ trait AlwaysThrowOnErrors
         $pendingRequest->middleware()->onResponse(
             callable: static fn (Response $response) => $response->throw(),
             name: 'alwaysThrowOnErrors',
-            order: PipeOrder::last()
+            order: PipeOrder::LAST
         );
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Traits;
 
 use Saloon\Http\Response;
-use Saloon\Data\PipeOrder;
+use Saloon\Enums\PipeOrder;
 use Saloon\Http\PendingRequest;
 
 trait HasDebugging
@@ -22,7 +22,7 @@ trait HasDebugging
             callable: static function (PendingRequest $pendingRequest) use ($onRequest): void {
                 $onRequest($pendingRequest, $pendingRequest->createPsrRequest());
             },
-            order: PipeOrder::last()
+            order: PipeOrder::LAST
         );
 
         return $this;
@@ -40,7 +40,7 @@ trait HasDebugging
             callable: static function (Response $response) use ($onResponse): void {
                 $onResponse($response, $response->getPsrResponse());
             },
-            order: PipeOrder::first()
+            order: PipeOrder::FIRST
         );
 
         return $this;

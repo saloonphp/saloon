@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Helpers;
 
 use Saloon\Data\Pipe;
-use Saloon\Enums\Order;
-use Saloon\Data\PipeOrder;
+use Saloon\Enums\PipeOrder;
 use Saloon\Exceptions\DuplicatePipeNameException;
 
 class Pipeline
@@ -65,10 +64,10 @@ class Pipeline
         // arrays based on the order type. We'll then merge the arrays.
 
         foreach ($this->pipes as $pipe) {
-            match ($pipe->order?->type) {
-                Order::FIRST => $firstPipes[] = $pipe,
+            match ($pipe->order) {
+                PipeOrder::FIRST => $firstPipes[] = $pipe,
                 null => $nullPipes[] = $pipe,
-                Order::LAST => $lastPipes[] = $pipe,
+                PipeOrder::LAST => $lastPipes[] = $pipe,
             };
         }
 

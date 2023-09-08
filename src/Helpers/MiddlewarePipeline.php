@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Helpers;
 
 use Saloon\Http\Response;
-use Saloon\Data\PipeOrder;
+use Saloon\Enums\PipeOrder;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\FakeResponse;
 

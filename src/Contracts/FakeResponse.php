@@ -13,9 +13,6 @@ use Saloon\Contracts\Body\BodyRepository;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 
-/**
- * @method static static make(mixed $body = [], int $status = 200, array $headers = [])
- */
 interface FakeResponse
 {
     /**
@@ -39,11 +36,6 @@ interface FakeResponse
      * @return $this
      */
     public function throw(Closure|Throwable $value): static;
-
-    /**
-     * Checks if the response throws an exception.
-     */
-    public function throwsException(): bool;
 
     /**
      * Get the exception
