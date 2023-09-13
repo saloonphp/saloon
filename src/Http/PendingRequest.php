@@ -7,6 +7,7 @@ namespace Saloon\Http;
 use Saloon\Config;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Helpers;
+use Saloon\Traits\Macroable;
 use Saloon\Helpers\URLHelper;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
@@ -18,6 +19,7 @@ use Saloon\Http\Middleware\MergeDelay;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\Middleware\DelayMiddleware;
 use Saloon\Traits\Auth\AuthenticatesRequests;
+use Saloon\Http\Middleware\ValidateProperties;
 use Saloon\Http\Middleware\AuthenticateRequest;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Http\Middleware\MergeRequestProperties;
@@ -32,6 +34,7 @@ class PendingRequest
     use ManagesPsrRequests;
     use Conditionable;
     use HasMockClient;
+    use Macroable;
 
     /**
      * The connector making the request.
@@ -176,6 +179,11 @@ class PendingRequest
         $middleware
             ->merge($this->connector->middleware())
             ->merge($this->request->middleware());
+
+        // Next, we'll register our ValidateProperties middleware. This will validate
+        // any properties on the pending request like headers.
+
+        $middleware->onRequest(new ValidateProperties, 'validateProperties');
 
         // Next, we'll delay the request if we need to. This needs to be as near to
         // the end as possible to apply delay right before the request is sent.

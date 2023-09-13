@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Faking;
 
+use Saloon\MockConfig;
 use Saloon\Helpers\Storage;
-use Saloon\Helpers\MockConfig;
 use Saloon\Data\RecordedResponse;
 use Saloon\Helpers\FixtureHelper;
 use Saloon\Exceptions\FixtureException;

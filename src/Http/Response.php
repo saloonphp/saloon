@@ -7,6 +7,7 @@ namespace Saloon\Http;
 use Throwable;
 use LogicException;
 use SimpleXMLElement;
+use Saloon\Traits\Macroable;
 use InvalidArgumentException;
 use Saloon\Helpers\ArrayHelpers;
 use Illuminate\Support\Collection;
@@ -22,6 +23,8 @@ use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
 class Response
 {
+    use Macroable;
+
     /**
      * The PSR request
      */

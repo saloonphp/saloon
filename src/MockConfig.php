@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Helpers;
+namespace Saloon;
 
-use Saloon\Config;
 use Saloon\Enums\PipeOrder;
 use Saloon\Http\PendingRequest;
 use Saloon\Exceptions\StrayRequestException;
