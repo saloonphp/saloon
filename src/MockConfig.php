@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Saloon;
 
 use Saloon\Enums\PipeOrder;
-use Saloon\Exceptions\StrayRequestException;
 use Saloon\Http\PendingRequest;
+use Saloon\Exceptions\StrayRequestException;
 
 final class MockConfig
 {

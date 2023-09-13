@@ -2,33 +2,33 @@
 
 declare(strict_types=1);
 
+use Saloon\MockConfig;
+use Saloon\Http\Response;
+use Saloon\Http\PendingRequest;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Local\LocalFilesystemAdapter;
-use Saloon\Exceptions\FixtureException;
-use Saloon\Exceptions\NoMockResponseFoundException;
-use Saloon\Exceptions\Request\RequestException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use Saloon\Http\Response;
-use Saloon\MockConfig;
-use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
-use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Tests\Fixtures\Mocking\BeforeSaveUserFixture;
-use Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
-use Saloon\Tests\Fixtures\Mocking\MissingNameFixture;
-use Saloon\Tests\Fixtures\Mocking\RegexUserFixture;
-use Saloon\Tests\Fixtures\Mocking\SafeUserFixture;
-use Saloon\Tests\Fixtures\Mocking\SuperheroFixture;
+use Saloon\Exceptions\FixtureException;
 use Saloon\Tests\Fixtures\Mocking\UserFixture;
-use Saloon\Tests\Fixtures\Requests\AlwaysThrowRequest;
-use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
-use Saloon\Tests\Fixtures\Requests\ErrorRequest;
-use Saloon\Tests\Fixtures\Requests\FileDownloadRequest;
-use Saloon\Tests\Fixtures\Requests\PagedSuperheroRequest;
-use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use League\Flysystem\Local\LocalFilesystemAdapter;
+use Saloon\Tests\Fixtures\Mocking\SafeUserFixture;
+use Saloon\Exceptions\NoMockResponseFoundException;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Mocking\RegexUserFixture;
+use Saloon\Tests\Fixtures\Mocking\SuperheroFixture;
+use Saloon\Tests\Fixtures\Mocking\MissingNameFixture;
+use Saloon\Tests\Fixtures\Requests\AlwaysThrowRequest;
+use Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
+use Saloon\Tests\Fixtures\Requests\FileDownloadRequest;
+use Saloon\Tests\Fixtures\Mocking\BeforeSaveUserFixture;
+use Saloon\Tests\Fixtures\Requests\PagedSuperheroRequest;
+use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
+use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
+use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
+use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
 
 $filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon/Testing'));
 

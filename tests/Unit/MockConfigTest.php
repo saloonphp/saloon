@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
+use Saloon\MockConfig;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Local\LocalFilesystemAdapter;
-use Saloon\Exceptions\FixtureMissingException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\MockConfig;
+use Saloon\Exceptions\FixtureMissingException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 
 afterEach(function () {
     MockConfig::setFixturePath('tests/Fixtures/Saloon');

@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Http;
 
 class BaseResource
 {
     /**
      * Constructor
-     *
-     * @param \Saloon\Http\Connector $connector
      */
     public function __construct(readonly protected Connector $connector)
     {

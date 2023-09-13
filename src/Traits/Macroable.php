@@ -25,10 +25,6 @@ trait Macroable
 
     /**
      * Create a macro
-     *
-     * @param string $name
-     * @param object|callable $macro
-     * @return void
      */
     public static function macro(string $name, object|callable $macro): void
     {
@@ -39,7 +35,6 @@ trait Macroable
      * Add a mixin
      *
      * @param object|class-string $mixin
-     * @return void
      * @throws \ReflectionException
      */
     public static function mixin(object|string $mixin): void
@@ -57,9 +52,6 @@ trait Macroable
 
     /**
      * Check if we have a macro
-     *
-     * @param string $name
-     * @return bool
      */
     public static function hasMacro(string $name): bool
     {
@@ -69,9 +61,7 @@ trait Macroable
     /**
      * Handle a static call
      *
-     * @param string $method
      * @param array<string, mixed> $parameters
-     * @return mixed
      */
     public static function __callStatic(string $method, array $parameters): mixed
     {
@@ -91,9 +81,7 @@ trait Macroable
     /**
      * Handle a method call
      *
-     * @param string $method
      * @param array<string, mixed> $parameters
-     * @return mixed
      */
     public function __call(string $method, array $parameters): mixed
     {

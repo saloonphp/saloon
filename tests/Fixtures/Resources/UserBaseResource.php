@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Saloon\Tests\Fixtures\Resources;
 
 use Saloon\Http\BaseResource;
@@ -10,7 +12,6 @@ class UserBaseResource extends BaseResource
     /**
      * Get User
      *
-     * @return array
      * @throws \JsonException
      * @throws \ReflectionException
      * @throws \Throwable
