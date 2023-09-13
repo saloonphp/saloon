@@ -89,3 +89,13 @@ parameters:
 		 message: "#^Match arm is unreachable because previous comparison is always true.$#"
 		 count: 1
 		 path: src/Http/Pool.php
+
+		-
+		 message: "#^Parameter \\#1 \\$object of method ReflectionMethod\\:\\:invoke\\(\\) expects object\\|null, class-string\\|object given.$#"
+		 count: 2
+		 path: src/Traits/Macroable.php
+
+		-
+		 message: "#^Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\)\\: mixed, \\(callable\\(\\)\\: mixed\\)\\|object given.$#"
+		 count: 4
+		 path: src/Traits/Macroable.php
