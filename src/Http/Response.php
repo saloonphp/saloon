@@ -4,24 +4,27 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use Throwable;
-use LogicException;
-use SimpleXMLElement;
-use InvalidArgumentException;
-use Saloon\Helpers\ArrayHelpers;
 use Illuminate\Support\Collection;
-use Saloon\Contracts\FakeResponse;
-use Saloon\Repositories\ArrayStore;
-use Psr\Http\Message\StreamInterface;
+use InvalidArgumentException;
+use LogicException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\DomCrawler\Crawler;
-use Saloon\Helpers\RequestExceptionHelper;
-use Saloon\Contracts\DataObjects\WithResponse;
+use Psr\Http\Message\StreamInterface;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
+use Saloon\Contracts\DataObjects\WithResponse;
+use Saloon\Contracts\FakeResponse;
+use Saloon\Helpers\ArrayHelpers;
+use Saloon\Helpers\RequestExceptionHelper;
+use Saloon\Repositories\ArrayStore;
+use Saloon\Traits\Macroable;
+use SimpleXMLElement;
+use Symfony\Component\DomCrawler\Crawler;
+use Throwable;
 
 class Response
 {
+    use Macroable;
+
     /**
      * The PSR request
      */

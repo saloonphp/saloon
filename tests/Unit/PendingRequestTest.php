@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use Saloon\Enums\Method;
+use Saloon\Exceptions\InvalidHeaderException;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\Response as SaloonResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
@@ -30,4 +32,25 @@ test('you can overwrite the url and the method of the pending request', function
 
     expect($pendingRequest->getUrl())->toEqual('https://other-endpoint.co.uk/user');
     expect($pendingRequest->getMethod())->toEqual(Method::POST);
+});
+
+test('the pending request is macroable', function () {
+    PendingRequest::macro('yee', fn () => 'haw');
+
+    $pendingRequest = connector()->createPendingRequest(new UserRequest);
+
+    expect($pendingRequest->yee())->toEqual('haw');
+});
+
+test('the pending request validates properly formed headers', function () {
+    $request = new UserRequest;
+
+    $request->headers()->set([
+        'Content-Type: application/json',
+    ]);
+
+    $this->expectException(InvalidHeaderException::class);
+    $this->expectExceptionMessage("One or more of the headers are invalid. Make sure to use the header name as the key. For example: 'Content-Type' => 'application/json'.");
+
+    connector()->createPendingRequest($request);
 });

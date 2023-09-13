@@ -344,3 +344,15 @@ test('you can get save the response to a file', function (mixed $resourceOrPath)
     'tests/Fixtures/Saloon/Testing/streamToFile1.json',
     fn () => fopen('tests/Fixtures/Saloon/Testing/streamToFile2.json', 'wb+'),
 ]);
+
+test('the response is macroable', function () {
+    SaloonResponse::macro('yee', fn () => 'haw');
+
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+
+    expect($response->yee())->toEqual('haw');
+});

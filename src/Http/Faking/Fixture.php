@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Faking;
 
-use Saloon\Helpers\Storage;
-use Saloon\Helpers\MockConfig;
 use Saloon\Data\RecordedResponse;
-use Saloon\Helpers\FixtureHelper;
 use Saloon\Exceptions\FixtureException;
 use Saloon\Exceptions\FixtureMissingException;
+use Saloon\Helpers\FixtureHelper;
+use Saloon\Helpers\Storage;
+use Saloon\MockConfig;
 
 class Fixture
 {

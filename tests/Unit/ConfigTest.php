@@ -3,16 +3,16 @@
 declare(strict_types=1);
 
 use Saloon\Config;
-use Saloon\Http\Response;
-use Saloon\Helpers\MockConfig;
-use Saloon\Http\PendingRequest;
+use Saloon\Exceptions\StrayRequestException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingRequest;
+use Saloon\Http\Response;
 use Saloon\Http\Senders\GuzzleSender;
-use Saloon\Exceptions\StrayRequestException;
-use Saloon\Tests\Fixtures\Senders\ArraySender;
-use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\MockConfig;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Senders\ArraySender;
 
 afterEach(function () {
     Config::clearGlobalMiddleware();
