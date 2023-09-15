@@ -14,7 +14,7 @@ A PHP package that helps you build beautiful API integrations and SDKs 🤠
 </div>
 
 ## Introduction
-Saloon is a PHP library that provides you with a beautiful API integration framework. It gives you all the tools you need to build and test API integrations for your application or SDKs. It can be easily customised with plugins, but It comes pre-configured for you so you can get to sending API requests right away. Saloon comes with many exciting features out of the box like recording requests in your tests, caching, OAuth2 and pagination. 
+Saloon is a PHP library that gives you the tools to build beautifully simple API integrations. Saloon moves your API requests into reusable classes so you can keep all your API configurations in one place. It can be easily customised with plugins, but It comes pre-configured for you so you can get to sending API requests right away. Saloon comes with many exciting features out of the box like recording requests in your tests, caching, OAuth2 and pagination.
 
 ```php
 <?php
@@ -27,15 +27,13 @@ $data = $response->json();
 
 ## Key Features
 
-- Provides a simple, easy-to-learn, object-oriented syntax that standardises the way you interact with APIs
-- No HTTP client configuration is required but can be completely customised if you need
-- Abstract API integrations into classes to keep your code tidy and centralised
-- Great for building your next PHP SDKs or package/library
+- Provides a simple, easy-to-learn, and modern way to build clean, reusable API integrations
+- Built on top of Guzzle, the most popular and feature-rich PHP HTTP client
 - Works great within a team as it provides a standard everyone can follow
-- Application/framework agnostic
+- Great for building your next PHP SDK or library
 - Packed full of features like request recording, request concurrency, caching, data-transfer-object support, and full Laravel support.
-- Fully extendable and welcomes your own implementations
-- Uses Guzzle, the most popular PHP HTTP client
+- Framework agnostic
+- Low on dependencies
 
 ## Getting Started
 
