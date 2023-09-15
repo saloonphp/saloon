@@ -14,7 +14,7 @@ A PHP package that helps you build beautiful API integrations and SDKs 🤠
 </div>
 
 ## Introduction
-Saloon is a PHP library that gives you the tools to build beautifully simple API integrations. Saloon moves your API requests into reusable classes so you can keep all your API configurations in one place. It can be easily customised with plugins, but It comes pre-configured for you so you can get to sending API requests right away. Saloon comes with many exciting features out of the box like recording requests in your tests, caching, OAuth2 and pagination.
+Saloon is a PHP library that gives you the tools to build beautifully simple API integrations and SDKs. Saloon moves your API requests into reusable classes so you can keep all your API configurations in one place. It can be easily customised with plugins, but It comes pre-configured for you so you can get to sending API requests right away. Saloon comes with many exciting features out of the box like recording requests in your tests, caching, OAuth2 and pagination.
 
 ```php
 <?php
