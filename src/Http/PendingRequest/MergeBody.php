@@ -2,23 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Http\Middleware;
+namespace Saloon\Http\PendingRequest;
 
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Body\HasBody;
-use Saloon\Contracts\RequestMiddleware;
 use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Exceptions\PendingRequestException;
 use Saloon\Repositories\Body\MultipartBodyRepository;
 
-class MergeBody implements RequestMiddleware
+class MergeBody
 {
     /**
      * Register a request middleware
      *
      * @throws \Saloon\Exceptions\PendingRequestException
      */
-    public function __invoke(PendingRequest $pendingRequest): void
+    public function __invoke(PendingRequest $pendingRequest): PendingRequest
     {
         $connector = $pendingRequest->getConnector();
         $request = $pendingRequest->getRequest();
@@ -27,7 +26,7 @@ class MergeBody implements RequestMiddleware
         $requestBody = $request instanceof HasBody ? $request->body() : null;
 
         if (is_null($connectorBody) && is_null($requestBody)) {
-            return;
+            return $pendingRequest;
         }
 
         // When both the connector and the request use the `HasBody` interface - we will enforce
@@ -64,5 +63,7 @@ class MergeBody implements RequestMiddleware
         }
 
         $pendingRequest->setBody($body);
+
+        return $pendingRequest;
     }
 }

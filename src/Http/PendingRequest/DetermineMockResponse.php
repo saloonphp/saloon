@@ -2,24 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Http\Middleware;
+namespace Saloon\Http\PendingRequest;
 
 use Saloon\Enums\PipeOrder;
 use Saloon\Http\Faking\Fixture;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Contracts\RequestMiddleware;
+use Saloon\Http\Middleware\RecordFixture;
 
-class DetermineMockResponse implements RequestMiddleware
+class DetermineMockResponse
 {
     /**
      * Guess a mock response
      *
      * @throws \JsonException
+     * @throws \Saloon\Exceptions\DuplicatePipeNameException
      * @throws \Saloon\Exceptions\FixtureException
      * @throws \Saloon\Exceptions\FixtureMissingException
+     * @throws \Saloon\Exceptions\NoMockResponseFoundException
      */
-    public function __invoke(PendingRequest $pendingRequest): PendingRequest|MockResponse
+    public function __invoke(PendingRequest $pendingRequest): PendingRequest
     {
         if ($pendingRequest->hasMockClient() === false) {
             return $pendingRequest;
@@ -40,10 +42,10 @@ class DetermineMockResponse implements RequestMiddleware
 
         // If the mock response is a valid instance, we will return it.
         // The middleware pipeline will recognise this and will set
-        // it as the "FakeResponse" on the request.
+        // it as the "FakeResponse" on the PendingRequest.
 
         if ($mockResponse instanceof MockResponse) {
-            return $mockResponse;
+            return $pendingRequest->setFakeResponse($mockResponse);
         }
 
         // However if the mock response is not valid because it is

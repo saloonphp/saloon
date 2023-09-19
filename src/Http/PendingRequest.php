@@ -14,18 +14,20 @@ use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\FakeResponse;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Contracts\Authenticator;
-use Saloon\Http\Middleware\MergeBody;
-use Saloon\Http\Middleware\MergeDelay;
 use Saloon\Contracts\Body\BodyRepository;
+use Saloon\Http\PendingRequest\MergeBody;
+use Saloon\Http\PendingRequest\MergeDelay;
 use Saloon\Http\Middleware\DelayMiddleware;
+use Saloon\Http\PendingRequest\BootPlugins;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Http\Middleware\ValidateProperties;
-use Saloon\Http\Middleware\AuthenticateRequest;
-use Saloon\Http\Middleware\DetermineMockResponse;
-use Saloon\Http\Middleware\MergeRequestProperties;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Traits\PendingRequest\ManagesPsrRequests;
+use Saloon\Http\PendingRequest\DetermineMockResponse;
+use Saloon\Http\PendingRequest\MergeRequestProperties;
+use Saloon\Http\PendingRequest\BootConnectorAndRequest;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
+use Saloon\Http\PendingRequest\AuthenticatePendingRequest;
 
 class PendingRequest
 {
@@ -74,7 +76,7 @@ class PendingRequest
     /**
      * Build up the request payload.
      *
-     * @throws \ReflectionException
+     * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
     public function __construct(Connector $connector, Request $request, MockClient $mockClient = null)
     {
@@ -92,108 +94,39 @@ class PendingRequest
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
         $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient();
 
-        // Next, we'll boot our plugin traits.
+        // Now, we'll register our global middleware and our mock response middleware.
+        // Registering these middleware first means that the mock client can set
+        // the fake response for every subsequent middleware.
 
-        $this->bootPlugins();
+        $this->middleware()->merge(Config::globalMiddleware());
+        $this->middleware()->onRequest(new DetermineMockResponse, 'determineMockResponse');
 
-        // Finally, we'll register and execute the middleware pipeline.
+        // Next, we'll boot our plugins. These plugins can add headers, config variables and
+        // even register their own middleware. We'll use a tap method to simply apply logic
+        // to the PendingRequest. After that, we will merge together our request properties
+        // like headers, config, middleware, body and delay, and we'll follow it up by
+        // invoking our authenticators. We'll do this here because when middleware is
+        // executed, the developer will have access to any headers added by the middleware.
 
-        $this->registerAndExecuteMiddleware();
-    }
+        $this
+            ->tap(new BootPlugins)
+            ->tap(new MergeRequestProperties)
+            ->tap(new MergeBody)
+            ->tap(new MergeDelay)
+            ->tap(new AuthenticatePendingRequest)
+            ->tap(new BootConnectorAndRequest);
 
-    /**
-     * Boot every plugin on the connector and request.
-     *
-     * @return $this
-     * @throws \ReflectionException
-     */
-    protected function bootPlugins(): static
-    {
-        $connector = $this->connector;
-        $request = $this->request;
+        // Now, we'll register some default middleware for validating the request properties and
+        // running the delay that should have been set by the user.
 
-        $connectorTraits = Helpers::classUsesRecursive($connector);
-        $requestTraits = Helpers::classUsesRecursive($request);
+        $this->middleware()
+            ->onRequest(new ValidateProperties, 'validateProperties')
+            ->onRequest(new DelayMiddleware, 'delayMiddleware');
 
-        foreach ($connectorTraits as $connectorTrait) {
-            Helpers::bootPlugin($this, $connector, $connectorTrait);
-        }
-
-        foreach ($requestTraits as $requestTrait) {
-            Helpers::bootPlugin($this, $request, $requestTrait);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Run the boot method on the connector and request.
-     *
-     * @return $this
-     */
-    protected function bootConnectorAndRequest(): static
-    {
-        // This method is not going to be part of a middleware because the
-        // users may wish to register middleware inside the boot methods.
-
-        $this->connector->boot($this);
-        $this->request->boot($this);
-
-        return $this;
-    }
-
-    /**
-     * Register and execute middleware
-     */
-    protected function registerAndExecuteMiddleware(): void
-    {
-        $middleware = $this->middleware();
-
-        // We'll start with our core middleware like merging request properties, merging the
-        // body, delay and also running authenticators on the request.
-
-        $middleware
-            ->onRequest(new MergeRequestProperties, 'mergeRequestProperties')
-            ->onRequest(new MergeBody, 'mergeBody')
-            ->onRequest(new MergeDelay, 'mergeDelay')
-            ->onRequest(new AuthenticateRequest, 'authenticateRequest')
-            ->onRequest(new DetermineMockResponse, 'determineMockResponse');
-
-        // Next, we'll merge in our "Global" middleware which can be middleware set by the
-        // user or set by Saloon's plugins like the Laravel Plugin. It's best that this
-        // middleware is run now because we want the user to still have an opportunity
-        // to overwrite anything applied by it.
-
-        $middleware->merge(Config::globalMiddleware());
-
-        // Now we'll "boot" the connector and request. This is a hook that can be run after
-        // the core middleware that allows you to add your own properties that are a higher
-        // priority than anything else.
-
-        $this->bootConnectorAndRequest();
-
-        // Now we'll merge the middleware added on the connector and the request. This
-        // middleware will have almost the final object to play with and overwrite if
-        // they desire.
-
-        $middleware
-            ->merge($this->connector->middleware())
-            ->merge($this->request->middleware());
-
-        // Next, we'll register our ValidateProperties middleware. This will validate
-        // any properties on the pending request like headers.
-
-        $middleware->onRequest(new ValidateProperties, 'validateProperties');
-
-        // Next, we'll delay the request if we need to. This needs to be as near to
-        // the end as possible to apply delay right before the request is sent.
-
-        $middleware->onRequest(new DelayMiddleware, 'delayMiddleware');
-
-        // Next, we will execute the request middleware pipeline which will
+        // Finally, we will execute the request middleware pipeline which will
         // process the middleware in the order we added it.
 
-        $middleware->executeRequestPipeline($this);
+        $this->middleware()->executeRequestPipeline($this);
     }
 
     /**
@@ -331,6 +264,26 @@ class PendingRequest
     }
 
     /**
+     * Check if the request is asynchronous
+     */
+    public function isAsynchronous(): bool
+    {
+        return $this->asynchronous;
+    }
+
+    /**
+     * Set if the request is going to be sent asynchronously
+     *
+     * @return $this
+     */
+    public function setAsynchronous(bool $asynchronous): static
+    {
+        $this->asynchronous = $asynchronous;
+
+        return $this;
+    }
+
+    /**
      * Get the response class
      *
      * @return class-string<\Saloon\Http\Response>
@@ -349,21 +302,13 @@ class PendingRequest
     }
 
     /**
-     * Check if the request is asynchronous
-     */
-    public function isAsynchronous(): bool
-    {
-        return $this->asynchronous;
-    }
-
-    /**
-     * Set if the request is going to be sent asynchronously
+     * Tap into the pending request
      *
      * @return $this
      */
-    public function setAsynchronous(bool $asynchronous): static
+    protected function tap(callable $callable): static
     {
-        $this->asynchronous = $asynchronous;
+        $callable($this);
 
         return $this;
     }
