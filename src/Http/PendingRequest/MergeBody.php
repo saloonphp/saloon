@@ -13,7 +13,7 @@ use Saloon\Repositories\Body\MultipartBodyRepository;
 class MergeBody
 {
     /**
-     * Register a request middleware
+     * Merge connector and request body
      *
      * @throws \Saloon\Exceptions\PendingRequestException
      */

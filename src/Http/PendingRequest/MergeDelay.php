@@ -9,7 +9,7 @@ use Saloon\Http\PendingRequest;
 class MergeDelay
 {
     /**
-     * Register a request middleware
+     * Merge connector and request delay
      */
     public function __invoke(PendingRequest $pendingRequest): PendingRequest
     {

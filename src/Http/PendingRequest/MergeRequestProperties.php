@@ -9,7 +9,7 @@ use Saloon\Http\PendingRequest;
 class MergeRequestProperties
 {
     /**
-     * Register a request middleware
+     * Merge connector and request properties (headers, query, config, middleware)
      */
     public function __invoke(PendingRequest $pendingRequest): PendingRequest
     {

@@ -21,7 +21,7 @@ class ValidateProperties implements RequestMiddleware
 
         foreach ($pendingRequest->headers()->all() as $key => $unused) {
             if (! is_string($key)) {
-                throw new InvalidHeaderException('One or more of the headers are invalid. Make sure to use the header name as the key. For example: \'Content-Type\' => \'application/json\'.');
+                throw new InvalidHeaderException('One or more of the headers are invalid. Make sure to use the header name as the key. For example: [\'Content-Type\' => \'application/json\'].');
             }
         }
     }
