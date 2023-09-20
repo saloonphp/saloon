@@ -115,13 +115,25 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
      *
      * @return ($key is null ? array<array-key, mixed> : mixed)
      */
-    public function get(string|int $key = null, mixed $default = null): mixed
+    public function all(string|int $key = null, mixed $default = null): mixed
     {
         if (is_null($key)) {
             return $this->data->get();
         }
 
         return $this->data->get($key, $default);
+    }
+
+    /**
+     * Get a specific key of the array
+     *
+     * Alias of `all()`.
+     *
+     * @return ($key is null ? array<array-key, mixed> : mixed)
+     */
+    public function get(string|int $key = null, mixed $default = null): mixed
+    {
+        return $this->all($key, $default);
     }
 
     /**

@@ -118,7 +118,10 @@ test('you can get all items', function () {
     $body->add('name', 'Sam');
     $body->add('superhero', 'Iron Man');
 
-    expect($body->get())->toEqual(['name' => 'Sam', 'superhero' => 'Iron Man']);
+    $allResults = ['name' => 'Sam', 'superhero' => 'Iron Man'];
+
+    expect($body->all())->toEqual($allResults);
+    expect($body->get())->toEqual($allResults);
 });
 
 test('you can merge items together into the body repository', function () {
