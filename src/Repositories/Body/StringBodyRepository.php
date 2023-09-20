@@ -43,9 +43,19 @@ class StringBodyRepository implements BodyRepository, Stringable
     /**
      * Retrieve all in the repository
      */
-    public function get(): ?string
+    public function all(): ?string
     {
         return $this->data;
+    }
+
+    /**
+     * Retrieve all in the repository
+     *
+     * Alias of `all()`.
+     */
+    public function get(): ?string
+    {
+        return $this->all();
     }
 
     /**

@@ -53,9 +53,21 @@ class StreamBodyRepository implements BodyRepository
      *
      * @return StreamInterface|resource|null
      */
-    public function get(): mixed
+    public function all(): mixed
     {
         return $this->stream;
+    }
+
+    /**
+     * Retrieve the stream from the repository
+     *
+     * Alias of `all()`.
+     *
+     * @return StreamInterface|resource|null
+     */
+    public function get(): mixed
+    {
+        return $this->all();
     }
 
     /**
