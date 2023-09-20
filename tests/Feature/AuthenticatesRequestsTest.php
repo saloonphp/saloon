@@ -1,14 +1,14 @@
 <?php
 
-use GuzzleHttp\Promise\FulfilledPromise;
-use GuzzleHttp\Psr7\HttpFactory;
+declare(strict_types=1);
+
 use GuzzleHttp\RequestOptions;
-use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
+use Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Promise\FulfilledPromise;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('you can provide digest authentication and guzzle will send it', function () {
     $connector = new TestConnector;
