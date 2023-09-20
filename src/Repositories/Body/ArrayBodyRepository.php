@@ -84,13 +84,26 @@ class ArrayBodyRepository implements BodyRepository, MergeableBody
      * @param array-key|null $key
      * @return ($key is null ? array<array-key, mixed> : mixed)
      */
-    public function get(string|int|null $key = null, mixed $default = null): mixed
+    public function all(string|int|null $key = null, mixed $default = null): mixed
     {
         if (is_null($key)) {
             return $this->data;
         }
 
         return $this->data[$key] ?? $default;
+    }
+
+    /**
+     * Get a specific key of the array
+     *
+     * Alias of `all()`.
+     *
+     * @param array-key|null $key
+     * @return ($key is null ? array<array-key, mixed> : mixed)
+     */
+    public function get(string|int|null $key = null, mixed $default = null): mixed
+    {
+        return $this->all($key, $default);
     }
 
     /**
