@@ -38,6 +38,8 @@ class DigestAuthenticator implements Authenticator
         // authentication. This will be replaced later in Saloon v3 with
         // a first-party implementation of digest authentication.
 
+        // See: https://docs.guzzlephp.org/en/stable/request-options.html#auth
+
         $pendingRequest->config()->add(RequestOptions::AUTH, [$this->username, $this->password, $this->digest]);
     }
 }
