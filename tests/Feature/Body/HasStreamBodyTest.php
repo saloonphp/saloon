@@ -12,7 +12,7 @@ use Saloon\Tests\Fixtures\Requests\HasStreamBodyRequest;
 test('the default body is loaded', function () {
     $request = new HasStreamBodyRequest;
 
-    expect($request->body()->get())->toBeResource();
+    expect($request->body()->all())->toBeResource();
 });
 
 test('the guzzle sender properly sends it', function () {

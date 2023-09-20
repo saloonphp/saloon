@@ -109,8 +109,6 @@ class Response
 
     /**
      * Get the original request that created the response.
-     *
-     * @deprecated Will be removed in Saloon v4. Use $response->getPendingRequest()->getRequest() instead.
      */
     public function getRequest(): Request
     {

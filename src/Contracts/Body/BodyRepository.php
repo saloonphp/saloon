@@ -17,16 +17,9 @@ interface BodyRepository
     public function set(mixed $value): static;
 
     /**
-     * Retrieve the raw data in the repository.
+     * Get the raw data in the repository.
      */
     public function all(): mixed;
-
-    /**
-     * Retrieve the raw data in the repository
-     *
-     * Alias of `all()`.
-     */
-    public function get(): mixed;
 
     /**
      * Determine if the repository is empty

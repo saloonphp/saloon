@@ -28,7 +28,7 @@ test('a mock response can have raw body data', function () {
     expect($response->headers()->all())->toEqual(['Content-Type' => 'application/json']);
     expect($response->status())->toEqual(200);
     expect($response->body())->toBeInstanceOf(StringBodyRepository::class);
-    expect($response->body()->get())->toEqual('xml');
+    expect($response->body()->all())->toEqual('xml');
 });
 
 test('a response can be a custom response class', function () {

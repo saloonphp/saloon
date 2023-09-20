@@ -50,8 +50,6 @@ class StreamBodyRepository implements BodyRepository
 
     /**
      * Retrieve the stream from the repository
-     *
-     * @return StreamInterface|resource|null
      */
     public function all(): mixed
     {
@@ -61,9 +59,7 @@ class StreamBodyRepository implements BodyRepository
     /**
      * Retrieve the stream from the repository
      *
-     * Alias of `all()`.
-     *
-     * @return StreamInterface|resource|null
+     * Alias of "all" method.
      */
     public function get(): mixed
     {
