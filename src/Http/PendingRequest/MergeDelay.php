@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Http\Middleware;
+namespace Saloon\Http\PendingRequest;
 
 use Saloon\Http\PendingRequest;
-use Saloon\Contracts\RequestMiddleware;
 
-class MergeDelay implements RequestMiddleware
+class MergeDelay
 {
     /**
-     * Register a request middleware
+     * Merge connector and request delay
      */
-    public function __invoke(PendingRequest $pendingRequest): void
+    public function __invoke(PendingRequest $pendingRequest): PendingRequest
     {
         $connector = $pendingRequest->getConnector();
         $request = $pendingRequest->getRequest();
@@ -22,5 +21,7 @@ class MergeDelay implements RequestMiddleware
         if ($request->delay()->isNotEmpty()) {
             $pendingRequest->delay()->set($request->delay()->get());
         }
+
+        return $pendingRequest;
     }
 }

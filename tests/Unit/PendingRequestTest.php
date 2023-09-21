@@ -49,7 +49,7 @@ test('the pending request validates properly formed headers', function () {
     ]);
 
     $this->expectException(InvalidHeaderException::class);
-    $this->expectExceptionMessage('One or more of the headers are invalid. Make sure to use the header name as the key. For example: \'Content-Type\' => \'application/json\'.');
+    $this->expectExceptionMessage('One or more of the headers are invalid. Make sure to use the header name as the key. For example: [\'Content-Type\' => \'application/json\'].');
 
     connector()->createPendingRequest($request);
 });
