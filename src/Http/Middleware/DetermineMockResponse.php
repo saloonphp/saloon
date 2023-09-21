@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Http\PendingRequest;
+namespace Saloon\Http\Middleware;
 
 use Saloon\Enums\PipeOrder;
 use Saloon\Http\Faking\Fixture;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\Middleware\RecordFixture;
+use Saloon\Contracts\RequestMiddleware;
 
-class DetermineMockResponse
+class DetermineMockResponse implements RequestMiddleware
 {
     /**
-     * Guess a mock response
+     * Check if a MockClient has been provided and guess the MockResponse based on the request.
      *
      * @throws \JsonException
      * @throws \Saloon\Exceptions\DuplicatePipeNameException
