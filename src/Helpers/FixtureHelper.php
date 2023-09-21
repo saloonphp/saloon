@@ -7,7 +7,7 @@ namespace Saloon\Helpers;
 /**
  * @internal
  */
-final class FixtureHelper
+class FixtureHelper
 {
     /**
      * Recursively replaces array attributes

@@ -79,18 +79,13 @@ class ArrayBodyRepository implements BodyRepository, MergeableBody
     }
 
     /**
-     * Get a specific key of the array
+     * Get the raw data in the repository.
      *
-     * @param array-key|null $key
-     * @return ($key is null ? array<array-key, mixed> : mixed)
+     * @return array<mixed, mixed>
      */
-    public function all(string|int|null $key = null, mixed $default = null): mixed
+    public function all(): array
     {
-        if (is_null($key)) {
-            return $this->data;
-        }
-
-        return $this->data[$key] ?? $default;
+        return $this->data;
     }
 
     /**
@@ -103,7 +98,11 @@ class ArrayBodyRepository implements BodyRepository, MergeableBody
      */
     public function get(string|int|null $key = null, mixed $default = null): mixed
     {
-        return $this->all($key, $default);
+        if (is_null($key)) {
+            return $this->all();
+        }
+
+        return $this->all()[$key] ?? $default;
     }
 
     /**

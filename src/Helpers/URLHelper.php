@@ -7,7 +7,7 @@ namespace Saloon\Helpers;
 /**
  * @internal
  */
-final class URLHelper
+class URLHelper
 {
     /**
      * Check if a URL matches a given pattern

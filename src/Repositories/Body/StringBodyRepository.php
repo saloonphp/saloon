@@ -49,16 +49,6 @@ class StringBodyRepository implements BodyRepository, Stringable
     }
 
     /**
-     * Retrieve all in the repository
-     *
-     * Alias of `all()`.
-     */
-    public function get(): ?string
-    {
-        return $this->all();
-    }
-
-    /**
      * Determine if the repository is empty
      */
     public function isEmpty(): bool
@@ -79,6 +69,6 @@ class StringBodyRepository implements BodyRepository, Stringable
      */
     public function __toString(): string
     {
-        return $this->get() ?? '';
+        return $this->all() ?? '';
     }
 }

@@ -16,7 +16,7 @@ use Saloon\Tests\Fixtures\Connectors\HasMultipartBodyConnector;
 test('the default body is loaded with the content type header', function () {
     $request = new HasMultipartBodyRequest();
 
-    expect($request->body()->get())->toEqual([
+    expect($request->body()->all())->toEqual([
         'nickname' => new MultipartValue('nickname', 'Sam', 'user.txt', ['X-Saloon' => 'Yee-haw!']),
     ]);
 
@@ -33,12 +33,12 @@ test('when both the connector and the request have the same request bodies they 
     $connector = new HasMultipartBodyConnector;
     $request = new HasMultipartBodyRequest;
 
-    expect($connector->body()->get())->toEqual([
+    expect($connector->body()->all())->toEqual([
         'nickname' => new MultipartValue('nickname', 'Gareth', 'user.txt', ['X-Saloon' => 'Yee-haw!']),
         'drink' => new MultipartValue('drink', 'Moonshine', 'moonshine.txt', ['X-My-Head' => 'Spinning!']),
     ]);
 
-    expect($request->body()->get())->toEqual([
+    expect($request->body()->all())->toEqual([
         'nickname' => new MultipartValue('nickname', 'Sam', 'user.txt', ['X-Saloon' => 'Yee-haw!']),
     ]);
 
@@ -49,7 +49,7 @@ test('when both the connector and the request have the same request bodies they 
 
     expect($pendingRequestBody)->toBeInstanceOf(MultipartBodyRepository::class);
 
-    expect($pendingRequestBody->get())->toEqual([
+    expect($pendingRequestBody->all())->toEqual([
         'nickname' => new MultipartValue('nickname', 'Sam', 'user.txt', ['X-Saloon' => 'Yee-haw!']),
         'drink' => new MultipartValue('drink', 'Moonshine', 'moonshine.txt', ['X-My-Head' => 'Spinning!']),
     ]);

@@ -111,29 +111,23 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
     }
 
     /**
-     * Get a specific key of the array
+     * Get the raw data in the repository.
      *
-     * @return ($key is null ? array<array-key, mixed> : mixed)
+     * @return array<\Saloon\Data\MultipartValue>
      */
-    public function all(string|int $key = null, mixed $default = null): mixed
+    public function all(): array
     {
-        if (is_null($key)) {
-            return $this->data->get();
-        }
-
-        return $this->data->get($key, $default);
+        return $this->data->all();
     }
 
     /**
      * Get a specific key of the array
      *
-     * Alias of `all()`.
-     *
-     * @return ($key is null ? array<array-key, mixed> : mixed)
+     * @param array-key $key
      */
-    public function get(string|int $key = null, mixed $default = null): mixed
+    public function get(string|int $key, mixed $default = null): MultipartValue
     {
-        return $this->all($key, $default);
+        return $this->data->get($key, $default);
     }
 
     /**
@@ -210,6 +204,6 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
             throw new BodyException('Unable to create a multipart body stream because the multipart body factory was not set.');
         }
 
-        return $this->multipartBodyFactory->create($streamFactory, (array)$this->get(), $this->getBoundary());
+        return $this->multipartBodyFactory->create($streamFactory, $this->all(), $this->getBoundary());
     }
 }
