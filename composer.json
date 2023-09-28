@@ -36,6 +36,9 @@
         "spatie/ray": "^1.33",
         "symfony/dom-crawler": "^6.0"
     },
+    "conflict": {
+        "sammyjo20/saloon": "*"
+    },
     "suggest": {
         "illuminate/collections": "Required for the response collect() method.",
         "symfony/dom-crawler": "Required for the response dom() method."
