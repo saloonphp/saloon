@@ -60,6 +60,8 @@ trait SendsRequests
             try {
                 $pendingRequest = $this->createPendingRequest($request, $mockClient);
 
+                // 🚀 ... 🪐  ... 💫
+
                 if ($pendingRequest->hasFakeResponse()) {
                     $response = $this->createFakeResponse($pendingRequest);
                 } else {
@@ -130,6 +132,8 @@ trait SendsRequests
             // We need to check if the Pending Request contains a fake response.
             // If it does, then we will create the fake response. Otherwise,
             // we'll send the request.
+
+            // 🚀 ... 🪐  ... 💫
 
             if ($pendingRequest->hasFakeResponse()) {
                 $requestPromise = $this->createFakeResponse($pendingRequest);
