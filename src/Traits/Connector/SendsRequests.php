@@ -27,7 +27,7 @@ trait SendsRequests
      * @throws \ReflectionException
      * @throws \Throwable
      */
-    public function send(Request $request, MockClient $mockClient = null, callable $handleRetry = null): Response
+    public function send(Request $request, MockClient $mockClient = null, callable $handleRetry = null, bool $useExponentialBackoff = false): Response
     {
         if (is_null($handleRetry)) {
             $handleRetry = static fn (): bool => true;
@@ -54,7 +54,10 @@ trait SendsRequests
             // the interval (if it has been provided)
 
             if ($attempts > 1) {
-                usleep($retryInterval * 1000);
+                $sleepTime = $useExponentialBackoff 
+                             ? $retryInterval * (2 ** ($attempts - 1)) * 1000
+                             : $retryInterval * 1000;
+                usleep($sleepTime);
             }
 
             try {
