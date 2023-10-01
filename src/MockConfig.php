@@ -51,16 +51,4 @@ final class MockConfig
     {
         return self::$throwOnMissingFixtures;
     }
-
-    /**
-     * Throw an exception if a request without a MockClient is made.
-     */
-    public static function preventStrayRequests(): void
-    {
-        Config::globalMiddleware()->onRequest(static function (PendingRequest $pendingRequest) {
-            if (! $pendingRequest->hasMockClient()) {
-                throw new StrayRequestException;
-            }
-        }, order: PipeOrder::LAST);
-    }
 }

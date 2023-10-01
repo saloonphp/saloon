@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Plugins;
 
+use GuzzleHttp\RequestOptions;
 use Saloon\Config;
 use Saloon\Http\PendingRequest;
 
@@ -15,8 +16,8 @@ trait HasTimeout
     public function bootHasTimeout(PendingRequest $pendingRequest): void
     {
         $pendingRequest->config()->merge([
-            'connect_timeout' => $this->getConnectTimeout(),
-            'timeout' => $this->getRequestTimeout(),
+            RequestOptions::CONNECT_TIMEOUT => $this->getConnectTimeout(),
+            RequestOptions::TIMEOUT => $this->getRequestTimeout(),
         ]);
     }
 
