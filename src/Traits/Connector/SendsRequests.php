@@ -27,7 +27,7 @@ trait SendsRequests
      * @throws \ReflectionException
      * @throws \Throwable
      */
-    public function send(Request $request, MockClient $mockClient = null, callable $handleRetry = null, bool $useExponentialBackoff = false): Response
+    public function send(Request $request, MockClient $mockClient = null, callable $handleRetry = null): Response
     {
         if (is_null($handleRetry)) {
             $handleRetry = static fn (): bool => true;
@@ -38,6 +38,7 @@ trait SendsRequests
         $maxTries = $request->tries ?? $this->tries ?? 1;
         $retryInterval = $request->retryInterval ?? $this->retryInterval ?? 0;
         $throwOnMaxTries = $request->throwOnMaxTries ?? $this->throwOnMaxTries ?? true;
+        $useExponentialBackoff = $request->useExponentialBackoff ?? $this->useExponentialBackoff ?? false;
 
         if ($maxTries <= 0) {
             $maxTries = 1;
@@ -161,11 +162,12 @@ trait SendsRequests
      * @throws \ReflectionException
      * @throws \Throwable
      */
-    public function sendAndRetry(Request $request, int $tries, int $interval = 0, callable $handleRetry = null, bool $throw = true, MockClient $mockClient = null): Response
+    public function sendAndRetry(Request $request, int $tries, int $interval = 0, callable $handleRetry = null, bool $throw = true, MockClient $mockClient = null, bool $useExponentialBackoff = false): Response
     {
         $request->tries = $tries;
         $request->retryInterval = $interval;
         $request->throwOnMaxTries = $throw;
+        $request->useExponentialBackoff = $useExponentialBackoff;
 
         return $this->send($request, $mockClient, $handleRetry);
     }
