@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon;
 
-use Saloon\Contracts\Sender;
 use Saloon\Enums\PipeOrder;
-use Saloon\Exceptions\StrayRequestException;
+use Saloon\Contracts\Sender;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Senders\GuzzleSender;
 use Saloon\Helpers\MiddlewarePipeline;
+use Saloon\Exceptions\StrayRequestException;
 
 final class Config
 {

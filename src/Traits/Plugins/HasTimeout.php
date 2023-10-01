@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Plugins;
 
-use GuzzleHttp\RequestOptions;
 use Saloon\Config;
+use GuzzleHttp\RequestOptions;
 use Saloon\Http\PendingRequest;
 
 trait HasTimeout
