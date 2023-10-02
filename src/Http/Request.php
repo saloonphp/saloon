@@ -12,6 +12,8 @@ use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
 use Saloon\Traits\HandlesPsrRequest;
 use Saloon\Traits\ManagesExceptions;
+use Saloon\Traits\Request\HasConnector;
+use Saloon\Http\Connectors\NullConnector;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\RequestProperties\HasTries;
 use Saloon\Traits\Responses\HasCustomResponses;
@@ -29,6 +31,7 @@ abstract class Request
     use HasMockClient;
     use Conditionable;
     use HasDebugging;
+    use HasConnector;
     use HasTries;
     use Bootable;
     use Makeable;
@@ -50,4 +53,12 @@ abstract class Request
      * Define the endpoint for the request.
      */
     abstract public function resolveEndpoint(): string;
+
+    /**
+     * Create a new connector instance.
+     */
+    protected function resolveConnector(): Connector
+    {
+        return new NullConnector;
+    }
 }

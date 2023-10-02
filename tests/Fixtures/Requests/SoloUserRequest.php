@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
-use Saloon\Http\SoloRequest;
+use Saloon\Http\Request;
 
-class SoloUserRequest extends SoloRequest
+class SoloUserRequest extends Request
 {
     /**
      * Define the HTTP method.
