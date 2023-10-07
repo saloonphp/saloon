@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Connector;
 
-use GuzzleHttp\Promise\Utils;
 use LogicException;
 use Saloon\Http\Pool;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
+use GuzzleHttp\Promise\Utils;
 use GuzzleHttp\Promise\Promise;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
