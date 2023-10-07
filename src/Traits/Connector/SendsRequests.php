@@ -8,6 +8,7 @@ use LogicException;
 use Saloon\Http\Pool;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
+use GuzzleHttp\Promise\Utils;
 use GuzzleHttp\Promise\Promise;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
@@ -126,7 +127,7 @@ trait SendsRequests
         // this is great because our middleware will only run right before
         // the request is sent.
 
-        return $promise = new Promise(function () use (&$promise, $request, $mockClient, $sender) {
+        return Utils::task(function () use ($request, $mockClient, $sender) {
             $pendingRequest = $this->createPendingRequest($request, $mockClient)->setAsynchronous(true);
 
             // We need to check if the Pending Request contains a fake response.
@@ -143,11 +144,7 @@ trait SendsRequests
 
             $requestPromise->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
 
-            // We'll resolve the promise's value with another promise.
-            // We will use promise chaining as Guzzle's will fulfill
-            // the request promise.
-
-            $promise->resolve($requestPromise);
+            return $requestPromise;
         });
     }
 
