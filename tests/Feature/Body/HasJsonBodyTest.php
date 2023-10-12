@@ -8,6 +8,7 @@ use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
 use Saloon\Exceptions\PendingRequestException;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Repositories\Body\JsonBodyRepository;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
@@ -36,6 +37,26 @@ test('the content-type header is set in the pending request', function () {
     expect($pendingRequest->headers()->all())->toEqual([
         'Accept' => 'application/json',
         'Content-Type' => 'application/json',
+    ]);
+});
+
+test('when just the connector has body the body will be sent', function () {
+    $connector = new HasJsonBodyConnector;
+    $request = new UserRequest;
+
+    expect($connector->body()->all())->toEqual([
+        'name' => 'Gareth',
+        'drink' => 'Moonshine',
+    ]);
+
+    $pendingRequest = $connector->createPendingRequest($request);
+    $pendingRequestBody = $pendingRequest->body();
+
+    expect($pendingRequestBody)->toBeInstanceOf(JsonBodyRepository::class);
+
+    expect($pendingRequestBody->all())->toEqual([
+        'name' => 'Gareth',
+        'drink' => 'Moonshine',
     ]);
 });
 
