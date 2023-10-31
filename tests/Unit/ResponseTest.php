@@ -153,6 +153,16 @@ test('the collect method will return a collection', function () {
     expect($response->collect('age'))->toBeEmpty();
 });
 
+test('the json method will empty array if body is empty', function () {
+    $mockClient = new MockClient([
+        MockResponse::make('', 404),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+
+    expect($response->json())->toBe([]);
+});
+
 test('the toPsrResponse method will return a guzzle response', function () {
     $mockClient = new MockClient([
         MockResponse::make(['name' => 'Sam', 'work' => 'Codepotato'], 500),
