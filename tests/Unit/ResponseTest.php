@@ -153,7 +153,7 @@ test('the collect method will return a collection', function () {
     expect($response->collect('age'))->toBeEmpty();
 });
 
-test('the json method will empty array if body is empty', function () {
+test('the json method will return empty array if body is empty', function () {
     $mockClient = new MockClient([
         MockResponse::make('', 404),
     ]);
