@@ -220,6 +220,7 @@ test('you can customise if saloon determines if a request has failed on a connec
     $mockClient = new MockClient([
         MockResponse::make(['message' => 'Success']),
         MockResponse::make(['message' => 'Error: Invalid Cowboy Hat']),
+        MockResponse::make(['message' => 'Not Authenticated'], 401),
     ]);
 
     $responseA = CustomFailHandlerConnector::make()->send(new UserRequest, $mockClient);
@@ -229,12 +230,17 @@ test('you can customise if saloon determines if a request has failed on a connec
     $responseB = CustomFailHandlerConnector::make()->send(new UserRequest, $mockClient);
 
     expect($responseB->failed())->toBeTrue();
+
+    $responseC = CustomFailHandlerConnector::make()->send(new UserRequest, $mockClient);
+
+    expect($responseC->failed())->toBeFalse();
 });
 
 test('you can customise if saloon determines if a request has failed on a request', function () {
     $mockClient = new MockClient([
         MockResponse::make(['message' => 'Success']),
         MockResponse::make(['message' => 'Yee-naw: Horse Not Found']),
+        MockResponse::make(['message' => 'Not Authenticated'], 401),
     ]);
 
     $responseA = TestConnector::make()->send(new CustomFailHandlerRequest, $mockClient);
@@ -244,6 +250,10 @@ test('you can customise if saloon determines if a request has failed on a reques
     $responseB = TestConnector::make()->send(new CustomFailHandlerRequest, $mockClient);
 
     expect($responseB->failed())->toBeTrue();
+
+    $responseC = TestConnector::make()->send(new CustomFailHandlerRequest, $mockClient);
+
+    expect($responseC->failed())->toBeFalse();
 });
 
 test('the sender will throw a FatalRequestException if it cannot connect to a site using synchronous', function (string $url) {

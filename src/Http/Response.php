@@ -336,10 +336,11 @@ class Response
     {
         $pendingRequest = $this->getPendingRequest();
 
-        $hasRequestFailed = $pendingRequest->getRequest()->hasRequestFailed($this) || $pendingRequest->getConnector()->hasRequestFailed($this);
+        $hasRequestFailedAccordingToRequest = $pendingRequest->getRequest()->hasRequestFailed($this);
+        $hasRequestFailedAccordingToConnector = $pendingRequest->getConnector()->hasRequestFailed($this);
 
-        if ($hasRequestFailed === true) {
-            return true;
+        if ($hasRequestFailedAccordingToRequest !== null || $hasRequestFailedAccordingToConnector !== null) {
+            return $hasRequestFailedAccordingToRequest || $hasRequestFailedAccordingToConnector;
         }
 
         return $this->serverError() || $this->clientError();
