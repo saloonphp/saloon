@@ -50,6 +50,18 @@ test('you can provide default scopes that will be applied to every authorization
     );
 });
 
+test('you can get authorization url without setting valid scopes', function () {
+    $connector = new OAuth2Connector;
+
+    $connector->oauthConfig()->setDefaultScopes(['', null]);
+
+    $url = $connector->getAuthorizationUrl([], 'my-state');
+
+    expect($url)->toEqual(
+        'https://oauth.saloon.dev/authorize?response_type=code&client_id=client-id&redirect_uri=https%3A%2F%2Fmy-app.saloon.dev%2Fauth%2Fcallback&state=my-state'
+    );
+});
+
 test('default state is generated automatically with every authorization url if state is not defined', function () {
     $connector = new OAuth2Connector;
 

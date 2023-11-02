@@ -46,14 +46,14 @@ trait AuthorizationCodeGrant
 
         $this->state = $state ?? StringHelpers::random(32);
 
-        $queryParameters = [
+        $queryParameters = array_filter([
             'response_type' => 'code',
-            'scope' => implode($scopeSeparator, array_merge($defaultScopes, $scopes)),
+            'scope' => implode($scopeSeparator, array_filter(array_merge($defaultScopes, $scopes))),
             'client_id' => $clientId,
             'redirect_uri' => $redirectUri,
             'state' => $this->state,
             ...$additionalQueryParameters,
-        ];
+        ]);
 
         $query = http_build_query($queryParameters, '', '&', PHP_QUERY_RFC3986);
         $query = trim($query, '?&');
