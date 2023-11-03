@@ -170,9 +170,10 @@ class GuzzleSender implements Sender
 
                     $response = $this->createResponse($guzzleResponse, $pendingRequest, $psrRequest, $guzzleException);
 
-                    // Throw the exception our way
+                    // Throw the exception our way if there is an exception.
+                    // Otherwise we'll return the response.
 
-                    throw $response->toException();
+                    return ($exception = $response->toException()) ? throw $exception : $response;
                 }
             );
     }

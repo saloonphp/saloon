@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Response;
-use Saloon\Http\PendingRequest;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Promise\PromiseInterface;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Exception\ConnectException;
-use Saloon\Exceptions\Request\RequestException;
-use Saloon\Tests\Fixtures\Requests\UserRequest;
-use Saloon\Tests\Fixtures\Requests\ErrorRequest;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Http\PendingRequest;
+use Saloon\Http\Response;
 use Saloon\Tests\Fixtures\Connectors\InvalidConnectionConnector;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Tests\Fixtures\Requests\ErrorRequestThatShouldBeTreatedAsSuccessful;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('you can create a pool on a connector', function () {
     $connector = new TestConnector;
@@ -87,6 +88,29 @@ test('if a pool has a request that cannot connect it will be caught in the handl
     $promise->wait();
 
     expect($count)->toEqual(5);
+});
+
+test('if a pool has a failed response that should be treated as a successful response', function () {
+    $count = 0;
+
+    $pool = (new TestConnector)->pool([
+        new ErrorRequestThatShouldBeTreatedAsSuccessful,
+    ]);
+
+    $pool->withResponseHandler(function (Response $response) use (&$count) {
+        expect($response)->toBeInstanceOf(Response::class);
+        expect($response->status())->toBe(404);
+
+        $count++;
+    });
+
+    $promise = $pool->send();
+
+    expect($promise)->toBeInstanceOf(PromiseInterface::class);
+
+    $promise->wait();
+
+    expect($count)->toEqual(1);
 });
 
 test('you can use pool with a mock client added and it wont send real requests', function () {
