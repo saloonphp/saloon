@@ -118,8 +118,12 @@ trait SendsRequests
     /**
      * Send a request asynchronously
      */
-    public function sendAsync(Request $request, MockClient $mockClient = null): PromiseInterface
+    public function sendAsync(Request $request, MockClient $mockClient = null, callable $handleRetry = null, int $attempt = 1): PromiseInterface
     {
+        if (is_null($handleRetry)) {
+            $handleRetry = static fn (): bool => true;
+        }
+
         $sender = $this->sender();
 
         // We'll wrap the following logic in our own Promise which means we won't
@@ -127,7 +131,7 @@ trait SendsRequests
         // this is great because our middleware will only run right before
         // the request is sent.
 
-        return Utils::task(function () use ($request, $mockClient, $sender) {
+        return Utils::task(function () use ($request, $mockClient, $sender, $handleRetry, $attempt) {
             $pendingRequest = $this->createPendingRequest($request, $mockClient)->setAsynchronous(true);
 
             // We need to check if the Pending Request contains a fake response.
@@ -142,9 +146,61 @@ trait SendsRequests
                 $requestPromise = $sender->sendAsync($pendingRequest);
             }
 
-            $requestPromise->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
+            $maxTries = $request->tries ?? $this->tries ?? 1;
+            $retryInterval = $request->retryInterval ?? $this->retryInterval ?? 0;
+            $throwOnMaxTries = $request->throwOnMaxTries ?? $this->throwOnMaxTries ?? true;
 
-            return $requestPromise;
+            if ($maxTries <= 0) {
+                $maxTries = 1;
+            }
+
+            if ($retryInterval <= 0) {
+                $retryInterval = 0;
+            }
+
+            return $requestPromise->then(function (Response $response) use ($pendingRequest) {
+                return $pendingRequest->executeResponsePipeline($response);
+            }, function (FatalRequestException|RequestException $exception) use ($request, $pendingRequest, $mockClient, $maxTries, $retryInterval, $throwOnMaxTries, $handleRetry, $attempt) {
+                // We'll attempt to get the response from the exception. We'll only be able
+                // to do this if the exception was a "RequestException".
+
+                $exceptionResponse = $exception instanceof RequestException ? $exception->getResponse() : null;
+
+                if ($exceptionResponse) {
+                    $pendingRequest->executeResponsePipeline($exceptionResponse);
+                }
+
+                if ($maxTries <= 1) {
+                    return $exceptionResponse;
+                }
+
+                // If we've reached our max attempts - we won't try again, but we'll either
+                // return the last response made or just throw an exception.
+
+                if ($attempt === $maxTries) {
+                    return isset($exceptionResponse) && $throwOnMaxTries === false ? $exceptionResponse : throw $exception;
+                }
+
+                // Now we'll run the "handleRetry" method on both the connector and the request.
+                // This method will return a boolean. If just one of the objects returns false
+                // then we won't handle the retry.
+
+                $allowRetry = $handleRetry($exception, $request)
+                    && $request->handleRetry($exception, $request)
+                    && $this->handleRetry($exception, $request);
+
+                // If we cannot retry we will simply return the response or throw the exception.
+
+                if ($allowRetry === false) {
+                    return isset($exceptionResponse) && $throwOnMaxTries === false ? $exceptionResponse : throw $exception;
+                }
+
+                if ($attempt + 1 > 1) {
+                    usleep($retryInterval * 1000);
+                }
+
+                return $this->sendAsync($request, $mockClient, $handleRetry, $attempt + 1);
+            });
         });
     }
 
