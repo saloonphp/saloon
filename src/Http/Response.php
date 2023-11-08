@@ -191,7 +191,7 @@ class Response
     public function json(string|int|null $key = null, mixed $default = null): mixed
     {
         if (! isset($this->decodedJson)) {
-            $this->decodedJson = json_decode($this->body(), true, 512, JSON_THROW_ON_ERROR);
+            $this->decodedJson = json_decode($this->body() ?: '[]', true, 512, JSON_THROW_ON_ERROR);
         }
 
         if (is_null($key)) {
