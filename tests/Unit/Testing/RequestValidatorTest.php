@@ -20,6 +20,15 @@ test('you can validate a request using the `instance of` check', function () {
     expect($validator->validate())->toBeTrue();
 });
 
+test('you can validate a request using the `endpoints starts with` check', function () {
+    $request = connector()->createPendingRequest(new HasJsonBodyRequest());
+
+    $validator = RequestValidator::for($request)
+        ->endpointStartsWith('/api');
+
+    expect($validator->validate())->toBeTrue();
+});
+
 test('you can validate a request using the `endpoints ends with` check', function () {
     $request = connector()->createPendingRequest(new HasJsonBodyRequest());
 

@@ -11,6 +11,7 @@ use Saloon\Helpers\Testing\Checks\BodyEqualsCheck;
 use Saloon\Helpers\Testing\Checks\InstanceOfCheck;
 use Saloon\Helpers\Testing\Checks\QueryEqualsCheck;
 use Saloon\Helpers\Testing\Checks\EndpointEndsWithCheck;
+use Saloon\Helpers\Testing\Checks\EndpointStartsWithCheck;
 
 class RequestValidator
 {
@@ -35,6 +36,18 @@ class RequestValidator
         $check = InstanceOfCheck::make(
             $this->request,
             $class
+        );
+
+        $this->checks[] = $check;
+
+        return $this;
+    }
+
+    public function endpointStartsWith(string $url): self
+    {
+        $check = EndpointStartsWithCheck::make(
+            $this->request,
+            $url
         );
 
         $this->checks[] = $check;
