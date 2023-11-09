@@ -26,6 +26,15 @@ test('you can validate a request using the `endpoints ends with` check', functio
     expect($validator->validate())->toBeTrue();
 });
 
+test('you can validate a request using the `body equals` check', function () {
+    $request = connector()->createPendingRequest(new HasJsonBodyRequest());
+
+    $validator = RequestValidator::for($request)
+        ->bodyEquals('name', 'Sam');
+
+    expect($validator->validate())->toBeTrue();
+});
+
 test('you can get an array of errors', function () {
     $request = connector()->createPendingRequest(new HasJsonBodyRequest());
 

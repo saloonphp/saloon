@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers\Testing;
 
+use Closure;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Validators\ValidatorCheck;
+use Saloon\Helpers\Testing\Checks\BodyEqualsCheck;
 use Saloon\Helpers\Testing\Checks\InstanceOfCheck;
 use Saloon\Helpers\Testing\Checks\EndpointEndsWithCheck;
 
@@ -44,6 +46,19 @@ class RequestValidator
         $check = EndpointEndsWithCheck::make(
             $url,
             $this->request
+        );
+
+        $this->checks[] = $check;
+
+        return $this;
+    }
+
+    public function bodyEquals(string|Closure $path, mixed $expected): self
+    {
+        $check = BodyEqualsCheck::make(
+            $this->request,
+            $path,
+            $expected
         );
 
         $this->checks[] = $check;
