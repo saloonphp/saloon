@@ -6,7 +6,7 @@ namespace Saloon\Helpers\Testing\Checks;
 
 use Saloon\Traits\Makeable;
 use Saloon\Http\PendingRequest;
-use Saloon\Contracts\Validators\ValidatorCheck;
+use Saloon\Contracts\Testing\ValidatorCheck;
 
 class InstanceOfCheck implements ValidatorCheck
 {

@@ -7,7 +7,7 @@ namespace Saloon\Helpers\Testing\Checks;
 use Closure;
 use Saloon\Traits\Makeable;
 use Saloon\Http\PendingRequest;
-use Saloon\Contracts\Validators\ValidatorCheck;
+use Saloon\Contracts\Testing\ValidatorCheck;
 
 class EndpointContainsCheck implements ValidatorCheck
 {

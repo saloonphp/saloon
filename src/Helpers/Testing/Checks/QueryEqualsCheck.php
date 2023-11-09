@@ -8,7 +8,7 @@ use Closure;
 use Illuminate\Support\Arr;
 use Saloon\Traits\Makeable;
 use Saloon\Http\PendingRequest;
-use Saloon\Contracts\Validators\ValidatorCheck;
+use Saloon\Contracts\Testing\ValidatorCheck;
 
 class QueryEqualsCheck implements ValidatorCheck
 {

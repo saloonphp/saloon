@@ -6,7 +6,7 @@ namespace Saloon\Helpers\Testing;
 
 use Closure;
 use Saloon\Http\PendingRequest;
-use Saloon\Contracts\Validators\ValidatorCheck;
+use Saloon\Contracts\Testing\ValidatorCheck;
 use Saloon\Helpers\Testing\Checks\BodyEqualsCheck;
 use Saloon\Helpers\Testing\Checks\InstanceOfCheck;
 use Saloon\Helpers\Testing\Checks\QueryEqualsCheck;
