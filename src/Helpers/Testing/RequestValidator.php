@@ -10,6 +10,7 @@ use Saloon\Contracts\Validators\ValidatorCheck;
 use Saloon\Helpers\Testing\Checks\BodyEqualsCheck;
 use Saloon\Helpers\Testing\Checks\InstanceOfCheck;
 use Saloon\Helpers\Testing\Checks\QueryEqualsCheck;
+use Saloon\Helpers\Testing\Checks\EndpointContainsCheck;
 use Saloon\Helpers\Testing\Checks\EndpointEndsWithCheck;
 use Saloon\Helpers\Testing\Checks\EndpointStartsWithCheck;
 
@@ -31,11 +32,11 @@ class RequestValidator
         return new static($request);
     }
 
-    public function instanceOf(string $class): self
+    public function instanceOf(string $expected): self
     {
         $check = InstanceOfCheck::make(
             $this->request,
-            $class
+            $expected
         );
 
         $this->checks[] = $check;
@@ -43,11 +44,11 @@ class RequestValidator
         return $this;
     }
 
-    public function endpointStartsWith(string $url): self
+    public function endpointStartsWith(string $expected): self
     {
         $check = EndpointStartsWithCheck::make(
             $this->request,
-            $url
+            $expected
         );
 
         $this->checks[] = $check;
@@ -55,11 +56,23 @@ class RequestValidator
         return $this;
     }
 
-    public function endpointEndsWith(string $url): self
+    public function endpointEndsWith(string $expected): self
     {
         $check = EndpointEndsWithCheck::make(
             $this->request,
-            $url
+            $expected
+        );
+
+        $this->checks[] = $check;
+
+        return $this;
+    }
+
+    public function endpointContains(Closure|string $expected): self
+    {
+        $check = EndpointContainsCheck::make(
+            $this->request,
+            $expected
         );
 
         $this->checks[] = $check;

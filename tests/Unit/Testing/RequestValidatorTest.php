@@ -38,6 +38,15 @@ test('you can validate a request using the `endpoints ends with` check', functio
     expect($validator->validate())->toBeTrue();
 });
 
+test('you can validate a request using the `endpoints contains` check', function () {
+    $request = connector()->createPendingRequest(new HasJsonBodyRequest());
+
+    $validator = RequestValidator::for($request)
+        ->endpointContains('api/us');
+
+    expect($validator->validate())->toBeTrue();
+});
+
 test('you can validate a request using the `body equals` check using path', function () {
     $request = connector()->createPendingRequest(new HasJsonBodyRequest());
 
