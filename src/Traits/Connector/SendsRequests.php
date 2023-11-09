@@ -74,15 +74,7 @@ trait SendsRequests
 
                 $response = $pendingRequest->executeResponsePipeline($response);
 
-                // We'll check if our tries is greater than one. If it is, then we will
-                // force an exception to be thrown if the request was unsuccessful.
-                // This will then force our catch handler to retry the request.
-
-                if ($maxTries > 1) {
-                    $response->throw();
-                }
-
-                return $response;
+                return $response->throw();
             } catch (FatalRequestException|RequestException $exception) {
                 // We'll attempt to get the response from the exception. We'll only be able
                 // to do this if the exception was a "RequestException".

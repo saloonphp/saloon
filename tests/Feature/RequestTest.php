@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Response;
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\Http\PendingRequest;
+use Saloon\Http\Response;
 use Saloon\Http\Senders\GuzzleSender;
-use Saloon\Tests\Fixtures\Requests\UserRequest;
-use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Requests\ErrorRequest;
+use Saloon\Tests\Fixtures\Requests\ErrorRequestThatShouldBeTreatedAsSuccessful;
 use Saloon\Tests\Fixtures\Requests\HasConnectorUserRequest;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 
 test('a request can be made successfully', function () {
     $connector = new TestConnector();
@@ -26,6 +28,20 @@ test('a request can be made successfully', function () {
         'actual_name' => 'Sam',
         'twitter' => '@carre_sam',
     ]);
+});
+
+test('a request can throw failed response exception', function () {
+    $exception = null;
+
+    try {
+        (new TestConnector())->send(new ErrorRequest);
+    } catch (RequestException $e) {
+        $exception = $e;
+    }
+
+    expect($exception)->not->toBeNull();
+    expect($exception->getResponse())->toBeInstanceOf(Response::class);
+    expect($exception->getResponse()->status())->toEqual(500);
 });
 
 test('a request can handle an exception properly', function () {
@@ -56,4 +72,11 @@ test('a request with HasConnector can be sent individually', function () {
         'actual_name' => 'Sam',
         'twitter' => '@carre_sam',
     ]);
+});
+
+test('a failed response that should be treated as a successful response', function () {
+    $response = (new TestConnector)->send(new ErrorRequestThatShouldBeTreatedAsSuccessful);
+
+    expect($response)->toBeInstanceOf(Response::class);
+    expect($response->status())->toEqual(404);
 });

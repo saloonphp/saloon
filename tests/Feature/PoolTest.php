@@ -91,17 +91,25 @@ test('if a pool has a request that cannot connect it will be caught in the handl
 });
 
 test('if a pool has a failed response that should be treated as a successful response', function () {
-    $count = 0;
+    $responseCount = 0;
+    $exceptionCount = 0;
 
     $pool = (new TestConnector)->pool([
         new ErrorRequestThatShouldBeTreatedAsSuccessful,
     ]);
 
-    $pool->withResponseHandler(function (Response $response) use (&$count) {
+    $pool->withResponseHandler(function (Response $response) use (&$responseCount) {
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->status())->toBe(404);
 
-        $count++;
+        $responseCount++;
+    })->withExceptionHandler(function (RequestException $exception) use (&$exceptionCount) {
+        $response = $exception->getResponse();
+
+        expect($response)->toBeInstanceOf(Response::class);
+        expect($response->status())->toBe(404);
+
+        $exceptionCount++;
     });
 
     $promise = $pool->send();
@@ -110,7 +118,8 @@ test('if a pool has a failed response that should be treated as a successful res
 
     $promise->wait();
 
-    expect($count)->toEqual(1);
+    expect($responseCount)->toEqual(1);
+    expect($exceptionCount)->toEqual(0);
 });
 
 test('you can use pool with a mock client added and it wont send real requests', function () {
