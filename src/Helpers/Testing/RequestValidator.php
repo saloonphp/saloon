@@ -7,6 +7,7 @@ namespace Saloon\Helpers\Testing;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Validators\ValidatorCheck;
 use Saloon\Helpers\Testing\Checks\InstanceOfCheck;
+use Saloon\Helpers\Testing\Checks\EndpointEndsWithCheck;
 
 class RequestValidator
 {
@@ -38,6 +39,18 @@ class RequestValidator
         return $this;
     }
 
+    public function endpointEndsWith(string $url): self
+    {
+        $check = EndpointEndsWithCheck::make(
+            $url,
+            $this->request
+        );
+
+        $this->checks[] = $check;
+
+        return $this;
+    }
+
     public function validate(): bool
     {
         return collect($this->checks)
@@ -47,7 +60,7 @@ class RequestValidator
     public function errors(): array
     {
         return collect($this->checks)
-            ->filter(fn (ValidatorCheck $check) => $check->valid())
+            ->filter(fn (ValidatorCheck $check) => ! $check->valid())
             ->map(fn (ValidatorCheck $check) => $check->message())
             ->toArray();
     }
