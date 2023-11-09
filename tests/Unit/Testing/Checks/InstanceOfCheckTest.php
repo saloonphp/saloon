@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Tests\Unit\Validator\Checks;
 
 use Saloon\Tests\Fixtures\Requests\UserRequest;
-use Saloon\Helpers\Validators\Checks\InstanceOfCheck;
+use Saloon\Helpers\Testing\Checks\InstanceOfCheck;
 use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
 
 test('you can validate if a given request matches the expected instance', function () {

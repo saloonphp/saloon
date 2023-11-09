@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Helpers\Validators\Checks;
+namespace Saloon\Helpers\Testing\Checks;
 
 use Saloon\Traits\Makeable;
 use Saloon\Http\PendingRequest;

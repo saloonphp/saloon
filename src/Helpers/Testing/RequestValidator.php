@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Helpers\Validators;
+namespace Saloon\Helpers\Testing;
 
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Validators\ValidatorCheck;
-use Saloon\Helpers\Validators\Checks\InstanceOfCheck;
+use Saloon\Helpers\Testing\Checks\InstanceOfCheck;
 
 class RequestValidator
 {
