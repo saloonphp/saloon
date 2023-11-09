@@ -10,7 +10,7 @@ use Saloon\Traits\Makeable;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Validators\ValidatorCheck;
 
-class BodyEqualsCheck implements ValidatorCheck
+class QueryEqualsCheck implements ValidatorCheck
 {
     use Makeable;
 
@@ -20,17 +20,17 @@ class BodyEqualsCheck implements ValidatorCheck
 
     public function valid(): bool
     {
-        $body = json_decode((string) $this->actual->body(), true);
+        $query = $this->actual->query();
 
         if ($this->path instanceof Closure) {
-            return ($this->path)($body);
+            return ($this->path)($query);
         }
 
-        return Arr::get($body, $this->path) === $this->expected;
+        return Arr::get($query->all(), $this->path) === $this->expected;
     }
 
     public function message(): string
     {
-        return 'The body did not contain the expected value';
+        return 'The query parameters did not contain the expected value';
     }
 }

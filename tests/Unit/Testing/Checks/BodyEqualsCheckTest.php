@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Unit\Testing\Checks;
 
-use Saloon\Http\PendingRequest;
 use Saloon\Helpers\Testing\Checks\BodyEqualsCheck;
 use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
 
@@ -13,7 +12,7 @@ test('you can validate body using a closure returning true', function () {
 
     $check = BodyEqualsCheck::make(
         $actual,
-        fn (PendingRequest $request) => true
+        fn (array $request) => true
     );
 
     expect($check->valid())->toBeTrue();
@@ -24,7 +23,7 @@ test('you can validate body using a closure returning false', function () {
 
     $check = BodyEqualsCheck::make(
         $actual,
-        fn (PendingRequest $request) => false
+        fn (array $request) => false
     );
 
     expect($check->valid())->toBeFalse();

@@ -9,6 +9,7 @@ use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Validators\ValidatorCheck;
 use Saloon\Helpers\Testing\Checks\BodyEqualsCheck;
 use Saloon\Helpers\Testing\Checks\InstanceOfCheck;
+use Saloon\Helpers\Testing\Checks\QueryEqualsCheck;
 use Saloon\Helpers\Testing\Checks\EndpointEndsWithCheck;
 
 class RequestValidator
@@ -53,9 +54,22 @@ class RequestValidator
         return $this;
     }
 
-    public function bodyEquals(string|Closure $path, mixed $expected): self
+    public function bodyEquals(string|Closure $path, mixed $expected = null): self
     {
         $check = BodyEqualsCheck::make(
+            $this->request,
+            $path,
+            $expected
+        );
+
+        $this->checks[] = $check;
+
+        return $this;
+    }
+
+    public function queryEquals(string|Closure $path, mixed $expected = null): self
+    {
+        $check = QueryEqualsCheck::make(
             $this->request,
             $path,
             $expected
