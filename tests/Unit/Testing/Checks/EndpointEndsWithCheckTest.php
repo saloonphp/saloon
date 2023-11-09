@@ -11,8 +11,8 @@ test('you can validate if a given request ends with the expected url', function 
     $actual = connector()->createPendingRequest(new HasJsonBodyRequest());
 
     $check = EndpointEndsWithCheck::make(
-        '/user',
-        $actual
+        $actual,
+        '/user'
     );
 
     expect($check->valid())->toBeTrue();
@@ -22,8 +22,8 @@ test('you can validate if a given request does not end with the expected url', f
     $actual = connector()->createPendingRequest(new HasJsonBodyRequest());
 
     $check = EndpointEndsWithCheck::make(
+        $actual,
         '/users',
-        $actual
     );
 
     expect($check->valid())->toBeFalse();

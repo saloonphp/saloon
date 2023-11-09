@@ -12,7 +12,7 @@ class EndpointEndsWithCheck implements ValidatorCheck
 {
     use Makeable;
 
-    public function __construct(protected string $expected, protected PendingRequest $actual)
+    public function __construct(protected PendingRequest $actual, protected string $expected)
     {
 
     }

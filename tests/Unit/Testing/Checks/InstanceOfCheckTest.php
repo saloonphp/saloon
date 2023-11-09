@@ -12,8 +12,8 @@ test('you can validate if a given request matches the expected instance', functi
     $actual = connector()->createPendingRequest(new HasJsonBodyRequest());
 
     $check = InstanceOfCheck::make(
-        HasJsonBodyRequest::class,
-        $actual
+        $actual,
+        HasJsonBodyRequest::class
     );
 
     expect($check->valid())->toBeTrue();
@@ -23,8 +23,8 @@ test('you can validate if a given request does not match the expected instance',
     $actual = connector()->createPendingRequest(new HasJsonBodyRequest());
 
     $check = InstanceOfCheck::make(
-        UserRequest::class,
-        $actual
+        $actual,
+        UserRequest::class
     );
 
     expect($check->valid())->toBeFalse();

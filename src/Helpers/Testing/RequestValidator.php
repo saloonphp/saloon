@@ -33,8 +33,8 @@ class RequestValidator
     public function instanceOf(string $class): self
     {
         $check = InstanceOfCheck::make(
-            $class,
-            $this->request
+            $this->request,
+            $class
         );
 
         $this->checks[] = $check;
@@ -45,8 +45,8 @@ class RequestValidator
     public function endpointEndsWith(string $url): self
     {
         $check = EndpointEndsWithCheck::make(
-            $url,
-            $this->request
+            $this->request,
+            $url
         );
 
         $this->checks[] = $check;
