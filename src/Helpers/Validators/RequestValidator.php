@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers\Validators;
 
-use Saloon\Http\Request;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Validators\ValidatorCheck;
 use Saloon\Helpers\Validators\Checks\InstanceOfCheck;
@@ -17,19 +16,14 @@ class RequestValidator
      */
     protected array $checks = [];
 
-    public function __construct(protected Request $request)
+    public function __construct(protected PendingRequest $request)
     {
 
     }
 
-    public static function for(Request $request): self
+    public static function for(PendingRequest $request): self
     {
         return new static($request);
-    }
-
-    public static function forPendingRequest(PendingRequest $request): self
-    {
-        return new static($request->getRequest());
     }
 
     public function instanceOf(string $class): self
@@ -46,7 +40,8 @@ class RequestValidator
 
     public function validate(): bool
     {
-        return collect($this->checks)->every(fn (ValidatorCheck $check) => $check->valid());
+        return collect($this->checks)
+            ->every(fn (ValidatorCheck $check) => $check->valid());
     }
 
     public function errors(): array

@@ -9,7 +9,7 @@ use Saloon\Helpers\Validators\Checks\InstanceOfCheck;
 use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
 
 test('you can validate if a given request matches the expected instance', function () {
-    $actual = new HasJsonBodyRequest();
+    $actual = connector()->createPendingRequest(new HasJsonBodyRequest());
 
     $check = InstanceOfCheck::make(
         HasJsonBodyRequest::class,
@@ -20,7 +20,7 @@ test('you can validate if a given request matches the expected instance', functi
 });
 
 test('you can validate if a given request does not match the expected instance', function () {
-    $actual = new HasJsonBodyRequest();
+    $actual = connector()->createPendingRequest(new HasJsonBodyRequest());
 
     $check = InstanceOfCheck::make(
         UserRequest::class,
