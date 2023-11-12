@@ -687,3 +687,13 @@ test('you can define regex patterns that should be used to replace the body in f
         'twitter' => '**REDACTED-TWITTER**',
     ], JSON_THROW_ON_ERROR));
 });
+
+test('fixtures are still recorded on the first request', function () {
+    $mockClient = new MockClient([
+        MockResponse::fixture('user'), // Test Exact Route
+    ]);
+
+    connector()->send(new UserRequest, $mockClient);
+
+    $mockClient->assertSent(UserRequest::class);
+});
