@@ -19,6 +19,7 @@ use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Mocking\RegexUserFixture;
 use Saloon\Tests\Fixtures\Mocking\SuperheroFixture;
+use Saloon\Tests\Fixtures\Connectors\HeaderConnector;
 use Saloon\Tests\Fixtures\Mocking\MissingNameFixture;
 use Saloon\Tests\Fixtures\Requests\AlwaysThrowRequest;
 use Saloon\Tests\Fixtures\Mocking\CallableMockResponse;
@@ -738,4 +739,17 @@ test('fixtures are still recorded on the first request', function () {
     connector()->send(new UserRequest, $mockClient);
 
     $mockClient->assertSent(UserRequest::class);
+});
+
+test('a mocked request has the headers from the connector', function () {
+    $mockClient = new MockClient([
+        UserRequest::class => MockResponse::make()
+    ]);
+
+    $connector = new HeaderConnector;
+    $connector->withMockClient($mockClient);
+
+    $responseA = $connector->send(new UserRequest);
+
+    expect($responseA->getPsrRequest()->getHeader('X-Connector-Header'))->toBe(['Sam']);
 });

@@ -6,6 +6,7 @@ namespace Saloon\Traits\Connector;
 
 use Throwable;
 use Saloon\Http\Response;
+use GuzzleHttp\RequestOptions;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\FakeResponse;
 use Saloon\Http\Faking\MockResponse;
@@ -24,6 +25,11 @@ trait ManagesFakeResponses
      */
     protected function createFakeResponse(PendingRequest $pendingRequest): Response|PromiseInterface
     {
+        // Merge the headers from the connector config
+        $pendingRequest->headers()->merge(
+            $this->config()->get(RequestOptions::HEADERS, [])
+        );
+
         $fakeResponse = $pendingRequest->getFakeResponse();
 
         if (! $fakeResponse instanceof FakeResponse) {
