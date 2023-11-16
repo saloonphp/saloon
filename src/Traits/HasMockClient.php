@@ -47,6 +47,8 @@ trait HasMockClient
      * Mocks the given requests with the given responses, or with the
      * mocked response from the 'getFakeData()' method if the
      * request has implemented the HasFakeData interface.
+     *
+     * @param array<array-key|class-string, mixed> $requestMocks
      */
     public function withRequestMocks(array $requestMocks): static
     {
@@ -67,9 +69,13 @@ trait HasMockClient
             }];
         })->all();
 
-        return $this->hasMockClient()
-            ? $this->getMockClient()->addResponses($responses)
-            : $this->withMockClient(new MockClient($responses));
+        if ($this->hasMockClient()) {
+            $this->getMockClient()->addResponses($responses);
+
+            return $this;
+        }
+
+        return $this->withMockClient(new MockClient($responses));
     }
 
     /**

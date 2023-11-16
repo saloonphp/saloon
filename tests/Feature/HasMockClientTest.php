@@ -137,3 +137,18 @@ it('can mock a request that does not implement the HasFakeData interface', funct
     expect($response->status())->toEqual(200);
     expect($response->json())->toEqual([]);
 });
+
+it('can call the withRequestMocks twice without losing any mocks', function () {
+    $connector = TestConnector::make()->withRequestMocks([
+        UserRequest::class => ['Sam'],
+    ])->withRequestMocks([
+        SoloUserRequest::class,
+    ]);
+
+    $responseA = $connector->send(new UserRequest);
+    expect($responseA->json())->toEqual(['Sam']);
+
+    $responseB = $connector->send(new SoloUserRequest);
+    expect($responseB->status())->toEqual(200);
+    expect($responseB->json())->toEqual([]);
+});
