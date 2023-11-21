@@ -20,12 +20,12 @@ class GuzzleMultipartBodyFactory implements MultipartBodyFactory
     public function create(StreamFactoryInterface $streamFactory, array $multipartValues, string $boundary): StreamInterface
     {
         $elements = array_map(static function (MultipartValue $value) {
-            return array_filter([
+            return [
                 'name' => $value->name,
                 'filename' => $value->filename,
                 'contents' => $value->value,
                 'headers' => $value->headers,
-            ]);
+            ];
         }, $multipartValues);
 
         return new MultipartStream($elements, $boundary);
