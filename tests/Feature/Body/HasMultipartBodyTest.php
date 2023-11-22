@@ -10,6 +10,7 @@ use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Repositories\Body\MultipartBodyRepository;
+use Saloon\Tests\Fixtures\Requests\MixedMultipartRequest;
 use Saloon\Tests\Fixtures\Requests\HasMultipartBodyRequest;
 use Saloon\Tests\Fixtures\Connectors\HasMultipartBodyConnector;
 
@@ -87,4 +88,34 @@ test('the guzzle sender properly sends it', function () {
     $connector->send($request);
 
     expect($asserted)->toBeTrue();
+});
+
+test('can send a real multipart request and files are sent', function () {
+    $connector = new TestConnector;
+    $request = new MixedMultipartRequest;
+
+    $request->body()->add('name', 'Howdy');
+    $request->body()->add('file', file_get_contents('tests/Fixtures/Howdy.txt'), 'hi.txt');
+
+    $response = $connector->send($request);
+
+    $data = $response->json();
+
+    expect($data)->toHaveKey('name', 'Howdy');
+    expect($data)->toHaveKey('file_contents', 'Hello World!' . PHP_EOL);
+});
+
+test('can send an empty string as the contents', function () {
+    $connector = new TestConnector;
+    $request = new MixedMultipartRequest;
+
+    $request->body()->add('name', 'Howdy');
+    $request->body()->add('file', '', 'hi.txt');
+
+    $response = $connector->send($request);
+
+    $data = $response->json();
+
+    expect($data)->toHaveKey('name', 'Howdy');
+    expect($data)->toHaveKey('file_contents', '');
 });
