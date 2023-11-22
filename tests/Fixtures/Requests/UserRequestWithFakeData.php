@@ -6,8 +6,10 @@ namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
+use Saloon\Http\Faking\Fixture;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\HasFakeData;
+use Saloon\Http\Faking\MockResponse;
 
 class UserRequestWithFakeData extends Request implements HasFakeData
 {
@@ -27,7 +29,7 @@ class UserRequestWithFakeData extends Request implements HasFakeData
     /**
      * Get the fake data for the mocked request.
      */
-    public function getFakeData(PendingRequest $request): mixed
+    public function getFakeData(PendingRequest $request): array|string|MockResponse|Fixture
     {
         return ['Sam'];
     }
