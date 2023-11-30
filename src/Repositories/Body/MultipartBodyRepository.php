@@ -123,6 +123,7 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
      * Get a specific key of the array
      *
      * @param array-key $key
+     * @return MultipartValue|array<MultipartValue>
      */
     public function get(string|int $key, mixed $default = null): MultipartValue|array
     {
