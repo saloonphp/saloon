@@ -25,8 +25,6 @@ trait SendsRequests
      * Send a request synchronously
      *
      * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
-     * @throws \ReflectionException
-     * @throws \Throwable
      */
     public function send(Request $request, MockClient $mockClient = null, callable $handleRetry = null): Response
     {
@@ -152,8 +150,6 @@ trait SendsRequests
      * Send a synchronous request and retry if it fails
      *
      * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
-     * @throws \ReflectionException
-     * @throws \Throwable
      */
     public function sendAndRetry(Request $request, int $tries, int $interval = 0, callable $handleRetry = null, bool $throw = true, MockClient $mockClient = null): Response
     {
@@ -166,8 +162,6 @@ trait SendsRequests
 
     /**
      * Create a new PendingRequest
-     *
-     * @throws \ReflectionException
      */
     public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequest
     {
