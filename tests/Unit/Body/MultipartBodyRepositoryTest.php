@@ -104,6 +104,18 @@ test('you can get an item', function () {
     expect($body->get('name'))->toEqual(new MultipartValue('name', 'Sam'));
 });
 
+test('you can get multiple items with the same name', function () {
+    $body = new MultipartBodyRepository();
+
+    $body->add('name', 'Sam');
+    $body->add('name', 'Alex');
+
+    expect($body->get('name'))->toEqual([
+        new MultipartValue('name', 'Sam'),
+        new MultipartValue('name', 'Alex'),
+    ]);
+});
+
 test('you can get all items', function () {
     $body = new MultipartBodyRepository();
 
