@@ -6,6 +6,7 @@ namespace Saloon\Repositories\Body;
 
 use LogicException;
 use InvalidArgumentException;
+use Saloon\Helpers\ArrayHelpers;
 use Saloon\Traits\Conditionable;
 use Psr\Http\Message\StreamInterface;
 use Saloon\Contracts\Body\MergeableBody;
@@ -102,7 +103,7 @@ class ArrayBodyRepository implements BodyRepository, MergeableBody
             return $this->all();
         }
 
-        return $this->all()[$key] ?? $default;
+        return ArrayHelpers::get($this->all(), $key, $default);
     }
 
     /**
