@@ -52,3 +52,12 @@ test('you can add a token to a query parameter', function () {
 
     expect($query)->toHaveKey('token', 'Sammyjo20');
 });
+
+test('you can add a header to a request', function () {
+    $request = UserRequest::make()->withHeaderAuth('Sammyjo20', 'X-Authorization');
+
+    $pendingRequest = connector()->createPendingRequest($request);
+    $query = $pendingRequest->headers()->all();
+
+    expect($query)->toHaveKey('X-Authorization', 'Sammyjo20');
+});
