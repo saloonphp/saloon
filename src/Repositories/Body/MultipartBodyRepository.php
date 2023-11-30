@@ -6,7 +6,6 @@ namespace Saloon\Repositories\Body;
 
 use InvalidArgumentException;
 use Saloon\Data\MultipartValue;
-use Saloon\Helpers\ArrayHelpers;
 use Saloon\Traits\Conditionable;
 use Saloon\Helpers\StringHelpers;
 use Saloon\Exceptions\BodyException;
