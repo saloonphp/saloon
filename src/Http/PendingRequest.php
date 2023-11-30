@@ -75,8 +75,6 @@ class PendingRequest
 
     /**
      * Build up the request payload.
-     *
-     * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
     public function __construct(Connector $connector, Request $request, MockClient $mockClient = null)
     {
