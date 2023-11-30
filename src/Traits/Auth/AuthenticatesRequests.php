@@ -6,10 +6,10 @@ namespace Saloon\Traits\Auth;
 
 use Saloon\Contracts\Authenticator;
 use Saloon\Http\Auth\BasicAuthenticator;
-use Saloon\Http\Auth\HeaderAuthenticator;
 use Saloon\Http\Auth\QueryAuthenticator;
 use Saloon\Http\Auth\TokenAuthenticator;
 use Saloon\Http\Auth\DigestAuthenticator;
+use Saloon\Http\Auth\HeaderAuthenticator;
 
 trait AuthenticatesRequests
 {
