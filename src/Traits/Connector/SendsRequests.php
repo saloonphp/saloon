@@ -37,6 +37,7 @@ trait SendsRequests
         $maxTries = $request->tries ?? $this->tries ?? 1;
         $retryInterval = $request->retryInterval ?? $this->retryInterval ?? 0;
         $throwOnMaxTries = $request->throwOnMaxTries ?? $this->throwOnMaxTries ?? true;
+        $useExponentialBackoff = $request->useExponentialBackoff ?? $this->useExponentialBackoff ?? false;
 
         if ($maxTries <= 0) {
             $maxTries = 1;
@@ -53,7 +54,11 @@ trait SendsRequests
             // the interval (if it has been provided)
 
             if ($attempts > 1) {
-                usleep($retryInterval * 1000);
+                $sleepTime = $useExponentialBackoff
+                    ? $retryInterval * (2 ** ($attempts - 2)) * 1000
+                    : $retryInterval * 1000;
+
+                usleep($sleepTime);
             }
 
             try {
@@ -151,11 +156,12 @@ trait SendsRequests
      *
      * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
      */
-    public function sendAndRetry(Request $request, int $tries, int $interval = 0, callable $handleRetry = null, bool $throw = true, MockClient $mockClient = null): Response
+    public function sendAndRetry(Request $request, int $tries, int $interval = 0, callable $handleRetry = null, bool $throw = true, MockClient $mockClient = null, bool $useExponentialBackoff = false): Response
     {
         $request->tries = $tries;
         $request->retryInterval = $interval;
         $request->throwOnMaxTries = $throw;
+        $request->useExponentialBackoff = $useExponentialBackoff;
 
         return $this->send($request, $mockClient, $handleRetry);
     }
