@@ -33,6 +33,7 @@
         "league/flysystem": "^3.0",
         "pestphp/pest": "^2.6",
         "phpstan/phpstan": "^1.9",
+        "saloonphp/xml-wrangler": "^1.1",
         "spatie/ray": "^1.33",
         "symfony/dom-crawler": "^6.0"
     },
