@@ -108,6 +108,27 @@ test('a failed request can have an interval between each attempt', function () {
     expect(round(microtime(true) - $start))->toBeGreaterThanOrEqual(2);
 });
 
+test('a failed request can have an interval with exponential backoff between each attempt', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam'], 500), // 1,000
+        MockResponse::make(['name' => 'Gareth'], 500), // 2,000
+        MockResponse::make(['name' => 'Michael'], 500), // 4,000
+        MockResponse::make(['name' => 'Teodor'], 200),
+    ]);
+
+    $connector = new TestConnector;
+    $connector->withMockClient($mockClient);
+
+    $start = microtime(true);
+
+    $connector->sendAndRetry(new UserRequest, 4, 1000, useExponentialBackoff: true);
+
+    // It should be a duration of > 7000ms (7 seconds) because the there are four requests
+    // after the first.
+
+    expect(round(microtime(true) - $start))->toBeGreaterThanOrEqual(7);
+});
+
 test('an exception other than a request exception will not be retried', function () {
     $mockClient = new MockClient([
         MockResponse::make(['name' => 'Sam'], 500),

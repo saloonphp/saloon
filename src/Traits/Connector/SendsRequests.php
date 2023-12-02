@@ -54,9 +54,10 @@ trait SendsRequests
             // the interval (if it has been provided)
 
             if ($attempts > 1) {
-                $sleepTime = $useExponentialBackoff 
-                             ? $retryInterval * (2 ** ($attempts - 1)) * 1000
-                             : $retryInterval * 1000;
+                $sleepTime = $useExponentialBackoff
+                    ? $retryInterval * (2 ** ($attempts - 2)) * 1000
+                    : $retryInterval * 1000;
+
                 usleep($sleepTime);
             }
 

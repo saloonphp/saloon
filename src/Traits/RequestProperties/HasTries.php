@@ -27,6 +27,13 @@ trait HasTries
     public ?int $retryInterval = null;
 
     /**
+     * Should Saloon use exponential backoff during retries?
+     *
+     * When true, Saloon will double the retry interval after each attempt.
+     */
+    public bool $useExponentialBackoff = false;
+
+    /**
      * Should Saloon throw an exception after exhausting the maximum number of retries?
      *
      * When false, Saloon will return the last response attempted.
@@ -34,13 +41,6 @@ trait HasTries
      * Set to null to always throw after maximum retry attempts.
      */
     public ?bool $throwOnMaxTries = null;
-
-    /**
-     * Should Saloon use exponential backoff during retries?
-     *
-     * When true, Saloon will double the retry interval after each attempt.
-     */
-    public bool $useExponentialBackoff = false;
 
     /**
      * Define whether the request should be retried.
