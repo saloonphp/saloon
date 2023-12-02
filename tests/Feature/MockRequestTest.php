@@ -729,3 +729,13 @@ test('request and response middleware is invoked when using fake responses', fun
     expect($middlewareC)->toBeTrue();
     expect($middlewareD)->toBeTrue();
 });
+
+test('fixtures are still recorded on the first request', function () {
+    $mockClient = new MockClient([
+        MockResponse::fixture('user'), // Test Exact Route
+    ]);
+
+    connector()->send(new UserRequest, $mockClient);
+
+    $mockClient->assertSent(UserRequest::class);
+});

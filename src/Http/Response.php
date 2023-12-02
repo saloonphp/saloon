@@ -10,6 +10,7 @@ use SimpleXMLElement;
 use Saloon\Traits\Macroable;
 use InvalidArgumentException;
 use Saloon\Helpers\ArrayHelpers;
+use Saloon\XmlWrangler\XmlReader;
 use Illuminate\Support\Collection;
 use Saloon\Contracts\FakeResponse;
 use Saloon\Repositories\ArrayStore;
@@ -136,11 +137,19 @@ class Response
      */
     public function body(): string
     {
-        return $this->stream()->getContents();
+        $stream = $this->stream();
+
+        $contents = $stream->getContents();
+
+        if ($stream->isSeekable()) {
+            $stream->rewind();
+        }
+
+        return $contents;
     }
 
     /**
-     * Get the body as a stream. Don't forget to close the stream after using ->close().
+     * Get the body as a stream.
      */
     public function stream(): StreamInterface
     {
@@ -191,7 +200,7 @@ class Response
     public function json(string|int|null $key = null, mixed $default = null): mixed
     {
         if (! isset($this->decodedJson)) {
-            $this->decodedJson = json_decode($this->body(), true, 512, JSON_THROW_ON_ERROR);
+            $this->decodedJson = json_decode($this->body() ?: '[]', true, 512, JSON_THROW_ON_ERROR);
         }
 
         if (is_null($key)) {
@@ -227,6 +236,8 @@ class Response
 
     /**
      * Convert the XML response into a SimpleXMLElement.
+     *
+     * @deprecated Use the xmlReader method instead.
      */
     public function xml(mixed ...$arguments): SimpleXMLElement|bool
     {
@@ -235,6 +246,18 @@ class Response
         }
 
         return simplexml_load_string($this->decodedXml, ...$arguments);
+    }
+
+    /**
+     * Load the XML response into a reader
+     *
+     * Requires XML Wrangler (composer require saloonphp/xml-wrangler)
+     *
+     * @see https://github.com/saloonphp/xml-wrangler
+     */
+    public function xmlReader(): XmlReader
+    {
+        return XmlReader::fromSaloonResponse($this);
     }
 
     /**
