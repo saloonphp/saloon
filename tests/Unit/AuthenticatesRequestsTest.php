@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use GuzzleHttp\RequestOptions;
 use Saloon\Exceptions\SaloonException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\ArraySenderConnector;
@@ -60,4 +61,28 @@ test('you can add a header to a request', function () {
     $query = $pendingRequest->headers()->all();
 
     expect($query)->toHaveKey('X-Authorization', 'Sammyjo20');
+});
+
+test('you can add a certificate to a request', function () {
+    $certPath = __DIR__ . '/certificate.cer';
+
+    $requestA = UserRequest::make()->withCertificateAuth($certPath);
+
+    $pendingRequestA = connector()->createPendingRequest($requestA);
+    $configA = $pendingRequestA->config()->all();
+
+    expect($configA)->toBe([
+        RequestOptions::CERT => $certPath,
+    ]);
+
+    // Test with password
+
+    $requestB = UserRequest::make()->withCertificateAuth($certPath, 'example');
+
+    $pendingRequestB = connector()->createPendingRequest($requestB);
+    $configB = $pendingRequestB->config()->all();
+
+    expect($configB)->toBe([
+        RequestOptions::CERT => [$certPath, 'example'],
+    ]);
 });

@@ -10,6 +10,7 @@ use Saloon\Http\Auth\QueryAuthenticator;
 use Saloon\Http\Auth\TokenAuthenticator;
 use Saloon\Http\Auth\DigestAuthenticator;
 use Saloon\Http\Auth\HeaderAuthenticator;
+use Saloon\Http\Auth\CertificateAuthenticator;
 
 trait AuthenticatesRequests
 {
@@ -94,5 +95,15 @@ trait AuthenticatesRequests
     public function withHeaderAuth(string $accessToken, string $headerName = 'Authorization'): static
     {
         return $this->authenticate(new HeaderAuthenticator($accessToken, $headerName));
+    }
+
+    /**
+     * Authenticate the request with a certificate.
+     *
+     * @return $this
+     */
+    public function withCertificateAuth(string $path, ?string $password = null): static
+    {
+        return $this->authenticate(new CertificateAuthenticator($path, $password));
     }
 }

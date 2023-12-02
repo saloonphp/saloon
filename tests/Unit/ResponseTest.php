@@ -15,6 +15,7 @@ use Saloon\Http\Response as SaloonResponse;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
+use Saloon\Tests\Fixtures\Requests\CustomEndpointRequest;
 
 test('you can get the original pending request', function () {
     $mockClient = new MockClient([
@@ -237,6 +238,20 @@ test('the xml method will return xml as an array', function () {
     $simpleXml = $response->xml();
 
     expect($simpleXml)->toBeInstanceOf(SimpleXMLElement::class);
+});
+
+test('the xmlReader method will return an XmlReader instance', function () {
+    $mockClient = new MockClient([
+        MockResponse::fixture('xml'),
+    ]);
+
+    $request = new CustomEndpointRequest;
+    $request->setEndpoint('/breakfast-menu');
+
+    $response = connector()->send($request, $mockClient);
+    $reader = $response->xmlReader();
+
+    expect($reader->value('food.2.name')->sole())->toBe('Berry-Berry Belgian Waffles');
 });
 
 test('the headers method returns an array store', function () {
