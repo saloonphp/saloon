@@ -31,7 +31,7 @@ trait HasTries
      *
      * When true, Saloon will double the retry interval after each attempt.
      */
-    public bool $useExponentialBackoff = false;
+    public ?bool $useExponentialBackoff = null;
 
     /**
      * Should Saloon throw an exception after exhausting the maximum number of retries?
