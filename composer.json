@@ -42,7 +42,8 @@
     },
     "suggest": {
         "illuminate/collections": "Required for the response collect() method.",
-        "symfony/dom-crawler": "Required for the response dom() method."
+        "symfony/dom-crawler": "Required for the response dom() method.",
+        "saloonphp/xml-wrangler": "Required for the response xmlReader() method."
     },
     "minimum-stability": "stable",
     "autoload": {
