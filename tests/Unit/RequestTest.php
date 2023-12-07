@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Tests\Fixtures\Requests\MissingMethodRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Responses\UserResponse;
 use Saloon\Exceptions\NoMockResponseFoundException;
@@ -117,3 +118,10 @@ test('you can join various URLs together', function ($baseUrl, $endpoint, $expec
     ['', 'google.com/search', '/google.com/search'],
     ['https://google.com', 'https://api.google.com/search', 'https://api.google.com/search'],
 ]);
+
+test('it throws an exception if you forget to add a method', function () {
+    $connector = new TestConnector;
+    $request = new MissingMethodRequest;
+
+    $connector->send($request);
+})->throws(LogicException::class, 'Your request is missing a HTTP method. You must add a method property like [protected Method $method = Method::GET]');
