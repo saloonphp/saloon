@@ -11,6 +11,7 @@ use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Responses\CustomResponse;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Tests\Fixtures\Requests\InvalidResponseClass;
+use Saloon\Tests\Fixtures\Requests\MissingMethodRequest;
 use Saloon\Tests\Fixtures\Requests\CustomEndpointRequest;
 use Saloon\Tests\Fixtures\Requests\DefaultEndpointRequest;
 use Saloon\Tests\Fixtures\Connectors\CustomBaseUrlConnector;
@@ -117,3 +118,10 @@ test('you can join various URLs together', function ($baseUrl, $endpoint, $expec
     ['', 'google.com/search', '/google.com/search'],
     ['https://google.com', 'https://api.google.com/search', 'https://api.google.com/search'],
 ]);
+
+test('it throws an exception if you forget to add a method', function () {
+    $connector = new TestConnector;
+    $request = new MissingMethodRequest;
+
+    $connector->send($request);
+})->throws(LogicException::class, 'Your request is missing a HTTP method. You must add a method property like [protected Method $method = Method::GET]');
