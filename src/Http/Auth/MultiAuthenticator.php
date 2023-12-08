@@ -12,7 +12,7 @@ class MultiAuthenticator implements Authenticator
     /**
      * Constructor
      *
-     * @param array<Authenticator> $authenticators
+     * @param array<\Saloon\Contracts\Authenticator> $authenticators
      */
     public function __construct(protected readonly array $authenticators)
     {
