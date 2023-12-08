@@ -6,6 +6,7 @@ namespace Saloon\Traits\Auth;
 
 use Saloon\Contracts\Authenticator;
 use Saloon\Http\Auth\BasicAuthenticator;
+use Saloon\Http\Auth\MultiAuthenticator;
 use Saloon\Http\Auth\QueryAuthenticator;
 use Saloon\Http\Auth\TokenAuthenticator;
 use Saloon\Http\Auth\DigestAuthenticator;
@@ -21,8 +22,10 @@ trait AuthenticatesRequests
 
     /**
      * Default authenticator used.
+     *
+     * @return \Saloon\Contracts\Authenticator|array<\Saloon\Contracts\Authenticator>|null
      */
-    protected function defaultAuth(): ?Authenticator
+    protected function defaultAuth(): Authenticator|array|null
     {
         return null;
     }
@@ -32,17 +35,26 @@ trait AuthenticatesRequests
      */
     public function getAuthenticator(): ?Authenticator
     {
-        return $this->authenticator ?? $this->defaultAuth();
+        if (isset($this->authenticator)) {
+            return $this->authenticator;
+        }
+
+        if ($defaultAuth = $this->defaultAuth()) {
+            $this->authenticate($defaultAuth);
+        }
+
+        return $this->authenticator;
     }
 
     /**
      * Authenticate the request with an authenticator.
      *
+     * @param \Saloon\Contracts\Authenticator|array<\Saloon\Contracts\Authenticator> $authenticator
      * @return $this
      */
-    public function authenticate(Authenticator $authenticator): static
+    public function authenticate(Authenticator|array $authenticator): static
     {
-        $this->authenticator = $authenticator;
+        $this->authenticator = is_array($authenticator) ? new MultiAuthenticator($authenticator) :$authenticator;
 
         return $this;
     }

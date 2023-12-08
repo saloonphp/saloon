@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 use GuzzleHttp\RequestOptions;
 use Saloon\Exceptions\SaloonException;
+use Saloon\Http\Auth\QueryAuthenticator;
+use Saloon\Http\Auth\TokenAuthenticator;
+use Saloon\Http\Auth\HeaderAuthenticator;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\ArraySenderConnector;
+use Saloon\Tests\Fixtures\Requests\DefaultMultiAuthenticatorRequest;
 
 test('you can add basic auth to a request', function () {
     $request = new UserRequest;
@@ -84,5 +88,67 @@ test('you can add a certificate to a request', function () {
 
     expect($configB)->toBe([
         RequestOptions::CERT => [$certPath, 'example'],
+    ]);
+});
+
+test('you can use multiple authenticators at the same time using the defaultAuth method', function () {
+    $pendingRequest = connector()->createPendingRequest(new DefaultMultiAuthenticatorRequest);
+
+    $headers = $pendingRequest->headers()->all();
+
+    expect($headers)->toEqual([
+        'Accept' => 'application/json',
+        'Authorization' => 'Bearer example',
+        'X-API-Key' => 'api-key',
+    ]);
+});
+
+test('you can use multiple authenticators at the same time using the authenticate method', function () {
+    $request = new UserRequest;
+
+    $request->authenticate([
+        new TokenAuthenticator('example'),
+        new HeaderAuthenticator('api-key', 'X-API-Key'),
+    ]);
+
+    $pendingRequest = connector()->createPendingRequest($request);
+
+    $headers = $pendingRequest->headers()->all();
+
+    expect($headers)->toEqual([
+        'Accept' => 'application/json',
+        'Authorization' => 'Bearer example',
+        'X-API-Key' => 'api-key',
+    ]);
+});
+
+test('the pending request authenticate method can accept an array', function () {
+    $request = new UserRequest;
+
+    $request->authenticate([
+        new TokenAuthenticator('example'),
+        new HeaderAuthenticator('api-key', 'X-API-Key'),
+    ]);
+
+    $pendingRequest = connector()->createPendingRequest($request);
+
+    $pendingRequest->authenticate([
+        new QueryAuthenticator('api-key', 'testing'),
+        new QueryAuthenticator('another', 'example'),
+    ]);
+
+    $headers = $pendingRequest->headers()->all();
+
+    expect($headers)->toEqual([
+        'Accept' => 'application/json',
+        'Authorization' => 'Bearer example',
+        'X-API-Key' => 'api-key',
+    ]);
+
+    $query = $pendingRequest->query()->all();
+
+    expect($query)->toEqual([
+        'api-key' => 'testing',
+        'another' => 'example',
     ]);
 });
