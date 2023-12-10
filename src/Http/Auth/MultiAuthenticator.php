@@ -10,13 +10,18 @@ use Saloon\Contracts\Authenticator;
 class MultiAuthenticator implements Authenticator
 {
     /**
-     * Constructor
+     * Authenticators
      *
-     * @param array<\Saloon\Contracts\Authenticator> $authenticators
+     * @var array<\Saloon\Contracts\Authenticator>
      */
-    public function __construct(protected readonly array $authenticators)
+    protected readonly array $authenticators;
+
+    /**
+     * Constructor
+     */
+    public function __construct(Authenticator ...$authenticators)
     {
-        //
+        $this->authenticators = $authenticators;
     }
 
     /**

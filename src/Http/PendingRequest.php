@@ -31,9 +31,7 @@ use Saloon\Http\PendingRequest\AuthenticatePendingRequest;
 
 class PendingRequest
 {
-    use AuthenticatesRequests {
-        authenticate as protected baseAuthenticate;
-    }
+    use AuthenticatesRequests;
     use HasRequestProperties;
     use ManagesPsrRequests;
     use Conditionable;
@@ -132,15 +130,14 @@ class PendingRequest
     /**
      * Authenticate the PendingRequest
      *
-     * @param \Saloon\Contracts\Authenticator|array<\Saloon\Contracts\Authenticator> $authenticator
      * @return $this
      */
-    public function authenticate(Authenticator|array $authenticator): static
+    public function authenticate(Authenticator $authenticator): static
     {
-        $this->baseAuthenticate($authenticator);
+        $this->authenticator = $authenticator;
 
         // Since the PendingRequest has already been constructed we will run the set
-        // method on the authenticator which applies them straight away.
+        // method on the authenticator which runs it straight away.
 
         $this->authenticator->set($this);
 
