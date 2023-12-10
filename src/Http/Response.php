@@ -237,7 +237,11 @@ class Response
     /**
      * Convert the XML response into a SimpleXMLElement.
      *
-     * @deprecated Use the xmlReader method instead.
+     * Suitable for reading small, simple XML responses but not suitable for
+     * more advanced XML responses with namespaces and prefixes. Consider
+     * using the xmlReader method instead for better compatability.
+     *
+     * @see https://www.php.net/manual/en/book.simplexml.php
      */
     public function xml(mixed ...$arguments): SimpleXMLElement|bool
     {
@@ -251,7 +255,8 @@ class Response
     /**
      * Load the XML response into a reader
      *
-     * Requires XML Wrangler (composer require saloonphp/xml-wrangler)
+     * Suitable for reading large XML responses and supports a wider range of XML
+     * documents. Requires XML Wrangler (composer require saloonphp/xml-wrangler)
      *
      * @see https://github.com/saloonphp/xml-wrangler
      */
