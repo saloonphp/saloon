@@ -136,10 +136,8 @@ class PendingRequest
     {
         $this->authenticator = $authenticator;
 
-        // If the PendingRequest has already been constructed, it would be nice
-        // for someone to be able to run the "authenticate" method after. This
-        // will allow us to do this. With future versions of Saloon we will
-        // likely remove this method.
+        // Since the PendingRequest has already been constructed we will run the set
+        // method on the authenticator which runs it straight away.
 
         $this->authenticator->set($this);
 

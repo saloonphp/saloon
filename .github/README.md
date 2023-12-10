@@ -14,7 +14,7 @@ A PHP package that helps you build beautiful API integrations and SDKs 🤠
 </div>
 
 ## Introduction
-Saloon is a PHP library that gives you the tools to build beautifully simple API integrations and SDKs. Saloon moves your API requests into reusable classes so you can keep all your API configurations in one place. It can be easily customised with plugins, but It comes pre-configured for you so you can get to sending API requests right away. Saloon comes with many exciting features out of the box like recording requests in your tests, caching, OAuth2 and pagination.
+Saloon is a PHP library that gives you the tools to build beautifully simple API integrations and SDKs. Saloon moves your API requests into reusable classes so you can keep all your API configurations in one place. Saloon comes with many exciting features out of the box like recording requests in your tests, caching, OAuth2 and pagination. It's a great starting point for building simple, standardised API integrations in your application.
 
 ```php
 <?php
@@ -22,18 +22,19 @@ Saloon is a PHP library that gives you the tools to build beautifully simple API
 $forge = new ForgeConnector('api-token');
 
 $response = $forge->send(new GetServersRequest);
+
 $data = $response->json();
 ```
 
 ## Key Features
 
 - Provides a simple, easy-to-learn, and modern way to build clean, reusable API integrations
-- Built on top of Guzzle, the most popular and feature-rich PHP HTTP client
+- Built on top of Guzzle, the most popular and feature-rich HTTP client
 - Works great within a team as it provides a standard everyone can follow
 - Great for building your next PHP SDK or library
 - Packed full of features like request recording, request concurrency, caching, data-transfer-object support, and full Laravel support.
 - Framework agnostic
-- Low on dependencies
+- Lightweight and has few dependencies.
 
 ## Getting Started
 

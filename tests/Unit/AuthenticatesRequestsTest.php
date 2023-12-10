@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 use GuzzleHttp\RequestOptions;
 use Saloon\Exceptions\SaloonException;
+use Saloon\Http\Auth\MultiAuthenticator;
+use Saloon\Http\Auth\TokenAuthenticator;
+use Saloon\Http\Auth\HeaderAuthenticator;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\ArraySenderConnector;
 
@@ -84,5 +87,22 @@ test('you can add a certificate to a request', function () {
 
     expect($configB)->toBe([
         RequestOptions::CERT => [$certPath, 'example'],
+    ]);
+});
+
+test('you can use multiple authenticators at the same time using the defaultAuth method', function () {
+    $request = UserRequest::make()->authenticate(new MultiAuthenticator(
+        new TokenAuthenticator('example'),
+        new HeaderAuthenticator('api-key', 'X-API-Key'),
+    ));
+
+    $pendingRequest = connector()->createPendingRequest($request);
+
+    $headers = $pendingRequest->headers()->all();
+
+    expect($headers)->toEqual([
+        'Accept' => 'application/json',
+        'Authorization' => 'Bearer example',
+        'X-API-Key' => 'api-key',
     ]);
 });
