@@ -13,7 +13,6 @@ use Saloon\Traits\HandlesPsrRequest;
 use Saloon\Traits\ManagesExceptions;
 use Saloon\Traits\Connector\SendsRequests;
 use Saloon\Traits\Auth\AuthenticatesRequests;
-use Saloon\Traits\RequestProperties\HasDelay;
 use Saloon\Traits\RequestProperties\HasTries;
 use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Traits\Request\CreatesDtoFromResponse;
@@ -32,7 +31,6 @@ abstract class Connector
     use Conditionable;
     use Bootable;
     use Makeable;
-    use HasDelay;
     use HasTries;
     use HasDebugging;
 
