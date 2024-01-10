@@ -9,14 +9,14 @@ class GlobalMockClient
     /**
      * Global Mock Client
      *
-     * The global mock client instance. If it has not been set it will be null.
+     * The global mock client instance. When this is null, no global mock client will be used.
      */
     protected static ?MockClient $mockClient = null;
 
     /**
      * Create a global mock client
      *
-     * Make sure to destroy the global mock client after each test using `GlobalMockClient::destroy()`.
+     * Note: You should destroy the global mock client after each test using `GlobalMockClient::destroy()`.
      *
      * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $mockData
      */
@@ -26,7 +26,7 @@ class GlobalMockClient
     }
 
     /**
-     * Retrieve the global mock client from the store
+     * Retrieve the global mock client if it has been set
      */
     public static function get(): ?MockClient
     {
