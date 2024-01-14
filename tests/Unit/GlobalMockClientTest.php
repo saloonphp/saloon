@@ -42,7 +42,7 @@ test('a local mock client is given priority over the global mock client', functi
 
     $connector = new TestConnector;
     $connector->withMockClient($localMockClient);
-    
+
     $response = $connector->send(new UserRequest);
 
     expect($response->isMocked())->toBeTrue();
