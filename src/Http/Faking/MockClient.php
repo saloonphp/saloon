@@ -53,10 +53,18 @@ class MockClient
     protected array $recordedResponses = [];
 
     /**
+     * Global Mock Client
+     *
+     * Use MockClient::global() to register a global mock client
+     *
+     * @var \Saloon\Http\Faking\MockClient|null
+     */
+    protected static ?MockClient $globalMockClient = null;
+
+    /**
      * Constructor
      *
      * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $mockData
-     * @throws \Saloon\Exceptions\InvalidMockResponseCaptureMethodException
      */
     public function __construct(array $mockData = [])
     {
@@ -67,7 +75,6 @@ class MockClient
      * Store the mock responses in the correct places.
      *
      * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $responses
-     * @throws \Saloon\Exceptions\InvalidMockResponseCaptureMethodException
      */
     public function addResponses(array $responses): void
     {
@@ -82,8 +89,6 @@ class MockClient
 
     /**
      * Add a mock response to the client
-     *
-     * @throws \Saloon\Exceptions\InvalidMockResponseCaptureMethodException
      */
     public function addResponse(MockResponse|Fixture|callable $response, ?string $captureMethod = null): void
     {
@@ -371,6 +376,36 @@ class MockClient
         }
 
         return null;
+    }
+
+    /**
+     * Register a global mock client
+     *
+     * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $mockData
+     */
+    public static function global(array $mockData = []): static
+    {
+        return static::$globalMockClient ??= new static($mockData);
+    }
+
+    /**
+     * Get the global mock client if it has been registered
+     *
+     * @return static|null
+     */
+    public static function getGlobal(): ?static
+    {
+        return static::$globalMockClient;
+    }
+
+    /**
+     * Destroy the global mock client
+     *
+     * @return void
+     */
+    public static function destroyGlobal(): void
+    {
+        static::$globalMockClient = null;
     }
 
     /**

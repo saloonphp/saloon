@@ -14,7 +14,6 @@ use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\FakeResponse;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Contracts\Authenticator;
-use Saloon\Http\Faking\GlobalMockClient;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\PendingRequest\MergeBody;
 use Saloon\Http\PendingRequest\MergeDelay;
@@ -91,7 +90,7 @@ class PendingRequest
         $this->method = $request->getMethod();
         $this->url = URLHelper::join($this->connector->resolveBaseUrl(), $this->request->resolveEndpoint());
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
-        $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient() ?? GlobalMockClient::get()?->getMockClient();
+        $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient() ?? MockClient::getGlobal();
 
         // Now, we'll register our global middleware and our mock response middleware.
         // Registering these middleware first means that the mock client can set
