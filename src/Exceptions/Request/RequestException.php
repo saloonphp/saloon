@@ -15,7 +15,7 @@ use Saloon\Exceptions\SaloonException;
  *
  * This exception is thrown when the response from a request is a failed response.
  *
- * See @https://docs.saloon.dev/the-basics/handling-failures
+ * @see https://docs.saloon.dev/the-basics/handling-failures
  */
 class RequestException extends SaloonException
 {
