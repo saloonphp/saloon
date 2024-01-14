@@ -241,8 +241,6 @@ class MockClient
 
     /**
      * Assert that a given request was sent.
-     *
-     * @throws \ReflectionException
      */
     public function assertSent(string|callable $value): void
     {
@@ -253,8 +251,6 @@ class MockClient
 
     /**
      * Assert that a given request was not sent.
-     *
-     * @throws \ReflectionException
      */
     public function assertNotSent(string|callable $request): void
     {
@@ -267,7 +263,6 @@ class MockClient
      * Assert JSON data was sent
      *
      * @param array<string, mixed> $data
-     * @throws \ReflectionException
      */
     public function assertSentJson(string $request, array $data): void
     {
@@ -294,8 +289,6 @@ class MockClient
 
     /**
      * Check if a given request was sent
-     *
-     * @throws \ReflectionException
      */
     protected function checkRequestWasSent(string|callable $request): bool
     {
@@ -318,8 +311,6 @@ class MockClient
 
     /**
      * Check if a request has not been sent.
-     *
-     * @throws \ReflectionException
      */
     protected function checkRequestWasNotSent(string|callable $request): bool
     {
