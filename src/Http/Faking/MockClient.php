@@ -56,8 +56,6 @@ class MockClient
      * Global Mock Client
      *
      * Use MockClient::global() to register a global mock client
-     *
-     * @var \Saloon\Http\Faking\MockClient|null
      */
     protected static ?MockClient $globalMockClient = null;
 
@@ -390,8 +388,6 @@ class MockClient
 
     /**
      * Get the global mock client if it has been registered
-     *
-     * @return static|null
      */
     public static function getGlobal(): ?static
     {
@@ -400,8 +396,6 @@ class MockClient
 
     /**
      * Destroy the global mock client
-     *
-     * @return void
      */
     public static function destroyGlobal(): void
     {
