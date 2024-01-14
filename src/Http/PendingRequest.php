@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use JetBrains\PhpStorm\Deprecated;
 use Saloon\Config;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Helpers;
