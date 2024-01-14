@@ -35,7 +35,6 @@ trait Macroable
      * Add a mixin
      *
      * @param object|class-string $mixin
-     * @throws \ReflectionException
      */
     public static function mixin(object|string $mixin): void
     {

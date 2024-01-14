@@ -283,7 +283,6 @@ class PendingRequest
      * Get the response class
      *
      * @return class-string<\Saloon\Http\Response>
-     * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidResponseClassException
      */
     public function getResponseClass(): string

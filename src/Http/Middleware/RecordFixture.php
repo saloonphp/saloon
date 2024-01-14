@@ -33,11 +33,6 @@ class RecordFixture implements ResponseMiddleware
 
     /**
      * Store the response
-     *
-     * @throws \JsonException
-     * @throws \Saloon\Exceptions\FixtureException
-     * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
-     * @throws \Saloon\Exceptions\UnableToCreateFileException
      */
     public function __invoke(Response $response): void
     {

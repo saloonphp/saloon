@@ -15,9 +15,6 @@ class DetermineMockResponse implements RequestMiddleware
     /**
      * Check if a MockClient has been provided and guess the MockResponse based on the request.
      *
-     * @throws \JsonException
-     * @throws \Saloon\Exceptions\DuplicatePipeNameException
-     * @throws \Saloon\Exceptions\FixtureException
      * @throws \Saloon\Exceptions\FixtureMissingException
      * @throws \Saloon\Exceptions\NoMockResponseFoundException
      */

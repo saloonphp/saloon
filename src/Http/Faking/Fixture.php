@@ -30,9 +30,6 @@ class Fixture
 
     /**
      * Constructor
-     *
-     * @throws \Saloon\Exceptions\DirectoryNotFoundException
-     * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      */
     public function __construct(string $name = '', Storage $storage = null)
     {
@@ -42,9 +39,6 @@ class Fixture
 
     /**
      * Attempt to get the mock response from the fixture.
-     *
-     * @throws \Saloon\Exceptions\FixtureMissingException
-     * @throws \JsonException|\Saloon\Exceptions\FixtureException
      */
     public function getMockResponse(): ?MockResponse
     {
@@ -66,9 +60,6 @@ class Fixture
      * Store data as the fixture.
      *
      * @return $this
-     * @throws \JsonException
-     * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
-     * @throws \Saloon\Exceptions\UnableToCreateFileException|\Saloon\Exceptions\FixtureException
      */
     public function store(RecordedResponse $recordedResponse): static
     {

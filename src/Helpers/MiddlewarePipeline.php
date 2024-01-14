@@ -35,7 +35,6 @@ class MiddlewarePipeline
      *
      * @param callable(\Saloon\Http\PendingRequest): (\Saloon\Http\PendingRequest|\Saloon\Contracts\FakeResponse|void) $callable
      * @return $this
-     * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
     public function onRequest(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
     {
@@ -71,7 +70,6 @@ class MiddlewarePipeline
      *
      * @param callable(\Saloon\Http\Response): (\Saloon\Http\Response|void) $callable
      * @return $this
-     * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
     public function onResponse(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
     {
@@ -114,7 +112,6 @@ class MiddlewarePipeline
      * Merge in another middleware pipeline.
      *
      * @return $this
-     * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
     public function merge(MiddlewarePipeline $middlewarePipeline): static
     {

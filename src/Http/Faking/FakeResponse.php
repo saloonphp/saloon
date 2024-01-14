@@ -110,9 +110,6 @@ class FakeResponse implements FakeResponseContract
 
     /**
      * Create a new mock response from a fixture
-     *
-     * @throws \Saloon\Exceptions\DirectoryNotFoundException
-     * @throws \Saloon\Exceptions\UnableToCreateDirectoryException
      */
     public static function fixture(string $name): Fixture
     {
