@@ -385,7 +385,7 @@ class MockClient
      *
      * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $mockData
      */
-    public static function global(array $mockData = []): static
+    public static function global(array $mockData = []): MockClient
     {
         return static::$globalMockClient ??= new static($mockData);
     }
@@ -393,7 +393,7 @@ class MockClient
     /**
      * Get the global mock client if it has been registered
      */
-    public static function getGlobal(): ?static
+    public static function getGlobal(): ?MockClient
     {
         return static::$globalMockClient;
     }
