@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use JetBrains\PhpStorm\Deprecated;
 use Saloon\Config;
 use Saloon\Enums\Method;
 use Saloon\Helpers\Helpers;
@@ -91,7 +92,7 @@ class PendingRequest
         $this->method = $request->getMethod();
         $this->url = URLHelper::join($this->connector->resolveBaseUrl(), $this->request->resolveEndpoint());
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
-        $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient() ?? GlobalMockClient::get();
+        $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient() ?? GlobalMockClient::resolve()?->getMockClient();
 
         // Now, we'll register our global middleware and our mock response middleware.
         // Registering these middleware first means that the mock client can set
