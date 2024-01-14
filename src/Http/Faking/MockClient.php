@@ -379,6 +379,10 @@ class MockClient
     /**
      * Register a global mock client
      *
+     * This will register a global mock client that is available throughout the
+     * application's lifecycle. You should destroy the global mock client
+     * after each test using MockClient::destroyGlobal().
+     *
      * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $mockData
      */
     public static function global(array $mockData = []): static
