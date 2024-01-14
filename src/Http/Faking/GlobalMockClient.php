@@ -56,9 +56,9 @@ class GlobalMockClient
     }
 
     /**
-     * Resolve the global mock client
+     * Get the global mock client
      */
-    public static function resolve(): ?self
+    public static function get(): ?self
     {
         return static::$instance;
     }

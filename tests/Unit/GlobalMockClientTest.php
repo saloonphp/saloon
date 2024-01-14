@@ -8,13 +8,17 @@ use Saloon\Http\Faking\GlobalMockClient;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
+afterEach(function () {
+    GlobalMockClient::destroy();
+});
+
 test('can create a global mock client', function () {
     $mockClient = GlobalMockClient::make([
         MockResponse::make(['name' => 'Sam']),
     ]);
 
     expect($mockClient)->toBeInstanceOf(GlobalMockClient::class);
-    expect(GlobalMockClient::resolve())->toBe($mockClient);
+    expect(GlobalMockClient::get())->toBe($mockClient);
 
     $connector = new TestConnector;
     $response = $connector->send(new UserRequest);
@@ -26,9 +30,13 @@ test('can create a global mock client', function () {
 });
 
 test('the mock client can be destroyed', function () {
+    $client = new GlobalMockClient([]);
+
+    expect(GlobalMockClient::get())->toBe($client);
+
     GlobalMockClient::destroy();
 
-    expect(GlobalMockClient::resolve())->toBeNull();
+    expect(GlobalMockClient::get())->toBeNull();
 });
 
 test('a local mock client is given priority over the global mock client', function () {
@@ -49,5 +57,5 @@ test('a local mock client is given priority over the global mock client', functi
     expect($response->json())->toEqual(['name' => 'Taylor']);
 
     $localMockClient->assertSentCount(1);
-    GlobalMockClient::resolve()->assertNothingSent();
+    GlobalMockClient::get()->assertNothingSent();
 });

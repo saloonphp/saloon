@@ -91,7 +91,7 @@ class PendingRequest
         $this->method = $request->getMethod();
         $this->url = URLHelper::join($this->connector->resolveBaseUrl(), $this->request->resolveEndpoint());
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
-        $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient() ?? GlobalMockClient::resolve()?->getMockClient();
+        $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient() ?? GlobalMockClient::get()?->getMockClient();
 
         // Now, we'll register our global middleware and our mock response middleware.
         // Registering these middleware first means that the mock client can set
