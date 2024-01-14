@@ -66,7 +66,6 @@ final class Helpers
      * Check if a class is a subclass of another.
      *
      * @param class-string $class
-     * @throws \ReflectionException
      */
     public static function isSubclassOf(string $class, string $subclass): bool
     {

@@ -44,8 +44,6 @@ interface FakeResponse
 
     /**
      * Create a new mock response from a fixture
-     *
-     * @throws \Saloon\Exceptions\DirectoryNotFoundException
      */
     public static function fixture(string $name): Fixture;
 
