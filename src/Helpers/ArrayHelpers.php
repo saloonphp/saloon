@@ -75,31 +75,4 @@ final class ArrayHelpers
 
         return $array;
     }
-
-    /**
-     * Map an array with keys
-     *
-     * @template TKey of array-key
-     * @template TValue
-     * @template TReturnKey of array-key
-     * @template TReturnValue
-     *
-     * @param array<TKey, TValue> $items
-     * @param callable(TValue, TKey): (array<TReturnKey, TReturnValue>) $callback
-     * @return array<TReturnKey, TReturnValue>
-     */
-    public static function mapWithKeys(array $items, callable $callback): array
-    {
-        $result = [];
-
-        foreach ($items as $key => $value) {
-            $assoc = $callback($value, $key);
-
-            foreach ($assoc as $mapKey => $mapValue) {
-                $result[$mapKey] = $mapValue;
-            }
-        }
-
-        return $result;
-    }
 }

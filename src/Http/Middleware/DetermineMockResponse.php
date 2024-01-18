@@ -15,9 +15,6 @@ class DetermineMockResponse implements RequestMiddleware
     /**
      * Check if a MockClient has been provided and guess the MockResponse based on the request.
      *
-     * @throws \JsonException
-     * @throws \Saloon\Exceptions\DuplicatePipeNameException
-     * @throws \Saloon\Exceptions\FixtureException
      * @throws \Saloon\Exceptions\FixtureMissingException
      * @throws \Saloon\Exceptions\NoMockResponseFoundException
      */
@@ -53,7 +50,7 @@ class DetermineMockResponse implements RequestMiddleware
         // middleware on the response to record the response.
 
         if (is_null($mockResponse) && $mockObject instanceof Fixture) {
-            $pendingRequest->middleware()->onResponse(new RecordFixture($mockObject), 'recordFixture', PipeOrder::FIRST);
+            $pendingRequest->middleware()->onResponse(new RecordFixture($mockObject, $mockClient), 'recordFixture', PipeOrder::FIRST);
         }
 
         return $pendingRequest;

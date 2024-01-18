@@ -33,6 +33,7 @@
         "league/flysystem": "^3.0",
         "pestphp/pest": "^2.6",
         "phpstan/phpstan": "^1.9",
+        "saloonphp/xml-wrangler": "^1.1",
         "spatie/ray": "^1.33",
         "symfony/dom-crawler": "^6.0"
     },
@@ -41,7 +42,8 @@
     },
     "suggest": {
         "illuminate/collections": "Required for the response collect() method.",
-        "symfony/dom-crawler": "Required for the response dom() method."
+        "symfony/dom-crawler": "Required for the response dom() method.",
+        "saloonphp/xml-wrangler": "Required for the response xmlReader() method."
     },
     "minimum-stability": "stable",
     "autoload": {

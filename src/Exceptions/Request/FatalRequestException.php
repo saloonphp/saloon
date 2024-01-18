@@ -8,6 +8,15 @@ use Throwable;
 use Saloon\Http\PendingRequest;
 use Saloon\Exceptions\SaloonException;
 
+/**
+ * FatalRequestException
+ *
+ * This exception is thrown when the sender encountered a problem before the API
+ * was able to respond. For example: An issue with connecting to the API or
+ * an SSL error.
+ *
+ * @see https://docs.saloon.dev/the-basics/handling-failures
+ */
 class FatalRequestException extends SaloonException
 {
     /**

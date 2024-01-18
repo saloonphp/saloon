@@ -22,7 +22,6 @@ class Pipeline
      *
      * @param callable(mixed $payload): (mixed) $callable
      * @return $this
-     * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
     public function pipe(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
     {
@@ -79,7 +78,6 @@ class Pipeline
      *
      * @param array<\Saloon\Data\Pipe> $pipes
      * @return $this
-     * @throws \Saloon\Exceptions\DuplicatePipeNameException
      */
     public function setPipes(array $pipes): static
     {

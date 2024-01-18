@@ -6,7 +6,6 @@ namespace Saloon\Repositories\Body;
 
 use InvalidArgumentException;
 use Saloon\Data\MultipartValue;
-use Saloon\Helpers\ArrayHelpers;
 use Saloon\Traits\Conditionable;
 use Saloon\Helpers\StringHelpers;
 use Saloon\Exceptions\BodyException;
@@ -105,7 +104,7 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
      */
     public function attach(MultipartValue $file): static
     {
-        $this->data->add($file->name, $file);
+        $this->data->add(null, $file);
 
         return $this;
     }
@@ -124,10 +123,23 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
      * Get a specific key of the array
      *
      * @param array-key $key
+     * @return MultipartValue|array<MultipartValue>
      */
-    public function get(string|int $key, mixed $default = null): MultipartValue
+    public function get(string|int $key, mixed $default = null): MultipartValue|array
     {
-        return $this->data->get($key, $default);
+        $values = array_filter($this->all(), static function (MultipartValue $value) use ($key) {
+            return $value->name === $key;
+        });
+
+        if (count($values) === 0) {
+            return $default;
+        }
+
+        if (count($values) === 1) {
+            return $values[0];
+        }
+
+        return $values;
     }
 
     /**
@@ -137,7 +149,11 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
      */
     public function remove(string $key): static
     {
-        $this->data->remove($key);
+        $values = array_filter($this->all(), static function (MultipartValue $value) use ($key) {
+            return $value->name !== $key;
+        });
+
+        $this->set($values);
 
         return $this;
     }
@@ -172,7 +188,7 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
             throw new InvalidArgumentException(sprintf('The value array must only contain %s objects.', MultipartValue::class));
         }
 
-        return ArrayHelpers::mapWithKeys($multipartValues, static fn (MultipartValue $value) => [$value->name => $value]);
+        return array_values($value);
     }
 
     /**
