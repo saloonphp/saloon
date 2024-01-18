@@ -53,10 +53,16 @@ class MockClient
     protected array $recordedResponses = [];
 
     /**
+     * Global Mock Client
+     *
+     * Use MockClient::global() to register a global mock client
+     */
+    protected static ?MockClient $globalMockClient = null;
+
+    /**
      * Constructor
      *
      * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $mockData
-     * @throws \Saloon\Exceptions\InvalidMockResponseCaptureMethodException
      */
     public function __construct(array $mockData = [])
     {
@@ -67,7 +73,6 @@ class MockClient
      * Store the mock responses in the correct places.
      *
      * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $responses
-     * @throws \Saloon\Exceptions\InvalidMockResponseCaptureMethodException
      */
     public function addResponses(array $responses): void
     {
@@ -82,8 +87,6 @@ class MockClient
 
     /**
      * Add a mock response to the client
-     *
-     * @throws \Saloon\Exceptions\InvalidMockResponseCaptureMethodException
      */
     public function addResponse(MockResponse|Fixture|callable $response, ?string $captureMethod = null): void
     {
@@ -238,8 +241,6 @@ class MockClient
 
     /**
      * Assert that a given request was sent.
-     *
-     * @throws \ReflectionException
      */
     public function assertSent(string|callable $value): void
     {
@@ -250,8 +251,6 @@ class MockClient
 
     /**
      * Assert that a given request was not sent.
-     *
-     * @throws \ReflectionException
      */
     public function assertNotSent(string|callable $request): void
     {
@@ -264,7 +263,6 @@ class MockClient
      * Assert JSON data was sent
      *
      * @param array<string, mixed> $data
-     * @throws \ReflectionException
      */
     public function assertSentJson(string $request, array $data): void
     {
@@ -291,8 +289,6 @@ class MockClient
 
     /**
      * Check if a given request was sent
-     *
-     * @throws \ReflectionException
      */
     protected function checkRequestWasSent(string|callable $request): bool
     {
@@ -315,8 +311,6 @@ class MockClient
 
     /**
      * Check if a request has not been sent.
-     *
-     * @throws \ReflectionException
      */
     protected function checkRequestWasNotSent(string|callable $request): bool
     {
@@ -371,6 +365,36 @@ class MockClient
         }
 
         return null;
+    }
+
+    /**
+     * Register a global mock client
+     *
+     * This will register a global mock client that is available throughout the
+     * application's lifecycle. You should destroy the global mock client
+     * after each test using MockClient::destroyGlobal().
+     *
+     * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $mockData
+     */
+    public static function global(array $mockData = []): MockClient
+    {
+        return static::$globalMockClient ??= new static($mockData);
+    }
+
+    /**
+     * Get the global mock client if it has been registered
+     */
+    public static function getGlobal(): ?MockClient
+    {
+        return static::$globalMockClient;
+    }
+
+    /**
+     * Destroy the global mock client
+     */
+    public static function destroyGlobal(): void
+    {
+        static::$globalMockClient = null;
     }
 
     /**
