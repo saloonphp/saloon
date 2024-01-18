@@ -161,7 +161,7 @@ trait AuthorizationCodeGrant
     /**
      * Create the authenticator.
      */
-    protected function createOAuthAuthenticator(string $accessToken, string $refreshToken, ?DateTimeImmutable $expiresAt = null): OAuthAuthenticator
+    protected function createOAuthAuthenticator(string $accessToken, ?string $refreshToken = null, ?DateTimeImmutable $expiresAt = null): OAuthAuthenticator
     {
         return new AccessTokenAuthenticator($accessToken, $refreshToken, $expiresAt);
     }
