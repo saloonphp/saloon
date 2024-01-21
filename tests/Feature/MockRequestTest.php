@@ -6,6 +6,7 @@ use Saloon\MockConfig;
 use Saloon\Http\Response;
 use Saloon\Http\PendingRequest;
 use League\Flysystem\Filesystem;
+use Symfony\Component\Yaml\Yaml;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Exceptions\FixtureException;
@@ -29,7 +30,6 @@ use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
 use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
-use Symfony\Component\Yaml\Yaml;
 
 $filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon/Testing'));
 

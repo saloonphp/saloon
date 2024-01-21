@@ -6,9 +6,9 @@ namespace Saloon\Data;
 
 use JsonSerializable;
 use Saloon\Http\Response;
+use Symfony\Component\Yaml\Yaml;
 use Saloon\Http\Faking\MockResponse;
 use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Yaml;
 
 class RecordedResponse implements JsonSerializable
 {

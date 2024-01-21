@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Unit;
 
+use Symfony\Component\Yaml\Yaml;
 use Saloon\Data\RecordedResponse;
 use Saloon\Http\Faking\MockResponse;
-use Symfony\Component\Yaml\Yaml;
 
 test('you can create a fixture data object from a file string', function () {
     $data = [
