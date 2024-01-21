@@ -260,7 +260,9 @@ class MockClient
     }
 
     /**
-     * Assert JSON data was sent
+     * Assert JSON response data was received
+     *
+     * @deprecated This method will be removed in v4
      *
      * @param array<string, mixed> $data
      */
@@ -282,8 +284,16 @@ class MockClient
     /**
      * Assert a request count has been met.
      */
-    public function assertSentCount(int $count): void
+    public function assertSentCount(int $count, string $requestClass = null): void
     {
+        if (is_string($requestClass)) {
+            $actualCount = $this->getRequestSentCount()[$requestClass] ?? 0;
+
+            PHPUnit::assertEquals($count, $actualCount);
+
+            return;
+        }
+
         PHPUnit::assertCount($count, $this->getRecordedResponses());
     }
 
@@ -457,5 +467,19 @@ class MockClient
         }
 
         return $mockable($pendingRequest);
+    }
+
+    /**
+     * Get an array of requests recorded with their count
+     *
+     * @return array<class-string, int>
+     */
+    private function getRequestSentCount(): array
+    {
+        $requests = array_map(static function (Response $response) {
+            return $response->getRequest()::class;
+        }, $this->getRecordedResponses());
+
+        return array_count_values($requests);
     }
 }
