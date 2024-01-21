@@ -1,0 +1,18 @@
+statusCode: 200
+headers:
+    Date: 'Sun, 21 Jan 2024 16:54:41 GMT'
+    Content-Type: application/json
+    Content-Length: '63'
+    Connection: keep-alive
+    access-control-allow-origin: '*'
+    Cache-Control: 'no-cache, private'
+    x-frame-options: SAMEORIGIN
+    x-xss-protection: '1; mode=block'
+    x-content-type-options: nosniff
+    CF-Cache-Status: DYNAMIC
+    Report-To: '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=a5qItZCjVVxhAJZHD9QYPhxZE9IRT2aHny9RGq8KAEBpv1TyORtRLGZeQ4dS5FEZhT%2BIuHCXNXjSEJAZ%2Bd7azJqozHyJDU%2BymPaAxYYvJe3TkY9E1HKy2v5zaZGqMl5XwXDR7pkh2w%2B1EuJI7Tfw"}],"group":"cf-nel","max_age":604800}'
+    NEL: '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+    Server: cloudflare
+    CF-RAY: 8491149a3a5924d4-LHR
+    alt-svc: 'h3=":443"; ma=86400'
+data: '{"name":"Sammyjo20","actual_name":"Sam","twitter":"@carre_sam"}'
