@@ -6,6 +6,7 @@ namespace Saloon\Tests\Unit;
 
 use Saloon\Data\RecordedResponse;
 use Saloon\Http\Faking\MockResponse;
+use Symfony\Component\Yaml\Yaml;
 
 test('you can create a fixture data object from a file string', function () {
     $data = [
@@ -55,8 +56,5 @@ test('you can json serialize the fixture data or convert it into a file', functi
 
     $fixtureData = RecordedResponse::fromFile(json_encode($data));
 
-    $serialized = json_encode($fixtureData);
-
-    expect($serialized)->toEqual(json_encode($data));
-    expect($fixtureData->toFile())->toEqual($serialized);
+    expect($fixtureData->toFile())->toEqual(Yaml::dump($data));
 });

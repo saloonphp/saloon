@@ -16,7 +16,7 @@ class Fixture
     /**
      * The extension used by the fixture
      */
-    protected static string $fixtureExtension = 'json';
+    protected static string $fixtureExtension = 'yaml';
 
     /**
      * The name of the fixture
@@ -44,6 +44,10 @@ class Fixture
     {
         $storage = $this->storage;
         $fixturePath = $this->getFixturePath();
+
+        if (! $storage->exists($fixturePath)) {
+            $fixturePath = $this->getFixturePath('json');
+        }
 
         if ($storage->exists($fixturePath)) {
             return RecordedResponse::fromFile($storage->get($fixturePath))->toMockResponse();
@@ -78,7 +82,7 @@ class Fixture
      *
      * @throws \Saloon\Exceptions\FixtureException
      */
-    public function getFixturePath(): string
+    public function getFixturePath(string $extension = null): string
     {
         $name = $this->name;
 
@@ -90,7 +94,7 @@ class Fixture
             throw new FixtureException('The fixture must have a name');
         }
 
-        return sprintf('%s.%s', $name, $this::$fixtureExtension);
+        return sprintf('%s.%s', $name, $extension ?? $this::$fixtureExtension);
     }
 
     /**

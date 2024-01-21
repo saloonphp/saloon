@@ -7,6 +7,8 @@ namespace Saloon\Data;
 use JsonSerializable;
 use Saloon\Http\Response;
 use Saloon\Http\Faking\MockResponse;
+use Symfony\Component\Yaml\Exception\ParseException;
+use Symfony\Component\Yaml\Yaml;
 
 class RecordedResponse implements JsonSerializable
 {
@@ -30,14 +32,11 @@ class RecordedResponse implements JsonSerializable
      */
     public static function fromFile(string $contents): static
     {
-        /**
-         * @param array{
-         *     statusCode: int,
-         *     headers: array<string, mixed>,
-         *     data: mixed,
-         * } $fileData
-         */
-        $fileData = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
+        try {
+            $fileData = Yaml::parse($contents);
+        } catch (ParseException) {
+            $fileData = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
+        }
 
         $data = $fileData['data'];
 
@@ -66,12 +65,10 @@ class RecordedResponse implements JsonSerializable
 
     /**
      * Encode the instance to be stored as a file
-     *
-     * @throws \JsonException
      */
     public function toFile(): string
     {
-        return json_encode($this, JSON_THROW_ON_ERROR);
+        return Yaml::dump($this->toArray());
     }
 
     /**
@@ -83,7 +80,7 @@ class RecordedResponse implements JsonSerializable
     }
 
     /**
-     * Define the JSON object if this class is converted into JSON
+     * Convert the recorded response into an array
      *
      * @return array{
      *     statusCode: int,
@@ -91,7 +88,7 @@ class RecordedResponse implements JsonSerializable
      *     data: mixed,
      * }
      */
-    public function jsonSerialize(): array
+    public function toArray(): array
     {
         $response = [
             'statusCode' => $this->statusCode,
@@ -105,5 +102,19 @@ class RecordedResponse implements JsonSerializable
         }
 
         return $response;
+    }
+
+    /**
+     * Define the JSON object if this class is converted into JSON
+     *
+     * @return array{
+     *     statusCode: int,
+     *     headers: array<string, mixed>,
+     *     data: mixed,
+     * }
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 }

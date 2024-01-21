@@ -29,6 +29,7 @@ use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
 use Saloon\Tests\Fixtures\Connectors\DifferentServiceConnector;
 use Saloon\Tests\Fixtures\Requests\DifferentServiceUserRequest;
 use Saloon\Tests\Fixtures\Requests\QueryParameterConnectorRequest;
+use Symfony\Component\Yaml\Yaml;
 
 $filesystem = new Filesystem(new LocalFilesystemAdapter('tests/Fixtures/Saloon/Testing'));
 
@@ -365,7 +366,7 @@ test('a fixture can be used with a request mock', function () use ($filesystem) 
         'twitter' => '@carre_sam',
     ]);
 
-    expect($filesystem->fileExists('user.json'))->toBeTrue();
+    expect($filesystem->fileExists('user.yaml'))->toBeTrue();
 
     $responseB = connector()->send(new UserRequest, $mockClient);
 
@@ -380,17 +381,17 @@ test('a fixture can be used with a request mock', function () use ($filesystem) 
 
 test('a fixture can be used with a url mock', function () use ($filesystem) {
     $mockClient = new MockClient([
-        'tests.saloon.dev/api/user' => MockResponse::fixture('user'), // Test Exact Route
-        'tests.saloon.dev/*' => MockResponse::fixture('other'), // Test Wildcard Routes
+        'tests.saloon.dev/api/user' => MockResponse::fixture('user-url'), // Test Exact Route
+        'tests.saloon.dev/*' => MockResponse::fixture('other-url'), // Test Wildcard Routes
     ]);
 
-    expect($filesystem->fileExists('user.json'))->toBeFalse();
-    expect($filesystem->fileExists('other.json'))->toBeFalse();
+    expect($filesystem->fileExists('user-url.yaml'))->toBeFalse();
+    expect($filesystem->fileExists('other-url.yaml'))->toBeFalse();
 
     $responseA = connector()->send(new UserRequest, $mockClient);
 
-    expect($filesystem->fileExists('user.json'))->toBeTrue();
-    expect($filesystem->fileExists('other.json'))->toBeFalse();
+    expect($filesystem->fileExists('user-url.yaml'))->toBeTrue();
+    expect($filesystem->fileExists('other-url.yaml'))->toBeFalse();
 
     expect($responseA->isMocked())->toBeFalse();
     expect($responseA->status())->toEqual(200);
@@ -402,8 +403,8 @@ test('a fixture can be used with a url mock', function () use ($filesystem) {
 
     $responseB = connector()->send(new ErrorRequest, $mockClient);
 
-    expect($filesystem->fileExists('user.json'))->toBeTrue();
-    expect($filesystem->fileExists('other.json'))->toBeTrue();
+    expect($filesystem->fileExists('user-url.yaml'))->toBeTrue();
+    expect($filesystem->fileExists('other-url.yaml'))->toBeTrue();
 
     expect($responseB->isMocked())->toBeFalse();
     expect($responseB->status())->toEqual(500);
@@ -619,7 +620,7 @@ test('you can hide sensitive json body parameters and headers before the fixture
     expect($responseB->header('Server'))->toEqual('secret');
     expect($responseB->header('Cache-Control'))->toEqual('no-cache, private, yeehaw');
 
-    $fixtureData = json_decode(file_get_contents('tests/Fixtures/Saloon/Testing/user.json'), true, 512, JSON_THROW_ON_ERROR);
+    $fixtureData = Yaml::parse(file_get_contents('tests/Fixtures/Saloon/Testing/user.yaml'));
 
     expect($fixtureData['headers']['Server'])->toEqual('secret');
     expect($fixtureData['headers']['Cache-Control'])->toEqual('no-cache, private, yeehaw');
@@ -680,7 +681,7 @@ test('you can define regex patterns that should be used to replace the body in f
         'twitter' => '**REDACTED-TWITTER**',
     ]);
 
-    $fixtureData = json_decode(file_get_contents('tests/Fixtures/Saloon/Testing/user.json'), true, 512, JSON_THROW_ON_ERROR);
+    $fixtureData = Yaml::parseFile('tests/Fixtures/Saloon/Testing/user.yaml');
 
     expect($fixtureData['data'])->toEqual(json_encode([
         'name' => 'Sxxxmyjo20',
@@ -738,4 +739,26 @@ test('fixtures are still recorded on the first request', function () {
     connector()->send(new UserRequest, $mockClient);
 
     $mockClient->assertSent(UserRequest::class);
+});
+
+test('if a fixture is recorded in json it can still be parsed', function () use ($filesystem) {
+    MockConfig::setFixturePath('tests/Fixtures/Json');
+
+    $fixture = MockResponse::fixture('user');
+
+    expect(file_exists('tests/Fixtures/Json/' . $fixture->getFixturePath('json')))->toBeTrue();
+
+    $mockClient = new MockClient([
+        UserRequest::class => $fixture,
+    ]);
+
+    $responseB = connector()->send(new UserRequest, $mockClient);
+
+    expect($responseB->isMocked())->toBeTrue();
+    expect($responseB->status())->toEqual(200);
+    expect($responseB->json())->toEqual([
+        'name' => 'Sammyjo20',
+        'actual_name' => 'Sam',
+        'twitter' => '@carre_sam',
+    ]);
 });
