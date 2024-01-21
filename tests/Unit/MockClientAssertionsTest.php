@@ -180,9 +180,6 @@ test('can assert count of requests', function () {
 
     $mockClient->assertSentCount(3, UserRequest::class);
     $mockClient->assertSentCount(1, ErrorRequest::class);
-
-    $mockClient->assertSent(UserRequest::class, 3);
-    $mockClient->assertSent(ErrorRequest::class, 1);
 });
 
 test('assertSent with a closure works with more than one request in the history', function () {
