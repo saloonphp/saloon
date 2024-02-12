@@ -142,8 +142,6 @@ class Pool
 
     /**
      * Send the pool and create a Promise
-     *
-     * @throws \Saloon\Exceptions\InvalidPoolItemException
      */
     public function send(): PromiseInterface
     {

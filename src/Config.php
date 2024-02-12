@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon;
 
+use Saloon\Enums\PipeOrder;
 use Saloon\Contracts\Sender;
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Senders\GuzzleSender;
 use Saloon\Helpers\MiddlewarePipeline;
+use Saloon\Exceptions\StrayRequestException;
 
 final class Config
 {
@@ -76,5 +79,17 @@ final class Config
     public static function clearGlobalMiddleware(): void
     {
         self::$globalMiddlewarePipeline = null;
+    }
+
+    /**
+     * Throw an exception if a request without a MockClient is made.
+     */
+    public static function preventStrayRequests(): void
+    {
+        self::globalMiddleware()->onRequest(static function (PendingRequest $pendingRequest) {
+            if (! $pendingRequest->hasMockClient()) {
+                throw new StrayRequestException;
+            }
+        }, order: PipeOrder::LAST);
     }
 }

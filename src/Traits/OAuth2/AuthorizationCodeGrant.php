@@ -32,7 +32,6 @@ trait AuthorizationCodeGrant
      * Get the Authorization URL.
      *
      * @param array<string> $scopes
-     * @throws \Saloon\Exceptions\OAuthConfigValidationException
      */
     public function getAuthorizationUrl(array $scopes = [], string $state = null, string $scopeSeparator = ' ', array $additionalQueryParameters = []): string
     {
@@ -46,14 +45,14 @@ trait AuthorizationCodeGrant
 
         $this->state = $state ?? StringHelpers::random(32);
 
-        $queryParameters = [
+        $queryParameters = array_filter([
             'response_type' => 'code',
-            'scope' => implode($scopeSeparator, array_merge($defaultScopes, $scopes)),
+            'scope' => implode($scopeSeparator, array_filter(array_merge($defaultScopes, $scopes))),
             'client_id' => $clientId,
             'redirect_uri' => $redirectUri,
             'state' => $this->state,
             ...$additionalQueryParameters,
-        ];
+        ]);
 
         $query = http_build_query($queryParameters, '', '&', PHP_QUERY_RFC3986);
         $query = trim($query, '?&');
@@ -71,10 +70,7 @@ trait AuthorizationCodeGrant
      * @template TRequest of \Saloon\Http\Request
      *
      * @param callable(TRequest): (void)|null $requestModifier
-     * @throws \ReflectionException
      * @throws \Saloon\Exceptions\InvalidStateException
-     * @throws \Saloon\Exceptions\OAuthConfigValidationException
-     * @throws \Throwable
      */
     public function getAccessToken(string $code, string $state = null, string $expectedState = null, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
@@ -109,9 +105,6 @@ trait AuthorizationCodeGrant
      * @template TRequest of \Saloon\Http\Request
      *
      * @param callable(TRequest): (void)|null $requestModifier
-     * @throws \ReflectionException
-     * @throws \Saloon\Exceptions\OAuthConfigValidationException
-     * @throws \Throwable
      */
     public function refreshAccessToken(OAuthAuthenticator|string $refreshToken, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
@@ -168,7 +161,7 @@ trait AuthorizationCodeGrant
     /**
      * Create the authenticator.
      */
-    protected function createOAuthAuthenticator(string $accessToken, string $refreshToken, ?DateTimeImmutable $expiresAt = null): OAuthAuthenticator
+    protected function createOAuthAuthenticator(string $accessToken, ?string $refreshToken = null, ?DateTimeImmutable $expiresAt = null): OAuthAuthenticator
     {
         return new AccessTokenAuthenticator($accessToken, $refreshToken, $expiresAt);
     }
@@ -179,8 +172,6 @@ trait AuthorizationCodeGrant
      * @template TRequest of \Saloon\Http\Request
      *
      * @param callable(TRequest): (void)|null $requestModifier
-     * @throws \ReflectionException
-     * @throws \Throwable
      */
     public function getUser(OAuthAuthenticator $oauthAuthenticator, ?callable $requestModifier = null): Response
     {

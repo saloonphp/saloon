@@ -2,32 +2,31 @@
 
 declare(strict_types=1);
 
-namespace Saloon\Http\Middleware;
+namespace Saloon\Http\PendingRequest;
 
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Body\HasBody;
-use Saloon\Contracts\RequestMiddleware;
 use Saloon\Contracts\Body\MergeableBody;
 use Saloon\Exceptions\PendingRequestException;
 use Saloon\Repositories\Body\MultipartBodyRepository;
 
-class MergeBody implements RequestMiddleware
+class MergeBody
 {
     /**
-     * Register a request middleware
+     * Merge connector and request body
      *
      * @throws \Saloon\Exceptions\PendingRequestException
      */
-    public function __invoke(PendingRequest $pendingRequest): void
+    public function __invoke(PendingRequest $pendingRequest): PendingRequest
     {
         $connector = $pendingRequest->getConnector();
         $request = $pendingRequest->getRequest();
 
-        $connectorBody = $connector instanceof HasBody ? $connector->body() : null;
-        $requestBody = $request instanceof HasBody ? $request->body() : null;
+        $connectorBody = $connector instanceof HasBody ? clone $connector->body() : null;
+        $requestBody = $request instanceof HasBody ? clone $request->body() : null;
 
         if (is_null($connectorBody) && is_null($requestBody)) {
-            return;
+            return $pendingRequest;
         }
 
         // When both the connector and the request use the `HasBody` interface - we will enforce
@@ -38,21 +37,20 @@ class MergeBody implements RequestMiddleware
             throw new PendingRequestException('Connector and request body types must be the same.');
         }
 
-        // We'll start by cloning the request or connector body depending on which
-        // one has been set.
+        // Now we'll look at both the request body and the connector body. If the request
+        // body is null (not set) then we will use the connector body. If both are set
+        // then the request body will still be preferred.
 
-        $body = clone $requestBody ?? clone $connectorBody;
+        $body = $requestBody ?? $connectorBody;
 
         // When both the connector and the request body repositories are mergeable then we
         // will merge them together.
 
         if (isset($connectorBody, $requestBody) && $connectorBody instanceof MergeableBody && $requestBody instanceof MergeableBody) {
-            $repository = clone $connectorBody;
-
-            // We'll clone the request body into the connector body so any properties on the request
+            // We'll merge the request body into the connector body so any properties on the request
             // body will take priority if they are using a keyed array.
 
-            $body = $repository->merge($requestBody->get());
+            $body = $connectorBody->merge($requestBody->all());
         }
 
         // Now we'll check if the body is a MultipartBodyRepository. If it is, then we must
@@ -64,5 +62,7 @@ class MergeBody implements RequestMiddleware
         }
 
         $pendingRequest->setBody($body);
+
+        return $pendingRequest;
     }
 }

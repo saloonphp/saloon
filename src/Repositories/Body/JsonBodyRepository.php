@@ -45,7 +45,7 @@ class JsonBodyRepository extends ArrayBodyRepository implements Stringable
      */
     public function __toString(): string
     {
-        $json = json_encode($this->get(), $this->getJsonFlags());
+        $json = json_encode($this->all(), $this->getJsonFlags());
 
         return $json === false ? '' : $json;
     }

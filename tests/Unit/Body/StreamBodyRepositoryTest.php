@@ -8,6 +8,7 @@ use Saloon\Repositories\Body\StreamBodyRepository;
 test('the store is empty by default', function () {
     $body = new StreamBodyRepository();
 
+    expect($body->all())->toBeNull();
     expect($body->get())->toBeNull();
 });
 
@@ -17,6 +18,7 @@ test('the store can have a default stream provided', function () {
 
     $body = new StreamBodyRepository($resource);
 
+    expect($body->all())->toEqual($resource);
     expect($body->get())->toEqual($resource);
 });
 

@@ -117,7 +117,7 @@ test('you can use pool with a mock client added and it wont send real requests',
 
     $pool->withResponseHandler(function (Response $response) use (&$successCount, $mockResponses) {
         expect($response)->toBeInstanceOf(Response::class);
-        expect($response->json())->toEqual($mockResponses[$successCount]->body()->get());
+        expect($response->json())->toEqual($mockResponses[$successCount]->body()->all());
 
         $successCount++;
     });

@@ -13,13 +13,12 @@ use Saloon\Contracts\RequestMiddleware;
 class DetermineMockResponse implements RequestMiddleware
 {
     /**
-     * Guess a mock response
+     * Check if a MockClient has been provided and guess the MockResponse based on the request.
      *
-     * @throws \JsonException
-     * @throws \Saloon\Exceptions\FixtureException
      * @throws \Saloon\Exceptions\FixtureMissingException
+     * @throws \Saloon\Exceptions\NoMockResponseFoundException
      */
-    public function __invoke(PendingRequest $pendingRequest): PendingRequest|MockResponse
+    public function __invoke(PendingRequest $pendingRequest): PendingRequest
     {
         if ($pendingRequest->hasMockClient() === false) {
             return $pendingRequest;
@@ -40,10 +39,10 @@ class DetermineMockResponse implements RequestMiddleware
 
         // If the mock response is a valid instance, we will return it.
         // The middleware pipeline will recognise this and will set
-        // it as the "FakeResponse" on the request.
+        // it as the "FakeResponse" on the PendingRequest.
 
         if ($mockResponse instanceof MockResponse) {
-            return $mockResponse;
+            return $pendingRequest->setFakeResponse($mockResponse);
         }
 
         // However if the mock response is not valid because it is
@@ -51,7 +50,7 @@ class DetermineMockResponse implements RequestMiddleware
         // middleware on the response to record the response.
 
         if (is_null($mockResponse) && $mockObject instanceof Fixture) {
-            $pendingRequest->middleware()->onResponse(new RecordFixture($mockObject), 'recordFixture', PipeOrder::FIRST);
+            $pendingRequest->middleware()->onResponse(new RecordFixture($mockObject, $mockClient), 'recordFixture', PipeOrder::FIRST);
         }
 
         return $pendingRequest;

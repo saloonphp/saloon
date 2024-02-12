@@ -18,8 +18,6 @@ trait HasMultipartBody
 
     /**
      * Boot the HasMultipartBody trait
-     *
-     * @throws \Exception
      */
     public function bootHasMultipartBody(PendingRequest $pendingRequest): void
     {
@@ -28,8 +26,6 @@ trait HasMultipartBody
 
     /**
      * Retrieve the data repository
-     *
-     * @throws \Exception
      */
     public function body(): MultipartBodyRepository
     {

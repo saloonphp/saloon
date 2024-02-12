@@ -2,31 +2,29 @@
 
 declare(strict_types=1);
 
+use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Psr7\HttpFactory;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
-use Saloon\Tests\Fixtures\Requests\HasStringBodyRequest;
 
-test('the default body is loaded', function () {
-    $request = new HasStringBodyRequest();
-
-    expect($request->body()->all())->toEqual('name: Sam');
-});
-
-test('the guzzle sender properly sends it', function () {
+test('you can provide digest authentication and guzzle will send it', function () {
     $connector = new TestConnector;
-    $request = new HasStringBodyRequest;
+    $request = new UserRequest;
 
-    $request->headers()->add('Content-Type', 'application/custom');
+    $request->withDigestAuth('Sammyjo20', 'Cowboy1', 'Howdy');
 
     $asserted = false;
 
     $connector->sender()->addMiddleware(function (callable $handler) use ($request, &$asserted) {
         return function (RequestInterface $guzzleRequest, array $options) use ($request, &$asserted) {
-            expect($guzzleRequest->getHeader('Content-Type'))->toEqual(['application/custom']);
-            expect((string)$guzzleRequest->getBody())->toEqual((string)$request->body());
+            expect($options)->toHaveKey(RequestOptions::AUTH, [
+                'Sammyjo20',
+                'Cowboy1',
+                'Howdy',
+            ]);
 
             $asserted = true;
 

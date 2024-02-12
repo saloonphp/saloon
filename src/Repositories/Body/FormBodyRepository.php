@@ -16,6 +16,6 @@ class FormBodyRepository extends ArrayBodyRepository implements Stringable
      */
     public function __toString(): string
     {
-        return http_build_query($this->get());
+        return http_build_query($this->all());
     }
 }

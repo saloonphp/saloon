@@ -43,7 +43,7 @@ class StringBodyRepository implements BodyRepository, Stringable
     /**
      * Retrieve all in the repository
      */
-    public function get(): ?string
+    public function all(): ?string
     {
         return $this->data;
     }
@@ -69,6 +69,6 @@ class StringBodyRepository implements BodyRepository, Stringable
      */
     public function __toString(): string
     {
-        return $this->get() ?? '';
+        return $this->all() ?? '';
     }
 }

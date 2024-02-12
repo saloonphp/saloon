@@ -9,7 +9,7 @@ use Saloon\Repositories\Body\MultipartBodyRepository;
 test('the store is empty by default', function () {
     $body = new MultipartBodyRepository();
 
-    expect($body->get())->toEqual([]);
+    expect($body->all())->toEqual([]);
 });
 
 test('the store can have an array of multipart values provided', function () {
@@ -18,9 +18,9 @@ test('the store can have an array of multipart values provided', function () {
         new MultipartValue('sidekick', 'Mantas'),
     ]);
 
-    expect($body->get())->toEqual([
-        'name' => new MultipartValue('name', 'Sam'),
-        'sidekick' => new MultipartValue('sidekick', 'Mantas'),
+    expect($body->all())->toEqual([
+        new MultipartValue('name', 'Sam'),
+        new MultipartValue('sidekick', 'Mantas'),
     ]);
 });
 
@@ -49,40 +49,41 @@ test('you can set it', function () {
         new MultipartValue('username', 'Sammyjo20'),
     ]);
 
-    expect($body->get())->toEqual([
-        'username' => new MultipartValue('username', 'Sammyjo20'),
+    expect($body->all())->toEqual([
+        new MultipartValue('username', 'Sammyjo20'),
     ]);
 });
 
-test('you can add an item', function () {
-    $body = new MultipartBodyRepository();
+test('you can add multiple items', function () {
+    $body = new MultipartBodyRepository;
 
     $body->add('name', 'Sam', 'welcome.txt', ['a' => 'b']);
 
-    expect($body->get())->toEqual([
-        'name' => new MultipartValue('name', 'Sam', 'welcome.txt', ['a' => 'b']),
+    expect($body->all())->toEqual([
+        new MultipartValue('name', 'Sam', 'welcome.txt', ['a' => 'b']),
     ]);
 
-    // Test it being overwritten
+    // Test it gets added to the array
 
     $body->add('name', 'Charlotte', 'welcome.txt', ['a' => 'b']);
 
-    expect($body->get())->toEqual([
-        'name' => new MultipartValue('name', 'Charlotte', 'welcome.txt', ['a' => 'b']),
+    expect($body->all())->toEqual([
+        new MultipartValue('name', 'Sam', 'welcome.txt', ['a' => 'b']),
+        new MultipartValue('name', 'Charlotte', 'welcome.txt', ['a' => 'b']),
     ]);
 });
 
 test('you can conditionally add items to the array store', function () {
-    $body = new MultipartBodyRepository();
+    $body = new MultipartBodyRepository;
 
     $body->when(true, fn (MultipartBodyRepository $body) => $body->add('name', 'Gareth'));
     $body->when(false, fn (MultipartBodyRepository $body) => $body->add('name', 'Sam'));
     $body->when(true, fn (MultipartBodyRepository $body) => $body->add('sidekick', 'Mantas'));
     $body->when(false, fn (MultipartBodyRepository $body) => $body->add('sidekick', 'Teo'));
 
-    expect($body->get())->toEqual([
-        'name' => new MultipartValue('name', 'Gareth'),
-        'sidekick' => new MultipartValue('sidekick', 'Mantas'),
+    expect($body->all())->toEqual([
+        new MultipartValue('name', 'Gareth'),
+        new MultipartValue('sidekick', 'Mantas'),
     ]);
 });
 
@@ -92,7 +93,7 @@ test('you can delete an item', function () {
     $body->add('name', 'Sam');
     $body->remove('name');
 
-    expect($body->get())->toEqual([]);
+    expect($body->all())->toEqual([]);
 });
 
 test('you can get an item', function () {
@@ -103,16 +104,31 @@ test('you can get an item', function () {
     expect($body->get('name'))->toEqual(new MultipartValue('name', 'Sam'));
 });
 
+test('you can get multiple items with the same name', function () {
+    $body = new MultipartBodyRepository();
+
+    $body->add('name', 'Sam');
+    $body->add('name', 'Alex');
+
+    expect($body->get('name'))->toEqual([
+        new MultipartValue('name', 'Sam'),
+        new MultipartValue('name', 'Alex'),
+    ]);
+});
+
 test('you can get all items', function () {
     $body = new MultipartBodyRepository();
 
     $body->add('name', 'Sam');
     $body->add('superhero', 'Iron Man');
 
-    expect($body->get())->toEqual([
-        'name' => new MultipartValue('name', 'Sam'),
-        'superhero' => new MultipartValue('superhero', 'Iron Man'),
-    ]);
+    $allResults = [
+        new MultipartValue('name', 'Sam'),
+        new MultipartValue('superhero', 'Iron Man'),
+    ];
+
+    expect($body->all())->toEqual($allResults);
+    expect($body->all())->toEqual($allResults);
 });
 
 test('you can merge items together into the body repository', function () {
@@ -125,10 +141,11 @@ test('you can merge items together into the body repository', function () {
 
     $body->merge([new MultipartValue('sidekick', 'Gareth')], [new MultipartValue('superhero', 'Black Widow')]);
 
-    expect($body->get())->toEqual([
-        'name' => new MultipartValue('name', 'Sam'),
-        'sidekick' => new MultipartValue('sidekick', 'Gareth'),
-        'superhero' => new MultipartValue('superhero', 'Black Widow'),
+    expect($body->all())->toEqual([
+        new MultipartValue('name', 'Sam'),
+        new MultipartValue('sidekick', 'Mantas'),
+        new MultipartValue('sidekick', 'Gareth'),
+        new MultipartValue('superhero', 'Black Widow'),
     ]);
 });
 

@@ -20,7 +20,7 @@
     "homepage": "https://github.com/saloonphp/saloon",
     "require": {
         "php": "^8.1",
-        "guzzlehttp/guzzle": "^7.7",
+        "guzzlehttp/guzzle": "^7.6",
         "guzzlehttp/promises": "^1.5 || ^2.0",
         "guzzlehttp/psr7": "^2.0",
         "psr/http-factory": "^1.0",
@@ -33,12 +33,17 @@
         "league/flysystem": "^3.0",
         "pestphp/pest": "^2.6",
         "phpstan/phpstan": "^1.9",
+        "saloonphp/xml-wrangler": "^1.1",
         "spatie/ray": "^1.33",
         "symfony/dom-crawler": "^6.0"
     },
+    "conflict": {
+        "sammyjo20/saloon": "*"
+    },
     "suggest": {
         "illuminate/collections": "Required for the response collect() method.",
-        "symfony/dom-crawler": "Required for the response dom() method."
+        "symfony/dom-crawler": "Required for the response dom() method.",
+        "saloonphp/xml-wrangler": "Required for the response xmlReader() method."
     },
     "minimum-stability": "stable",
     "autoload": {

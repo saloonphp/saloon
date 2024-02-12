@@ -6,7 +6,6 @@ namespace Saloon\Repositories\Body;
 
 use InvalidArgumentException;
 use Saloon\Data\MultipartValue;
-use Saloon\Helpers\ArrayHelpers;
 use Saloon\Traits\Conditionable;
 use Saloon\Helpers\StringHelpers;
 use Saloon\Exceptions\BodyException;
@@ -105,23 +104,42 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
      */
     public function attach(MultipartValue $file): static
     {
-        $this->data->add($file->name, $file);
+        $this->data->add(null, $file);
 
         return $this;
     }
 
     /**
+     * Get the raw data in the repository.
+     *
+     * @return array<\Saloon\Data\MultipartValue>
+     */
+    public function all(): array
+    {
+        return $this->data->all();
+    }
+
+    /**
      * Get a specific key of the array
      *
-     * @return ($key is null ? array<array-key, mixed> : mixed)
+     * @param array-key $key
+     * @return MultipartValue|array<MultipartValue>
      */
-    public function get(string|int $key = null, mixed $default = null): mixed
+    public function get(string|int $key, mixed $default = null): MultipartValue|array
     {
-        if (is_null($key)) {
-            return $this->data->get();
+        $values = array_filter($this->all(), static function (MultipartValue $value) use ($key) {
+            return $value->name === $key;
+        });
+
+        if (count($values) === 0) {
+            return $default;
         }
 
-        return $this->data->get($key, $default);
+        if (count($values) === 1) {
+            return $values[0];
+        }
+
+        return $values;
     }
 
     /**
@@ -131,7 +149,11 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
      */
     public function remove(string $key): static
     {
-        $this->data->remove($key);
+        $values = array_filter($this->all(), static function (MultipartValue $value) use ($key) {
+            return $value->name !== $key;
+        });
+
+        $this->set($values);
 
         return $this;
     }
@@ -166,7 +188,7 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
             throw new InvalidArgumentException(sprintf('The value array must only contain %s objects.', MultipartValue::class));
         }
 
-        return ArrayHelpers::mapWithKeys($multipartValues, static fn (MultipartValue $value) => [$value->name => $value]);
+        return array_values($value);
     }
 
     /**
@@ -198,6 +220,6 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
             throw new BodyException('Unable to create a multipart body stream because the multipart body factory was not set.');
         }
 
-        return $this->multipartBodyFactory->create($streamFactory, (array)$this->get(), $this->getBoundary());
+        return $this->multipartBodyFactory->create($streamFactory, $this->all(), $this->getBoundary());
     }
 }

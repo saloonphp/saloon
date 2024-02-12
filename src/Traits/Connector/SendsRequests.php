@@ -8,6 +8,7 @@ use LogicException;
 use Saloon\Http\Pool;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
+use GuzzleHttp\Promise\Utils;
 use GuzzleHttp\Promise\Promise;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
@@ -24,8 +25,6 @@ trait SendsRequests
      * Send a request synchronously
      *
      * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
-     * @throws \ReflectionException
-     * @throws \Throwable
      */
     public function send(Request $request, MockClient $mockClient = null, callable $handleRetry = null): Response
     {
@@ -38,6 +37,7 @@ trait SendsRequests
         $maxTries = $request->tries ?? $this->tries ?? 1;
         $retryInterval = $request->retryInterval ?? $this->retryInterval ?? 0;
         $throwOnMaxTries = $request->throwOnMaxTries ?? $this->throwOnMaxTries ?? true;
+        $useExponentialBackoff = $request->useExponentialBackoff ?? $this->useExponentialBackoff ?? false;
 
         if ($maxTries <= 0) {
             $maxTries = 1;
@@ -54,11 +54,17 @@ trait SendsRequests
             // the interval (if it has been provided)
 
             if ($attempts > 1) {
-                usleep($retryInterval * 1000);
+                $sleepTime = $useExponentialBackoff
+                    ? $retryInterval * (2 ** ($attempts - 2)) * 1000
+                    : $retryInterval * 1000;
+
+                usleep($sleepTime);
             }
 
             try {
                 $pendingRequest = $this->createPendingRequest($request, $mockClient);
+
+                // 🚀 ... 🪐  ... 💫
 
                 if ($pendingRequest->hasFakeResponse()) {
                     $response = $this->createFakeResponse($pendingRequest);
@@ -124,12 +130,14 @@ trait SendsRequests
         // this is great because our middleware will only run right before
         // the request is sent.
 
-        return $promise = new Promise(function () use (&$promise, $request, $mockClient, $sender) {
+        return Utils::task(function () use ($request, $mockClient, $sender) {
             $pendingRequest = $this->createPendingRequest($request, $mockClient)->setAsynchronous(true);
 
             // We need to check if the Pending Request contains a fake response.
             // If it does, then we will create the fake response. Otherwise,
             // we'll send the request.
+
+            // 🚀 ... 🪐  ... 💫
 
             if ($pendingRequest->hasFakeResponse()) {
                 $requestPromise = $this->createFakeResponse($pendingRequest);
@@ -139,11 +147,7 @@ trait SendsRequests
 
             $requestPromise->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
 
-            // We'll resolve the promise's value with another promise.
-            // We will use promise chaining as Guzzle's will fulfill
-            // the request promise.
-
-            $promise->resolve($requestPromise);
+            return $requestPromise;
         });
     }
 
@@ -151,22 +155,19 @@ trait SendsRequests
      * Send a synchronous request and retry if it fails
      *
      * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
-     * @throws \ReflectionException
-     * @throws \Throwable
      */
-    public function sendAndRetry(Request $request, int $tries, int $interval = 0, callable $handleRetry = null, bool $throw = true, MockClient $mockClient = null): Response
+    public function sendAndRetry(Request $request, int $tries, int $interval = 0, callable $handleRetry = null, bool $throw = true, MockClient $mockClient = null, bool $useExponentialBackoff = false): Response
     {
         $request->tries = $tries;
         $request->retryInterval = $interval;
         $request->throwOnMaxTries = $throw;
+        $request->useExponentialBackoff = $useExponentialBackoff;
 
         return $this->send($request, $mockClient, $handleRetry);
     }
 
     /**
      * Create a new PendingRequest
-     *
-     * @throws \ReflectionException
      */
     public function createPendingRequest(Request $request, MockClient $mockClient = null): PendingRequest
     {

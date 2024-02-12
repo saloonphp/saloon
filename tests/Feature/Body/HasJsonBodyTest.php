@@ -8,6 +8,7 @@ use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
 use Saloon\Exceptions\PendingRequestException;
+use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Repositories\Body\JsonBodyRepository;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
@@ -17,7 +18,7 @@ use Saloon\Tests\Fixtures\Requests\HasMultipartBodyRequest;
 test('the default body is loaded with the content type header', function () {
     $request = new HasJsonBodyRequest();
 
-    expect($request->body()->get())->toEqual([
+    expect($request->body()->all())->toEqual([
         'name' => 'Sam',
         'catchphrase' => 'Yeehaw!',
     ]);
@@ -39,16 +40,36 @@ test('the content-type header is set in the pending request', function () {
     ]);
 });
 
-test('when both the connector and the request have the same request bodies they will be merged', function () {
+test('when just the connector has body the body will be sent', function () {
     $connector = new HasJsonBodyConnector;
-    $request = new HasJsonBodyRequest;
+    $request = new UserRequest;
 
-    expect($connector->body()->get())->toEqual([
+    expect($connector->body()->all())->toEqual([
         'name' => 'Gareth',
         'drink' => 'Moonshine',
     ]);
 
-    expect($request->body()->get())->toEqual([
+    $pendingRequest = $connector->createPendingRequest($request);
+    $pendingRequestBody = $pendingRequest->body();
+
+    expect($pendingRequestBody)->toBeInstanceOf(JsonBodyRepository::class);
+
+    expect($pendingRequestBody->all())->toEqual([
+        'name' => 'Gareth',
+        'drink' => 'Moonshine',
+    ]);
+});
+
+test('when both the connector and the request have the same request bodies they will be merged', function () {
+    $connector = new HasJsonBodyConnector;
+    $request = new HasJsonBodyRequest;
+
+    expect($connector->body()->all())->toEqual([
+        'name' => 'Gareth',
+        'drink' => 'Moonshine',
+    ]);
+
+    expect($request->body()->all())->toEqual([
         'name' => 'Sam',
         'catchphrase' => 'Yeehaw!',
     ]);
@@ -60,7 +81,7 @@ test('when both the connector and the request have the same request bodies they 
 
     expect($pendingRequestBody)->toBeInstanceOf(JsonBodyRepository::class);
 
-    expect($pendingRequestBody->get())->toEqual([
+    expect($pendingRequestBody->all())->toEqual([
         'drink' => 'Moonshine',
         'name' => 'Sam',
         'catchphrase' => 'Yeehaw!',

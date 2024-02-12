@@ -15,7 +15,7 @@ class CustomResponseOAuth2Connector extends Connector
 {
     use AuthorizationCodeGrant;
 
-    
+
     public function __construct(protected string $greeting)
     {
         //
@@ -41,9 +41,9 @@ class CustomResponseOAuth2Connector extends Connector
     }
 
     /**
-     * Define a custom OAuth2 authenticator.
+     * Create the OAuth authenticator
      */
-    protected function createOAuthAuthenticator(string $accessToken, string $refreshToken, DateTimeImmutable $expiresAt): OAuthAuthenticator
+    protected function createOAuthAuthenticator(string $accessToken, ?string $refreshToken = null, ?DateTimeImmutable $expiresAt = null): OAuthAuthenticator
     {
         return new CustomOAuthAuthenticator($accessToken, $this->greeting,  $refreshToken, $expiresAt);
     }
