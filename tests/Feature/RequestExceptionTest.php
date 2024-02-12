@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-use GuzzleHttp\Promise\PromiseInterface;
 use Saloon\Http\Response;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ServerException;
 use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\RequestException;
-use Saloon\Tests\Fixtures\Requests\NotFoundFailedRequest;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Tests\Fixtures\Requests\BadResponseRequest;
+use Saloon\Tests\Fixtures\Requests\NotFoundFailedRequest;
 use Saloon\Tests\Fixtures\Connectors\BadResponseConnector;
 use Saloon\Tests\Fixtures\Exceptions\CustomRequestException;
 use Saloon\Tests\Fixtures\Requests\CustomFailHandlerRequest;

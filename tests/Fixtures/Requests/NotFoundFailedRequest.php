@@ -28,9 +28,6 @@ class NotFoundFailedRequest extends Request
 
     /**
      * Determine if the request has failed
-     *
-     * @param \Saloon\Http\Response $response
-     * @return bool|null
      */
     public function hasRequestFailed(Response $response): ?bool
     {
