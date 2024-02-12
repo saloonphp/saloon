@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\PendingRequest;
 
+use Saloon\Helpers\URLHelper;
 use Psr\Http\Message\UriInterface;
 use Saloon\Data\FactoryCollection;
 use Psr\Http\Message\RequestInterface;
 use Saloon\Contracts\Body\BodyRepository;
-use Saloon\Helpers\URLHelper;
 
 trait ManagesPsrRequests
 {

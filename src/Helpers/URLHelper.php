@@ -50,7 +50,6 @@ class URLHelper
     /**
      * Parse a query string into an array
      *
-     * @param string $query
      * @return array<string, mixed>
      */
     public static function parseQueryString(string $query): array
