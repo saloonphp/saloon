@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Saloon\Exceptions\Request\RequestException;
 use Saloon\Http\Response;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Senders\GuzzleSender;

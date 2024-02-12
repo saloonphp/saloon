@@ -172,7 +172,7 @@ class GuzzleSender implements Sender
 
                     // Throw the exception our way
 
-                    throw $response->toException();
+                    return ($exception = $response->toException()) ? throw $exception : $response;
                 }
             );
     }

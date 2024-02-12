@@ -15,6 +15,7 @@
 .php-cs-fixer.cache
 .phpunit.result.cache
 tests/Fixtures/Saloon/Testing
+.phpunit.cache/test-results
 
 # environments/configs
 phpstan.neon
