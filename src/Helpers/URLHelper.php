@@ -46,4 +46,31 @@ class URLHelper
     {
         return ! empty(filter_var($url, FILTER_VALIDATE_URL));
     }
+
+    /**
+     * Parse a query string into an array
+     *
+     * @return array<string, mixed>
+     */
+    public static function parseQueryString(string $query): array
+    {
+        if ($query === '') {
+            return [];
+        }
+
+        $parameters = [];
+
+        foreach (explode('&', $query) as $parameter) {
+            $name = urldecode((string)strtok($parameter, '='));
+            $value = urldecode((string)strtok('='));
+
+            if (! $name || str_starts_with($parameter, '=')) {
+                continue;
+            }
+
+            $parameters[$name] = $value;
+        }
+
+        return $parameters;
+    }
 }

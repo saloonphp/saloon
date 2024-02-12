@@ -28,10 +28,6 @@ declare(strict_types=1);
 
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
-});
-
 /*
 |--------------------------------------------------------------------------
 | Functions

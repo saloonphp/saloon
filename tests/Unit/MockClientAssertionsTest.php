@@ -163,6 +163,25 @@ test('assertSentCount works properly', function () {
     $mockClient->assertSentCount(3);
 });
 
+test('can assert count of requests', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam']),
+        MockResponse::make(['name' => 'Taylor']),
+        MockResponse::make(['name' => 'Marcel']),
+        MockResponse::make(['message' => 'Error'], 500),
+    ]);
+
+    $connector = new TestConnector;
+
+    $connector->send(new UserRequest, $mockClient);
+    $connector->send(new UserRequest, $mockClient);
+    $connector->send(new UserRequest, $mockClient);
+    $connector->send(new ErrorRequest, $mockClient);
+
+    $mockClient->assertSentCount(3, UserRequest::class);
+    $mockClient->assertSentCount(1, ErrorRequest::class);
+});
+
 test('assertSent with a closure works with more than one request in the history', function () {
     $mockClient = new MockClient([
         MockResponse::make(['name' => 'Sam']),

@@ -59,3 +59,13 @@ test('you can generate a uri from the PendingRequest', function () {
     expect($uri->getQuery())->toEqual('include=hats&sort=first_name&per_page=100');
     expect($uri->getFragment())->toEqual('fragment-123');
 });
+
+test('when using the url for query parameters you can use dots and value-less parameters', function () {
+    $connector = new TestConnector;
+    $request = new QueryParameterRequest('/user?account.id=1&checked&name=sam');
+
+    $pendingRequest = $connector->createPendingRequest($request);
+    $uri = $pendingRequest->getUri();
+
+    expect($uri->getQuery())->toEqual('account.id=1&checked=&name=sam&per_page=100');
+});
