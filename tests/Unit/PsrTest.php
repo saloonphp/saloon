@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Psr\Http\Message\UriInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\RequestInterface;
+use Saloon\Helpers\URLHelper;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasJsonBodyRequest;
@@ -58,4 +59,14 @@ test('you can generate a uri from the PendingRequest', function () {
     expect($uri->getPath())->toEqual('/api/user');
     expect($uri->getQuery())->toEqual('include=hats&sort=first_name&per_page=100');
     expect($uri->getFragment())->toEqual('fragment-123');
+});
+
+test('when using the url for query parameters you can use dots and value-less parameters', function () {
+    $connector = new TestConnector;
+    $request = new QueryParameterRequest('/user?account.id=1&checked&name=sam');
+
+    $pendingRequest = $connector->createPendingRequest($request);
+    $uri = $pendingRequest->getUri();
+
+    expect($uri->getQuery())->toEqual('account.id=1&checked=&name=sam&per_page=100');
 });

@@ -8,6 +8,7 @@ use Psr\Http\Message\UriInterface;
 use Saloon\Data\FactoryCollection;
 use Psr\Http\Message\RequestInterface;
 use Saloon\Contracts\Body\BodyRepository;
+use Saloon\Helpers\URLHelper;
 
 trait ManagesPsrRequests
 {
@@ -27,7 +28,7 @@ trait ManagesPsrRequests
         // and then we'll merge in Saloon's query parameters. Our query parameters will take
         // priority over any that were defined in the URL.
 
-        parse_str($uri->getQuery(), $existingQuery);
+        $existingQuery = URLHelper::parseQueryString($uri->getQuery());
 
         return $uri->withQuery(
             http_build_query(array_merge($existingQuery, $this->query()->all()))
