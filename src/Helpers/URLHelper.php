@@ -50,7 +50,7 @@ class URLHelper
     /**
      * Parse a query string into an array
      *
-     * @return array<int|string, mixed>
+     * @return array<string, mixed>
      */
     public static function parseQueryString(string $query): array
     {
@@ -61,10 +61,14 @@ class URLHelper
         $parameters = [];
 
         foreach (explode('&', $query) as $parameter) {
-            $name = strtok($parameter, '=');
-            $value = strtok('=');
+            $name = urldecode((string)strtok($parameter, '='));
+            $value = urldecode((string)strtok('='));
 
-            $parameters[$name] = $value !== false ? $value : '';
+            if (! $name || str_starts_with($parameter, '=')) {
+                continue;
+            }
+
+            $parameters[$name] = $value;
         }
 
         return $parameters;
