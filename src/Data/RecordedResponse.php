@@ -71,7 +71,7 @@ class RecordedResponse implements JsonSerializable
      */
     public function toFile(): string
     {
-        return json_encode($this, JSON_THROW_ON_ERROR);
+        return json_encode($this, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
     }
 
     /**
