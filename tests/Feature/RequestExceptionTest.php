@@ -6,6 +6,7 @@ use Saloon\Http\Response;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ServerException;
 use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\RequestException;
@@ -14,6 +15,7 @@ use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Tests\Fixtures\Requests\BadResponseRequest;
+use Saloon\Tests\Fixtures\Requests\NotFoundFailedRequest;
 use Saloon\Tests\Fixtures\Connectors\BadResponseConnector;
 use Saloon\Tests\Fixtures\Exceptions\CustomRequestException;
 use Saloon\Tests\Fixtures\Requests\CustomFailHandlerRequest;
@@ -246,13 +248,57 @@ test('you can customise if saloon determines if a request has failed on a reques
     expect($responseB->failed())->toBeTrue();
 });
 
+test('a request can mark a request as not failed', function () {
+    $response = TestConnector::make()->send(new NotFoundFailedRequest);
+
+    expect($response->failed())->toBeFalse();
+});
+
+test('a request can mark a request as not failed with asynchronous requests', function () {
+    $response = TestConnector::make()->sendAsync(new NotFoundFailedRequest)->wait();
+
+    expect($response->failed())->toBeFalse();
+});
+
+test('a request can mark a request as not failed with pools', function () {
+    $responseCount = 0;
+    $exceptionCount = 0;
+
+    $pool = TestConnector::make()->pool([
+        new NotFoundFailedRequest,
+    ]);
+
+    $pool->withResponseHandler(function (Response $response) use (&$responseCount) {
+        expect($response)->toBeInstanceOf(Response::class);
+        expect($response->status())->toBe(404);
+
+        $responseCount++;
+    })->withExceptionHandler(function (RequestException $exception) use (&$exceptionCount) {
+        $response = $exception->getResponse();
+
+        expect($response)->toBeInstanceOf(Response::class);
+        expect($response->status())->toBe(404);
+
+        $exceptionCount++;
+    });
+
+    $promise = $pool->send();
+
+    expect($promise)->toBeInstanceOf(PromiseInterface::class);
+
+    $promise->wait();
+
+    expect($responseCount)->toEqual(1);
+    expect($exceptionCount)->toEqual(0);
+});
+
 test('the sender will throw a FatalRequestException if it cannot connect to a site using synchronous', function (string $url) {
     $connector = new TestConnector($url);
     $request = new UserRequest();
 
     $this->expectException(FatalRequestException::class);
 
-    $response = $connector->send($request);
+    $connector->send($request);
 })->with([
     'https://saloon.saloon.test',
     'https://saloon.doesnt-exist',
