@@ -53,10 +53,10 @@ test('you can json serialize the fixture data or convert it into a file', functi
         ],
     ];
 
-    $fixtureData = RecordedResponse::fromFile(json_encode($data));
+    $fixtureData = RecordedResponse::fromFile(json_encode($data, JSON_PRETTY_PRINT));
 
-    $serialized = json_encode($fixtureData);
+    $serialized = json_encode($fixtureData, JSON_PRETTY_PRINT);
 
-    expect($serialized)->toEqual(json_encode($data));
+    expect($serialized)->toEqual(json_encode($data, JSON_PRETTY_PRINT));
     expect($fixtureData->toFile())->toEqual($serialized);
 });
