@@ -154,6 +154,8 @@ trait SendsRequests
     /**
      * Send a synchronous request and retry if it fails
      *
+     * @deprecated This method will be removed in Saloon v4. Please refer to the documentation to see connector or request-based retry functionality.
+     *
      * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
      */
     public function sendAndRetry(Request $request, int $tries, int $interval = 0, callable $handleRetry = null, bool $throw = true, MockClient $mockClient = null, bool $useExponentialBackoff = false): Response
