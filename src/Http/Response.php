@@ -334,6 +334,14 @@ class Response
     }
 
     /**
+     * Convert the response to a data URL
+     */
+    public function dataUrl(): string
+    {
+        return 'data:'.$this->psrResponse->getHeaderLine('Content-Type').';base64,'.base64_encode($this->body());
+    }
+
+    /**
      * Determine if the request was successful.
      */
     public function successful(): bool

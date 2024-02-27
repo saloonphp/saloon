@@ -305,6 +305,16 @@ test('when using the body methods the stream is rewound back to the start', func
     expect($response->object())->toEqual((object)['foo' => 'bar']);
 });
 
+test('it can convert the response to a data url', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar'], 200, ['Content-Type' => 'application/json;encoding=utf-8']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+
+    expect($response->dataUrl())->toEqual('data:application/json;encoding=utf-8;base64,eyJmb28iOiJiYXIifQ==');
+});
+
 test('if a response is changed through middleware the new instance is used', function () {
     $mockClient = new MockClient([
         MockResponse::make(['foo' => 'bar'], 200, ['X-Custom-Header' => 'Howdy']),
