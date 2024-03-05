@@ -76,4 +76,20 @@ final class StringHelpers
 
         return $string;
     }
+
+    /**
+     * Replace one or multiple placeholders in curly braces with the given replacements.
+     *
+     * @param  array<string, mixed>  $replacements
+     */
+    public static function replacePlaceholders(string $value, array $replacements): string
+    {
+        return preg_match('/{.*}/', $value)
+            ? str_replace(
+                array_map(fn ($key) => '{'.$key.'}', array_keys($replacements)),
+                array_values($replacements),
+                $value
+            )
+            : $value;
+    }
 }
