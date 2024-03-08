@@ -6,6 +6,9 @@ namespace Saloon\Tests\Fixtures\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
+use Saloon\Tests\Fixtures\Enums\AnotherEnum;
+use Saloon\Tests\Fixtures\Enums\GenderEnum;
+use Saloon\Tests\Fixtures\Enums\SomeEnum;
 use Saloon\Traits\Request\HasEndpointPlaceholders;
 
 class HasEndpointPlaceholdersRequest extends Request
@@ -15,7 +18,7 @@ class HasEndpointPlaceholdersRequest extends Request
     /**
      * Define endpoint
      */
-    protected string $endpoint = '/{user}/post/{id}/{purge}';
+    protected string $endpoint = '/{user}/{gender}/{something}/post/{id}/{purge}';
 
     /**
      * Define the HTTP method.
@@ -26,6 +29,8 @@ class HasEndpointPlaceholdersRequest extends Request
 
     public function __construct(
         protected string $user,
+        protected GenderEnum $gender,
+        protected SomeEnum|AnotherEnum $something,
         protected ?int $id = null,
         protected bool $purge = false,
     ) {
