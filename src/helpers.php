@@ -32,17 +32,13 @@ function debug(Request|Connector $debuggable, bool $die = true): Request|Connect
             $headers[$headerName] = implode(';', $value);
         }
 
-        VarDumper::dump('', '"" 🤠 Saloon Request 🤠');
-
         VarDumper::dump([
             'request' => $pendingRequest->getRequest()::class,
             'method' => $psrRequest->getMethod(),
             'uri' => (string)$psrRequest->getUri(),
             'headers' => $headers,
             'body' => (string)$psrRequest->getBody(),
-        ]);
-
-        VarDumper::dump('', '""---------------------');
+        ], '🤠 Saloon Request ->');
 
         if ($die === true) {
             exit(1);
