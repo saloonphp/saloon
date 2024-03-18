@@ -32,6 +32,8 @@ function debug(Request|Connector $debuggable, bool $die = true): Request|Connect
             $headers[$headerName] = implode(';', $value);
         }
 
+        VarDumper::dump('', '"" 🤠 Saloon Request 🤠');
+
         VarDumper::dump([
             'request' => $pendingRequest->getRequest()::class,
             'method' => $psrRequest->getMethod(),
@@ -39,6 +41,8 @@ function debug(Request|Connector $debuggable, bool $die = true): Request|Connect
             'headers' => $headers,
             'body' => (string)$psrRequest->getBody(),
         ]);
+
+        VarDumper::dump('', '""---------------------');
 
         if ($die === true) {
             exit(1);

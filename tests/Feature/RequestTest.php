@@ -9,10 +9,11 @@ use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasConnectorUserRequest;
+use function Saloon\debug;
 
 test('a request can be made successfully', function () {
     $connector = new TestConnector();
-    $response = $connector->send(new UserRequest);
+    $response = debug($connector)->send(new UserRequest);
 
     $data = $response->json();
 
