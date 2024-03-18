@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 use Saloon\Http\Response;
+use function Saloon\debug;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Senders\GuzzleSender;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\HasConnectorUserRequest;
-use function Saloon\debug;
 
 test('a request can be made successfully', function () {
     $connector = new TestConnector();
