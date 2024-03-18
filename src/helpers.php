@@ -11,15 +11,19 @@ use Psr\Http\Message\MessageInterface;
 use Symfony\Component\VarDumper\VarDumper;
 
 /**
- * Debug Request
+ * Debug a request being sent
  *
- * Wrap this around a request class to debug the request being sent.
+ * Wrap this around a connector or request before sending to debug the
+ * raw request data being sent to the HTTP sender. Note that anything
+ * added by the sender will not be reflected here.
+ *
+ * Example usage: debug($connector)->send($request)
  *
  * @template TDebuggable of \Saloon\Http\Request|\Saloon\Http\Connector
  * @param TDebuggable $debuggable
  * @return TDebuggable
  */
-function debugger(Request|Connector $debuggable, bool $die = true): Request|Connector
+function debug(Request|Connector $debuggable, bool $die = true): Request|Connector
 {
     $debuggable->debugRequest(function (PendingRequest $pendingRequest, MessageInterface $psrRequest) use ($die) {
         $headers = [];
