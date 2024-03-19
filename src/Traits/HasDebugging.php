@@ -15,6 +15,8 @@ trait HasDebugging
     /**
      * Register a request debugger
      *
+     * Leave blank for a default debugger (requires symfony/var-dump)
+     *
      * @param callable(\Saloon\Http\PendingRequest, \Psr\Http\Message\RequestInterface): void|null $onRequest
      * @return $this
      */
@@ -37,13 +39,15 @@ trait HasDebugging
     /**
      * Register a response debugger
      *
+     * Leave blank for a default debugger (requires symfony/var-dump)
+     *
      * @param callable(\Saloon\Http\Response, \Psr\Http\Message\ResponseInterface): void|null $onResponse
      * @return $this
      */
     public function debugResponse(?callable $onResponse = null): static
     {
         if (is_null($onResponse)) {
-            return debug($this, request: false, response: true, die: false);
+            return debug($this, request: false, die: false);
         }
 
         $this->middleware()->onResponse(
@@ -57,26 +61,14 @@ trait HasDebugging
     }
 
     /**
-     * Dump a request before being sent and terminate the application
+     * Dump a request before it is sent and the response.
      *
      * Note that anything added by the sender will not be reflected here.
      *
      * Requires symfony/var-dumper
      */
-    public function dd(): static
+    public function debug(bool $die = false): static
     {
-        return debug($this, die: true);
-    }
-
-    /**
-     * Dump a request before being sent
-     *
-     * Note that anything added by the sender will not be reflected here.
-     *
-     * Requires symfony/var-dumper
-     */
-    public function dump(): static
-    {
-        return debug($this, die: false);
+        return debug($this, die: $die);
     }
 }
