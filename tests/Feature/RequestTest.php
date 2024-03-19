@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Saloon\Http\Response;
-use function Saloon\debug;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Senders\GuzzleSender;
 use Saloon\Tests\Fixtures\Requests\UserRequest;

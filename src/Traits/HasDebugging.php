@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Traits;
 
-use Saloon\Http\Connector;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
+use function Saloon\debug;
 use Saloon\Enums\PipeOrder;
 use Saloon\Http\PendingRequest;
-use function Saloon\debug;
 
 trait HasDebugging
 {
