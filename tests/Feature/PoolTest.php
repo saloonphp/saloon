@@ -20,6 +20,8 @@ test('you can create a pool on a connector', function () {
     $successCount = 0;
     $errorCount = 0;
 
+    $connector->debug();
+
     $pool = $connector->pool([
         new UserRequest,
         new UserRequest,

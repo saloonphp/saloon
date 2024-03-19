@@ -37,7 +37,8 @@ function debug(Request|Connector $debuggable, bool $request = true, bool $respon
                 $headers[$headerName] = implode(';', $value);
             }
 
-            $label = end(explode('\\', $pendingRequest->getRequest()::class));
+            $debugIndex = random_int(0, 9999);
+            $label = end(explode('\\', $pendingRequest->getRequest()::class)) . ':' . $debugIndex;
 
             VarDumper::dump([
                 'connector' => $pendingRequest->getConnector()::class,
@@ -51,6 +52,8 @@ function debug(Request|Connector $debuggable, bool $request = true, bool $respon
             if ($response === false && $die === true) {
                 exit(1);
             }
+
+            $pendingRequest->config()->add('saloonDebugIndex', $debugIndex);
         });
     }
 
@@ -62,7 +65,8 @@ function debug(Request|Connector $debuggable, bool $request = true, bool $respon
                 $headers[$headerName] = implode(';', $value);
             }
 
-            $label = end(explode('\\', $response->getRequest()::class));
+            $debugIndex = $response->getPendingRequest()->config()->get('saloonDebugIndex');
+            $label = end(explode('\\', $response->getRequest()::class)) . ':' . $debugIndex;
 
             VarDumper::dump([
                 'status' => $response->status(),
