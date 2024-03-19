@@ -13,7 +13,7 @@ use Saloon\Tests\Fixtures\Requests\HasConnectorUserRequest;
 
 test('a request can be made successfully', function () {
     $connector = new TestConnector();
-    $response = debug($connector)->send(new UserRequest);
+    $response = $connector->dump()->send(new UserRequest);
 
     $data = $response->json();
 

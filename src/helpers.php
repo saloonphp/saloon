@@ -19,6 +19,8 @@ use Symfony\Component\VarDumper\VarDumper;
  *
  * Example usage: debug($connector)->send($request)
  *
+ * Requires symfony/var-dumper
+ *
  * @template TDebuggable of \Saloon\Http\Request|\Saloon\Http\Connector
  * @param TDebuggable $debuggable
  * @return TDebuggable
