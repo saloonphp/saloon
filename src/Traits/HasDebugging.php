@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Traits;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Saloon\Http\Response;
-use Symfony\Component\VarDumper\VarDumper;
 use Saloon\Enums\PipeOrder;
 use Saloon\Http\PendingRequest;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\VarDumper\VarDumper;
 
 trait HasDebugging
 {
