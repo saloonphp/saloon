@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Saloon\Http\Request;
+use Saloon\Http\Response;
 use Saloon\Http\Connector;
 use Saloon\Http\PendingRequest;
-use Saloon\Http\Response;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\VarDumper\VarDumper;
 
 /**
