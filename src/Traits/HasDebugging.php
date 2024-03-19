@@ -15,11 +15,15 @@ trait HasDebugging
     /**
      * Register a request debugger
      *
-     * @param callable(\Saloon\Http\PendingRequest, \Psr\Http\Message\RequestInterface): void $onRequest
+     * @param callable(\Saloon\Http\PendingRequest, \Psr\Http\Message\RequestInterface): void|null $onRequest
      * @return $this
      */
-    public function debugRequest(callable $onRequest): static
+    public function debugRequest(?callable $onRequest = null): static
     {
+        if (is_null($onRequest)) {
+            return debug($this, response: false, die: false);
+        }
+
         $this->middleware()->onRequest(
             callable: static function (PendingRequest $pendingRequest) use ($onRequest): void {
                 $onRequest($pendingRequest, $pendingRequest->createPsrRequest());
@@ -33,11 +37,15 @@ trait HasDebugging
     /**
      * Register a response debugger
      *
-     * @param callable(\Saloon\Http\Response, \Psr\Http\Message\ResponseInterface): void $onResponse
+     * @param callable(\Saloon\Http\Response, \Psr\Http\Message\ResponseInterface): void|null $onResponse
      * @return $this
      */
-    public function debugResponse(callable $onResponse): static
+    public function debugResponse(?callable $onResponse = null): static
     {
+        if (is_null($onResponse)) {
+            return debug($this, request: false, response: true, die: false);
+        }
+
         $this->middleware()->onResponse(
             callable: static function (Response $response) use ($onResponse): void {
                 $onResponse($response, $response->getPsrResponse());

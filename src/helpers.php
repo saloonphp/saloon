@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon;
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Saloon\Http\Request;
 use Saloon\Http\Connector;
 use Saloon\Http\PendingRequest;
-use Psr\Http\Message\MessageInterface;
+use Saloon\Http\Response;
 use Symfony\Component\VarDumper\VarDumper;
 
 /**
@@ -25,27 +27,53 @@ use Symfony\Component\VarDumper\VarDumper;
  * @param TDebuggable $debuggable
  * @return TDebuggable
  */
-function debug(Request|Connector $debuggable, bool $die = true): Request|Connector
+function debug(Request|Connector $debuggable, bool $request = true, bool $response = true, bool $die = true): Request|Connector
 {
-    $debuggable->debugRequest(function (PendingRequest $pendingRequest, MessageInterface $psrRequest) use ($die) {
-        $headers = [];
+    if ($request === true) {
+        $debuggable->debugRequest(function (PendingRequest $pendingRequest, RequestInterface $psrRequest) use ($response, $die) {
+            $headers = [];
 
-        foreach ($psrRequest->getHeaders() as $headerName => $value) {
-            $headers[$headerName] = implode(';', $value);
-        }
+            foreach ($psrRequest->getHeaders() as $headerName => $value) {
+                $headers[$headerName] = implode(';', $value);
+            }
 
-        VarDumper::dump([
-            'request' => $pendingRequest->getRequest()::class,
-            'method' => $psrRequest->getMethod(),
-            'uri' => (string)$psrRequest->getUri(),
-            'headers' => $headers,
-            'body' => (string)$psrRequest->getBody(),
-        ], '🤠 Saloon Request ->');
+            $label = end(explode('\\', $pendingRequest->getRequest()::class));
 
-        if ($die === true) {
-            exit(1);
-        }
-    });
+            VarDumper::dump([
+                'request' => $pendingRequest->getRequest()::class,
+                'method' => $psrRequest->getMethod(),
+                'uri' => (string)$psrRequest->getUri(),
+                'headers' => $headers,
+                'body' => (string)$psrRequest->getBody(),
+            ], 'Saloon Request (' . $label . ') ->');
+
+            if ($response === false && $die === true) {
+                exit(1);
+            }
+        });
+    }
+
+    if ($response === true) {
+        $debuggable->debugResponse(function (Response $response, ResponseInterface $psrResponse) use ($die) {
+            $headers = [];
+
+            foreach ($psrResponse->getHeaders() as $headerName => $value) {
+                $headers[$headerName] = implode(';', $value);
+            }
+
+            $label = end(explode('\\', $response->getRequest()::class));
+
+            VarDumper::dump([
+                'status' => $response->status(),
+                'headers' => $headers,
+                'body' => $response->body(),
+            ], 'Saloon Response (' . $label . ') ->');
+
+            if ($die === true) {
+                exit(1);
+            }
+        });
+    }
 
     return $debuggable;
 }
