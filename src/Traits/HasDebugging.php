@@ -20,15 +20,19 @@ trait HasDebugging
      * @param callable(\Saloon\Http\PendingRequest, \Psr\Http\Message\RequestInterface): void|null $onRequest
      * @return $this
      */
-    public function debugRequest(?callable $onRequest = null): static
+    public function debugRequest(?callable $onRequest = null, bool $die = false): static
     {
         if (is_null($onRequest)) {
-            return debug($this, response: false, die: false);
+            return debug($this, response: false, die: $die);
         }
 
         $this->middleware()->onRequest(
-            callable: static function (PendingRequest $pendingRequest) use ($onRequest): void {
+            callable: static function (PendingRequest $pendingRequest) use ($onRequest, $die): void {
                 $onRequest($pendingRequest, $pendingRequest->createPsrRequest());
+
+                if ($die) {
+                    exit(1);
+                }
             },
             order: PipeOrder::LAST
         );
@@ -44,15 +48,19 @@ trait HasDebugging
      * @param callable(\Saloon\Http\Response, \Psr\Http\Message\ResponseInterface): void|null $onResponse
      * @return $this
      */
-    public function debugResponse(?callable $onResponse = null): static
+    public function debugResponse(?callable $onResponse = null, bool $die = false): static
     {
         if (is_null($onResponse)) {
-            return debug($this, request: false, die: false);
+            return debug($this, request: false, die: $die);
         }
 
         $this->middleware()->onResponse(
-            callable: static function (Response $response) use ($onResponse): void {
+            callable: static function (Response $response) use ($onResponse, $die): void {
                 $onResponse($response, $response->getPsrResponse());
+
+                if ($die) {
+                    exit(1);
+                }
             },
             order: PipeOrder::FIRST
         );

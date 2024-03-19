@@ -40,6 +40,7 @@ function debug(Request|Connector $debuggable, bool $request = true, bool $respon
             $label = end(explode('\\', $pendingRequest->getRequest()::class));
 
             VarDumper::dump([
+                'connector' => $pendingRequest->getConnector()::class,
                 'request' => $pendingRequest->getRequest()::class,
                 'method' => $psrRequest->getMethod(),
                 'uri' => (string)$psrRequest->getUri(),
