@@ -155,7 +155,7 @@ test('the default debugRequest driver will dump an output using symfony var-dump
 
     $output = stream_get_contents($output);
 
-    expect($output)->toEqual(<<<EOT
+    expect($output)->toEqual(<<<END
     Saloon Request (UserRequest) -> array:6 [
       "connector" => "Saloon\Tests\Fixtures\Connectors\TestConnector"
       "request" => "Saloon\Tests\Fixtures\Requests\UserRequest"
@@ -167,7 +167,7 @@ test('the default debugRequest driver will dump an output using symfony var-dump
       ]
       "body" => ""
     ]\n
-    EOT);
+    END);
 });
 
 test('the default debugResponse driver will dump an output using symfony var-dumper', function () {
@@ -189,13 +189,13 @@ test('the default debugResponse driver will dump an output using symfony var-dum
 
     $output = stream_get_contents($output);
 
-    expect($output)->toEqual(<<<EOT
+    expect($output)->toEqual(<<<END
     Saloon Response (UserRequest) -> array:3 [
       "status" => 500
       "headers" => []
       "body" => "{"name":"Sam"}"
     ]\n
-    EOT);
+    END);
 });
 
 test('the debug method will output both request and response at the same time', function () {
@@ -217,7 +217,7 @@ test('the debug method will output both request and response at the same time', 
 
     $output = stream_get_contents($output);
 
-    expect($output)->toEqual(<<<EOT
+    expect($output)->toEqual(<<<END
     Saloon Request (UserRequest) -> array:6 [
       "connector" => "Saloon\Tests\Fixtures\Connectors\TestConnector"
       "request" => "Saloon\Tests\Fixtures\Requests\UserRequest"
@@ -234,7 +234,7 @@ test('the debug method will output both request and response at the same time', 
       "headers" => []
       "body" => "{"name":"Sam"}"
     ]\n
-    EOT);
+    END);
 });
 
 test('the debug method can kill the application', function () {
