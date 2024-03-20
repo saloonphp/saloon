@@ -51,6 +51,9 @@ function connector(): TestConnector
     return new TestConnector;
 }
 
+/**
+ * @param resource $output
+ */
 function getCustomVarDump(mixed $output): Closure
 {
     return static function ($var, ?string $label = null) use ($output) {
