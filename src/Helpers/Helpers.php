@@ -16,6 +16,11 @@ use Saloon\Http\PendingRequest;
 final class Helpers
 {
     /**
+     * Application "Die" handler.
+     */
+    protected static ?Closure $dieHandler = null;
+
+    /**
      * Returns all traits used by a class, its parent classes and trait of their traits.
      *
      * @param object|class-string $class
@@ -93,5 +98,27 @@ final class Helpers
         }
 
         $resource->{$bootMethodName}($pendingRequest);
+    }
+
+    /**
+     * Kill the application
+     *
+     * This is a method as it can be easily mocked during tests
+     */
+    public static function die(): void
+    {
+        $handler = self::$dieHandler ?? static fn () => exit(1);
+
+        $handler();
+    }
+
+    /**
+     * Set the "die" handler
+     *
+     * Used for testing/mocking purposes
+     */
+    public static function setDieHandler(?Closure $handler): void
+    {
+        self::$dieHandler = $handler;
     }
 }

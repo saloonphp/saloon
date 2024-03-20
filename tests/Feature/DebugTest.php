@@ -3,11 +3,13 @@
 declare(strict_types=1);
 
 use Saloon\Http\Response;
+use Saloon\Helpers\Helpers;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\VarDumper\VarDumper;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\AlwaysThrowRequest;
@@ -132,4 +134,130 @@ test('the response debugger is always executed before the AlwaysThrowOnErrors tr
     } catch (Exception $exception) {
         expect($middlewareCount)->toBe(2);
     }
+});
+
+test('the default debugRequest driver will dump an output using symfony var-dumper', function () {
+    $output = fopen('php://memory', 'rwb+');
+
+    VarDumper::setHandler(getCustomVarDump($output));
+
+    $connector = new TestConnector;
+
+    $connector->withMockClient(new MockClient([
+        new MockResponse(['name' => 'Sam'], 500),
+    ]));
+
+    $connector->debugRequest()->send(new UserRequest);
+
+    VarDumper::setHandler(null);
+
+    rewind($output);
+
+    $output = stream_get_contents($output);
+
+    expect($output)->toEqual(<<<EOT
+    Saloon Request (UserRequest) -> array:6 [
+      "connector" => "Saloon\Tests\Fixtures\Connectors\TestConnector"
+      "request" => "Saloon\Tests\Fixtures\Requests\UserRequest"
+      "method" => "GET"
+      "uri" => "https://tests.saloon.dev/api/user"
+      "headers" => array:2 [
+        "Host" => "tests.saloon.dev"
+        "Accept" => "application/json"
+      ]
+      "body" => ""
+    ]\n
+    EOT);
+});
+
+test('the default debugResponse driver will dump an output using symfony var-dumper', function () {
+    $output = fopen('php://memory', 'rwb+');
+
+    VarDumper::setHandler(getCustomVarDump($output));
+
+    $connector = new TestConnector;
+
+    $connector->withMockClient(new MockClient([
+        new MockResponse(['name' => 'Sam'], 500),
+    ]));
+
+    $connector->debugResponse()->send(new UserRequest);
+
+    VarDumper::setHandler(null);
+
+    rewind($output);
+
+    $output = stream_get_contents($output);
+
+    expect($output)->toEqual(<<<EOT
+    Saloon Response (UserRequest) -> array:3 [
+      "status" => 500
+      "headers" => []
+      "body" => "{"name":"Sam"}"
+    ]\n
+    EOT);
+});
+
+test('the debug method will output both request and response at the same time', function () {
+    $output = fopen('php://memory', 'rwb+');
+
+    VarDumper::setHandler(getCustomVarDump($output));
+
+    $connector = new TestConnector;
+
+    $connector->withMockClient(new MockClient([
+        new MockResponse(['name' => 'Sam'], 500),
+    ]));
+
+    $connector->debug()->send(new UserRequest);
+
+    VarDumper::setHandler(null);
+
+    rewind($output);
+
+    $output = stream_get_contents($output);
+
+    expect($output)->toEqual(<<<EOT
+    Saloon Request (UserRequest) -> array:6 [
+      "connector" => "Saloon\Tests\Fixtures\Connectors\TestConnector"
+      "request" => "Saloon\Tests\Fixtures\Requests\UserRequest"
+      "method" => "GET"
+      "uri" => "https://tests.saloon.dev/api/user"
+      "headers" => array:2 [
+        "Host" => "tests.saloon.dev"
+        "Accept" => "application/json"
+      ]
+      "body" => ""
+    ]
+    Saloon Response (UserRequest) -> array:3 [
+      "status" => 500
+      "headers" => []
+      "body" => "{"name":"Sam"}"
+    ]\n
+    EOT);
+});
+
+test('the debug method can kill the application', function () {
+    $killed = false;
+
+    $output = fopen('php://memory', 'rwb+');
+
+    VarDumper::setHandler(getCustomVarDump($output));
+
+    Helpers::setDieHandler(static function () use (&$killed) {
+        $killed = true;
+    });
+
+    $connector = new TestConnector;
+
+    $connector->withMockClient(new MockClient([
+        new MockResponse(['name' => 'Sam'], 500),
+    ]));
+
+    $connector->debug(die: true)->send(new UserRequest);
+
+    VarDumper::setHandler(null);
+    Helpers::setDieHandler(null);
+
+    expect($killed)->toBeTrue();
 });

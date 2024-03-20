@@ -6,6 +6,7 @@ namespace Saloon\Traits;
 
 use Saloon\Http\Response;
 use Saloon\Enums\PipeOrder;
+use Saloon\Helpers\Helpers;
 use Saloon\Http\PendingRequest;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -55,7 +56,7 @@ trait HasDebugging
                 $onRequest($pendingRequest, $pendingRequest->createPsrRequest());
 
                 if ($die) {
-                    exit(1);
+                    Helpers::die();
                 }
             },
             order: PipeOrder::LAST
@@ -103,7 +104,7 @@ trait HasDebugging
                 $onResponse($response, $response->getPsrResponse());
 
                 if ($die) {
-                    exit(1);
+                    Helpers::die();
                 }
             },
             order: PipeOrder::FIRST
