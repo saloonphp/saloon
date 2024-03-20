@@ -6,11 +6,8 @@ namespace Saloon\Traits;
 
 use Saloon\Http\Response;
 use Saloon\Enums\PipeOrder;
-use Saloon\Helpers\Helpers;
+use Saloon\Helpers\Debugger;
 use Saloon\Http\PendingRequest;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\VarDumper\VarDumper;
 
 trait HasDebugging
 {
@@ -28,25 +25,7 @@ trait HasDebugging
         // debugging driver. This will use symfony/var-dumper to display a nice output to
         // the user's screen of the request.
 
-        $onRequest ??= static function (PendingRequest $pendingRequest, RequestInterface $psrRequest) {
-            $headers = [];
-
-            foreach ($psrRequest->getHeaders() as $headerName => $value) {
-                $headers[$headerName] = implode(';', $value);
-            }
-
-            $className = explode('\\', $pendingRequest->getRequest()::class);
-            $label = end($className);
-
-            VarDumper::dump([
-                'connector' => $pendingRequest->getConnector()::class,
-                'request' => $pendingRequest->getRequest()::class,
-                'method' => $psrRequest->getMethod(),
-                'uri' => (string)$psrRequest->getUri(),
-                'headers' => $headers,
-                'body' => (string)$psrRequest->getBody(),
-            ], 'Saloon Request (' . $label . ') ->');
-        };
+        $onRequest ??= Debugger::symfonyRequestDebugger(...);
 
         // Register the middleware - we will use PipeOrder::FIRST to ensure that the response
         // is shown before it is modified by the user's middleware.
@@ -56,7 +35,7 @@ trait HasDebugging
                 $onRequest($pendingRequest, $pendingRequest->createPsrRequest());
 
                 if ($die) {
-                    Helpers::die();
+                    Debugger::die();
                 }
             },
             order: PipeOrder::LAST
@@ -79,22 +58,7 @@ trait HasDebugging
         // debugging driver. This will use symfony/var-dumper to display a nice output to
         // the user's screen of the response.
 
-        $onResponse ??= static function (Response $response, ResponseInterface $psrResponse) {
-            $headers = [];
-
-            foreach ($psrResponse->getHeaders() as $headerName => $value) {
-                $headers[$headerName] = implode(';', $value);
-            }
-
-            $className = explode('\\', $response->getRequest()::class);
-            $label = end($className);
-
-            VarDumper::dump([
-                'status' => $response->status(),
-                'headers' => $headers,
-                'body' => $response->body(),
-            ], 'Saloon Response (' . $label . ') ->');
-        };
+        $onResponse ??= Debugger::symfonyResponseDebugger(...);
 
         // Register the middleware - we will use PipeOrder::FIRST to ensure that the response
         // is shown before it is modified by the user's middleware.
@@ -104,7 +68,7 @@ trait HasDebugging
                 $onResponse($response, $response->getPsrResponse());
 
                 if ($die) {
-                    Helpers::die();
+                    Debugger::die();
                 }
             },
             order: PipeOrder::FIRST

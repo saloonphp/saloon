@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Saloon\Http\Response;
-use Saloon\Helpers\Helpers;
+use Saloon\Helpers\Debugger;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
@@ -244,9 +244,9 @@ test('the debug method can kill the application', function () {
 
     VarDumper::setHandler(getCustomVarDump($output));
 
-    Helpers::setDieHandler(static function () use (&$killed) {
+    Debugger::$dieHandler = static function () use (&$killed) {
         $killed = true;
-    });
+    };
 
     $connector = new TestConnector;
 
@@ -257,7 +257,7 @@ test('the debug method can kill the application', function () {
     $connector->debug(die: true)->send(new UserRequest);
 
     VarDumper::setHandler(null);
-    Helpers::setDieHandler(null);
+    Debugger::$dieHandler = null;
 
     expect($killed)->toBeTrue();
 });
