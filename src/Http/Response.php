@@ -195,7 +195,6 @@ class Response
      *
      * @param array-key|null $key
      * @return ($key is null ? array<array-key, mixed> : mixed)
-     * @throws \JsonException
      */
     public function json(string|int|null $key = null, mixed $default = null): mixed
     {
@@ -217,7 +216,6 @@ class Response
      *
      * @param array-key|null $key
      * @return ($key is null ? array<array-key, mixed> : mixed)
-     * @throws \JsonException
      */
     public function array(int|string|null $key = null, mixed $default = null): mixed
     {
@@ -226,8 +224,6 @@ class Response
 
     /**
      * Get the JSON decoded body of the response as an object.
-     *
-     * @throws \JsonException
      */
     public function object(): object
     {
@@ -273,7 +269,6 @@ class Response
      *
      * @param array-key|null $key
      * @return \Illuminate\Support\Collection<array-key, mixed>
-     * @throws \JsonException
      */
     public function collect(string|int|null $key = null): Collection
     {
@@ -309,8 +304,6 @@ class Response
 
     /**
      * Convert the response into a DTO or throw a LogicException if the response failed
-     *
-     * @throws LogicException
      */
     public function dtoOrFail(): mixed
     {

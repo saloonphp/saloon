@@ -26,6 +26,8 @@ declare(strict_types=1);
 |
 */
 
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\CliDumper;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 /*
@@ -47,4 +49,23 @@ function apiUrl()
 function connector(): TestConnector
 {
     return new TestConnector;
+}
+
+/**
+ * @param resource $output
+ */
+function getCustomVarDump(mixed $output): Closure
+{
+    return static function ($var, ?string $label = null) use ($output) {
+        $dumper = new CliDumper;
+        $cloner = new VarCloner;
+
+        $var = $cloner->cloneVar($var);
+
+        if (null !== $label) {
+            $var = $var->withContext(['label' => $label]);
+        }
+
+        $dumper->dump($var, $output);
+    };
 }
