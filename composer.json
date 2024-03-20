@@ -36,7 +36,7 @@
         "saloonphp/xml-wrangler": "^1.1",
         "spatie/ray": "^1.33",
         "symfony/dom-crawler": "^6.0 || ^7.0",
-        "symfony/var-dumper": "^6.0 || ^7.0"
+        "symfony/var-dumper": "^6.3 || ^7.0"
     },
     "conflict": {
         "sammyjo20/saloon": "*"
