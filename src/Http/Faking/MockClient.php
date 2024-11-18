@@ -352,7 +352,7 @@ class MockClient
             return null;
         }
 
-        if(! is_null($index)) {
+        if (! is_null($index)) {
             $recordedResponse = $this->getRecordedResponses()[$index];
 
             if ($recordedResponse->getPendingRequest()->getRequest() instanceof $request) {
@@ -384,7 +384,7 @@ class MockClient
             return null;
         }
 
-        if(! is_null($index)) {
+        if (! is_null($index)) {
             $response = $this->getRecordedResponses()[$index];
             $pendingRequest = $response->getPendingRequest();
 
@@ -451,7 +451,7 @@ class MockClient
             return false;
         }
 
-        if(! is_null($index)) {
+        if (! is_null($index)) {
             $response = $this->getRecordedResponses()[$index];
             $request = $response->getPendingRequest()->getRequest();
 

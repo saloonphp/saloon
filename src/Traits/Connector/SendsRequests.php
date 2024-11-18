@@ -93,7 +93,7 @@ trait SendsRequests
                 $exceptionResponse = $exception instanceof RequestException ? $exception->getResponse() : null;
 
                 // If the exception is a FatalRequestException, we'll execute the fatal pipeline
-                if($exception instanceof FatalRequestException) {
+                if ($exception instanceof FatalRequestException) {
                     $exception->getPendingRequest()->executeFatalPipeline($exception);
                 }
 
