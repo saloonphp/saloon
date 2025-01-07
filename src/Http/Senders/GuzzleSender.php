@@ -66,11 +66,7 @@ class GuzzleSender implements Sender
      */
     protected function createGuzzleClient(): GuzzleClient
     {
-        // We'll use HandlerStack::create as it will create a default
-        // handler stack with the default Guzzle middleware like
-        // http_errors, cookies etc.
-
-        $this->handlerStack = HandlerStack::create();
+        $this->handlerStack = $this->defaultHandlerStack();
 
         // Now we'll return new Guzzle client with some default request
         // options configured. We'll also define the handler stack we
@@ -84,6 +80,18 @@ class GuzzleSender implements Sender
             RequestOptions::HTTP_ERRORS => true,
             'handler' => $this->handlerStack,
         ]);
+    }
+
+    /**
+     * The default handler stack used by the underlying Guzzle client
+     */
+    protected function defaultHandlerStack(): HandlerStack
+    {
+        // We'll use HandlerStack::create as it will create a default
+        // handler stack with the default Guzzle middleware like
+        // http_errors, cookies etc.
+
+        return HandlerStack::create();
     }
 
     /**
