@@ -11,6 +11,11 @@ use Saloon\Repositories\ArrayStore;
 trait HasQuery
 {
     /**
+     * Specify the default query builder class
+     */
+    protected string $queryBuilder = ArrayStore::class;
+
+    /**
      * Request Query Parameters
      */
     protected ArrayStoreContract $query;
@@ -20,7 +25,7 @@ trait HasQuery
      */
     public function query(): ArrayStoreContract
     {
-        return $this->query ??= $this->resolveQueryBuilder()->set($this->defaultQuery());
+        return $this->query ??= $this->resolveQueryBuilder();
     }
 
     /**
@@ -38,7 +43,7 @@ trait HasQuery
      */
     protected function resolveQueryBuilder(): ArrayStoreContract
     {
-        return new ArrayStore();
+        return new $this->queryBuilder($this->defaultQuery());
     }
 
     /**
