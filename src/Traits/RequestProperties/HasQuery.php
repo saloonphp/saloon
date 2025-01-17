@@ -19,7 +19,15 @@ trait HasQuery
      */
     public function query(): ArrayStoreContract
     {
-        return $this->query ??= new ArrayStore($this->defaultQuery());
+        return $this->query ??= $this->resolveQueryBuilder()->set($this->defaultQuery());
+    }
+
+    /**
+     * Define the query builder class
+     */
+    protected function resolveQueryBuilder(): ArrayStoreContract
+    {
+        return new ArrayStore();
     }
 
     /**
