@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use Saloon\Repositories\ArrayStore;
-use Saloon\Tests\Fixtures\Requests\QueryParameterRequest;
 use Saloon\Tests\Fixtures\Connectors\QueryParameterConnector;
+use Saloon\Tests\Fixtures\QueryBuilders\CustomQueryBuilder;
+use Saloon\Tests\Fixtures\Requests\CustomQueryBuilderRequest;
+use Saloon\Tests\Fixtures\Requests\QueryParameterRequest;
 
 test('default query parameters are merged in from a request', function () {
     $request = new QueryParameterRequest();
@@ -79,4 +81,24 @@ test('query parameters can be managed on a connector', function () {
 
     expect($connector->query()->isEmpty())->toBeFalse();
     expect($connector->query()->isNotEmpty())->toBeTrue();
+});
+
+test('it resolves custom query builder class', function () {
+    $request = new CustomQueryBuilderRequest();
+
+    $query = $request->query()->limit(5);
+
+    expect($query)->toBeInstanceOf(CustomQueryBuilder::class);
+    expect($query)->toEqual(new CustomQueryBuilder(['per_page' => 100, 'limit' => 5]));
+});
+
+test('it can add queries fluently', function () {
+    $request = (new CustomQueryBuilderRequest())
+        ->fluentQuery(function ($query) {
+            $query->limit(5)->add('foo', 'bar');
+        });
+
+    expect($request)->toBeInstanceOf(CustomQueryBuilderRequest::class);
+    expect($request->query())->toBeInstanceOf(CustomQueryBuilder::class);
+    expect($request->query())->toEqual(new CustomQueryBuilder(['per_page' => 100, 'limit' => 5, 'foo' => 'bar']));
 });
