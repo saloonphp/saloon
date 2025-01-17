@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\RequestProperties;
 
-use Saloon\Repositories\ArrayStore;
+use Closure;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
+use Saloon\Repositories\ArrayStore;
 
 trait HasQuery
 {
@@ -20,6 +21,16 @@ trait HasQuery
     public function query(): ArrayStoreContract
     {
         return $this->query ??= $this->resolveQueryBuilder()->set($this->defaultQuery());
+    }
+
+    /**
+     * Access the query parameters fluently
+     */
+    public function fluentQuery(?Closure $callback = null): self
+    {
+        $callback($this->query());
+
+        return $this;
     }
 
     /**
