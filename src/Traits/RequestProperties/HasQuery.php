@@ -31,7 +31,7 @@ trait HasQuery
     /**
      * Access the query parameters fluently
      */
-    public function fluentQuery(?Closure $callback = null): self
+    public function fluentQuery(Closure $callback): self
     {
         $callback($this->query());
 
