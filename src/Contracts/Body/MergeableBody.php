@@ -9,7 +9,7 @@ interface MergeableBody
     /**
      * Merge another array into the repository
      *
-     * @param array<mixed, mixed> ...$arrays
+     * @param array<array-key, mixed> ...$arrays
      * @return $this
      */
     public function merge(array ...$arrays): static;

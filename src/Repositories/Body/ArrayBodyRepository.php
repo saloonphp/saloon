@@ -51,16 +51,60 @@ class ArrayBodyRepository implements BodyRepository, MergeableBody
     }
 
     /**
-     * Merge another array into the repository
+     * Recursively merge another array into the repository
      *
      * @param array<array-key, mixed> ...$arrays
      * @return $this
      */
     public function merge(array ...$arrays): static
     {
-        $this->data = array_merge($this->data, ...$arrays);
+        foreach ($arrays as $array) {
+            $this->data = $this->safeRecursiveMerge($this->data, $array);
+        }
 
         return $this;
+    }
+
+    /**
+     * Safely merge arrays recursively while handling flat arrays properly.
+     *
+     * @param array<array-key, mixed> $array1 The original array.
+     * @param array<array-key, mixed> $array2 The array being merged into the original array.
+     * @return array<array-key, mixed> A properly merged array.
+     */
+    private function safeRecursiveMerge(array $array1, array $array2): array
+    {
+        foreach ($array2 as $key => $value) {
+            // Handle if both are arrays (flat or nested)
+            if (isset($array1[$key]) && is_array($array1[$key]) && is_array($value)) {
+                // Check if arrays are flat (associative vs. sequential arrays)
+                if ($this->isSequentialArray($array1[$key]) && $this->isSequentialArray($value)) {
+                    // Concatenate flat arrays
+                    $array1[$key] = array_merge($array1[$key], $value);
+                } else {
+                    // Recursively merge nested arrays
+                    $array1[$key] = $this->safeRecursiveMerge($array1[$key], $value);
+                }
+            } else {
+                // Overwrite non-array values or add missing keys
+                $array1[$key] = $value;
+            }
+        }
+
+        return $array1;
+    }
+
+    /**
+     * Determine if an array is sequential (flat).
+     *
+     * Sequential arrays have keys as consecutive integers starting from 0.
+     *
+     * @param array<array-key, mixed> $array The array to check.
+     * @return bool True if the array is sequential, otherwise false.
+     */
+    private function isSequentialArray(array $array): bool
+    {
+        return array_keys($array) === range(0, count($array) - 1);
     }
 
     /**

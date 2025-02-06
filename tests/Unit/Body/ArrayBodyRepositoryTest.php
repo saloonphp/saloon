@@ -137,6 +137,50 @@ test('you can merge items together into the body repository', function () {
     expect($body->all())->toEqual(['name' => 'Sam', 'sidekick' => 'Gareth', 'superhero' => 'Black Widow']);
 });
 
+test('you can merge nested items recursively into the body repository', function () {
+    $body = new ArrayBodyRepository();
+
+    $body->add('profile', [
+        'first_name' => 'Sam',
+        'last_name' => 'Mantas'
+    ]);
+    $body->add('avengers', [
+        'Spider-Man' => [
+            'abilities' => ['web']
+        ]
+    ]);
+
+    $body->merge(
+        [
+            'profile' => [
+                'email' => 'test@email.com',
+            ],
+        ],
+        [
+            'avengers' => [
+                'Spider-Man' => [
+                    'abilities' => [
+                        'spidey-sense',
+                    ],
+                ],
+            ],
+        ]
+    );
+
+    expect($body->all())->toEqual([
+        'profile' => [
+            'first_name' => 'Sam',
+            'last_name' => 'Mantas',
+            'email' => 'test@email.com',
+        ],
+        'avengers' => [
+            'Spider-Man' => [
+                'abilities' => ['web', 'spidey-sense']
+            ]
+        ],
+    ]);
+});
+
 test('you can check if the store is empty or not', function () {
     $body = new ArrayBodyRepository();
 
