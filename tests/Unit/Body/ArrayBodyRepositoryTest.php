@@ -153,6 +153,7 @@ test('you can merge nested items recursively into the body repository', function
     $body->merge(
         [
             'profile' => [
+                'first_name' => 'Samuel',
                 'email' => 'test@email.com',
             ],
         ],
@@ -169,7 +170,7 @@ test('you can merge nested items recursively into the body repository', function
 
     expect($body->all())->toEqual([
         'profile' => [
-            'first_name' => 'Sam',
+            'first_name' => 'Samuel',
             'last_name' => 'Mantas',
             'email' => 'test@email.com',
         ],
