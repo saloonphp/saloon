@@ -267,17 +267,28 @@ test('you can mock normal exceptions', function () {
 test('`assertSent` accepts the request class as a type-hint', function () {
     $mockClient = new MockClient([
         MockResponse::make(['name' => 'Sam']),
+        MockResponse::make(['name' => 'Sam']),
     ]);
 
-    $request = new UserRequest;
-    $request->headers()->add('X-Foo', 'bar');
+    $requestA = new UserRequest;
+    $requestA->headers()->add('X-Foo', 'bar');
+    $requestB = new UserRequest;
+    $requestB->headers()->add('X-Foo', 'two');
 
-    connector()->send($request, $mockClient);
+    connector()->send($requestA, $mockClient);
+    connector()->send($requestB, $mockClient);
 
     $mockClient->assertSent(function (UserRequest $request) {
-        expect($request->headers()->all())->toMatchArray([
-            'X-Foo' => 'bar',
-        ]);
+        $header = $request->headers()->get('X-Foo');
+        expect($header)->toBeIn(['bar', 'two']);
+
+        return $header === 'bar';
+    });
+    $mockClient->assertSent(function (UserRequest $request) {
+        $header = $request->headers()->get('X-Foo');
+        expect($header)->toBeIn(['bar', 'two']);
+
+        return $header === 'two';
     });
 });
 

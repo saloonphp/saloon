@@ -463,16 +463,21 @@ class MockClient
         // and call the callable accordingly. We will only fail if it returns `false`.
 
         if ($fqcn = $this->getRequestClass($closure)) {
-            /** @var Response */
+            /** @var Response $response */
             foreach ($this->getRecordedResponses() as $response) {
                 if (get_class($request = $response->getPendingRequest()->getRequest()) !== $fqcn) {
                     continue;
                 }
 
-                return $closure($request, $response) !== false;
-            }
-        }
+                $passed = $closure($request, $response) !== false;
 
+                if ($passed === true) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         // Let's then check if the latest response resolves the callable
         // with a successful result.
 
