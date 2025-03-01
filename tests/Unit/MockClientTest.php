@@ -2,12 +2,10 @@
 
 declare(strict_types=1);
 
-use Pest\Expectation;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
-use PHPUnit\Framework\ExpectationFailedException;
 use Saloon\Exceptions\NoMockResponseFoundException;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Exceptions\TestResponseException;
@@ -263,36 +261,3 @@ test('you can mock normal exceptions', function () {
     $response = connector()->send(new UserRequest, $mockClient);
     $response->throw();
 });
-
-test('`assertSent` accepts the request class as a type-hint', function () {
-    $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Sam']),
-    ]);
-
-    $request = new UserRequest;
-    $request->headers()->add('X-Foo', 'bar');
-
-    connector()->send($request, $mockClient);
-
-    $mockClient->assertSent(function (UserRequest $request) {
-        expect($request->headers()->all())->toMatchArray([
-            'X-Foo' => 'bar',
-        ]);
-    });
-});
-
-test('`assertSent` fails or succeeds depending on the closure result when the closure is type-hinted', function (mixed $returns, bool $shouldThrow) {
-    $mockClient = new MockClient([
-        MockResponse::make(['name' => 'Sam']),
-    ]);
-
-    connector()->send(new UserRequest, $mockClient);
-
-    expect(fn () => $mockClient->assertSent(fn (UserRequest $request) => $returns))
-        ->when($shouldThrow, fn (Expectation $e) => $e->toThrow(ExpectationFailedException::class))
-        ->when(! $shouldThrow, fn (Expectation $e) => $e->not->toThrow(ExpectationFailedException::class));
-})->with([
-    [false, true],
-    [true, false],
-    [null, false],
-]);

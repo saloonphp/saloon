@@ -458,22 +458,7 @@ class MockClient
             return $closure($request, $response);
         }
 
-        // Let's first check if the callable type-hints the latest request class.
-        // If so, we try to find the corresponding request in the recorded responses
-        // and call the callable accordingly. We will only fail if it returns `false`.
-
-        if ($fqcn = $this->getRequestClass($closure)) {
-            /** @var Response */
-            foreach ($this->getRecordedResponses() as $response) {
-                if (get_class($request = $response->getPendingRequest()->getRequest()) !== $fqcn) {
-                    continue;
-                }
-
-                return $closure($request, $response) !== false;
-            }
-        }
-
-        // Let's then check if the latest response resolves the callable
+        // Let's first check if the latest response resolves the callable
         // with a successful result.
 
         $lastResponse = $this->getLastResponse();
@@ -538,26 +523,5 @@ class MockClient
         }, $this->getRecordedResponses());
 
         return array_count_values($requests);
-    }
-
-    /**
-     * Get the FQCN of the request class if type-hinted.
-     *
-     * @return class-string
-     */
-    private function getRequestClass(callable $closure): ?string
-    {
-        $reflection = new \ReflectionFunction($closure);
-        $parameters = $reflection->getParameters();
-
-        if (! ($fqcn = $parameters[0]->getType()?->getName())) {
-            return null;
-        }
-
-        if (! is_a($fqcn, Request::class, allow_string: true)) {
-            return null;
-        }
-
-        return $fqcn;
     }
 }

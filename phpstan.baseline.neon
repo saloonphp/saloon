@@ -49,18 +49,3 @@ parameters:
 		 message: "#^Match arm is unreachable because previous comparison is always true.$#"
 		 count: 1
 		 path: src/Http/Pool.php
-
-		-
-		 message: "#^Method Saloon\\\\Http\\\\Faking\\\\MockClient\\:\\:getRequestClass\\(\\) should return class-string|null but returns class-string<Saloon\\\\Http\\\\Request>|Saloon\\\\Http\\\\Request$#"
-		 count: 1
-		 path: src/Http/Faking/MockClient.php
-
-		-
-		 message: "#^Call to an undefined method ReflectionType\\:\\:getName\\(\\)\\.$#"
-		 count: 1
-		 path: src/Http/Faking/MockClient.php
-
-		-
-		 message: "#^Parameter \\#1 \\$function of class ReflectionFunction constructor expects Closure|string, callable\\(\\)\\: mixed given\\.$#"
-		 count: 1
-		 path: src/Http/Faking/MockClient.php
