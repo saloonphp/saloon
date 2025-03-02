@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use Saloon\Http\Response;
-use Saloon\Tests\Fixtures\Data\IntoUser;
-use Saloon\Tests\Fixtures\Data\IntoUserWithResponse;
 use Saloon\Tests\Fixtures\Data\User;
+use Saloon\Tests\Fixtures\Data\IntoUser;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Data\IntoUserWithResponse;
 
 test('can create a dto using the into method on a request', function () {
     $connector = connector();

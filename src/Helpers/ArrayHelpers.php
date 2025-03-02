@@ -81,17 +81,17 @@ final class ArrayHelpers
      *
      * If no key is given to the method, the entire array will be replaced.
      *
-     * @param  array  $array
+     * @param  array<mixed, mixed>  $array
      * @param  string|int|null  $key
-     * @return array
+     * @return array<mixed, mixed>
      */
-    public static function set(&$array, $key, $value)
+    public static function set(array &$array, mixed $key, mixed $value)
     {
         if (is_null($key)) {
             return $array = $value;
         }
 
-        $keys = explode('.', $key);
+        $keys = explode('.', (string)$key);
 
         foreach ($keys as $i => $key) {
             if (count($keys) === 1) {

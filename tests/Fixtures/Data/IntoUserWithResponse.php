@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Data;
 
-use Saloon\Contracts\DataObjects\DataTransferObject;
-use Saloon\Contracts\DataObjects\WithResponse;
 use Saloon\Http\Response;
 use Saloon\Traits\Responses\HasResponse;
+use Saloon\Contracts\DataObjects\WithResponse;
+use Saloon\Contracts\DataObjects\DataTransferObject;
 
 class IntoUserWithResponse implements DataTransferObject, WithResponse
 {

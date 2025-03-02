@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Faking;
 
+use Closure;
+use JsonException;
 use Saloon\MockConfig;
 use Saloon\Helpers\Storage;
+use const JSON_THROW_ON_ERROR;
 use Saloon\Helpers\ArrayHelpers;
 use Saloon\Data\RecordedResponse;
 use Saloon\Helpers\FixtureHelper;
@@ -32,13 +35,15 @@ class Fixture
 
     /**
      * Data to merge in the mocked response.
+     *
+     * @var array<string, mixed>|null
      */
     protected ?array $merge = null;
 
     /**
      * Closure to modify the returned data with.
      */
-    protected ?\Closure $through = null;
+    protected ?Closure $through = null;
 
     /**
      * Constructor
@@ -51,6 +56,8 @@ class Fixture
 
     /**
      * Specify data to merge with the mock response data.
+     *
+     * @param array<string, mixed> $merge
      */
     public function merge(array $merge = []): static
     {
@@ -62,7 +69,7 @@ class Fixture
     /**
      * Specify a closure to modify the mock response data with.
      */
-    public function through(\Closure $through): static
+    public function through(Closure $through): static
     {
         $this->through = $through;
 
@@ -87,7 +94,7 @@ class Fixture
             // First, we get the body as an array. If we're dealing with
             // a `StringBodyRepository`, we have to encode it first.
             if (! is_array($body = $response->body()->all())) {
-                $body = json_decode($body ?: '[]', associative: true, flags: \JSON_THROW_ON_ERROR);
+                $body = json_decode($body ?: '[]', associative: true, flags: JSON_THROW_ON_ERROR);
             }
 
             // We can then merge the data in the body usingthrough
@@ -97,7 +104,7 @@ class Fixture
                     ArrayHelpers::set($body, $key, $value);
                 }
             }
-            
+
             // If specified, we pass the body through a function that
             // may modify the mock response data.
             if (! is_null($this->through)) {
@@ -186,7 +193,7 @@ class Fixture
     /**
      * Swap any sensitive JSON data
      *
-     * @throws \JsonException
+     * @throws JsonException
      */
     protected function swapSensitiveJson(RecordedResponse $recordedResponse): RecordedResponse
     {

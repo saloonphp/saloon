@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Data;
 
-use Saloon\Contracts\DataObjects\DataTransferObject;
 use Saloon\Http\Response;
+use Saloon\Contracts\DataObjects\DataTransferObject;
 
 class IntoUser implements DataTransferObject
 {

@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
-use Saloon\Contracts\DataObjects\DataTransferObject;
-use Saloon\Helpers\Helpers;
 use Throwable;
 use LogicException;
 use SimpleXMLElement;
+use Saloon\Helpers\Helpers;
 use Saloon\Traits\Macroable;
 use InvalidArgumentException;
 use Saloon\Helpers\ArrayHelpers;
@@ -23,6 +22,7 @@ use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Helpers\RequestExceptionHelper;
 use Saloon\Contracts\DataObjects\WithResponse;
+use Saloon\Contracts\DataObjects\DataTransferObject;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
 class Response
