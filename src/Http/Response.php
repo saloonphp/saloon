@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Http;
 
+use Saloon\Contracts\DataObjects\DataTransferObject;
+use Saloon\Helpers\Helpers;
 use Throwable;
 use LogicException;
 use SimpleXMLElement;
@@ -301,6 +303,8 @@ class Response
 
     /**
      * Cast the response to a DTO.
+     *
+     * @deprecated 2025-03-02 - We recommend that you use the `into` method instead which provides an improved generics experience and PHPStan/IDE support. Please see the documentation on "Data Transfer Objects" for revised instructions.
      */
     public function dto(): mixed
     {
@@ -318,6 +322,8 @@ class Response
 
     /**
      * Convert the response into a DTO or throw a LogicException if the response failed
+     *
+     * @deprecated 2025-03-02 - We recommend that you use the `into` method instead which provides an improved generics experience and PHPStan/IDE support. Please see the documentation on "Data Transfer Objects" for revised instructions.
      */
     public function dtoOrFail(): mixed
     {
@@ -345,7 +351,7 @@ class Response
      */
     public function dataUrl(): string
     {
-        return 'data:'.$this->psrResponse->getHeaderLine('Content-Type').';base64,'.base64_encode($this->body());
+        return 'data:' . $this->psrResponse->getHeaderLine('Content-Type') . ';base64,' . base64_encode($this->body());
     }
 
     /**
@@ -627,5 +633,34 @@ class Response
     public function getFakeResponse(): ?FakeResponse
     {
         return $this->fakeResponse;
+    }
+
+    /**
+     * Create an instance of a DTO from a response
+     *
+     * @template TClass of string|class-string
+     *
+     * @param TClass $class
+     * @return TClass
+     */
+    public function into(string $class, bool $throw = true): mixed
+    {
+        if (! class_exists($class)) {
+            throw new InvalidArgumentException('The class provided does not exist.');
+        }
+
+        if (! Helpers::isSubclassOf($class, DataTransferObject::class)) {
+            throw new InvalidArgumentException(sprintf('The class provided must implement the %s interface.', DataTransferObject::class));
+        }
+
+        if ($throw === true) {
+            $this->throw();
+        }
+
+        $instance = $class::fromResponse($this);
+
+        return $instance instanceof WithResponse
+            ? $instance->setResponse($this)
+            : $instance;
     }
 }
