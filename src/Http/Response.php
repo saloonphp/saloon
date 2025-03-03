@@ -21,8 +21,9 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\DomCrawler\Crawler;
 use Saloon\Helpers\RequestExceptionHelper;
+use Saloon\Contracts\DataObjects\IntoObject;
+use Saloon\Contracts\DataObjects\IntoObjects;
 use Saloon\Contracts\DataObjects\WithResponse;
-use Saloon\Contracts\DataObjects\DataTransferObject;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
 class Response
@@ -649,8 +650,8 @@ class Response
             throw new InvalidArgumentException('The class provided does not exist.');
         }
 
-        if (! Helpers::isSubclassOf($class, DataTransferObject::class)) {
-            throw new InvalidArgumentException(sprintf('The class provided must implement the %s interface.', DataTransferObject::class));
+        if (! Helpers::isSubclassOf($class, IntoObject::class)) {
+            throw new InvalidArgumentException(sprintf('The class provided must implement the %s interface.', IntoObject::class));
         }
 
         if ($throw === true) {
@@ -662,5 +663,38 @@ class Response
         return $instance instanceof WithResponse
             ? $instance->setResponse($this)
             : $instance;
+    }
+
+    /**
+     * Create many instances of an object from a response
+     *
+     * @template TClass of string|class-string
+     *
+     * @param TClass $class
+     * @return array<TClass>
+     */
+    public function intoMany(string $class, bool $throw = true): array
+    {
+        if (! class_exists($class)) {
+            throw new InvalidArgumentException('The class provided does not exist.');
+        }
+
+        if (! Helpers::isSubclassOf($class, IntoObjects::class)) {
+            throw new InvalidArgumentException(sprintf('The class provided must implement the %s interface.', IntoObjects::class));
+        }
+
+        if ($throw === true) {
+            $this->throw();
+        }
+
+        $instances = $class::fromResponse($this);
+
+        if (Helpers::isSubclassOf($class, WithResponse::class)) {
+            foreach ($instances as $instance) {
+                $instance->setResponse($this);
+            }
+        }
+
+        return $instances;
     }
 }

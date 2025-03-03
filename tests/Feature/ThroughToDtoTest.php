@@ -5,33 +5,68 @@ declare(strict_types=1);
 use Saloon\Http\Response;
 use Saloon\Tests\Fixtures\Data\User;
 use Saloon\Tests\Fixtures\Data\IntoUser;
+use Saloon\Tests\Fixtures\Data\Superhero;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Data\IntoUserWithResponse;
+use Saloon\Tests\Fixtures\Data\SuperheroWithResponse;
+use Saloon\Tests\Fixtures\Requests\PagedSuperheroRequest;
 
-test('can create a dto using the into method on a request', function () {
-    $connector = connector();
-    $request = new UserRequest;
+describe('into', function () {
+    test('can create a dto using the into method on a request', function () {
+        $connector = connector();
+        $request = new UserRequest;
 
-    $user = $connector->send($request)->into(IntoUser::class);
+        $user = $connector->send($request)->into(IntoUser::class);
 
-    expect($user)->toBeInstanceOf(IntoUser::class);
-    expect($user->name)->toEqual('Sammyjo20');
+        expect($user)->toBeInstanceOf(IntoUser::class);
+        expect($user->name)->toEqual('Sammyjo20');
+    });
+
+    test('if the class does not implement the dto interface it will throw an exception', function () {
+        $connector = connector();
+        $request = new UserRequest;
+
+        $connector->send($request)->into(User::class);
+    })->throws(InvalidArgumentException::class, 'The class provided must implement the Saloon\Contracts\DataObjects\IntoObject interface.');
+
+    test('if the class implements the with response interface it will populate the response', function () {
+        $connector = connector();
+        $request = new UserRequest;
+
+        $user = $connector->send($request)->into(IntoUserWithResponse::class);
+
+        expect($user)->toBeInstanceOf(IntoUserWithResponse::class);
+        expect($user->name)->toEqual('Sammyjo20');
+        expect($user->getResponse())->toBeInstanceOf(Response::class);
+    });
 });
 
-test('if the class does not implement the dto interface it will throw an exception', function () {
-    $connector = connector();
-    $request = new UserRequest;
+describe('into many', function () {
+    test('can create many dtos using the intoMany method on a request', function () {
+        $connector = connector();
+        $request = new PagedSuperheroRequest;
 
-    $connector->send($request)->into(User::class);
-})->throws(InvalidArgumentException::class, 'The class provided must implement the Saloon\Contracts\DataObjects\DataTransferObject interface.');
+        $superheroes = $connector->send($request)->intoMany(Superhero::class);
 
-test('if the class implements the with response interface it will populate the response', function () {
-    $connector = connector();
-    $request = new UserRequest;
+        expect($superheroes)->toBeArray();
+        expect($superheroes[0])->toBeInstanceOf(Superhero::class);
+        expect($superheroes[0]->name)->toEqual('Batman');
+    });
 
-    $user = $connector->send($request)->into(IntoUserWithResponse::class);
+    test('if the class does not implement the dto interface it will throw an exception', function () {
+        $connector = connector();
+        $request = new UserRequest;
 
-    expect($user)->toBeInstanceOf(IntoUserWithResponse::class);
-    expect($user->name)->toEqual('Sammyjo20');
-    expect($user->getResponse())->toBeInstanceOf(Response::class);
+        $connector->send($request)->intoMany(IntoUser::class);
+    })->throws(InvalidArgumentException::class, 'The class provided must implement the Saloon\Contracts\DataObjects\IntoObjects interface.');
+
+    test('if the class implements the with response interface it will populate the response', function () {
+        $connector = connector();
+        $request = new PagedSuperheroRequest;
+
+        $superheroes = $connector->send($request)->intoMany(SuperheroWithResponse::class);
+
+        expect($superheroes)->toBeArray();
+        expect($superheroes[0]->getResponse())->toBeInstanceOf(Response::class);
+    });
 });

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Saloon\Tests\Fixtures\Data;
 
 use Saloon\Http\Response;
-use Saloon\Contracts\DataObjects\DataTransferObject;
+use Saloon\Contracts\DataObjects\IntoObject;
 
-class IntoUser implements DataTransferObject
+class IntoUser implements IntoObject
 {
     public function __construct(
         public string $name,

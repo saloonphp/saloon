@@ -6,7 +6,7 @@ namespace Saloon\Contracts\DataObjects;
 
 use Saloon\Http\Response;
 
-interface DataTransferObject
+interface IntoObject
 {
     /**
      * Handle the creation of the object from Saloon
