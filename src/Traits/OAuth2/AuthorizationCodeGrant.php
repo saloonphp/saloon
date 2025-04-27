@@ -70,6 +70,9 @@ trait AuthorizationCodeGrant
      * @template TRequest of \Saloon\Http\Request
      *
      * @param callable(TRequest): (void)|null $requestModifier
+     *
+     * @return ($returnResponse is true ? \Saloon\Http\Response : \Saloon\Contracts\OAuthAuthenticator)
+     *
      * @throws \Saloon\Exceptions\InvalidStateException
      */
     public function getAccessToken(string $code, ?string $state = null, ?string $expectedState = null, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
@@ -105,6 +108,8 @@ trait AuthorizationCodeGrant
      * @template TRequest of \Saloon\Http\Request
      *
      * @param callable(TRequest): (void)|null $requestModifier
+     *
+     * @return ($returnResponse is true ? \Saloon\Http\Response : \Saloon\Contracts\OAuthAuthenticator)
      */
     public function refreshAccessToken(OAuthAuthenticator|string $refreshToken, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
