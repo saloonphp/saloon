@@ -491,32 +491,32 @@ class Response
 
     /**
      * Determine if the response is in JSON format.
-     *
-     * @return bool
      */
     public function isJson(): bool
     {
         $contentType = $this->header('Content-Type');
 
-        if(is_null($contentType)) {
+        if (is_null($contentType)) {
             return false;
         }
+
+        $contentType = is_array($contentType) ? $contentType[0] : $contentType;
 
         return str_contains($contentType, 'json');
     }
 
     /**
      * Determine if the response is in XML format.
-     *
-     * @return bool
      */
     public function isXml(): bool
     {
         $contentType = $this->header('Content-Type');
 
-        if(is_null($contentType)) {
+        if (is_null($contentType)) {
             return false;
         }
+
+        $contentType = is_array($contentType) ? $contentType[0] : $contentType;
 
         return str_contains($contentType, 'xml');
     }

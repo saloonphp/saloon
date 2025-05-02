@@ -7,6 +7,9 @@ namespace Saloon\Traits\Body;
 use Psr\Http\Message\StreamInterface;
 use Saloon\Repositories\Body\StreamBodyRepository;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait HasStreamBody
 {
     use ChecksForHasBody;

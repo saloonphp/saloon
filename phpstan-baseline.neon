@@ -1,0 +1,67 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to an undefined method GuzzleHttp\\Promise\\PromiseInterface\|Saloon\\Http\\Response\:\:then\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Http/Connector.php
+
+		-
+			message: '#^Method Saloon\\Http\\Connector\:\:defaultSender\(\) should return Saloon\\Contracts\\Sender but returns object\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Http/Connector.php
+
+		-
+			message: '#^Parameter \#1 \$response of method Saloon\\Http\\PendingRequest\:\:executeResponsePipeline\(\) expects Saloon\\Http\\Response, GuzzleHttp\\Promise\\PromiseInterface\|Saloon\\Http\\Response given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Http/Connector.php
+
+		-
+			message: '#^Parameter \#1 \$contents of static method Saloon\\Data\\RecordedResponse\:\:fromFile\(\) expects string, bool\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Http/Faking/Fixture.php
+
+		-
+			message: '#^Method Saloon\\Http\\Faking\\MockClient\:\:getLastResponse\(\) should return Saloon\\Http\\Response\|null but returns \(callable\)\|Saloon\\Http\\Faking\\Fixture\|Saloon\\Http\\Faking\\MockResponse\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Http/Faking/MockClient.php
+
+		-
+			message: '#^Method Saloon\\Http\\Faking\\MockClient\:\:getRecordedResponses\(\) should return array\<Saloon\\Http\\Response\> but returns array\<\(callable\)\|Saloon\\Http\\Faking\\Fixture\|Saloon\\Http\\Faking\\MockResponse\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Http/Faking/MockClient.php
+
+		-
+			message: '#^Property Saloon\\Http\\Faking\\MockClient\:\:\$recordedResponses \(array\<\(callable\(\)\: mixed\)\|Saloon\\Http\\Faking\\Fixture\|Saloon\\Http\\Faking\\MockResponse\>\) does not accept non\-empty\-array\<\(callable\(\)\: mixed\)\|Saloon\\Http\\Faking\\Fixture\|Saloon\\Http\\Faking\\MockResponse\|Saloon\\Http\\Response\>\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Http/Faking/MockClient.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function call_user_func_array expects callable\(\)\: mixed, \(callable\(\)\: mixed\)\|object given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Http/PendingRequest.php
+
+		-
+			message: '#^Parameter \#1 \$object of method ReflectionMethod\:\:invoke\(\) expects object\|null, class\-string\|object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Http/PendingRequest.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function call_user_func_array expects callable\(\)\: mixed, \(callable\(\)\: mixed\)\|object given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Http/Response.php
+
+		-
+			message: '#^Parameter \#1 \$object of method ReflectionMethod\:\:invoke\(\) expects object\|null, class\-string\|object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Http/Response.php

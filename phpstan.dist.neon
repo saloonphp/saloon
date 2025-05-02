@@ -4,7 +4,7 @@
 #############################################################################################
 
 includes:
-- phpstan.baseline.neon
+- phpstan-baseline.neon
 
 parameters:
   # Add one of the editorUrl's in your phpstan.neon file for direct editor/IDE links in the terminal.
@@ -18,3 +18,7 @@ parameters:
 
   ignoreErrors:
   - "#^Unsafe usage of new static\\(\\)\\.$#"
+
+  # Rules
+
+  treatPhpDocTypesAsCertain: false
