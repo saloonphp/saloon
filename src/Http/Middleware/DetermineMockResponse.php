@@ -49,7 +49,7 @@ class DetermineMockResponse implements RequestMiddleware
         // an instance of a fixture instead, we will register a
         // middleware on the response to record the response.
 
-        if (is_null($mockResponse) && $mockObject instanceof Fixture) {
+        if ($mockObject instanceof Fixture) {
             $pendingRequest->middleware()->onResponse(new RecordFixture($mockObject, $mockClient), 'recordFixture', PipeOrder::FIRST);
         }
 

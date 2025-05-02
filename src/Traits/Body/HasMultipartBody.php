@@ -7,6 +7,9 @@ namespace Saloon\Traits\Body;
 use Saloon\Http\PendingRequest;
 use Saloon\Repositories\Body\MultipartBodyRepository;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait HasMultipartBody
 {
     use ChecksForHasBody;

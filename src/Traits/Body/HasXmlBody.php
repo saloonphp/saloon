@@ -6,6 +6,9 @@ namespace Saloon\Traits\Body;
 
 use Saloon\Http\PendingRequest;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait HasXmlBody
 {
     use HasStringBody;

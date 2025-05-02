@@ -13,7 +13,6 @@ use Saloon\Helpers\URLHelper;
 use Saloon\Http\PendingRequest;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Saloon\Exceptions\NoMockResponseFoundException;
-use Saloon\Exceptions\InvalidMockResponseCaptureMethodException;
 
 class MockClient
 {
@@ -94,10 +93,6 @@ class MockClient
             $this->sequenceResponses[] = $response;
 
             return;
-        }
-
-        if (! is_string($captureMethod)) {
-            throw new InvalidMockResponseCaptureMethodException;
         }
 
         // Let's detect if the capture method is either a connector or
@@ -271,16 +266,15 @@ class MockClient
         foreach ($callbacks as $index => $callback) {
             $result = $this->checkRequestWasSent($callback, $index);
 
-            PHPUnit::assertTrue($result, 'An expected request (#'.($index + 1).') was not sent.');
+            PHPUnit::assertTrue($result, 'An expected request (#' . ($index + 1) . ') was not sent.');
         }
     }
 
     /**
      * Assert JSON response data was received
      *
-     * @deprecated This method will be removed in v4
-     *
      * @param array<string, mixed> $data
+     * @deprecated This method will be removed in v4
      */
     public function assertSentJson(string $request, array $data): void
     {
@@ -324,12 +318,10 @@ class MockClient
             return $this->checkClosureAgainstResponses($request, $index);
         }
 
-        if (is_string($request)) {
-            if (class_exists($request) && Helpers::isSubclassOf($request, Request::class)) {
-                $passed = $this->findResponseByRequest($request, $index) instanceof Response;
-            } else {
-                $passed = $this->findResponseByRequestUrl($request, $index) instanceof Response;
-            }
+        if (class_exists($request) && Helpers::isSubclassOf($request, Request::class)) {
+            $passed = $this->findResponseByRequest($request, $index) instanceof Response;
+        } else {
+            $passed = $this->findResponseByRequestUrl($request, $index) instanceof Response;
         }
 
         return $passed;

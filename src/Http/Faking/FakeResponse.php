@@ -19,7 +19,7 @@ use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 use Saloon\Contracts\FakeResponse as FakeResponseContract;
 
 /**
- * @method static static make(mixed $body = [], int $status = 200, array $headers = [])
+ * @method static static make(mixed $body = [], int $status = 200, array<string, string|int|float|bool> $headers = [])
  */
 class FakeResponse implements FakeResponseContract
 {

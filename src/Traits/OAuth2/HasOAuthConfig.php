@@ -6,6 +6,9 @@ namespace Saloon\Traits\OAuth2;
 
 use Saloon\Helpers\OAuth2\OAuthConfig;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait HasOAuthConfig
 {
     /**
