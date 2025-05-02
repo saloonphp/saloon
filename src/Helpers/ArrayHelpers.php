@@ -16,7 +16,7 @@ final class ArrayHelpers
     /**
      * Determine whether the given value is array accessible.
      *
-     * @phpstan-assert-if-true array|ArrayAccess $value
+     * @phpstan-assert-if-true array<array-key, mixed>|ArrayAccess<array-key, mixed> $value
      */
     private static function accessible(mixed $value): bool
     {
@@ -49,10 +49,6 @@ final class ArrayHelpers
      */
     public static function get(array $array, string|int|null $key, mixed $default = null): mixed
     {
-        if (! static::accessible($array)) {
-            return Helpers::value($default);
-        }
-
         if (is_null($key)) {
             return $array;
         }
@@ -81,9 +77,10 @@ final class ArrayHelpers
      *
      * If no key is given to the method, the entire array will be replaced.
      *
-     * @param  array  $array
-     * @param  string|int|null  $key
-     * @return array
+     * @param array<array-key, mixed> $array
+     * @param string|int|null $key
+     * @param mixed $value
+     * @return array<array-key, mixed>
      */
     public static function set(&$array, $key, $value)
     {
@@ -91,7 +88,7 @@ final class ArrayHelpers
             return $array = $value;
         }
 
-        $keys = explode('.', $key);
+        $keys = explode('.', (string)$key);
 
         foreach ($keys as $i => $key) {
             if (count($keys) === 1) {

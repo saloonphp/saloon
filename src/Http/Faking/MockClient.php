@@ -96,10 +96,6 @@ class MockClient
             return;
         }
 
-        if (! is_string($captureMethod)) {
-            throw new InvalidMockResponseCaptureMethodException;
-        }
-
         // Let's detect if the capture method is either a connector or
         // a request. If so we'll put them in their designated arrays.
 
@@ -271,16 +267,16 @@ class MockClient
         foreach ($callbacks as $index => $callback) {
             $result = $this->checkRequestWasSent($callback, $index);
 
-            PHPUnit::assertTrue($result, 'An expected request (#'.($index + 1).') was not sent.');
+            PHPUnit::assertTrue($result, 'An expected request (#' . ($index + 1) . ') was not sent.');
         }
     }
 
     /**
      * Assert JSON response data was received
      *
+     * @param array<string, mixed> $data
      * @deprecated This method will be removed in v4
      *
-     * @param array<string, mixed> $data
      */
     public function assertSentJson(string $request, array $data): void
     {
@@ -324,12 +320,10 @@ class MockClient
             return $this->checkClosureAgainstResponses($request, $index);
         }
 
-        if (is_string($request)) {
-            if (class_exists($request) && Helpers::isSubclassOf($request, Request::class)) {
-                $passed = $this->findResponseByRequest($request, $index) instanceof Response;
-            } else {
-                $passed = $this->findResponseByRequestUrl($request, $index) instanceof Response;
-            }
+        if (class_exists($request) && Helpers::isSubclassOf($request, Request::class)) {
+            $passed = $this->findResponseByRequest($request, $index) instanceof Response;
+        } else {
+            $passed = $this->findResponseByRequestUrl($request, $index) instanceof Response;
         }
 
         return $passed;

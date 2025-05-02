@@ -502,6 +502,8 @@ class Response
             return false;
         }
 
+        $contentType = is_array($contentType) ? $contentType[0] : $contentType;
+
         return str_contains($contentType, 'json');
     }
 
@@ -517,6 +519,8 @@ class Response
         if(is_null($contentType)) {
             return false;
         }
+
+        $contentType = is_array($contentType) ? $contentType[0] : $contentType;
 
         return str_contains($contentType, 'xml');
     }
