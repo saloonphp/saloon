@@ -19,6 +19,9 @@ use Saloon\Http\OAuth2\GetAccessTokenRequest;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
 use Saloon\Http\OAuth2\GetRefreshTokenRequest;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait AuthorizationCodeGrant
 {
     use HasOAuthConfig;
