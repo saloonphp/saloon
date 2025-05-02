@@ -8,6 +8,9 @@ use Saloon\Http\PendingRequest;
 use Saloon\Contracts\Authenticator;
 use Saloon\Exceptions\MissingAuthenticatorException;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait RequiresAuth
 {
     /**

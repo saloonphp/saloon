@@ -6,6 +6,9 @@ namespace Saloon\Traits\Body;
 
 use Saloon\Repositories\Body\StringBodyRepository;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait HasStringBody
 {
     use ChecksForHasBody;

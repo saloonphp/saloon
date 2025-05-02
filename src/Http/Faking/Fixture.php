@@ -36,7 +36,7 @@ class Fixture
     /**
      * Data to merge in the mocked response.
      *
-     * @var array<string, mixed>|null
+     * @var array<array-key, mixed>|null
      */
     protected ?array $merge = null;
 
@@ -57,7 +57,7 @@ class Fixture
     /**
      * Specify data to merge with the mock response data.
      *
-     * @param array<string, mixed> $merge
+     * @param array<array-key, mixed> $merge
      */
     public function merge(array $merge = []): static
     {

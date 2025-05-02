@@ -100,8 +100,7 @@ class ArrayStore implements ArrayStoreContract
     /**
      * Determine if the store is empty
      *
-     *
-     * @phpstan-assert-if-false non-empty-array $this->data
+     * @phpstan-assert-if-false non-empty-array<array-key, mixed> $this->data
      */
     public function isEmpty(): bool
     {
@@ -111,8 +110,7 @@ class ArrayStore implements ArrayStoreContract
     /**
      * Determine if the store is not empty
      *
-     *
-     * @phpstan-assert-if-true non-empty-array $this->data
+     * @phpstan-assert-if-true non-empty-array<array-key, mixed> $this->data
      */
     public function isNotEmpty(): bool
     {
