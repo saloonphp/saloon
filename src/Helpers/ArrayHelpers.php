@@ -16,7 +16,7 @@ final class ArrayHelpers
     /**
      * Determine whether the given value is array accessible.
      *
-     * @phpstan-assert-if-true array|ArrayAccess $value
+     * @phpstan-assert-if-true array<array-key, mixed>|ArrayAccess<array-key, mixed> $value
      */
     private static function accessible(mixed $value): bool
     {
@@ -49,10 +49,6 @@ final class ArrayHelpers
      */
     public static function get(array $array, string|int|null $key, mixed $default = null): mixed
     {
-        if (! static::accessible($array)) {
-            return Helpers::value($default);
-        }
-
         if (is_null($key)) {
             return $array;
         }
@@ -72,6 +68,46 @@ final class ArrayHelpers
                 return Helpers::value($default);
             }
         }
+
+        return $array;
+    }
+
+    /**
+     * Set an array item to a given value using "dot" notation.
+     *
+     * If no key is given to the method, the entire array will be replaced.
+     *
+     * @param array<array-key, mixed> $array
+     * @param string|int|null $key
+     * @param mixed $value
+     * @return array<array-key, mixed>
+     */
+    public static function set(&$array, $key, $value)
+    {
+        if (is_null($key)) {
+            return $array = $value;
+        }
+
+        $keys = explode('.', (string)$key);
+
+        foreach ($keys as $i => $key) {
+            if (count($keys) === 1) {
+                break;
+            }
+
+            unset($keys[$i]);
+
+            // If the key doesn't exist at this depth, we will just create an empty array
+            // to hold the next value, allowing us to create the arrays to hold final
+            // values at the correct depth. Then we'll keep digging into the array.
+            if (! isset($array[$key]) || ! is_array($array[$key])) {
+                $array[$key] = [];
+            }
+
+            $array = &$array[$key];
+        }
+
+        $array[array_shift($keys)] = $value;
 
         return $array;
     }

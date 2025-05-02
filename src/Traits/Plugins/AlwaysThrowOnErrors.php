@@ -8,6 +8,9 @@ use Saloon\Http\Response;
 use Saloon\Enums\PipeOrder;
 use Saloon\Http\PendingRequest;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait AlwaysThrowOnErrors
 {
     /**

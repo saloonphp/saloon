@@ -8,6 +8,9 @@ use Saloon\Config;
 use GuzzleHttp\RequestOptions;
 use Saloon\Http\PendingRequest;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait HasTimeout
 {
     /**

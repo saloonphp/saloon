@@ -490,6 +490,38 @@ class Response
     }
 
     /**
+     * Determine if the response is in JSON format.
+     */
+    public function isJson(): bool
+    {
+        $contentType = $this->header('Content-Type');
+
+        if (is_null($contentType)) {
+            return false;
+        }
+
+        $contentType = is_array($contentType) ? $contentType[0] : $contentType;
+
+        return str_contains($contentType, 'json');
+    }
+
+    /**
+     * Determine if the response is in XML format.
+     */
+    public function isXml(): bool
+    {
+        $contentType = $this->header('Content-Type');
+
+        if (is_null($contentType)) {
+            return false;
+        }
+
+        $contentType = is_array($contentType) ? $contentType[0] : $contentType;
+
+        return str_contains($contentType, 'xml');
+    }
+
+    /**
      * Create a temporary resource for the stream.
      *
      * Useful for storing the file. Make sure to close the raw stream after you have used it.

@@ -13,6 +13,9 @@ use Saloon\Contracts\OAuthAuthenticator;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
 use Saloon\Http\OAuth2\GetClientCredentialsTokenRequest;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait ClientCredentialsGrant
 {
     use HasOAuthConfig;
