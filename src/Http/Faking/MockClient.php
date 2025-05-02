@@ -13,7 +13,6 @@ use Saloon\Helpers\URLHelper;
 use Saloon\Http\PendingRequest;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Saloon\Exceptions\NoMockResponseFoundException;
-use Saloon\Exceptions\InvalidMockResponseCaptureMethodException;
 
 class MockClient
 {
@@ -276,7 +275,6 @@ class MockClient
      *
      * @param array<string, mixed> $data
      * @deprecated This method will be removed in v4
-     *
      */
     public function assertSentJson(string $request, array $data): void
     {

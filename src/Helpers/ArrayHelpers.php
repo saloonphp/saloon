@@ -79,7 +79,6 @@ final class ArrayHelpers
      *
      * @param array<array-key, mixed> $array
      * @param string|int|null $key
-     * @param mixed $value
      * @return array<array-key, mixed>
      */
     public static function set(&$array, $key, $value)
