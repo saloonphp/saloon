@@ -6,6 +6,9 @@ namespace Saloon\Traits\Responses;
 
 use Saloon\Http\Response;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait HasResponse
 {
     /**

@@ -408,3 +408,57 @@ test('the response is macroable', function () {
 
     expect($response->yee())->toEqual('haw');
 });
+
+test('can determine if response is JSON', function () {
+    $mockClient = new MockClient([
+        // JSON content type
+        MockResponse::make(['foo' => 'bar'], 200, ['Content-Type' => 'application/json']),
+        // JSON with charset
+        MockResponse::make(['foo' => 'bar'], 200, ['Content-Type' => 'application/json; charset=utf-8']),
+        // Non-JSON content type
+        MockResponse::make('plain text', 200, ['Content-Type' => 'text/plain']),
+        // No content type
+        MockResponse::make('no content type', 200, []),
+    ]);
+
+    $connector = connector();
+
+    $response = $connector->send(new UserRequest, $mockClient);
+    expect($response->isJson())->toBeTrue();
+
+    $response = $connector->send(new UserRequest, $mockClient);
+    expect($response->isJson())->toBeTrue();
+
+    $response = $connector->send(new UserRequest, $mockClient);
+    expect($response->isJson())->toBeFalse();
+
+    $response = $connector->send(new UserRequest, $mockClient);
+    expect($response->isJson())->toBeFalse();
+});
+
+test('can determine if response is XML', function () {
+    $mockClient = new MockClient([
+        // XML content type
+        MockResponse::make('<?xml version="1.0"?><root></root>', 200, ['Content-Type' => 'application/xml']),
+        // XML with charset
+        MockResponse::make('<?xml version="1.0"?><root></root>', 200, ['Content-Type' => 'text/xml; charset=utf-8']),
+        // Non-XML content type
+        MockResponse::make('plain text', 200, ['Content-Type' => 'text/plain']),
+        // No content type
+        MockResponse::make('no content type', 200, []),
+    ]);
+
+    $connector = connector();
+
+    $response = $connector->send(new UserRequest, $mockClient);
+    expect($response->isXml())->toBeTrue();
+
+    $response = $connector->send(new UserRequest, $mockClient);
+    expect($response->isXml())->toBeTrue();
+
+    $response = $connector->send(new UserRequest, $mockClient);
+    expect($response->isXml())->toBeFalse();
+
+    $response = $connector->send(new UserRequest, $mockClient);
+    expect($response->isXml())->toBeFalse();
+});

@@ -7,6 +7,9 @@ namespace Saloon\Traits\Body;
 use Saloon\Http\PendingRequest;
 use Saloon\Repositories\Body\JsonBodyRepository;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait HasJsonBody
 {
     use ChecksForHasBody;
