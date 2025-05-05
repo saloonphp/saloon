@@ -19,6 +19,9 @@ use Saloon\Http\OAuth2\GetAccessTokenRequest;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
 use Saloon\Http\OAuth2\GetRefreshTokenRequest;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait AuthorizationCodeGrant
 {
     use HasOAuthConfig;
@@ -33,7 +36,7 @@ trait AuthorizationCodeGrant
      *
      * @param array<string> $scopes
      */
-    public function getAuthorizationUrl(array $scopes = [], string $state = null, string $scopeSeparator = ' ', array $additionalQueryParameters = []): string
+    public function getAuthorizationUrl(array $scopes = [], ?string $state = null, string $scopeSeparator = ' ', array $additionalQueryParameters = []): string
     {
         $config = $this->oauthConfig();
 
@@ -70,9 +73,12 @@ trait AuthorizationCodeGrant
      * @template TRequest of \Saloon\Http\Request
      *
      * @param callable(TRequest): (void)|null $requestModifier
+     *
+     * @return ($returnResponse is true ? \Saloon\Http\Response : \Saloon\Contracts\OAuthAuthenticator)
+     *
      * @throws \Saloon\Exceptions\InvalidStateException
      */
-    public function getAccessToken(string $code, string $state = null, string $expectedState = null, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
+    public function getAccessToken(string $code, ?string $state = null, ?string $expectedState = null, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
         $this->oauthConfig()->validate();
 
@@ -105,6 +111,8 @@ trait AuthorizationCodeGrant
      * @template TRequest of \Saloon\Http\Request
      *
      * @param callable(TRequest): (void)|null $requestModifier
+     *
+     * @return ($returnResponse is true ? \Saloon\Http\Response : \Saloon\Contracts\OAuthAuthenticator)
      */
     public function refreshAccessToken(OAuthAuthenticator|string $refreshToken, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
@@ -140,7 +148,7 @@ trait AuthorizationCodeGrant
     /**
      * Create the OAuthAuthenticator from a response.
      */
-    protected function createOAuthAuthenticatorFromResponse(Response $response, string $fallbackRefreshToken = null): OAuthAuthenticator
+    protected function createOAuthAuthenticatorFromResponse(Response $response, ?string $fallbackRefreshToken = null): OAuthAuthenticator
     {
         $responseData = $response->object();
 

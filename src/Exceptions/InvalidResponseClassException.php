@@ -11,7 +11,7 @@ class InvalidResponseClassException extends SaloonException
     /**
      * Constructor
      */
-    public function __construct(string $message = null)
+    public function __construct(?string $message = null)
     {
         parent::__construct($message ?? sprintf('The provided response must exist and implement the %s contract.', Response::class));
     }

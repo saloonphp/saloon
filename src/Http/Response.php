@@ -82,7 +82,7 @@ class Response
     /**
      * Create a new response instance.
      */
-    public function __construct(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, Throwable $senderException = null)
+    public function __construct(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, ?Throwable $senderException = null)
     {
         $this->psrRequest = $psrRequest;
         $this->psrResponse = $psrResponse;
@@ -487,6 +487,38 @@ class Response
     public function header(string $header): string|array|null
     {
         return $this->headers()->get($header);
+    }
+
+    /**
+     * Determine if the response is in JSON format.
+     */
+    public function isJson(): bool
+    {
+        $contentType = $this->header('Content-Type');
+
+        if (is_null($contentType)) {
+            return false;
+        }
+
+        $contentType = is_array($contentType) ? $contentType[0] : $contentType;
+
+        return str_contains($contentType, 'json');
+    }
+
+    /**
+     * Determine if the response is in XML format.
+     */
+    public function isXml(): bool
+    {
+        $contentType = $this->header('Content-Type');
+
+        if (is_null($contentType)) {
+            return false;
+        }
+
+        $contentType = is_array($contentType) ? $contentType[0] : $contentType;
+
+        return str_contains($contentType, 'xml');
     }
 
     /**

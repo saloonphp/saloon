@@ -26,7 +26,7 @@ class RequestExceptionHelper
     /**
      * Create the request exception from a response
      */
-    public static function create(Response $response, Throwable $previous = null): RequestException
+    public static function create(Response $response, ?Throwable $previous = null): RequestException
     {
         $status = $response->status();
 

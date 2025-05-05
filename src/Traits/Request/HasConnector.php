@@ -57,7 +57,7 @@ trait HasConnector
     /**
      * Create a pending request
      */
-    public function createPendingRequest(MockClient $mockClient = null): PendingRequest
+    public function createPendingRequest(?MockClient $mockClient = null): PendingRequest
     {
         return $this->connector()->createPendingRequest($this, $mockClient);
     }
@@ -65,7 +65,7 @@ trait HasConnector
     /**
      * Send a request synchronously
      */
-    public function send(MockClient $mockClient = null): Response
+    public function send(?MockClient $mockClient = null): Response
     {
         return $this->connector()->send($this, $mockClient);
     }
@@ -73,7 +73,7 @@ trait HasConnector
     /**
      * Send a request asynchronously
      */
-    public function sendAsync(MockClient $mockClient = null): PromiseInterface
+    public function sendAsync(?MockClient $mockClient = null): PromiseInterface
     {
         return $this->connector()->sendAsync($this, $mockClient);
     }

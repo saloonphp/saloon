@@ -77,7 +77,7 @@ class PendingRequest
     /**
      * Build up the request payload.
      */
-    public function __construct(Connector $connector, Request $request, MockClient $mockClient = null)
+    public function __construct(Connector $connector, Request $request, ?MockClient $mockClient = null)
     {
         // Let's start by getting our PSR factory collection. This object contains all the
         // relevant factories for creating PSR-7 requests as well as URIs and streams.

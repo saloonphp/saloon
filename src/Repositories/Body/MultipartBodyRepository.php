@@ -40,7 +40,7 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
      * @param array<\Saloon\Data\MultipartValue> $value
      * @throws \Exception
      */
-    public function __construct(array $value = [], string $boundary = null)
+    public function __construct(array $value = [], ?string $boundary = null)
     {
         $this->data = new ArrayBodyRepository;
         $this->boundary = is_null($boundary) ? StringHelpers::random(40) : $boundary;
@@ -90,7 +90,7 @@ class MultipartBodyRepository implements BodyRepository, MergeableBody
      * @param array<string, mixed> $headers
      * @return $this
      */
-    public function add(string $name, mixed $contents, string $filename = null, array $headers = []): static
+    public function add(string $name, mixed $contents, ?string $filename = null, array $headers = []): static
     {
         $this->attach(new MultipartValue($name, $contents, $filename, $headers));
 

@@ -180,7 +180,7 @@ class GuzzleSender implements Sender
     /**
      * Create a response.
      */
-    protected function createResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, Exception $exception = null): Response
+    protected function createResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, ?Exception $exception = null): Response
     {
         /** @var class-string<\Saloon\Http\Response> $responseClass */
         $responseClass = $pendingRequest->getResponseClass();

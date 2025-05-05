@@ -26,7 +26,7 @@ class RetryUserRequest extends Request
         return '/user';
     }
 
-    public function __construct(int $tries = null, int $retryInterval = 0, bool $throwOnMaxTries = null, protected ?Closure $handleRetry = null)
+    public function __construct(?int $tries = null, int $retryInterval = 0, ?bool $throwOnMaxTries = null, protected ?Closure $handleRetry = null)
     {
         // These are just for us to test the various retries
 
