@@ -44,6 +44,11 @@ class URLHelper
      */
     public static function isValidUrl(string $url): bool
     {
+        // The following str_replace is used to get around an issue raised by PHP 8.4
+        // @see https://github.com/php/php-src/issues/17842
+
+        $url = str_replace('_', '-', $url);
+
         return ! empty(filter_var($url, FILTER_VALIDATE_URL));
     }
 
