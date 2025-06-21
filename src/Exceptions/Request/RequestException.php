@@ -27,7 +27,7 @@ class RequestException extends SaloonException
     /**
      * Maximum length allowed for the body
      */
-    protected int $maxBodyLength = 200;
+    protected int $maxBodyLength = 2_000;
 
     /**
      * Create the RequestException
