@@ -60,6 +60,13 @@ class MockClient
     protected static ?MockClient $globalMockClient = null;
 
     /**
+     * Whether to allow sending an actual request if no mock response is found.
+     *
+     * @var bool
+     */
+    protected bool $allowFallback = false;
+
+    /**
      * Constructor
      *
      * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $mockData
@@ -67,6 +74,16 @@ class MockClient
     public function __construct(array $mockData = [])
     {
         $this->addResponses($mockData);
+    }
+
+    /**
+     * Allow sending an actual request if no mock response is found.
+     */
+    public function allowFallback(bool $allowFallback = true): static
+    {
+        $this->allowFallback = $allowFallback;
+
+        return $this;
     }
 
     /**
@@ -137,7 +154,7 @@ class MockClient
      *
      * @throws \Saloon\Exceptions\NoMockResponseFoundException
      */
-    public function guessNextResponse(PendingRequest $pendingRequest): MockResponse|Fixture
+    public function guessNextResponse(PendingRequest $pendingRequest): MockResponse|Fixture|PendingRequest
     {
         $request = $pendingRequest->getRequest();
         $requestClass = get_class($request);
@@ -158,11 +175,17 @@ class MockClient
             return $this->mockResponseValue($guessedResponse, $pendingRequest);
         }
 
-        if (empty($this->sequenceResponses)) {
-            throw new NoMockResponseFoundException($pendingRequest);
+        $sequenceResponse = $this->getNextFromSequence();
+
+        if (! empty($sequenceResponse)) {
+            return $this->mockResponseValue($sequenceResponse, $pendingRequest);
         }
 
-        return $this->mockResponseValue($this->getNextFromSequence(), $pendingRequest);
+        if ($this->allowFallback) {
+            return $pendingRequest;
+        }
+
+        throw new NoMockResponseFoundException($pendingRequest);
     }
 
     /**
