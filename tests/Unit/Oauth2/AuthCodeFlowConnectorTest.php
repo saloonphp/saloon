@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Saloon\Tests\Helpers\Date;
+use Saloon\Helpers\DateHelper;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Helpers\OAuth2\OAuthConfig;
@@ -51,7 +51,7 @@ test('the old refresh token is carried over if a response does not include a new
 
     $connector->withMockClient($mockClient);
 
-    $authenticator = new AccessTokenAuthenticator('access', 'refresh-old', Date::now()->addSeconds(3600)->toDateTime());
+    $authenticator = new AccessTokenAuthenticator('access', 'refresh-old', DateHelper::now()->add(new DateInterval('PT3600S')));
 
     $newAuthenticator = $connector->refreshAccessToken($authenticator);
 

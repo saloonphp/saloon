@@ -8,6 +8,7 @@ use DateInterval;
 use DateTimeImmutable;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
+use Saloon\Helpers\DateHelper;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Contracts\OAuthAuthenticator;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
@@ -62,7 +63,7 @@ trait ClientCredentialsGrant
         $expiresAt = null;
 
         if (isset($responseData->expires_in) && is_numeric($responseData->expires_in)) {
-            $expiresAt = (new DateTimeImmutable)->add(
+            $expiresAt = DateHelper::now()->add(
                 DateInterval::createFromDateString((int)$responseData->expires_in . ' seconds')
             );
         }
