@@ -10,6 +10,7 @@ use Saloon\Http\Request;
 use Saloon\Http\Response;
 use InvalidArgumentException;
 use Saloon\Helpers\URLHelper;
+use Saloon\Helpers\DateHelper;
 use Saloon\Helpers\StringHelpers;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Http\OAuth2\GetUserRequest;
@@ -158,7 +159,7 @@ trait AuthorizationCodeGrant
         $expiresAt = null;
 
         if (isset($responseData->expires_in) && is_numeric($responseData->expires_in)) {
-            $expiresAt = (new DateTimeImmutable)->add(
+            $expiresAt = DateHelper::now()->add(
                 DateInterval::createFromDateString((int)$responseData->expires_in . ' seconds')
             );
         }

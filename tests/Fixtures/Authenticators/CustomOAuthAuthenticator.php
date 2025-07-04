@@ -13,10 +13,10 @@ class CustomOAuthAuthenticator extends AccessTokenAuthenticator
      * Constructor
      */
     public function __construct(
-        readonly public string             $accessToken,
-        readonly public string             $greeting,
-        readonly public ?string            $refreshToken = null,
-        readonly public ?DateTimeImmutable $expiresAt = null,
+        public readonly string             $accessToken,
+        public readonly string             $greeting,
+        public readonly ?string            $refreshToken = null,
+        public readonly ?DateTimeImmutable $expiresAt = null,
     ) {
         //
     }

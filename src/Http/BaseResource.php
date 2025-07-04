@@ -9,7 +9,7 @@ class BaseResource
     /**
      * Constructor
      */
-    public function __construct(readonly protected Connector $connector)
+    public function __construct(protected readonly Connector $connector)
     {
         //
     }

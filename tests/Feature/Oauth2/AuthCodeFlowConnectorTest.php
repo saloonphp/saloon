@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Saloon\Http\Request;
 use Saloon\Http\Response;
-use Saloon\Tests\Helpers\Date;
+use Saloon\Helpers\DateHelper;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\OAuth2\GetUserRequest;
@@ -165,7 +165,7 @@ test('you can refresh a token from a connector', function () {
 
     $connector->withMockClient($mockClient);
 
-    $authenticator = new AccessTokenAuthenticator('access', 'refresh', Date::now()->addSeconds(3600)->toDateTime());
+    $authenticator = new AccessTokenAuthenticator('access', 'refresh', DateHelper::now()->add(new DateInterval('PT3600S')));
 
     $newAuthenticator = $connector->refreshAccessToken($authenticator);
 
@@ -184,7 +184,7 @@ test('you can tap into the refresh token request', function () {
 
     $connector->withMockClient($mockClient);
 
-    $authenticator = new AccessTokenAuthenticator('access', 'refresh', Date::now()->addSeconds(3600)->toDateTime());
+    $authenticator = new AccessTokenAuthenticator('access', 'refresh', DateHelper::now()->add(new DateInterval('PT3600S')));
 
     $newAuthenticator = $connector->refreshAccessToken($authenticator, requestModifier: function (Request $request) {
         $request->query()->add('yee', 'haw');
@@ -209,7 +209,7 @@ test('the refreshAccessToken method throws an exception if you provide it an aut
 
     $connector->withMockClient($mockClient);
 
-    $authenticator = new AccessTokenAuthenticator('access', null, Date::now()->addSeconds(3600)->toDateTime());
+    $authenticator = new AccessTokenAuthenticator('access', null, DateHelper::now()->add(new DateInterval('PT3600S')));
 
     $this->expectException(InvalidArgumentException::class);
     $this->expectExceptionMessage('The provided OAuthAuthenticator does not contain a refresh token.');
@@ -226,7 +226,7 @@ test('you can request the original response instead of the authenticator on the 
 
     $connector->withMockClient($mockClient);
 
-    $authenticator = new AccessTokenAuthenticator('access', 'refresh', Date::now()->addSeconds(3600)->toDateTime());
+    $authenticator = new AccessTokenAuthenticator('access', 'refresh', DateHelper::now()->add(new DateInterval('PT3600S')));
 
     $response = $connector->refreshAccessToken($authenticator, true);
 
@@ -242,7 +242,7 @@ test('you can get the user from an oauth connector', function () {
     $connector = new OAuth2Connector;
     $connector->withMockClient($mockClient);
 
-    $accessToken = new AccessTokenAuthenticator('access', 'refresh', Date::now()->addSeconds(3600)->toDateTime());
+    $accessToken = new AccessTokenAuthenticator('access', 'refresh', DateHelper::now()->add(new DateInterval('PT3600S')));
 
     $response = $connector->getUser($accessToken);
 
@@ -265,7 +265,7 @@ test('you can tap into the the user request', function () {
     $connector = new OAuth2Connector;
     $connector->withMockClient($mockClient);
 
-    $accessToken = new AccessTokenAuthenticator('access', 'refresh', Date::now()->addSeconds(3600)->toDateTime());
+    $accessToken = new AccessTokenAuthenticator('access', 'refresh', DateHelper::now()->add(new DateInterval('PT3600S')));
 
     $response = $connector->getUser($accessToken, function (Request $request) {
         $request->query()->add('yee', 'haw');

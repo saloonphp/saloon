@@ -2,13 +2,21 @@
 
 declare(strict_types=1);
 
-use Saloon\Tests\Helpers\Date;
+use Saloon\Helpers\DateHelper;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
+
+beforeEach(function () {
+    DateHelper::setFixedTime(new DateTimeImmutable('2025-01-01 00:00:00 +00:00'));
+});
+
+afterEach(function () {
+    DateHelper::useSystemTime();
+});
 
 it('can be serialized and unserialized', function () {
     $accessToken = 'access';
     $refreshToken = 'refresh';
-    $expiresAt = Date::now()->toDateTime();
+    $expiresAt = DateHelper::now();
 
     $authenticator = new AccessTokenAuthenticator($accessToken, $refreshToken, $expiresAt);
 
@@ -28,7 +36,7 @@ it('can be serialized and unserialized', function () {
 it('can return if it has expired or not', function () {
     $accessToken = 'access';
     $refreshToken = 'refresh';
-    $expiresAt = Date::now()->subMinutes(5)->toDateTime();
+    $expiresAt = DateHelper::now()->sub(new DateInterval('PT5M'));
 
     $authenticator = new AccessTokenAuthenticator($accessToken, $refreshToken, $expiresAt);
 
@@ -49,7 +57,7 @@ test('can be constructed without a refresh token or expiry', function () {
 });
 
 test('can be constructed with just an access token and expiry', function () {
-    $expiresAt = Date::now()->subMinutes(5)->toDateTime();
+    $expiresAt = DateHelper::now()->sub(new DateInterval('PT5M'));
 
     $authenticator = new AccessTokenAuthenticator('access', null, $expiresAt);
 
