@@ -89,7 +89,8 @@ class PendingRequest
         $this->connector = $connector;
         $this->request = $request;
         $this->method = $request->getMethod();
-        $this->url = URLHelper::join($this->connector->resolveBaseUrl(), $this->request->resolveEndpoint());
+        $baseUrl = $this->request->resolveBaseUrl() ?? $this->connector->resolveBaseUrl();
+        $this->url = URLHelper::join($baseUrl, $this->request->resolveEndpoint());
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
         $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient() ?? MockClient::getGlobal();
 

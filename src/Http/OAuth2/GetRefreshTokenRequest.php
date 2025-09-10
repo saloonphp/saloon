@@ -22,6 +22,14 @@ class GetRefreshTokenRequest extends Request implements HasBody
     protected Method $method = Method::POST;
 
     /**
+     * Define the base URL for the request.
+     */
+    public function resolveBaseUrl(): ?string
+    {
+        return $this->oauthConfig->getBaseUrl();
+    }
+
+    /**
      * Define the endpoint for the request.
      */
     public function resolveEndpoint(): string

@@ -32,6 +32,11 @@ class OAuthConfig
     protected string $redirectUri = '';
 
     /**
+     * The Base URL
+     */
+    protected ?string $baseUrl = null;
+
+    /**
      * The endpoint used for the authorization URL.
      */
     protected string $authorizeEndpoint = 'authorize';
@@ -119,6 +124,27 @@ class OAuthConfig
 
         return $this;
     }
+
+    /**
+     * Get the Base URL
+     */
+    public function getBaseUrl(): ?string
+    {
+        return $this->baseUrl;
+    }
+
+    /**
+     * Set the Base URL
+     *
+     * @return $this
+     */
+    public function setBaseUrl(?string $baseUrl): static
+    {
+        $this->baseUrl = $baseUrl;
+
+        return $this;
+    }
+
 
     /**
      * Get the authorization endpoint.

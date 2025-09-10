@@ -52,6 +52,14 @@ abstract class Request
     }
 
     /**
+     * Define the base URL of the API.
+     */
+    public function resolveBaseUrl(): ?string
+    {
+        return null;
+    }
+
+    /**
      * Define the endpoint for the request.
      */
     abstract public function resolveEndpoint(): string;

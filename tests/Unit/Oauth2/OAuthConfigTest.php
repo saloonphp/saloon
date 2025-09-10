@@ -11,6 +11,7 @@ test('all default properties are correct and all getters and setters work proper
     expect($config->getClientId())->toEqual('');
     expect($config->getClientSecret())->toEqual('');
     expect($config->getRedirectUri())->toEqual('');
+    expect($config->getBaseUrl())->toEqual(null);
     expect($config->getAuthorizeEndpoint())->toEqual('authorize');
     expect($config->getTokenEndpoint())->toEqual('token');
     expect($config->getUserEndpoint())->toEqual('user');
@@ -19,6 +20,7 @@ test('all default properties are correct and all getters and setters work proper
     $clientId = 'client-id';
     $clientSecret = 'client-secret';
     $redirectUri = 'https://my-app.saloon.dev/auth/callback';
+    $baseUrl = 'https://my-app.saloon.dev/auth';
     $authorizeEndpoint = 'auth/authorize';
     $tokenEndpoint = 'auth/token';
     $userEndpoint = 'auth/user';
@@ -27,6 +29,7 @@ test('all default properties are correct and all getters and setters work proper
     expect($config->setClientId($clientId))->toEqual($config);
     expect($config->setClientSecret($clientSecret))->toEqual($config);
     expect($config->setRedirectUri($redirectUri))->toEqual($config);
+    expect($config->setBaseUrl($baseUrl))->toEqual($config);
     expect($config->setAuthorizeEndpoint($authorizeEndpoint))->toEqual($config);
     expect($config->setTokenEndpoint($tokenEndpoint))->toEqual($config);
     expect($config->setUserEndpoint($userEndpoint))->toEqual($config);
@@ -35,6 +38,7 @@ test('all default properties are correct and all getters and setters work proper
     expect($config->getClientId())->toEqual($clientId);
     expect($config->getClientSecret())->toEqual($clientSecret);
     expect($config->getRedirectUri())->toEqual($redirectUri);
+    expect($config->getBaseUrl())->toEqual($baseUrl);
     expect($config->getAuthorizeEndpoint())->toEqual($authorizeEndpoint);
     expect($config->getTokenEndpoint())->toEqual($tokenEndpoint);
     expect($config->getUserEndpoint())->toEqual($userEndpoint);
