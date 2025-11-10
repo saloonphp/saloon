@@ -84,3 +84,19 @@ test('you can prevent stray api requests', function () {
 
     Config::clearGlobalMiddleware();
 });
+
+test('you can prevent and then allow stray api requests', function () {
+    Config::preventStrayRequests();
+
+    try {
+        TestConnector::make()->send(new UserRequest);
+    } catch (StrayRequestException $e) {
+        expect($e)->toBeInstanceOf(StrayRequestException::class);
+    }
+
+    Config::allowStrayRequests();
+
+    TestConnector::make()->send(new UserRequest);
+
+    Config::clearGlobalMiddleware();
+});
