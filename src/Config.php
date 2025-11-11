@@ -49,8 +49,6 @@ final class Config
 
     /**
      * Whether stray requests should be prevented
-     *
-     * @var bool
      */
     private static bool $preventStrayRequests = false;
 
