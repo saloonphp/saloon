@@ -48,6 +48,11 @@ final class Config
     private static ?MiddlewarePipeline $globalMiddlewarePipeline = null;
 
     /**
+     * Whether stray requests should be prevented
+     */
+    private static bool $preventStrayRequests = false;
+
+    /**
      * Write a custom sender resolver
      */
     public static function setSenderResolver(?callable $senderResolver): void
@@ -86,10 +91,20 @@ final class Config
      */
     public static function preventStrayRequests(): void
     {
+        self::$preventStrayRequests = true;
+
         self::globalMiddleware()->onRequest(static function (PendingRequest $pendingRequest) {
-            if (! $pendingRequest->hasMockClient()) {
+            if (self::$preventStrayRequests && ! $pendingRequest->hasMockClient()) {
                 throw new StrayRequestException;
             }
         }, order: PipeOrder::LAST);
+    }
+
+    /**
+     * Allow stray requests without a MockClient.
+     */
+    public static function allowStrayRequests(): void
+    {
+        self::$preventStrayRequests = false;
     }
 }
