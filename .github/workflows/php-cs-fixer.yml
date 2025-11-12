@@ -24,10 +24,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Run PHP CS Fixer
-        uses: docker://oskarstark/php-cs-fixer-ga
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          args: --config=.php-cs-fixer.dist.php --allow-risky=yes
+          php-version: '8.1'
+          coverage: none
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+      - name: Run PHP CS Fixer
+        run: composer run fix-code
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
