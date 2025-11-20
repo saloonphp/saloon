@@ -34,6 +34,7 @@
         "pestphp/pest": "^2.36.0 || ^3.8.2 || ^4.1.4",
         "phpstan/phpstan": "^2.1.13",
         "saloonphp/xml-wrangler": "^1.1",
+        "spatie/invade": "^2.1",
         "symfony/dom-crawler": "^6.0 || ^7.0",
         "symfony/var-dumper": "^6.3 || ^7.0"
     },

@@ -7,6 +7,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Arr;
+use Laravel\SerializableClosure\SerializableClosure;
 use Saloon\Http\Senders\GuzzleSender;
 use Psr\Http\Message\RequestInterface;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -76,9 +78,20 @@ test('the guzzle sender has the default handler stack configured by default', fu
 
     $handlerStack = $sender->getHandlerStack();
 
-    // The HandlerStack::create() loads important default middleware
+    $saloonStack = invade($handlerStack)->stack;
+    $defaultStack = invade(HandlerStack::create())->stack;
 
-    expect($handlerStack)->toEqual(HandlerStack::create());
+    expect($saloonStack)->toHaveSameSize($defaultStack)->toHaveCount(4);
+
+    expect($saloonStack[0][1])->toBe($defaultStack[0][1]);
+    expect($saloonStack[1][1])->toBe($defaultStack[1][1]);
+    expect($saloonStack[2][1])->toBe($defaultStack[2][1]);
+    expect($saloonStack[3][1])->toBe($defaultStack[3][1]);
+
+    expect($saloonStack[0][0])->toBeCallable();
+    expect($saloonStack[1][0])->toBeCallable();
+    expect($saloonStack[2][0])->toBeCallable();
+    expect($saloonStack[3][0])->toBeCallable();
 });
 
 test('the guzzle sender has default options configured', function () {
@@ -96,7 +109,15 @@ test('the guzzle sender has default options configured', function () {
         'crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
     ]);
 
-    expect($freshClient->getConfig())->toEqual($client->getConfig());
+    $saloonConfig = $client->getConfig();
+    $defaultConfig = $freshClient->getConfig();
+
+    expect(Arr::except($saloonConfig, 'handler'))->toEqual(Arr::except($defaultConfig, 'handler'));
+
+    $saloonStack = invade($saloonConfig['handler'])->stack;
+    $defaultStack = invade($defaultConfig['handler'])->stack;
+
+    expect($saloonStack)->toHaveSameSize($defaultStack)->toHaveCount(4);
 });
 
 test('you can set a custom handler stack on the guzzle sender', function () {
