@@ -33,7 +33,7 @@ jobs:
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run PHP CS Fixer
-        run: ./vendor/bin/php-cs-fixer fix --allow-risky=true
+        run: ./vendor/bin/php-cs-fixer fix --allow-risky=yes
 
       - name: Format Frontend
         run: npm run format
