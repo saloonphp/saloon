@@ -19,7 +19,7 @@
     ],
     "homepage": "https://github.com/saloonphp/saloon",
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "guzzlehttp/guzzle": "^7.6",
         "guzzlehttp/promises": "^1.5 || ^2.0",
         "guzzlehttp/psr7": "^2.0",
@@ -29,12 +29,12 @@
     "require-dev": {
         "ext-simplexml": "*",
         "friendsofphp/php-cs-fixer": "^3.5",
-        "illuminate/collections": "^9.39 || ^10.0",
+        "illuminate/collections": "^10.0 || ^11.0 || ^12.0",
         "league/flysystem": "^3.0",
-        "pestphp/pest": "^2.36.0 || ^3.8.2",
+        "pestphp/pest": "^2.36.0 || ^3.8.2 || ^4.1.4",
         "phpstan/phpstan": "^2.1.13",
         "saloonphp/xml-wrangler": "^1.1",
-        "spatie/ray": "^1.33",
+        "spatie/invade": "^2.1",
         "symfony/dom-crawler": "^6.0 || ^7.0",
         "symfony/var-dumper": "^6.3 || ^7.0"
     },
