@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@4
+        uses: actions/checkout@v4
 
       - name: Run PHP CS Fixer
         uses: docker://oskarstark/php-cs-fixer-ga
