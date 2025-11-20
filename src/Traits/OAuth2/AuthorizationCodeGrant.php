@@ -58,7 +58,7 @@ trait AuthorizationCodeGrant
         ]);
 
         $query = http_build_query($queryParameters, '', '&', PHP_QUERY_RFC3986);
-        $query = mb_trim($query, '?&');
+        $query = trim($query, '?&');
 
         $url = URLHelper::join($this->resolveBaseUrl(), $config->getAuthorizeEndpoint());
 
