@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Http;
 
 use Saloon\Traits\Bootable;
+use Saloon\Traits\Macroable;
 use Saloon\Traits\Makeable;
 use Saloon\Traits\HasDebugging;
 use Saloon\Traits\Conditionable;
@@ -29,10 +30,11 @@ abstract class Connector
     use HasMockClient;
     use SendsRequests;
     use Conditionable;
+    use HasDebugging;
+    use Macroable;
     use Bootable;
     use Makeable;
     use HasTries;
-    use HasDebugging;
 
     /**
      * Define the base URL of the API.
