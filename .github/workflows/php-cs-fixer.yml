@@ -18,7 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  quality:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,9 +34,6 @@ jobs:
 
       - name: Run PHP CS Fixer
         run: ./vendor/bin/php-cs-fixer fix --allow-risky=yes
-
-      - name: Format Frontend
-        run: npm run format
 
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
