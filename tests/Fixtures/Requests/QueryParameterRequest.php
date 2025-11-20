@@ -25,7 +25,7 @@ class QueryParameterRequest extends Request
     /**
      * Constructor
      */
-    public function __construct(public readonly string $endpoint = '/user')
+    public function __construct(readonly public string $endpoint = '/user')
     {
         //
     }
