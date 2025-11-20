@@ -18,19 +18,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  php-cs-fixer:
+  quality:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install Dependencies
+        run: |
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Run PHP CS Fixer
-        uses: docker://oskarstark/php-cs-fixer-ga
-        with:
-          args: --config=.php-cs-fixer.dist.php --allow-risky=yes
+        run: ./vendor/bin/php-cs-fixer fix --allow-risky=true
 
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
+      - name: Format Frontend
+        run: npm run format
+
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: 🪄 Code Style Fixes
+          commit_options: '--no-verify'
