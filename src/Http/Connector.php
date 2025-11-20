@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Saloon\Http;
 
 use Saloon\Traits\Bootable;
-use Saloon\Traits\Macroable;
 use Saloon\Traits\Makeable;
+use Saloon\Traits\Macroable;
 use Saloon\Traits\HasDebugging;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
