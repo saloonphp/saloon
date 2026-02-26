@@ -415,6 +415,8 @@ test('can determine if response is JSON', function () {
         MockResponse::make(['foo' => 'bar'], 200, ['Content-Type' => 'application/json']),
         // JSON with charset
         MockResponse::make(['foo' => 'bar'], 200, ['Content-Type' => 'application/json; charset=utf-8']),
+        // JSON with lowercase header (e.g. FastAPI, HTTP/2)
+        MockResponse::make(['foo' => 'bar'], 200, ['content-type' => 'application/json']),
         // Non-JSON content type
         MockResponse::make('plain text', 200, ['Content-Type' => 'text/plain']),
         // No content type
@@ -422,6 +424,9 @@ test('can determine if response is JSON', function () {
     ]);
 
     $connector = connector();
+
+    $response = $connector->send(new UserRequest, $mockClient);
+    expect($response->isJson())->toBeTrue();
 
     $response = $connector->send(new UserRequest, $mockClient);
     expect($response->isJson())->toBeTrue();
@@ -442,6 +447,8 @@ test('can determine if response is XML', function () {
         MockResponse::make('<?xml version="1.0"?><root></root>', 200, ['Content-Type' => 'application/xml']),
         // XML with charset
         MockResponse::make('<?xml version="1.0"?><root></root>', 200, ['Content-Type' => 'text/xml; charset=utf-8']),
+        // XML with lowercase header (e.g. FastAPI, HTTP/2)
+        MockResponse::make('<?xml version="1.0"?><root></root>', 200, ['content-type' => 'application/xml']),
         // Non-XML content type
         MockResponse::make('plain text', 200, ['Content-Type' => 'text/plain']),
         // No content type
@@ -449,6 +456,9 @@ test('can determine if response is XML', function () {
     ]);
 
     $connector = connector();
+
+    $response = $connector->send(new UserRequest, $mockClient);
+    expect($response->isXml())->toBeTrue();
 
     $response = $connector->send(new UserRequest, $mockClient);
     expect($response->isXml())->toBeTrue();
