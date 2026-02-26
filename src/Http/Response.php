@@ -494,13 +494,11 @@ class Response
      */
     public function isJson(): bool
     {
-        $contentType = $this->header('Content-Type');
+        $contentType = $this->psrResponse->getHeaderLine('Content-Type');
 
-        if (is_null($contentType)) {
+        if ($contentType === '') {
             return false;
         }
-
-        $contentType = is_array($contentType) ? $contentType[0] : $contentType;
 
         return str_contains($contentType, 'json');
     }
@@ -510,13 +508,11 @@ class Response
      */
     public function isXml(): bool
     {
-        $contentType = $this->header('Content-Type');
+        $contentType = $this->psrResponse->getHeaderLine('Content-Type');
 
-        if (is_null($contentType)) {
+        if ($contentType === '') {
             return false;
         }
-
-        $contentType = is_array($contentType) ? $contentType[0] : $contentType;
 
         return str_contains($contentType, 'xml');
     }
