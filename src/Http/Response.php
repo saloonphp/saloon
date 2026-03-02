@@ -6,7 +6,10 @@ namespace Saloon\Http;
 
 use Throwable;
 use LogicException;
+use function implode;
 use SimpleXMLElement;
+use function is_array;
+use function mb_strtolower;
 use Saloon\Traits\Macroable;
 use InvalidArgumentException;
 use Saloon\Helpers\ArrayHelpers;
@@ -500,13 +503,17 @@ class Response
      */
     public function isJson(): bool
     {
-        $contentType = $this->psrResponse->getHeaderLine('Content-Type');
+        $contentType = $this->header('Content-Type');
 
-        if ($contentType === '') {
+        if (empty($contentType)) {
             return false;
         }
 
-        return str_contains($contentType, 'json');
+        if (is_array($contentType)) {
+            $contentType = implode(',', $contentType);
+        }
+
+        return str_contains(mb_strtolower($contentType), 'json');
     }
 
     /**
@@ -514,13 +521,17 @@ class Response
      */
     public function isXml(): bool
     {
-        $contentType = $this->psrResponse->getHeaderLine('Content-Type');
+        $contentType = $this->header('Content-Type');
 
-        if ($contentType === '') {
+        if (empty($contentType)) {
             return false;
         }
 
-        return str_contains($contentType, 'xml');
+        if (is_array($contentType)) {
+            $contentType = implode(',', $contentType);
+        }
+
+        return str_contains(mb_strtolower($contentType), 'xml');
     }
 
     /**

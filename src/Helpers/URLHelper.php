@@ -27,12 +27,12 @@ class URLHelper
         }
 
         if ($endpoint !== '/') {
-            $endpoint = ltrim($endpoint, '/ ');
+            $endpoint = mb_ltrim($endpoint, '/ ');
         }
 
         $requiresTrailingSlash = ! empty($endpoint) && $endpoint !== '/';
 
-        $baseEndpoint = rtrim($baseUrl, '/ ');
+        $baseEndpoint = mb_rtrim($baseUrl, '/ ');
 
         $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . '/' : $baseEndpoint;
 
