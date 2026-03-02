@@ -472,3 +472,14 @@ test('can determine if response is XML', function () {
     $response = $connector->send(new UserRequest, $mockClient);
     expect($response->isXml())->toBeFalse();
 });
+
+test('header lookup is case-insensitive per HTTP RFC', function () {
+    $mockClient = new MockClient([
+        MockResponse::make([], 200, ['x-my-custom-header' => 'custom-value']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+
+    expect($response->header('X-My-Custom-Header'))->toEqual('custom-value');
+    expect($response->header('x-my-custom-header'))->toEqual('custom-value');
+});

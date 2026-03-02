@@ -486,7 +486,13 @@ class Response
      */
     public function header(string $header): string|array|null
     {
-        return $this->headers()->get($header);
+        if (! $this->psrResponse->hasHeader($header)) {
+            return null;
+        }
+
+        $values = $this->psrResponse->getHeader($header);
+
+        return count($values) === 1 ? $values[0] : $values;
     }
 
     /**
