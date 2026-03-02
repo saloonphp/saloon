@@ -27,6 +27,8 @@ trait ClientCredentialsGrant
      *
      * @param array<string> $scopes
      * @param callable(TRequest): (void)|null $requestModifier
+     *
+     * @return ($returnResponse is true ? \Saloon\Http\Response : \Saloon\Contracts\OAuthAuthenticator)
      */
     public function getAccessToken(array $scopes = [], string $scopeSeparator = ' ', bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
