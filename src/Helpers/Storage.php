@@ -48,7 +48,7 @@ class Storage
     {
         $trimRules = DIRECTORY_SEPARATOR . ' ';
 
-        return mb_rtrim($this->baseDirectory, $trimRules) . DIRECTORY_SEPARATOR . mb_ltrim($path, $trimRules);
+        return rtrim($this->baseDirectory, $trimRules) . DIRECTORY_SEPARATOR . ltrim($path, $trimRules);
     }
 
     /**
