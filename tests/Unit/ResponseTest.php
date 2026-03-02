@@ -472,3 +472,36 @@ test('can determine if response is XML', function () {
     $response = $connector->send(new UserRequest, $mockClient);
     expect($response->isXml())->toBeFalse();
 });
+
+test('header lookup is case-insensitive per HTTP RFC', function () {
+    $mockClient = new MockClient([
+        MockResponse::make([], 200, ['x-my-custom-header' => 'custom-value']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+
+    expect($response->header('X-My-Custom-Header'))->toEqual('custom-value');
+    expect($response->header('x-my-custom-header'))->toEqual('custom-value');
+});
+
+test('isJson lookup can use case insensitive headers', function () {
+    $mockClient = new MockClient([
+        MockResponse::make([], 200, ['content-type' => 'application/JSON']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+
+    expect($response->isJson())->toBeTrue();
+    expect($response->isXml())->toBeFalse();
+});
+
+test('isXml lookup can use case insensitive headers', function () {
+    $mockClient = new MockClient([
+        MockResponse::make([], 200, ['content-type' => 'text/xml']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+
+    expect($response->isXml())->toBeTrue();
+    expect($response->isJson())->toBeFalse();
+});
