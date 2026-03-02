@@ -13,6 +13,18 @@ parameters:
 			path: src/Http/Connector.php
 
 		-
+			message: '#^Parameter \#1 \$callback of function call_user_func_array expects callable\(\)\: mixed, \(callable\(\)\: mixed\)\|object given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Http/Connector.php
+
+		-
+			message: '#^Parameter \#1 \$object of method ReflectionMethod\:\:invoke\(\) expects object\|null, class\-string\|object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Http/Connector.php
+
+		-
 			message: '#^Parameter \#1 \$response of method Saloon\\Http\\PendingRequest\:\:executeResponsePipeline\(\) expects Saloon\\Http\\Response, GuzzleHttp\\Promise\\PromiseInterface\|Saloon\\Http\\Response given\.$#'
 			identifier: argument.type
 			count: 1
@@ -53,6 +65,18 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Http/PendingRequest.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function call_user_func_array expects callable\(\)\: mixed, \(callable\(\)\: mixed\)\|object given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Http/Request.php
+
+		-
+			message: '#^Parameter \#1 \$object of method ReflectionMethod\:\:invoke\(\) expects object\|null, class\-string\|object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Http/Request.php
 
 		-
 			message: '#^Parameter \#1 \$callback of function call_user_func_array expects callable\(\)\: mixed, \(callable\(\)\: mixed\)\|object given\.$#'
