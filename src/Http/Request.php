@@ -8,6 +8,7 @@ use LogicException;
 use Saloon\Enums\Method;
 use Saloon\Traits\Bootable;
 use Saloon\Traits\Makeable;
+use Saloon\Traits\Macroable;
 use Saloon\Traits\HasDebugging;
 use Saloon\Traits\Conditionable;
 use Saloon\Traits\HasMockClient;
@@ -30,6 +31,7 @@ abstract class Request
     use HasMockClient;
     use Conditionable;
     use HasDebugging;
+    use Macroable;
     use HasTries;
     use Bootable;
     use Makeable;
