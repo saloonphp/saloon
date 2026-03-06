@@ -18,6 +18,8 @@ interface Sender
 
     /**
      * Send the request synchronously
+     *
+     * @return Response<mixed>
      */
     public function send(PendingRequest $pendingRequest): Response;
 

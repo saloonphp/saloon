@@ -75,7 +75,7 @@ class MiddlewarePipeline
     /**
      * Add a middleware after the request is sent
      *
-     * @param callable(\Saloon\Http\Response): (\Saloon\Http\Response|void) $callable
+     * @param callable(\Saloon\Http\Response<mixed>): (\Saloon\Http\Response<mixed>|void) $callable
      * @return $this
      */
     public function onResponse(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
@@ -136,6 +136,9 @@ class MiddlewarePipeline
 
     /**
      * Process the response pipeline.
+     *
+     * @param Response<mixed> $response
+     * @return Response<mixed>
      */
     public function executeResponsePipeline(Response $response): Response
     {

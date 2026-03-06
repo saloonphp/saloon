@@ -80,6 +80,7 @@ final class Helpers
      * Boot a plugin
      *
      * @param class-string $trait
+     * @param Connector|Request<mixed> $resource
      * @throws \ReflectionException
      */
     public static function bootPlugin(PendingRequest $pendingRequest, Connector|Request $resource, string $trait): void

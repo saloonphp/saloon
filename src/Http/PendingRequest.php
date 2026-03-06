@@ -46,6 +46,8 @@ class PendingRequest
 
     /**
      * The request used by the instance.
+     *
+     * @var Request<mixed>
      */
     protected Request $request;
 
@@ -76,6 +78,8 @@ class PendingRequest
 
     /**
      * Build up the request payload.
+     *
+     * @param Request<mixed> $request
      */
     public function __construct(Connector $connector, Request $request, ?MockClient $mockClient = null)
     {
@@ -147,6 +151,9 @@ class PendingRequest
 
     /**
      * Execute the response pipeline.
+     *
+     * @param Response<mixed> $response
+     * @return Response<mixed>
      */
     public function executeResponsePipeline(Response $response): Response
     {
@@ -163,6 +170,8 @@ class PendingRequest
 
     /**
      * Get the request.
+     *
+     * @return Request<mixed>
      */
     public function getRequest(): Request
     {
@@ -291,7 +300,7 @@ class PendingRequest
     /**
      * Get the response class
      *
-     * @return class-string<\Saloon\Http\Response>
+     * @return class-string<\Saloon\Http\Response<mixed>>
      * @throws \Saloon\Exceptions\InvalidResponseClassException
      */
     public function getResponseClass(): string

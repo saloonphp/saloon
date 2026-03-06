@@ -21,6 +21,8 @@ class RequestException extends SaloonException
 {
     /**
      * The Saloon Response
+     *
+     * @var Response<mixed>
      */
     protected Response $response;
 
@@ -31,6 +33,8 @@ class RequestException extends SaloonException
 
     /**
      * Create the RequestException
+     *
+     * @param Response<mixed> $response
      */
     public function __construct(Response $response, ?string $message = null, int $code = 0, ?Throwable $previous = null)
     {
@@ -50,6 +54,8 @@ class RequestException extends SaloonException
 
     /**
      * Get the Saloon Response Class.
+     *
+     * @return Response<mixed>
      */
     public function getResponse(): Response
     {
