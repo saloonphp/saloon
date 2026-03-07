@@ -13,6 +13,7 @@ use Symfony\Component\VarDumper\VarDumper;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\AlwaysThrowRequest;
+use Saloon\Tests\Fixtures\Mocking\UnseekableBodyMockResponse;
 
 test('a user can register a request and response debugger on the connector and request', function () {
     $mockClient = new MockClient([
@@ -266,4 +267,24 @@ test('the debug method can kill the application', function () {
     Debugger::$dieHandler = null;
 
     expect($killed)->toBeTrue();
+});
+
+test('the response debugger receives a response with full body when the stream is unseekable', function () {
+    $expectedBody = '{"name":"Jon"}';
+    $mockClient = new MockClient([
+        new UnseekableBodyMockResponse(['name' => 'Jon'], 200),
+    ]);
+
+    $connector = new TestConnector;
+    $connector->withMockClient($mockClient);
+
+    $debuggerReceivedBody = null;
+
+    $connector->debugResponse(function (Response $response) use (&$debuggerReceivedBody) {
+        $debuggerReceivedBody = $response->body();
+    });
+
+    $connector->send(new UserRequest);
+
+    expect($debuggerReceivedBody)->toEqual($expectedBody);
 });
