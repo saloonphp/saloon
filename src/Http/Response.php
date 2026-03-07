@@ -18,6 +18,7 @@ use Saloon\XmlWrangler\XmlReader;
 use Illuminate\Support\Collection;
 use Saloon\Contracts\FakeResponse;
 use Saloon\Repositories\ArrayStore;
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -169,6 +170,21 @@ class Response
         }
 
         return $stream;
+    }
+
+    /**
+     * Return a new response with the body replaced by a seekable stream containing the given content.
+     * Use when the original body stream is not seekable (e.g. after debug has consumed it) so
+     * subsequent callers still receive the full body.
+     */
+    public function withBufferedBody(string $body): static
+    {
+        return new static(
+            $this->psrResponse->withBody(Utils::streamFor($body)),
+            $this->pendingRequest,
+            $this->psrRequest,
+            $this->senderException
+        );
     }
 
     /**
