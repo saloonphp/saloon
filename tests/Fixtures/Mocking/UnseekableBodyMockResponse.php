@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Saloon\Tests\Fixtures\Mocking;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 use Saloon\Http\Faking\MockResponse;
-use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 
 /**
  * A MockResponse that uses an unseekable body stream so we can test
@@ -60,7 +60,7 @@ final class UnseekableStream implements StreamInterface
 
     public function getSize(): ?int
     {
-        return strlen($this->contents);
+        return mb_strlen($this->contents);
     }
 
     public function tell(): int
@@ -70,7 +70,7 @@ final class UnseekableStream implements StreamInterface
 
     public function eof(): bool
     {
-        return $this->position >= strlen($this->contents);
+        return $this->position >= mb_strlen($this->contents);
     }
 
     public function isSeekable(): bool
@@ -105,16 +105,16 @@ final class UnseekableStream implements StreamInterface
 
     public function read(int $length): string
     {
-        $chunk = substr($this->contents, $this->position, $length);
-        $this->position += strlen($chunk);
+        $chunk = mb_substr($this->contents, $this->position, $length);
+        $this->position += mb_strlen($chunk);
 
         return $chunk;
     }
 
     public function getContents(): string
     {
-        $remaining = substr($this->contents, $this->position);
-        $this->position = strlen($this->contents);
+        $remaining = mb_substr($this->contents, $this->position);
+        $this->position = mb_strlen($this->contents);
 
         return $remaining;
     }
