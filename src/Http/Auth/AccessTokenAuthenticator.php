@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Saloon\Http\Auth;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\OAuthAuthenticator;
 
