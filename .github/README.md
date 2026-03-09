@@ -58,7 +58,7 @@ Please see [here](https://github.com/Sammyjo20/Saloon/blob/main/.github/CONTRIBU
 
 ## Security
 
-Please see [here](https://github.com/Sammyjo20/Saloon/blob/main/.github/SECURITY.md) for our security policy.
+Please see [here](https://github.com/Sammyjo20/Saloon/blob/main/.github/SECURITY.md) for our security policy
 
 ## Credits
 
