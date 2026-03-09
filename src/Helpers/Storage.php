@@ -53,6 +53,37 @@ class Storage
     }
 
     /**
+     * Normalize a path by resolving . and .. segments (no filesystem access).
+     */
+    protected function normalizePath(string $path): string
+    {
+        $leadingSlash = $path !== '' && $path[0] === DIRECTORY_SEPARATOR;
+        $leadingDrive = strlen($path) >= 2 && $path[1] === ':';
+
+        $segments = [];
+        foreach (preg_split('#[/\\\\]+#', $path, -1, PREG_SPLIT_NO_EMPTY) ?: [] as $segment) {
+            if ($segment === '.') {
+                continue;
+            }
+            if ($segment === '..') {
+                array_pop($segments);
+                continue;
+            }
+            $segments[] = $segment;
+        }
+
+        $result = implode(DIRECTORY_SEPARATOR, $segments);
+        if ($leadingSlash && $result !== '') {
+            $result = DIRECTORY_SEPARATOR . $result;
+        }
+        if ($leadingDrive && $result !== '' && $result[0] !== ':') {
+            $result = $path[0] . ':' . $result;
+        }
+
+        return $result;
+    }
+
+    /**
      * Ensure the resolved path is under the base directory to prevent path traversal.
      *
      * @throws InvalidArgumentException
@@ -65,30 +96,16 @@ class Storage
             throw new InvalidArgumentException('Unable to determine the realpath of the base directory.');
         }
 
-        $resolved = realpath($fullPath);
-
-        if ($resolved === false) {
-            $parent = dirname($fullPath);
-            while ($parent !== $fullPath && realpath($parent) === false) {
-                $parent = dirname($parent);
-            }
-            $resolved = realpath($parent);
-
-            if ($resolved === false) {
-                throw new InvalidArgumentException('Unable to determine the realpath of the base directory.');
-            }
-
-            $baseWithSeparator = $baseReal . DIRECTORY_SEPARATOR;
-            if ($resolved !== $baseReal && ! str_starts_with($resolved, $baseWithSeparator)) {
-                throw new InvalidArgumentException('Path must remain inside the storage base directory.');
-            }
-
-            return;
+        if (str_contains($fullPath, '~')) {
+            throw new InvalidArgumentException('Path must remain inside the storage base directory.');
         }
 
-        $baseWithSeparator = $baseReal . DIRECTORY_SEPARATOR;
+        $baseTrimmed = rtrim($this->baseDirectory, DIRECTORY_SEPARATOR . ' ');
+        $pathSuffix = $baseTrimmed === '' ? $fullPath : ltrim(substr($fullPath, strlen($baseTrimmed)), DIRECTORY_SEPARATOR . ' ');
+        $normalizedAbsolute = $this->normalizePath($baseReal . DIRECTORY_SEPARATOR . $pathSuffix);
 
-        if ($resolved !== $baseReal && ! str_starts_with($resolved, $baseWithSeparator)) {
+        $baseWithSeparator = $baseReal . DIRECTORY_SEPARATOR;
+        if ($normalizedAbsolute !== $baseReal && ! str_starts_with($normalizedAbsolute, $baseWithSeparator)) {
             throw new InvalidArgumentException('Path must remain inside the storage base directory.');
         }
     }
