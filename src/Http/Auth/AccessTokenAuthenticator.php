@@ -89,43 +89,4 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
     {
         return ! $this->isRefreshable();
     }
-
-    /**
-     * Serialize the access token to a JSON string (safe format; no object injection).
-     */
-    public function serialize(): string
-    {
-        $data = [
-            'accessToken' => $this->accessToken,
-            'refreshToken' => $this->refreshToken,
-            'expiresAt' => $this->expiresAt?->format(\DateTimeInterface::ATOM),
-        ];
-
-        return json_encode($data, JSON_THROW_ON_ERROR);
-    }
-
-    /**
-     * Unserialize the access token from a JSON string (safe; rejects non-JSON and malformed payloads).
-     *
-     * @throws \JsonException
-     * @throws \InvalidArgumentException
-     */
-    public static function unserialize(string $string): static
-    {
-        $data = json_decode($string, true, 512, JSON_THROW_ON_ERROR);
-
-        if (! is_array($data) || ! array_key_exists('accessToken', $data)) {
-            throw new InvalidArgumentException('Invalid or malformed token data.');
-        }
-
-        $expiresAt = isset($data['expiresAt']) && is_string($data['expiresAt'])
-            ? new DateTimeImmutable($data['expiresAt'])
-            : null;
-
-        return new static(
-            $data['accessToken'],
-            $data['refreshToken'] ?? null,
-            $expiresAt,
-        );
-    }
 }
