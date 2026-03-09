@@ -740,22 +740,12 @@ test('fixtures are still recorded on the first request', function () {
     $mockClient->assertSent(UserRequest::class);
 });
 
-test('unix - fixtures can be created in sub directories', function () {
+test('fixtures can be created in sub directories', function () {
     $mockClient = new MockClient([
-        MockResponse::fixture('my-integration/user'), // Test Exact Route
+        MockResponse::fixture('my-integration' . DIRECTORY_SEPARATOR .'user'), // Test Exact Route
     ]);
 
     connector()->send(new UserRequest, $mockClient);
 
     $mockClient->assertSent(UserRequest::class);
 });
-
-test('windows - fixtures can be created in sub directories', function () {
-    $mockClient = new MockClient([
-        MockResponse::fixture('my-integration\user'), // Test Exact Route
-    ]);
-
-    connector()->send(new UserRequest, $mockClient);
-
-    $mockClient->assertSent(UserRequest::class);
-})->onlyOnWindows();
