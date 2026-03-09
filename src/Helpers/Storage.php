@@ -109,7 +109,7 @@ class Storage
             throw new InvalidArgumentException('Path must remain inside the storage base directory.');
         }
 
-        $pathSuffix = $baseTrimmed === '' ? $fullPath : ($fullNorm === $baseNorm ? '' : substr($fullNorm, strlen($baseWithSep)));
+        $pathSuffix = $baseTrimmed === '' ? $fullPath : ($fullNorm === $baseNorm ? '' : mb_substr($fullNorm, mb_strlen($baseWithSep)));
         $normalizedAbsolute = $this->normalizePath($baseReal . DIRECTORY_SEPARATOR . $pathSuffix);
 
         $baseWithSeparator = $baseReal . DIRECTORY_SEPARATOR;
