@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Http\Faking;
 
 use Saloon\MockConfig;
+use function preg_match;
 use Saloon\Helpers\Storage;
 use Saloon\Helpers\ArrayHelpers;
 use Saloon\Data\RecordedResponse;
@@ -14,7 +15,6 @@ use Saloon\Exceptions\FixtureException;
 use Saloon\Exceptions\FixtureMissingException;
 use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
-use function preg_match;
 
 class Fixture
 {
