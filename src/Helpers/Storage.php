@@ -60,21 +60,26 @@ class Storage
     protected function ensurePathUnderBase(string $fullPath): void
     {
         $baseReal = realpath($this->baseDirectory);
+
         if ($baseReal === false) {
-            return;
+            throw new InvalidArgumentException('Unable to determine the realpath of the base directory.');
         }
 
         $resolved = realpath($fullPath);
+
         if ($resolved === false) {
             $parent = dirname($fullPath);
             $resolved = realpath($parent);
+
             if ($resolved === false) {
-                return;
+                throw new InvalidArgumentException('Unable to determine the realpath of the base directory.');
             }
+
             $resolved = $resolved . DIRECTORY_SEPARATOR . basename($fullPath);
         }
 
         $baseWithSeparator = $baseReal . DIRECTORY_SEPARATOR;
+
         if ($resolved !== $baseReal && ! str_starts_with($resolved, $baseWithSeparator)) {
             throw new InvalidArgumentException('Path must remain inside the storage base directory.');
         }
