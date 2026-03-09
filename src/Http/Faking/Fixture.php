@@ -14,6 +14,7 @@ use Saloon\Exceptions\FixtureException;
 use Saloon\Exceptions\FixtureMissingException;
 use Saloon\Repositories\Body\StringBodyRepository;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
+use function preg_match;
 
 class Fixture
 {
@@ -173,7 +174,7 @@ class Fixture
         }
 
         if (str_contains($name, "\0") || str_contains($name, '..') || str_contains($name, '~')
-            || ! preg_match('/^[a-zA-Z0-9\/_\-]+$/', $name)) {
+            || ! preg_match('/^[a-zA-Z0-9\/_\-\\\\]+$/', $name)) {
             throw new FixtureException('The fixture name must not contain directory traversal components or invalid characters. Only alphanumeric characters, hyphens, slashes, and underscores are allowed.');
         }
 
