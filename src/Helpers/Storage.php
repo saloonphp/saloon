@@ -58,7 +58,7 @@ class Storage
     protected function normalizePath(string $path): string
     {
         $leadingSlash = $path !== '' && $path[0] === DIRECTORY_SEPARATOR;
-        $leadingDrive = strlen($path) >= 2 && $path[1] === ':';
+        $leadingDrive = mb_strlen($path) >= 2 && $path[1] === ':';
 
         $segments = [];
         foreach (preg_split('#[/\\\\]+#', $path, -1, PREG_SPLIT_NO_EMPTY) ?: [] as $segment) {
@@ -101,7 +101,7 @@ class Storage
         }
 
         $baseTrimmed = rtrim($this->baseDirectory, DIRECTORY_SEPARATOR . ' ');
-        $pathSuffix = $baseTrimmed === '' ? $fullPath : ltrim(substr($fullPath, strlen($baseTrimmed)), DIRECTORY_SEPARATOR . ' ');
+        $pathSuffix = $baseTrimmed === '' ? $fullPath : ltrim(mb_substr($fullPath, mb_strlen($baseTrimmed)), DIRECTORY_SEPARATOR . ' ');
         $normalizedAbsolute = $this->normalizePath($baseReal . DIRECTORY_SEPARATOR . $pathSuffix);
 
         $baseWithSeparator = $baseReal . DIRECTORY_SEPARATOR;
