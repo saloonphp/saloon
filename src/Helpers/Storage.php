@@ -76,7 +76,7 @@ class Storage
         if ($leadingSlash && $result !== '') {
             $result = DIRECTORY_SEPARATOR . $result;
         }
-        if ($leadingDrive && $result !== '' && $result[0] !== ':') {
+        if ($leadingDrive && $result !== '' && ! preg_match('#^[a-zA-Z]:#', $result)) {
             $result = $path[0] . ':' . $result;
         }
 
@@ -101,7 +101,15 @@ class Storage
         }
 
         $baseTrimmed = rtrim($this->baseDirectory, DIRECTORY_SEPARATOR . ' ');
-        $pathSuffix = $baseTrimmed === '' ? $fullPath : ltrim(mb_substr($fullPath, mb_strlen($baseTrimmed)), DIRECTORY_SEPARATOR . ' ');
+        $baseNorm = $this->normalizePath($baseTrimmed);
+        $fullNorm = $this->normalizePath($fullPath);
+        $baseWithSep = $baseNorm . DIRECTORY_SEPARATOR;
+
+        if ($baseTrimmed !== '' && $fullNorm !== $baseNorm && ! str_starts_with($fullNorm, $baseWithSep)) {
+            throw new InvalidArgumentException('Path must remain inside the storage base directory.');
+        }
+
+        $pathSuffix = $baseTrimmed === '' ? $fullPath : ($fullNorm === $baseNorm ? '' : substr($fullNorm, strlen($baseWithSep)));
         $normalizedAbsolute = $this->normalizePath($baseReal . DIRECTORY_SEPARATOR . $pathSuffix);
 
         $baseWithSeparator = $baseReal . DIRECTORY_SEPARATOR;
