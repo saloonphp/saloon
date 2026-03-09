@@ -69,13 +69,21 @@ class Storage
 
         if ($resolved === false) {
             $parent = dirname($fullPath);
+            while ($parent !== $fullPath && realpath($parent) === false) {
+                $parent = dirname($parent);
+            }
             $resolved = realpath($parent);
 
             if ($resolved === false) {
                 throw new InvalidArgumentException('Unable to determine the realpath of the base directory.');
             }
 
-            $resolved = $resolved . DIRECTORY_SEPARATOR . basename($fullPath);
+            $baseWithSeparator = $baseReal . DIRECTORY_SEPARATOR;
+            if ($resolved !== $baseReal && ! str_starts_with($resolved, $baseWithSeparator)) {
+                throw new InvalidArgumentException('Path must remain inside the storage base directory.');
+            }
+
+            return;
         }
 
         $baseWithSeparator = $baseReal . DIRECTORY_SEPARATOR;
