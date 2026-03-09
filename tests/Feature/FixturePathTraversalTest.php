@@ -43,7 +43,7 @@ test('fixture name with path traversal throws when getting mock response and doe
     $fixture = new Fixture($traversalName, $storage);
 
     expect(fn () => $fixture->getMockResponse())
-        ->toThrow(FixtureException::class, 'The fixture name must not contain path components');
+        ->toThrow(FixtureException::class, 'The fixture name must not contain directory traversal components or invalid characters. Only alphanumeric characters, hyphens, slashes, and underscores are allowed.');
 
     expect(file_get_contents($externalPath))->toContain($secretContent);
 });
@@ -57,7 +57,7 @@ test('fixture name with path traversal throws when storing and does not write ou
     $recordedResponse = new RecordedResponse(200, [], '{"pwned":true}');
 
     expect(fn () => $fixture->store($recordedResponse))
-        ->toThrow(FixtureException::class, 'The fixture name must not contain path components');
+        ->toThrow(FixtureException::class, 'The fixture name must not contain directory traversal components or invalid characters. Only alphanumeric characters, hyphens, slashes, and underscores are allowed.');
 
     $escapePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'traversal_write_test.json';
     expect(file_exists($escapePath))->toBeFalse();

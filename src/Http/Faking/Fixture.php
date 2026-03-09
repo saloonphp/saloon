@@ -172,9 +172,9 @@ class Fixture
             throw new FixtureException('The fixture must have a name');
         }
 
-        if (str_contains($name, "\0") || str_contains($name, '..') || str_contains($name, '/') || str_contains($name, '\\')
-            || ! preg_match('/^[a-zA-Z0-9_\-]+$/', $name)) {
-            throw new FixtureException('The fixture name must not contain path components or invalid characters. Only alphanumeric characters, hyphens, and underscores are allowed.');
+        if (str_contains($name, "\0") || str_contains($name, '..') || str_contains($name, '~')
+            || ! preg_match('/^[a-zA-Z0-9\/_\-]+$/', $name)) {
+            throw new FixtureException('The fixture name must not contain directory traversal components or invalid characters. Only alphanumeric characters, hyphens, slashes, and underscores are allowed.');
         }
 
         return sprintf('%s.%s', $name, $this::$fixtureExtension);
