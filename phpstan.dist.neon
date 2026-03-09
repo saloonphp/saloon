@@ -18,7 +18,6 @@ parameters:
 
   ignoreErrors:
   - "#^Unsafe usage of new static\\(\\)\\.$#"
-  - "#^Trait Saloon\\\\Traits\\\\Request\\\\HasConnector is used zero times#"
 
   # Rules
 
