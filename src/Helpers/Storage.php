@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
+use InvalidArgumentException;
 use Saloon\Exceptions\DirectoryNotFoundException;
 use Saloon\Exceptions\UnableToCreateFileException;
 use Saloon\Exceptions\UnableToCreateDirectoryException;
@@ -52,11 +53,42 @@ class Storage
     }
 
     /**
+     * Ensure the resolved path is under the base directory to prevent path traversal.
+     *
+     * @throws InvalidArgumentException
+     */
+    protected function ensurePathUnderBase(string $fullPath): void
+    {
+        $baseReal = realpath($this->baseDirectory);
+        if ($baseReal === false) {
+            return;
+        }
+
+        $resolved = realpath($fullPath);
+        if ($resolved === false) {
+            $parent = dirname($fullPath);
+            $resolved = realpath($parent);
+            if ($resolved === false) {
+                return;
+            }
+            $resolved = $resolved . DIRECTORY_SEPARATOR . basename($fullPath);
+        }
+
+        $baseWithSeparator = $baseReal . DIRECTORY_SEPARATOR;
+        if ($resolved !== $baseReal && ! str_starts_with($resolved, $baseWithSeparator)) {
+            throw new InvalidArgumentException('Path must remain inside the storage base directory.');
+        }
+    }
+
+    /**
      * Check if the file exists
      */
     public function exists(string $path): bool
     {
-        return file_exists($this->buildPath($path));
+        $fullPath = $this->buildPath($path);
+        $this->ensurePathUnderBase($fullPath);
+
+        return file_exists($fullPath);
     }
 
     /**
@@ -72,7 +104,10 @@ class Storage
      */
     public function get(string $path): bool|string
     {
-        return file_get_contents($this->buildPath($path));
+        $fullPath = $this->buildPath($path);
+        $this->ensurePathUnderBase($fullPath);
+
+        return file_get_contents($fullPath);
     }
 
     /**
@@ -85,6 +120,7 @@ class Storage
     public function put(string $path, string $contents): static
     {
         $fullPath = $this->buildPath($path);
+        $this->ensurePathUnderBase($fullPath);
 
         $directoryWithoutFilename = implode(DIRECTORY_SEPARATOR, explode(DIRECTORY_SEPARATOR, $fullPath, -1));
 

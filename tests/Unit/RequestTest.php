@@ -114,9 +114,7 @@ test('you can join various URLs together', function ($baseUrl, $endpoint, $expec
     ['https://google.com/', '/search', 'https://google.com/search'],
     ['https://google.com/', 'search', 'https://google.com/search'],
     ['https://google.com//', '//search', 'https://google.com/search'],
-    ['', 'https://google.com/search', 'https://google.com/search'],
     ['', 'google.com/search', '/google.com/search'],
-    ['https://google.com', 'https://api.google.com/search', 'https://api.google.com/search'],
 ]);
 
 test('it throws an exception if you forget to add a method', function () {
