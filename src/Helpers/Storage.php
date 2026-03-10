@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
+use InvalidArgumentException;
 use Saloon\Exceptions\DirectoryNotFoundException;
 use Saloon\Exceptions\UnableToCreateFileException;
 use Saloon\Exceptions\UnableToCreateDirectoryException;
@@ -52,11 +53,80 @@ class Storage
     }
 
     /**
+     * Normalize a path by resolving . and .. segments (no filesystem access).
+     */
+    protected function normalizePath(string $path): string
+    {
+        $leadingSlash = $path !== '' && $path[0] === DIRECTORY_SEPARATOR;
+        $leadingDrive = mb_strlen($path) >= 2 && $path[1] === ':';
+
+        $segments = [];
+        foreach (preg_split('#[/\\\\]+#', $path, -1, PREG_SPLIT_NO_EMPTY) ?: [] as $segment) {
+            if ($segment === '.') {
+                continue;
+            }
+            if ($segment === '..') {
+                array_pop($segments);
+                continue;
+            }
+            $segments[] = $segment;
+        }
+
+        $result = implode(DIRECTORY_SEPARATOR, $segments);
+        if ($leadingSlash && $result !== '') {
+            $result = DIRECTORY_SEPARATOR . $result;
+        }
+        if ($leadingDrive && $result !== '' && ! preg_match('#^[a-zA-Z]:#', $result)) {
+            $result = $path[0] . ':' . $result;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Ensure the resolved path is under the base directory to prevent path traversal.
+     *
+     * @throws InvalidArgumentException
+     */
+    protected function ensurePathUnderBase(string $fullPath): void
+    {
+        $baseReal = realpath($this->baseDirectory);
+
+        if ($baseReal === false) {
+            throw new InvalidArgumentException('Unable to determine the realpath of the base directory.');
+        }
+
+        if (str_contains($fullPath, '~')) {
+            throw new InvalidArgumentException('Path must remain inside the storage base directory.');
+        }
+
+        $baseTrimmed = rtrim($this->baseDirectory, DIRECTORY_SEPARATOR . ' ');
+        $baseNorm = $this->normalizePath($baseTrimmed);
+        $fullNorm = $this->normalizePath($fullPath);
+        $baseWithSep = $baseNorm . DIRECTORY_SEPARATOR;
+
+        if ($baseTrimmed !== '' && $fullNorm !== $baseNorm && ! str_starts_with($fullNorm, $baseWithSep)) {
+            throw new InvalidArgumentException('Path must remain inside the storage base directory.');
+        }
+
+        $pathSuffix = $baseTrimmed === '' ? $fullPath : ($fullNorm === $baseNorm ? '' : mb_substr($fullNorm, mb_strlen($baseWithSep)));
+        $normalizedAbsolute = $this->normalizePath($baseReal . DIRECTORY_SEPARATOR . $pathSuffix);
+
+        $baseWithSeparator = $baseReal . DIRECTORY_SEPARATOR;
+        if ($normalizedAbsolute !== $baseReal && ! str_starts_with($normalizedAbsolute, $baseWithSeparator)) {
+            throw new InvalidArgumentException('Path must remain inside the storage base directory.');
+        }
+    }
+
+    /**
      * Check if the file exists
      */
     public function exists(string $path): bool
     {
-        return file_exists($this->buildPath($path));
+        $fullPath = $this->buildPath($path);
+        $this->ensurePathUnderBase($fullPath);
+
+        return file_exists($fullPath);
     }
 
     /**
@@ -72,7 +142,10 @@ class Storage
      */
     public function get(string $path): bool|string
     {
-        return file_get_contents($this->buildPath($path));
+        $fullPath = $this->buildPath($path);
+        $this->ensurePathUnderBase($fullPath);
+
+        return file_get_contents($fullPath);
     }
 
     /**
@@ -85,6 +158,7 @@ class Storage
     public function put(string $path, string $contents): static
     {
         $fullPath = $this->buildPath($path);
+        $this->ensurePathUnderBase($fullPath);
 
         $directoryWithoutFilename = implode(DIRECTORY_SEPARATOR, explode(DIRECTORY_SEPARATOR, $fullPath, -1));
 

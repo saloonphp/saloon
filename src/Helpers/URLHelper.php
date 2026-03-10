@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Saloon\Helpers;
 
+use InvalidArgumentException;
+
 /**
  * @internal
  */
@@ -19,10 +21,23 @@ class URLHelper
 
     /**
      * Join a base url and an endpoint together.
+     *
+     * When the connector has a base URL, the endpoint must be a relative path (e.g. "/users" or "users").
+     * Absolute URLs in the endpoint are not allowed in that case (SSRF / credential leakage).
+     * When the base URL is empty (e.g. Solo Request), the endpoint may be an absolute URL.
+     *
+     * @throws InvalidArgumentException When the endpoint is an absolute URL and the base URL is not empty
      */
     public static function join(string $baseUrl, string $endpoint): string
     {
-        if (static::isValidUrl($endpoint)) {
+        $baseTrimmed = trim($baseUrl, '/ ');
+        if ($baseTrimmed !== '' && static::isValidUrl($endpoint)) {
+            throw new InvalidArgumentException(
+                'Absolute URLs are not allowed in the endpoint. The endpoint must be a relative path to prevent SSRF and credential leakage. To request a different host, use a connector with that host as the base URL.'
+            );
+        }
+
+        if ($baseTrimmed === '' && static::isValidUrl($endpoint)) {
             return $endpoint;
         }
 

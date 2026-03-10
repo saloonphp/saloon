@@ -72,3 +72,24 @@ test('you can get the base directory path from the storage class', function () {
 
     expect($storage->getBaseDirectory())->toEqual('tests/Fixtures/Saloon');
 });
+
+test('when putting the path that escapes the base directory throws', function () {
+    $storage = new Storage('tests');
+
+    expect(fn () => $storage->put('..' . DIRECTORY_SEPARATOR . 'outside.txt', 'content'))
+        ->toThrow(InvalidArgumentException::class, 'Path must remain inside the storage base directory');
+});
+
+test('when getting the path that escapes the base directory throws', function () {
+    $storage = new Storage('tests');
+
+    expect(fn () => $storage->get('..' . DIRECTORY_SEPARATOR . 'outside.txt'))
+        ->toThrow(InvalidArgumentException::class, 'Path must remain inside the storage base directory');
+});
+
+test('when checking the existence of a path that escapes the base directory throws', function (string $method) {
+    $storage = new Storage('tests');
+
+    expect(fn () => $storage->$method('..' . DIRECTORY_SEPARATOR . 'outside.txt'))
+        ->toThrow(InvalidArgumentException::class, 'Path must remain inside the storage base directory');
+})->with(['exists', 'missing']);

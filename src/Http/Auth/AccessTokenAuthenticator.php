@@ -88,20 +88,4 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
     {
         return ! $this->isRefreshable();
     }
-
-    /**
-     * Serialize the access token.
-     */
-    public function serialize(): string
-    {
-        return serialize($this);
-    }
-
-    /**
-     * Unserialize the access token.
-     */
-    public static function unserialize(string $string): static
-    {
-        return unserialize($string, ['allowed_classes' => true]);
-    }
 }

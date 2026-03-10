@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Http\Faking;
 
 use Saloon\MockConfig;
+use function preg_match;
 use Saloon\Helpers\Storage;
 use Saloon\Helpers\ArrayHelpers;
 use Saloon\Data\RecordedResponse;
@@ -155,6 +156,9 @@ class Fixture
     /**
      * Get the fixture path
      *
+     * The fixture name must not contain path components (/, \, ..) to prevent path traversal.
+     * Only alphanumeric characters, hyphens, and underscores are allowed.
+     *
      * @throws \Saloon\Exceptions\FixtureException
      */
     public function getFixturePath(): string
@@ -167,6 +171,11 @@ class Fixture
 
         if (empty($name)) {
             throw new FixtureException('The fixture must have a name');
+        }
+
+        if (str_contains($name, "\0") || str_contains($name, '..') || str_contains($name, '~')
+            || ! preg_match('/^[a-zA-Z0-9\/_\-\\\\]+$/', $name)) {
+            throw new FixtureException('The fixture name must not contain directory traversal components or invalid characters. Only alphanumeric characters, hyphens, slashes, and underscores are allowed.');
         }
 
         return sprintf('%s.%s', $name, $this::$fixtureExtension);
