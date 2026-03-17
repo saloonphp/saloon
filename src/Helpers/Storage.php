@@ -49,7 +49,7 @@ class Storage
     {
         $trimRules = DIRECTORY_SEPARATOR . ' ';
 
-        return rtrim($this->baseDirectory, $trimRules) . DIRECTORY_SEPARATOR . ltrim($path, $trimRules);
+        return mb_rtrim($this->baseDirectory, $trimRules) . DIRECTORY_SEPARATOR . mb_ltrim($path, $trimRules);
     }
 
     /**
@@ -100,7 +100,7 @@ class Storage
             throw new InvalidArgumentException('Path must remain inside the storage base directory.');
         }
 
-        $baseTrimmed = rtrim($this->baseDirectory, DIRECTORY_SEPARATOR . ' ');
+        $baseTrimmed = mb_rtrim($this->baseDirectory, DIRECTORY_SEPARATOR . ' ');
         $baseNorm = $this->normalizePath($baseTrimmed);
         $fullNorm = $this->normalizePath($fullPath);
         $baseWithSep = $baseNorm . DIRECTORY_SEPARATOR;

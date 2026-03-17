@@ -66,7 +66,7 @@
         "sort-packages": true
     },
     "scripts": {
-        "fix-code": [
+        "lint": [
             "./vendor/bin/php-cs-fixer fix --allow-risky=yes"
         ],
         "test": [

@@ -6,9 +6,6 @@ namespace Saloon\Helpers;
 
 use InvalidArgumentException;
 
-/**
- * @internal
- */
 class URLHelper
 {
     /**
@@ -30,7 +27,7 @@ class URLHelper
      */
     public static function join(string $baseUrl, string $endpoint): string
     {
-        $baseTrimmed = trim($baseUrl, '/ ');
+        $baseTrimmed = mb_trim($baseUrl, '/ ');
         if ($baseTrimmed !== '' && static::isValidUrl($endpoint)) {
             throw new InvalidArgumentException(
                 'Absolute URLs are not allowed in the endpoint. The endpoint must be a relative path to prevent SSRF and credential leakage. To request a different host, use a connector with that host as the base URL.'
@@ -42,12 +39,12 @@ class URLHelper
         }
 
         if ($endpoint !== '/') {
-            $endpoint = ltrim($endpoint, '/ ');
+            $endpoint = mb_ltrim($endpoint, '/ ');
         }
 
         $requiresTrailingSlash = ! empty($endpoint) && $endpoint !== '/';
 
-        $baseEndpoint = rtrim($baseUrl, '/ ');
+        $baseEndpoint = mb_rtrim($baseUrl, '/ ');
 
         $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . '/' : $baseEndpoint;
 

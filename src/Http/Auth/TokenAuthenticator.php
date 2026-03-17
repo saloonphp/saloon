@@ -22,6 +22,6 @@ class TokenAuthenticator implements Authenticator
      */
     public function set(PendingRequest $pendingRequest): void
     {
-        $pendingRequest->headers()->add('Authorization', trim($this->prefix . ' ' . $this->token));
+        $pendingRequest->headers()->add('Authorization', mb_trim($this->prefix . ' ' . $this->token));
     }
 }
