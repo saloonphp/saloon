@@ -27,7 +27,7 @@ class URLHelper
      */
     public static function join(string $baseUrl, string $endpoint): string
     {
-        $baseTrimmed = mb_trim($baseUrl, '/ ');
+        $baseTrimmed = trim($baseUrl, '/ ');
         if ($baseTrimmed !== '' && static::isValidUrl($endpoint)) {
             throw new InvalidArgumentException(
                 'Absolute URLs are not allowed in the endpoint. The endpoint must be a relative path to prevent SSRF and credential leakage. To request a different host, use a connector with that host as the base URL.'
@@ -39,12 +39,12 @@ class URLHelper
         }
 
         if ($endpoint !== '/') {
-            $endpoint = mb_ltrim($endpoint, '/ ');
+            $endpoint = ltrim($endpoint, '/ ');
         }
 
         $requiresTrailingSlash = ! empty($endpoint) && $endpoint !== '/';
 
-        $baseEndpoint = mb_rtrim($baseUrl, '/ ');
+        $baseEndpoint = rtrim($baseUrl, '/ ');
 
         $baseEndpoint = $requiresTrailingSlash ? $baseEndpoint . '/' : $baseEndpoint;
 
