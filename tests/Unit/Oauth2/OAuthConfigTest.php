@@ -15,6 +15,7 @@ test('all default properties are correct and all getters and setters work proper
     expect($config->getTokenEndpoint())->toEqual('token');
     expect($config->getUserEndpoint())->toEqual('user');
     expect($config->getDefaultScopes())->toEqual([]);
+    expect($config->allowBaseUrlOverride)->toBeFalse();
 
     $clientId = 'client-id';
     $clientSecret = 'client-secret';
@@ -39,6 +40,11 @@ test('all default properties are correct and all getters and setters work proper
     expect($config->getTokenEndpoint())->toEqual($tokenEndpoint);
     expect($config->getUserEndpoint())->toEqual($userEndpoint);
     expect($config->getDefaultScopes())->toEqual($defaultScopes);
+
+    $config->allowBaseUrlOverride = true;
+    expect($config->allowBaseUrlOverride)->toBeTrue();
+    $config->allowBaseUrlOverride = false;
+    expect($config->allowBaseUrlOverride)->toBeFalse();
 });
 
 test('make method creates an instance of OAuthConfig', function () {

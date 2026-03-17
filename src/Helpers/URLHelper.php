@@ -22,18 +22,23 @@ class URLHelper
     /**
      * Join a base url and an endpoint together.
      *
-     * When the connector has a base URL, the endpoint must be a relative path (e.g. "/users" or "users").
-     * Absolute URLs in the endpoint are not allowed in that case (SSRF / credential leakage).
+     * When the connector has a base URL, the endpoint must be a relative path (e.g. "/users" or "users"),
+     * unless $allowBaseUrlOverride is true (e.g. OAuth provider URLs). Allowing override with user-controlled
+     * endpoints reintroduces SSRF and credential leakage.
      * When the base URL is empty (e.g. Solo Request), the endpoint may be an absolute URL.
      *
-     * @throws InvalidArgumentException When the endpoint is an absolute URL and the base URL is not empty
+     * @throws InvalidArgumentException When the endpoint is an absolute URL, the base URL is not empty, and override is not allowed
      */
-    public static function join(string $baseUrl, string $endpoint): string
+    public static function join(string $baseUrl, string $endpoint, bool $allowBaseUrlOverride = false): string
     {
         $baseTrimmed = trim($baseUrl, '/ ');
         if ($baseTrimmed !== '' && static::isValidUrl($endpoint)) {
+            if ($allowBaseUrlOverride) {
+                return $endpoint;
+            }
+
             throw new InvalidArgumentException(
-                'Absolute URLs are not allowed in the endpoint. The endpoint must be a relative path to prevent SSRF and credential leakage. To request a different host, use a connector with that host as the base URL.'
+                'Absolute URLs are not allowed in the endpoint. The endpoint must be a relative path to prevent SSRF and credential leakage. To request a different host, use a connector with that host as the base URL, or enable allowBaseUrlOverride on the connector, request, or OAuth config when the endpoint is trusted.'
             );
         }
 

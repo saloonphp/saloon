@@ -25,12 +25,42 @@ test('join throws when endpoint is an absolute URL to prevent SSRF and credentia
         ->toThrow(InvalidArgumentException::class, 'Absolute URLs are not allowed in the endpoint');
 });
 
+test('join allows absolute endpoint when allowBaseUrlOverride is true', function () {
+    expect(URLHelper::join('https://api.example.com', 'https://auth.provider.com/token', true))
+        ->toBe('https://auth.provider.com/token');
+});
+
+test('join with empty base and absolute endpoint ignores allowBaseUrlOverride flag', function () {
+    expect(URLHelper::join('', 'https://solo.example.com/hook', false))
+        ->toBe('https://solo.example.com/hook');
+});
+
 test('creating a pending request with a request that returns absolute URL from resolveEndpoint throws', function () {
     $connector = new TestConnector('https://api.trusted.com');
     $request = new AbsoluteEndpointRequest('https://attacker.example.com/callback');
 
     expect(fn () => $connector->createPendingRequest($request))
         ->toThrow(InvalidArgumentException::class, 'Absolute URLs are not allowed in the endpoint');
+});
+
+test('connector allowBaseUrlOverride allows pending request with absolute endpoint', function () {
+    $connector = new TestConnector('https://api.trusted.com');
+    $connector->allowBaseUrlOverride = true;
+    $request = new AbsoluteEndpointRequest('https://other-api.example.com/v1');
+
+    $pending = $connector->createPendingRequest($request);
+
+    expect($pending->getUrl())->toBe('https://other-api.example.com/v1');
+});
+
+test('request allowBaseUrlOverride false denies absolute endpoint even when connector allows', function () {
+    $connector = new TestConnector('https://api.trusted.com');
+    $connector->allowBaseUrlOverride = true;
+    $request = new AbsoluteEndpointRequest('https://other.example.com/x');
+    $request->allowBaseUrlOverride = false;
+
+    expect(fn () => $connector->createPendingRequest($request))
+        ->toThrow(InvalidArgumentException::class);
 });
 
 test('the URL helper can parse a variety of query parameters', function (string $query, array $expected) {

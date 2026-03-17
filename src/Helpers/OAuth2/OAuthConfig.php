@@ -61,6 +61,12 @@ class OAuthConfig
     protected array $defaultScopes = [];
 
     /**
+     * When true, OAuth endpoints (authorize, token, user) may be full URLs that differ from the connector base.
+     * Set on the config instance after make(). Do not enable with user-controlled endpoint values (SSRF / credential leakage).
+     */
+    public bool $allowBaseUrlOverride = false;
+
+    /**
      * Get the Client ID
      */
     public function getClientId(): string

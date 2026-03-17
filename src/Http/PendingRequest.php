@@ -14,21 +14,26 @@ use Saloon\Traits\HasMockClient;
 use Saloon\Contracts\FakeResponse;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Contracts\Authenticator;
+use Saloon\Http\OAuth2\GetUserRequest;
 use Saloon\Contracts\Body\BodyRepository;
 use Saloon\Http\PendingRequest\MergeBody;
 use Saloon\Http\PendingRequest\MergeDelay;
 use Saloon\Http\Middleware\DelayMiddleware;
 use Saloon\Http\PendingRequest\BootPlugins;
+use Saloon\Http\OAuth2\GetAccessTokenRequest;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Http\Middleware\ValidateProperties;
+use Saloon\Http\OAuth2\GetRefreshTokenRequest;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Traits\PendingRequest\ManagesPsrRequests;
 use Saloon\Http\PendingRequest\MergeRequestProperties;
 use Saloon\Http\PendingRequest\BootConnectorAndRequest;
+use Saloon\Http\OAuth2\GetClientCredentialsTokenRequest;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Http\PendingRequest\AuthenticatePendingRequest;
+use Saloon\Http\OAuth2\GetClientCredentialsTokenBasicAuthRequest;
 
 class PendingRequest
 {
@@ -89,7 +94,11 @@ class PendingRequest
         $this->connector = $connector;
         $this->request = $request;
         $this->method = $request->getMethod();
-        $this->url = URLHelper::join($this->connector->resolveBaseUrl(), $this->request->resolveEndpoint());
+        $this->url = URLHelper::join(
+            $this->connector->resolveBaseUrl(),
+            $this->request->resolveEndpoint(),
+            $this->resolveAllowBaseUrlOverrideForUrl(),
+        );
         $this->authenticator = $request->getAuthenticator() ?? $connector->getAuthenticator();
         $this->mockClient = $mockClient ?? $request->getMockClient() ?? $connector->getMockClient() ?? MockClient::getGlobal();
 
@@ -315,5 +324,29 @@ class PendingRequest
         $callable($this);
 
         return $this;
+    }
+
+    protected function resolveAllowBaseUrlOverrideForUrl(): bool
+    {
+        if ($this->request->allowBaseUrlOverride !== null) {
+            return $this->request->allowBaseUrlOverride;
+        }
+
+        if ($this->usesOAuthConfigTokenOrUserEndpoint() && method_exists($this->connector, 'oauthConfig')) {
+            return $this->connector->oauthConfig()->allowBaseUrlOverride;
+        }
+
+        return $this->connector->allowBaseUrlOverride;
+    }
+
+    protected function usesOAuthConfigTokenOrUserEndpoint(): bool
+    {
+        $request = $this->request;
+
+        return $request instanceof GetAccessTokenRequest
+            || $request instanceof GetRefreshTokenRequest
+            || $request instanceof GetUserRequest
+            || $request instanceof GetClientCredentialsTokenRequest
+            || $request instanceof GetClientCredentialsTokenBasicAuthRequest;
     }
 }
