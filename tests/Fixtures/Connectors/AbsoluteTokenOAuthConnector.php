@@ -19,12 +19,10 @@ class AbsoluteTokenOAuthConnector extends Connector
 
     protected function defaultOauthConfig(): OAuthConfig
     {
-        $config = OAuthConfig::make()
+        return OAuthConfig::make()
             ->setClientId('id')
             ->setClientSecret('secret')
-            ->setTokenEndpoint('https://auth.external.com/oauth/token');
-        $config->setAllowBaseUrlOverride();
-
-        return $config;
+            ->setTokenEndpoint('https://auth.external.com/oauth/token')
+            ->setAllowBaseUrlOverride();
     }
 }

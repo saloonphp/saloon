@@ -19,13 +19,11 @@ class AuthorizeUrlOAuthConnector extends Connector
 
     protected function defaultOauthConfig(): OAuthConfig
     {
-        $config = OAuthConfig::make()
+        return OAuthConfig::make()
             ->setClientId('id')
             ->setClientSecret('secret')
             ->setRedirectUri('https://app.com/cb')
-            ->setAuthorizeEndpoint('https://login.provider.com/authorize');
-        $config->setAllowBaseUrlOverride();
-
-        return $config;
+            ->setAuthorizeEndpoint('https://login.provider.com/authorize')
+            ->setAllowBaseUrlOverride();
     }
 }
