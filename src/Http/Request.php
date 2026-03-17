@@ -37,6 +37,12 @@ abstract class Request
     use Makeable;
 
     /**
+     * When non-null, overrides connector / OAuth resolution for absolute endpoints in resolveEndpoint().
+     * null = inherit. Set true/false on the instance or declare on your request subclass.
+     */
+    public ?bool $allowBaseUrlOverride = null;
+
+    /**
      * Define the HTTP method.
      */
     protected Method $method;

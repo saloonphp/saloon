@@ -37,6 +37,13 @@ abstract class Connector
     use HasTries;
 
     /**
+     * When true, resolveEndpoint() may return an absolute URL (different host than base).
+     * Set on the connector instance or declare e.g. `public bool $allowBaseUrlOverride = true` on your subclass.
+     * Enabling with user-controlled endpoints risks SSRF and credential leakage.
+     */
+    public bool $allowBaseUrlOverride = false;
+
+    /**
      * Define the base URL of the API.
      */
     abstract public function resolveBaseUrl(): string;
