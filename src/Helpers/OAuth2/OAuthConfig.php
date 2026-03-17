@@ -128,8 +128,6 @@ class OAuthConfig
 
     /**
      * Whether absolute URLs are allowed for OAuth authorize, token, and user endpoints.
-     *
-     * @return bool
      */
     public function getAllowBaseUrlOverride(): bool
     {
