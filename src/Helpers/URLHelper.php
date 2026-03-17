@@ -38,7 +38,7 @@ class URLHelper
             }
 
             throw new InvalidArgumentException(
-                'Absolute URLs are not allowed in the endpoint. The endpoint must be a relative path to prevent SSRF and credential leakage. To request a different host, use a connector with that host as the base URL, or enable allowBaseUrlOverride on the connector, request, or OAuth config when the endpoint is trusted.'
+                'Absolute URLs are not allowed in the endpoint. The endpoint must be a relative path to prevent SSRF and credential leakage. To request a different host, use a connector with that host as the base URL, or enable allowBaseUrlOverride on the connector, request, or OAuth configuration when the endpoint is trusted.'
             );
         }
 

@@ -24,7 +24,7 @@ class AuthorizeUrlOAuthConnector extends Connector
             ->setClientSecret('secret')
             ->setRedirectUri('https://app.com/cb')
             ->setAuthorizeEndpoint('https://login.provider.com/authorize');
-        $config->allowBaseUrlOverride = true;
+        $config->setAllowBaseUrlOverride();
 
         return $config;
     }

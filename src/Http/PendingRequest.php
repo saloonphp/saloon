@@ -27,6 +27,7 @@ use Saloon\Http\OAuth2\GetRefreshTokenRequest;
 use Saloon\Http\Middleware\DetermineMockResponse;
 use Saloon\Exceptions\InvalidResponseClassException;
 use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Traits\PendingRequest\ManagesPsrRequests;
 use Saloon\Http\PendingRequest\MergeRequestProperties;
 use Saloon\Http\PendingRequest\BootConnectorAndRequest;
@@ -326,19 +327,26 @@ class PendingRequest
         return $this;
     }
 
+    /**
+     * Resolve whether an absolute URL may be used when joining the connector base with the request endpoint.
+     * Uses the request flag when set, else OAuth config for token/user internal requests, else the connector flag.
+     */
     protected function resolveAllowBaseUrlOverrideForUrl(): bool
     {
         if ($this->request->allowBaseUrlOverride !== null) {
             return $this->request->allowBaseUrlOverride;
         }
 
-        if ($this->usesOAuthConfigTokenOrUserEndpoint() && method_exists($this->connector, 'oauthConfig')) {
-            return $this->connector->oauthConfig()->allowBaseUrlOverride;
+        if ($this->usesOAuthConfigTokenOrUserEndpoint() && method_exists($this->connector, 'oauthConfig') && $this->connector->oauthConfig() instanceof OAuthConfig) {
+            return $this->connector->oauthConfig()->getAllowBaseUrlOverride();
         }
 
         return $this->connector->allowBaseUrlOverride;
     }
 
+    /**
+     * True for internal OAuth2 requests (token exchange, refresh, client credentials, or user info).
+     */
     protected function usesOAuthConfigTokenOrUserEndpoint(): bool
     {
         $request = $this->request;

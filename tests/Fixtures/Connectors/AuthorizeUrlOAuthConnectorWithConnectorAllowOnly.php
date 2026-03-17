@@ -9,7 +9,7 @@ use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Traits\OAuth2\AuthorizationCodeGrant;
 
 /**
- * Absolute authorize URL; only {@see Connector::$allowBaseUrlOverride} is set (not OAuthConfig).
+ * Absolute authorize URL; only the connector allowBaseUrlOverride flag is set (not OAuthConfig).
  */
 class AuthorizeUrlOAuthConnectorWithConnectorAllowOnly extends Connector
 {

@@ -23,7 +23,7 @@ class AbsoluteTokenOAuthConnector extends Connector
             ->setClientId('id')
             ->setClientSecret('secret')
             ->setTokenEndpoint('https://auth.external.com/oauth/token');
-        $config->allowBaseUrlOverride = true;
+        $config->setAllowBaseUrlOverride();
 
         return $config;
     }

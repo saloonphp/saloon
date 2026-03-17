@@ -62,9 +62,9 @@ class OAuthConfig
 
     /**
      * When true, OAuth endpoints (authorize, token, user) may be full URLs that differ from the connector base.
-     * Set on the config instance after make(). Do not enable with user-controlled endpoint values (SSRF / credential leakage).
+     * Do not enable with user-controlled endpoint values (SSRF / credential leakage).
      */
-    public bool $allowBaseUrlOverride = false;
+    protected bool $allowBaseUrlOverride = false;
 
     /**
      * Get the Client ID
@@ -122,6 +122,29 @@ class OAuthConfig
     public function setRedirectUri(string $redirectUri): static
     {
         $this->redirectUri = $redirectUri;
+
+        return $this;
+    }
+
+    /**
+     * Whether absolute URLs are allowed for OAuth authorize, token, and user endpoints.
+     *
+     * @return bool
+     */
+    public function getAllowBaseUrlOverride(): bool
+    {
+        return $this->allowBaseUrlOverride;
+    }
+
+    /**
+     * Allow OAuth endpoints to be absolute URLs (different host than the connector base).
+     * Do not enable when endpoint values are user-controlled.
+     *
+     * @return $this
+     */
+    public function setAllowBaseUrlOverride(bool $allow = true): static
+    {
+        $this->allowBaseUrlOverride = $allow;
 
         return $this;
     }
