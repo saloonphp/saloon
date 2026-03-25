@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Saloon\Http\Auth\OAuth1Authenticator;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
@@ -64,6 +65,18 @@ test('the RequiresAuth trait will throw an exception if an authenticator is not 
     $request = new RequiresAuthRequest();
 
     connector()->send($request, $mockClient);
+});
+
+test('you can use the oauth1 authenticator', function () {
+    $request = new UserRequest();
+    $request->authenticate(new OAuth1Authenticator('consumer-key', 'consumer-secret', 'token', 'token-secret'));
+
+    $pendingRequest = connector()->createPendingRequest($request);
+//
+    expect($pendingRequest->headers()->get('Authorization'))
+        ->toContain('consumer-key')
+        ->toContain('token')
+        ->toContain('oauth_signature');
 });
 
 test('you can use your own authenticators', function () {
