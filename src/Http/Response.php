@@ -9,6 +9,7 @@ use LogicException;
 use function implode;
 use SimpleXMLElement;
 use function is_array;
+use GuzzleHttp\Psr7\Utils;
 use function mb_strtolower;
 use Saloon\Traits\Macroable;
 use InvalidArgumentException;
@@ -169,6 +170,21 @@ class Response
         }
 
         return $stream;
+    }
+
+    /**
+     * Return a new response with the body replaced by a seekable stream containing the given content.
+     * Use when the original body stream is not seekable (e.g. after debug has consumed it) so
+     * subsequent callers still receive the full body.
+     */
+    public function withBufferedBody(string $body): static
+    {
+        return new static(
+            $this->psrResponse->withBody(Utils::streamFor($body)),
+            $this->pendingRequest,
+            $this->psrRequest,
+            $this->senderException
+        );
     }
 
     /**

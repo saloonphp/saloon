@@ -64,12 +64,24 @@ trait HasDebugging
         // is shown before it is modified by the user's middleware.
 
         $this->middleware()->onResponse(
-            callable: static function (Response $response) use ($onResponse, $die): void {
-                $onResponse($response, $response->getPsrResponse());
+            callable: static function (Response $response) use ($onResponse, $die): Response {
+                $stream = $response->getPsrResponse()->getBody();
+                if ($stream->isSeekable()) {
+                    $onResponse($response, $response->getPsrResponse());
+                    if ($die) {
+                        Debugger::die();
+                    }
 
+                    return $response;
+                }
+                $body = $response->body();
+                $replaced = $response->withBufferedBody($body);
+                $onResponse($replaced, $replaced->getPsrResponse());
                 if ($die) {
                     Debugger::die();
                 }
+
+                return $replaced;
             },
             order: PipeOrder::FIRST
         );
