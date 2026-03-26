@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Traits\OAuth2;
 
 use DateInterval;
+use Saloon\Config;
 use DateTimeImmutable;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
@@ -32,11 +33,13 @@ trait ClientCredentialsGrant
      */
     public function getAccessToken(array $scopes = [], string $scopeSeparator = ' ', bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
-        $this->oauthConfig()->validate(withRedirectUrl: false);
+        $oauthConfig = $this->oauthConfig();
 
-        $request = $this->resolveAccessTokenRequest($this->oauthConfig(), $scopes, $scopeSeparator);
+        $oauthConfig->validate(withRedirectUrl: false);
 
-        $request = $this->oauthConfig()->invokeRequestModifier($request);
+        $request = $this->resolveAccessTokenRequest($oauthConfig, $scopes, $scopeSeparator);
+
+        $request = $oauthConfig->invokeRequestModifier($request);
 
         if (is_callable($requestModifier)) {
             $requestModifier($request);
@@ -64,7 +67,7 @@ trait ClientCredentialsGrant
         $expiresAt = null;
 
         if (isset($responseData->expires_in) && is_numeric($responseData->expires_in)) {
-            $expiresAt = (new DateTimeImmutable)->add(
+            $expiresAt = Config::now()->add(
                 DateInterval::createFromDateString((int)$responseData->expires_in . ' seconds')
             );
         }

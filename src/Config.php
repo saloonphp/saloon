@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Saloon;
 
+use DateTimeImmutable;
 use Saloon\Enums\PipeOrder;
 use Saloon\Contracts\Sender;
+use Psr\Clock\ClockInterface;
 use Saloon\Http\PendingRequest;
 use Saloon\Http\Senders\GuzzleSender;
 use Saloon\Helpers\MiddlewarePipeline;
@@ -53,6 +55,11 @@ final class Config
     private static bool $preventStrayRequests = false;
 
     /**
+     * Global clock used by built-in time-aware features.
+     */
+    private static ?ClockInterface $clock = null;
+
+    /**
      * Write a custom sender resolver
      */
     public static function setSenderResolver(?callable $senderResolver): void
@@ -68,6 +75,30 @@ final class Config
         $senderResolver = self::$senderResolver;
 
         return is_callable($senderResolver) ? $senderResolver() : new self::$defaultSender;
+    }
+
+    /**
+     * Set the global package clock.
+     */
+    public static function setClock(?ClockInterface $clock): void
+    {
+        self::$clock = $clock;
+    }
+
+    /**
+     * Get the global package clock.
+     */
+    public static function getClock(): ?ClockInterface
+    {
+        return self::$clock;
+    }
+
+    /**
+     * Resolve the current time.
+     */
+    public static function now(): DateTimeImmutable
+    {
+        return self::$clock?->now() ?? new DateTimeImmutable;
     }
 
     /**
