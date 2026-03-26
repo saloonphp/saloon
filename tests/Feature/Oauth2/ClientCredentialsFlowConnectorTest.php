@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
+use Saloon\Config;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use Saloon\Tests\Fixtures\Clock\FixedClock;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
 use Saloon\Exceptions\OAuthConfigValidationException;
 use Saloon\Tests\Fixtures\Connectors\ClientCredentialsConnector;
@@ -13,6 +15,10 @@ use Saloon\Tests\Fixtures\Connectors\NoConfigClientCredentialsConnector;
 use Saloon\Tests\Fixtures\Connectors\ClientCredentialsBasicAuthConnector;
 use Saloon\Tests\Fixtures\Connectors\CustomRequestClientCredentialsConnector;
 use Saloon\Tests\Fixtures\Requests\OAuth\CustomClientCredentialsAccessTokenRequest;
+
+afterEach(function () {
+    Config::setClock(null);
+});
 
 test('you can get the authenticator from the connector', function () {
     $mockClient = new MockClient([
@@ -38,6 +44,22 @@ test('you can get the authenticator from the connector', function () {
         'client_secret' => 'client-secret',
         'scope' => '',
     ]);
+});
+
+test('client credentials tokens derive expiry from the global clock', function () {
+    $now = new DateTimeImmutable('2026-01-01T00:00:00+00:00');
+    $mockClient = new MockClient([
+        MockResponse::make(['access_token' => 'access', 'expires_in' => 3600], 200),
+    ]);
+
+    Config::setClock(new FixedClock($now));
+
+    $connector = new ClientCredentialsConnector;
+    $connector->withMockClient($mockClient);
+
+    $authenticator = $connector->getAccessToken();
+
+    expect($authenticator->getExpiresAt())->toEqual($now->modify('+3600 seconds'));
 });
 
 test('you can get the response instead of the authenticator', function () {

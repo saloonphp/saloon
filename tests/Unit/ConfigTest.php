@@ -8,6 +8,7 @@ use Saloon\Http\PendingRequest;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Senders\GuzzleSender;
+use Saloon\Tests\Fixtures\Clock\FixedClock;
 use Saloon\Exceptions\StrayRequestException;
 use Saloon\Tests\Fixtures\Senders\ArraySender;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
@@ -16,6 +17,9 @@ use Saloon\Tests\Fixtures\Connectors\TestConnector;
 afterEach(function () {
     Config::clearGlobalMiddleware();
     Config::$defaultSender = GuzzleSender::class;
+    Config::setSenderResolver(null);
+    Config::setClock(null);
+    Config::allowStrayRequests();
 });
 
 test('the config can specify global middleware', function () {
@@ -72,6 +76,20 @@ test('you can change how the global default sender is resolved', function () {
     $sender = TestConnector::make()->sender();
 
     expect($sender)->toBeInstanceOf(GuzzleSender::class);
+});
+
+test('you can configure a global clock and resolve now', function () {
+    $now = new DateTimeImmutable('2026-01-01T00:00:00+00:00');
+    $clock = new FixedClock($now);
+
+    Config::setClock($clock);
+
+    expect(Config::getClock())->toBe($clock);
+    expect(Config::now())->toEqual($now);
+
+    Config::setClock(null);
+
+    expect(Config::getClock())->toBeNull();
 });
 
 test('you can prevent stray api requests', function () {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Traits\OAuth2;
 
 use DateInterval;
+use Saloon\Config;
 use DateTimeImmutable;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
@@ -81,15 +82,17 @@ trait AuthorizationCodeGrant
      */
     public function getAccessToken(string $code, ?string $state = null, ?string $expectedState = null, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
-        $this->oauthConfig()->validate();
+        $oauthConfig = $this->oauthConfig();
+
+        $oauthConfig->validate();
 
         if (! empty($state) && ! empty($expectedState) && $state !== $expectedState) {
             throw new InvalidStateException;
         }
 
-        $request = $this->resolveAccessTokenRequest($code, $this->oauthConfig());
+        $request = $this->resolveAccessTokenRequest($code, $oauthConfig);
 
-        $request = $this->oauthConfig()->invokeRequestModifier($request);
+        $request = $oauthConfig->invokeRequestModifier($request);
 
         if (is_callable($requestModifier)) {
             $requestModifier($request);
@@ -117,7 +120,9 @@ trait AuthorizationCodeGrant
      */
     public function refreshAccessToken(OAuthAuthenticator|string $refreshToken, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
-        $this->oauthConfig()->validate();
+        $oauthConfig = $this->oauthConfig();
+
+        $oauthConfig->validate();
 
         if ($refreshToken instanceof OAuthAuthenticator) {
             if ($refreshToken->isNotRefreshable()) {
@@ -127,9 +132,9 @@ trait AuthorizationCodeGrant
             $refreshToken = $refreshToken->getRefreshToken();
         }
 
-        $request = $this->resolveRefreshTokenRequest($this->oauthConfig(), $refreshToken);
+        $request = $this->resolveRefreshTokenRequest($oauthConfig, $refreshToken);
 
-        $request = $this->oauthConfig()->invokeRequestModifier($request);
+        $request = $oauthConfig->invokeRequestModifier($request);
 
         if (is_callable($requestModifier)) {
             $requestModifier($request);
@@ -159,7 +164,7 @@ trait AuthorizationCodeGrant
         $expiresAt = null;
 
         if (isset($responseData->expires_in) && is_numeric($responseData->expires_in)) {
-            $expiresAt = (new DateTimeImmutable)->add(
+            $expiresAt = Config::now()->add(
                 DateInterval::createFromDateString((int)$responseData->expires_in . ' seconds')
             );
         }
