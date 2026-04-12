@@ -261,3 +261,13 @@ test('you can mock normal exceptions', function () {
     $response = connector()->send(new UserRequest, $mockClient);
     $response->throw();
 });
+
+test('mock client can opt out of response cache integration', function () {
+    $client = new MockClient([]);
+
+    expect($client->shouldBypassResponseCache())->toBeFalse();
+
+    $client->withoutCache();
+
+    expect($client->shouldBypassResponseCache())->toBeTrue();
+});
