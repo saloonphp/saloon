@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use Saloon\Http\Response;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\Response;
-use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('cloning a request after query() is initialized gives independent query bags', function () {
     $original = new UserRequest;
