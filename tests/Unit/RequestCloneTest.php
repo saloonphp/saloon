@@ -8,12 +8,6 @@ use Saloon\Http\Response;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 
-/**
- * Regression for https://github.com/saloonphp/saloon/issues/524
- *
- * Shallow-cloned requests must not share ArrayStore / pipeline instances when those
- * were initialized before cloning (e.g. async paginated pools).
- */
 test('cloning a request after query() is initialized gives independent query bags', function () {
     $original = new UserRequest;
     $original->query()->add('key', 'value');
