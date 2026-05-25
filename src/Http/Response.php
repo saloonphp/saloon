@@ -557,7 +557,7 @@ class Response
      *
      * @return resource
      */
-    public function getRawStream(): mixed
+    public function getRawStream(bool $validatePath = false): mixed
     {
         $temporaryResource = fopen('php://temp', 'wb+');
 
@@ -565,7 +565,7 @@ class Response
             throw new LogicException('Unable to create a temporary resource for the stream.');
         }
 
-        $this->saveBodyToFile($temporaryResource, false);
+        $this->saveBodyToFile($temporaryResource, false, $validatePath);
 
         return $temporaryResource;
     }
@@ -575,10 +575,14 @@ class Response
      *
      * @param string|resource $resourceOrPath
      */
-    public function saveBodyToFile(mixed $resourceOrPath, bool $closeResource = true): void
+    public function saveBodyToFile(mixed $resourceOrPath, bool $closeResource = true, bool $validatePath = false): void
     {
         if (! is_string($resourceOrPath) && ! is_resource($resourceOrPath)) {
             throw new InvalidArgumentException('The $resourceOrPath argument must be either a file path or a resource.');
+        }
+
+        if (is_string($resourceOrPath) && $validatePath) {
+            $this->assertSafePath($resourceOrPath);
         }
 
         $resource = is_string($resourceOrPath) ? fopen($resourceOrPath, 'wb+') : $resourceOrPath;
@@ -688,5 +692,16 @@ class Response
     public function getFakeResponse(): ?FakeResponse
     {
         return $this->fakeResponse;
+    }
+
+    private function assertSafePath(string $path): void
+    {
+        if (str_contains($path, '../') || str_contains($path, '..\\')) {
+            throw new InvalidArgumentException('Path traversal detected.');
+        }
+
+        if (str_contains($path, '://') || str_starts_with(strtolower($path), 'phar://') || str_starts_with(strtolower($path), 'php://') || str_starts_with(strtolower($path), 'data://')) {
+            throw new InvalidArgumentException('Stream wrappers are not allowed.');
+        }
     }
 }

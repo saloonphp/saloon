@@ -397,6 +397,100 @@ test('you can get save the response to a file', function (mixed $resourceOrPath)
     fn () => fopen('tests/Fixtures/Saloon/Testing/streamToFile2.json', 'wb+'),
 ]);
 
+test('saveBodyToFile is backwards compatible when validatePath is disabled', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+    $path = sys_get_temp_dir().'/saloon_bc_'.uniqid('', true).'.json';
+
+    $response->saveBodyToFile($path);
+
+    expect(file_get_contents($path))->toEqual('{"foo":"bar"}');
+
+    unlink($path);
+});
+
+test('saveBodyToFile does not validate paths when validatePath is disabled', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+
+    expect(fn () => $response->saveBodyToFile('../unvalidated-path.json'))
+        ->not->toThrow(\InvalidArgumentException::class);
+});
+
+test('saveBodyToFile saves to a safe path when validatePath is enabled', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+    $path = sys_get_temp_dir().'/saloon_safe_'.uniqid('', true).'.json';
+
+    $response->saveBodyToFile($path, true, true);
+
+    expect(file_get_contents($path))->toEqual('{"foo":"bar"}');
+
+    unlink($path);
+});
+
+test('saveBodyToFile rejects path traversal when validatePath is enabled', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+    $path = sys_get_temp_dir().'/../../../etc/passwd';
+
+    expect(fn () => $response->saveBodyToFile($path, true, true))
+        ->toThrow(InvalidArgumentException::class, 'Path traversal detected.');
+});
+
+test('saveBodyToFile rejects stream wrappers when validatePath is enabled', function (string $path, string $message) {
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+
+    expect(fn () => $response->saveBodyToFile($path, true, true))
+        ->toThrow(InvalidArgumentException::class, $message);
+})->with([
+    ['phar://malicious.phar/payload.php', 'Stream wrappers are not allowed.'],
+    ['php://filter/read=convert.base64-encode/resource=index.php', 'Stream wrappers are not allowed.'],
+    ['data://text/plain,test', 'Stream wrappers are not allowed.'],
+]);
+
+test('getRawStream remains backwards compatible when validatePath is disabled', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+
+    $resource = $response->getRawStream();
+
+    expect($resource)->toBeResource();
+    expect(stream_get_contents($resource))->toEqual('{"foo":"bar"}');
+});
+
+test('getRawStream works when validatePath is enabled', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['foo' => 'bar']),
+    ]);
+
+    $response = connector()->send(new UserRequest, $mockClient);
+
+    $resource = $response->getRawStream(validatePath: true);
+
+    expect($resource)->toBeResource();
+    expect(stream_get_contents($resource))->toEqual('{"foo":"bar"}');
+});
+
 test('the response is macroable', function () {
     SaloonResponse::macro('yee', fn () => 'haw');
 
