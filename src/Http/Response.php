@@ -684,7 +684,7 @@ class Response
             throw new InvalidArgumentException('Path traversal detected.');
         }
 
-        if (str_contains($path, '://') || str_starts_with(strtolower($path), 'phar://') || str_starts_with(strtolower($path), 'php://') || str_starts_with(strtolower($path), 'data://')) {
+        if (str_contains($path, '://') || str_starts_with(mb_strtolower($path), 'phar://') || str_starts_with(mb_strtolower($path), 'php://') || str_starts_with(mb_strtolower($path), 'data://')) {
             throw new InvalidArgumentException('Stream wrappers are not allowed.');
         }
     }
