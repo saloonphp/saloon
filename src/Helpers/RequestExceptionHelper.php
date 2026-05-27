@@ -9,6 +9,7 @@ use Saloon\Http\Response;
 use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\ServerException;
 use Saloon\Exceptions\Request\RequestException;
+use Saloon\Exceptions\Request\Statuses\BadRequestException;
 use Saloon\Exceptions\Request\Statuses\NotFoundException;
 use Saloon\Exceptions\Request\Statuses\ForbiddenException;
 use Saloon\Exceptions\Request\Statuses\UnauthorizedException;
@@ -32,6 +33,7 @@ class RequestExceptionHelper
 
         $requestException = match (true) {
             // Built-in exceptions
+            $status === 400 => BadRequestException::class,
             $status === 401 => UnauthorizedException::class,
             $status === 402 => PaymentRequiredException::class,
             $status === 403 => ForbiddenException::class,
