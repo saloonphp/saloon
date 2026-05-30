@@ -12,6 +12,7 @@ use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Exceptions\Request\Statuses\NotFoundException;
 use Saloon\Exceptions\Request\Statuses\ForbiddenException;
 use Saloon\Tests\Fixtures\Requests\AlwaysHasFailureRequest;
+use Saloon\Exceptions\Request\Statuses\BadRequestException;
 use Saloon\Exceptions\Request\Statuses\UnauthorizedException;
 use Saloon\Exceptions\Request\Statuses\GatewayTimeoutException;
 use Saloon\Exceptions\Request\Statuses\RequestTimeOutException;
@@ -35,6 +36,7 @@ test('the response will return different exceptions based on status', function (
     expect($exception)->toBeInstanceOf($expectedException);
     expect($exception->getMessage())->toEqual($message);
 })->with([
+    [400, BadRequestException::class],
     [401, UnauthorizedException::class],
     [402, PaymentRequiredException::class],
     [403, ForbiddenException::class],
