@@ -24,6 +24,11 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Reflection\MethodsClassReflectionExtension;
 use PHPStan\Reflection\MissingMethodFromReflectionException;
 
+/**
+ * Many thanks to Larastan for building this excellent extension.
+ *
+ * @see https://github.com/larastan/larastan/blob/3.x/src/Methods/MacroMethodsClassReflectionExtension.php
+ */
 class MacroMethodsClassReflectionExtension implements MethodsClassReflectionExtension
 {
     /** @var array<string, MethodReflection> */
