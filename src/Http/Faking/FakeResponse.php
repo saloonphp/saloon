@@ -124,7 +124,7 @@ class FakeResponse implements FakeResponseContract
         $response = $responseFactory->createResponse($this->status());
 
         foreach ($this->headers()->all() as $headerName => $headerValue) {
-            $response = $response->withHeader($headerName, $headerValue);
+            $response = $response->withHeader($headerName, $headerValue ?? '');
         }
 
         return $response->withBody($this->body()->toStream($streamFactory));

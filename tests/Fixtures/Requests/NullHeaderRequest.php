@@ -1,0 +1,41 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Saloon\Tests\Fixtures\Requests;
+
+use Saloon\Enums\Method;
+use Saloon\Http\Request;
+use Saloon\Tests\Fixtures\Connectors\HeaderConnector;
+
+class NullHeaderRequest extends Request
+{
+    /**
+     * Define the method that the request will use.
+     *
+     * @var string
+     */
+    protected Method $method = Method::GET;
+
+    /**
+     * Define the endpoint for the request.
+     */
+    public function resolveEndpoint(): string
+    {
+        return '/user';
+    }
+
+    protected function defaultHeaders(): array
+    {
+        return [
+            'X-Null-Header' => null,
+        ];
+    }
+
+    protected function defaultConfig(): array
+    {
+        return [
+            'timeout' => 5,
+        ];
+    }
+}
