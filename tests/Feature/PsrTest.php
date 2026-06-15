@@ -34,7 +34,7 @@ test('The psr request and readers must be converted to empty string', function (
         MockResponse::make(headers: ['X-Null-Header' => null]),
     ]);
 
-    $connector = new TestConnector()->debug();
+    $connector = new TestConnector();
     $connector->withMockClient($mockClient);
 
     $response = $connector->send(new NullHeaderRequest());
