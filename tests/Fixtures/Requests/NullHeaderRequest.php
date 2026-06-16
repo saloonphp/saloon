@@ -30,11 +30,4 @@ class NullHeaderRequest extends Request
             'X-Null-Header' => null,
         ];
     }
-
-    protected function defaultConfig(): array
-    {
-        return [
-            'timeout' => 5,
-        ];
-    }
 }
