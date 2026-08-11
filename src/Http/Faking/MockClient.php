@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Faking;
 
+use Closure;
+use ReflectionFunction;
+use ReflectionIntersectionType;
+use ReflectionNamedType;
+use ReflectionType;
+use ReflectionUnionType;
 use ReflectionClass;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
@@ -443,9 +449,15 @@ class MockClient
             return false;
         }
 
+        $firstParameterType = $this->getClosureFirstParameterType($closure);
+
         if (! is_null($index)) {
             $response = $this->getRecordedResponses()[$index];
             $request = $response->getPendingRequest()->getRequest();
+
+            if ($this->requestMatchesType($request, $firstParameterType) === false) {
+                return false;
+            }
 
             return $closure($request, $response);
         }
@@ -456,7 +468,13 @@ class MockClient
         $lastResponse = $this->getLastResponse();
 
         if ($lastResponse instanceof Response) {
-            $passed = $closure($lastResponse->getPendingRequest()->getRequest(), $lastResponse);
+            $lastRequest = $lastResponse->getPendingRequest()->getRequest();
+
+            $passed = false;
+
+            if ($this->requestMatchesType($lastRequest, $firstParameterType)) {
+                $passed = $closure($lastRequest, $lastResponse);
+            }
 
             if ($passed === true) {
                 return true;
@@ -469,6 +487,10 @@ class MockClient
         foreach ($this->getRecordedResponses() as $response) {
             $request = $response->getPendingRequest()->getRequest();
 
+            if ($this->requestMatchesType($request, $firstParameterType) === false) {
+                continue;
+            }
+
             $passed = $closure($request, $response);
 
             if ($passed === true) {
@@ -477,6 +499,67 @@ class MockClient
         }
 
         return false;
+    }
+
+    /**
+     * Get the first closure parameter type if one exists.
+     */
+    private function getClosureFirstParameterType(callable $closure): ?ReflectionType
+    {
+        $reflection = new ReflectionFunction(Closure::fromCallable($closure));
+        $parameters = $reflection->getParameters();
+
+        if ($parameters === []) {
+            return null;
+        }
+
+        return $parameters[0]->getType();
+    }
+
+    /**
+     * Determine if a request matches a closure first parameter type.
+     */
+    private function requestMatchesType(Request $request, ?ReflectionType $type): bool
+    {
+        if ($type === null) {
+            return true;
+        }
+
+        if ($type instanceof ReflectionNamedType) {
+            $typeName = $type->getName();
+
+            if ($typeName === 'mixed') {
+                return true;
+            }
+
+            if ($type->isBuiltin()) {
+                return $typeName === 'object';
+            }
+
+            return $request instanceof $typeName;
+        }
+
+        if ($type instanceof ReflectionUnionType) {
+            foreach ($type->getTypes() as $subType) {
+                if ($this->requestMatchesType($request, $subType)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        if ($type instanceof ReflectionIntersectionType) {
+            foreach ($type->getTypes() as $subType) {
+                if ($this->requestMatchesType($request, $subType) === false) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return true;
     }
 
     /**
