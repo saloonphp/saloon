@@ -20,7 +20,7 @@
     "homepage": "https://github.com/saloonphp/saloon",
     "require": {
         "php": "^8.2",
-        "guzzlehttp/guzzle": "^7.6",
+        "guzzlehttp/guzzle": "^7.6 || ^8.0",
         "guzzlehttp/promises": "^1.5 || ^2.0",
         "guzzlehttp/psr7": "^2.0",
         "psr/http-factory": "^1.0",
