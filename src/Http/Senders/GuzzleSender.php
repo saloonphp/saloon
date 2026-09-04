@@ -32,6 +32,8 @@ class GuzzleSender implements Sender
 
     /**
      * Guzzle's Handler Stack.
+     *
+     * @var HandlerStack<callable(RequestInterface, array<array-key, mixed>): PromiseInterface<ResponseInterface, mixed>>
      */
     protected HandlerStack $handlerStack;
 
@@ -84,6 +86,8 @@ class GuzzleSender implements Sender
 
     /**
      * The default handler stack used by the underlying Guzzle client
+     *
+     * @return HandlerStack<callable(RequestInterface, array<array-key, mixed>): PromiseInterface<ResponseInterface, mixed>>
      */
     protected function defaultHandlerStack(): HandlerStack
     {
@@ -118,7 +122,7 @@ class GuzzleSender implements Sender
             // Sometimes, Guzzle will throw a RequestException without a response. This
             // means that it was fatal, so we should still throw a fatal request exception.
 
-            $guzzleResponse = $exception->getResponse();
+            $guzzleResponse = method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
 
             if (is_null($guzzleResponse)) {
                 throw new FatalRequestException($exception, $pendingRequest);
@@ -166,7 +170,7 @@ class GuzzleSender implements Sender
                     // Sometimes, Guzzle will throw a RequestException without a response. This
                     // means that it was fatal, so we should still throw a fatal request exception.
 
-                    $guzzleResponse = $guzzleException->getResponse();
+                    $guzzleResponse = method_exists($guzzleException, 'getResponse') ? $guzzleException->getResponse() : null;
 
                     if (is_null($guzzleResponse)) {
                         throw new FatalRequestException($guzzleException, $pendingRequest);
@@ -211,6 +215,8 @@ class GuzzleSender implements Sender
     /**
      * Overwrite the entire handler stack.
      *
+     * @param HandlerStack<callable(RequestInterface, array<array-key, mixed>): PromiseInterface<ResponseInterface, mixed>> $handlerStack
+     *
      * @return $this
      */
     public function setHandlerStack(HandlerStack $handlerStack): static
@@ -222,6 +228,8 @@ class GuzzleSender implements Sender
 
     /**
      * Get the handler stack.
+     *
+     * @return HandlerStack<callable(RequestInterface, array<array-key, mixed>): PromiseInterface<ResponseInterface, mixed>>
      */
     public function getHandlerStack(): HandlerStack
     {

@@ -80,7 +80,7 @@ test('the guzzle sender has the default handler stack configured by default', fu
     $saloonStack = invade($handlerStack)->stack;
     $defaultStack = invade(HandlerStack::create())->stack;
 
-    expect($saloonStack)->toHaveSameSize($defaultStack)->toHaveCount(4);
+    expect($saloonStack)->toHaveSameSize($defaultStack);
 
     expect($saloonStack[0][1])->toBe($defaultStack[0][1]);
     expect($saloonStack[1][1])->toBe($defaultStack[1][1]);
@@ -116,7 +116,7 @@ test('the guzzle sender has default options configured', function () {
     $saloonStack = invade($saloonConfig['handler'])->stack;
     $defaultStack = invade($defaultConfig['handler'])->stack;
 
-    expect($saloonStack)->toHaveSameSize($defaultStack)->toHaveCount(4);
+    expect($saloonStack)->toHaveSameSize($defaultStack);
 });
 
 test('you can set a custom handler stack on the guzzle sender', function () {

@@ -26,9 +26,11 @@ jobs:
       matrix:
         os: [ ubuntu-latest, windows-latest ]
         php: [ 8.2, 8.3, 8.4, 8.5 ]
-        stability: [ prefer-lowest, prefer-stable ]
+        guzzle:
+          - { constraint: '^7.6', stability: prefer-lowest }
+          - { constraint: '^8.0', stability: prefer-stable }
 
-    name: P${{ matrix.php }} - ${{ matrix.stability }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - Guzzle ${{ matrix.guzzle.constraint }} - ${{ matrix.os }}
 
     steps:
       - name: Checkout code
@@ -48,6 +50,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+          composer require guzzlehttp/guzzle:${{ matrix.guzzle.constraint }} --no-update
+          composer update --${{ matrix.guzzle.stability }} --prefer-dist --no-interaction
       - name: Execute tests
         run: vendor/bin/pest -p

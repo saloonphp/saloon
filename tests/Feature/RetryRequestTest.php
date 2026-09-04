@@ -214,7 +214,7 @@ test('you can modify the request inside the retry handler', function () {
     $response = $connector->send(new RetryUserRequest(5, handleRetry: function (Exception $exception, Request $request) use (&$index) {
         $index++;
 
-        $request->headers()->add('X-Test-Index', $index);
+        $request->headers()->add('X-Test-Index', (string) $index);
 
         return true;
     }));
@@ -234,7 +234,7 @@ test('retry against a live endpoint to test GuzzleSender', function () {
     });
 
     $request = new HeaderErrorRetryRequest(6, handleRetry: function (Exception $exception, Request $request) use (&$exceptions, &$index) {
-        $request->headers()->add('X-Yee-Haw', $index++);
+        $request->headers()->add('X-Yee-Haw', (string) $index++);
 
         return true;
     });
