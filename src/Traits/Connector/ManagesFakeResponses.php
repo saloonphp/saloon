@@ -21,6 +21,7 @@ trait ManagesFakeResponses
      *
      * @throws \Saloon\Exceptions\PendingRequestException
      * @throws \Throwable
+     * @return Response<mixed>|PromiseInterface
      */
     protected function createFakeResponse(PendingRequest $pendingRequest): Response|PromiseInterface
     {
@@ -50,7 +51,7 @@ trait ManagesFakeResponses
             streamFactory: $factories->streamFactory,
         );
 
-        /** @var class-string<\Saloon\Http\Response> $responseClass */
+        /** @var class-string<\Saloon\Http\Response<mixed>> $responseClass */
         $responseClass = $pendingRequest->getResponseClass();
 
         $response = $responseClass::fromPsrResponse(

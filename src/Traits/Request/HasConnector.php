@@ -64,6 +64,8 @@ trait HasConnector
 
     /**
      * Send a request synchronously
+     *
+     * @return Response<mixed>
      */
     public function send(?MockClient $mockClient = null): Response
     {

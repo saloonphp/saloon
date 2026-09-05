@@ -186,6 +186,8 @@ class MockClient
 
     /**
      * Record a response.
+     *
+     * @param Response<mixed> $response
      */
     public function recordResponse(Response $response): void
     {
@@ -195,7 +197,7 @@ class MockClient
     /**
      * Get all the recorded responses
      *
-     * @return array<\Saloon\Http\Response>
+     * @return array<\Saloon\Http\Response<mixed>>
      */
     public function getRecordedResponses(): array
     {
@@ -204,6 +206,8 @@ class MockClient
 
     /**
      * Get the last request that the mock manager sent.
+     *
+     * @return Request<mixed>|null
      */
     public function getLastRequest(): ?Request
     {
@@ -220,6 +224,8 @@ class MockClient
 
     /**
      * Get the last response that the mock manager sent.
+     *
+     * @return Response<mixed>|null
      */
     public function getLastResponse(): ?Response
     {
@@ -337,6 +343,8 @@ class MockClient
 
     /**
      * Assert a given request was sent.
+     *
+     * @return Response<mixed>|null
      */
     public function findResponseByRequest(string $request, ?int $index = null): ?Response
     {
@@ -369,6 +377,8 @@ class MockClient
 
     /**
      * Find a request that matches a given url pattern
+     *
+     * @return Response<mixed>|null
      */
     public function findResponseByRequestUrl(string $url, ?int $index = null): ?Response
     {
