@@ -59,6 +59,13 @@ class MockClient
     protected static ?MockClient $globalMockClient = null;
 
     /**
+     * When true, the response cache plugin will not read or write the cache
+     * for requests using this mock client (for example, so fixture files are
+     * re-read from disk on each request during tests).
+     */
+    protected bool $withoutResponseCache = false;
+
+    /**
      * Constructor
      *
      * @param array<\Saloon\Http\Faking\MockResponse|\Saloon\Http\Faking\Fixture|callable> $mockData
@@ -402,6 +409,26 @@ class MockClient
         }
 
         return null;
+    }
+
+    /**
+     * Disable the response cache while this mock client is in use.
+     *
+     * @return $this
+     */
+    public function withoutCache(): static
+    {
+        $this->withoutResponseCache = true;
+
+        return $this;
+    }
+
+    /**
+     * Whether the response cache plugin should bypass caching.
+     */
+    public function shouldBypassResponseCache(): bool
+    {
+        return $this->withoutResponseCache;
     }
 
     /**
