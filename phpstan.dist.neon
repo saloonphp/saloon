@@ -19,6 +19,9 @@ parameters:
   ignoreErrors:
   - "#^Unsafe usage of new static\\(\\)\\.$#"
 
+  excludePaths:
+  - '*/src/PHPStan/*'
+
   # Rules
 
   treatPhpDocTypesAsCertain: false
