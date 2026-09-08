@@ -111,7 +111,7 @@ test('you can create wildcard url mocks', function () {
     expect($mockClient->guessNextResponse($connectorB->createPendingRequest($requestC)))->toEqual($responseC);
 });
 
-test('saloon throws an exception if it cant work out the url response', function () {
+test('saloon throws an exception if it cant work out the url response', function (bool $allowFallback) {
     $responseA = MockResponse::make(['name' => 'Sammyjo20']);
     $responseB = MockResponse::make(['name' => 'Alex']);
     $responseC = MockResponse::make(['name' => 'Sam Carré']);
@@ -128,14 +128,25 @@ test('saloon throws an exception if it cant work out the url response', function
         'tests.saloon.dev/*' => $responseB, // Test Wildcard Routes
     ]);
 
+    $mockClient->allowFallback($allowFallback);
+
     expect($mockClient->guessNextResponse($connectorA->createPendingRequest($requestA)))->toEqual($responseA);
     expect($mockClient->guessNextResponse($connectorA->createPendingRequest($requestB)))->toEqual($responseB);
 
-    $this->expectException(NoMockResponseFoundException::class);
-    $this->expectExceptionMessage('Saloon was unable to guess a mock response for your request [https://google.com/user], consider using a wildcard url mock or a connector mock.');
+    if ($allowFallback) {
+        $pendingRequest = $connectorB->createPendingRequest($requestC);
 
-    expect($mockClient->guessNextResponse($connectorB->createPendingRequest($requestC)))->toEqual($responseC);
-});
+        expect($mockClient->guessNextResponse($pendingRequest))->toEqual($pendingRequest);
+    } else {
+        $this->expectException(NoMockResponseFoundException::class);
+        $this->expectExceptionMessage('Saloon was unable to guess a mock response for your request [https://google.com/user], consider using a wildcard url mock or a connector mock.');
+
+        expect($mockClient->guessNextResponse($connectorB->createPendingRequest($requestC)))->toEqual($responseC);
+    }
+})->with([
+    true,
+    false,
+]);
 
 test('you can get an array of the recorded requests', function () {
     $mockClient = new MockClient([
