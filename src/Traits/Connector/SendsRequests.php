@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Connector;
 
+use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Promise\Utils;
 use LogicException;
+use Saloon\Exceptions\Request\FatalRequestException;
+use Saloon\Exceptions\Request\RequestException;
+use Saloon\Http\BatchRequest;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\PendingRequest;
 use Saloon\Http\Pool;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
-use GuzzleHttp\Promise\Utils;
-use GuzzleHttp\Promise\Promise;
-use Saloon\Http\PendingRequest;
-use Saloon\Http\Faking\MockClient;
-use GuzzleHttp\Promise\PromiseInterface;
-use Saloon\Exceptions\Request\RequestException;
-use Saloon\Exceptions\Request\FatalRequestException;
 
 trait SendsRequests
 {
@@ -29,7 +29,7 @@ trait SendsRequests
     public function send(Request $request, ?MockClient $mockClient = null, ?callable $handleRetry = null): Response
     {
         if (is_null($handleRetry)) {
-            $handleRetry = static fn (): bool => true;
+            $handleRetry = static fn(): bool => true;
         }
 
         $attempts = 0;
@@ -126,17 +126,37 @@ trait SendsRequests
     /**
      * Send a request asynchronously
      */
-    public function sendAsync(Request $request, ?MockClient $mockClient = null): PromiseInterface
+    public function sendAsync(Request|BatchRequest $request, ?MockClient $mockClient = null): PromiseInterface
     {
-        $sender = $this->sender();
-
         // We'll wrap the following logic in our own Promise which means we won't
         // build up our PendingRequest until the promise is actually being sent
         // this is great because our middleware will only run right before
         // the request is sent.
 
-        return Utils::task(function () use ($request, $mockClient, $sender) {
-            $pendingRequest = $this->createPendingRequest($request, $mockClient)->setAsynchronous(true);
+        if ($request instanceof Request) {
+            return $this->prepareAsyncRequest($request, $mockClient);
+        }
+
+        $requests = array_map(
+            fn($singleRequest) => $this->prepareAsyncRequest($singleRequest, $mockClient),
+            $request->getRequests()->all()
+        );
+
+        return Utils::all($requests)->then(fn(array $responses) => $request->processResponses($responses));
+    }
+
+    /**
+     * Prepare an asynchronous task for sending the request.
+     *
+     * @param Request $request
+     * @param MockClient|null $mockClient
+     * @return PromiseInterface
+     */
+    protected function prepareAsyncRequest(Request $request, MockClient $mockClient = null): PromiseInterface
+    {
+        return Utils::task(function () use ($request, $mockClient) {
+            $pendingRequest = $this->createPendingRequest($request, $mockClient)
+                ->setAsynchronous(true);
 
             // We need to check if the Pending Request contains a fake response.
             // If it does, then we will create the fake response. Otherwise,
@@ -147,10 +167,10 @@ trait SendsRequests
             if ($pendingRequest->hasFakeResponse()) {
                 $requestPromise = $this->createFakeResponse($pendingRequest);
             } else {
-                $requestPromise = $sender->sendAsync($pendingRequest);
+                $requestPromise = $this->sender()->sendAsync($pendingRequest);
             }
 
-            $requestPromise->then(fn (Response $response) => $pendingRequest->executeResponsePipeline($response));
+            $requestPromise->then(fn(Response $response) => $pendingRequest->executeResponsePipeline($response));
 
             return $requestPromise;
         });

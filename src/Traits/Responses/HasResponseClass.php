@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Responses;
 
-trait HasCustomResponses
+trait HasResponseClass
 {
     /**
-     * Specify a default response.
+     * Specify a default response class.
      *
      * When null or an empty string, the response on the sender will be used.
      *
      * @var class-string<\Saloon\Http\Response>|null
      */
-    protected ?string $response = null;
+    protected ?string $responseClass = null;
 
     /**
      * Resolve the custom response class
@@ -22,6 +22,6 @@ trait HasCustomResponses
      */
     public function resolveResponseClass(): ?string
     {
-        return $this->response ?? null;
+        return $this->responseClass ?? null;
     }
 }

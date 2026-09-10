@@ -16,7 +16,7 @@ use Saloon\Traits\HandlesPsrRequest;
 use Saloon\Traits\ManagesExceptions;
 use Saloon\Traits\Auth\AuthenticatesRequests;
 use Saloon\Traits\RequestProperties\HasTries;
-use Saloon\Traits\Responses\HasCustomResponses;
+use Saloon\Traits\Responses\HasResponseClass;
 use Saloon\Traits\Request\CreatesDtoFromResponse;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 
@@ -25,7 +25,7 @@ abstract class Request
     use CreatesDtoFromResponse;
     use AuthenticatesRequests;
     use HasRequestProperties;
-    use HasCustomResponses;
+    use HasResponseClass;
     use ManagesExceptions;
     use HandlesPsrRequest;
     use HasMockClient;
