@@ -15,4 +15,5 @@ enum Method: string
     case OPTIONS = 'OPTIONS';
     case CONNECT = 'CONNECT';
     case TRACE = 'TRACE';
+    case QUERY = 'QUERY';
 }
