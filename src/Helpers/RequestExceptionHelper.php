@@ -9,8 +9,11 @@ use Saloon\Http\Response;
 use Saloon\Exceptions\Request\ClientException;
 use Saloon\Exceptions\Request\ServerException;
 use Saloon\Exceptions\Request\RequestException;
+use Saloon\Exceptions\Request\Statuses\ConflictException;
 use Saloon\Exceptions\Request\Statuses\NotFoundException;
 use Saloon\Exceptions\Request\Statuses\ForbiddenException;
+use Saloon\Exceptions\Request\Statuses\BadGatewayException;
+use Saloon\Exceptions\Request\Statuses\BadRequestException;
 use Saloon\Exceptions\Request\Statuses\UnauthorizedException;
 use Saloon\Exceptions\Request\Statuses\GatewayTimeoutException;
 use Saloon\Exceptions\Request\Statuses\RequestTimeOutException;
@@ -32,15 +35,18 @@ class RequestExceptionHelper
 
         $requestException = match (true) {
             // Built-in exceptions
+            $status === 400 => BadRequestException::class,
             $status === 401 => UnauthorizedException::class,
             $status === 402 => PaymentRequiredException::class,
             $status === 403 => ForbiddenException::class,
             $status === 404 => NotFoundException::class,
             $status === 405 => MethodNotAllowedException::class,
             $status === 408 => RequestTimeOutException::class,
+            $status === 409 => ConflictException::class,
             $status === 422 => UnprocessableEntityException::class,
             $status === 429 => TooManyRequestsException::class,
             $status === 500 => InternalServerErrorException::class,
+            $status === 502 => BadGatewayException::class,
             $status === 503 => ServiceUnavailableException::class,
             $status === 504 => GatewayTimeoutException::class,
 
