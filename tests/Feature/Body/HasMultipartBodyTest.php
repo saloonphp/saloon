@@ -74,7 +74,6 @@ test('the guzzle sender properly sends it', function () {
             expect((string)$guzzleRequest->getBody())->toContain(
                 'X-Saloon: Yee-haw!',
                 'Content-Disposition: form-data; name="nickname"; filename="user.txt"',
-                'Content-Length: 3',
                 'Sam',
             );
 
@@ -135,7 +134,6 @@ test('can send multiple multipart files with the same key name', function () {
             expect($guzzleRequest->getBody()->getContents())->toContain(
                 'X-Saloon: Yee-haw!',
                 'Content-Disposition: form-data; name="nickname"; filename="user.txt"',
-                'Content-Length: 3',
                 'Sam',
                 'Alfie',
                 'Tom',

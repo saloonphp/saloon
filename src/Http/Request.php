@@ -60,6 +60,36 @@ abstract class Request
     }
 
     /**
+     * Ensure cloned requests do not share mutable object state (query, headers, etc.).
+     *
+     * Without this, a shallow clone reuses the same {@see \Saloon\Repositories\ArrayStore}
+     * instances when they were initialized before cloning, which breaks concurrent pools
+     * (e.g. paginated requests mutating the same query bag).
+     */
+    public function __clone(): void
+    {
+        if (isset($this->query)) {
+            $this->query = clone $this->query;
+        }
+
+        if (isset($this->headers)) {
+            $this->headers = clone $this->headers;
+        }
+
+        if (isset($this->config)) {
+            $this->config = clone $this->config;
+        }
+
+        if (isset($this->delay)) {
+            $this->delay = clone $this->delay;
+        }
+
+        if (isset($this->middlewarePipeline)) {
+            $this->middlewarePipeline = clone $this->middlewarePipeline;
+        }
+    }
+
+    /**
      * Define the endpoint for the request.
      */
     abstract public function resolveEndpoint(): string;
