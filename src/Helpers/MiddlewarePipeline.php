@@ -38,6 +38,16 @@ class MiddlewarePipeline
     }
 
     /**
+     * Deep-clone internal pipelines so cloned requests do not share pipe state.
+     */
+    public function __clone(): void
+    {
+        $this->requestPipeline = clone $this->requestPipeline;
+        $this->responsePipeline = clone $this->responsePipeline;
+        $this->fatalPipeline = clone $this->fatalPipeline;
+    }
+
+    /**
      * Add a middleware before the request is sent
      *
      * @param callable(\Saloon\Http\PendingRequest): (\Saloon\Http\PendingRequest|\Saloon\Contracts\FakeResponse|void) $callable
