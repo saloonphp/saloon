@@ -11,6 +11,8 @@ trait ManagesExceptions
 {
     /**
      * Determine if the request has failed.
+     *
+     * @param Response<mixed> $response
      */
     public function hasRequestFailed(Response $response): ?bool
     {
@@ -19,6 +21,8 @@ trait ManagesExceptions
 
     /**
      * Get the request exception.
+     *
+     * @param Response<mixed> $response
      */
     public function getRequestException(Response $response, ?Throwable $senderException): ?Throwable
     {
@@ -28,6 +32,8 @@ trait ManagesExceptions
     /**
      * Determine if we should throw an exception if the `$response->throw()` is
      * used, or when the `AlwaysThrowOnErrors` trait is used.
+     *
+     * @param Response<mixed> $response
      */
     public function shouldThrowRequestException(Response $response): bool
     {

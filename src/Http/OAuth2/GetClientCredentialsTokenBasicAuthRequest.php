@@ -13,6 +13,9 @@ use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Http\Auth\BasicAuthenticator;
 
+/**
+ * @extends Request<null>
+ */
 class GetClientCredentialsTokenBasicAuthRequest extends Request implements HasBody
 {
     use HasFormBody;

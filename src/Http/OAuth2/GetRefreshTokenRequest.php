@@ -11,6 +11,9 @@ use Saloon\Traits\Body\HasFormBody;
 use Saloon\Helpers\OAuth2\OAuthConfig;
 use Saloon\Traits\Plugins\AcceptsJson;
 
+/**
+ * @extends Request<null>
+ */
 class GetRefreshTokenRequest extends Request implements HasBody
 {
     use HasFormBody;

@@ -33,6 +33,8 @@ class RecordFixture implements ResponseMiddleware
 
     /**
      * Store the response
+     *
+     * @param Response<mixed> $response
      */
     public function __invoke(Response $response): void
     {

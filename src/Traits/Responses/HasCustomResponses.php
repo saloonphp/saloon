@@ -11,14 +11,14 @@ trait HasCustomResponses
      *
      * When null or an empty string, the response on the sender will be used.
      *
-     * @var class-string<\Saloon\Http\Response>|null
+     * @var class-string<\Saloon\Http\Response<mixed>>|null
      */
     protected ?string $response = null;
 
     /**
      * Resolve the custom response class
      *
-     * @return class-string<\Saloon\Http\Response>|null
+     * @return class-string<\Saloon\Http\Response<mixed>>|null
      */
     public function resolveResponseClass(): ?string
     {

@@ -11,7 +11,8 @@ interface ResponseMiddleware
     /**
      * Register a response middleware
      *
-     * @return \Saloon\Http\Response|void
+     * @param Response<mixed> $response
+     * @return Response<mixed>|void
      */
     public function __invoke(Response $response);
 }

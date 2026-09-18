@@ -46,6 +46,8 @@ class Debugger
 
     /**
      * Debug a response with Symfony Var Dumper
+     *
+     * @param Response<mixed> $response
      */
     public static function symfonyResponseDebugger(Response $response, ResponseInterface $psrResponse): void
     {
