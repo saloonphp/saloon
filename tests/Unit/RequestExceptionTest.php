@@ -10,7 +10,9 @@ use Saloon\Exceptions\Request\RequestException;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 use Saloon\Exceptions\Request\Statuses\NotFoundException;
+use Saloon\Exceptions\Request\Statuses\ConflictException;
 use Saloon\Exceptions\Request\Statuses\ForbiddenException;
+use Saloon\Exceptions\Request\Statuses\BadGatewayException;
 use Saloon\Exceptions\Request\Statuses\BadRequestException;
 use Saloon\Tests\Fixtures\Requests\AlwaysHasFailureRequest;
 use Saloon\Exceptions\Request\Statuses\UnauthorizedException;
@@ -43,9 +45,11 @@ test('the response will return different exceptions based on status', function (
     [404, NotFoundException::class],
     [405, MethodNotAllowedException::class],
     [408, RequestTimeOutException::class],
+    [409, ConflictException::class],
     [422, UnprocessableEntityException::class],
     [429, TooManyRequestsException::class],
     [500, InternalServerErrorException::class],
+    [502, BadGatewayException::class],
     [503, ServiceUnavailableException::class],
     [504, GatewayTimeoutException::class],
     [418, ClientException::class],
