@@ -75,5 +75,12 @@
         "pstan": [
             "./vendor/bin/phpstan analyse --memory-limit=1G"
         ]
+    },
+    "extra": {
+        "phpstan": {
+            "includes": [
+                "extension.neon"
+            ]
+        }
     }
 }

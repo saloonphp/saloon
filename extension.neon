@@ -1,0 +1,5 @@
+services:
+    -
+        class: Saloon\PHPStan\MacroMethodsClassReflectionExtension
+        tags:
+            - phpstan.broker.methodsClassReflectionExtension
