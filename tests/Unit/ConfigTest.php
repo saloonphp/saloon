@@ -16,6 +16,7 @@ use Saloon\Tests\Fixtures\Connectors\TestConnector;
 afterEach(function () {
     Config::clearGlobalMiddleware();
     Config::$defaultSender = GuzzleSender::class;
+    Config::sleepUsing(null);
 });
 
 test('the config can specify global middleware', function () {
@@ -99,4 +100,16 @@ test('you can prevent and then allow stray api requests', function () {
     TestConnector::make()->send(new UserRequest);
 
     Config::clearGlobalMiddleware();
+});
+
+test('the config can specify a custom sleep handler', function () {
+    $microseconds = [];
+
+    Config::sleepUsing(function (int $duration) use (&$microseconds) {
+        $microseconds[] = $duration;
+    });
+
+    Config::sleep(50_000);
+
+    expect($microseconds)->toEqual([50_000]);
 });
