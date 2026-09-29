@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Enums;
+declare(strict_types=1);
+
+namespace Saloon\Enums;
 
 enum VersionMode
 {

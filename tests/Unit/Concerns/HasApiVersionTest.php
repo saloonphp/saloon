@@ -2,16 +2,13 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../../../src/Enums/VersionMode.php';
-require_once __DIR__ . '/../../../src/Traits/HasApiVersion.php';
-
-use App\Enums\VersionMode;
-use App\Traits\HasApiVersion;
 use Saloon\Enums\Method;
+use Saloon\Enums\VersionMode;
 use Saloon\Http\Connector;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\Request;
+use Saloon\Traits\Plugins\HasApiVersion;
 
 test('header mode adds the version to the outgoing request headers', function () {
     $mockClient = sendVersionedRequest(

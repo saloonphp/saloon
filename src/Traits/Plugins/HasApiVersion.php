@@ -1,15 +1,21 @@
 <?php
 
-namespace App\Traits;
+declare(strict_types=1);
 
-use App\Enums\VersionMode;
-use Jean85\Version;
+namespace Saloon\Traits\Plugins;
+
+use Saloon\Enums\VersionMode;
 use Saloon\Http\PendingRequest;
 
+/**
+ * @phpstan-ignore trait.unused
+ */
 trait HasApiVersion
 {
     protected ?string $apiVersion = null;
+
     protected VersionMode $versionMode = VersionMode::Header;
+
     protected string $versionKey = 'api-version';
 
     public function setApiVersion(string $version): static
@@ -26,7 +32,7 @@ trait HasApiVersion
 
     public function bootHasApiVersion(PendingRequest $pendingRequest): void
     {
-        if (!$this->apiVersion) {
+        if (! $this->apiVersion) {
             return;
         }
 
@@ -38,7 +44,7 @@ trait HasApiVersion
             VersionMode::Subdomain,
             VersionMode::UrlPath => $pendingRequest->setUrl(
                 str_replace('{version}', $this->apiVersion, $pendingRequest->getUrl())
-            )  
+            ),
         };
     }
 }
