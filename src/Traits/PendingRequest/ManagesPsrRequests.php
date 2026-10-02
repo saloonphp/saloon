@@ -48,7 +48,7 @@ trait ManagesPsrRequests
         );
 
         foreach ($this->headers()->all() as $headerName => $headerValue) {
-            $request = $request->withHeader($headerName, $headerValue);
+            $request = $request->withHeader($headerName, $headerValue ?? '');
         }
 
         if ($this->body() instanceof BodyRepository) {
