@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
+use Saloon\Config;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\Tests\Helpers\Date;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\OAuth2\GetUserRequest;
+use Saloon\Tests\Fixtures\Clock\FixedClock;
 use Saloon\Exceptions\InvalidStateException;
 use Saloon\Http\OAuth2\GetAccessTokenRequest;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
@@ -21,6 +23,10 @@ use Saloon\Tests\Fixtures\Connectors\CustomRequestOAuth2Connector;
 use Saloon\Tests\Fixtures\Requests\OAuth\CustomAccessTokenRequest;
 use Saloon\Tests\Fixtures\Connectors\CustomResponseOAuth2Connector;
 use Saloon\Tests\Fixtures\Requests\OAuth\CustomRefreshTokenRequest;
+
+afterEach(function () {
+    Config::setClock(null);
+});
 
 test('you can get the redirect url from a connector', function () {
     $connector = new OAuth2Connector;
@@ -107,6 +113,40 @@ test('you can request a token from a connector', function () {
     expect($authenticator->getAccessToken())->toEqual('access');
     expect($authenticator->getRefreshToken())->toEqual('refresh');
     expect($authenticator->getExpiresAt())->toBeInstanceOf(DateTimeImmutable::class);
+});
+
+test('oauth access tokens derive expiry from the global clock', function () {
+    $now = new DateTimeImmutable('2026-01-01T00:00:00+00:00');
+    $mockClient = new MockClient([
+        MockResponse::make(['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600], 200),
+    ]);
+
+    Config::setClock(new FixedClock($now));
+
+    $connector = new OAuth2Connector;
+    $connector->withMockClient($mockClient);
+
+    $authenticator = $connector->getAccessToken('code');
+
+    expect($authenticator->getExpiresAt())->toEqual($now->modify('+3600 seconds'));
+});
+
+test('custom oauth authenticators use the global clock for expiry semantics', function () {
+    $now = new DateTimeImmutable('2026-01-01T00:00:00+00:00');
+    $mockClient = new MockClient([
+        MockResponse::make(['access_token' => 'access', 'refresh_token' => 'refresh', 'expires_in' => 3600], 200),
+    ]);
+
+    Config::setClock(new FixedClock($now));
+
+    $connector = new CustomResponseOAuth2Connector('hello');
+    $connector->withMockClient($mockClient);
+
+    $authenticator = $connector->getAccessToken('code');
+
+    expect($authenticator)->toBeInstanceOf(CustomOAuthAuthenticator::class);
+    expect($authenticator->getExpiresAt())->toEqual($now->modify('+3600 seconds'));
+    expect($authenticator->hasExpired())->toBeFalse();
 });
 
 test('you can tap into the access token request and modify it', function () {
