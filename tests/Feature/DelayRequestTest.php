@@ -2,9 +2,14 @@
 
 declare(strict_types=1);
 
+use Saloon\Config;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
+
+afterEach(function () {
+    Config::sleepUsing(null);
+});
 
 test('async request delay works', function () {
     $request = new UserRequest;
@@ -95,4 +100,25 @@ test('connector delay works', function () {
     $start = microtime(true);
     $connector->send($request);
     expect(round(microtime(true) - $start))->toBeGreaterThanOrEqual(1);
+});
+
+test('the delay is sent through the custom sleep handler when one is defined', function () {
+    $microseconds = [];
+
+    Config::sleepUsing(function (int $duration) use (&$microseconds) {
+        $microseconds[] = $duration;
+    });
+
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam']),
+    ]);
+
+    $request = new UserRequest;
+    $request->delay()->set(1000);
+
+    $start = microtime(true);
+    connector()->send($request, $mockClient);
+
+    expect(microtime(true) - $start)->toBeLessThan(1);
+    expect($microseconds)->toEqual([1_000_000]);
 });

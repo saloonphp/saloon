@@ -55,6 +55,13 @@ final class Config
     private static bool $preventStrayRequests = false;
 
     /**
+     * Custom sleep handler used instead of usleep()
+     *
+     * @var callable|null
+     */
+    private static mixed $sleepHandler = null;
+
+    /**
      * Global clock used by built-in time-aware features.
      */
     private static ?ClockInterface $clock = null;
@@ -137,5 +144,27 @@ final class Config
     public static function allowStrayRequests(): void
     {
         self::$preventStrayRequests = false;
+    }
+
+    /**
+     * Write a custom sleep handler
+     *
+     * The handler receives the number of microseconds to sleep for. Useful
+     * for skipping or observing sleeps in tests. Pass null to restore the
+     * default usleep() behaviour.
+     */
+    public static function sleepUsing(?callable $sleepHandler): void
+    {
+        self::$sleepHandler = $sleepHandler;
+    }
+
+    /**
+     * Sleep for the given number of microseconds
+     */
+    public static function sleep(int $microseconds): void
+    {
+        $sleepHandler = self::$sleepHandler;
+
+        is_callable($sleepHandler) ? $sleepHandler($microseconds) : usleep($microseconds);
     }
 }
