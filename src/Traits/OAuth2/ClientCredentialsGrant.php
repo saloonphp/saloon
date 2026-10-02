@@ -33,13 +33,11 @@ trait ClientCredentialsGrant
      */
     public function getAccessToken(array $scopes = [], string $scopeSeparator = ' ', bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
-        $oauthConfig = $this->oauthConfig();
+        $this->oauthConfig()->validate(withRedirectUrl: false);
 
-        $oauthConfig->validate(withRedirectUrl: false);
+        $request = $this->resolveAccessTokenRequest($this->oauthConfig(), $scopes, $scopeSeparator);
 
-        $request = $this->resolveAccessTokenRequest($oauthConfig, $scopes, $scopeSeparator);
-
-        $request = $oauthConfig->invokeRequestModifier($request);
+        $request = $this->oauthConfig()->invokeRequestModifier($request);
 
         if (is_callable($requestModifier)) {
             $requestModifier($request);

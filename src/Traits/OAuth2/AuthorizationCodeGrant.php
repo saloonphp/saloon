@@ -82,17 +82,15 @@ trait AuthorizationCodeGrant
      */
     public function getAccessToken(string $code, ?string $state = null, ?string $expectedState = null, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
-        $oauthConfig = $this->oauthConfig();
-
-        $oauthConfig->validate();
+        $this->oauthConfig()->validate();
 
         if (! empty($state) && ! empty($expectedState) && $state !== $expectedState) {
             throw new InvalidStateException;
         }
 
-        $request = $this->resolveAccessTokenRequest($code, $oauthConfig);
+        $request = $this->resolveAccessTokenRequest($code, $this->oauthConfig());
 
-        $request = $oauthConfig->invokeRequestModifier($request);
+        $request = $this->oauthConfig()->invokeRequestModifier($request);
 
         if (is_callable($requestModifier)) {
             $requestModifier($request);
@@ -120,9 +118,7 @@ trait AuthorizationCodeGrant
      */
     public function refreshAccessToken(OAuthAuthenticator|string $refreshToken, bool $returnResponse = false, ?callable $requestModifier = null): OAuthAuthenticator|Response
     {
-        $oauthConfig = $this->oauthConfig();
-
-        $oauthConfig->validate();
+        $this->oauthConfig()->validate();
 
         if ($refreshToken instanceof OAuthAuthenticator) {
             if ($refreshToken->isNotRefreshable()) {
@@ -132,9 +128,9 @@ trait AuthorizationCodeGrant
             $refreshToken = $refreshToken->getRefreshToken();
         }
 
-        $request = $this->resolveRefreshTokenRequest($oauthConfig, $refreshToken);
+        $request = $this->resolveRefreshTokenRequest($this->oauthConfig(), $refreshToken);
 
-        $request = $oauthConfig->invokeRequestModifier($request);
+        $request = $this->oauthConfig()->invokeRequestModifier($request);
 
         if (is_callable($requestModifier)) {
             $requestModifier($request);
