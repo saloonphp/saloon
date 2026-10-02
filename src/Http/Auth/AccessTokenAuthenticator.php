@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Http\Auth;
 
+use Saloon\Config;
 use DateTimeImmutable;
 use Saloon\Http\PendingRequest;
 use Saloon\Contracts\OAuthAuthenticator;
@@ -38,7 +39,7 @@ class AccessTokenAuthenticator implements OAuthAuthenticator
             return false;
         }
 
-        return $this->expiresAt->getTimestamp() <= (new DateTimeImmutable)->getTimestamp();
+        return $this->expiresAt->getTimestamp() <= Config::now()->getTimestamp();
     }
 
     /**

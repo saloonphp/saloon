@@ -2,8 +2,14 @@
 
 declare(strict_types=1);
 
+use Saloon\Config;
 use Saloon\Tests\Helpers\Date;
+use Saloon\Tests\Fixtures\Clock\FixedClock;
 use Saloon\Http\Auth\AccessTokenAuthenticator;
+
+afterEach(function () {
+    Config::setClock(null);
+});
 
 it('can return if it has expired or not', function () {
     $accessToken = 'access';
@@ -43,4 +49,15 @@ test('it allows expires_in to be optional', function () {
     expect($authenticator->getExpiresAt())->toBeNull();
     expect($authenticator->isRefreshable())->toBeTrue();
     expect($authenticator->isNotRefreshable())->toBeFalse();
+});
+
+test('it can use the global clock for expiry checks', function () {
+    $expiresAt = new DateTimeImmutable('2026-01-01T01:00:00+00:00');
+
+    Config::setClock(new FixedClock(new DateTimeImmutable('2026-01-01T02:00:00+00:00')));
+
+    $authenticator = new AccessTokenAuthenticator('access', 'refresh', $expiresAt);
+
+    expect($authenticator->hasExpired())->toBeTrue();
+    expect($authenticator->hasNotExpired())->toBeFalse();
 });

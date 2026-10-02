@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Saloon\Traits\OAuth2;
 
 use DateInterval;
+use Saloon\Config;
 use DateTimeImmutable;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
@@ -64,7 +65,7 @@ trait ClientCredentialsGrant
         $expiresAt = null;
 
         if (isset($responseData->expires_in) && is_numeric($responseData->expires_in)) {
-            $expiresAt = (new DateTimeImmutable)->add(
+            $expiresAt = Config::now()->add(
                 DateInterval::createFromDateString((int)$responseData->expires_in . ' seconds')
             );
         }
