@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Saloon\Config;
 use Saloon\Http\Request;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
@@ -12,6 +13,10 @@ use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Tests\Fixtures\Requests\RetryUserRequest;
 use Saloon\Tests\Fixtures\Requests\HeaderErrorRetryRequest;
 use Saloon\Exceptions\Request\Statuses\InternalServerErrorException;
+
+afterEach(function () {
+    Config::sleepUsing(null);
+});
 
 test('a failed request can be retried', function () {
     $mockClient = new MockClient([
@@ -106,6 +111,29 @@ test('a failed request can have an interval between each attempt', function () {
     // after the first.
 
     expect(round(microtime(true) - $start))->toBeGreaterThanOrEqual(2);
+});
+
+test('the interval between attempts is sent through the custom sleep handler when one is defined', function () {
+    $microseconds = [];
+
+    Config::sleepUsing(function (int $duration) use (&$microseconds) {
+        $microseconds[] = $duration;
+    });
+
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam'], 500),
+        MockResponse::make(['name' => 'Gareth'], 500),
+        MockResponse::make(['name' => 'Teodor'], 200),
+    ]);
+
+    $connector = new TestConnector;
+    $connector->withMockClient($mockClient);
+
+    $connector->send(new RetryUserRequest(3, 200));
+
+    expect($microseconds)->toEqual([200_000, 200_000]);
+
+    $mockClient->assertSentCount(3);
 });
 
 test('an exception other than a request exception will not be retried', function () {

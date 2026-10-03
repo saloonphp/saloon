@@ -9,6 +9,7 @@ use Saloon\Http\Faking\MockResponse;
 use Saloon\Tests\Fixtures\Requests\UserRequest;
 use Saloon\Tests\Fixtures\Requests\ErrorRequest;
 use PHPUnit\Framework\ExpectationFailedException;
+use Saloon\Tests\Fixtures\Requests\ConfigRequest;
 use Saloon\Tests\Fixtures\Connectors\TestConnector;
 
 test('assertSent works with a request', function () {
@@ -208,6 +209,56 @@ test('assertSent with a closure works with more than one request in the history'
         return $response->json() === ['name' => 'Marcel'] && $response->status() === 204;
     });
 });
+
+test('assertSent with a typed closure skips non-matching requests and still finds a match', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam']),
+        MockResponse::make(['message' => 'Error'], 500),
+    ]);
+
+    $connector = new TestConnector;
+
+    $connector->send(new UserRequest, $mockClient);
+    $connector->send(new ErrorRequest, $mockClient);
+
+    $mockClient->assertSent(function (UserRequest $request) {
+        return $request->userId === null;
+    });
+});
+
+test('assertSent with a union typed closure skips non-matching requests and still finds a match', function () {
+    $mockClient = new MockClient([
+        MockResponse::make(['name' => 'Sam']),
+        MockResponse::make(['message' => 'Error'], 500),
+        MockResponse::make(['config' => true]),
+    ]);
+
+    $connector = new TestConnector;
+
+    $connector->send(new UserRequest, $mockClient);
+    $connector->send(new ErrorRequest, $mockClient);
+    $connector->send(new ConfigRequest, $mockClient);
+
+    $mockClient->assertSent(function (UserRequest|ErrorRequest $request) {
+        return $request instanceof UserRequest && $request->userId === null;
+    });
+
+    $mockClient->assertSent(function (UserRequest|ErrorRequest $request) {
+        return $request instanceof ErrorRequest;
+    });
+});
+
+test('assertSent with a typed closure fails assertion when no matching request type was sent', function () {
+    $mockClient = new MockClient([
+        ErrorRequest::class => MockResponse::make(['message' => 'Error'], 500),
+    ]);
+
+    connector()->send(new ErrorRequest, $mockClient);
+
+    $mockClient->assertSent(function (UserRequest $request) {
+        return true;
+    });
+})->expectException(ExpectationFailedException::class);
 
 test('it can assert requests are sent in a specific order', function () {
     $mockClient = new MockClient([

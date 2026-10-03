@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Connector;
 
+use Saloon\Config;
 use LogicException;
 use Saloon\Http\Pool;
 use Saloon\Http\Request;
@@ -58,7 +59,7 @@ trait SendsRequests
                     ? $retryInterval * (2 ** ($attempts - 2)) * 1000
                     : $retryInterval * 1000;
 
-                usleep($sleepTime);
+                Config::sleep($sleepTime);
             }
 
             try {
