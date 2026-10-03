@@ -58,6 +58,8 @@ class RecordedResponse implements JsonSerializable
 
     /**
      * Create an instance from a Response
+     *
+     * @param Response<mixed> $response
      */
     public static function fromResponse(Response $response): static
     {

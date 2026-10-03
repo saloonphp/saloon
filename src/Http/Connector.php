@@ -21,6 +21,7 @@ use Saloon\Traits\RequestProperties\HasRequestProperties;
 
 abstract class Connector
 {
+    /** @use CreatesDtoFromResponse<mixed> */
     use CreatesDtoFromResponse;
     use AuthenticatesRequests;
     use HasRequestProperties;

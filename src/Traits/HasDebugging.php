@@ -49,7 +49,7 @@ trait HasDebugging
      *
      * Leave blank for a default debugger (requires symfony/var-dump)
      *
-     * @param callable(\Saloon\Http\Response, \Psr\Http\Message\ResponseInterface): void|null $onResponse
+     * @param callable(\Saloon\Http\Response<mixed>, \Psr\Http\Message\ResponseInterface): void|null $onResponse
      * @return $this
      */
     public function debugResponse(?callable $onResponse = null, bool $die = false): static

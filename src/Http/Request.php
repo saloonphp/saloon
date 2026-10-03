@@ -20,8 +20,12 @@ use Saloon\Traits\Responses\HasCustomResponses;
 use Saloon\Traits\Request\CreatesDtoFromResponse;
 use Saloon\Traits\RequestProperties\HasRequestProperties;
 
+/**
+ * @template TDto
+ */
 abstract class Request
 {
+    /** @use CreatesDtoFromResponse<TDto> */
     use CreatesDtoFromResponse;
     use AuthenticatesRequests;
     use HasRequestProperties;
