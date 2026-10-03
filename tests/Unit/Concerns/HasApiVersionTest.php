@@ -38,7 +38,7 @@ test('query param mode appends the version to the query string', function () {
 
 test('url path mode replaces the version placeholder in the base url', function () {
     $mockClient = sendVersionedRequest(
-        makeVersionedConnector('https://generativelanguage.googleapis.com/{version}', VersionMode::UrlPath, 'v1beta'),
+        makeVersionedConnector('https://generativelanguage.googleapis.com/{version}', VersionMode::Url, 'v1beta'),
         makeVersionedRequest(),
     );
 
@@ -52,7 +52,7 @@ test('url path mode replaces the version placeholder in the base url', function 
 
 test('subdomain mode replaces the version placeholder in the host', function () {
     $mockClient = sendVersionedRequest(
-        makeVersionedConnector('https://{version}.api.provider.com', VersionMode::Subdomain, 'v2'),
+        makeVersionedConnector('https://{version}.api.provider.com', VersionMode::Url, 'v2'),
         makeVersionedRequest(),
     );
 
@@ -108,9 +108,48 @@ test('a null api version does not add a header, query parameter, or replace the 
 })->with([
     'header' => VersionMode::Header,
     'query param' => VersionMode::QueryParam,
-    'subdomain' => VersionMode::Subdomain,
-    'url path' => VersionMode::UrlPath,
+    'url' => VersionMode::Url,
 ]);
+
+test('url mode rejects versions that could alter the scheme, host, or path', function (string $baseUrl, string $version) {
+    $mockClient = new MockClient([MockResponse::make()]);
+
+    $connector = makeVersionedConnector($baseUrl, VersionMode::Url, $version);
+
+    expect(fn () => $connector->send(makeVersionedRequest(), $mockClient))
+        ->toThrow(InvalidArgumentException::class, sprintf('The API version "%s" is not safe to use in a URL.', $version));
+
+    $mockClient->assertNothingSent();
+})->with([
+    'https scheme in path' => ['https://api.provider.com/{version}', 'https://evil.com'],
+    'https scheme in subdomain' => ['https://{version}.api.provider.com', 'https://evil.com'],
+    'file scheme' => ['{version}/api', 'file:///etc/passwd'],
+    'bare scheme separator' => ['https://api.provider.com/{version}', '://evil.com'],
+    'protocol relative host' => ['https://api.provider.com/{version}', '//evil.com'],
+    'userinfo host takeover' => ['https://{version}.api.provider.com', 'evil.com@'],
+    'path traversal' => ['https://api.provider.com/{version}', '..'],
+    'nested path traversal' => ['https://api.provider.com/{version}', 'v1/../../admin'],
+    'single dot' => ['https://api.provider.com/{version}', '.'],
+    'query string' => ['https://api.provider.com/{version}', 'v1?admin=true'],
+    'fragment' => ['https://api.provider.com/{version}', 'v1#admin'],
+    'port' => ['https://{version}.api.provider.com', 'evil.com:8080'],
+    'whitespace' => ['https://api.provider.com/{version}', 'v1 beta'],
+    'crlf' => ['https://api.provider.com/{version}', "v1\r\nHost: evil.com"],
+    'percent encoding' => ['https://api.provider.com/{version}', '%2e%2e'],
+]);
+
+test('url mode accepts common version formats', function (string $version) {
+    $mockClient = sendVersionedRequest(
+        makeVersionedConnector('https://api.provider.com/{version}', VersionMode::Url, $version),
+        makeVersionedRequest(),
+    );
+
+    $mockClient->assertSent(function (Request $request, $response) use ($version) {
+        expect($response->getPendingRequest()->getUrl())->toBe('https://api.provider.com/' . $version);
+
+        return true;
+    });
+})->with(['v1', 'v1beta', 'v2.1', '2026-10-01', 'v1_alpha']);
 
 function makeVersionedConnector(string $baseUrl, VersionMode $versionMode = VersionMode::Header, ?string $apiVersion = null): Connector
 {
