@@ -26,6 +26,8 @@ trait SendsRequests
      * Send a request synchronously
      *
      * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
+     * @throws \Saloon\Exceptions\Request\FatalRequestException
+     * @throws \Saloon\Exceptions\Request\RequestException
      */
     public function send(Request $request, ?MockClient $mockClient = null, ?callable $handleRetry = null): Response
     {
@@ -163,6 +165,8 @@ trait SendsRequests
      * @deprecated This method will be removed in Saloon v4. Please refer to the documentation to see connector or request-based retry functionality.
      *
      * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
+     * @throws \Saloon\Exceptions\Request\FatalRequestException
+     * @throws \Saloon\Exceptions\Request\RequestException
      */
     public function sendAndRetry(Request $request, int $tries, int $interval = 0, ?callable $handleRetry = null, bool $throw = true, ?MockClient $mockClient = null, bool $useExponentialBackoff = false): Response
     {
