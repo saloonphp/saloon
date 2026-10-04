@@ -4,6 +4,7 @@
 #############################################################################################
 
 includes:
+- extension.neon
 - phpstan-baseline.neon
 
 parameters:
