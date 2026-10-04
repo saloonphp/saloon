@@ -65,6 +65,7 @@ trait HasConnector
     /**
      * Send a request synchronously
      *
+     * @return \Saloon\Http\Response<$this>
      * @throws \Saloon\Exceptions\Request\FatalRequestException
      * @throws \Saloon\Exceptions\Request\RequestException
      */

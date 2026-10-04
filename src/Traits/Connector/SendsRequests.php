@@ -25,7 +25,11 @@ trait SendsRequests
     /**
      * Send a request synchronously
      *
+     * @template TRequest of \Saloon\Http\Request
+     *
+     * @param TRequest $request
      * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
+     * @return \Saloon\Http\Response<TRequest>
      * @throws \Saloon\Exceptions\Request\FatalRequestException
      * @throws \Saloon\Exceptions\Request\RequestException
      */
@@ -164,7 +168,11 @@ trait SendsRequests
      *
      * @deprecated This method will be removed in Saloon v4. Please refer to the documentation to see connector or request-based retry functionality.
      *
+     * @template TRequest of \Saloon\Http\Request
+     *
+     * @param TRequest $request
      * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
+     * @return \Saloon\Http\Response<TRequest>
      * @throws \Saloon\Exceptions\Request\FatalRequestException
      * @throws \Saloon\Exceptions\Request\RequestException
      */
