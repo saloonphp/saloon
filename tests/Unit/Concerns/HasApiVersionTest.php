@@ -138,6 +138,19 @@ describe('Overriding The Version', function () {
             return true;
         });
     });
+
+    test('the request can override the connector api version in the url', function () {
+        $mockClient = sendVersionedRequest(
+            makeVersionedConnector('https://api.provider.com/{version}', VersionMode::Url, 'v1'),
+            makeVersionedRequest('beta', VersionMode::Url),
+        );
+
+        $mockClient->assertSent(function (Request $request, $response) {
+            expect($response->getPendingRequest()->getUrl())->toBe('https://api.provider.com/beta');
+
+            return true;
+        });
+    });
 });
 
 describe('Without A Version', function () {
