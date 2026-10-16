@@ -61,9 +61,19 @@ trait HasApiVersion
             VersionMode::Header => $pendingRequest->headers()->add($this->versionKey, $this->apiVersion),
             VersionMode::QueryParam => $pendingRequest->query()->add($this->versionKey, $this->apiVersion),
             VersionMode::Url => $pendingRequest->setUrl(
-                str_replace('{version}', $this->ensureVersionIsSafeForUrl($this->apiVersion), $pendingRequest->getUrl())
+                str_replace('{version}', $this->ensureVersionIsSafeForUrl($this->getRequestApiVersion($pendingRequest) ?? $this->apiVersion), $pendingRequest->getUrl())
             ),
         };
+    }
+
+    /**
+     * Get the request's API version, which takes precedence in the URL because the connector boots first and replaces the placeholder before the request can.
+     */
+    protected function getRequestApiVersion(PendingRequest $pendingRequest): ?string
+    {
+        $request = $pendingRequest->getRequest();
+
+        return method_exists($request, 'getApiVersion') ? $request->getApiVersion() : null;
     }
 
     /**
