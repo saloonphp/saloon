@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Saloon\Traits\Plugins;
 
+use Saloon\Helpers\Helpers;
 use InvalidArgumentException;
 use Saloon\Enums\VersionMode;
 use Saloon\Http\PendingRequest;
@@ -49,6 +50,14 @@ trait HasApiVersion
     }
 
     /**
+     * Get where the API version is applied to the request
+     */
+    public function getVersionMode(): VersionMode
+    {
+        return $this->versionMode;
+    }
+
+    /**
      * Boot HasApiVersion plugin.
      */
     public function bootHasApiVersion(PendingRequest $pendingRequest): void
@@ -61,19 +70,30 @@ trait HasApiVersion
             VersionMode::Header => $pendingRequest->headers()->add($this->versionKey, $this->apiVersion),
             VersionMode::QueryParam => $pendingRequest->query()->add($this->versionKey, $this->apiVersion),
             VersionMode::Url => $pendingRequest->setUrl(
-                str_replace('{version}', $this->ensureVersionIsSafeForUrl($this->getRequestApiVersion($pendingRequest) ?? $this->apiVersion), $pendingRequest->getUrl())
+                str_replace('{version}', $this->ensureVersionIsSafeForUrl($this->resolveUrlApiVersion($pendingRequest)), $pendingRequest->getUrl())
             ),
         };
     }
 
     /**
-     * Get the request's API version, which takes precedence in the URL because the connector boots first and replaces the placeholder before the request can.
+     * Resolve which version to substitute into `{version}` for URL mode.
      */
-    protected function getRequestApiVersion(PendingRequest $pendingRequest): ?string
+    protected function resolveUrlApiVersion(PendingRequest $pendingRequest): string
     {
-        $request = $pendingRequest->getRequest();
+        if ($pendingRequest->getConnector() === $this) {
+            $request = $pendingRequest->getRequest();
 
-        return method_exists($request, 'getApiVersion') ? $request->getApiVersion() : null;
+            if (in_array(HasApiVersion::class, Helpers::classUsesRecursive($request), true)
+                && $request->getVersionMode() === VersionMode::Url) {
+                $requestVersion = $request->getApiVersion();
+
+                if (is_string($requestVersion) && $requestVersion !== '') {
+                    return $requestVersion;
+                }
+            }
+        }
+
+        return $this->apiVersion;
     }
 
     /**

@@ -151,6 +151,52 @@ describe('Overriding The Version', function () {
             return true;
         });
     });
+
+    test('a request versioned by header leaves the connector api version in the url', function () {
+        $mockClient = sendVersionedRequest(
+            makeVersionedConnector('https://api.provider.com/{version}', VersionMode::Url, 'v1'),
+            makeVersionedRequest('beta', VersionMode::Header),
+        );
+
+        $mockClient->assertSent(function (Request $request, $response) {
+            expect($response->getPendingRequest()->getUrl())->toBe('https://api.provider.com/v1');
+            expect($response->getPsrRequest()->getHeaderLine('api-version'))->toBe('beta');
+
+            return true;
+        });
+    });
+
+    test('a request with its own version methods but not the trait leaves the connector api version in the url', function () {
+        $request = new class extends Request {
+            protected Method $method = Method::GET;
+
+            public function resolveEndpoint(): string
+            {
+                return '';
+            }
+
+            public function getApiVersion(): string
+            {
+                return 'beta';
+            }
+
+            public function getVersionMode(): VersionMode
+            {
+                return VersionMode::Url;
+            }
+        };
+
+        $mockClient = sendVersionedRequest(
+            makeVersionedConnector('https://api.provider.com/{version}', VersionMode::Url, 'v1'),
+            $request,
+        );
+
+        $mockClient->assertSent(function (Request $request, $response) {
+            expect($response->getPendingRequest()->getUrl())->toBe('https://api.provider.com/v1');
+
+            return true;
+        });
+    });
 });
 
 describe('Without A Version', function () {
