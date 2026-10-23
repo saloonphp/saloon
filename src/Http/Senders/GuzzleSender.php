@@ -182,13 +182,29 @@ class GuzzleSender implements Sender
             throw new FatalRequestException($exception, $pendingRequest);
         }
 
-        $guzzleResponse = $exception->getResponse();
+        $guzzleResponse = $this->guzzleResponseFromRequestException($exception);
 
         if ($guzzleResponse === null) {
             throw new FatalRequestException($exception, $pendingRequest);
         }
 
         return $this->createResponse($guzzleResponse, $pendingRequest, $psrRequest, $exception);
+    }
+
+    /**
+     * Guzzle 7: getResponse() is on RequestException. Guzzle 8: only on ResponseException subclasses.
+     */
+    protected function guzzleResponseFromRequestException(RequestException $exception): ?ResponseInterface
+    {
+        if (! class_exists('GuzzleHttp\Exception\ResponseException')) {
+            return $exception->getResponse();
+        }
+
+        if ($exception instanceof \GuzzleHttp\Exception\ResponseException) {
+            return $exception->getResponse();
+        }
+
+        return null;
     }
 
     /**
