@@ -19,6 +19,7 @@ use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ResponseTransferException;
 use GuzzleHttp\Exception\TransferException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Http\Senders\Factories\GuzzleMultipartBodyFactory;
@@ -114,21 +115,14 @@ class GuzzleSender implements Sender
 
             return $this->createResponse($guzzleResponse, $pendingRequest, $request);
         } catch (ConnectException $exception) {
-            // ConnectException means a network exception has happened, like Guzzle
-            // not being able to connect to the host.
-
             throw new FatalRequestException($exception, $pendingRequest);
         } catch (RequestException $exception) {
-            // Sometimes, Guzzle will throw a RequestException without a response. This
-            // means that it was fatal, so we should still throw a fatal request exception.
+            return $this->responseFromRequestException($exception, $pendingRequest, $request);
+        } catch (TransferException $exception) {
+            // Guzzle 8: timeouts and network errors before a response (NetworkException, etc.)
+            // are no longer ConnectException. Matches processPromise() behaviour.
 
-            $guzzleResponse = method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
-
-            if (is_null($guzzleResponse)) {
-                throw new FatalRequestException($exception, $pendingRequest);
-            }
-
-            return $this->createResponse($guzzleResponse, $pendingRequest, $request, $exception);
+            throw new FatalRequestException($exception, $pendingRequest);
         }
     }
 
@@ -167,26 +161,43 @@ class GuzzleSender implements Sender
                         throw new FatalRequestException($guzzleException, $pendingRequest);
                     }
 
-                    // Sometimes, Guzzle will throw a RequestException without a response. This
-                    // means that it was fatal, so we should still throw a fatal request exception.
-
-                    $guzzleResponse = method_exists($guzzleException, 'getResponse') ? $guzzleException->getResponse() : null;
-
-                    if (is_null($guzzleResponse)) {
-                        throw new FatalRequestException($guzzleException, $pendingRequest);
-                    }
-
-                    // Otherwise we'll create a response to convert into an exception.
-                    // This will run the exception through the exception handlers
-                    // which allows the user to handle their own exceptions.
-
-                    $response = $this->createResponse($guzzleResponse, $pendingRequest, $psrRequest, $guzzleException);
-
-                    // Throw the exception our way
+                    $response = $this->responseFromRequestException($guzzleException, $pendingRequest, $psrRequest);
 
                     return ($exception = $response->toException()) ? throw $exception : $response;
                 }
             );
+    }
+
+    /**
+     * Build a Saloon response from a Guzzle RequestException, or throw when the transfer was fatal.
+     *
+     * @throws FatalRequestException
+     */
+    protected function responseFromRequestException(
+        RequestException $exception,
+        PendingRequest $pendingRequest,
+        RequestInterface $psrRequest,
+    ): Response {
+        if ($this->isIncompleteResponseTransfer($exception)) {
+            throw new FatalRequestException($exception, $pendingRequest);
+        }
+
+        $guzzleResponse = $exception->getResponse();
+
+        if ($guzzleResponse === null) {
+            throw new FatalRequestException($exception, $pendingRequest);
+        }
+
+        return $this->createResponse($guzzleResponse, $pendingRequest, $psrRequest, $exception);
+    }
+
+    /**
+     * Guzzle 8 may return a partial response when the body transfer fails (ResponseTransferException).
+     */
+    protected function isIncompleteResponseTransfer(RequestException $exception): bool
+    {
+        return class_exists(ResponseTransferException::class)
+            && $exception instanceof ResponseTransferException;
     }
 
     /**
