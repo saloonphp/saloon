@@ -19,8 +19,8 @@ use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\ResponseTransferException;
 use GuzzleHttp\Exception\TransferException;
+use GuzzleHttp\Exception\ResponseTransferException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Http\Senders\Factories\GuzzleMultipartBodyFactory;
 
@@ -196,15 +196,15 @@ class GuzzleSender implements Sender
      */
     protected function guzzleResponseFromRequestException(RequestException $exception): ?ResponseInterface
     {
-        if (! class_exists('GuzzleHttp\Exception\ResponseException')) {
+        if (class_exists('GuzzleHttp\Exception\ResponseException') && $exception instanceof \GuzzleHttp\Exception\ResponseException) {
             return $exception->getResponse();
         }
 
-        if ($exception instanceof \GuzzleHttp\Exception\ResponseException) {
-            return $exception->getResponse();
+        if (! method_exists($exception, 'getResponse')) {
+            return null;
         }
 
-        return null;
+        return $exception->getResponse();
     }
 
     /**
