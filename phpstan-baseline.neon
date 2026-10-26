@@ -25,7 +25,7 @@ parameters:
 			path: src/Http/Connector.php
 
 		-
-			message: '#^Parameter \#1 \$response of method Saloon\\Http\\PendingRequest\:\:executeResponsePipeline\(\) expects Saloon\\Http\\Response, GuzzleHttp\\Promise\\PromiseInterface\|Saloon\\Http\\Response given\.$#'
+			message: '#^Parameter \#1 \$response of method Saloon\\Http\\PendingRequest\<Saloon\\Http\\Request\>\:\:executeResponsePipeline\(\) expects Saloon\\Http\\Response, GuzzleHttp\\Promise\\PromiseInterface\|Saloon\\Http\\Response given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Http/Connector.php
