@@ -1,0 +1,15 @@
+services:
+    -
+        class: Saloon\PHPStan\CreateDtoMethodResolver
+
+    -
+        class: Saloon\PHPStan\DtoReturnTypeExtension
+        tags:
+            - phpstan.broker.dynamicMethodReturnTypeExtension
+
+    -
+        class: Saloon\PHPStan\DtoThrowTypeExtension
+        arguments:
+            implicitThrows: %exceptions.implicitThrows%
+        tags:
+            - phpstan.dynamicMethodThrowTypeExtension

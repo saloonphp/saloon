@@ -36,6 +36,9 @@ use Saloon\Traits\RequestProperties\HasRequestProperties;
 use Saloon\Http\PendingRequest\AuthenticatePendingRequest;
 use Saloon\Http\OAuth2\GetClientCredentialsTokenBasicAuthRequest;
 
+/**
+ * @template TRequest of \Saloon\Http\Request = \Saloon\Http\Request
+ */
 class PendingRequest
 {
     use AuthenticatesRequests;
@@ -52,6 +55,8 @@ class PendingRequest
 
     /**
      * The request used by the instance.
+     *
+     * @var TRequest
      */
     protected Request $request;
 
@@ -82,6 +87,8 @@ class PendingRequest
 
     /**
      * Build up the request payload.
+     *
+     * @param TRequest $request
      */
     public function __construct(Connector $connector, Request $request, ?MockClient $mockClient = null)
     {
@@ -173,6 +180,8 @@ class PendingRequest
 
     /**
      * Get the request.
+     *
+     * @return TRequest
      */
     public function getRequest(): Request
     {

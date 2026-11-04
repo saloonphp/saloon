@@ -64,6 +64,10 @@ trait HasConnector
 
     /**
      * Send a request synchronously
+     *
+     * @return \Saloon\Http\Response<$this>
+     * @throws \Saloon\Exceptions\Request\FatalRequestException
+     * @throws \Saloon\Exceptions\Request\RequestException
      */
     public function send(?MockClient $mockClient = null): Response
     {

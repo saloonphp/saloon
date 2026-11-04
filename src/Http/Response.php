@@ -27,6 +27,9 @@ use Saloon\Helpers\RequestExceptionHelper;
 use Saloon\Contracts\DataObjects\WithResponse;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
+/**
+ * @template TRequest of \Saloon\Http\Request = \Saloon\Http\Request
+ */
 class Response
 {
     use Macroable;
@@ -43,6 +46,8 @@ class Response
 
     /**
      * The pending request that has all the request properties
+     *
+     * @var \Saloon\Http\PendingRequest<TRequest>
      */
     protected readonly PendingRequest $pendingRequest;
 
@@ -85,6 +90,8 @@ class Response
 
     /**
      * Create a new response instance.
+     *
+     * @param \Saloon\Http\PendingRequest<TRequest> $pendingRequest
      */
     public function __construct(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, ?Throwable $senderException = null)
     {
@@ -96,6 +103,11 @@ class Response
 
     /**
      * Create a new response instance
+     *
+     * @template TSentRequest of \Saloon\Http\Request
+     *
+     * @param \Saloon\Http\PendingRequest<TSentRequest> $pendingRequest
+     * @return static<TSentRequest>
      */
     public static function fromPsrResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, ?Throwable $senderException = null): static
     {
@@ -104,6 +116,8 @@ class Response
 
     /**
      * Get the pending request that created the response.
+     *
+     * @return \Saloon\Http\PendingRequest<TRequest>
      */
     public function getPendingRequest(): PendingRequest
     {
@@ -120,6 +134,8 @@ class Response
 
     /**
      * Get the original request that created the response.
+     *
+     * @return TRequest
      */
     public function getRequest(): Request
     {
@@ -220,6 +236,7 @@ class Response
      *
      * @param array-key|null $key
      * @return ($key is null ? array<array-key, mixed> : mixed)
+     * @throws \JsonException
      */
     public function json(string|int|null $key = null, mixed $default = null): mixed
     {
@@ -241,6 +258,7 @@ class Response
      *
      * @param array-key|null $key
      * @return ($key is null ? array<array-key, mixed> : mixed)
+     * @throws \JsonException
      */
     public function array(int|string|null $key = null, mixed $default = null): mixed
     {
@@ -249,6 +267,8 @@ class Response
 
     /**
      * Get the JSON decoded body of the response as an object or scalar value.
+     *
+     * @throws \JsonException
      */
     public function object(string|int|null $key = null, mixed $default = null): mixed
     {
@@ -302,6 +322,7 @@ class Response
      *
      * @param array-key|null $key
      * @return \Illuminate\Support\Collection<array-key, mixed>
+     * @throws \JsonException
      */
     public function collect(string|int|null $key = null): Collection
     {
@@ -337,6 +358,8 @@ class Response
 
     /**
      * Convert the response into a DTO or throw a LogicException if the response failed
+     *
+     * @throws \LogicException
      */
     public function dtoOrFail(): mixed
     {
