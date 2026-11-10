@@ -104,6 +104,7 @@ class GuzzleSender implements Sender
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Saloon\Exceptions\Request\FatalRequestException
+     * @return Response<mixed>
      */
     public function send(PendingRequest $pendingRequest): Response
     {
@@ -218,10 +219,12 @@ class GuzzleSender implements Sender
 
     /**
      * Create a response.
+     *
+     * @return Response<mixed>
      */
     protected function createResponse(ResponseInterface $psrResponse, PendingRequest $pendingRequest, RequestInterface $psrRequest, ?Exception $exception = null): Response
     {
-        /** @var class-string<\Saloon\Http\Response> $responseClass */
+        /** @var class-string<\Saloon\Http\Response<mixed>> $responseClass */
         $responseClass = $pendingRequest->getResponseClass();
 
         return $responseClass::fromPsrResponse($psrResponse, $pendingRequest, $psrRequest, $exception);

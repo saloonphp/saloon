@@ -15,14 +15,14 @@ class Pool
     /**
      * Requests inside the pool
      *
-     * @var iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request>
+     * @var iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request<mixed>>
      */
     protected iterable $requests;
 
     /**
      * Handle Response Callback
      *
-     * @var \Closure(\Saloon\Http\Response, array-key, \GuzzleHttp\Promise\PromiseInterface): (void)|null
+     * @var \Closure(\Saloon\Http\Response<mixed>, array-key, \GuzzleHttp\Promise\PromiseInterface): (void)|null
      */
     protected ?Closure $responseHandler = null;
 
@@ -50,9 +50,9 @@ class Pool
     /**
      * Constructor
      *
-     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request>|callable(\Saloon\Http\Connector): iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request> $requests
+     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request<mixed>>|callable(\Saloon\Http\Connector): iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request<mixed>> $requests
      * @param int|callable(int $pendingRequests): (int) $concurrency
-     * @param callable(\Saloon\Http\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
+     * @param callable(\Saloon\Http\Response<mixed>, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
      * @param callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $exceptionHandler
      */
     public function __construct(Connector $connector, iterable|callable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null)
@@ -73,7 +73,7 @@ class Pool
     /**
      * Specify a callback to happen for each successful request
      *
-     * @param callable(\Saloon\Http\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void) $callable
+     * @param callable(\Saloon\Http\Response<mixed>, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void) $callable
      * @return $this
      */
     public function withResponseHandler(callable $callable): static
@@ -112,7 +112,7 @@ class Pool
     /**
      * Set the requests
      *
-     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request>|callable(\Saloon\Http\Connector): iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request> $requests
+     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request<mixed>>|callable(\Saloon\Http\Connector): iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request<mixed>> $requests
      * @return $this
      */
     public function setRequests(iterable|callable $requests): static
@@ -133,7 +133,7 @@ class Pool
     /**
      * Get the request generator
      *
-     * @return iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request>
+     * @return iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request<mixed>>
      */
     public function getRequests(): iterable
     {

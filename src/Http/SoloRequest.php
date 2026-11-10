@@ -7,6 +7,10 @@ namespace Saloon\Http;
 use Saloon\Traits\Request\HasConnector;
 use Saloon\Http\Connectors\NullConnector;
 
+/**
+ * @template TDto
+ * @extends Request<TDto>
+ */
 abstract class SoloRequest extends Request
 {
     use HasConnector;

@@ -25,7 +25,10 @@ trait SendsRequests
     /**
      * Send a request synchronously
      *
-     * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
+     * @template TDto
+     * @param Request<TDto> $request
+     * @param callable(\Throwable, \Saloon\Http\Request<mixed>): (bool)|null $handleRetry
+     * @return Response<TDto>
      */
     public function send(Request $request, ?MockClient $mockClient = null, ?callable $handleRetry = null): Response
     {
@@ -126,6 +129,8 @@ trait SendsRequests
 
     /**
      * Send a request asynchronously
+     *
+     * @param Request<mixed> $request
      */
     public function sendAsync(Request $request, ?MockClient $mockClient = null): PromiseInterface
     {
@@ -162,7 +167,9 @@ trait SendsRequests
      *
      * @deprecated This method will be removed in Saloon v4. Please refer to the documentation to see connector or request-based retry functionality.
      *
-     * @param callable(\Throwable, \Saloon\Http\Request): (bool)|null $handleRetry
+     * @param Request<mixed> $request
+     * @param callable(\Throwable, \Saloon\Http\Request<mixed>): (bool)|null $handleRetry
+     * @return Response<mixed>
      */
     public function sendAndRetry(Request $request, int $tries, int $interval = 0, ?callable $handleRetry = null, bool $throw = true, ?MockClient $mockClient = null, bool $useExponentialBackoff = false): Response
     {
@@ -176,6 +183,8 @@ trait SendsRequests
 
     /**
      * Create a new PendingRequest
+     *
+     * @param Request<mixed> $request
      */
     public function createPendingRequest(Request $request, ?MockClient $mockClient = null): PendingRequest
     {
@@ -185,9 +194,9 @@ trait SendsRequests
     /**
      * Create a request pool
      *
-     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request>|callable(\Saloon\Http\Connector): iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request> $requests
+     * @param iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request<mixed>>|callable(\Saloon\Http\Connector): iterable<\GuzzleHttp\Promise\PromiseInterface|\Saloon\Http\Request<mixed>> $requests
      * @param int|callable(int $pendingRequests): (int) $concurrency
-     * @param callable(\Saloon\Http\Response, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
+     * @param callable(\Saloon\Http\Response<mixed>, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $responseHandler
      * @param callable(mixed $reason, array-key $key, \GuzzleHttp\Promise\PromiseInterface $poolAggregate): (void)|null $exceptionHandler
      */
     public function pool(iterable|callable $requests = [], int|callable $concurrency = 5, callable|null $responseHandler = null, callable|null $exceptionHandler = null): Pool

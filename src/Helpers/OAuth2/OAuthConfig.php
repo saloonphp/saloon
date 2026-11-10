@@ -49,7 +49,7 @@ class OAuthConfig
     /**
      * Callable that modifies the OAuth requests
      *
-     * @var \Closure(\Saloon\Http\Request): (void)|null
+     * @var \Closure(\Saloon\Http\Request<mixed>): (void)|null
      */
     protected ?Closure $requestModifier = null;
 
@@ -233,7 +233,7 @@ class OAuthConfig
     /**
      * Set the request modifier callable which can be used to modify the request being sent
      *
-     * @param callable(\Saloon\Http\Request): (void) $requestModifier
+     * @param callable(\Saloon\Http\Request<mixed>): (void) $requestModifier
      * @return $this
      */
     public function setRequestModifier(callable $requestModifier): static

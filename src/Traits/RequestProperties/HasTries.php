@@ -47,6 +47,8 @@ trait HasTries
      *
      * You can access the response from the RequestException. You can also modify the
      * request before the next attempt is made.
+     *
+     * @param Request<mixed> $request
      */
     public function handleRetry(FatalRequestException|RequestException $exception, Request $request): bool
     {

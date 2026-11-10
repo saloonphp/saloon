@@ -27,6 +27,9 @@ use Saloon\Helpers\RequestExceptionHelper;
 use Saloon\Contracts\DataObjects\WithResponse;
 use Saloon\Contracts\ArrayStore as ArrayStoreContract;
 
+/**
+ * @template TDto
+ */
 class Response
 {
     use Macroable;
@@ -120,6 +123,8 @@ class Response
 
     /**
      * Get the original request that created the response.
+     *
+     * @return Request<mixed>
      */
     public function getRequest(): Request
     {
@@ -320,6 +325,8 @@ class Response
 
     /**
      * Cast the response to a DTO.
+     *
+     * @return TDto
      */
     public function dto(): mixed
     {
@@ -337,6 +344,8 @@ class Response
 
     /**
      * Convert the response into a DTO or throw a LogicException if the response failed
+     *
+     * @return TDto
      */
     public function dtoOrFail(): mixed
     {

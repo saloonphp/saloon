@@ -28,6 +28,8 @@ class RequestExceptionHelper
 {
     /**
      * Create the request exception from a response
+     *
+     * @param Response<mixed> $response
      */
     public static function create(Response $response, ?Throwable $previous = null): RequestException
     {
